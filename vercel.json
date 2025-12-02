@@ -1,5 +1,6 @@
 {
-  "projectSettings": {
-    "rootDirectory": "app/frontend"
-  }
+  "buildCommand": "cd app/frontend && npm install && npm run build",
+  "outputDirectory": "app/frontend/.next",
+  "installCommand": "echo 'skip root install'",
+  "framework": "nextjs"
 }

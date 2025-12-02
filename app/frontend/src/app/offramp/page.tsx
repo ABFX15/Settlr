@@ -9,17 +9,19 @@ import {
   Shield,
   Zap,
   ArrowDownToLine,
+  ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
-import Script from "next/script";
 
 // Sphere Application ID - replace with your actual ID from spherepay.co dashboard
 const SPHERE_APPLICATION_ID =
   process.env.NEXT_PUBLIC_SPHERE_APP_ID || "YOUR_APPLICATION_ID";
 
+// Sphere Ramp URL for redirect approach (more stable than embedded widget)
+const SPHERE_RAMP_URL = `https://spherepay.co/ramp?applicationId=${SPHERE_APPLICATION_ID}`;
+
 function OfframpContent() {
   const searchParams = useSearchParams();
-  const [sphereLoaded, setSphereLoaded] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // Parse URL params for pre-filling
@@ -29,35 +31,8 @@ function OfframpContent() {
     setMounted(true);
   }, []);
 
-  // Initialize Sphere Ramp when script loads
-  const initSphereRamp = () => {
-    if (typeof window !== "undefined" && (window as any).SphereRamp) {
-      new (window as any).SphereRamp({
-        containerId: "sphere-ramp-container",
-        applicationId: SPHERE_APPLICATION_ID,
-        theme: {
-          color: "violet",
-          radius: "lg",
-          components: {
-            logo: "/logo.png",
-          },
-        },
-        debug: process.env.NODE_ENV === "development",
-      });
-      setSphereLoaded(true);
-    }
-  };
-
   return (
     <main className="min-h-screen flex flex-col items-center justify-start p-4 md:p-8 pt-24">
-      {/* Sphere Ramp Script */}
-      <Script
-        src="https://spherepay.co/packages/sphere-ramp/index.js"
-        type="module"
-        crossOrigin="anonymous"
-        onLoad={initSphereRamp}
-      />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -124,22 +99,48 @@ function OfframpContent() {
           </motion.div>
         </div>
 
-        {/* Sphere Ramp Widget Container */}
+        {/* Sphere Ramp - Link to external page */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="glass-card p-2 min-h-[500px]"
+          className="glass-card p-8 text-center"
         >
-          {!mounted || !sphereLoaded ? (
-            <div className="flex items-center justify-center h-[500px]">
-              <div className="text-center">
-                <div className="w-8 h-8 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                <p className="text-[var(--text-muted)]">Loading Sphere...</p>
-              </div>
+          <div className="mb-6">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center mb-4">
+              <Banknote className="w-8 h-8 text-white" />
             </div>
-          ) : null}
-          <div id="sphere-ramp-container" className="w-full" />
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
+              Ready to Cash Out?
+            </h3>
+            <p className="text-[var(--text-muted)] text-sm max-w-sm mx-auto">
+              Convert your USDC to USD, EUR, or other currencies and withdraw
+              directly to your bank account.
+            </p>
+          </div>
+
+          <a
+            href={SPHERE_RAMP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            Open Sphere Ramp
+            <ExternalLink className="w-4 h-4" />
+          </a>
+
+          <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
+            <div className="p-3 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+              <p className="text-[var(--text-muted)]">Supported</p>
+              <p className="font-medium text-[var(--text-primary)]">
+                40+ Countries
+              </p>
+            </div>
+            <div className="p-3 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+              <p className="text-[var(--text-muted)]">Settlement</p>
+              <p className="font-medium text-[var(--text-primary)]">1-2 Days</p>
+            </div>
+          </div>
         </motion.div>
 
         {/* Info */}
