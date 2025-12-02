@@ -1,6 +1,7 @@
 "use client";
 
-import { Zap, History, Plus, Home, Wallet, Menu, X, Store } from "lucide-react";
+import { History, Plus, Home, Wallet, Menu, X, Store } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -25,12 +26,16 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Zap className="w-5 h-5 text-white" />
-          </div>
-          <span className="font-bold text-lg text-[var(--text-primary)]">
-            x402 Pay
-          </span>
+          <Image
+            src="/logo.png"
+            alt="Settlr"
+            width={110}
+            height={30}
+            quality={100}
+            priority
+            className="group-hover:scale-105 transition-transform object-contain"
+            style={{ imageRendering: "auto" }}
+          />
         </Link>
 
         {/* Desktop Navigation */}

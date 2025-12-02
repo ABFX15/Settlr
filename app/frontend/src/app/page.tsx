@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Zap,
   Shield,
@@ -105,7 +106,7 @@ export default function LandingPage() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-4">
-              Why x402 Pay?
+              Why Settlr?
             </h2>
             <p className="text-[var(--text-muted)] text-lg max-w-2xl mx-auto">
               Everything you need to accept crypto payments, without the
@@ -281,12 +282,15 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-[var(--border)]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-[var(--primary)]" />
-            <span className="font-semibold text-[var(--text-primary)]">
-              x402 Pay
-            </span>
-          </div>
+          <Image
+            src="/logo.png"
+            alt="Settlr"
+            width={90}
+            height={24}
+            quality={100}
+            className="object-contain"
+            style={{ imageRendering: "auto" }}
+          />
           <p className="text-sm text-[var(--text-muted)]">
             Built with ❤️ for the x402 Hackathon
           </p>

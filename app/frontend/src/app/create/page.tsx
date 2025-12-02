@@ -46,7 +46,7 @@ export default function CreatePaymentPage() {
       const solanaParams = new URLSearchParams({
         amount: amount,
         "spl-token": USDC_MINT,
-        label: merchantName || "x402 Pay",
+        label: merchantName || "Settlr",
         message: memo || `Payment of $${amount} USDC`,
       });
       setSolanaPayUrl(`solana:${MERCHANT_WALLET}?${solanaParams.toString()}`);

@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "x402 Pay | Instant Crypto Payments",
-  description: "Fast, secure, and gasless payments on Solana",
+  title: "Settlr | Instant Crypto Payments",
+  description:
+    "The Stripe for crypto. Accept USDC payments instantly on Solana.",
 };
 
 export default function RootLayout({
