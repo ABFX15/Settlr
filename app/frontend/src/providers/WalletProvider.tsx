@@ -6,10 +6,6 @@ import {
   WalletProvider as SolanaWalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
 
 // Import wallet adapter styles
@@ -20,20 +16,18 @@ interface WalletProviderProps {
 }
 
 export const WalletProvider: FC<WalletProviderProps> = ({ children }) => {
-  // Use devnet for hackathon demo
   const endpoint = useMemo(
     () => process.env.NEXT_PUBLIC_RPC_URL || clusterApiUrl("devnet"),
     []
   );
 
-  const wallets = useMemo(
-    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
-    []
-  );
+  // Empty array - Wallet Standard auto-detects installed wallets
+  // Do NOT add PhantomWalletAdapter - it conflicts with Wallet Standard detection
+  const wallets = useMemo(() => [], []);
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <SolanaWalletProvider wallets={wallets} autoConnect>
+      <SolanaWalletProvider wallets={wallets} autoConnect={false}>
         <WalletModalProvider>{children}</WalletModalProvider>
       </SolanaWalletProvider>
     </ConnectionProvider>

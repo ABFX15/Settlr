@@ -1,0 +1,26 @@
+{
+  "name": "@settlr/octane-relay",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Settlr gasless transaction relay powered by Octane",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@solana/spl-token": "^0.4.13",
+    "@solana/web3.js": "^1.98.0",
+    "bs58": "^6.0.0",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.0.0"
+  }
+}

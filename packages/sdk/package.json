@@ -1,0 +1,63 @@
+{
+  "name": "@settlr/sdk",
+  "version": "0.1.0",
+  "description": "Solana USDC payments in 7 lines of code",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "solana",
+    "payments",
+    "usdc",
+    "crypto",
+    "web3",
+    "stablecoin",
+    "gasless"
+  ],
+  "author": "Settlr",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ABFX15/x402-hack-payment"
+  },
+  "homepage": "https://settlr.dev",
+  "dependencies": {
+    "@solana/spl-token": "^0.4.13",
+    "@solana/web3.js": "^1.98.0"
+  },
+  "devDependencies": {
+    "@solana/wallet-adapter-react": "^0.15.39",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.2.7",
+    "react": "^19.2.3",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@solana/wallet-adapter-base": ">=0.9.0"
+  },
+  "peerDependenciesMeta": {
+    "@solana/wallet-adapter-base": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
