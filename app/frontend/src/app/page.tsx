@@ -15,13 +15,47 @@ import {
   Store,
   Users,
   ArrowDownToLine,
+  Check,
 } from "lucide-react";
 
 export default function LandingPage() {
   return (
     <main className="min-h-screen">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)]/80 backdrop-blur-lg border-b border-[var(--border)]">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+          <Link href="/">
+            <Image
+              src="/logo.png"
+              alt="Settlr"
+              width={90}
+              height={24}
+              quality={100}
+              className="object-contain"
+            />
+          </Link>
+          <nav className="flex items-center gap-6">
+            <Link
+              href="/pricing"
+              className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="/dashboard"
+              className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              Dashboard
+            </Link>
+            <Link href="/create" className="btn-primary text-sm">
+              Create Payment
+            </Link>
+          </nav>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden">
+      <section className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden pt-20">
         {/* Animated background orbs */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--primary)] rounded-full blur-[128px] opacity-20 animate-pulse" />
         <div
@@ -190,6 +224,34 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Simplicity Stats */}
+      <section className="py-16 px-4 md:px-8 border-y border-[var(--border)]">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { value: "7", label: "Lines of code to integrate" },
+              { value: "<1s", label: "Transaction confirmation" },
+              { value: "0", label: "SOL needed by customers" },
+              { value: "2%", label: "Simple flat fee" },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center"
+              >
+                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] bg-clip-text text-transparent mb-2">
+                  {stat.value}
+                </div>
+                <p className="text-sm text-[var(--text-muted)]">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* How it Works */}
       <section className="py-24 px-4 md:px-8 bg-[var(--card)]/30">
         <div className="max-w-6xl mx-auto">
@@ -258,6 +320,194 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Easy Integration Section */}
+      <section className="py-24 px-4 md:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-sm font-medium mb-4">
+                <Zap className="w-4 h-4" />
+                Developer Friendly
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-4">
+                Integrate in minutes,
+                <br />
+                not days
+              </h2>
+              <p className="text-[var(--text-muted)] text-lg mb-6">
+                Our SDK is designed for simplicity. Accept payments with just 7
+                lines of code. No complex configurations, no blockchain
+                expertise required.
+              </p>
+              <ul className="space-y-3 mb-8">
+                {[
+                  "One npm install to get started",
+                  "TypeScript support out of the box",
+                  "React hooks for seamless integration",
+                  "Works with any Solana wallet adapter",
+                ].map((item, i) => (
+                  <li
+                    key={i}
+                    className="flex items-center gap-3 text-[var(--text-secondary)]"
+                  >
+                    <Check className="w-5 h-5 text-[var(--success)]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex gap-4">
+                <Link
+                  href="/create"
+                  className="btn-primary inline-flex items-center gap-2"
+                >
+                  Try it now
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <a
+                  href="https://github.com/ABFX15/x402-hack-payment"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary inline-flex items-center gap-2"
+                >
+                  View on GitHub
+                </a>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/20 to-[var(--secondary)]/20 rounded-2xl blur-xl" />
+              <div className="relative glass-card p-6 rounded-2xl overflow-hidden">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  <span className="ml-2 text-sm text-[var(--text-muted)]">
+                    index.ts
+                  </span>
+                </div>
+                <pre className="text-sm overflow-x-auto">
+                  <code className="text-[var(--text-secondary)]">
+                    {`import { Settlr } from "@settlr/sdk";
+
+const settlr = new Settlr({
+  merchant: {
+    name: "My Store",
+    walletAddress: "YOUR_WALLET",
+  },
+});
+
+// Create a payment link
+const payment = await settlr.createPayment({
+  amount: 29.99,
+  memo: "Premium subscription",
+});
+
+// Redirect to checkout
+window.location.href = payment.checkoutUrl;`}
+                  </code>
+                </pre>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Preview */}
+      <section className="py-24 px-4 md:px-8">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-4">
+              Simple Pricing
+            </h2>
+            <p className="text-[var(--text-muted)] text-lg">
+              Start free, pay only when you grow
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {[
+              {
+                name: "Free",
+                price: "$0",
+                desc: "2% fee",
+                features: ["Unlimited links", "QR codes", "Gasless payments"],
+              },
+              {
+                name: "Pro",
+                price: "$29/mo",
+                desc: "1.5% fee",
+                features: ["Custom branding", "API access", "Priority support"],
+                highlight: true,
+              },
+              {
+                name: "Enterprise",
+                price: "Custom",
+                desc: "1% fee",
+                features: ["White-label", "Dedicated support", "SLA"],
+              },
+            ].map((plan, i) => (
+              <motion.div
+                key={plan.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className={`p-6 rounded-2xl text-center ${
+                  plan.highlight
+                    ? "bg-gradient-to-b from-[var(--primary)]/20 to-[var(--card)] border-2 border-[var(--primary)]"
+                    : "glass-card"
+                }`}
+              >
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">
+                  {plan.name}
+                </h3>
+                <div className="text-3xl font-bold text-[var(--text-primary)] mb-1">
+                  {plan.price}
+                </div>
+                <p className="text-sm text-[var(--text-muted)] mb-4">
+                  {plan.desc}
+                </p>
+                <ul className="space-y-2 text-left">
+                  {plan.features.map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-center gap-2 text-sm text-[var(--text-secondary)]"
+                    >
+                      <Check className="w-4 h-4 text-[var(--success)]" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Link
+              href="/pricing"
+              className="text-[var(--primary)] hover:underline inline-flex items-center gap-1"
+            >
+              View full pricing
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-24 px-4 md:px-8">
         <motion.div
@@ -299,6 +549,26 @@ export default function LandingPage() {
             className="object-contain"
             style={{ imageRendering: "auto" }}
           />
+          <div className="flex items-center gap-6">
+            <Link
+              href="/pricing"
+              className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="/dashboard"
+              className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/create"
+              className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            >
+              Create Payment
+            </Link>
+          </div>
           <p className="text-sm text-[var(--text-muted)]">
             Built with ❤️ for the x402 Hackathon
           </p>
