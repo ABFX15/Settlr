@@ -161,8 +161,8 @@ export default function HistoryPage() {
   };
 
   return (
-    <main className="min-h-screen p-4 md:p-8">
-      <div className="max-w-2xl mx-auto">
+    <main className="min-h-screen p-4 md:p-8 pt-24 md:pt-28 bg-[#0a0a12]">
+      <div className="max-w-2xl mx-auto mt-16">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <Link

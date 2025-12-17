@@ -14,6 +14,8 @@ export type {
     PaymentResult,
     MerchantConfig,
     TransactionOptions,
+    WebhookEventType,
+    WebhookPayload,
 } from './types';
 
 // Constants
@@ -27,5 +29,23 @@ export {
 // Utilities
 export { formatUSDC, parseUSDC, shortenAddress } from './utils';
 
-// React hook (optional peer dependency)
+// React hook and provider
 export { useSettlr, SettlrProvider } from './react';
+
+// React components
+export {
+    BuyButton,
+    CheckoutWidget,
+    usePaymentLink,
+    type BuyButtonProps,
+    type CheckoutWidgetProps,
+} from './components';
+
+// Webhooks
+export {
+    createWebhookHandler,
+    verifyWebhookSignature,
+    parseWebhookPayload,
+    type WebhookHandler,
+    type WebhookHandlers,
+} from './webhooks';

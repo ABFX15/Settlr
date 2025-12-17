@@ -1,6 +1,6 @@
 import { PublicKey, Transaction, Connection } from '@solana/web3.js';
 import * as react_jsx_runtime from 'react/jsx-runtime';
-import { ReactNode } from 'react';
+import { ReactNode, CSSProperties } from 'react';
 
 declare const USDC_MINT_DEVNET: PublicKey;
 declare const USDC_MINT_MAINNET: PublicKey;
@@ -111,6 +111,20 @@ interface TransactionOptions {
     commitment?: 'processed' | 'confirmed' | 'finalized';
     /** Max retries */
     maxRetries?: number;
+}
+/**
+ * Webhook event types
+ */
+type WebhookEventType = 'payment.created' | 'payment.completed' | 'payment.failed' | 'payment.expired' | 'payment.refunded';
+/**
+ * Webhook payload
+ */
+interface WebhookPayload {
+    id: string;
+    type: WebhookEventType;
+    payment: Payment;
+    timestamp: string;
+    signature: string;
 }
 
 /**
@@ -381,4 +395,241 @@ declare function SettlrProvider({ children, config }: SettlrProviderProps): reac
  */
 declare function useSettlr(): SettlrContextValue;
 
-export { type CreatePaymentOptions, type MerchantConfig, type Payment, type PaymentResult, type PaymentStatus, SETTLR_CHECKOUT_URL, SUPPORTED_NETWORKS, Settlr, type SettlrConfig, SettlrProvider, type TransactionOptions, USDC_MINT_DEVNET, USDC_MINT_MAINNET, formatUSDC, parseUSDC, shortenAddress, useSettlr };
+/**
+ * Settlr Buy Button - Drop-in payment button component
+ *
+ * @example
+ * ```tsx
+ * import { BuyButton } from '@settlr/sdk';
+ *
+ * function ProductPage() {
+ *   return (
+ *     <BuyButton
+ *       amount={49.99}
+ *       memo="Premium Game Bundle"
+ *       onSuccess={(result) => {
+ *         console.log('Payment successful!', result.signature);
+ *         // Redirect to success page or unlock content
+ *       }}
+ *       onError={(error) => console.error(error)}
+ *     >
+ *       Buy Now - $49.99
+ *     </BuyButton>
+ *   );
+ * }
+ * ```
+ */
+interface BuyButtonProps {
+    /** Payment amount in USDC */
+    amount: number;
+    /** Optional memo/description */
+    memo?: string;
+    /** Optional order ID for your records */
+    orderId?: string;
+    /** Button text/content (default: "Pay ${amount}") */
+    children?: ReactNode;
+    /** Called when payment succeeds */
+    onSuccess?: (result: {
+        signature: string;
+        amount: number;
+        merchantAddress: string;
+    }) => void;
+    /** Called when payment fails */
+    onError?: (error: Error) => void;
+    /** Called when payment starts processing */
+    onProcessing?: () => void;
+    /** Use redirect flow instead of direct payment */
+    useRedirect?: boolean;
+    /** Success URL for redirect flow */
+    successUrl?: string;
+    /** Cancel URL for redirect flow */
+    cancelUrl?: string;
+    /** Custom class name */
+    className?: string;
+    /** Custom styles */
+    style?: CSSProperties;
+    /** Disabled state */
+    disabled?: boolean;
+    /** Button variant */
+    variant?: "primary" | "secondary" | "outline";
+    /** Button size */
+    size?: "sm" | "md" | "lg";
+}
+declare function BuyButton({ amount, memo, orderId, children, onSuccess, onError, onProcessing, useRedirect, successUrl, cancelUrl, className, style, disabled, variant, size, }: BuyButtonProps): react_jsx_runtime.JSX.Element;
+/**
+ * Checkout Widget - Embeddable checkout form
+ *
+ * @example
+ * ```tsx
+ * import { CheckoutWidget } from '@settlr/sdk';
+ *
+ * function CheckoutPage() {
+ *   return (
+ *     <CheckoutWidget
+ *       amount={149.99}
+ *       productName="Annual Subscription"
+ *       productDescription="Full access to all premium features"
+ *       onSuccess={(result) => {
+ *         router.push('/success');
+ *       }}
+ *     />
+ *   );
+ * }
+ * ```
+ */
+interface CheckoutWidgetProps {
+    /** Payment amount in USDC */
+    amount: number;
+    /** Product/service name */
+    productName: string;
+    /** Optional description */
+    productDescription?: string;
+    /** Optional product image URL */
+    productImage?: string;
+    /** Merchant name (from config if not provided) */
+    merchantName?: string;
+    /** Optional memo for the transaction */
+    memo?: string;
+    /** Optional order ID */
+    orderId?: string;
+    /** Called when payment succeeds */
+    onSuccess?: (result: {
+        signature: string;
+        amount: number;
+        merchantAddress: string;
+    }) => void;
+    /** Called when payment fails */
+    onError?: (error: Error) => void;
+    /** Called when user cancels */
+    onCancel?: () => void;
+    /** Custom class name */
+    className?: string;
+    /** Custom styles */
+    style?: CSSProperties;
+    /** Theme */
+    theme?: "light" | "dark";
+    /** Show powered by Settlr badge */
+    showBranding?: boolean;
+}
+declare function CheckoutWidget({ amount, productName, productDescription, productImage, merchantName, memo, orderId, onSuccess, onError, onCancel, className, style, theme, showBranding, }: CheckoutWidgetProps): react_jsx_runtime.JSX.Element;
+/**
+ * Payment Link Generator - Create shareable payment links
+ *
+ * @example
+ * ```tsx
+ * const { generateLink } = usePaymentLink({
+ *   merchantWallet: 'YOUR_WALLET',
+ *   merchantName: 'My Store',
+ * });
+ *
+ * const link = generateLink({
+ *   amount: 29.99,
+ *   memo: 'Order #1234',
+ * });
+ * // https://settlr.dev/pay?amount=29.99&merchant=My+Store&to=YOUR_WALLET&memo=Order+%231234
+ * ```
+ */
+declare function usePaymentLink(config: {
+    merchantWallet: string;
+    merchantName: string;
+    baseUrl?: string;
+}): {
+    generateLink: (options: {
+        amount: number;
+        memo?: string;
+        orderId?: string;
+        successUrl?: string;
+        cancelUrl?: string;
+    }) => string;
+    generateQRCode: (options: Parameters<(options: {
+        amount: number;
+        memo?: string;
+        orderId?: string;
+        successUrl?: string;
+        cancelUrl?: string;
+    }) => string>[0]) => Promise<string>;
+};
+
+/**
+ * Verify a webhook signature
+ * @param payload - The raw request body (string)
+ * @param signature - The signature from the X-Settlr-Signature header
+ * @param secret - Your webhook secret
+ * @returns Whether the signature is valid
+ */
+declare function verifyWebhookSignature(payload: string, signature: string, secret: string): boolean;
+/**
+ * Parse and verify a webhook payload
+ * @param rawBody - The raw request body
+ * @param signature - The signature from headers
+ * @param secret - Your webhook secret
+ * @returns The parsed and verified payload
+ * @throws Error if signature is invalid
+ */
+declare function parseWebhookPayload(rawBody: string, signature: string, secret: string): WebhookPayload;
+/**
+ * Webhook event handler type
+ */
+type WebhookHandler = (event: WebhookPayload) => Promise<void> | void;
+/**
+ * Webhook event handlers map
+ */
+interface WebhookHandlers {
+    'payment.created'?: WebhookHandler;
+    'payment.completed'?: WebhookHandler;
+    'payment.failed'?: WebhookHandler;
+    'payment.expired'?: WebhookHandler;
+    'payment.refunded'?: WebhookHandler;
+}
+/**
+ * Create a webhook handler middleware
+ *
+ * @example Express.js
+ * ```typescript
+ * import express from 'express';
+ * import { createWebhookHandler } from '@settlr/sdk/webhooks';
+ *
+ * const app = express();
+ *
+ * app.post('/webhooks/settlr',
+ *   express.raw({ type: 'application/json' }),
+ *   createWebhookHandler({
+ *     secret: process.env.SETTLR_WEBHOOK_SECRET!,
+ *     handlers: {
+ *       'payment.completed': async (event) => {
+ *         console.log('Payment completed:', event.payment.id);
+ *         await fulfillOrder(event.payment.orderId);
+ *       },
+ *       'payment.failed': async (event) => {
+ *         console.log('Payment failed:', event.payment.id);
+ *         await notifyCustomer(event.payment.orderId);
+ *       },
+ *     },
+ *   })
+ * );
+ * ```
+ *
+ * @example Next.js API Route
+ * ```typescript
+ * // pages/api/webhooks/settlr.ts
+ * import { createWebhookHandler } from '@settlr/sdk/webhooks';
+ *
+ * export const config = { api: { bodyParser: false } };
+ *
+ * export default createWebhookHandler({
+ *   secret: process.env.SETTLR_WEBHOOK_SECRET!,
+ *   handlers: {
+ *     'payment.completed': async (event) => {
+ *       await fulfillOrder(event.payment.orderId);
+ *     },
+ *   },
+ * });
+ * ```
+ */
+declare function createWebhookHandler(options: {
+    secret: string;
+    handlers: WebhookHandlers;
+    onError?: (error: Error) => void;
+}): (req: any, res: any) => Promise<void>;
+
+export { BuyButton, type BuyButtonProps, CheckoutWidget, type CheckoutWidgetProps, type CreatePaymentOptions, type MerchantConfig, type Payment, type PaymentResult, type PaymentStatus, SETTLR_CHECKOUT_URL, SUPPORTED_NETWORKS, Settlr, type SettlrConfig, SettlrProvider, type TransactionOptions, USDC_MINT_DEVNET, USDC_MINT_MAINNET, type WebhookEventType, type WebhookHandler, type WebhookHandlers, type WebhookPayload, createWebhookHandler, formatUSDC, parseUSDC, parseWebhookPayload, shortenAddress, usePaymentLink, useSettlr, verifyWebhookSignature };

@@ -1,7 +1,9 @@
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -15,21 +17,35 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
+  BuyButton: () => BuyButton,
+  CheckoutWidget: () => CheckoutWidget,
   SETTLR_CHECKOUT_URL: () => SETTLR_CHECKOUT_URL,
   SUPPORTED_NETWORKS: () => SUPPORTED_NETWORKS,
   Settlr: () => Settlr,
   SettlrProvider: () => SettlrProvider,
   USDC_MINT_DEVNET: () => USDC_MINT_DEVNET,
   USDC_MINT_MAINNET: () => USDC_MINT_MAINNET,
+  createWebhookHandler: () => createWebhookHandler,
   formatUSDC: () => formatUSDC,
   parseUSDC: () => parseUSDC,
+  parseWebhookPayload: () => parseWebhookPayload,
   shortenAddress: () => shortenAddress,
-  useSettlr: () => useSettlr
+  usePaymentLink: () => usePaymentLink,
+  useSettlr: () => useSettlr,
+  verifyWebhookSignature: () => verifyWebhookSignature
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -503,16 +519,456 @@ function useSettlr() {
   }
   return context;
 }
+
+// src/components.tsx
+var import_react2 = require("react");
+var import_jsx_runtime2 = require("react/jsx-runtime");
+var defaultStyles = {
+  base: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    fontWeight: 600,
+    borderRadius: "12px",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+    border: "none",
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+  },
+  primary: {
+    background: "linear-gradient(135deg, #f472b6 0%, #67e8f9 100%)",
+    color: "white"
+  },
+  secondary: {
+    background: "#12121a",
+    color: "white",
+    border: "1px solid rgba(255,255,255,0.1)"
+  },
+  outline: {
+    background: "transparent",
+    color: "#f472b6",
+    border: "2px solid #f472b6"
+  },
+  sm: {
+    padding: "8px 16px",
+    fontSize: "14px"
+  },
+  md: {
+    padding: "12px 24px",
+    fontSize: "16px"
+  },
+  lg: {
+    padding: "16px 32px",
+    fontSize: "18px"
+  },
+  disabled: {
+    opacity: 0.5,
+    cursor: "not-allowed"
+  },
+  loading: {
+    opacity: 0.8
+  }
+};
+function BuyButton({
+  amount,
+  memo,
+  orderId,
+  children,
+  onSuccess,
+  onError,
+  onProcessing,
+  useRedirect = false,
+  successUrl,
+  cancelUrl,
+  className,
+  style,
+  disabled = false,
+  variant = "primary",
+  size = "md"
+}) {
+  const { pay, createPayment, connected } = useSettlr();
+  const [loading, setLoading] = (0, import_react2.useState)(false);
+  const [status, setStatus] = (0, import_react2.useState)("idle");
+  const handleClick = (0, import_react2.useCallback)(async () => {
+    if (disabled || loading) return;
+    setLoading(true);
+    setStatus("processing");
+    onProcessing?.();
+    try {
+      if (useRedirect) {
+        const payment = await createPayment({
+          amount,
+          memo,
+          orderId,
+          successUrl,
+          cancelUrl
+        });
+        window.location.href = payment.checkoutUrl;
+      } else {
+        const result = await pay({ amount, memo });
+        if (result.success) {
+          setStatus("success");
+          onSuccess?.({
+            signature: result.signature,
+            amount: result.amount,
+            merchantAddress: result.merchantAddress
+          });
+        } else {
+          throw new Error(result.error || "Payment failed");
+        }
+      }
+    } catch (error) {
+      setStatus("error");
+      onError?.(error instanceof Error ? error : new Error("Payment failed"));
+    } finally {
+      setLoading(false);
+    }
+  }, [
+    amount,
+    memo,
+    orderId,
+    disabled,
+    loading,
+    useRedirect,
+    successUrl,
+    cancelUrl,
+    pay,
+    createPayment,
+    onSuccess,
+    onError,
+    onProcessing
+  ]);
+  const buttonStyle = {
+    ...defaultStyles.base,
+    ...defaultStyles[variant],
+    ...defaultStyles[size],
+    ...disabled ? defaultStyles.disabled : {},
+    ...loading ? defaultStyles.loading : {},
+    ...style
+  };
+  const buttonContent = loading ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Spinner, {}),
+    "Processing..."
+  ] }) : children || `Pay $${amount.toFixed(2)}`;
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    "button",
+    {
+      onClick: handleClick,
+      disabled: disabled || loading || !connected,
+      className,
+      style: buttonStyle,
+      type: "button",
+      children: !connected ? "Connect Wallet" : buttonContent
+    }
+  );
+}
+function Spinner() {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    "svg",
+    {
+      width: "16",
+      height: "16",
+      viewBox: "0 0 16 16",
+      fill: "none",
+      style: { animation: "spin 1s linear infinite" },
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("style", { children: `@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }` }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          "circle",
+          {
+            cx: "8",
+            cy: "8",
+            r: "6",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeDasharray: "32",
+            strokeDashoffset: "12"
+          }
+        )
+      ]
+    }
+  );
+}
+var widgetStyles = {
+  container: {
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    borderRadius: "16px",
+    overflow: "hidden",
+    maxWidth: "400px",
+    width: "100%"
+  },
+  containerDark: {
+    background: "#12121a",
+    border: "1px solid rgba(255,255,255,0.1)",
+    color: "white"
+  },
+  containerLight: {
+    background: "white",
+    border: "1px solid #e5e7eb",
+    color: "#111827"
+  },
+  header: {
+    padding: "24px",
+    borderBottom: "1px solid rgba(255,255,255,0.1)"
+  },
+  productImage: {
+    width: "64px",
+    height: "64px",
+    borderRadius: "12px",
+    objectFit: "cover",
+    marginBottom: "16px"
+  },
+  productName: {
+    fontSize: "20px",
+    fontWeight: 600,
+    margin: "0 0 4px 0"
+  },
+  productDescription: {
+    fontSize: "14px",
+    opacity: 0.7,
+    margin: 0
+  },
+  body: {
+    padding: "24px"
+  },
+  row: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "12px"
+  },
+  label: {
+    fontSize: "14px",
+    opacity: 0.7
+  },
+  value: {
+    fontSize: "14px",
+    fontWeight: 500
+  },
+  total: {
+    fontSize: "24px",
+    fontWeight: 700
+  },
+  divider: {
+    height: "1px",
+    background: "rgba(255,255,255,0.1)",
+    margin: "16px 0"
+  },
+  footer: {
+    padding: "24px",
+    paddingTop: "0"
+  },
+  branding: {
+    textAlign: "center",
+    fontSize: "12px",
+    opacity: 0.5,
+    marginTop: "16px"
+  }
+};
+function CheckoutWidget({
+  amount,
+  productName,
+  productDescription,
+  productImage,
+  merchantName,
+  memo,
+  orderId,
+  onSuccess,
+  onError,
+  onCancel,
+  className,
+  style,
+  theme = "dark",
+  showBranding = true
+}) {
+  const { connected } = useSettlr();
+  const [status, setStatus] = (0, import_react2.useState)("idle");
+  const containerStyle = {
+    ...widgetStyles.container,
+    ...theme === "dark" ? widgetStyles.containerDark : widgetStyles.containerLight,
+    ...style
+  };
+  const dividerStyle = {
+    ...widgetStyles.divider,
+    background: theme === "dark" ? "rgba(255,255,255,0.1)" : "#e5e7eb"
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className, style: containerStyle, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: widgetStyles.header, children: [
+      productImage && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        "img",
+        {
+          src: productImage,
+          alt: productName,
+          style: widgetStyles.productImage
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h2", { style: widgetStyles.productName, children: productName }),
+      productDescription && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: widgetStyles.productDescription, children: productDescription })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: widgetStyles.body, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: widgetStyles.row, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: widgetStyles.label, children: "Subtotal" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: widgetStyles.value, children: [
+          "$",
+          amount.toFixed(2)
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: widgetStyles.row, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: widgetStyles.label, children: "Network Fee" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: widgetStyles.value, children: "$0.01" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: dividerStyle }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: widgetStyles.row, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: widgetStyles.label, children: "Total" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: widgetStyles.total, children: [
+          "$",
+          (amount + 0.01).toFixed(2),
+          " USDC"
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: widgetStyles.footer, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        BuyButton,
+        {
+          amount,
+          memo: memo || productName,
+          orderId,
+          onSuccess: (result) => {
+            setStatus("success");
+            onSuccess?.(result);
+          },
+          onError: (error) => {
+            setStatus("error");
+            onError?.(error);
+          },
+          onProcessing: () => setStatus("processing"),
+          size: "lg",
+          style: { width: "100%" },
+          children: status === "success" ? "\u2713 Payment Complete" : status === "error" ? "Payment Failed - Retry" : `Pay $${(amount + 0.01).toFixed(2)} USDC`
+        }
+      ),
+      showBranding && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("p", { style: widgetStyles.branding, children: [
+        "Secured by ",
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("strong", { children: "Settlr" }),
+        " \u2022 Powered by Solana"
+      ] })
+    ] })
+  ] });
+}
+function usePaymentLink(config) {
+  const {
+    merchantWallet,
+    merchantName,
+    baseUrl = "https://settlr.dev/pay"
+  } = config;
+  const generateLink = (0, import_react2.useCallback)(
+    (options) => {
+      const params = new URLSearchParams({
+        amount: options.amount.toString(),
+        merchant: merchantName,
+        to: merchantWallet
+      });
+      if (options.memo) params.set("memo", options.memo);
+      if (options.orderId) params.set("orderId", options.orderId);
+      if (options.successUrl) params.set("successUrl", options.successUrl);
+      if (options.cancelUrl) params.set("cancelUrl", options.cancelUrl);
+      return `${baseUrl}?${params.toString()}`;
+    },
+    [merchantWallet, merchantName, baseUrl]
+  );
+  const generateQRCode = (0, import_react2.useCallback)(
+    async (options) => {
+      const link = generateLink(options);
+      const qrUrl = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${encodeURIComponent(
+        link
+      )}&choe=UTF-8`;
+      return qrUrl;
+    },
+    [generateLink]
+  );
+  return {
+    generateLink,
+    generateQRCode
+  };
+}
+
+// src/webhooks.ts
+var import_crypto = __toESM(require("crypto"));
+function generateWebhookSignature(payload, secret) {
+  return import_crypto.default.createHmac("sha256", secret).update(payload).digest("hex");
+}
+function verifyWebhookSignature(payload, signature, secret) {
+  const expectedSignature = generateWebhookSignature(payload, secret);
+  try {
+    return import_crypto.default.timingSafeEqual(
+      Buffer.from(signature),
+      Buffer.from(expectedSignature)
+    );
+  } catch {
+    return false;
+  }
+}
+function parseWebhookPayload(rawBody, signature, secret) {
+  if (!verifyWebhookSignature(rawBody, signature, secret)) {
+    throw new Error("Invalid webhook signature");
+  }
+  const payload = JSON.parse(rawBody);
+  return payload;
+}
+function createWebhookHandler(options) {
+  const { secret, handlers, onError } = options;
+  return async (req, res) => {
+    try {
+      let rawBody;
+      if (typeof req.body === "string") {
+        rawBody = req.body;
+      } else if (Buffer.isBuffer(req.body)) {
+        rawBody = req.body.toString("utf8");
+      } else {
+        rawBody = JSON.stringify(req.body);
+      }
+      const signature = req.headers["x-settlr-signature"];
+      if (!signature) {
+        res.status(400).json({ error: "Missing signature header" });
+        return;
+      }
+      const event = parseWebhookPayload(rawBody, signature, secret);
+      const handler = handlers[event.type];
+      if (handler) {
+        await handler(event);
+      }
+      res.status(200).json({ received: true });
+    } catch (error) {
+      if (onError && error instanceof Error) {
+        onError(error);
+      }
+      if (error instanceof Error && error.message === "Invalid webhook signature") {
+        res.status(401).json({ error: "Invalid signature" });
+      } else {
+        res.status(500).json({ error: "Webhook processing failed" });
+      }
+    }
+  };
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  BuyButton,
+  CheckoutWidget,
   SETTLR_CHECKOUT_URL,
   SUPPORTED_NETWORKS,
   Settlr,
   SettlrProvider,
   USDC_MINT_DEVNET,
   USDC_MINT_MAINNET,
+  createWebhookHandler,
   formatUSDC,
   parseUSDC,
+  parseWebhookPayload,
   shortenAddress,
-  useSettlr
+  usePaymentLink,
+  useSettlr,
+  verifyWebhookSignature
 });

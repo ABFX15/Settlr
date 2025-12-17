@@ -47,6 +47,12 @@ export default function LandingPage() {
             </Link>
             <nav className="flex items-center gap-6">
               <Link
+                href="/about"
+                className="text-white/60 hover:text-white transition-colors text-sm"
+              >
+                About
+              </Link>
+              <Link
                 href="/pricing"
                 className="text-white/60 hover:text-white transition-colors text-sm"
               >

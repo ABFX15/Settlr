@@ -138,6 +138,12 @@ export default function PricingPage() {
               Home
             </Link>
             <Link
+              href="/about"
+              className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              About
+            </Link>
+            <Link
               href="/pricing"
               className="text-[var(--text-primary)] font-medium"
             >

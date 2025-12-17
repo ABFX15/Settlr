@@ -67,6 +67,12 @@ export default function WaitlistPage() {
               Home
             </Link>
             <Link
+              href="/about"
+              className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            >
+              About
+            </Link>
+            <Link
               href="/pricing"
               className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             >

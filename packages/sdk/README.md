@@ -40,6 +40,53 @@ const payment = await settlr.createPayment({
 window.location.href = payment.checkoutUrl;
 ```
 
+### 3. Drop-in Buy Button ⭐ NEW
+
+The easiest way to accept payments - just drop in a button:
+
+```tsx
+import { SettlrProvider, BuyButton } from "@settlr/sdk";
+
+function App() {
+  return (
+    <SettlrProvider
+      config={{
+        apiKey: "sk_live_xxxxxxxxxxxx",
+        merchant: { name: "GameStore", walletAddress: "YOUR_WALLET" },
+      }}
+    >
+      <BuyButton
+        amount={49.99}
+        memo="Premium Game Bundle"
+        onSuccess={(result) => {
+          console.log("Payment successful!", result.signature);
+          unlockContent();
+        }}
+      >
+        Buy Now - $49.99
+      </BuyButton>
+    </SettlrProvider>
+  );
+}
+```
+
+### 4. Checkout Widget ⭐ NEW
+
+Full embeddable checkout with product info:
+
+```tsx
+import { CheckoutWidget } from "@settlr/sdk";
+
+<CheckoutWidget
+  amount={149.99}
+  productName="Annual Subscription"
+  productDescription="Full access to all premium features"
+  productImage="/subscription.png"
+  onSuccess={(result) => router.push("/success")}
+  onError={(error) => console.error(error)}
+/>;
+```
+
 ### Direct Payment (with wallet adapter)
 
 ```typescript
@@ -107,6 +154,81 @@ function CheckoutButton() {
     </button>
   );
 }
+```
+
+### Payment Link Generator Hook ⭐ NEW
+
+Generate shareable payment links programmatically:
+
+```tsx
+import { usePaymentLink } from "@settlr/sdk";
+
+function InvoicePage() {
+  const { generateLink, generateQRCode } = usePaymentLink({
+    merchantWallet: "YOUR_WALLET",
+    merchantName: "My Store",
+  });
+
+  const link = generateLink({
+    amount: 500,
+    memo: "Invoice #1234",
+    orderId: "inv_1234",
+  });
+  // → https://settlr.dev/pay?amount=500&merchant=My+Store&...
+
+  const qrCode = await generateQRCode({ amount: 500 });
+  // → QR code image URL
+}
+```
+
+## React Components
+
+### `<BuyButton>`
+
+Drop-in payment button component.
+
+```tsx
+<BuyButton
+  amount={49.99} // Required: amount in USDC
+  memo="Order description" // Optional
+  orderId="order_123" // Optional: your order ID
+  onSuccess={(result) => {}} // Called on successful payment
+  onError={(error) => {}} // Called on payment failure
+  onProcessing={() => {}} // Called when payment starts
+  useRedirect={false} // Use redirect flow instead of direct payment
+  successUrl="https://..." // Redirect URL (if useRedirect=true)
+  cancelUrl="https://..." // Cancel URL (if useRedirect=true)
+  variant="primary" // "primary" | "secondary" | "outline"
+  size="md" // "sm" | "md" | "lg"
+  disabled={false}
+  className=""
+  style={{}}
+>
+  Buy Now - $49.99
+</BuyButton>
+```
+
+### `<CheckoutWidget>`
+
+Full checkout UI component with product info.
+
+```tsx
+<CheckoutWidget
+  amount={149.99} // Required
+  productName="Annual Subscription" // Required
+  productDescription="Description" // Optional
+  productImage="/image.png" // Optional
+  merchantName="My Store" // Optional (uses config)
+  memo="Transaction memo" // Optional
+  orderId="order_123" // Optional
+  onSuccess={(result) => {}} // Called on success
+  onError={(error) => {}} // Called on error
+  onCancel={() => {}} // Called on cancel
+  theme="dark" // "dark" | "light"
+  showBranding={true} // Show "Powered by Settlr"
+  className=""
+  style={{}}
+/>
 ```
 
 ## API Keys
@@ -255,48 +377,105 @@ window.location.href = session.url;
 }
 ```
 
-## Webhooks
+## Webhooks ⭐ UPDATED
 
-When a payment completes, Settlr sends a POST request to your `webhookUrl`:
+Get notified when payments complete to fulfill orders automatically.
+
+### Quick Setup (Next.js)
 
 ```typescript
-// Your webhook handler (e.g., /api/webhooks/settlr)
+// app/api/webhooks/settlr/route.ts
+import { createWebhookHandler } from "@settlr/sdk";
+
+export const POST = createWebhookHandler({
+  secret: process.env.SETTLR_WEBHOOK_SECRET!,
+  handlers: {
+    "payment.completed": async (event) => {
+      console.log("Payment completed!", event.payment.id);
+      await fulfillOrder(event.payment.orderId);
+      await sendConfirmationEmail(event.payment);
+    },
+    "payment.failed": async (event) => {
+      await notifyCustomer(event.payment.orderId);
+    },
+  },
+});
+```
+
+### Express.js
+
+```typescript
+import express from "express";
+import { createWebhookHandler } from "@settlr/sdk";
+
+const app = express();
+
+app.post(
+  "/webhooks/settlr",
+  express.raw({ type: "application/json" }),
+  createWebhookHandler({
+    secret: process.env.SETTLR_WEBHOOK_SECRET!,
+    handlers: {
+      "payment.completed": async (event) => {
+        await fulfillOrder(event.payment.orderId);
+      },
+    },
+  })
+);
+```
+
+### Manual Verification
+
+```typescript
+import { verifyWebhookSignature, parseWebhookPayload } from "@settlr/sdk";
+
 export async function POST(request: Request) {
-  const signature = request.headers.get("X-Settlr-Signature");
-  const body = await request.json();
+  const signature = request.headers.get("x-settlr-signature")!;
+  const body = await request.text();
 
-  // Verify signature (recommended in production)
-  // ...
+  // Verify signature
+  if (!verifyWebhookSignature(body, signature, process.env.WEBHOOK_SECRET!)) {
+    return new Response("Invalid signature", { status: 401 });
+  }
 
-  if (body.event === "checkout.completed") {
-    const { sessionId, amount, customerWallet, paymentSignature, metadata } =
-      body.data;
+  const event = JSON.parse(body);
 
-    // Fulfill the order
-    await fulfillOrder(metadata.orderId);
+  if (event.type === "payment.completed") {
+    await fulfillOrder(event.payment.orderId);
   }
 
   return new Response("OK", { status: 200 });
 }
 ```
 
+### Webhook Events
+
+| Event               | Description                |
+| ------------------- | -------------------------- |
+| `payment.created`   | Payment link was created   |
+| `payment.completed` | Payment confirmed on-chain |
+| `payment.failed`    | Payment failed             |
+| `payment.expired`   | Payment link expired       |
+| `payment.refunded`  | Payment was refunded       |
+
 ### Webhook Payload
 
 ```json
 {
-  "event": "checkout.completed",
-  "data": {
-    "sessionId": "cs_abc123...",
-    "merchantId": "my-store",
+  "id": "evt_abc123",
+  "type": "payment.completed",
+  "payment": {
+    "id": "pay_xyz789",
     "amount": 29.99,
-    "currency": "USDC",
-    "customerWallet": "7xKX...3mPq",
-    "paymentSignature": "5KtP...",
-    "description": "Premium Plan",
-    "metadata": { "orderId": "order_123" },
-    "completedAt": 1702659600000
+    "status": "completed",
+    "orderId": "order_123",
+    "memo": "Premium subscription",
+    "txSignature": "5KtP...",
+    "payerAddress": "7xKX...3mPq",
+    "merchantAddress": "4dGo...7Ywd"
   },
-  "timestamp": 1702659600000
+  "timestamp": "2025-12-17T10:30:00.000Z",
+  "signature": "hmac_sha256_signature"
 }
 ```
 
