@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
         const { apiKey, rawKey } = await createApiKey(
             merchantId,
-            name || "Default",
+            name || "Default",           
             tier || "free",
             isTest || false
         );

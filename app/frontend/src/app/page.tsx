@@ -101,22 +101,22 @@ export default function LandingPage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
-              href="/dashboard"
+              href="/waitlist"
               className="btn-primary flex items-center gap-2 text-lg"
             >
-              <Store className="w-5 h-5" />
-              Merchant Dashboard
+              <Zap className="w-5 h-5" />
+              Join Waitlist
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
-              href="/create"
+              href="/demo"
               className="btn-secondary flex items-center gap-2"
             >
               <QrCode className="w-5 h-5" />
-              Create Payment
-            </Link>
-            <Link href="/demo" className="btn-ghost flex items-center gap-2">
               Try Demo
+            </Link>
+            <Link href="/pricing" className="btn-ghost flex items-center gap-2">
+              View Pricing
             </Link>
           </div>
         </motion.div>

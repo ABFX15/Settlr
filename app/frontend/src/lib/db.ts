@@ -770,3 +770,152 @@ export async function revokeApiKey(keyId: string): Promise<boolean> {
         return false;
     }
 }
+
+// ============================================================================
+// WAITLIST
+// ============================================================================
+
+export interface WaitlistEntry {
+    id: string;
+    email: string;
+    company?: string;
+    useCase?: string;
+    position: number;
+    createdAt: Date;
+    status: "pending" | "invited" | "active";
+}
+
+// In-memory waitlist storage
+const memoryWaitlist: WaitlistEntry[] = [];
+
+export async function addToWaitlist(
+    email: string,
+    company?: string,
+    useCase?: string
+): Promise<WaitlistEntry> {
+    const normalizedEmail = email.toLowerCase().trim();
+
+    if (isSupabaseConfigured()) {
+        // Check if already exists
+        const { data: existing } = await supabase
+            .from("waitlist")
+            .select("*")
+            .eq("email", normalizedEmail)
+            .single();
+
+        if (existing) {
+            throw new Error("This email is already on the waitlist");
+        }
+
+        // Get current count for position
+        const { count } = await supabase
+            .from("waitlist")
+            .select("*", { count: "exact", head: true });
+
+        const { data, error } = await supabase
+            .from("waitlist")
+            .insert({
+                email: normalizedEmail,
+                company,
+                use_case: useCase,
+                position: (count || 0) + 1,
+                status: "pending",
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        return {
+            id: data.id,
+            email: data.email,
+            company: data.company,
+            useCase: data.use_case,
+            position: data.position,
+            createdAt: new Date(data.created_at),
+            status: data.status,
+        };
+    } else {
+        // Check if already exists
+        const existing = memoryWaitlist.find(e => e.email === normalizedEmail);
+        if (existing) {
+            throw new Error("This email is already on the waitlist");
+        }
+
+        const entry: WaitlistEntry = {
+            id: `wl_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            email: normalizedEmail,
+            company,
+            useCase,
+            position: memoryWaitlist.length + 1,
+            createdAt: new Date(),
+            status: "pending",
+        };
+
+        memoryWaitlist.push(entry);
+        return entry;
+    }
+}
+
+export async function getWaitlist(): Promise<WaitlistEntry[]> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("waitlist")
+            .select("*")
+            .order("position", { ascending: true });
+
+        if (error) throw error;
+
+        return (data || []).map(row => ({
+            id: row.id,
+            email: row.email,
+            company: row.company,
+            useCase: row.use_case,
+            position: row.position,
+            createdAt: new Date(row.created_at),
+            status: row.status,
+        }));
+    } else {
+        return [...memoryWaitlist];
+    }
+}
+
+export async function getWaitlistPosition(email: string): Promise<number | null> {
+    const normalizedEmail = email.toLowerCase().trim();
+
+    if (isSupabaseConfigured()) {
+        const { data } = await supabase
+            .from("waitlist")
+            .select("position")
+            .eq("email", normalizedEmail)
+            .single();
+
+        return data?.position || null;
+    } else {
+        const entry = memoryWaitlist.find(e => e.email === normalizedEmail);
+        return entry?.position || null;
+    }
+}
+
+export async function updateWaitlistStatus(
+    email: string,
+    status: "pending" | "invited" | "active"
+): Promise<boolean> {
+    const normalizedEmail = email.toLowerCase().trim();
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("waitlist")
+            .update({ status })
+            .eq("email", normalizedEmail);
+
+        return !error;
+    } else {
+        const entry = memoryWaitlist.find(e => e.email === normalizedEmail);
+        if (entry) {
+            entry.status = status;
+            return true;
+        }
+        return false;
+    }
+}
