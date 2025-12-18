@@ -27,8 +27,8 @@ export type OctaneConfig = {
     };
 };
 
-// Use public Octane devnet endpoint or your own
-const OCTANE_ENDPOINT = process.env.NEXT_PUBLIC_OCTANE_ENDPOINT || 'https://octane-relay.vercel.app/api';
+// Use our own relay API (same origin, no CORS issues)
+const OCTANE_ENDPOINT = process.env.NEXT_PUBLIC_OCTANE_ENDPOINT || '/api/relay';
 
 export async function loadOctaneConfig(): Promise<OctaneConfig> {
     const response = await fetch(OCTANE_ENDPOINT);
@@ -59,18 +59,62 @@ export async function createAssociatedTokenAccount(transaction: Transaction): Pr
 }
 
 export async function transferTokenWithFee(transaction: Transaction): Promise<string> {
-    const response = await fetch(OCTANE_ENDPOINT + '/transfer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            transaction: encodeTransaction(transaction),
-        }),
-    });
-    const data = await response.json();
-    if (data.error) {
-        throw new Error(data.error || data.message || 'Octane transfer failed');
+    console.log('Sending transaction to Octane...');
+    console.log('Transaction signatures:', transaction.signatures.map(s => ({
+        publicKey: s.publicKey.toBase58(),
+        signature: s.signature ? 'present' : 'null'
+    })));
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout (reduced)
+
+    try {
+        const encodedTx = encodeTransaction(transaction);
+        console.log('Encoded transaction length:', encodedTx.length);
+        console.log('About to fetch Octane endpoint...');
+
+        const response = await fetch(OCTANE_ENDPOINT + '/transfer', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                transaction: encodedTx,
+            }),
+            signal: controller.signal,
+        });
+        console.log('Fetch completed!');
+        clearTimeout(timeoutId);
+
+        console.log('Octane response status:', response.status);
+        const text = await response.text();
+        console.log('Octane raw response:', text);
+
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            throw new Error('Invalid JSON response from Octane: ' + text);
+        }
+
+        console.log('Octane response data:', data);
+        if (data.error || data.message) {
+            throw new Error(data.error || data.message || 'Octane transfer failed');
+        }
+        if (!data.signature) {
+            throw new Error('No signature returned from Octane: ' + JSON.stringify(data));
+        }
+        return data.signature as string;
+    } catch (err: any) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+            // Transaction may have still succeeded - Octane processes async
+            throw new Error('Payment is being processed. The relay is slow but your transaction may have succeeded. Please check your wallet balance and Solana Explorer.');
+        }
+        throw err;
     }
-    return data.signature as string;
 }
 
 export async function buildTransaction(

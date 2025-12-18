@@ -29,7 +29,7 @@ import Link from "next/link";
 import {
   loadOctaneConfig,
   transferTokenWithFee,
-  buildTransaction,
+  buildTransactionWithAccountCheck,
   TokenFee,
   OctaneConfig,
 } from "@/lib/octane";
@@ -196,8 +196,9 @@ export default function CheckoutPage() {
 
       if (useGasless && octaneConfig && octaneFee) {
         // Gasless payment via Octane - build the transaction first
+        console.log("Building gasless transaction...");
         const feePayer = new PublicKey(octaneConfig.feePayer);
-        const transaction = await buildTransaction(
+        const transaction = await buildTransactionWithAccountCheck(
           connection,
           feePayer,
           octaneFee,
@@ -206,12 +207,15 @@ export default function CheckoutPage() {
           merchantWallet,
           Number(amountLamports)
         );
+        console.log("Transaction built, requesting signature...");
 
         // Sign the transaction (user signs their part, Octane signs fee payer)
         const signedTx = await signTransaction(transaction);
+        console.log("Transaction signed, sending to Octane...");
 
         // Send to Octane relay
         signature = await transferTokenWithFee(signedTx);
+        console.log("Octane returned signature:", signature);
       } else {
         // Standard payment
         const transaction = new Transaction();
