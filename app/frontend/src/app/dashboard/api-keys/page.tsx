@@ -189,15 +189,17 @@ export default function ApiKeysPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => {
+                console.log("Create API Key clicked");
                 setShowCreateModal(true);
                 setNewKeyName("");
                 setNewKeyTier("free");
                 setNewlyCreatedKey(null);
               }}
-              className="px-6 py-3 bg-white text-black font-semibold rounded-xl flex items-center gap-2"
+              disabled={!connected}
+              className="px-6 py-3 bg-white text-black font-semibold rounded-xl flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Plus className="w-4 h-4" />
-              Create API Key
+              {connected ? "Create API Key" : "Connect Wallet First"}
             </motion.button>
           </div>
         </motion.div>

@@ -65,6 +65,12 @@ export default function LandingPage() {
                 Contact
               </Link>
               <Link
+                href="/dashboard"
+                className="text-white/60 hover:text-white transition-colors text-sm"
+              >
+                Dashboard
+              </Link>
+              <Link
                 href="/waitlist"
                 className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-all"
               >
