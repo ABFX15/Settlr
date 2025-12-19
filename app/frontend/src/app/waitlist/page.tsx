@@ -78,6 +78,12 @@ export default function WaitlistPage() {
             >
               Pricing
             </Link>
+            <Link
+              href="/dashboard"
+              className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            >
+              Dashboard
+            </Link>
           </div>
         </div>
       </header>

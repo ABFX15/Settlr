@@ -120,7 +120,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
+    <div className="min-h-screen bg-[#0a0a12] text-white p-8 pt-32">
       <div className="max-w-7xl mx-auto">
         {/* Header with Visa News Banner */}
         <motion.div
@@ -142,7 +142,7 @@ export default function DashboardPage() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="px-6 py-3 bg-white text-black font-semibold rounded-xl flex items-center gap-2"
+                  className="px-6 py-3 bg-gradient-to-r from-[#f472b6] to-[#67e8f9] text-white font-semibold rounded-xl flex items-center gap-2"
                 >
                   <Zap className="w-4 h-4" />
                   Create Payment
@@ -152,7 +152,7 @@ export default function DashboardPage() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="px-6 py-3 bg-zinc-800 text-white font-semibold rounded-xl flex items-center gap-2 border border-zinc-700"
+                  className="px-6 py-3 bg-white/10 text-white font-semibold rounded-xl flex items-center gap-2 border border-white/20 hover:bg-white/20 transition-all"
                 >
                   <TrendingUp className="w-4 h-4" />
                   Analytics

@@ -78,6 +78,15 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a12] text-white pt-8 md:pt-12">
+      {/* Back to Home Link */}
+      <div className="container mx-auto px-4 pt-4">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
+        >
+          ← Back to Home
+        </Link>
+      </div>
       {/* Main Content */}
       <main className="container mx-auto px-4 py-16">
         <div className="max-w-2xl mx-auto">
