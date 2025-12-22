@@ -39,7 +39,10 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Get the embedded wallet address
-  const embeddedWallet = wallets?.find((w) => w.walletClientType === "privy");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const embeddedWallet = wallets?.find(
+    (w: any) => w.walletClientType === "privy"
+  );
   const walletAddress = embeddedWallet?.address;
 
   return (

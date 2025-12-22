@@ -69,7 +69,10 @@ function CheckoutContent() {
   const [creatingWallet, setCreatingWallet] = useState(false);
 
   // Get the embedded Privy wallet
-  const embeddedWallet = wallets?.find((w) => w.walletClientType === "privy");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const embeddedWallet = wallets?.find(
+    (w: any) => w.walletClientType === "privy"
+  );
 
   // Fetch USDC balance
   const fetchBalance = useCallback(async () => {
