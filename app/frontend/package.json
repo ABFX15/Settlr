@@ -10,6 +10,13 @@
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1",
+    "@next/swc-darwin-x64": "^16.1.0",
+    "@privy-io/react-auth": "^3.9.1",
+    "@privy-io/server-auth": "^1.32.5",
+    "@solana-program/memo": "^0.10.0",
+    "@solana-program/system": "^0.10.0",
+    "@solana-program/token": "^0.9.0",
+    "@solana/kit": "^5.1.0",
     "@solana/spl-token": "^0.4.14",
     "@solana/wallet-adapter-base": "^0.9.27",
     "@solana/wallet-adapter-react": "^0.15.39",
@@ -33,6 +40,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.6",
+    "ignore-loader": "^0.1.2",
     "typescript": "^5"
   }
 }

@@ -227,8 +227,8 @@ export class Settlr {
 
         if (memo) params.set('memo', memo);
         if (orderId) params.set('orderId', orderId);
-        if (successUrl) params.set('successUrl', successUrl);
-        if (cancelUrl) params.set('cancelUrl', cancelUrl);
+        if (successUrl) params.set('success', successUrl);
+        if (cancelUrl) params.set('cancel', cancelUrl);
         if (paymentId) params.set('paymentId', paymentId);
 
         const checkoutUrl = `${baseUrl}?${params.toString()}`;

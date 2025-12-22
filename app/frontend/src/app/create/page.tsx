@@ -29,20 +29,23 @@ export default function CreatePaymentPage() {
   // Generate payment link when amount is entered
   useEffect(() => {
     if (amount && parseFloat(amount) > 0) {
+      // Demo merchant wallet - in production this would come from the logged-in merchant
+      const MERCHANT_WALLET = "Ac52MMouwRypY7WPxMnUGwi6ZDRuBDgbmt9aXKSp43By";
       const params = new URLSearchParams({
         amount,
+        to: MERCHANT_WALLET,
         ...(merchantName && { merchant: merchantName }),
         ...(memo && { memo }),
       });
       // In production, this would be your actual domain
       const baseUrl =
         typeof window !== "undefined" ? window.location.origin : "";
-      setPaymentLink(`${baseUrl}/pay?${params.toString()}`);
+      // Use embedded wallet checkout for payments
+      setPaymentLink(`${baseUrl}/checkout?${params.toString()}`);
 
       // Generate Solana Pay URL for mobile wallets
       // Format: solana:<recipient>?amount=<amount>&spl-token=<mint>&label=<label>&message=<message>
       const USDC_MINT = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
-      const MERCHANT_WALLET = "FxhtQGJgytPCMbKTkWqwPVfBnjnsiBJcdY6zadFWcHMr";
       const solanaParams = new URLSearchParams({
         amount: amount,
         "spl-token": USDC_MINT,

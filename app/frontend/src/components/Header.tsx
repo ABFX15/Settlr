@@ -10,18 +10,22 @@ import {
   Store,
   ArrowDownToLine,
   BarChart3,
+  CreditCard,
+  LogOut,
+  User,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { usePrivy } from "@privy-io/react-auth";
+import { useWallets } from "@privy-io/react-auth/solana";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { href: "/", icon: Home, label: "Home" },
   { href: "/create", icon: Plus, label: "Create Payment" },
+  { href: "/demo", icon: CreditCard, label: "Try Checkout" },
   { href: "/offramp", icon: ArrowDownToLine, label: "Cash Out" },
   { href: "/history", icon: History, label: "History" },
   { href: "/analytics", icon: BarChart3, label: "Analytics" },
@@ -30,8 +34,13 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
-  const { connected, publicKey } = useWallet();
+  const { ready, authenticated, login, logout, user } = usePrivy();
+  const { wallets } = useWallets();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Get the embedded wallet address
+  const embeddedWallet = wallets?.find((w) => w.walletClientType === "privy");
+  const walletAddress = embeddedWallet?.address;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a12]/90 backdrop-blur-xl border-b border-white/10">
@@ -70,18 +79,49 @@ export default function Header() {
           })}
         </nav>
 
-        {/* Right side - Wallet */}
+        {/* Right side - Auth/Wallet */}
         <div className="flex items-center gap-3">
-          {connected && publicKey && (
+          {authenticated && walletAddress && (
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)]">
               <Wallet className="w-4 h-4 text-[var(--primary)]" />
               <span className="text-sm text-[var(--text-muted)]">
-                {publicKey.toBase58().slice(0, 4)}...
-                {publicKey.toBase58().slice(-4)}
+                {walletAddress.slice(0, 4)}...
+                {walletAddress.slice(-4)}
               </span>
             </div>
           )}
-          <WalletMultiButton />
+
+          {!ready ? (
+            <div className="px-4 py-2 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+              <span className="text-sm text-[var(--text-muted)]">
+                Loading...
+              </span>
+            </div>
+          ) : authenticated ? (
+            <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+                <User className="w-4 h-4 text-[var(--primary)]" />
+                <span className="text-sm text-[var(--text-muted)]">
+                  {user?.email?.address?.slice(0, 10) || "User"}
+                </span>
+              </div>
+              <button
+                onClick={logout}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--primary)]/10 transition-colors"
+              >
+                <LogOut className="w-4 h-4 text-[var(--text-muted)]" />
+                <span className="text-sm text-[var(--text-muted)]">Logout</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={login}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-medium hover:opacity-90 transition-opacity"
+            >
+              <User className="w-4 h-4" />
+              <span className="text-sm">Sign In</span>
+            </button>
+          )}
 
           {/* Mobile menu button */}
           <button

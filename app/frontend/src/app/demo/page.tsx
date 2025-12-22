@@ -7,9 +7,11 @@ export default function DemoPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to payment page with demo data
+    // Demo merchant wallet
+    const demoWallet = "Ac52MMouwRypY7WPxMnUGwi6ZDRuBDgbmt9aXKSp43By";
+    // Redirect to embedded wallet checkout
     router.push(
-      "/pay?amount=5.00&merchant=Demo%20Coffee%20Shop&memo=Latte%20%26%20Pastry"
+      `/checkout?amount=5.00&merchant=Demo%20Coffee%20Shop&to=${demoWallet}&memo=Latte%20%26%20Pastry`
     );
   }, [router]);
 

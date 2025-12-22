@@ -10,10 +10,10 @@ export const SETTLR_API_URL = {
     development: 'http://localhost:3000/api',
 } as const;
 
-// Settlr checkout URLs
+// Settlr checkout URLs (embedded wallet checkout)
 export const SETTLR_CHECKOUT_URL = {
-    production: 'https://settlr.dev/pay',
-    development: 'http://localhost:3000/pay',
+    production: 'https://settlr.dev/checkout',
+    development: 'http://localhost:3000/checkout',
 } as const;
 
 // Supported networks
