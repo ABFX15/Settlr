@@ -38,15 +38,7 @@ import {
   TokenFee,
   OctaneConfig,
 } from "@/lib/octane";
-
-// Dynamically import WalletMultiButton to avoid SSR hydration issues
-const WalletButton = dynamic(
-  () =>
-    import("@solana/wallet-adapter-react-ui").then(
-      (mod) => mod.WalletMultiButton
-    ),
-  { ssr: false }
-);
+import { PrivyLoginButton } from "@/components/PrivyLoginButton";
 
 // USDC mint address (devnet)
 const USDC_MINT_DEVNET = new PublicKey(
@@ -475,7 +467,7 @@ function PaymentPageContent() {
                     <p className="text-sm text-[var(--text-muted)]">
                       Connect your wallet to pay
                     </p>
-                    <WalletButton />
+                    <PrivyLoginButton />
                   </div>
                 ) : (
                   <>
@@ -493,7 +485,7 @@ function PaymentPageContent() {
                           </p>
                         </div>
                       </div>
-                      <WalletButton />
+                      <PrivyLoginButton />
                     </div>
 
                     {/* Gasless Toggle */}

@@ -33,15 +33,7 @@ import {
   TokenFee,
   OctaneConfig,
 } from "@/lib/octane";
-
-// Dynamic import for wallet button
-const WalletButton = dynamic(
-  () =>
-    import("@solana/wallet-adapter-react-ui").then(
-      (mod) => mod.WalletMultiButton
-    ),
-  { ssr: false }
-);
+import { PrivyLoginButton } from "@/components/PrivyLoginButton";
 
 // USDC mint address (devnet)
 const USDC_MINT_DEVNET = new PublicKey(
@@ -541,7 +533,7 @@ export default function CheckoutPage() {
                 <p className="text-[var(--text-secondary)] mb-4">
                   Connect your wallet to pay
                 </p>
-                <WalletButton className="!bg-[var(--primary)] !rounded-xl !h-12 !px-6" />
+                <PrivyLoginButton />
               </div>
             ) : (
               <div className="space-y-4">

@@ -17,14 +17,7 @@ import {
   Clock,
   CheckCircle2,
 } from "lucide-react";
-
-const WalletButton = dynamic(
-  () =>
-    import("@solana/wallet-adapter-react-ui").then(
-      (mod) => mod.WalletMultiButton
-    ),
-  { ssr: false }
-);
+import { PrivyLoginButton } from "@/components/PrivyLoginButton";
 
 // USDC mint on devnet
 const USDC_MINT = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
@@ -218,7 +211,7 @@ export default function HistoryPage() {
             <p className="text-[var(--text-muted)] mb-4">
               Connect your wallet to view transaction history
             </p>
-            <WalletButton />
+            <PrivyLoginButton />
           </motion.div>
         ) : loading && transactions.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 gap-4">
