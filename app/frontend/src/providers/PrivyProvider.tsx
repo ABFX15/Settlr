@@ -26,7 +26,7 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
           logo: "/logo-new.png",
           showWalletLoginFirst: false,
         },
-        loginMethods: ["email", "google", "apple", "twitter"],
+        loginMethods: ["email"],
         embeddedWallets: {
           solana: {
             createOnLogin: "all-users",

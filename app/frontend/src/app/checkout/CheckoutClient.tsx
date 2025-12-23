@@ -1,9 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { usePrivy } from "@privy-io/react-auth";
+import {
+  useWallets,
+  useSignAndSendTransaction,
+  useCreateWallet,
+} from "@privy-io/react-auth/solana";
 import {
   Check,
   Loader2,
@@ -32,31 +36,21 @@ const USDC_DECIMALS = 6;
 // RPC endpoint
 const RPC_ENDPOINT = "https://api.devnet.solana.com";
 
-// Dynamically import Privy Solana hooks to avoid SSR issues
-let useWallets: any = null;
-let useSignAndSendTransaction: any = null;
-let useCreateWallet: any = null;
-
-interface CheckoutContentProps {
-  searchParams: ReturnType<typeof useSearchParams>;
+interface CheckoutClientProps {
+  searchParams: URLSearchParams;
 }
 
-function CheckoutContentInner({ searchParams }: CheckoutContentProps) {
+export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const { ready, authenticated, login, user, logout } = usePrivy();
-
-  // State for dynamic imports
-  const [solanaHooksLoaded, setSolanaHooksLoaded] = useState(false);
-  const [wallets, setWallets] = useState<any[]>([]);
-  const [walletsReady, setWalletsReady] = useState(false);
-  const [signAndSend, setSignAndSend] = useState<any>(null);
-  const [createWalletFn, setCreateWalletFn] = useState<any>(null);
+  const { wallets, ready: walletsReady } = useWallets();
+  const { signAndSendTransaction } = useSignAndSendTransaction();
+  const { createWallet } = useCreateWallet();
 
   // Payment params from URL
   const amount = parseFloat(searchParams.get("amount") || "0");
   const merchantName = searchParams.get("merchant") || "Merchant";
   const merchantWallet = searchParams.get("to") || "";
   const memo = searchParams.get("memo") || "";
-  const successUrl = searchParams.get("success") || "/";
 
   // State
   const [step, setStep] = useState<
@@ -74,48 +68,8 @@ function CheckoutContentInner({ searchParams }: CheckoutContentProps) {
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [creatingWallet, setCreatingWallet] = useState(false);
 
-  // Load Privy Solana hooks dynamically on client side
-  useEffect(() => {
-    import("@privy-io/react-auth/solana").then((mod) => {
-      useWallets = mod.useWallets;
-      useSignAndSendTransaction = mod.useSignAndSendTransaction;
-      useCreateWallet = mod.useCreateWallet;
-      setSolanaHooksLoaded(true);
-    });
-  }, []);
-
-  // Use a polling approach to get wallet data after hooks are loaded
-  useEffect(() => {
-    if (!solanaHooksLoaded || !authenticated) return;
-
-    // We need to re-render to use the hooks, so we'll use the provider's context directly
-    // This is a workaround since we can't conditionally call hooks
-    const checkWallets = async () => {
-      try {
-        // Access wallets through Privy's user object
-        const privyUser = user;
-        if (privyUser?.linkedAccounts) {
-          const solanaWallets = privyUser.linkedAccounts.filter(
-            (account: any) =>
-              account.type === "wallet" && account.chainType === "solana"
-          );
-          if (solanaWallets.length > 0) {
-            setWallets(solanaWallets);
-            setWalletsReady(true);
-          }
-        }
-      } catch (err) {
-        console.error("Error checking wallets:", err);
-      }
-    };
-
-    checkWallets();
-  }, [solanaHooksLoaded, authenticated, user]);
-
-  // Get the embedded Privy wallet
-  const embeddedWallet = wallets?.find(
-    (w: any) => w.walletClientType === "privy" || w.connectorType === "embedded"
-  );
+  // Get the first Privy embedded wallet (it will be the first one for embedded wallets)
+  const embeddedWallet = wallets?.[0];
 
   // Fetch USDC balance
   const fetchBalance = useCallback(async () => {
@@ -144,11 +98,6 @@ function CheckoutContentInner({ searchParams }: CheckoutContentProps) {
 
   // Check auth and wallet status
   useEffect(() => {
-    if (!solanaHooksLoaded) {
-      setStep("loading");
-      return;
-    }
-
     if (!ready) {
       setStep("loading");
       return;
@@ -167,23 +116,14 @@ function CheckoutContentInner({ searchParams }: CheckoutContentProps) {
         setStep("wallet");
       }
     }
-  }, [
-    solanaHooksLoaded,
-    ready,
-    authenticated,
-    walletsReady,
-    embeddedWallet,
-    fetchBalance,
-  ]);
+  }, [ready, authenticated, walletsReady, embeddedWallet, fetchBalance]);
 
-  // Create embedded wallet - simplified version
+  // Create embedded wallet
   const handleCreateWallet = async () => {
-    setCreatingWallet(true);
     setError("");
+    setCreatingWallet(true);
     try {
-      // For now, we'll show an error since dynamic hook calling is complex
-      // In production, you'd use Privy's createWallet from the context
-      setError("Please refresh the page and try again");
+      await createWallet();
     } catch (err) {
       console.error("Error creating wallet:", err);
       setError("Failed to create wallet");
@@ -192,7 +132,7 @@ function CheckoutContentInner({ searchParams }: CheckoutContentProps) {
     }
   };
 
-  // Process payment - simplified using web3.js directly
+  // Process payment
   const processPayment = async () => {
     if (!embeddedWallet?.address || !merchantWallet) {
       setError("Missing wallet or merchant address");
@@ -204,10 +144,74 @@ function CheckoutContentInner({ searchParams }: CheckoutContentProps) {
     setError("");
 
     try {
-      // For embedded wallets, we need to use Privy's signing
-      // This is a simplified version - in production you'd use the full Privy flow
-      setError("Transaction signing requires page reload. Please try again.");
-      setStep("error");
+      const connection = new Connection(RPC_ENDPOINT, "confirmed");
+
+      // Get the user's ATA
+      const userPubkey = new PublicKey(embeddedWallet.address);
+      const merchantPubkey = new PublicKey(merchantWallet);
+      const userAta = await getAssociatedTokenAddress(USDC_MINT, userPubkey);
+      const merchantAta = await getAssociatedTokenAddress(
+        USDC_MINT,
+        merchantPubkey
+      );
+
+      // Calculate amount in base units
+      const amountInBaseUnits = BigInt(
+        Math.round(amount * Math.pow(10, USDC_DECIMALS))
+      );
+
+      // Build transaction
+      const transaction = new Transaction();
+
+      // Check if merchant ATA exists
+      try {
+        await getAccount(connection, merchantAta);
+      } catch {
+        // Create ATA for merchant
+        transaction.add(
+          createAssociatedTokenAccountInstruction(
+            userPubkey,
+            merchantAta,
+            merchantPubkey,
+            USDC_MINT
+          )
+        );
+      }
+
+      // Add transfer instruction
+      transaction.add(
+        createTransferInstruction(
+          userAta,
+          merchantAta,
+          userPubkey,
+          amountInBaseUnits
+        )
+      );
+
+      // Get recent blockhash
+      const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = userPubkey;
+
+      // Serialize transaction for Privy (as Uint8Array)
+      const serializedTx = transaction.serialize({
+        requireAllSignatures: false,
+        verifySignatures: false,
+      });
+
+      // Sign and send via Privy
+      const result = await signAndSendTransaction({
+        transaction: serializedTx,
+        wallet: embeddedWallet,
+        chain: "solana:devnet",
+      });
+
+      console.log("Transaction result:", result);
+      // Convert signature Uint8Array to base58 string
+      const signatureBase58 = Buffer.from(result.signature).toString("base64");
+      setTxSignature(signatureBase58);
+      setStep("success");
     } catch (err: unknown) {
       console.error("Payment error:", err);
       const errorMessage =
@@ -576,10 +580,4 @@ function CheckoutContentInner({ searchParams }: CheckoutContentProps) {
   }
 
   return null;
-}
-
-export default function CheckoutClientContent({
-  searchParams,
-}: CheckoutContentProps) {
-  return <CheckoutContentInner searchParams={searchParams} />;
 }
