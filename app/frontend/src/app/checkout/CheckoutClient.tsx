@@ -7,12 +7,15 @@ import {
   useWallets,
   useSignAndSendTransaction,
   useCreateWallet,
+  useFundWallet,
 } from "@privy-io/react-auth/solana";
 import {
   Check,
   Loader2,
   Mail,
   CreditCard,
+  Copy,
+  Plus,
   Shield,
   Zap,
   ExternalLink,
@@ -45,6 +48,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const { wallets, ready: walletsReady } = useWallets();
   const { signAndSendTransaction } = useSignAndSendTransaction();
   const { createWallet } = useCreateWallet();
+  const { fundWallet } = useFundWallet();
 
   // Payment params from URL
   const amount = parseFloat(searchParams.get("amount") || "0");
@@ -254,7 +258,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
             <div className="border-t border-zinc-800 pt-6">
               <p className="text-center text-zinc-300 mb-4">
-                Sign in to continue
+                Choose how to pay
               </p>
 
               {!ready ? (
@@ -262,17 +266,35 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   <Loader2 className="w-8 h-8 text-pink-500 animate-spin" />
                 </div>
               ) : (
-                <button
-                  onClick={login}
-                  className="w-full py-4 bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
-                >
-                  <Mail className="w-5 h-5" />
-                  Continue with Email
-                </button>
+                <div className="space-y-3">
+                  {/* Connect existing wallet - Primary option */}
+                  <button
+                    onClick={() => login({ loginMethods: ["wallet"] })}
+                    className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+                  >
+                    <Wallet className="w-5 h-5" />
+                    Connect Wallet
+                  </button>
+
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-px bg-zinc-700" />
+                    <span className="text-zinc-500 text-xs">or</span>
+                    <div className="flex-1 h-px bg-zinc-700" />
+                  </div>
+
+                  {/* Email login - Creates embedded wallet */}
+                  <button
+                    onClick={() => login({ loginMethods: ["email"] })}
+                    className="w-full py-4 bg-zinc-800 border border-zinc-700 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-zinc-700 transition-colors"
+                  >
+                    <Mail className="w-5 h-5" />
+                    Continue with Email
+                  </button>
+                </div>
               )}
 
               <p className="text-center text-zinc-500 text-xs mt-4">
-                No wallet needed • Sign in with email or social
+                Use Phantom, Solflare, or create a new wallet with email
               </p>
             </div>
           </div>
@@ -435,15 +457,44 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               )}
             </div>
 
-            {/* Low balance warning */}
-            {!hasEnoughBalance && balance !== null && (
-              <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl mb-6">
-                <div className="flex items-center gap-2 text-red-400">
+            {/* Low balance warning with fund options */}
+            {!hasEnoughBalance && balance !== null && embeddedWallet && (
+              <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl mb-6">
+                <div className="flex items-center gap-2 text-amber-400 mb-3">
                   <AlertCircle className="w-4 h-4" />
-                  <p className="text-sm">
-                    Insufficient balance. You need $
-                    {(amount - balance).toFixed(2)} more USDC.
+                  <p className="text-sm font-medium">
+                    You need ${(amount - balance).toFixed(2)} more USDC
                   </p>
+                </div>
+
+                {/* Fund with card button */}
+                <button
+                  onClick={() =>
+                    fundWallet({ address: embeddedWallet.address })
+                  }
+                  className="w-full py-3 mb-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Funds with Card
+                </button>
+
+                {/* Or send from another wallet */}
+                <div className="text-center">
+                  <p className="text-zinc-500 text-xs mb-2">Or send USDC to:</p>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(embeddedWallet.address);
+                      alert("Address copied!");
+                    }}
+                    className="flex items-center justify-center gap-2 mx-auto px-3 py-1.5 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors"
+                  >
+                    <span className="text-xs font-mono text-zinc-300">
+                      {embeddedWallet.address.slice(0, 8)}...
+                      {embeddedWallet.address.slice(-6)}
+                    </span>
+                    <Copy className="w-3 h-3 text-zinc-400" />
+                  </button>
+                  <p className="text-zinc-600 text-xs mt-1">Solana Devnet</p>
                 </div>
               </div>
             )}
