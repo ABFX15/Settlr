@@ -20,7 +20,10 @@ import {
   ExternalLink,
   AlertCircle,
   Wallet,
+  X,
+  ArrowLeft,
 } from "lucide-react";
+import { FiatOnRamp } from "@/components/FiatOnRamp";
 import Link from "next/link";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
@@ -54,6 +57,17 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const merchantWallet = searchParams.get("to") || "";
   const memo = searchParams.get("memo") || "";
 
+  // Widget/embed mode detection
+  const isEmbed = searchParams.get("embed") === "true";
+  const isWidget = searchParams.get("widget") === "true";
+
+  // Helper to send messages to parent window (for embed mode)
+  const sendToParent = (type: string, data?: Record<string, unknown>) => {
+    if (typeof window !== "undefined" && window.parent !== window) {
+      window.parent.postMessage({ type, data }, "*");
+    }
+  };
+
   // State
   const [step, setStep] = useState<
     | "loading"
@@ -70,17 +84,26 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [creatingWallet, setCreatingWallet] = useState(false);
 
-  // Get the first Privy embedded wallet (it will be the first one for embedded wallets)
-  const embeddedWallet = wallets?.[0];
+  // Get active wallet - could be embedded (Privy) or external (Phantom/Solflare)
+  // Privy returns all connected wallets in the wallets array
+  const activeWallet = wallets?.[0];
+
+  // Check if user has an external wallet linked (Phantom, Solflare, etc.)
+  // If they logged in via wallet, they have an external wallet
+  const hasExternalWallet = user?.linkedAccounts?.some(
+    (account) =>
+      account.type === "wallet" && account.walletClientType !== "privy"
+  );
+  const isExternalWallet = hasExternalWallet ?? false;
 
   // Fetch USDC balance
   const fetchBalance = useCallback(async () => {
-    if (!embeddedWallet?.address) return;
+    if (!activeWallet?.address) return;
 
     setLoadingBalance(true);
     try {
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
-      const walletPubkey = new PublicKey(embeddedWallet.address);
+      const walletPubkey = new PublicKey(activeWallet.address);
       const ata = await getAssociatedTokenAddress(USDC_MINT, walletPubkey);
 
       try {
@@ -96,7 +119,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     } finally {
       setLoadingBalance(false);
     }
-  }, [embeddedWallet?.address]);
+  }, [activeWallet?.address]);
 
   // Check auth and wallet status
   useEffect(() => {
@@ -111,14 +134,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
 
     if (walletsReady) {
-      if (embeddedWallet) {
+      if (activeWallet) {
         setStep("confirm");
         fetchBalance();
       } else {
         setStep("wallet");
       }
     }
-  }, [ready, authenticated, walletsReady, embeddedWallet, fetchBalance]);
+  }, [ready, authenticated, walletsReady, activeWallet, fetchBalance]);
 
   // Create embedded wallet
   const handleCreateWallet = async () => {
@@ -136,7 +159,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Process payment
   const processPayment = async () => {
-    if (!embeddedWallet?.address || !merchantWallet) {
+    if (!activeWallet?.address || !merchantWallet) {
       setError("Missing wallet or merchant address");
       setStep("error");
       return;
@@ -149,7 +172,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
 
       // Get the user's ATA
-      const userPubkey = new PublicKey(embeddedWallet.address);
+      const userPubkey = new PublicKey(activeWallet.address);
       const merchantPubkey = new PublicKey(merchantWallet);
       const userAta = await getAssociatedTokenAddress(USDC_MINT, userPubkey);
       const merchantAta = await getAssociatedTokenAddress(
@@ -205,7 +228,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       // Sign and send via Privy
       const result = await signAndSendTransaction({
         transaction: serializedTx,
-        wallet: embeddedWallet,
+        wallet: activeWallet,
         chain: "solana:devnet",
       });
 
@@ -214,12 +237,23 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       const signatureBase58 = Buffer.from(result.signature).toString("base64");
       setTxSignature(signatureBase58);
       setStep("success");
+
+      // Notify parent window if embedded
+      sendToParent("settlr:success", {
+        signature: signatureBase58,
+        amount,
+        merchantWallet,
+        memo,
+      });
     } catch (err: unknown) {
       console.error("Payment error:", err);
       const errorMessage =
         err instanceof Error ? err.message : "Transaction failed";
       setError(errorMessage);
       setStep("error");
+
+      // Notify parent window if embedded
+      sendToParent("settlr:error", { message: errorMessage });
     }
   };
 
@@ -239,6 +273,21 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   if (step === "auth") {
     return (
       <div className="min-h-screen bg-[#0a0a12] flex items-center justify-center p-4">
+        {/* Close/Back button */}
+        <button
+          onClick={() => {
+            if (isEmbed || isWidget) {
+              sendToParent("settlr:cancel", {});
+            } else {
+              window.history.back();
+            }
+          }}
+          className="absolute top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-10"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5 text-zinc-400" />
+        </button>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -326,7 +375,19 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Wallet creation step
   if (step === "wallet") {
     return (
-      <div className="min-h-screen bg-[#0a0a12] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#0a0a12] flex items-center justify-center p-4 relative">
+        {/* Close/Back button */}
+        <button
+          onClick={() => {
+            logout();
+            setStep("auth");
+          }}
+          className="absolute top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-10"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5 text-zinc-400" />
+        </button>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -379,7 +440,24 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     const hasEnoughBalance = balance !== null && balance >= amount;
 
     return (
-      <div className="min-h-screen bg-[#0a0a12] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#0a0a12] flex items-center justify-center p-4 relative">
+        {/* Close/Back button */}
+        <button
+          onClick={() => {
+            if (isEmbed || isWidget) {
+              sendToParent("settlr:cancel", {});
+            } else {
+              // Go back or logout
+              logout();
+              setStep("auth");
+            }
+          }}
+          className="absolute top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-10"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5 text-zinc-400" />
+        </button>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -408,14 +486,16 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             </div>
 
             {/* Wallet info */}
-            {embeddedWallet && (
+            {activeWallet && (
               <div className="flex items-center gap-3 mb-6 p-3 bg-zinc-800/50 rounded-xl">
                 <Wallet className="w-5 h-5 text-pink-400" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-zinc-400 text-xs">Your Wallet</p>
+                  <p className="text-zinc-400 text-xs">
+                    {isExternalWallet ? "Connected Wallet" : "Your Wallet"}
+                  </p>
                   <p className="text-white text-sm font-mono truncate">
-                    {embeddedWallet.address?.slice(0, 8)}...
-                    {embeddedWallet.address?.slice(-6)}
+                    {activeWallet.address?.slice(0, 8)}...
+                    {activeWallet.address?.slice(-6)}
                   </p>
                 </div>
                 <div className="text-right">
@@ -456,7 +536,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             </div>
 
             {/* Low balance warning with fund options */}
-            {!hasEnoughBalance && balance !== null && embeddedWallet && (
+            {!hasEnoughBalance && balance !== null && activeWallet && (
               <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl mb-6">
                 <div className="flex items-center gap-2 text-amber-400 mb-3">
                   <AlertCircle className="w-4 h-4" />
@@ -465,12 +545,31 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   </p>
                 </div>
 
-                {/* Get devnet USDC - on-ramp only works on mainnet */}
+                {/* Buy USDC with Card (Fiat On-Ramp) - only for embedded wallets */}
+                {!isExternalWallet && (
+                  <div className="mb-3">
+                    <FiatOnRamp
+                      walletAddress={activeWallet.address}
+                      defaultAmount={Math.ceil(amount - balance)}
+                      onSuccess={() => {
+                        // Refresh balance after purchase
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 2000);
+                      }}
+                    />
+                  </div>
+                )}
+
+                {/* Devnet: Get test USDC from faucet */}
+                <div className="text-center text-zinc-500 text-xs mb-2">
+                  — or for testing —
+                </div>
                 <a
                   href="https://faucet.circle.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3 mb-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                  className="w-full py-2 bg-zinc-800 text-zinc-300 text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-zinc-700 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   Get Devnet USDC (Circle Faucet)
@@ -481,14 +580,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   <p className="text-zinc-500 text-xs mb-2">Or send USDC to:</p>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(embeddedWallet.address);
+                      navigator.clipboard.writeText(activeWallet.address);
                       alert("Address copied!");
                     }}
                     className="flex items-center justify-center gap-2 mx-auto px-3 py-1.5 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors"
                   >
                     <span className="text-xs font-mono text-zinc-300">
-                      {embeddedWallet.address.slice(0, 8)}...
-                      {embeddedWallet.address.slice(-6)}
+                      {activeWallet.address.slice(0, 8)}...
+                      {activeWallet.address.slice(-6)}
                     </span>
                     <Copy className="w-3 h-3 text-zinc-400" />
                   </button>

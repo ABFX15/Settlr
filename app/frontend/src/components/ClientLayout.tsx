@@ -3,14 +3,10 @@
 import dynamic from "next/dynamic";
 import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { PrivyProvider } from "@/providers/PrivyProvider";
 
 const WalletProvider = dynamic(
   () => import("@/providers/WalletProvider").then((mod) => mod.WalletProvider),
-  { ssr: false }
-);
-
-const PrivyProvider = dynamic(
-  () => import("@/providers/PrivyProvider").then((mod) => mod.PrivyProvider),
   { ssr: false }
 );
 

@@ -2,11 +2,7 @@
 
 import { PrivyProvider as BasePrivyProvider } from "@privy-io/react-auth";
 import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
-
-// Initialize Solana wallet connectors at module level (only runs client-side due to dynamic import)
-const solanaConnectors = toSolanaWalletConnectors({
-  shouldAutoConnect: true,
-});
+import { useEffect, useState, useMemo } from "react";
 
 interface PrivyProviderProps {
   children: React.ReactNode;
@@ -14,12 +10,35 @@ interface PrivyProviderProps {
 
 export function PrivyProvider({ children }: PrivyProviderProps) {
   const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Initialize Solana wallet connectors only on client-side
+  const solanaConnectors = useMemo(() => {
+    if (typeof window === "undefined") return undefined;
+    try {
+      return toSolanaWalletConnectors({
+        shouldAutoConnect: false,
+      });
+    } catch (e) {
+      console.warn("[Settlr] Failed to initialize Solana connectors:", e);
+      return undefined;
+    }
+  }, []);
 
   if (!appId) {
     console.warn(
       "[Settlr] Privy not configured. Set NEXT_PUBLIC_PRIVY_APP_ID to enable embedded wallets."
     );
     return <>{children}</>;
+  }
+
+  // Don't render on server
+  if (!mounted) {
+    return null;
   }
 
   return (
@@ -34,11 +53,13 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
           walletChainType: "solana-only",
         },
         loginMethods: ["email", "wallet"],
-        externalWallets: {
-          solana: {
-            connectors: solanaConnectors,
-          },
-        },
+        externalWallets: solanaConnectors
+          ? {
+              solana: {
+                connectors: solanaConnectors,
+              },
+            }
+          : undefined,
         embeddedWallets: {
           solana: {
             createOnLogin: "users-without-wallets",
@@ -50,3 +71,4 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
     </BasePrivyProvider>
   );
 }
+
