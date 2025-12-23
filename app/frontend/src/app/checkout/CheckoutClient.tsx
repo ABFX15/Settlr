@@ -319,7 +319,23 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 <div className="space-y-3">
                   {/* Connect existing wallet - Using login with wallet */}
                   <button
-                    onClick={() => login({ loginMethods: ["wallet"] })}
+                    onClick={() => {
+                      // Log what's detected for debugging
+                      console.log(
+                        "Phantom detected:",
+                        !!(
+                          window as unknown as {
+                            phantom?: { solana?: unknown };
+                          }
+                        ).phantom?.solana
+                      );
+                      console.log(
+                        "Solflare detected:",
+                        !!(window as unknown as { solflare?: unknown }).solflare
+                      );
+                      // Use login with wallet to authenticate + connect
+                      login({ loginMethods: ["wallet"] });
+                    }}
                     className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
                   >
                     <Wallet className="w-5 h-5" />

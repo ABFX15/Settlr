@@ -1,7 +1,13 @@
 "use client";
 
 import { PrivyProvider as BasePrivyProvider } from "@privy-io/react-auth";
+import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 import { useEffect, useState } from "react";
+
+// Create Solana wallet connectors for Phantom, Solflare, etc.
+const solanaConnectors = toSolanaWalletConnectors({
+  shouldAutoConnect: false,
+});
 
 interface PrivyProviderProps {
   children: React.ReactNode;
@@ -37,11 +43,22 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
           logo: "/logo-new.png",
           showWalletLoginFirst: true,
           walletChainType: "solana-only",
+          walletList: [
+            "detected_solana_wallets",
+            "phantom",
+            "solflare",
+            "backpack",
+          ],
         },
         loginMethods: ["email", "wallet"],
         embeddedWallets: {
           solana: {
             createOnLogin: "users-without-wallets",
+          },
+        },
+        externalWallets: {
+          solana: {
+            connectors: solanaConnectors,
           },
         },
       }}
