@@ -1,0 +1,8 @@
+# Secrets
+.env
+fee-payer.json
+*.json
+
+# Keep config templates
+!kora.toml
+!signers.toml

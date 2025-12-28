@@ -1,0 +1,159 @@
+# Kora RPC Server Configuration for Devnet
+# Docs: https://launch.solana.com/docs/kora/operators/configuration
+
+# =============================================================================
+# Kora Core Configuration
+# =============================================================================
+
+[kora]
+rate_limit = 100
+
+[kora.auth]
+# API key and HMAC secret can be set via env vars: KORA_API_KEY, KORA_HMAC_SECRET
+
+[kora.cache]
+enabled = false
+url = "redis://localhost:6379"
+default_ttl = 300
+account_ttl = 60
+
+[kora.enabled_methods]
+liveness = true
+estimate_transaction_fee = true
+get_supported_tokens = true
+sign_transaction = true
+sign_and_send_transaction = true
+transfer_transaction = true
+get_blockhash = true
+get_config = true
+get_payer_signer = true
+
+# =============================================================================
+# Validation Configuration
+# =============================================================================
+
+[validation]
+# Maximum SOL (in lamports) you're willing to pay per transaction
+# 0.001 SOL = 1,000,000 lamports
+max_allowed_lamports = 5000000  # 0.005 SOL max per tx
+
+# Maximum signatures allowed per transaction
+max_signatures = 10
+
+# Price source for token conversion ("Mock" for testing, "Jupiter" for production)
+price_source = "Mock"
+
+# Allowed programs (standard Solana programs)
+allowed_programs = [
+    "11111111111111111111111111111111",                      # System Program
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",          # Token Program
+    "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",         # Associated Token Program
+    "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",          # Token-2022 Program
+    "ComputeBudget111111111111111111111111111111",          # Compute Budget
+    "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",          # Memo Program
+    "AddressLookupTab1e1111111111111111111111111",          # Address Lookup Table
+]
+
+# Allowed tokens that can be transferred (devnet USDC)
+allowed_tokens = [
+    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",  # Devnet USDC
+]
+
+# Tokens accepted for fee payment (devnet USDC)
+allowed_spl_paid_tokens = [
+    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",  # Devnet USDC
+]
+
+# Accounts that are NOT allowed to interact
+disallowed_accounts = []
+
+# =============================================================================
+# Pricing Configuration
+# =============================================================================
+
+[validation.price]
+# Options: "free", "margin", "fixed"
+# - free: No fee charged to users
+# - margin: Add percentage on top of actual gas cost
+# - fixed: Fixed fee per transaction
+type = "free"  # Free for devnet testing
+
+# If using margin pricing:
+# margin = 10  # 10% markup on gas costs
+
+# If using fixed pricing:
+# amount = 1000  # Fixed amount in token smallest units
+# token = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
+
+# =============================================================================
+# Fee Payer Policy (what the fee payer is allowed to do)
+# =============================================================================
+
+[validation.fee_payer_policy.system]
+allow_transfer = false
+allow_assign = false
+allow_create_account = true  # Allow creating ATAs
+allow_allocate = false
+
+[validation.fee_payer_policy.system.nonce]
+allow_initialize = false
+allow_advance = false
+allow_authorize = false
+allow_withdraw = false
+
+[validation.fee_payer_policy.spl_token]
+allow_transfer = false
+allow_burn = false
+allow_close_account = false
+allow_approve = false
+allow_revoke = false
+allow_set_authority = false
+allow_mint_to = false
+allow_freeze_account = false
+allow_thaw_account = false
+allow_initialize_account = false
+allow_initialize_mint = false
+allow_initialize_multisig = false
+
+[validation.fee_payer_policy.token_2022]
+allow_transfer = false
+allow_burn = false
+allow_close_account = false
+allow_approve = false
+allow_revoke = false
+allow_set_authority = false
+allow_mint_to = false
+allow_freeze_account = false
+allow_thaw_account = false
+allow_initialize_account = false
+allow_initialize_mint = false
+allow_initialize_multisig = false
+
+# =============================================================================
+# Enabled RPC Methods
+# =============================================================================
+
+[enabled_methods]
+liveness = true
+estimate_transaction_fee = true
+get_supported_tokens = true
+sign_transaction = true
+sign_and_send_transaction = true
+transfer_transaction = true
+get_blockhash = true
+get_config = true
+
+# =============================================================================
+# Server Configuration
+# =============================================================================
+
+[server]
+# Host and port for the Kora RPC server
+host = "0.0.0.0"
+port = 8080
+
+# Rate limiting (requests per minute per IP)
+rate_limit = 100
+
+# CORS origins (use "*" for development, specific domains for production)
+cors_origins = ["*"]

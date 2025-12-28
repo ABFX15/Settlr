@@ -1,0 +1,39 @@
+=== Configuration Validation ===
+✓ Configuration validation successful!
+
+⚠️  Warnings:
+   - Using Mock price source - not suitable for production
+   - ⚠️  SECURITY: PermanentDelegate extension is NOT blocked. Tokens with this extension allow the delegate to transfer/burn tokens at any time without owner approval. This creates significant risks:
+- Payment tokens: Funds can be seized after payment
+Consider adding "permanent_delegate" to blocked_mint_extensions in [validation.token2022] unless explicitly needed for your use case.
+   - ⚠️  SECURITY: Free pricing model enabled - all transactions will be processed without charging fees.
+   - ⚠️  SECURITY: Fee payer policy allows System CreateAccount instructions (allow_create_account). Risk: Users can make the fee payer pay for arbitrary account creations. This can drain your fee payer account. Consider setting [validation.fee_payer_policy.system] allow_create_account=false to prevent abuse.
+   - ⚠️  SECURITY: No authentication configured (neither api_key nor hmac_secret). Authentication is strongly recommended for production deployments. Consider enabling api_key or hmac_secret in [kora.auth].
+   - Signer 'devnet-fee-payer' has weight specified but using round_robin strategy - weight will be ignored
+Warning: Using Mock price source - not suitable for production
+Warning: ⚠️  SECURITY: PermanentDelegate extension is NOT blocked. Tokens with this extension allow the delegate to transfer/burn tokens at any time without owner approval. This creates significant risks:
+- Payment tokens: Funds can be seized after payment
+Consider adding "permanent_delegate" to blocked_mint_extensions in [validation.token2022] unless explicitly needed for your use case.
+Warning: ⚠️  SECURITY: Free pricing model enabled - all transactions will be processed without charging fees.
+Warning: ⚠️  SECURITY: Fee payer policy allows System CreateAccount instructions (allow_create_account). Risk: Users can make the fee payer pay for arbitrary account creations. This can drain your fee payer account. Consider setting [validation.fee_payer_policy.system] allow_create_account=false to prevent abuse.
+Warning: ⚠️  SECURITY: No authentication configured (neither api_key nor hmac_secret). Authentication is strongly recommended for production deployments. Consider enabling api_key or hmac_secret in [kora.auth].
+Warning: Signer 'devnet-fee-payer' has weight specified but using round_robin strategy - weight will be ignored
+[2m2025-12-28T17:10:42.986699Z[0m [32m INFO[0m [2mkora_lib::signer::init[0m[2m:[0m Initializing multi-signer mode from config: signers.toml
+[2m2025-12-28T17:10:42.986745Z[0m [32m INFO[0m [2mkora_lib::signer::pool[0m[2m:[0m Initializing signer: devnet-fee-payer
+[2m2025-12-28T17:10:42.986799Z[0m [32m INFO[0m [2mkora_lib::signer::pool[0m[2m:[0m Successfully initialized signer: devnet-fee-payer (weight: 1)
+[2m2025-12-28T17:10:42.986807Z[0m [32m INFO[0m [2mkora_lib::signer::pool[0m[2m:[0m Created signer pool with 1 signers using RoundRobin strategy
+[2m2025-12-28T17:10:42.986814Z[0m [32m INFO[0m [2mkora_lib::state[0m[2m:[0m Initializing global signer pool with 1 signers using RoundRobin strategy
+[2m2025-12-28T17:10:42.986818Z[0m [32m INFO[0m [2mkora_lib::signer::init[0m[2m:[0m Multi-signer pool initialized successfully
+[2m2025-12-28T17:10:42.986824Z[0m [32m INFO[0m [2mkora_lib::cache[0m[2m:[0m Cache disabled or no URL configured
+[2m2025-12-28T17:10:42.986999Z[0m [32m INFO[0m [2mkora_lib::rpc_server::server[0m[2m:[0m RPC server started on 0.0.0.0:8080, port 8080
+[2m2025-12-28T17:10:42.987019Z[0m [32m INFO[0m [2mkora_lib::usage_limit::usage_tracker[0m[2m:[0m Usage limiting disabled
+[2m2025-12-28T17:11:49.842124Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Liveness request received
+[2m2025-12-28T17:11:49.842244Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Liveness response: Ok(())
+[2m2025-12-28T17:11:57.950495Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Get payer signer request received
+[2m2025-12-28T17:11:57.950639Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Get payer signer response: Ok(GetPayerSignerResponse { signer_address: "8o4bLuATwShRWnaqs1YrkNns5T5TJrPJCaM882Zh8CWr", payment_address: "8o4bLuATwShRWnaqs1YrkNns5T5TJrPJCaM882Zh8CWr" })
+[2m2025-12-28T17:13:15.299300Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Liveness request received
+[2m2025-12-28T17:13:15.299416Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Liveness response: Ok(())
+[2m2025-12-28T17:13:15.334418Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Get payer signer request received
+[2m2025-12-28T17:13:15.334453Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Get payer signer response: Ok(GetPayerSignerResponse { signer_address: "8o4bLuATwShRWnaqs1YrkNns5T5TJrPJCaM882Zh8CWr", payment_address: "8o4bLuATwShRWnaqs1YrkNns5T5TJrPJCaM882Zh8CWr" })
+[2m2025-12-28T17:13:15.371298Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Get supported tokens request received
+[2m2025-12-28T17:13:15.371318Z[0m [32m INFO[0m [2mkora_lib::rpc_server::rpc[0m[2m:[0m Get supported tokens response: Ok(GetSupportedTokensResponse { tokens: ["4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"] })

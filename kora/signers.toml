@@ -1,0 +1,11 @@
+# Kora Signers Configuration
+# Docs: https://launch.solana.com/docs/kora/operators/signers
+
+[signer_pool]
+strategy = "round_robin"
+
+[[signers]]
+name = "devnet-fee-payer"
+type = "memory"
+private_key_env = "FEE_PAYER_SECRET_KEY"
+weight = 1
