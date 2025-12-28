@@ -142,7 +142,7 @@ export function BuyButton({
   onSuccess,
   onError,
   onProcessing,
-  useRedirect = false,
+  useRedirect = true, // Default to redirect flow (works with Privy)
   successUrl,
   cancelUrl,
   className,
@@ -151,7 +151,7 @@ export function BuyButton({
   variant = "primary",
   size = "md",
 }: BuyButtonProps) {
-  const { pay, createPayment, connected } = useSettlr();
+  const { getCheckoutUrl, createPayment } = useSettlr();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<
     "idle" | "processing" | "success" | "error"
@@ -165,35 +165,18 @@ export function BuyButton({
     onProcessing?.();
 
     try {
-      if (useRedirect) {
-        // Create payment link and redirect
-        const payment = await createPayment({
-          amount,
-          memo,
-          orderId,
-          successUrl,
-          cancelUrl,
-        });
-        window.location.href = payment.checkoutUrl;
-      } else {
-        // Direct payment
-        const result = await pay({ amount, memo });
-
-        if (result.success) {
-          setStatus("success");
-          onSuccess?.({
-            signature: result.signature,
-            amount: result.amount,
-            merchantAddress: result.merchantAddress,
-          });
-        } else {
-          throw new Error(result.error || "Payment failed");
-        }
-      }
+      // Always use redirect flow - Settlr checkout handles auth via Privy
+      const url = getCheckoutUrl({
+        amount,
+        memo,
+        orderId,
+        successUrl,
+        cancelUrl,
+      });
+      window.location.href = url;
     } catch (error) {
       setStatus("error");
       onError?.(error instanceof Error ? error : new Error("Payment failed"));
-    } finally {
       setLoading(false);
     }
   }, [
@@ -202,12 +185,9 @@ export function BuyButton({
     orderId,
     disabled,
     loading,
-    useRedirect,
     successUrl,
     cancelUrl,
-    pay,
-    createPayment,
-    onSuccess,
+    getCheckoutUrl,
     onError,
     onProcessing,
   ]);
@@ -233,12 +213,12 @@ export function BuyButton({
   return (
     <button
       onClick={handleClick}
-      disabled={disabled || loading || !connected}
+      disabled={disabled || loading}
       className={className}
       style={buttonStyle}
       type="button"
     >
-      {!connected ? "Connect Wallet" : buttonContent}
+      {buttonContent}
     </button>
   );
 }
@@ -436,7 +416,7 @@ export function CheckoutWidget({
   theme = "dark",
   showBranding = true,
 }: CheckoutWidgetProps) {
-  const { connected } = useSettlr();
+  const { getCheckoutUrl } = useSettlr();
   const [status, setStatus] = useState<
     "idle" | "processing" | "success" | "error"
   >("idle");

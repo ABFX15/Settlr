@@ -185,6 +185,50 @@ export class Settlr {
     }
 
     /**
+     * Get a checkout URL for redirect-based payments
+     * 
+     * This is the simplest integration - just redirect users to this URL.
+     * Settlr handles auth (email or wallet) and payment processing.
+     * 
+     * @example
+     * ```typescript
+     * const url = settlr.getCheckoutUrl({
+     *   amount: 29.99,
+     *   memo: 'Premium Pack',
+     * });
+     * 
+     * // Redirect user to checkout
+     * window.location.href = url;
+     * ```
+     */
+    getCheckoutUrl(options: {
+        amount: number;
+        memo?: string;
+        orderId?: string;
+        successUrl?: string;
+        cancelUrl?: string;
+    }): string {
+        const { amount, memo, orderId, successUrl, cancelUrl } = options;
+
+        const baseUrl = this.config.testMode
+            ? SETTLR_CHECKOUT_URL.development
+            : SETTLR_CHECKOUT_URL.production;
+
+        const params = new URLSearchParams({
+            amount: amount.toString(),
+            merchant: this.config.merchant.name,
+            to: this.config.merchant.walletAddress as string,
+        });
+
+        if (memo) params.set('memo', memo);
+        if (orderId) params.set('orderId', orderId);
+        if (successUrl) params.set('successUrl', successUrl);
+        if (cancelUrl) params.set('cancelUrl', cancelUrl);
+
+        return `${baseUrl}?${params.toString()}`;
+    }
+
+    /**
      * Create a payment link
      * 
      * @example

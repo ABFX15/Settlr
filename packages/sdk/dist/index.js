@@ -62,8 +62,8 @@ var SETTLR_API_URL = {
   development: "http://localhost:3000/api"
 };
 var SETTLR_CHECKOUT_URL = {
-  production: "https://settlr.dev/pay",
-  development: "http://localhost:3000/pay"
+  production: "https://settlr.dev/checkout",
+  development: "http://localhost:3000/checkout"
 };
 var SUPPORTED_NETWORKS = ["devnet", "mainnet-beta"];
 var USDC_DECIMALS = 6;
@@ -189,6 +189,37 @@ var Settlr = class {
     return this.tier;
   }
   /**
+   * Get a checkout URL for redirect-based payments
+   * 
+   * This is the simplest integration - just redirect users to this URL.
+   * Settlr handles auth (email or wallet) and payment processing.
+   * 
+   * @example
+   * ```typescript
+   * const url = settlr.getCheckoutUrl({
+   *   amount: 29.99,
+   *   memo: 'Premium Pack',
+   * });
+   * 
+   * // Redirect user to checkout
+   * window.location.href = url;
+   * ```
+   */
+  getCheckoutUrl(options) {
+    const { amount, memo, orderId, successUrl, cancelUrl } = options;
+    const baseUrl = this.config.testMode ? SETTLR_CHECKOUT_URL.development : SETTLR_CHECKOUT_URL.production;
+    const params = new URLSearchParams({
+      amount: amount.toString(),
+      merchant: this.config.merchant.name,
+      to: this.config.merchant.walletAddress
+    });
+    if (memo) params.set("memo", memo);
+    if (orderId) params.set("orderId", orderId);
+    if (successUrl) params.set("successUrl", successUrl);
+    if (cancelUrl) params.set("cancelUrl", cancelUrl);
+    return `${baseUrl}?${params.toString()}`;
+  }
+  /**
    * Create a payment link
    * 
    * @example
@@ -221,8 +252,8 @@ var Settlr = class {
     });
     if (memo) params.set("memo", memo);
     if (orderId) params.set("orderId", orderId);
-    if (successUrl) params.set("successUrl", successUrl);
-    if (cancelUrl) params.set("cancelUrl", cancelUrl);
+    if (successUrl) params.set("success", successUrl);
+    if (cancelUrl) params.set("cancel", cancelUrl);
     if (paymentId) params.set("paymentId", paymentId);
     const checkoutUrl = `${baseUrl}?${params.toString()}`;
     const qrCode = await this.generateQRCode(checkoutUrl);
@@ -466,49 +497,34 @@ var Settlr = class {
 
 // src/react.tsx
 var import_react = require("react");
-var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
 var import_jsx_runtime = require("react/jsx-runtime");
 var SettlrContext = (0, import_react.createContext)(null);
-function SettlrProvider({ children, config }) {
-  const { connection } = (0, import_wallet_adapter_react.useConnection)();
-  const wallet = (0, import_wallet_adapter_react.useWallet)();
+function SettlrProvider({
+  children,
+  config,
+  authenticated = false
+}) {
   const settlr = (0, import_react.useMemo)(() => {
     return new Settlr({
       ...config,
-      rpcEndpoint: connection.rpcEndpoint
+      rpcEndpoint: config.rpcEndpoint ?? "https://api.devnet.solana.com"
     });
-  }, [config, connection.rpcEndpoint]);
+  }, [config]);
   const value = (0, import_react.useMemo)(
     () => ({
       settlr,
-      connected: wallet.connected,
+      authenticated,
       createPayment: (options) => {
         return settlr.createPayment(options);
       },
-      pay: async (options) => {
-        if (!wallet.publicKey || !wallet.signTransaction) {
-          return {
-            success: false,
-            signature: "",
-            amount: options.amount,
-            merchantAddress: settlr.getMerchantAddress().toBase58(),
-            error: "Wallet not connected"
-          };
-        }
-        return settlr.pay({
-          wallet: {
-            publicKey: wallet.publicKey,
-            signTransaction: wallet.signTransaction
-          },
-          amount: options.amount,
-          memo: options.memo
-        });
+      getCheckoutUrl: (options) => {
+        return settlr.getCheckoutUrl(options);
       },
       getBalance: () => {
         return settlr.getMerchantBalance();
       }
     }),
-    [settlr, wallet]
+    [settlr, authenticated]
   );
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SettlrContext.Provider, { value, children });
 }
@@ -578,7 +594,8 @@ function BuyButton({
   onSuccess,
   onError,
   onProcessing,
-  useRedirect = false,
+  useRedirect = true,
+  // Default to redirect flow (works with Privy)
   successUrl,
   cancelUrl,
   className,
@@ -587,7 +604,7 @@ function BuyButton({
   variant = "primary",
   size = "md"
 }) {
-  const { pay, createPayment, connected } = useSettlr();
+  const { getCheckoutUrl, createPayment } = useSettlr();
   const [loading, setLoading] = (0, import_react2.useState)(false);
   const [status, setStatus] = (0, import_react2.useState)("idle");
   const handleClick = (0, import_react2.useCallback)(async () => {
@@ -596,32 +613,17 @@ function BuyButton({
     setStatus("processing");
     onProcessing?.();
     try {
-      if (useRedirect) {
-        const payment = await createPayment({
-          amount,
-          memo,
-          orderId,
-          successUrl,
-          cancelUrl
-        });
-        window.location.href = payment.checkoutUrl;
-      } else {
-        const result = await pay({ amount, memo });
-        if (result.success) {
-          setStatus("success");
-          onSuccess?.({
-            signature: result.signature,
-            amount: result.amount,
-            merchantAddress: result.merchantAddress
-          });
-        } else {
-          throw new Error(result.error || "Payment failed");
-        }
-      }
+      const url = getCheckoutUrl({
+        amount,
+        memo,
+        orderId,
+        successUrl,
+        cancelUrl
+      });
+      window.location.href = url;
     } catch (error) {
       setStatus("error");
       onError?.(error instanceof Error ? error : new Error("Payment failed"));
-    } finally {
       setLoading(false);
     }
   }, [
@@ -630,12 +632,9 @@ function BuyButton({
     orderId,
     disabled,
     loading,
-    useRedirect,
     successUrl,
     cancelUrl,
-    pay,
-    createPayment,
-    onSuccess,
+    getCheckoutUrl,
     onError,
     onProcessing
   ]);
@@ -655,11 +654,11 @@ function BuyButton({
     "button",
     {
       onClick: handleClick,
-      disabled: disabled || loading || !connected,
+      disabled: disabled || loading,
       className,
       style: buttonStyle,
       type: "button",
-      children: !connected ? "Connect Wallet" : buttonContent
+      children: buttonContent
     }
   );
 }
@@ -783,7 +782,7 @@ function CheckoutWidget({
   theme = "dark",
   showBranding = true
 }) {
-  const { connected } = useSettlr();
+  const { getCheckoutUrl } = useSettlr();
   const [status, setStatus] = (0, import_react2.useState)("idle");
   const containerStyle = {
     ...widgetStyles.container,

@@ -5,8 +5,8 @@ import { ReactNode, CSSProperties } from 'react';
 declare const USDC_MINT_DEVNET: PublicKey;
 declare const USDC_MINT_MAINNET: PublicKey;
 declare const SETTLR_CHECKOUT_URL: {
-    readonly production: "https://settlr.dev/pay";
-    readonly development: "http://localhost:3000/pay";
+    readonly production: "https://settlr.dev/checkout";
+    readonly development: "http://localhost:3000/checkout";
 };
 declare const SUPPORTED_NETWORKS: readonly ["devnet", "mainnet-beta"];
 type SupportedNetwork = typeof SUPPORTED_NETWORKS[number];
@@ -183,6 +183,30 @@ declare class Settlr {
      */
     getTier(): 'free' | 'pro' | 'enterprise' | undefined;
     /**
+     * Get a checkout URL for redirect-based payments
+     *
+     * This is the simplest integration - just redirect users to this URL.
+     * Settlr handles auth (email or wallet) and payment processing.
+     *
+     * @example
+     * ```typescript
+     * const url = settlr.getCheckoutUrl({
+     *   amount: 29.99,
+     *   memo: 'Premium Pack',
+     * });
+     *
+     * // Redirect user to checkout
+     * window.location.href = url;
+     * ```
+     */
+    getCheckoutUrl(options: {
+        amount: number;
+        memo?: string;
+        orderId?: string;
+        successUrl?: string;
+        cancelUrl?: string;
+    }): string;
+    /**
      * Create a payment link
      *
      * @example
@@ -315,20 +339,27 @@ declare function parseUSDC(amount: number | string): bigint;
 declare function shortenAddress(address: string, chars?: number): string;
 
 /**
+ * Checkout URL options
+ */
+interface CheckoutUrlOptions {
+    amount: number;
+    memo?: string;
+    orderId?: string;
+    successUrl?: string;
+    cancelUrl?: string;
+}
+/**
  * Settlr context value
  */
 interface SettlrContextValue {
     /** Settlr client instance */
     settlr: Settlr | null;
-    /** Whether wallet is connected */
-    connected: boolean;
-    /** Create a payment link */
+    /** Whether user is authenticated */
+    authenticated: boolean;
+    /** Create a payment link (redirect flow) */
     createPayment: (options: CreatePaymentOptions) => Promise<Payment>;
-    /** Execute a direct payment */
-    pay: (options: {
-        amount: number;
-        memo?: string;
-    }) => Promise<PaymentResult>;
+    /** Generate checkout URL for redirect */
+    getCheckoutUrl: (options: CheckoutUrlOptions) => string;
     /** Get merchant's USDC balance */
     getBalance: () => Promise<number>;
 }
@@ -337,32 +368,41 @@ interface SettlrContextValue {
  */
 interface SettlrProviderProps {
     children: ReactNode;
-    config: Omit<SettlrConfig, "rpcEndpoint">;
+    config: SettlrConfig;
+    /** Whether user is authenticated (from Privy or other auth) */
+    authenticated?: boolean;
 }
 /**
  * Settlr Provider - Wraps your app to provide Settlr functionality
  *
+ * Works with Privy authentication - just pass the authenticated state.
+ *
  * @example
  * ```tsx
  * import { SettlrProvider } from '@settlr/sdk';
+ * import { usePrivy } from '@privy-io/react-auth';
  *
  * function App() {
+ *   const { authenticated } = usePrivy();
+ *
  *   return (
- *     <WalletProvider wallets={wallets}>
- *       <SettlrProvider config={{
+ *     <SettlrProvider
+ *       authenticated={authenticated}
+ *       config={{
+ *         apiKey: 'sk_live_xxxxxxxxxxxx',
  *         merchant: {
- *           name: 'My Store',
+ *           name: 'My Game',
  *           walletAddress: 'YOUR_WALLET',
  *         },
- *       }}>
- *         <YourApp />
- *       </SettlrProvider>
- *     </WalletProvider>
+ *       }}
+ *     >
+ *       <YourApp />
+ *     </SettlrProvider>
  *   );
  * }
  * ```
  */
-declare function SettlrProvider({ children, config }: SettlrProviderProps): react_jsx_runtime.JSX.Element;
+declare function SettlrProvider({ children, config, authenticated, }: SettlrProviderProps): react_jsx_runtime.JSX.Element;
 /**
  * useSettlr hook - Access Settlr functionality in your components
  *
@@ -371,23 +411,17 @@ declare function SettlrProvider({ children, config }: SettlrProviderProps): reac
  * import { useSettlr } from '@settlr/sdk';
  *
  * function CheckoutButton() {
- *   const { createPayment, pay, connected } = useSettlr();
+ *   const { getCheckoutUrl, authenticated } = useSettlr();
  *
- *   const handlePay = async () => {
- *     // Option 1: Create payment link
- *     const payment = await createPayment({ amount: 29.99 });
- *     window.location.href = payment.checkoutUrl;
- *
- *     // Option 2: Direct payment
- *     const result = await pay({ amount: 29.99 });
- *     if (result.success) {
- *       console.log('Paid!');
- *     }
+ *   const handleCheckout = () => {
+ *     // Redirect to Settlr checkout (handles Privy auth internally)
+ *     const url = getCheckoutUrl({ amount: 29.99, memo: 'Premium Pack' });
+ *     window.location.href = url;
  *   };
  *
  *   return (
- *     <button onClick={handlePay} disabled={!connected}>
- *       Pay $29.99
+ *     <button onClick={handleCheckout}>
+ *       Buy Premium Pack - $29.99
  *     </button>
  *   );
  * }
@@ -455,7 +489,8 @@ interface BuyButtonProps {
     /** Button size */
     size?: "sm" | "md" | "lg";
 }
-declare function BuyButton({ amount, memo, orderId, children, onSuccess, onError, onProcessing, useRedirect, successUrl, cancelUrl, className, style, disabled, variant, size, }: BuyButtonProps): react_jsx_runtime.JSX.Element;
+declare function BuyButton({ amount, memo, orderId, children, onSuccess, onError, onProcessing, useRedirect, // Default to redirect flow (works with Privy)
+successUrl, cancelUrl, className, style, disabled, variant, size, }: BuyButtonProps): react_jsx_runtime.JSX.Element;
 /**
  * Checkout Widget - Embeddable checkout form
  *

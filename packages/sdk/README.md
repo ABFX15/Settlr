@@ -1,22 +1,18 @@
 # @settlr/sdk
 
-> Solana USDC payments in 7 lines of code
+> Solana USDC payments for games - email checkout, no wallet required
 
 ## Installation
 
 ```bash
 npm install @settlr/sdk
-# or
-yarn add @settlr/sdk
-# or
-pnpm add @settlr/sdk
 ```
 
 ## Quick Start
 
 ### 1. Get Your API Key
 
-Sign up at [settlr.dev/dashboard](https://settlr.dev/dashboard) and create an API key.
+Sign up at [settlr.app/dashboard](https://settlr.app/dashboard) and create an API key.
 
 ### 2. Create a Payment Link
 
@@ -87,97 +83,65 @@ import { CheckoutWidget } from "@settlr/sdk";
 />;
 ```
 
-### Direct Payment (with wallet adapter)
+### How It Works
 
-```typescript
-import { Settlr } from "@settlr/sdk";
-import { useWallet } from "@solana/wallet-adapter-react";
+Settlr checkout handles authentication via Privy:
 
-const settlr = new Settlr({
-  apiKey: "sk_live_xxxxxxxxxxxx",
-  merchant: {
-    name: "My Store",
-    walletAddress: "YOUR_WALLET",
-  },
-});
+- **Email login** → Creates embedded Solana wallet automatically
+- **Wallet login** → Connects Phantom, Solflare, or Backpack
 
-// In your component
-const wallet = useWallet();
-
-const result = await settlr.pay({
-  wallet: {
-    publicKey: wallet.publicKey!,
-    signTransaction: wallet.signTransaction!,
-  },
-  amount: 29.99,
-  memo: "Order #1234",
-});
-
-if (result.success) {
-  console.log("Payment successful!", result.signature);
-}
-```
+No wallet-adapter setup needed. Just redirect to checkout.
 
 ### React Hook
 
 ```tsx
 import { SettlrProvider, useSettlr } from "@settlr/sdk";
 
-// Wrap your app
 function App() {
   return (
-    <WalletProvider wallets={wallets}>
-      <ConnectionProvider endpoint={endpoint}>
-        <SettlrProvider
-          config={{
-            apiKey: "sk_live_xxxxxxxxxxxx",
-            merchant: {
-              name: "My Store",
-              walletAddress: "YOUR_WALLET",
-            },
-          }}
-        >
-          <YourApp />
-        </SettlrProvider>
-      </ConnectionProvider>
-    </WalletProvider>
+    <SettlrProvider
+      config={{
+        apiKey: "sk_live_xxxxxxxxxxxx",
+        merchant: {
+          name: "My Game",
+          walletAddress: "YOUR_WALLET",
+        },
+      }}
+    >
+      <YourApp />
+    </SettlrProvider>
   );
 }
 
 // In your component
 function CheckoutButton() {
-  const { pay, connected } = useSettlr();
+  const { getCheckoutUrl } = useSettlr();
 
-  return (
-    <button onClick={() => pay({ amount: 29.99 })} disabled={!connected}>
-      Pay $29.99
-    </button>
-  );
+  const handlePay = () => {
+    const url = getCheckoutUrl({ amount: 29.99, memo: "Premium Pack" });
+    window.location.href = url;
+  };
+
+  return <button onClick={handlePay}>Pay $29.99</button>;
 }
 ```
 
-### Payment Link Generator Hook ⭐ NEW
+### Payment Link Generator Hook
 
 Generate shareable payment links programmatically:
 
 ```tsx
-import { usePaymentLink } from "@settlr/sdk";
+import { useSettlr } from "@settlr/sdk";
 
 function InvoicePage() {
-  const { generateLink, generateQRCode } = usePaymentLink({
-    merchantWallet: "YOUR_WALLET",
-    merchantName: "My Store",
-  });
+  const { getCheckoutUrl } = useSettlr();
 
-  const link = generateLink({
+  const link = getCheckoutUrl({
     amount: 500,
     memo: "Invoice #1234",
     orderId: "inv_1234",
   });
-  // → https://settlr.dev/pay?amount=500&merchant=My+Store&...
-
-  const qrCode = await generateQRCode({ amount: 500 });
-  // → QR code image URL
+  // → https://settlr.app/checkout?amount=500&merchant=My+Game&...
 }
 ```
 
@@ -250,7 +214,7 @@ Full checkout UI component with product info.
 
 ### Get Your API Key
 
-1. Go to [settlr.dev/dashboard](https://settlr.dev/dashboard)
+1. Go to [settlr.app/dashboard](https://settlr.app/dashboard)
 2. Connect your wallet
 3. Click "Create API Key"
 4. Save the key securely (only shown once!)
@@ -298,7 +262,7 @@ const payment = await settlr.createPayment({
   id: 'pay_abc123',
   amount: 29.99,
   status: 'pending',
-  checkoutUrl: 'https://settlr.dev/pay?...',
+  checkoutUrl: 'https://settlr.app/checkout?...',
   qrCode: 'data:image/svg+xml,...',
   createdAt: Date,
   expiresAt: Date,
@@ -372,7 +336,7 @@ window.location.href = session.url;
 // Returns
 {
   id: 'cs_abc123...',
-  url: 'https://settlr.dev/checkout/cs_abc123...',
+  url: 'https://settlr.app/checkout/cs_abc123...',
   expiresAt: 1702659600000, // 30 min expiry
 }
 ```

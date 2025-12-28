@@ -1,7 +1,17 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { Settlr, type SettlrConfig } from "./client";
-import type { CreatePaymentOptions, Payment, PaymentResult } from "./types";
+import type { CreatePaymentOptions, Payment } from "./types";
+
+/**
+ * Checkout URL options
+ */
+interface CheckoutUrlOptions {
+  amount: number;
+  memo?: string;
+  orderId?: string;
+  successUrl?: string;
+  cancelUrl?: string;
+}
 
 /**
  * Settlr context value
@@ -10,14 +20,14 @@ interface SettlrContextValue {
   /** Settlr client instance */
   settlr: Settlr | null;
 
-  /** Whether wallet is connected */
-  connected: boolean;
+  /** Whether user is authenticated */
+  authenticated: boolean;
 
-  /** Create a payment link */
+  /** Create a payment link (redirect flow) */
   createPayment: (options: CreatePaymentOptions) => Promise<Payment>;
 
-  /** Execute a direct payment */
-  pay: (options: { amount: number; memo?: string }) => Promise<PaymentResult>;
+  /** Generate checkout URL for redirect */
+  getCheckoutUrl: (options: CheckoutUrlOptions) => string;
 
   /** Get merchant's USDC balance */
   getBalance: () => Promise<number>;
@@ -30,78 +40,71 @@ const SettlrContext = createContext<SettlrContextValue | null>(null);
  */
 interface SettlrProviderProps {
   children: ReactNode;
-  config: Omit<SettlrConfig, "rpcEndpoint">;
+  config: SettlrConfig;
+  /** Whether user is authenticated (from Privy or other auth) */
+  authenticated?: boolean;
 }
 
 /**
  * Settlr Provider - Wraps your app to provide Settlr functionality
  *
+ * Works with Privy authentication - just pass the authenticated state.
+ *
  * @example
  * ```tsx
  * import { SettlrProvider } from '@settlr/sdk';
+ * import { usePrivy } from '@privy-io/react-auth';
  *
  * function App() {
+ *   const { authenticated } = usePrivy();
+ *
  *   return (
- *     <WalletProvider wallets={wallets}>
- *       <SettlrProvider config={{
+ *     <SettlrProvider
+ *       authenticated={authenticated}
+ *       config={{
+ *         apiKey: 'sk_live_xxxxxxxxxxxx',
  *         merchant: {
- *           name: 'My Store',
+ *           name: 'My Game',
  *           walletAddress: 'YOUR_WALLET',
  *         },
- *       }}>
- *         <YourApp />
- *       </SettlrProvider>
- *     </WalletProvider>
+ *       }}
+ *     >
+ *       <YourApp />
+ *     </SettlrProvider>
  *   );
  * }
  * ```
  */
-export function SettlrProvider({ children, config }: SettlrProviderProps) {
-  const { connection } = useConnection();
-  const wallet = useWallet();
-
+export function SettlrProvider({
+  children,
+  config,
+  authenticated = false,
+}: SettlrProviderProps) {
   const settlr = useMemo(() => {
     return new Settlr({
       ...config,
-      rpcEndpoint: connection.rpcEndpoint,
+      rpcEndpoint: config.rpcEndpoint ?? "https://api.devnet.solana.com",
     });
-  }, [config, connection.rpcEndpoint]);
+  }, [config]);
 
   const value = useMemo<SettlrContextValue>(
     () => ({
       settlr,
-      connected: wallet.connected,
+      authenticated,
 
       createPayment: (options: CreatePaymentOptions) => {
         return settlr.createPayment(options);
       },
 
-      pay: async (options: { amount: number; memo?: string }) => {
-        if (!wallet.publicKey || !wallet.signTransaction) {
-          return {
-            success: false,
-            signature: "",
-            amount: options.amount,
-            merchantAddress: settlr.getMerchantAddress().toBase58(),
-            error: "Wallet not connected",
-          };
-        }
-
-        return settlr.pay({
-          wallet: {
-            publicKey: wallet.publicKey,
-            signTransaction: wallet.signTransaction,
-          },
-          amount: options.amount,
-          memo: options.memo,
-        });
+      getCheckoutUrl: (options: { amount: number; memo?: string }) => {
+        return settlr.getCheckoutUrl(options);
       },
 
       getBalance: () => {
         return settlr.getMerchantBalance();
       },
     }),
-    [settlr, wallet]
+    [settlr, authenticated]
   );
 
   return (
@@ -117,23 +120,17 @@ export function SettlrProvider({ children, config }: SettlrProviderProps) {
  * import { useSettlr } from '@settlr/sdk';
  *
  * function CheckoutButton() {
- *   const { createPayment, pay, connected } = useSettlr();
+ *   const { getCheckoutUrl, authenticated } = useSettlr();
  *
- *   const handlePay = async () => {
- *     // Option 1: Create payment link
- *     const payment = await createPayment({ amount: 29.99 });
- *     window.location.href = payment.checkoutUrl;
- *
- *     // Option 2: Direct payment
- *     const result = await pay({ amount: 29.99 });
- *     if (result.success) {
- *       console.log('Paid!');
- *     }
+ *   const handleCheckout = () => {
+ *     // Redirect to Settlr checkout (handles Privy auth internally)
+ *     const url = getCheckoutUrl({ amount: 29.99, memo: 'Premium Pack' });
+ *     window.location.href = url;
  *   };
  *
  *   return (
- *     <button onClick={handlePay} disabled={!connected}>
- *       Pay $29.99
+ *     <button onClick={handleCheckout}>
+ *       Buy Premium Pack - $29.99
  *     </button>
  *   );
  * }

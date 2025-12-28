@@ -1,7 +1,7 @@
 {
   "name": "@settlr/sdk",
-  "version": "0.1.0",
-  "description": "Solana USDC payments in 7 lines of code",
+  "version": "0.2.0",
+  "description": "Solana USDC payments for games - email checkout, no wallet required",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -44,7 +44,6 @@
     "@solana/web3.js": "^1.98.0"
   },
   "devDependencies": {
-    "@solana/wallet-adapter-react": "^0.15.39",
     "@types/node": "^20.0.0",
     "@types/react": "^19.2.7",
     "react": "^19.2.3",
@@ -52,10 +51,10 @@
     "typescript": "^5.0.0"
   },
   "peerDependencies": {
-    "@solana/wallet-adapter-base": ">=0.9.0"
+    "react": ">=18.0.0"
   },
   "peerDependenciesMeta": {
-    "@solana/wallet-adapter-base": {
+    "react": {
       "optional": true
     }
   },
