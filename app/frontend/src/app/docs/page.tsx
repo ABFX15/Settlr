@@ -618,19 +618,271 @@ function CodeBlock({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Simple syntax highlighting
+  const highlightCode = (code: string, lang: string) => {
+    if (lang === "bash") {
+      return code.split("\n").map((line, i) => (
+        <div key={i}>
+          {line.startsWith("#") ? (
+            <span className="text-gray-500">{line}</span>
+          ) : (
+            <>
+              <span className="text-gray-500">$ </span>
+              <span className="text-emerald-400">{line}</span>
+            </>
+          )}
+        </div>
+      ));
+    }
+
+    if (lang === "json") {
+      return code.split("\n").map((line, i) => {
+        // Highlight JSON
+        const highlighted = line
+          .replace(/"([^"]+)":/g, '<span class="text-purple-400">"$1"</span>:')
+          .replace(
+            /: "([^"]+)"/g,
+            ': <span class="text-emerald-400">"$1"</span>'
+          )
+          .replace(/: (\d+)/g, ': <span class="text-orange-400">$1</span>')
+          .replace(
+            /: (true|false|null)/g,
+            ': <span class="text-blue-400">$1</span>'
+          );
+        return (
+          <div key={i} dangerouslySetInnerHTML={{ __html: highlighted }} />
+        );
+      });
+    }
+
+    // TypeScript/TSX highlighting
+    const keywords = [
+      "import",
+      "export",
+      "from",
+      "const",
+      "let",
+      "var",
+      "function",
+      "async",
+      "await",
+      "return",
+      "if",
+      "else",
+      "try",
+      "catch",
+      "throw",
+      "new",
+      "class",
+      "interface",
+      "type",
+      "extends",
+      "implements",
+      "default",
+      "typeof",
+    ];
+    const builtins = [
+      "console",
+      "process",
+      "window",
+      "document",
+      "Promise",
+      "Error",
+      "JSON",
+      "Object",
+      "Array",
+      "String",
+      "Number",
+      "Boolean",
+      "Date",
+      "Math",
+      "crypto",
+    ];
+    const reactKeywords = [
+      "useState",
+      "useEffect",
+      "useCallback",
+      "useMemo",
+      "useRef",
+      "useContext",
+    ];
+
+    return code.split("\n").map((line, lineIndex) => {
+      // Handle comments
+      if (line.trim().startsWith("//")) {
+        return (
+          <div key={lineIndex} className="text-gray-500">
+            {line}
+          </div>
+        );
+      }
+
+      // Process the line character by character for proper highlighting
+      const lineChars = line;
+
+      // Simple tokenizer
+      const tokens: { type: string; value: string }[] = [];
+      let i = 0;
+      while (i < lineChars.length) {
+        // String (double quotes)
+        if (
+          lineChars[i] === '"' ||
+          lineChars[i] === "'" ||
+          lineChars[i] === "`"
+        ) {
+          const quote = lineChars[i];
+          let str = quote;
+          i++;
+          while (i < lineChars.length && lineChars[i] !== quote) {
+            if (lineChars[i] === "\\" && i + 1 < lineChars.length) {
+              str += lineChars[i] + lineChars[i + 1];
+              i += 2;
+            } else {
+              str += lineChars[i];
+              i++;
+            }
+          }
+          if (i < lineChars.length) str += lineChars[i++];
+          tokens.push({ type: "string", value: str });
+          continue;
+        }
+
+        // Comment
+        if (lineChars[i] === "/" && lineChars[i + 1] === "/") {
+          tokens.push({ type: "comment", value: lineChars.slice(i) });
+          break;
+        }
+
+        // Word (identifier or keyword)
+        if (/[a-zA-Z_$]/.test(lineChars[i])) {
+          let word = "";
+          while (i < lineChars.length && /[a-zA-Z0-9_$]/.test(lineChars[i])) {
+            word += lineChars[i++];
+          }
+          if (keywords.includes(word)) {
+            tokens.push({ type: "keyword", value: word });
+          } else if (builtins.includes(word)) {
+            tokens.push({ type: "builtin", value: word });
+          } else if (reactKeywords.includes(word)) {
+            tokens.push({ type: "react", value: word });
+          } else if (word[0] === word[0].toUpperCase() && /[a-z]/.test(word)) {
+            tokens.push({ type: "class", value: word });
+          } else {
+            tokens.push({ type: "identifier", value: word });
+          }
+          continue;
+        }
+
+        // Number
+        if (/[0-9]/.test(lineChars[i])) {
+          let num = "";
+          while (i < lineChars.length && /[0-9._]/.test(lineChars[i])) {
+            num += lineChars[i++];
+          }
+          tokens.push({ type: "number", value: num });
+          continue;
+        }
+
+        // JSX tags
+        if (lineChars[i] === "<" && /[A-Za-z\/]/.test(lineChars[i + 1] || "")) {
+          let tag = "<";
+          i++;
+          while (
+            i < lineChars.length &&
+            lineChars[i] !== ">" &&
+            lineChars[i] !== " "
+          ) {
+            tag += lineChars[i++];
+          }
+          tokens.push({ type: "tag", value: tag });
+          continue;
+        }
+
+        // Operators and punctuation
+        tokens.push({ type: "punctuation", value: lineChars[i++] });
+      }
+
+      // Render tokens
+      return (
+        <div key={lineIndex}>
+          {tokens.map((token, tokenIndex) => {
+            switch (token.type) {
+              case "keyword":
+                return (
+                  <span key={tokenIndex} className="text-pink-400">
+                    {token.value}
+                  </span>
+                );
+              case "string":
+                return (
+                  <span key={tokenIndex} className="text-emerald-400">
+                    {token.value}
+                  </span>
+                );
+              case "comment":
+                return (
+                  <span key={tokenIndex} className="text-gray-500">
+                    {token.value}
+                  </span>
+                );
+              case "number":
+                return (
+                  <span key={tokenIndex} className="text-orange-400">
+                    {token.value}
+                  </span>
+                );
+              case "builtin":
+                return (
+                  <span key={tokenIndex} className="text-cyan-400">
+                    {token.value}
+                  </span>
+                );
+              case "react":
+                return (
+                  <span key={tokenIndex} className="text-purple-400">
+                    {token.value}
+                  </span>
+                );
+              case "class":
+                return (
+                  <span key={tokenIndex} className="text-yellow-300">
+                    {token.value}
+                  </span>
+                );
+              case "tag":
+                return (
+                  <span key={tokenIndex} className="text-blue-400">
+                    {token.value}
+                  </span>
+                );
+              default:
+                return (
+                  <span key={tokenIndex} className="text-gray-300">
+                    {token.value}
+                  </span>
+                );
+            }
+          })}
+        </div>
+      );
+    });
+  };
+
   return (
-    <div className="relative bg-gray-900 rounded-lg overflow-hidden mb-4">
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800/50">
-        <span className="text-xs text-gray-500 uppercase">{language}</span>
+    <div className="relative bg-gray-900 rounded-lg overflow-hidden mb-4 border border-gray-800">
+      <div className="flex items-center justify-between px-4 py-2 bg-gray-800/70 border-b border-gray-700">
+        <span className="text-xs text-gray-400 uppercase font-medium">
+          {language}
+        </span>
         <button
           onClick={handleCopy}
-          className="text-xs text-gray-500 hover:text-white transition-colors"
+          className="text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded hover:bg-gray-700"
         >
           {copied ? "✓ Copied" : "Copy"}
         </button>
       </div>
-      <pre className="p-4 overflow-x-auto">
-        <code className="text-sm text-gray-300">{children}</code>
+      <pre className="p-4 overflow-x-auto text-sm font-mono leading-relaxed">
+        <code>{highlightCode(children, language)}</code>
       </pre>
     </div>
   );

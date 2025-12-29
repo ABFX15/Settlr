@@ -129,8 +129,8 @@ export default function DemoStorePage() {
   return (
     <main className="min-h-screen bg-[var(--background)]">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[var(--card-bg)] border-b border-[var(--border-color)] backdrop-blur-lg">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--card-bg)]/95 border-b border-[var(--border-color)] backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
               href="/"
@@ -164,8 +164,11 @@ export default function DemoStorePage() {
         </div>
       </header>
 
+      {/* Spacer for fixed header */}
+      <div className="h-16" />
+
       {/* Hero */}
-      <section className="bg-gradient-to-b from-[var(--accent-muted)] to-transparent py-12 px-4">
+      <section className="bg-gradient-to-b from-[var(--accent-muted)] to-transparent py-10 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
             Fresh & Delicious
