@@ -44,6 +44,7 @@ Settlr is a Stripe-like payment platform built on Solana, enabling merchants to 
 
 - **Kora**: Solana Foundation gasless transaction relay for zero SOL gas fees
 - **Privy**: Embedded wallets with email/social login and fiat on-ramp
+- **Squads**: Multisig protection for platform treasury
 
 ## Project Structure
 
@@ -111,11 +112,11 @@ anchor build
 anchor deploy --provider.cluster devnet
 ```
 
-5. **Initialize platform config**
+5. **Initialize platform config with Squads**
 
 ```bash
-# Update the platform config PDA with your settings
-node migrations/deploy.ts
+# Initialize platform and transfer authority to Squads multisig
+npx ts-node scripts/init-with-squads.ts
 ```
 
 6. **Start the frontend**
@@ -283,6 +284,22 @@ window.location.href = payment.checkoutUrl;
 
 See [SDK Documentation](./packages/sdk/README.md) for full API reference.
 
+## Admin Dashboard
+
+Access the platform admin dashboard at `/admin` to:
+
+- View treasury balance (accumulated platform fees)
+- See on-chain details (PDAs, program ID)
+- Link to Squads multisig for fee claims
+
+### Claiming Platform Fees
+
+1. Go to [Squads Dashboard](https://devnet.squads.so)
+2. Connect as a multisig member
+3. Create a new transaction calling `claim_platform_fees`
+4. Get required signatures from other members
+5. Execute the transaction
+
 ## Roadmap
 
 - [x] Hosted checkout pages
@@ -298,10 +315,21 @@ See [SDK Documentation](./packages/sdk/README.md) for full API reference.
 ## Security Considerations
 
 - All funds flow directly to merchant wallets (non-custodial)
-- Platform treasury only receives small platform fees
+- Platform treasury only receives small platform fees (2%)
+- **Squads Multisig**: Platform authority is protected by Squads multisig - fee claims require multiple signatures
 - Refunds can only be initiated by the merchant who received the payment
 - Amount checks prevent overflow/underflow
 - PDA-based authentication for merchants
+
+### Platform Authority
+
+The platform is protected by a Squads multisig at:
+
+```
+Vault: DthkuDsPKR6MqqV28rVSBEqdgnuNtEU6QpLACZ7bCBpD
+```
+
+To claim platform fees, multisig members must create and approve a transaction via [Squads](https://devnet.squads.so).
 
 ## License
 

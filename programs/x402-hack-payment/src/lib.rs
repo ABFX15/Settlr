@@ -32,6 +32,10 @@ pub mod x402_hack_payment {
     pub fn refund_payment(ctx: Context<RefundPayment>) -> Result<()> {
         instructions::refund::handler(ctx)
     }
+
+    pub fn transfer_authority(ctx: Context<TransferAuthority>) -> Result<()> {
+        instructions::transfer::handler(ctx)
+    }
 }
 
 

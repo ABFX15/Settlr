@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 #[account]
 #[derive(InitSpace)]
 pub struct Platform {
-    pub authority: Pubkey,
+    pub authority: Pubkey,              // Can be a wallet OR a Squads vault
     pub treasury: Pubkey,
     pub usdc_mint: Pubkey,
     pub min_payment_amount: u64,

@@ -49,7 +49,8 @@ impl<'info> ClaimPlatformFees<'info> {
             authority: self.platform_config.to_account_info(),
         };
 
-        let seeds = &[Platform::TREASURY_SEED, &[self.platform_config.treasury_bump]];
+        // Use platform_config seeds since it's the token authority
+        let seeds = &[Platform::SEED, &[self.platform_config.bump]];
         let signer = &[&seeds[..]];
 
         let cpi_program = self.token_program.to_account_info();
