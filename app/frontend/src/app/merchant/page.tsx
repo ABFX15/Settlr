@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { usePrivy } from "@privy-io/react-auth";
 import { useWallets } from "@privy-io/react-auth/solana";
@@ -14,8 +14,17 @@ import {
   Globe,
   Code,
   LogIn,
+  Loader2,
+  Banknote,
 } from "lucide-react";
 import Link from "next/link";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { getAssociatedTokenAddress, getAccount } from "@solana/spl-token";
+
+// USDC on Devnet
+const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
+const USDC_DECIMALS = 6;
+const RPC_ENDPOINT = "https://api.devnet.solana.com";
 
 export default function MerchantPage() {
   const { authenticated, login } = usePrivy();
@@ -29,6 +38,40 @@ export default function MerchantPage() {
   const connected = authenticated && !!publicKey;
 
   const [copied, setCopied] = useState<string | null>(null);
+  const [balance, setBalance] = useState<number | null>(null);
+  const [loadingBalance, setLoadingBalance] = useState(false);
+
+  // Fetch USDC balance
+  const fetchBalance = useCallback(async () => {
+    if (!publicKey) return;
+
+    setLoadingBalance(true);
+    try {
+      const connection = new Connection(RPC_ENDPOINT, "confirmed");
+      const walletPubkey = new PublicKey(publicKey);
+      const ata = await getAssociatedTokenAddress(USDC_MINT, walletPubkey);
+
+      try {
+        const account = await getAccount(connection, ata);
+        const bal = Number(account.amount) / Math.pow(10, USDC_DECIMALS);
+        setBalance(bal);
+      } catch {
+        setBalance(0);
+      }
+    } catch (err) {
+      console.error("Error fetching balance:", err);
+      setBalance(0);
+    } finally {
+      setLoadingBalance(false);
+    }
+  }, [publicKey]);
+
+  // Fetch balance on load
+  useEffect(() => {
+    if (connected) {
+      fetchBalance();
+    }
+  }, [connected, fetchBalance]);
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -110,6 +153,47 @@ export default function MerchantPage() {
           </div>
           <p className="text-zinc-500 text-sm mt-3">
             Use this wallet address in your payment links to receive USDC.
+          </p>
+        </motion.div>
+
+        {/* Balance & Offramp Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-6"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-white">Your Balance</h2>
+            <button
+              onClick={fetchBalance}
+              disabled={loadingBalance}
+              className="text-sm text-zinc-400 hover:text-white transition-colors"
+            >
+              {loadingBalance ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                "Refresh"
+              )}
+            </button>
+          </div>
+
+          <div className="flex items-end gap-2 mb-4">
+            <span className="text-4xl font-bold text-white">
+              {balance !== null ? balance.toFixed(2) : "—"}
+            </span>
+            <span className="text-xl text-zinc-400 mb-1">USDC</span>
+          </div>
+
+          <Link href="/offramp">
+            <button className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+              <Banknote className="w-5 h-5" />
+              Cash Out to Bank
+            </button>
+          </Link>
+
+          <p className="text-zinc-500 text-xs mt-3 text-center">
+            Convert USDC to fiat via Sphere • 40+ countries supported
           </p>
         </motion.div>
 
