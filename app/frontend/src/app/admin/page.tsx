@@ -62,7 +62,10 @@ export default function AdminDashboardPage() {
   // Prefer external wallets (Phantom/Solflare) over embedded Privy wallets
   const solanaWallet = (() => {
     if (!wallets || wallets.length === 0) return undefined;
-    const externalWallet = wallets.find((w) => w.walletClientType !== "privy");
+    // Check for walletClientType if it exists on the wallet object
+    const externalWallet = wallets.find(
+      (w) => (w as { walletClientType?: string }).walletClientType !== "privy"
+    );
     return externalWallet || wallets[0];
   })();
 

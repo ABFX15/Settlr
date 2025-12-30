@@ -42,7 +42,9 @@ export default function DashboardPage() {
   const { wallets } = useWallets();
   // Prefer external wallets (Phantom/Solflare) over Privy embedded wallet
   const solanaWallet =
-    wallets?.find((w) => w.walletClientType !== "privy") || wallets?.[0];
+    wallets?.find(
+      (w) => (w as { walletClientType?: string }).walletClientType !== "privy"
+    ) || wallets?.[0];
   const publicKey = solanaWallet?.address;
   const connected = authenticated && !!publicKey;
 

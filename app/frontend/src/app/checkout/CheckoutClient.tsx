@@ -145,27 +145,20 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const activeWallet = (() => {
     if (!wallets || wallets.length === 0) return undefined;
 
-    // Debug: log all wallets to see what Privy returns
-    console.log(
-      "[Settlr] All wallets:",
-      wallets.map((w) => ({
-        type: w.walletClientType,
-        address: w.address,
-        connected: w.connected,
-      }))
-    );
+    // Type helper for wallet client type check
+    type WalletWithClientType = {
+      walletClientType?: string;
+      connected?: boolean;
+      address: string;
+    };
 
     // First, try to find an external wallet that's explicitly connected
     const connectedExternal = wallets.find(
-      (w) => w.walletClientType !== "privy" && w.connected === true
+      (w) =>
+        (w as WalletWithClientType).walletClientType !== "privy" &&
+        w.connected === true
     );
-    if (connectedExternal) {
-      console.log(
-        "[Settlr] Using connected external wallet:",
-        connectedExternal.walletClientType
-      );
-      return connectedExternal;
-    }
+    if (connectedExternal) return connectedExternal;
 
     // Next, check the user's linked accounts to see which wallet they authenticated with
     const linkedWalletAddress = user?.linkedAccounts?.find(
@@ -176,27 +169,16 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       const matchingWallet = wallets.find(
         (w) => w.address === linkedWalletAddress.address
       );
-      if (matchingWallet) {
-        console.log(
-          "[Settlr] Using linked wallet:",
-          matchingWallet.walletClientType
-        );
-        return matchingWallet;
-      }
+      if (matchingWallet) return matchingWallet;
     }
 
     // Fall back to any external wallet
-    const externalWallet = wallets.find((w) => w.walletClientType !== "privy");
-    if (externalWallet) {
-      console.log(
-        "[Settlr] Using first external wallet:",
-        externalWallet.walletClientType
-      );
-      return externalWallet;
-    }
+    const externalWallet = wallets.find(
+      (w) => (w as WalletWithClientType).walletClientType !== "privy"
+    );
+    if (externalWallet) return externalWallet;
 
     // Last resort: embedded wallet
-    console.log("[Settlr] Using embedded wallet");
     return wallets[0];
   })();
 
