@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { usePrivy } from "@privy-io/react-auth";
-import { useWallets } from "@privy-io/react-auth/solana";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   Wallet,
   TrendingUp,
@@ -39,14 +39,7 @@ interface PaymentRecord {
 
 export default function DashboardPage() {
   const { ready, authenticated, login } = usePrivy();
-  const { wallets } = useWallets();
-  // Prefer external wallets (Phantom/Solflare) over Privy embedded wallet
-  const solanaWallet =
-    wallets?.find(
-      (w) => (w as { walletClientType?: string }).walletClientType !== "privy"
-    ) || wallets?.[0];
-  const publicKey = solanaWallet?.address;
-  const connected = authenticated && !!publicKey;
+  const { publicKey, connected } = useActiveWallet();
 
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
   const [loading, setLoading] = useState(true);

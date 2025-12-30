@@ -722,17 +722,27 @@ export async function checkRateLimit(apiKey: string): Promise<{
 }
 
 export async function getApiKeysByMerchant(merchantId: string): Promise<ApiKey[]> {
+    console.log("[DB] getApiKeysByMerchant called with:", merchantId);
+
     if (isSupabaseConfigured()) {
+        console.log("[DB] Using Supabase, querying for merchant_id:", merchantId);
         const { data, error } = await supabase
             .from("api_keys")
             .select("*")
             .eq("merchant_id", merchantId)
             .order("created_at", { ascending: false });
 
-        if (error || !data) {
+        if (error) {
+            console.error("[DB] Supabase error:", error);
             return [];
         }
 
+        if (!data) {
+            console.log("[DB] No data returned from Supabase");
+            return [];
+        }
+
+        console.log("[DB] Supabase returned", data.length, "keys");
         return data.map((row: Record<string, unknown>) => ({
             id: row.id as string,
             merchantId: row.merchant_id as string,

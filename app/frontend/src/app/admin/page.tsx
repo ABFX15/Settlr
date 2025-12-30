@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePrivy } from "@privy-io/react-auth";
-import { useWallets } from "@privy-io/react-auth/solana";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   Wallet,
   TrendingUp,
@@ -57,20 +57,7 @@ interface PlatformConfig {
 
 export default function AdminDashboardPage() {
   const { ready, authenticated, login } = usePrivy();
-  const { wallets } = useWallets();
-
-  // Prefer external wallets (Phantom/Solflare) over embedded Privy wallets
-  const solanaWallet = (() => {
-    if (!wallets || wallets.length === 0) return undefined;
-    // Check for walletClientType if it exists on the wallet object
-    const externalWallet = wallets.find(
-      (w) => (w as { walletClientType?: string }).walletClientType !== "privy"
-    );
-    return externalWallet || wallets[0];
-  })();
-
-  const publicKey = solanaWallet?.address;
-  const connected = authenticated && !!publicKey;
+  const { solanaWallet, publicKey, connected } = useActiveWallet();
 
   const [loading, setLoading] = useState(true);
   const [treasuryBalance, setTreasuryBalance] = useState<number>(0);
@@ -185,9 +172,11 @@ export default function AdminDashboardPage() {
   }
 
   // Check if wallet is authorized
-  const isAuthorized = AUTHORIZED_ADMINS.includes(publicKey);
+  const isAuthorized = publicKey
+    ? AUTHORIZED_ADMINS.includes(publicKey)
+    : false;
 
-  if (!isAuthorized) {
+  if (!isAuthorized || !publicKey) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
         <div className="max-w-4xl mx-auto px-6 py-20">
@@ -206,7 +195,9 @@ export default function AdminDashboardPage() {
               This wallet is not authorized to access the admin dashboard.
             </p>
             <p className="text-sm text-slate-500 mb-8">
-              Connected: {publicKey.slice(0, 8)}...{publicKey.slice(-6)}
+              {publicKey
+                ? `Connected: ${publicKey.slice(0, 8)}...${publicKey.slice(-6)}`
+                : "No wallet connected"}
             </p>
             <Link
               href="/"

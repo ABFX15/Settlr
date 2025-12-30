@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { usePrivy } from "@privy-io/react-auth";
-import { useWallets } from "@privy-io/react-auth/solana";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   Store,
   Check,
@@ -16,6 +16,7 @@ import {
   LogIn,
   Loader2,
   Banknote,
+  Key,
 } from "lucide-react";
 import Link from "next/link";
 import { Connection, PublicKey } from "@solana/web3.js";
@@ -28,14 +29,7 @@ const RPC_ENDPOINT = "https://api.devnet.solana.com";
 
 export default function MerchantPage() {
   const { authenticated, login } = usePrivy();
-  const { wallets } = useWallets();
-  // Prefer external wallets (Phantom/Solflare) over Privy embedded wallet
-  const solanaWallet =
-    wallets?.find(
-      (w) => (w as { walletClientType?: string }).walletClientType !== "privy"
-    ) || wallets?.[0];
-  const publicKey = solanaWallet?.address;
-  const connected = authenticated && !!publicKey;
+  const { solanaWallet, publicKey, connected } = useActiveWallet();
 
   const [copied, setCopied] = useState<string | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
@@ -198,12 +192,32 @@ export default function MerchantPage() {
         </motion.div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <Link href="/create">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <Link href="/dashboard/api-keys">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
+              whileHover={{ scale: 1.02 }}
+              className="bg-zinc-900 border border-zinc-800 hover:border-amber-500/50 rounded-2xl p-6 cursor-pointer transition-all"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                  <Key className="w-6 h-6 text-amber-400" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">Get API Key</h3>
+                  <p className="text-zinc-400 text-sm">For SDK integration</p>
+                </div>
+              </div>
+            </motion.div>
+          </Link>
+
+          <Link href="/create">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
               whileHover={{ scale: 1.02 }}
               className="bg-zinc-900 border border-zinc-800 hover:border-[#f472b6]/50 rounded-2xl p-6 cursor-pointer transition-all"
             >

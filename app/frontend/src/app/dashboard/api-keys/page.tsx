@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { usePrivy } from "@privy-io/react-auth";
-import { useWallets } from "@privy-io/react-auth/solana";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   Key,
   Plus,
@@ -35,14 +35,8 @@ interface ApiKeyRecord {
 
 export default function ApiKeysPage() {
   const { authenticated, login } = usePrivy();
-  const { wallets } = useWallets();
-  // Prefer external wallets (Phantom/Solflare) over Privy embedded wallet
-  const solanaWallet =
-    wallets?.find(
-      (w) => (w as { walletClientType?: string }).walletClientType !== "privy"
-    ) || wallets?.[0];
-  const publicKey = solanaWallet?.address;
-  const connected = authenticated && !!publicKey;
+  const { publicKey, connected } = useActiveWallet();
+
   const [keys, setKeys] = useState<ApiKeyRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);

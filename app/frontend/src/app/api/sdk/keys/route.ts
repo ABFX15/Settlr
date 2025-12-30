@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
         const { apiKey, rawKey } = await createApiKey(
             merchantId,
-            name || "Default",           
+            name || "Default",
             tier || "free",
             isTest || false
         );
@@ -59,7 +59,9 @@ export async function GET(request: NextRequest) {
             );
         }
 
+        console.log("[API Keys] Fetching keys for merchantId:", merchantId);
         const keys = await getApiKeysByMerchant(merchantId);
+        console.log("[API Keys] Found", keys.length, "keys for merchant");
 
         // Return keys without the actual key hash
         return NextResponse.json({
