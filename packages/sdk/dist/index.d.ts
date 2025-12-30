@@ -584,6 +584,111 @@ declare function usePaymentLink(config: {
         cancelUrl?: string;
     }) => string>[0]) => Promise<string>;
 };
+/**
+ * Payment Modal - Iframe-based checkout that keeps users on your site
+ *
+ * @example
+ * ```tsx
+ * import { PaymentModal } from '@settlr/sdk';
+ *
+ * function ProductPage() {
+ *   const [showPayment, setShowPayment] = useState(false);
+ *
+ *   return (
+ *     <>
+ *       <button onClick={() => setShowPayment(true)}>
+ *         Buy Now - $49.99
+ *       </button>
+ *
+ *       {showPayment && (
+ *         <PaymentModal
+ *           amount={49.99}
+ *           merchantName="Arena GG"
+ *           merchantWallet="YOUR_WALLET_ADDRESS"
+ *           memo="Tournament Entry"
+ *           onSuccess={(result) => {
+ *             console.log('Paid!', result.signature);
+ *             setShowPayment(false);
+ *           }}
+ *           onClose={() => setShowPayment(false)}
+ *         />
+ *       )}
+ *     </>
+ *   );
+ * }
+ * ```
+ */
+interface PaymentModalProps {
+    /** Payment amount in USDC */
+    amount: number;
+    /** Merchant display name */
+    merchantName: string;
+    /** Merchant wallet address */
+    merchantWallet: string;
+    /** Optional memo/description */
+    memo?: string;
+    /** Optional order ID */
+    orderId?: string;
+    /** Called when payment succeeds */
+    onSuccess?: (result: {
+        signature: string;
+        amount: number;
+    }) => void;
+    /** Called when modal is closed */
+    onClose?: () => void;
+    /** Called on error */
+    onError?: (error: Error) => void;
+    /** Checkout base URL (default: https://settlr.dev/checkout) */
+    checkoutUrl?: string;
+}
+declare function PaymentModal({ amount, merchantName, merchantWallet, memo, orderId, onSuccess, onClose, onError, checkoutUrl, }: PaymentModalProps): react_jsx_runtime.JSX.Element;
+/**
+ * Hook to open payment modal programmatically
+ *
+ * @example
+ * ```tsx
+ * import { usePaymentModal } from '@settlr/sdk';
+ *
+ * function ProductPage() {
+ *   const { openPayment, PaymentModalComponent } = usePaymentModal({
+ *     merchantName: "Arena GG",
+ *     merchantWallet: "YOUR_WALLET",
+ *   });
+ *
+ *   return (
+ *     <>
+ *       <button onClick={() => openPayment({
+ *         amount: 49.99,
+ *         memo: "Tournament Entry",
+ *         onSuccess: (result) => console.log("Paid!", result),
+ *       })}>
+ *         Buy Now
+ *       </button>
+ *       <PaymentModalComponent />
+ *     </>
+ *   );
+ * }
+ * ```
+ */
+declare function usePaymentModal(config: {
+    merchantName: string;
+    merchantWallet: string;
+    checkoutUrl?: string;
+}): {
+    openPayment: (options: {
+        amount: number;
+        memo?: string;
+        orderId?: string;
+        onSuccess?: (result: {
+            signature: string;
+            amount: number;
+        }) => void;
+        onError?: (error: Error) => void;
+    }) => void;
+    closePayment: () => void;
+    isOpen: boolean;
+    PaymentModalComponent: () => react_jsx_runtime.JSX.Element | null;
+};
 
 /**
  * Verify a webhook signature
@@ -667,4 +772,4 @@ declare function createWebhookHandler(options: {
     onError?: (error: Error) => void;
 }): (req: any, res: any) => Promise<void>;
 
-export { BuyButton, type BuyButtonProps, CheckoutWidget, type CheckoutWidgetProps, type CreatePaymentOptions, type MerchantConfig, type Payment, type PaymentResult, type PaymentStatus, SETTLR_CHECKOUT_URL, SUPPORTED_NETWORKS, Settlr, type SettlrConfig, SettlrProvider, type TransactionOptions, USDC_MINT_DEVNET, USDC_MINT_MAINNET, type WebhookEventType, type WebhookHandler, type WebhookHandlers, type WebhookPayload, createWebhookHandler, formatUSDC, parseUSDC, parseWebhookPayload, shortenAddress, usePaymentLink, useSettlr, verifyWebhookSignature };
+export { BuyButton, type BuyButtonProps, CheckoutWidget, type CheckoutWidgetProps, type CreatePaymentOptions, type MerchantConfig, type Payment, PaymentModal, type PaymentModalProps, type PaymentResult, type PaymentStatus, SETTLR_CHECKOUT_URL, SUPPORTED_NETWORKS, Settlr, type SettlrConfig, SettlrProvider, type TransactionOptions, USDC_MINT_DEVNET, USDC_MINT_MAINNET, type WebhookEventType, type WebhookHandler, type WebhookHandlers, type WebhookPayload, createWebhookHandler, formatUSDC, parseUSDC, parseWebhookPayload, shortenAddress, usePaymentLink, usePaymentModal, useSettlr, verifyWebhookSignature };

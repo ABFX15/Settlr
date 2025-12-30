@@ -32,6 +32,7 @@ var index_exports = {};
 __export(index_exports, {
   BuyButton: () => BuyButton,
   CheckoutWidget: () => CheckoutWidget,
+  PaymentModal: () => PaymentModal,
   SETTLR_CHECKOUT_URL: () => SETTLR_CHECKOUT_URL,
   SUPPORTED_NETWORKS: () => SUPPORTED_NETWORKS,
   Settlr: () => Settlr,
@@ -44,6 +45,7 @@ __export(index_exports, {
   parseWebhookPayload: () => parseWebhookPayload,
   shortenAddress: () => shortenAddress,
   usePaymentLink: () => usePaymentLink,
+  usePaymentModal: () => usePaymentModal,
   useSettlr: () => useSettlr,
   verifyWebhookSignature: () => verifyWebhookSignature
 });
@@ -893,6 +895,193 @@ function usePaymentLink(config) {
     generateQRCode
   };
 }
+var modalStyles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backdropFilter: "blur(4px)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 9999,
+    padding: "16px"
+  },
+  container: {
+    position: "relative",
+    width: "100%",
+    maxWidth: "480px",
+    height: "90vh",
+    maxHeight: "700px",
+    backgroundColor: "#12121a",
+    borderRadius: "16px",
+    overflow: "hidden",
+    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
+  },
+  closeButton: {
+    position: "absolute",
+    top: "12px",
+    right: "12px",
+    width: "32px",
+    height: "32px",
+    borderRadius: "50%",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 10,
+    color: "white",
+    fontSize: "18px",
+    transition: "background-color 0.2s"
+  },
+  iframe: {
+    width: "100%",
+    height: "100%",
+    border: "none"
+  },
+  loading: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    color: "white",
+    fontSize: "14px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "12px"
+  }
+};
+function PaymentModal({
+  amount,
+  merchantName,
+  merchantWallet,
+  memo,
+  orderId,
+  onSuccess,
+  onClose,
+  onError,
+  checkoutUrl = "https://settlr.dev/checkout"
+}) {
+  const [loading, setLoading] = (0, import_react2.useState)(true);
+  const params = new URLSearchParams({
+    amount: amount.toString(),
+    merchant: merchantName,
+    to: merchantWallet,
+    embed: "true"
+  });
+  if (memo) params.set("memo", memo);
+  if (orderId) params.set("orderId", orderId);
+  const iframeSrc = `${checkoutUrl}?${params.toString()}`;
+  (0, import_react2.useEffect)(() => {
+    const handleMessage = (event) => {
+      if (!event.origin.includes("settlr.dev") && !event.origin.includes("localhost")) {
+        return;
+      }
+      const { type, data } = event.data || {};
+      switch (type) {
+        case "settlr:success":
+          onSuccess?.({
+            signature: data.signature,
+            amount: data.amount || amount
+          });
+          break;
+        case "settlr:error":
+          onError?.(new Error(data.message || "Payment failed"));
+          break;
+        case "settlr:close":
+          onClose?.();
+          break;
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [amount, onSuccess, onError, onClose]);
+  (0, import_react2.useEffect)(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") onClose?.();
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [onClose]);
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: modalStyles.overlay, onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: modalStyles.container, onClick: (e) => e.stopPropagation(), children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      "button",
+      {
+        style: modalStyles.closeButton,
+        onClick: onClose,
+        onMouseOver: (e) => e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.2)",
+        onMouseOut: (e) => e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)",
+        children: "\u2715"
+      }
+    ),
+    loading && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: modalStyles.loading, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Spinner, {}),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: "Loading checkout..." })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      "iframe",
+      {
+        src: iframeSrc,
+        style: {
+          ...modalStyles.iframe,
+          opacity: loading ? 0 : 1
+        },
+        onLoad: () => setLoading(false),
+        allow: "payment"
+      }
+    )
+  ] }) });
+}
+function usePaymentModal(config) {
+  const [modalState, setModalState] = (0, import_react2.useState)({
+    isOpen: false,
+    amount: 0
+  });
+  const openPayment = (0, import_react2.useCallback)(
+    (options) => {
+      setModalState({
+        isOpen: true,
+        ...options
+      });
+    },
+    []
+  );
+  const closePayment = (0, import_react2.useCallback)(() => {
+    setModalState((prev) => ({ ...prev, isOpen: false }));
+  }, []);
+  const PaymentModalComponent = (0, import_react2.useCallback)(() => {
+    if (!modalState.isOpen) return null;
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      PaymentModal,
+      {
+        amount: modalState.amount,
+        merchantName: config.merchantName,
+        merchantWallet: config.merchantWallet,
+        memo: modalState.memo,
+        orderId: modalState.orderId,
+        checkoutUrl: config.checkoutUrl,
+        onSuccess: (result) => {
+          modalState.onSuccess?.(result);
+          closePayment();
+        },
+        onError: modalState.onError,
+        onClose: closePayment
+      }
+    );
+  }, [modalState, config, closePayment]);
+  return {
+    openPayment,
+    closePayment,
+    isOpen: modalState.isOpen,
+    PaymentModalComponent
+  };
+}
 
 // src/webhooks.ts
 var import_crypto = __toESM(require("crypto"));
@@ -956,6 +1145,7 @@ function createWebhookHandler(options) {
 0 && (module.exports = {
   BuyButton,
   CheckoutWidget,
+  PaymentModal,
   SETTLR_CHECKOUT_URL,
   SUPPORTED_NETWORKS,
   Settlr,
@@ -968,6 +1158,7 @@ function createWebhookHandler(options) {
   parseWebhookPayload,
   shortenAddress,
   usePaymentLink,
+  usePaymentModal,
   useSettlr,
   verifyWebhookSignature
 });

@@ -168,26 +168,119 @@ function ReactSDKContent() {
           Full control over the payment flow with React hooks and components.
         </p>
 
-        {/* Provider Setup */}
-        <h3 className="text-xl font-semibold mb-4">1. Setup the Provider</h3>
+        {/* Payment Modal - NEW */}
+        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-emerald-400 mb-2">
+            ✨ New: Embedded Payment Modal
+          </h3>
+          <p className="text-gray-400 text-sm">
+            Accept payments without redirecting users away from your site!
+          </p>
+        </div>
+
+        <h3 className="text-xl font-semibold mb-4">
+          1. Payment Modal (Recommended)
+        </h3>
         <p className="text-gray-400 mb-4">
-          Wrap your app with the SettlrProvider to enable payments.
+          Keep users on your site with an embedded payment modal. Perfect for
+          iGaming, e-commerce, and subscriptions.
         </p>
         <CodeBlock language="tsx">
-          {`import { SettlrProvider } from '@settlr/sdk';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+          {`import { usePaymentModal } from '@settlr/sdk';
 
-function App() {
+function TournamentPage() {
+  const { openPayment, PaymentModalComponent } = usePaymentModal({
+    merchantName: "Arena GG",
+    merchantWallet: "YOUR_WALLET_ADDRESS",
+  });
+
+  const handleEnterTournament = () => {
+    openPayment({
+      amount: 25.00,
+      memo: "Tournament Entry Fee",
+      onSuccess: (result) => {
+        console.log("Paid!", result.signature);
+        unlockTournament();
+      },
+    });
+  };
+
   return (
-    <SettlrProvider 
-      network={WalletAdapterNetwork.Devnet}
-      // Optional: Add your API key for analytics
-      apiKey="your-api-key"
-    >
-      <YourApp />
-    </SettlrProvider>
+    <>
+      <button onClick={handleEnterTournament}>
+        Enter Tournament - $25.00
+      </button>
+      <PaymentModalComponent />
+    </>
   );
 }`}
+        </CodeBlock>
+
+        {/* Direct Modal Component */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">
+          2. Direct Modal Component
+        </h3>
+        <p className="text-gray-400 mb-4">
+          For more control, use the PaymentModal component directly.
+        </p>
+        <CodeBlock language="tsx">
+          {`import { PaymentModal } from '@settlr/sdk';
+import { useState } from 'react';
+
+function ProductPage() {
+  const [showPayment, setShowPayment] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setShowPayment(true)}>
+        Buy Now - $49.99
+      </button>
+
+      {showPayment && (
+        <PaymentModal
+          amount={49.99}
+          merchantName="My Store"
+          merchantWallet="YOUR_WALLET_ADDRESS"
+          memo="Premium Bundle"
+          onSuccess={(result) => {
+            console.log("Payment complete!", result.signature);
+            setShowPayment(false);
+            deliverProduct();
+          }}
+          onClose={() => setShowPayment(false)}
+        />
+      )}
+    </>
+  );
+}`}
+        </CodeBlock>
+
+        {/* Redirect Flow */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">
+          3. Redirect Flow (Alternative)
+        </h3>
+        <p className="text-gray-400 mb-4">
+          For simpler integrations, redirect users to Settlr checkout.
+        </p>
+        <CodeBlock language="tsx">
+          {`import { Settlr } from '@settlr/sdk';
+
+const settlr = new Settlr({
+  apiKey: "sk_test_xxx",
+  merchant: {
+    name: "My Store",
+    walletAddress: "YOUR_WALLET_ADDRESS",
+  },
+});
+
+// Redirect to Settlr checkout
+const url = settlr.getCheckoutUrl({
+  amount: 29.99,
+  memo: "Order #1234",
+  successUrl: "https://mystore.com/success",
+});
+
+window.location.href = url;`}
         </CodeBlock>
 
         {/* Pay Button */}
