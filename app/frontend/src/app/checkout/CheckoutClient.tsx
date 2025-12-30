@@ -156,7 +156,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     const connectedExternal = wallets.find(
       (w) =>
         (w as WalletWithClientType).walletClientType !== "privy" &&
-        w.connected === true
+        (w as WalletWithClientType).connected === true
     );
     if (connectedExternal) return connectedExternal;
 
