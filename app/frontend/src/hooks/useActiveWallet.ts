@@ -57,11 +57,25 @@ export function useActiveWallet() {
 
     return {
         wallet: activeWallet,
-        solanaWallet: activeWallet, // Alias for backward compatibility
+        solanaWallet: activeWallet,
         address: publicKey,
-        publicKey, // Alias for backward compatibility
+        publicKey,
         connected,
         ready,
         wallets,
     };
+}
+
+const publicKey = activeWallet?.address;
+const connected = authenticated && !!publicKey;
+
+return {
+    wallet: activeWallet,
+    solanaWallet: activeWallet, // Alias for backward compatibility
+    address: publicKey,
+    publicKey, // Alias for backward compatibility
+    connected,
+    ready,
+    wallets,
+};
 }
