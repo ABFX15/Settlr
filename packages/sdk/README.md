@@ -430,13 +430,17 @@ export async function POST(request: Request) {
 
 ### Webhook Events
 
-| Event               | Description                |
-| ------------------- | -------------------------- |
-| `payment.created`   | Payment link was created   |
-| `payment.completed` | Payment confirmed on-chain |
-| `payment.failed`    | Payment failed             |
-| `payment.expired`   | Payment link expired       |
-| `payment.refunded`  | Payment was refunded       |
+| Event                    | Description                |
+| ------------------------ | -------------------------- |
+| `payment.created`        | Payment link was created   |
+| `payment.completed`      | Payment confirmed on-chain |
+| `payment.failed`         | Payment failed             |
+| `payment.expired`        | Payment link expired       |
+| `payment.refunded`       | Payment was refunded       |
+| `subscription.created`   | Subscription was created   |
+| `subscription.renewed`   | Subscription was renewed   |
+| `subscription.cancelled` | Subscription was cancelled |
+| `subscription.expired`   | Subscription expired       |
 
 ### Webhook Payload
 
@@ -480,10 +484,21 @@ shortenAddress("ABC...XYZ"); // "ABC...XYZ"
 
 ## Networks
 
-| Network | USDC Mint                                      |
-| ------- | ---------------------------------------------- |
-| Devnet  | `4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU` |
-| Mainnet | `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v` |
+| Network | USDC Mint                                      | USDT Mint                                      |
+| ------- | ---------------------------------------------- | ---------------------------------------------- |
+| Devnet  | `4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU` | `EJwZgeZrdC8TXTQbQBoL6bfuAnFUUy1PVCMB4DYPzVaS` |
+| Mainnet | `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v` | `Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB` |
+
+## Supported Tokens
+
+```typescript
+import { SUPPORTED_TOKENS, getTokenMint, getTokenDecimals } from "@settlr/sdk";
+
+// Get token info
+const usdcMint = getTokenMint("USDC", "mainnet-beta");
+const usdtMint = getTokenMint("USDT", "mainnet-beta");
+const decimals = getTokenDecimals("USDC"); // 6
+```
 
 ## License
 

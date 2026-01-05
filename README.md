@@ -12,14 +12,21 @@ npm install @settlr/sdk
 ```
 
 ```tsx
-import { PaymentButton } from "@settlr/sdk";
+import { SettlrProvider, BuyButton } from "@settlr/sdk";
 
-<PaymentButton
-  amount={25.0}
-  token="USDC"
-  merchantWallet="your-wallet-address"
-  onSuccess={(payment) => console.log("Paid!", payment)}
-/>;
+<SettlrProvider
+  config={{
+    merchant: { name: "My Store", walletAddress: "your-wallet-address" },
+  }}
+>
+  <BuyButton
+    amount={25.0}
+    memo="Order #123"
+    onSuccess={(result) => console.log("Paid!", result.signature)}
+  >
+    Pay $25.00
+  </BuyButton>
+</SettlrProvider>;
 ```
 
 That's it. One component. [Try the live demo →](https://settlr.dev)
@@ -307,18 +314,25 @@ npm install @settlr/sdk
 **Option 1: React Component (easiest)**
 
 ```tsx
-import { PaymentButton } from "@settlr/sdk";
+import { SettlrProvider, BuyButton } from "@settlr/sdk";
 
-function Checkout() {
+function App() {
   return (
-    <PaymentButton
-      amount={25.0}
-      token="USDC"
-      merchantWallet="your-wallet-address"
-      onSuccess={(payment) => {
-        console.log("Payment successful!", payment.signature);
+    <SettlrProvider
+      config={{
+        merchant: { name: "My Store", walletAddress: "your-wallet-address" },
       }}
-    />
+    >
+      <BuyButton
+        amount={25.0}
+        memo="Order #123"
+        onSuccess={(result) => {
+          console.log("Payment successful!", result.signature);
+        }}
+      >
+        Pay $25.00
+      </BuyButton>
+    </SettlrProvider>
   );
 }
 ```
@@ -326,31 +340,33 @@ function Checkout() {
 **Option 2: Client SDK (more control)**
 
 ```typescript
-import { SettlrClient } from "@settlr/sdk";
+import { Settlr } from "@settlr/sdk";
 
-const client = new SettlrClient({
-  merchantWallet: "your-wallet-address",
+const settlr = new Settlr({
+  merchant: {
+    name: "My Store",
+    walletAddress: "your-wallet-address",
+  },
   network: "mainnet-beta", // or 'devnet'
 });
 
 // Create a payment
-const payment = await client.createPayment({
+const payment = await settlr.createPayment({
   amount: 50.0,
-  token: "USDC",
-  reference: "order-123",
+  memo: "Order #123",
 });
 
-// Verify payment on your backend
-const isValid = await client.verifyPayment(payment.signature);
+// Redirect to checkout
+window.location.href = payment.checkoutUrl;
 ```
 
 **Option 3: Webhooks**
 
 ```typescript
-import { verifyWebhook } from "@settlr/sdk";
+import { verifyWebhookSignature } from "@settlr/sdk";
 
 // In your API route
-const isValid = verifyWebhook(payload, signature, webhookSecret);
+const isValid = verifyWebhookSignature(body, signature, webhookSecret);
 if (isValid) {
   // Process payment.completed, payment.failed, etc.
 }
