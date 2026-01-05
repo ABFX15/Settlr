@@ -77,8 +77,8 @@ const plans = [
       { text: "Custom contracts", included: true },
       { text: "Volume discounts", included: true },
     ],
-    cta: "Contact Sales",
-    ctaLink: "mailto:hello@settlr.dev",
+    cta: "Submit Request",
+    ctaLink: "/waitlist",
   },
 ];
 

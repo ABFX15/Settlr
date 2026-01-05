@@ -662,10 +662,10 @@ export default function LandingPage() {
                 Try Live Demo
               </Link>
               <Link
-                href="mailto:hello@settlr.io"
+                href="/waitlist"
                 className="px-8 py-4 rounded-xl border border-white/20 text-white font-semibold text-lg hover:bg-white/10 transition-all"
               >
-                Contact Sales
+                Get Started
               </Link>
             </div>
           </motion.div>
@@ -699,7 +699,7 @@ export default function LandingPage() {
               Demo
             </Link>
             <Link
-              href="mailto:hello@settlr.io"
+              href="/waitlist"
               className="hover:text-white transition-colors"
             >
               Contact
