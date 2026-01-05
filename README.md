@@ -1,8 +1,41 @@
 # Settlr
 
-**Instant settlement for crypto payments**
+[![npm version](https://img.shields.io/npm/v/@settlr/sdk.svg)](https://www.npmjs.com/package/@settlr/sdk)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 
-Settlr is a Stripe-like payment platform built on Solana, enabling merchants to accept USDC payments with zero gas fees for customers. The platform features gasless transactions powered by Kora (Solana Foundation), instant settlement, and embedded wallets via Privy.
+**Accept USDC payments on Solana in 5 minutes.**
+
+No wallet adapter setup. No transaction building. No gas fees for your users.
+
+```bash
+npm install @settlr/sdk
+```
+
+```tsx
+import { PaymentButton } from "@settlr/sdk";
+
+<PaymentButton
+  amount={25.0}
+  token="USDC"
+  merchantWallet="your-wallet-address"
+  onSuccess={(payment) => console.log("Paid!", payment)}
+/>;
+```
+
+That's it. One component. [Try the live demo →](https://settlr.dev)
+
+---
+
+## Why Settlr?
+
+| Problem                         | Settlr Solution                      |
+| ------------------------------- | ------------------------------------ |
+| Wallet adapter setup is painful | Drop-in React components             |
+| Users need SOL for gas          | Gasless via Kora (Solana Foundation) |
+| Complex transaction building    | One function call                    |
+| Users need a wallet             | Embedded wallets via Privy           |
+
+---
 
 ## Features
 
@@ -265,21 +298,62 @@ npm run dev
 
 ## SDK
 
-Integrate payments in 7 lines of code:
+### Quick Start
 
 ```bash
 npm install @settlr/sdk
 ```
 
-```typescript
-import { Settlr } from "@settlr/sdk";
+**Option 1: React Component (easiest)**
 
-const settlr = new Settlr({
-  merchant: { name: "My Store", walletAddress: "YOUR_WALLET" },
+```tsx
+import { PaymentButton } from "@settlr/sdk";
+
+function Checkout() {
+  return (
+    <PaymentButton
+      amount={25.0}
+      token="USDC"
+      merchantWallet="your-wallet-address"
+      onSuccess={(payment) => {
+        console.log("Payment successful!", payment.signature);
+      }}
+    />
+  );
+}
+```
+
+**Option 2: Client SDK (more control)**
+
+```typescript
+import { SettlrClient } from "@settlr/sdk";
+
+const client = new SettlrClient({
+  merchantWallet: "your-wallet-address",
+  network: "mainnet-beta", // or 'devnet'
 });
 
-const payment = await settlr.createPayment({ amount: 29.99 });
-window.location.href = payment.checkoutUrl;
+// Create a payment
+const payment = await client.createPayment({
+  amount: 50.0,
+  token: "USDC",
+  reference: "order-123",
+});
+
+// Verify payment on your backend
+const isValid = await client.verifyPayment(payment.signature);
+```
+
+**Option 3: Webhooks**
+
+```typescript
+import { verifyWebhook } from "@settlr/sdk";
+
+// In your API route
+const isValid = verifyWebhook(payload, signature, webhookSecret);
+if (isValid) {
+  // Process payment.completed, payment.failed, etc.
+}
 ```
 
 See [SDK Documentation](./packages/sdk/README.md) for full API reference.
@@ -302,14 +376,19 @@ Access the platform admin dashboard at `/admin` to:
 
 ## Roadmap
 
+- [x] Drop-in React components
+- [x] Gasless transactions (Kora)
+- [x] Embedded wallets (Privy)
+- [x] USDC support
+- [x] USDT support
+- [x] Webhooks
+- [x] Subscription types
 - [x] Hosted checkout pages
 - [x] Merchant dashboard
-- [x] Analytics
-- [x] Webhooks
-- [x] Receipts
-- [ ] Multi-currency support (USDT, SOL)
-- [ ] Subscription payments
-- [ ] Mobile app
+- [x] Receipts & analytics
+- [ ] EVM chains (Ethereum, Base, Arbitrum)
+- [ ] Fiat on/off-ramps
+- [ ] Mobile SDK
 - [ ] Mainnet deployment
 
 ## Security Considerations
@@ -335,9 +414,13 @@ To claim platform fees, multisig members must create and approve a transaction v
 
 ISC
 
-## Contact
+## Get in Touch
 
-Built by [@ABFX15](https://github.com/ABFX15)
+- Twitter: [@your_handle](https://twitter.com/SettlrP)
+- GitHub: [@ABFX15](https://github.com/ABFX15)
+- npm: [@settlr/sdk](https://www.npmjs.com/package/@settlr/sdk)
+
+**Found this useful? Give it a ⭐ on GitHub!**
 
 ## Acknowledgments
 
