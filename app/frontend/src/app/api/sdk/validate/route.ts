@@ -52,6 +52,8 @@ export async function POST(request: NextRequest) {
             {
                 valid: true,
                 merchantId: validation.merchantId,
+                merchantWallet: validation.merchantWallet,
+                merchantName: validation.merchantName,
                 tier: validation.tier,
                 rateLimit: validation.rateLimit,
             },

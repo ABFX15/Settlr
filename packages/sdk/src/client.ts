@@ -60,6 +60,8 @@ export interface SettlrConfig {
 interface ApiKeyValidation {
     valid: boolean;
     merchantId?: string;
+    merchantWallet?: string;
+    merchantName?: string;
     tier?: 'free' | 'pro' | 'enterprise';
     rateLimit?: number;
     error?: string;
@@ -91,7 +93,8 @@ export class Settlr {
     private config: Required<Omit<SettlrConfig, 'apiKey'>> & { apiKey: string };
     private connection: Connection;
     private usdcMint: PublicKey;
-    private merchantWallet: PublicKey;
+    private merchantWallet: PublicKey | null;
+    private merchantWalletFromValidation?: string;
     private apiBaseUrl: string;
     private validated: boolean = false;
     private merchantId?: string;
@@ -103,13 +106,16 @@ export class Settlr {
             throw new Error('API key is required. Get one at https://settlr.dev/dashboard');
         }
 
-        // Validate merchant address
-        const walletAddress = typeof config.merchant.walletAddress === 'string'
-            ? config.merchant.walletAddress
-            : config.merchant.walletAddress.toBase58();
+        // Wallet address is optional - can be fetched from API validation
+        let walletAddress: string | undefined;
+        if (config.merchant.walletAddress) {
+            walletAddress = typeof config.merchant.walletAddress === 'string'
+                ? config.merchant.walletAddress
+                : config.merchant.walletAddress.toBase58();
 
-        if (!isValidSolanaAddress(walletAddress)) {
-            throw new Error('Invalid merchant wallet address');
+            if (!isValidSolanaAddress(walletAddress)) {
+                throw new Error('Invalid merchant wallet address');
+            }
         }
 
         const network = config.network ?? 'devnet';
@@ -118,7 +124,7 @@ export class Settlr {
         this.config = {
             merchant: {
                 ...config.merchant,
-                walletAddress,
+                walletAddress: walletAddress || '',
             },
             apiKey: config.apiKey,
             network,
@@ -129,7 +135,7 @@ export class Settlr {
         this.apiBaseUrl = testMode ? SETTLR_API_URL.development : SETTLR_API_URL.production;
         this.connection = new Connection(this.config.rpcEndpoint, 'confirmed');
         this.usdcMint = network === 'devnet' ? USDC_MINT_DEVNET : USDC_MINT_MAINNET;
-        this.merchantWallet = new PublicKey(walletAddress);
+        this.merchantWallet = walletAddress ? new PublicKey(walletAddress) : null;
     }
 
     /**
@@ -146,7 +152,7 @@ export class Settlr {
                     'X-API-Key': this.config.apiKey,
                 },
                 body: JSON.stringify({
-                    walletAddress: this.config.merchant.walletAddress,
+                    walletAddress: this.config.merchant.walletAddress || undefined,
                 }),
             });
 
@@ -164,6 +170,17 @@ export class Settlr {
             this.validated = true;
             this.merchantId = data.merchantId;
             this.tier = data.tier;
+
+            // Update merchant wallet from server if not provided in config
+            if (data.merchantWallet && !this.merchantWallet) {
+                this.merchantWallet = new PublicKey(data.merchantWallet);
+                this.config.merchant.walletAddress = data.merchantWallet;
+            }
+
+            // Update merchant name from server if available
+            if (data.merchantName && !this.config.merchant.name) {
+                this.config.merchant.name = data.merchantName;
+            }
         } catch (error) {
             if (error instanceof Error && error.message.includes('fetch')) {
                 // Network error - allow offline/dev mode for test keys
@@ -210,6 +227,12 @@ export class Settlr {
     }): string {
         const { amount, memo, orderId, successUrl, cancelUrl } = options;
 
+        // Get wallet from config or from API validation
+        const walletAddress = this.config.merchant.walletAddress?.toString() || this.merchantWalletFromValidation;
+        if (!walletAddress) {
+            throw new Error('Wallet address not available. Either provide walletAddress in config or call validateApiKey() first.');
+        }
+
         const baseUrl = this.config.testMode
             ? SETTLR_CHECKOUT_URL.development
             : SETTLR_CHECKOUT_URL.production;
@@ -217,7 +240,7 @@ export class Settlr {
         const params = new URLSearchParams({
             amount: amount.toString(),
             merchant: this.config.merchant.name,
-            to: this.config.merchant.walletAddress as string,
+            to: walletAddress,
         });
 
         if (memo) params.set('memo', memo);
@@ -244,13 +267,19 @@ export class Settlr {
      * ```
      */
     async createPayment(options: CreatePaymentOptions): Promise<Payment> {
-        // Validate API key before any operation
+        // Validate API key before any operation - this also fetches merchant wallet if not in config
         await this.validateApiKey();
 
         const { amount, memo, orderId, metadata, successUrl, cancelUrl, expiresIn = 3600 } = options;
 
         if (amount <= 0) {
             throw new Error('Amount must be greater than 0');
+        }
+
+        // Get wallet from config or from API validation
+        const walletAddress = this.config.merchant.walletAddress?.toString() || this.merchantWalletFromValidation;
+        if (!walletAddress) {
+            throw new Error('Wallet address not available. Ensure your API key is linked to a merchant with a wallet.');
         }
 
         const paymentId = generatePaymentId();
@@ -266,7 +295,7 @@ export class Settlr {
         const params = new URLSearchParams({
             amount: amount.toString(),
             merchant: this.config.merchant.name,
-            to: this.config.merchant.walletAddress as string,
+            to: walletAddress,
         });
 
         if (memo) params.set('memo', memo);
@@ -286,7 +315,7 @@ export class Settlr {
             token: 'USDC', // Default to USDC
             amountLamports,
             status: 'pending',
-            merchantAddress: this.config.merchant.walletAddress as string,
+            merchantAddress: walletAddress,
             checkoutUrl,
             qrCode,
             memo,
@@ -320,12 +349,18 @@ export class Settlr {
         // Validate API key before any operation
         await this.validateApiKey();
 
+        // Get merchant wallet - from config or from validation
+        const merchantWallet = this.getMerchantWallet();
+        if (!merchantWallet) {
+            throw new Error('Wallet address not available. Ensure your API key is linked to a merchant with a wallet.');
+        }
+
         const { payerPublicKey, amount, memo } = options;
         const amountLamports = parseUSDC(amount);
 
         // Get ATAs
         const payerAta = await getAssociatedTokenAddress(this.usdcMint, payerPublicKey);
-        const merchantAta = await getAssociatedTokenAddress(this.usdcMint, this.merchantWallet);
+        const merchantAta = await getAssociatedTokenAddress(this.usdcMint, merchantWallet);
 
         const instructions: TransactionInstruction[] = [];
 
@@ -338,7 +373,7 @@ export class Settlr {
                     createAssociatedTokenAccountInstruction(
                         payerPublicKey,
                         merchantAta,
-                        this.merchantWallet,
+                        merchantWallet,
                         this.usdcMint
                     )
                 );
@@ -436,18 +471,20 @@ export class Settlr {
                 signature,
             });
 
+            const merchantWallet = this.getMerchantWallet();
             return {
                 success: true,
                 signature,
                 amount,
-                merchantAddress: this.merchantWallet.toBase58(),
+                merchantAddress: merchantWallet?.toBase58() || '',
             };
         } catch (error) {
+            const merchantWallet = this.getMerchantWallet();
             return {
                 success: false,
                 signature: '',
                 amount,
-                merchantAddress: this.merchantWallet.toBase58(),
+                merchantAddress: merchantWallet?.toBase58() || '',
                 error: error instanceof Error ? error.message : 'Payment failed',
             };
         }
@@ -550,7 +587,11 @@ export class Settlr {
      */
     async getMerchantBalance(): Promise<number> {
         try {
-            const ata = await getAssociatedTokenAddress(this.usdcMint, this.merchantWallet);
+            const merchantWallet = this.getMerchantWallet();
+            if (!merchantWallet) {
+                throw new Error('Merchant wallet not available');
+            }
+            const ata = await getAssociatedTokenAddress(this.usdcMint, merchantWallet);
             const account = await getAccount(this.connection, ata);
             return Number(account.amount) / 1_000_000;
         } catch {
@@ -576,10 +617,24 @@ export class Settlr {
     }
 
     /**
+     * Get merchant wallet - from config or from API validation
+     * @internal
+     */
+    private getMerchantWallet(): PublicKey | null {
+        if (this.merchantWallet) {
+            return this.merchantWallet;
+        }
+        if (this.merchantWalletFromValidation) {
+            return new PublicKey(this.merchantWalletFromValidation);
+        }
+        return null;
+    }
+
+    /**
      * Get merchant wallet address
      */
-    getMerchantAddress(): PublicKey {
-        return this.merchantWallet;
+    getMerchantAddress(): PublicKey | null {
+        return this.getMerchantWallet();
     }
 
     /**

@@ -121,8 +121,8 @@ export interface MerchantConfig {
     /** Merchant display name */
     name: string;
 
-    /** Merchant wallet address (receives payments) */
-    walletAddress: string | PublicKey;
+    /** Merchant wallet address (receives payments) - optional if using registered API key */
+    walletAddress?: string | PublicKey;
 
     /** Optional logo URL */
     logoUrl?: string;

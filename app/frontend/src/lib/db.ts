@@ -666,6 +666,8 @@ export async function createApiKey(
 export async function validateApiKey(rawKey: string): Promise<{
     valid: boolean;
     merchantId?: string;
+    merchantWallet?: string;
+    merchantName?: string;
     tier?: "free" | "pro" | "enterprise";
     rateLimit?: number;
     error?: string;
@@ -675,6 +677,8 @@ export async function validateApiKey(rawKey: string): Promise<{
         return {
             valid: true,
             merchantId: "test_merchant",
+            merchantWallet: undefined, // Test keys still need wallet from SDK config
+            merchantName: undefined,
             tier: "free",
             rateLimit: 60,
         };
@@ -683,9 +687,17 @@ export async function validateApiKey(rawKey: string): Promise<{
     if (isSupabaseConfigured()) {
         const keyHash = hashApiKey(rawKey);
 
+        // Join with merchants to get wallet address
         const { data, error } = await supabase
             .from("api_keys")
-            .select("*")
+            .select(`
+                *,
+                merchants (
+                    id,
+                    name,
+                    wallet_address
+                )
+            `)
             .eq("key_hash", keyHash)
             .eq("active", true)
             .single();
@@ -708,9 +720,14 @@ export async function validateApiKey(rawKey: string): Promise<{
             })
             .eq("id", data.id);
 
+        // Extract merchant data from join
+        const merchant = data.merchants as { id: string; name: string; wallet_address: string } | null;
+
         return {
             valid: true,
             merchantId: data.merchant_id,
+            merchantWallet: merchant?.wallet_address,
+            merchantName: merchant?.name,
             tier: data.tier,
             rateLimit: data.rate_limit,
         };
@@ -725,9 +742,14 @@ export async function validateApiKey(rawKey: string): Promise<{
         apiKey.lastUsedAt = new Date();
         apiKey.requestCount++;
 
+        // Look up merchant for wallet address
+        const merchant = memoryMerchants.get(apiKey.merchantId);
+
         return {
             valid: true,
             merchantId: apiKey.merchantId,
+            merchantWallet: merchant?.walletAddress,
+            merchantName: merchant?.name,
             tier: apiKey.tier,
             rateLimit: apiKey.rateLimit,
         };

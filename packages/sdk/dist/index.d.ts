@@ -127,8 +127,8 @@ interface PaymentResult {
 interface MerchantConfig {
     /** Merchant display name */
     name: string;
-    /** Merchant wallet address (receives payments) */
-    walletAddress: string | PublicKey;
+    /** Merchant wallet address (receives payments) - optional if using registered API key */
+    walletAddress?: string | PublicKey;
     /** Optional logo URL */
     logoUrl?: string;
     /** Optional website URL */
@@ -262,6 +262,7 @@ declare class Settlr {
     private connection;
     private usdcMint;
     private merchantWallet;
+    private merchantWalletFromValidation?;
     private apiBaseUrl;
     private validated;
     private merchantId?;
@@ -404,9 +405,14 @@ declare class Settlr {
      */
     getConnection(): Connection;
     /**
+     * Get merchant wallet - from config or from API validation
+     * @internal
+     */
+    private getMerchantWallet;
+    /**
      * Get merchant wallet address
      */
-    getMerchantAddress(): PublicKey;
+    getMerchantAddress(): PublicKey | null;
     /**
      * Get USDC mint address
      */
