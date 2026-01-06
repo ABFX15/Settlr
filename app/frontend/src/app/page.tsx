@@ -16,6 +16,7 @@ import {
   CreditCard,
   CheckCircle2,
   X,
+  Globe,
 } from "lucide-react";
 
 // Code block component with syntax highlighting
@@ -178,8 +179,7 @@ import { SettlrCheckout } from 'settlr/vue'
           <div
             className="absolute -inset-1 -z-10 opacity-20 blur-2xl"
             style={{
-              background:
-                "linear-gradient(135deg, #a855f7, #22d3ee)",
+              background: "linear-gradient(135deg, #a855f7, #22d3ee)",
             }}
           />
 
@@ -327,6 +327,11 @@ function ComparisonTable() {
       feature: "Global Reach",
       stripe: { value: "Limited", isNegative: true },
       settlr: { value: "Worldwide", isPositive: true },
+    },
+    {
+      feature: "Multichain",
+      stripe: { value: "N/A", isNegative: false },
+      settlr: { value: "6 Chains", isPositive: true },
     },
     {
       feature: "Compliance",
@@ -752,10 +757,16 @@ export default function LandingPage() {
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             <Link
+              href="/demo/store"
+              className="text-sm text-white/50 transition-colors hover:text-white"
+            >
+              Try Demo
+            </Link>
+            <Link
               href="#demo"
               className="text-sm text-white/50 transition-colors hover:text-white"
             >
-              Demo
+              How it Works
             </Link>
             <Link
               href="#compare"
@@ -802,8 +813,7 @@ export default function LandingPage() {
             <span
               className="bg-clip-text text-transparent"
               style={{
-                backgroundImage:
-                  "linear-gradient(to right, #a855f7, #22d3ee)",
+                backgroundImage: "linear-gradient(to right, #a855f7, #22d3ee)",
               }}
             >
               Accept Payments Without Wallets
@@ -817,7 +827,8 @@ export default function LandingPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            Players pay with email. You get USDC instantly.
+            Customers pay with email from any chain. You get USDC instantly on
+            Solana.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -831,8 +842,7 @@ export default function LandingPage() {
               href="/demo/store"
               className="group relative overflow-hidden rounded-lg border-0 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-purple-500/30 transition-all hover:shadow-purple-500/50"
               style={{
-                backgroundImage:
-                  "linear-gradient(to right, #a855f7, #22d3ee)",
+                backgroundImage: "linear-gradient(to right, #a855f7, #22d3ee)",
               }}
             >
               <span className="flex items-center gap-2">
@@ -864,6 +874,7 @@ export default function LandingPage() {
             {[
               { icon: Mail, label: "Email Checkout" },
               { icon: Zap, label: "Gasless" },
+              { icon: Globe, label: "Multichain" },
               { icon: DollarSign, label: "2% Fees" },
               { icon: Clock, label: "Instant" },
             ].map((feature, index) => (
@@ -877,7 +888,7 @@ export default function LandingPage() {
               >
                 <feature.icon className="h-3.5 w-3.5" />
                 {feature.label}
-                {index < 3 && <span className="ml-2 text-purple-400">•</span>}
+                {index < 4 && <span className="ml-2 text-purple-400">•</span>}
               </span>
             ))}
           </motion.div>
@@ -917,8 +928,7 @@ export default function LandingPage() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-purple-500/30 transition-all hover:shadow-purple-500/50"
               style={{
-                backgroundImage:
-                  "linear-gradient(to right, #a855f7, #22d3ee)",
+                backgroundImage: "linear-gradient(to right, #a855f7, #22d3ee)",
               }}
             >
               View on npm

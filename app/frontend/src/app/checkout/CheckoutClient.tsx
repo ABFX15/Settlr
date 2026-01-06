@@ -9,6 +9,7 @@ import {
   useCreateWallet,
   useFundWallet,
 } from "@privy-io/react-auth/solana";
+import { useWallets as useEvmWallets } from "@privy-io/react-auth";
 import {
   Check,
   Loader2,
@@ -34,6 +35,10 @@ import {
   createTransferInstruction,
   createAssociatedTokenAccountInstruction,
 } from "@solana/spl-token";
+import { ChainSelector, getExplorerUrl } from "@/components/ChainSelector";
+import { useEvmPayment } from "@/hooks/useEvmPayment";
+import { useMayanSwap, MayanStatus } from "@/hooks/useMayanSwap";
+import { ChainType, USDC_ADDRESSES } from "@/hooks/useMultichainWallet";
 
 // Base58 alphabet for encoding signatures
 const BASE58_ALPHABET =
@@ -143,6 +148,42 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const [gaslessAvailable, setGaslessAvailable] = useState(false);
   const [checkingGasless, setCheckingGasless] = useState(true);
 
+  // Multichain state
+  const [selectedChain, setSelectedChain] = useState<ChainType>("solana");
+  const [evmBalance, setEvmBalance] = useState<number | null>(null);
+  const [mayanQuotePreview, setMayanQuotePreview] = useState<{
+    expectedOut: number;
+    fee: number;
+    eta: string;
+  } | null>(null);
+
+  // EVM wallet and payment hooks
+  const { wallets: evmWalletsList, ready: evmWalletsReady } = useEvmWallets();
+  const {
+    sendPayment: sendEvmPayment,
+    getBalance: getEvmBalance,
+    loading: evmLoading,
+  } = useEvmPayment();
+
+  // Mayan cross-chain swap hook
+  const {
+    executeSwap: executeMayanSwap,
+    getQuotePreview: getMayanQuotePreview,
+    trackSwap: trackMayanSwap,
+    loading: mayanLoading,
+    status: mayanStatus,
+    error: mayanError,
+  } = useMayanSwap();
+
+  // Get active EVM wallet
+  const activeEvmWallet =
+    evmWalletsList?.find((w) => w.walletClientType !== "privy") ||
+    evmWalletsList?.[0];
+  const hasEvmWallet = !!activeEvmWallet;
+
+  // Determine if selected chain is EVM
+  const isEvmChain = selectedChain !== "solana";
+
   // Check if gasless is available
   useEffect(() => {
     async function checkGasless() {
@@ -158,6 +199,20 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
     checkGasless();
   }, []);
+
+  // Fetch Mayan quote preview when EVM chain is selected
+  useEffect(() => {
+    async function fetchMayanQuote() {
+      if (!isEvmChain || amount <= 0) {
+        setMayanQuotePreview(null);
+        return;
+      }
+
+      const preview = await getMayanQuotePreview(amount, selectedChain);
+      setMayanQuotePreview(preview);
+    }
+    fetchMayanQuote();
+  }, [isEvmChain, amount, selectedChain, getMayanQuotePreview]);
 
   // Get active wallet - prefer the wallet that's actually connected
   // Privy may detect multiple wallet extensions, but only one is actively connected
@@ -367,8 +422,86 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
   };
 
+  // Process EVM payment via Mayan (cross-chain to Solana)
+  const processEvmPayment = async () => {
+    if (!activeEvmWallet?.address || !merchantWallet) {
+      setError("Missing wallet or merchant address");
+      setStep("error");
+      return;
+    }
+
+    setStep("processing");
+    setError("");
+
+    try {
+      // Use Mayan to bridge USDC from EVM chain to merchant's Solana wallet
+      const result = await executeMayanSwap({
+        amount,
+        fromChain: selectedChain,
+        toAddress: merchantWallet, // Merchant's Solana address
+      });
+
+      if (!result.success) {
+        throw new Error(result.error || "Cross-chain payment failed");
+      }
+
+      setTxSignature(result.hash || "");
+
+      // Complete checkout session if applicable
+      if (sessionId && result.hash) {
+        try {
+          const completeResponse = await fetch("/api/checkout/complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              sessionId,
+              signature: result.hash,
+              customerWallet: activeEvmWallet.address,
+              chain: selectedChain,
+              bridgeType: "mayan",
+              destinationChain: "solana",
+            }),
+          });
+
+          if (completeResponse.ok) {
+            console.log("[Mayan] Checkout completed");
+            if (successUrl) {
+              window.location.href = successUrl;
+              return;
+            }
+          }
+        } catch (completeErr) {
+          console.error("Error completing checkout:", completeErr);
+        }
+      }
+
+      setStep("success");
+      sendToParent("settlr:success", {
+        signature: result.hash,
+        amount,
+        merchantWallet,
+        memo,
+        sourceChain: selectedChain,
+        destinationChain: "solana",
+        bridgeType: "mayan",
+      });
+    } catch (err: unknown) {
+      console.error("[EVM] Payment error:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "Payment failed";
+      setError(errorMessage);
+      setStep("error");
+      sendToParent("settlr:error", { message: errorMessage });
+    }
+  };
+
   // Process payment (standard - user pays gas)
   const processPayment = async () => {
+    // If EVM chain is selected, use EVM payment flow
+    if (isEvmChain) {
+      return processEvmPayment();
+    }
+
     // If gasless is enabled, use that flow
     if (useGasless && gaslessAvailable) {
       return processGaslessPayment();
@@ -688,7 +821,11 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Confirm step
   if (step === "confirm") {
-    const hasEnoughBalance = balance !== null && balance >= amount;
+    // Check balance based on selected chain
+    const currentBalance = isEvmChain ? evmBalance : balance;
+    const hasEnoughBalance =
+      currentBalance !== null && currentBalance >= amount;
+    const hasCorrectWallet = isEvmChain ? hasEvmWallet : !!activeWallet;
 
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 relative">
@@ -766,6 +903,48 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               </div>
             )}
 
+            {/* Chain Selector */}
+            <div className="mb-4 p-3 bg-zinc-800/50 rounded-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-zinc-400 text-xs mb-1">Pay with USDC on</p>
+                  <ChainSelector
+                    selectedChain={selectedChain}
+                    onSelect={(chain) => {
+                      setSelectedChain(chain);
+                      // Reset balance when chain changes
+                      if (chain === "solana") {
+                        fetchBalance();
+                      } else {
+                        // Fetch EVM balance
+                        getEvmBalance(chain).then(setEvmBalance);
+                      }
+                    }}
+                  />
+                </div>
+                {isEvmChain && activeEvmWallet && (
+                  <div className="text-right">
+                    <p className="text-zinc-400 text-xs">Balance</p>
+                    <p
+                      className={`text-sm font-medium ${
+                        (evmBalance || 0) >= amount
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      ${evmBalance?.toFixed(2) || "0.00"}
+                    </p>
+                  </div>
+                )}
+              </div>
+              {isEvmChain && !hasEvmWallet && (
+                <p className="text-yellow-400 text-xs mt-2 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  Connect an Ethereum wallet to pay on {selectedChain}
+                </p>
+              )}
+            </div>
+
             {/* Payment details */}
             <div className="bg-zinc-800/50 rounded-2xl p-4 mb-4">
               <div className="flex justify-between items-center mb-3">
@@ -786,8 +965,56 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               )}
             </div>
 
-            {/* Gasless Toggle */}
-            {!checkingGasless && gaslessAvailable && (
+            {/* Mayan Cross-chain Info (for EVM chains) */}
+            {isEvmChain && (
+              <div className="bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/30 rounded-xl p-4 mb-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
+                    <Zap className="w-4 h-4 text-purple-400" />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-sm">
+                      Cross-Chain Payment
+                    </p>
+                    <p className="text-zinc-400 text-xs">
+                      Bridged to Solana via Mayan
+                    </p>
+                  </div>
+                </div>
+                {mayanQuotePreview ? (
+                  <div className="space-y-2 text-xs">
+                    <div className="flex justify-between text-zinc-400">
+                      <span>You pay ({selectedChain})</span>
+                      <span className="text-white">
+                        ${amount.toFixed(2)} USDC
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-zinc-400">
+                      <span>Merchant receives (Solana)</span>
+                      <span className="text-green-400">
+                        ~${mayanQuotePreview.expectedOut.toFixed(2)} USDC
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-zinc-400">
+                      <span>Bridge fee</span>
+                      <span>${mayanQuotePreview.fee.toFixed(4)}</span>
+                    </div>
+                    <div className="flex justify-between text-zinc-400">
+                      <span>Estimated time</span>
+                      <span>{mayanQuotePreview.eta}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-zinc-500 text-xs">
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    <span>Fetching best route...</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Gasless Toggle (Solana only) */}
+            {!isEvmChain && !checkingGasless && gaslessAvailable && (
               <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 rounded-xl p-4 mb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -885,16 +1112,30 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
             <button
               onClick={processPayment}
-              disabled={!hasEnoughBalance || loadingBalance}
+              disabled={
+                !hasEnoughBalance ||
+                loadingBalance ||
+                !hasCorrectWallet ||
+                evmLoading
+              }
               className={`w-full py-4 font-semibold rounded-xl flex items-center justify-center gap-2 transition-all ${
-                hasEnoughBalance && !loadingBalance
-                  ? useGasless && gaslessAvailable
+                hasEnoughBalance && !loadingBalance && hasCorrectWallet
+                  ? isEvmChain
+                    ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90"
+                    : useGasless && gaslessAvailable
                     ? "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:opacity-90"
                     : "bg-gradient-to-r from-purple-500 to-cyan-500 text-white hover:opacity-90"
                   : "bg-zinc-700 text-zinc-400 cursor-not-allowed"
               }`}
             >
-              {useGasless && gaslessAvailable ? (
+              {isEvmChain ? (
+                <>
+                  <Check className="w-5 h-5" />
+                  Pay ${amount.toFixed(2)} USDC on{" "}
+                  {selectedChain.charAt(0).toUpperCase() +
+                    selectedChain.slice(1)}
+                </>
+              ) : useGasless && gaslessAvailable ? (
                 <>
                   <Fuel className="w-5 h-5" />
                   Pay ${amount.toFixed(2)} USDC (No Gas)
@@ -921,6 +1162,31 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Processing step
   if (step === "processing") {
+    // Determine status message based on Mayan status for cross-chain payments
+    let statusMessage = "Please wait while we confirm your transaction...";
+    let statusTitle = "Processing Payment";
+
+    if (isEvmChain && mayanStatus !== "idle") {
+      switch (mayanStatus) {
+        case "quoting":
+          statusTitle = "Finding Best Route";
+          statusMessage = "Getting the best cross-chain swap rate...";
+          break;
+        case "approving":
+          statusTitle = "Approving USDC";
+          statusMessage = "Please approve USDC spending in your wallet...";
+          break;
+        case "swapping":
+          statusTitle = "Bridging to Solana";
+          statusMessage = "Sending USDC cross-chain via Mayan...";
+          break;
+        case "tracking":
+          statusTitle = "Confirming Bridge";
+          statusMessage = "Waiting for cross-chain confirmation...";
+          break;
+      }
+    }
+
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">
         <motion.div
@@ -931,12 +1197,13 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center mx-auto mb-6">
             <Loader2 className="w-10 h-10 text-white animate-spin" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">
-            Processing Payment
-          </h2>
-          <p className="text-zinc-400">
-            Please wait while we confirm your transaction...
-          </p>
+          <h2 className="text-2xl font-bold text-white mb-2">{statusTitle}</h2>
+          <p className="text-zinc-400">{statusMessage}</p>
+          {isEvmChain && (
+            <p className="text-xs text-zinc-500 mt-4">
+              Cross-chain payment powered by Mayan
+            </p>
+          )}
         </motion.div>
       </div>
     );
@@ -944,6 +1211,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Success step
   if (step === "success") {
+    // For EVM cross-chain payments, link to Mayan explorer
+    // For Solana direct payments, link to Solana explorer
+    const isCrossChain = selectedChain !== "solana";
+    const explorerUrl = isCrossChain
+      ? `https://explorer.mayan.finance/swap/${txSignature}`
+      : getExplorerUrl(selectedChain, txSignature);
+    const explorerName = isCrossChain ? "Mayan Explorer" : "Solana Explorer";
+
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">
         <motion.div
@@ -959,16 +1234,23 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           </h2>
           <p className="text-zinc-400 mb-6">
             You paid ${amount.toFixed(2)} USDC to {merchantName}
+            {selectedChain !== "solana" && (
+              <span className="block text-sm text-zinc-500 mt-1">
+                Bridged from{" "}
+                {selectedChain.charAt(0).toUpperCase() + selectedChain.slice(1)}{" "}
+                → Solana via Mayan
+              </span>
+            )}
           </p>
 
           {txSignature && (
             <a
-              href={`https://explorer.solana.com/tx/${txSignature}?cluster=devnet`}
+              href={explorerUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 mb-6"
             >
-              View on Solana Explorer
+              View on {explorerName}
               <ExternalLink className="w-4 h-4" />
             </a>
           )}

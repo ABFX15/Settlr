@@ -13,8 +13,9 @@
 ## Why Settlr?
 
 - ✅ **No wallet required** - Customers pay with just an email
-- ✅ **Zero gas fees** - No SOL needed, ever
-- ✅ **Instant settlement** - USDC direct to your wallet
+- ✅ **Zero gas fees** - No SOL needed, ever (Kora gasless)
+- ✅ **Pay from any chain** - Accept USDC from Ethereum, Base, Arbitrum, Polygon, Optimism (Mayan)
+- ✅ **Instant settlement** - USDC direct to your Solana wallet
 - ✅ **One component** - Drop-in React `<BuyButton>`
 - ✅ **2% flat fee** - No hidden costs
 
@@ -109,6 +110,21 @@ Settlr checkout handles authentication via Privy:
 - **Wallet login** → Connects Phantom, Solflare, or Backpack
 
 No wallet-adapter setup needed. Just redirect to checkout.
+
+### Multichain Payments
+
+Customers can pay with USDC from any supported chain. Settlr automatically bridges funds to your Solana wallet via Mayan:
+
+| Source Chain | Bridge Time | Gas Cost       |
+| ------------ | ----------- | -------------- |
+| Solana       | Instant     | Free (gasless) |
+| Base         | ~1-2 min    | ~$0.01         |
+| Arbitrum     | ~1-2 min    | ~$0.01         |
+| Optimism     | ~1-2 min    | ~$0.01         |
+| Polygon      | ~1-2 min    | ~$0.01         |
+| Ethereum     | ~1-3 min    | ~$1-5          |
+
+**You only need a Solana wallet** - cross-chain bridging is automatic.
 
 ### React Hook
 

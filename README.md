@@ -43,6 +43,7 @@ That's it. One component. [Try the live demo →](https://settlr.dev)
 | Users need SOL for gas          | Gasless via Kora (Solana Foundation) |
 | Complex transaction building    | One function call                    |
 | Users need a wallet             | Embedded wallets via Privy           |
+| USDC is on multiple chains      | Cross-chain payments via Mayan       |
 
 ---
 
@@ -63,9 +64,31 @@ That's it. One component. [Try the live demo →](https://settlr.dev)
 ### For Customers
 
 - **Zero Gas Fees**: Pay with USDC without needing SOL for gas (powered by Kora)
+- **Pay from Any Chain**: USDC on Ethereum, Base, Arbitrum, Polygon, or Optimism (powered by Mayan)
 - **Embedded Wallets**: Sign up with email/social, no crypto experience needed (Privy)
 - **Quick Checkout**: Scan QR code or click payment link
 - **Buy USDC**: Built-in fiat on-ramp to purchase USDC with card
+
+### Multichain Support
+
+Accept USDC from any major chain - funds are automatically bridged to your Solana wallet:
+
+```
+Customer pays USDC on Ethereum/Base/Arbitrum/Polygon/Optimism
+                    ↓
+              Mayan Protocol
+                    ↓
+        Merchant receives USDC on Solana
+```
+
+| Chain    | Bridge Time | Customer Gas   |
+| -------- | ----------- | -------------- |
+| Solana   | Instant     | Free (gasless) |
+| Base     | ~1-2 min    | ~$0.01         |
+| Arbitrum | ~1-2 min    | ~$0.01         |
+| Optimism | ~1-2 min    | ~$0.01         |
+| Polygon  | ~1-2 min    | ~$0.01         |
+| Ethereum | ~1-3 min    | ~$1-5          |
 
 ## Tech Stack
 
@@ -85,6 +108,7 @@ That's it. One component. [Try the live demo →](https://settlr.dev)
 ### Integrations
 
 - **Kora**: Solana Foundation gasless transaction relay for zero SOL gas fees
+- **Mayan**: Cross-chain swaps for EVM → Solana USDC payments
 - **Privy**: Embedded wallets with email/social login and fiat on-ramp
 - **Squads**: Multisig protection for platform treasury
 
