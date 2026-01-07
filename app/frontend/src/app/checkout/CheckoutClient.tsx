@@ -6,6 +6,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import {
   useWallets,
   useSignAndSendTransaction,
+  useSignTransaction,
   useCreateWallet,
   useFundWallet,
 } from "@privy-io/react-auth/solana";
@@ -107,6 +108,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     usePrivy();
   const { wallets, ready: walletsReady } = useWallets();
   const { signAndSendTransaction } = useSignAndSendTransaction();
+  const { signTransaction } = useSignTransaction();
   const { createWallet } = useCreateWallet();
   const { fundWallet } = useFundWallet();
 
@@ -361,25 +363,41 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       const { transaction: txBase64 } = await transferResponse.json();
       console.log("[Gasless] Transfer transaction created");
 
-      // Step 2: Decode and sign with user's wallet
+      // Step 2: Sign with user's wallet (sign only, don't send - Kora will send)
       const txBytes = Buffer.from(txBase64, "base64");
-
-      // Sign the transaction via Privy (partial sign - Kora will add fee payer signature)
-      // We need to get the wallet to sign
       const wallet = activeWallet;
 
-      // For Privy embedded wallets, we need to sign the transaction
-      // The transaction already has Kora as fee payer, user just needs to sign for the transfer
-      const signedResult = await signAndSendTransaction({
+      console.log("[Gasless] Requesting user signature...");
+      const signedResult = await signTransaction({
         transaction: txBytes,
         wallet: wallet,
         chain: "solana:devnet",
       });
 
-      // If signAndSendTransaction worked, we're done (Privy sent it)
-      const signatureBase58 = encodeBase58(signedResult.signature);
-      console.log("[Gasless] Transaction sent:", signatureBase58);
-      setTxSignature(signatureBase58);
+      console.log("[Gasless] User signed, sending to Kora for submission...");
+
+      // Step 3: Send user-signed transaction to Kora for fee payer signature + submission
+      const signedTxBase64 = Buffer.from(
+        signedResult.signedTransaction
+      ).toString("base64");
+
+      const signAndSendResponse = await fetch("/api/gasless", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "signAndSend",
+          transaction: signedTxBase64,
+        }),
+      });
+
+      if (!signAndSendResponse.ok) {
+        const errorData = await signAndSendResponse.json();
+        throw new Error(errorData.error || "Failed to submit transaction");
+      }
+
+      const { signature } = await signAndSendResponse.json();
+      console.log("[Gasless] Transaction sent:", signature);
+      setTxSignature(signature);
 
       // Complete checkout session if applicable
       if (sessionId) {
@@ -389,7 +407,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               sessionId,
-              signature: signatureBase58,
+              signature: signature,
               customerWallet: activeWallet.address,
             }),
           });
@@ -408,7 +426,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       setStep("success");
       sendToParent("settlr:success", {
-        signature: signatureBase58,
+        signature: signature,
         amount,
         merchantWallet,
         memo,
