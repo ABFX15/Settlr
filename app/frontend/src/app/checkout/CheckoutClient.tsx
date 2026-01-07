@@ -153,6 +153,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const [useGasless, setUseGasless] = useState(false); // Gasless only works with external wallets
   const [gaslessAvailable, setGaslessAvailable] = useState(false);
   const [checkingGasless, setCheckingGasless] = useState(true);
+  const [privyFeePayerAddress, setPrivyFeePayerAddress] = useState<
+    string | null
+  >(null); // For embedded wallet gasless
 
   // Multichain state
   const [selectedChain, setSelectedChain] = useState<ChainType>("solana");
@@ -190,7 +193,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Determine if selected chain is EVM
   const isEvmChain = selectedChain !== "solana";
 
-  // Check if gasless is available
+  // Check if gasless is available (Kora for external wallets)
   useEffect(() => {
     async function checkGasless() {
       try {
@@ -204,6 +207,26 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       }
     }
     checkGasless();
+  }, []);
+
+  // Check if Privy fee payer is available (for embedded wallet gasless)
+  useEffect(() => {
+    async function checkPrivyFeePayer() {
+      try {
+        const response = await fetch("/api/sponsor-transaction");
+        const data = await response.json();
+        if (data.enabled && data.feePayerAddress) {
+          setPrivyFeePayerAddress(data.feePayerAddress);
+          console.log(
+            "[Privy Gasless] Fee payer available:",
+            data.feePayerAddress
+          );
+        }
+      } catch (err) {
+        console.log("[Privy Gasless] Fee payer not available:", err);
+      }
+    }
+    checkPrivyFeePayer();
   }, []);
 
   // Fetch Mayan quote preview when EVM chain is selected
@@ -334,6 +357,127 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       setError("Failed to create wallet");
     } finally {
       setCreatingWallet(false);
+    }
+  };
+
+  // Process sponsored payment for embedded wallets (Privy + Helius pattern)
+  // Server creates tx (with its blockhash), user signs, server submits
+  const processSponsoredPayment = async () => {
+    if (!activeWallet?.address || !merchantWallet || !privyFeePayerAddress) {
+      setError("Missing wallet, merchant, or fee payer");
+      setStep("error");
+      return;
+    }
+
+    setStep("processing");
+    setError("");
+
+    try {
+      const amountInBaseUnits = Math.round(
+        amount * Math.pow(10, USDC_DECIMALS)
+      );
+
+      // Step 1: Server creates the transaction (with its own blockhash)
+      // This ensures blockhash is from the same RPC Privy uses
+      console.log("[Sponsored] Step 1: Server creating transaction...");
+      const createResponse = await fetch("/api/sponsor-transaction", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create",
+          amount: amountInBaseUnits,
+          source: activeWallet.address,
+          destination: merchantWallet,
+        }),
+      });
+
+      if (!createResponse.ok) {
+        const errorData = await createResponse.json();
+        throw new Error(errorData.error || "Failed to create transaction");
+      }
+
+      const { transaction: txBase64 } = await createResponse.json();
+      console.log("[Sponsored] Transaction created by server");
+
+      // Step 2: User signs their portion (the USDC transfer authorization)
+      console.log("[Sponsored] Step 2: Requesting user signature...");
+      const txBytes = Buffer.from(txBase64, "base64");
+
+      const signedResult = await signTransaction({
+        transaction: txBytes,
+        wallet: activeWallet,
+        chain: "solana:devnet",
+      });
+
+      console.log("[Sponsored] User signed");
+
+      // Step 3: Send user-signed tx back to server for fee payer signature + broadcast
+      console.log("[Sponsored] Step 3: Server signing and submitting...");
+      const signedTxBase64 = Buffer.from(
+        signedResult.signedTransaction
+      ).toString("base64");
+
+      const submitResponse = await fetch("/api/sponsor-transaction", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "submit",
+          transaction: signedTxBase64,
+        }),
+      });
+
+      if (!submitResponse.ok) {
+        const errorData = await submitResponse.json();
+        throw new Error(errorData.error || "Failed to submit transaction");
+      }
+
+      const { transactionHash } = await submitResponse.json();
+      console.log("[Sponsored] Transaction sent:", transactionHash);
+
+      setTxSignature(transactionHash);
+
+      // Complete checkout session if needed
+      if (sessionId) {
+        try {
+          const completeResponse = await fetch("/api/checkout/complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              sessionId,
+              signature: transactionHash,
+              customerWallet: activeWallet.address,
+            }),
+          });
+
+          if (completeResponse.ok) {
+            const completeData = await completeResponse.json();
+            console.log("[Sponsored] Checkout completed:", completeData);
+
+            if (successUrl) {
+              window.location.href = successUrl;
+              return;
+            }
+          }
+        } catch (completeErr) {
+          console.error("[Sponsored] Error completing checkout:", completeErr);
+        }
+      }
+
+      setStep("success");
+      sendToParent("settlr:success", {
+        signature: transactionHash,
+        amount,
+        merchantWallet,
+        memo,
+        sponsored: true,
+      });
+    } catch (err: unknown) {
+      console.error("[Sponsored] Payment error:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "Payment failed";
+      setError(errorMessage);
+      setStep("error");
+      sendToParent("settlr:error", { message: errorMessage });
     }
   };
 
@@ -530,9 +674,17 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       return processEvmPayment();
     }
 
-    // If gasless is enabled, use that flow
+    // If gasless is enabled (Kora), use that flow (for external wallets)
     if (useGasless && gaslessAvailable) {
       return processGaslessPayment();
+    }
+
+    // For embedded wallets with no SOL, use Privy-sponsored flow
+    // This is the Pump.fun / Helius pattern where server pays gas
+    if (!isExternalWallet && privyFeePayerAddress) {
+      // Use sponsored payment for embedded wallets (they never have SOL)
+      console.log("[Payment] Using Privy-sponsored flow for embedded wallet");
+      return processSponsoredPayment();
     }
 
     if (!activeWallet?.address || !merchantWallet) {
@@ -601,9 +753,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         verifySignatures: false,
       });
 
-      // Sign and send via Privy with gas sponsorship
-      // For embedded wallets, use sponsor: true so Privy pays gas (like Pump.fun)
-      // For external wallets, user pays their own gas
+      // Sign and send via Privy
+      // Note: Embedded wallets use processSponsoredPayment() instead
+      // This path is for external wallets (Phantom, etc.) that have their own SOL
       const result = await signAndSendTransaction({
         transaction: serializedTx,
         wallet: activeWallet,
@@ -611,8 +763,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         options: {
           skipPreflight: true,
           commitment: "confirmed",
-          // Enable Privy gas sponsorship for embedded wallets (no SOL needed!)
-          sponsor: !isExternalWallet,
         },
       });
 
