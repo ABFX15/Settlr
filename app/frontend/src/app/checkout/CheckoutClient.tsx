@@ -149,7 +149,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const [balance, setBalance] = useState<number | null>(null);
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [creatingWallet, setCreatingWallet] = useState(false);
-  const [useGasless, setUseGasless] = useState(true); // Default to gasless
+  const [useGasless, setUseGasless] = useState(false); // Gasless only works with external wallets
   const [gaslessAvailable, setGaslessAvailable] = useState(false);
   const [checkingGasless, setCheckingGasless] = useState(true);
 
@@ -1041,42 +1041,48 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               </div>
             )}
 
-            {/* Gasless Toggle (Solana only) */}
-            {!isEvmChain && !checkingGasless && gaslessAvailable && (
-              <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 rounded-xl p-4 mb-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                      <Fuel className="w-5 h-5 text-emerald-400" />
+            {/* Gasless Toggle (Solana only, external wallets only) */}
+            {/* Note: Gasless requires partial signing which Privy embedded wallets don't support */}
+            {!isEvmChain &&
+              !checkingGasless &&
+              gaslessAvailable &&
+              isExternalWallet && (
+                <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 rounded-xl p-4 mb-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                        <Fuel className="w-5 h-5 text-emerald-400" />
+                      </div>
+                      <div>
+                        <p className="text-white font-medium">
+                          Gasless Payment
+                        </p>
+                        <p className="text-zinc-400 text-xs">
+                          No SOL needed for gas fees
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-white font-medium">Gasless Payment</p>
-                      <p className="text-zinc-400 text-xs">
-                        No SOL needed for gas fees
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setUseGasless(!useGasless)}
-                    className={`relative w-12 h-6 rounded-full transition-colors ${
-                      useGasless ? "bg-emerald-500" : "bg-zinc-600"
-                    }`}
-                  >
-                    <span
-                      className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
-                        useGasless ? "translate-x-6" : "translate-x-0.5"
+                    <button
+                      onClick={() => setUseGasless(!useGasless)}
+                      className={`relative w-12 h-6 rounded-full transition-colors ${
+                        useGasless ? "bg-emerald-500" : "bg-zinc-600"
                       }`}
-                    />
-                  </button>
+                    >
+                      <span
+                        className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
+                          useGasless ? "translate-x-6" : "translate-x-0.5"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  {useGasless && (
+                    <p className="text-emerald-400 text-xs mt-2 flex items-center gap-1">
+                      <Check className="w-3 h-3" />
+                      Gas fees covered by Settlr
+                    </p>
+                  )}
                 </div>
-                {useGasless && (
-                  <p className="text-emerald-400 text-xs mt-2 flex items-center gap-1">
-                    <Check className="w-3 h-3" />
-                    Gas fees covered by Settlr
-                  </p>
-                )}
-              </div>
-            )}
+              )}
 
             {/* Low balance warning with fund options */}
             {!hasEnoughBalance && balance !== null && activeWallet && (
