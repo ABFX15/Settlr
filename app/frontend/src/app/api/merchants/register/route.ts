@@ -8,7 +8,7 @@ import { createMerchant, createApiKey, getMerchantByWallet } from "@/lib/db";
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { name, walletAddress, webhookUrl } = body;
+        const { name, websiteUrl, walletAddress, webhookUrl } = body;
 
         // Validate required fields
         if (!name || typeof name !== "string" || name.trim().length < 2) {
@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
         // Create merchant
         const merchant = await createMerchant({
             name: name.trim(),
+            websiteUrl: websiteUrl || null,
             walletAddress,
             webhookUrl: webhookUrl || null,
         });

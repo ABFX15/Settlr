@@ -108,9 +108,9 @@ const faqs = [
       "Yes, refunds are built into our smart contract. You can issue full or partial refunds with one click.",
   },
   {
-    question: "Do I need to KYC?",
+    question: "What verification is required?",
     answer:
-      "No KYC required to start. Payments go directly to your wallet. For enterprise features, we may require business verification.",
+      "We have a simple onboarding process. Basic verification is handled seamlessly through our partners. For enterprise features, additional business verification may be required.",
   },
 ];
 

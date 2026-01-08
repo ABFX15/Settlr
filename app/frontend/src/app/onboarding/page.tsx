@@ -25,6 +25,7 @@ type PayoutMethod = "wallet" | "exchange";
 interface OnboardingState {
   step: 1 | 2 | 3 | 4;
   businessName: string;
+  websiteUrl: string;
   payoutMethod: PayoutMethod;
   payoutAddress: string;
   webhookUrl: string;
@@ -40,6 +41,7 @@ export default function OnboardingPage() {
   const [state, setState] = useState<OnboardingState>({
     step: 1,
     businessName: "",
+    websiteUrl: "",
     payoutMethod: "wallet",
     payoutAddress: "",
     webhookUrl: "",
@@ -101,6 +103,7 @@ export default function OnboardingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: state.businessName,
+          websiteUrl: state.websiteUrl || null,
           walletAddress: state.payoutAddress,
           webhookUrl: state.webhookUrl || null,
         }),
@@ -183,8 +186,8 @@ export default function OnboardingPage() {
             Merchant Onboarding
           </h1>
           <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-            Set up your account to start accepting USDC payments. No monthly
-            fees, no KYC.
+            Set up your account to start accepting USDC payments. Simple setup,
+            no monthly fees.
           </p>
         </motion.div>
 
@@ -259,6 +262,23 @@ export default function OnboardingPage() {
                   placeholder="Your Company Name"
                   className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#a855f7]/50"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
+                  Website URL
+                </label>
+                <input
+                  type="url"
+                  value={state.websiteUrl}
+                  onChange={(e) =>
+                    setState((s) => ({ ...s, websiteUrl: e.target.value }))
+                  }
+                  placeholder="https://yourwebsite.com"
+                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#a855f7]/50"
+                />
+                <p className="text-xs text-zinc-500 mt-1">
+                  Optional — helps us verify your business
+                </p>
               </div>
             </div>
 

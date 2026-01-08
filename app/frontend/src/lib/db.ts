@@ -11,6 +11,7 @@ import { supabase, isSupabaseConfigured } from "./supabase";
 export interface Merchant {
     id: string;
     name: string;
+    websiteUrl?: string | null;
     walletAddress: string;
     webhookUrl?: string | null;
     webhookSecret?: string | null;
@@ -546,13 +547,14 @@ export async function getMerchantByWallet(walletAddress: string): Promise<Mercha
 }
 
 export async function createMerchant(
-    data: Pick<Merchant, "name" | "walletAddress" | "webhookUrl">
+    data: Pick<Merchant, "name" | "walletAddress" | "webhookUrl"> & { websiteUrl?: string | null }
 ): Promise<Merchant> {
     if (isSupabaseConfigured()) {
         const { data: inserted, error } = await supabase
             .from("merchants")
             .insert({
                 name: data.name,
+                website_url: data.websiteUrl,
                 wallet_address: data.walletAddress,
                 webhook_url: data.webhookUrl,
             })
@@ -568,6 +570,7 @@ export async function createMerchant(
             id: inserted.id,
             name: inserted.name,
             walletAddress: inserted.wallet_address,
+            websiteUrl: inserted.website_url,
             webhookUrl: inserted.webhook_url,
             webhookSecret: inserted.webhook_secret,
             createdAt: new Date(inserted.created_at),
@@ -577,6 +580,7 @@ export async function createMerchant(
         const merchant: Merchant = {
             id: crypto.randomUUID(),
             name: data.name,
+            websiteUrl: data.websiteUrl || null,
             walletAddress: data.walletAddress,
             webhookUrl: data.webhookUrl,
             createdAt: new Date(),

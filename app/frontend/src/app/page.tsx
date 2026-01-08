@@ -296,7 +296,7 @@ function ComparisonTable() {
     {
       feature: "Transaction Fees",
       stripe: { value: "2.9% + $0.30", isNegative: true },
-      settlr: { value: "2% flat", isPositive: true },
+      settlr: { value: "From 2%", isPositive: true },
     },
     {
       feature: "Settlement Time",
@@ -336,7 +336,7 @@ function ComparisonTable() {
     {
       feature: "Compliance",
       stripe: { value: "Complex KYC", isNegative: true },
-      settlr: { value: "Built-in", isPositive: true },
+      settlr: { value: "Simple", isPositive: true },
     },
   ];
 
@@ -871,7 +871,7 @@ export default function LandingPage() {
               { icon: Mail, label: "Email Checkout" },
               { icon: Zap, label: "Gasless" },
               { icon: Globe, label: "Multichain" },
-              { icon: DollarSign, label: "2% Fees" },
+              { icon: DollarSign, label: "From 2%" },
               { icon: Clock, label: "Instant" },
             ].map((feature, index) => (
               <span

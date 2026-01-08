@@ -97,8 +97,7 @@ function QuickStartContent() {
             </h3>
           </div>
           <p className="text-gray-400 mb-4">
-            Sign up to get your API key. No KYC required - just your wallet
-            address.
+            Sign up to get your API key. Quick setup with your wallet address.
           </p>
           <a
             href="/onboarding"

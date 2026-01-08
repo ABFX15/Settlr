@@ -116,7 +116,8 @@ export default function MerchantPage() {
           </div>
           <h1 className="text-4xl font-bold text-white mb-4">Merchant Setup</h1>
           <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-            Start accepting USDC payments in minutes. No KYC, no monthly fees.
+            Start accepting USDC payments in minutes. Simple onboarding, no
+            monthly fees.
           </p>
         </motion.div>
 
