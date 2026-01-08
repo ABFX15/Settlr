@@ -1,14 +1,24 @@
-import { NextResponse } from "next/server";
-import { getAllPayments } from "@/lib/db";
+import { NextRequest, NextResponse } from "next/server";
+import { getAllPayments, getPaymentsByMerchantWallet } from "@/lib/db";
 
 /**
  * GET /api/payments
  * 
- * Fetch all payments (in production, filter by merchant's API key)
+ * Fetch payments - optionally filter by merchant wallet
+ * Query params:
+ *   - wallet: merchant wallet address to filter by
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
-        const payments = await getAllPayments();
+        const { searchParams } = new URL(request.url);
+        const wallet = searchParams.get("wallet");
+
+        let payments;
+        if (wallet) {
+            payments = await getPaymentsByMerchantWallet(wallet);
+        } else {
+            payments = await getAllPayments();
+        }
 
         return NextResponse.json({
             payments,

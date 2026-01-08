@@ -62,8 +62,8 @@ export default function DashboardPage() {
       }
 
       try {
-        // In production, filter by merchant wallet
-        const res = await fetch("/api/payments");
+        // Filter by merchant wallet
+        const res = await fetch(`/api/payments?wallet=${publicKey}`);
         if (res.ok) {
           const data = await res.json();
           setPayments(data.payments || []);

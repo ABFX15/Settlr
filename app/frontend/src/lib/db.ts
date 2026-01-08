@@ -485,6 +485,65 @@ export async function getAllPayments(): Promise<Payment[]> {
     }
 }
 
+export async function getPaymentsByMerchantWallet(walletAddress: string): Promise<Payment[]> {
+    if (isSupabaseConfigured()) {
+        // First get the merchant by wallet address
+        const { data: merchant } = await supabase
+            .from("merchants")
+            .select("id")
+            .eq("wallet_address", walletAddress)
+            .single();
+
+        if (!merchant) {
+            return [];
+        }
+
+        const { data, error } = await supabase
+            .from("payments")
+            .select(`
+                *,
+                merchants (
+                    name,
+                    wallet_address
+                )
+            `)
+            .eq("merchant_id", merchant.id)
+            .order("completed_at", { ascending: false })
+            .limit(100);
+
+        if (error || !data) {
+            return [];
+        }
+
+        return data.map((row: any) => {
+            const merchantData = row.merchants as any;
+            return {
+                id: row.id,
+                sessionId: row.session_id,
+                merchantId: row.merchant_id,
+                merchantName: merchantData?.name || "",
+                merchantWallet: merchantData?.wallet_address || "",
+                customerWallet: row.customer_wallet,
+                amount: row.amount,
+                currency: row.currency,
+                description: row.description || undefined,
+                metadata: row.metadata as Record<string, string> | undefined,
+                txSignature: row.tx_signature,
+                explorerUrl: `https://explorer.solana.com/tx/${row.tx_signature}?cluster=devnet`,
+                createdAt: new Date(row.created_at).getTime(),
+                completedAt: new Date(row.completed_at).getTime(),
+                status: row.status as Payment["status"],
+                refundedAmount: row.refunded_amount || undefined,
+                refundSignature: row.refund_signature || undefined,
+            };
+        });
+    } else {
+        return Array.from(memoryPayments.values())
+            .filter((p) => p.merchantWallet === walletAddress)
+            .sort((a, b) => b.completedAt - a.completedAt);
+    }
+}
+
 // ============================================
 // MERCHANTS
 // ============================================
