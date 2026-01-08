@@ -25,7 +25,6 @@ const navLinks = [
   { href: "/dashboard", icon: BarChart3, label: "Dashboard" },
   { href: "/create", icon: Plus, label: "Create Payment" },
   { href: "/docs", icon: Store, label: "Docs" },
-  { href: "/pricing", icon: Wallet, label: "Pricing" },
 ];
 
 export default function Header() {

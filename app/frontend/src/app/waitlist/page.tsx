@@ -49,12 +49,6 @@ export default function WaitlistPage() {
               Docs
             </Link>
             <Link
-              href="/pricing"
-              className="text-sm text-white/60 hover:text-white transition-colors"
-            >
-              Pricing
-            </Link>
-            <Link
               href="/demo/store"
               className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-white text-sm font-medium"
             >
