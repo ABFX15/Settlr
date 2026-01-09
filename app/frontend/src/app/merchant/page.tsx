@@ -309,15 +309,15 @@ export default function MerchantPage() {
         >
           <p className="text-zinc-500">
             <span className="text-[#a855f7] font-semibold">
-              From 2% per transaction
+              Competitive volume-based pricing
             </span>{" "}
             · No monthly fees · No payment holds
           </p>
           <Link
-            href="/pricing"
+            href="/waitlist"
             className="text-[#22d3ee] hover:underline text-sm mt-2 inline-block"
           >
-            View full pricing →
+            Contact us for pricing →
           </Link>
         </motion.div>
       </div>

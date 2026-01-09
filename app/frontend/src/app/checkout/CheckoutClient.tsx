@@ -139,6 +139,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     | "loading"
     | "auth"
     | "wallet"
+    | "kyc"
     | "confirm"
     | "processing"
     | "success"
@@ -156,6 +157,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const [privyFeePayerAddress, setPrivyFeePayerAddress] = useState<
     string | null
   >(null); // For embedded wallet gasless
+
+  // KYC state
+  const [merchantKycEnabled, setMerchantKycEnabled] = useState(false);
+  const [merchantKycLevel, setMerchantKycLevel] =
+    useState<string>("basic-kyc-level");
+  const [customerKycStatus, setCustomerKycStatus] = useState<
+    "pending" | "verified" | "rejected" | "unknown"
+  >("unknown");
+  const [checkingKyc, setCheckingKyc] = useState(false);
 
   // Multichain state
   const [selectedChain, setSelectedChain] = useState<ChainType>("solana");
@@ -228,6 +238,57 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
     checkPrivyFeePayer();
   }, []);
+
+  // Check merchant KYC settings
+  useEffect(() => {
+    async function checkMerchantKyc() {
+      if (!merchantWallet) return;
+
+      try {
+        const response = await fetch(
+          `/api/merchants/settings?wallet=${merchantWallet}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setMerchantKycEnabled(data.kycEnabled === true);
+          setMerchantKycLevel(data.kycLevel || "basic-kyc-level");
+          console.log("[KYC] Merchant settings:", {
+            enabled: data.kycEnabled,
+            level: data.kycLevel,
+          });
+        }
+      } catch (err) {
+        console.log("[KYC] Could not fetch merchant settings:", err);
+      }
+    }
+    checkMerchantKyc();
+  }, [merchantWallet]);
+
+  // Check customer KYC status when merchant requires it
+  useEffect(() => {
+    async function checkCustomerKyc() {
+      if (!merchantKycEnabled || !activeWallet?.address || !merchantWallet)
+        return;
+
+      setCheckingKyc(true);
+      try {
+        const response = await fetch(
+          `/api/kyc/status?customerId=${activeWallet.address}&merchantId=${merchantWallet}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setCustomerKycStatus(data.status || "unknown");
+          console.log("[KYC] Customer status:", data.status);
+        }
+      } catch (err) {
+        console.log("[KYC] Could not fetch customer status:", err);
+        setCustomerKycStatus("unknown");
+      } finally {
+        setCheckingKyc(false);
+      }
+    }
+    checkCustomerKyc();
+  }, [merchantKycEnabled, activeWallet?.address, merchantWallet]);
 
   // Fetch Mayan quote preview when EVM chain is selected
   useEffect(() => {
@@ -338,13 +399,31 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
     if (walletsReady) {
       if (activeWallet) {
-        setStep("confirm");
+        // Check if merchant requires KYC and customer isn't verified
+        if (
+          merchantKycEnabled &&
+          customerKycStatus !== "verified" &&
+          !checkingKyc
+        ) {
+          setStep("kyc");
+        } else if (!merchantKycEnabled || customerKycStatus === "verified") {
+          setStep("confirm");
+        }
         fetchBalance();
       } else {
         setStep("wallet");
       }
     }
-  }, [ready, authenticated, walletsReady, activeWallet, fetchBalance]);
+  }, [
+    ready,
+    authenticated,
+    walletsReady,
+    activeWallet,
+    fetchBalance,
+    merchantKycEnabled,
+    customerKycStatus,
+    checkingKyc,
+  ]);
 
   // Create embedded wallet
   const handleCreateWallet = async () => {
@@ -999,6 +1078,183 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </>
               )}
             </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // KYC verification step
+  if (step === "kyc") {
+    return (
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 relative">
+        {/* Close/Back button */}
+        <button
+          onClick={() => {
+            if (isEmbed || isWidget) {
+              sendToParent("settlr:cancel", {});
+            } else if (cancelUrl) {
+              window.location.href = cancelUrl;
+            } else {
+              router.push("/");
+            }
+          }}
+          className="absolute top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-10"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5 text-zinc-400" />
+        </button>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-md"
+        >
+          <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-6">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Identity Verification
+              </h2>
+              <p className="text-zinc-400">
+                {merchantName} requires identity verification before payment
+              </p>
+            </div>
+
+            {/* Payment preview */}
+            <div className="p-4 bg-zinc-800/50 rounded-xl mb-6">
+              <div className="flex justify-between items-center">
+                <span className="text-zinc-400">Amount</span>
+                <span className="text-white font-semibold">
+                  ${amount.toFixed(2)} USDC
+                </span>
+              </div>
+            </div>
+
+            {/* KYC Status */}
+            {customerKycStatus === "pending" && (
+              <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl mb-4">
+                <div className="flex items-center gap-3">
+                  <Loader2 className="w-5 h-5 text-yellow-400 animate-spin" />
+                  <div>
+                    <p className="text-yellow-400 font-medium">
+                      Verification in Progress
+                    </p>
+                    <p className="text-yellow-400/70 text-sm">
+                      Your verification is being reviewed. This usually takes a
+                      few minutes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {customerKycStatus === "rejected" && (
+              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl mb-4">
+                <div className="flex items-center gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-400" />
+                  <div>
+                    <p className="text-red-400 font-medium">
+                      Verification Failed
+                    </p>
+                    <p className="text-red-400/70 text-sm">
+                      Please try again with valid documents.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Start Verification Button */}
+            {(customerKycStatus === "unknown" ||
+              customerKycStatus === "rejected") && (
+              <button
+                onClick={async () => {
+                  // Open Sumsub verification in a new window/modal
+                  try {
+                    const response = await fetch("/api/kyc/token", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        customerId: activeWallet?.address,
+                        merchantId: merchantWallet,
+                        levelName: merchantKycLevel,
+                      }),
+                    });
+
+                    if (response.ok) {
+                      const { token, applicantId } = await response.json();
+                      // Store for later reference
+                      console.log("[KYC] Token generated:", { applicantId });
+
+                      // For now, show a message that Sumsub WebSDK would launch here
+                      // In production, you'd initialize the Sumsub WebSDK
+                      alert(
+                        "Sumsub verification would launch here. Configure SUMSUB_APP_TOKEN and SUMSUB_SECRET_KEY to enable."
+                      );
+                    } else {
+                      const errorData = await response.json();
+                      alert(errorData.error || "Failed to start verification");
+                    }
+                  } catch (err) {
+                    console.error("[KYC] Error starting verification:", err);
+                    alert("Failed to start verification. Please try again.");
+                  }
+                }}
+                className="w-full py-4 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+              >
+                <Shield className="w-5 h-5" />
+                {customerKycStatus === "rejected"
+                  ? "Retry Verification"
+                  : "Start Verification"}
+              </button>
+            )}
+
+            {/* Refresh status button for pending */}
+            {customerKycStatus === "pending" && (
+              <button
+                onClick={async () => {
+                  setCheckingKyc(true);
+                  try {
+                    const response = await fetch(
+                      `/api/kyc/status?customerId=${activeWallet?.address}&merchantId=${merchantWallet}`
+                    );
+                    if (response.ok) {
+                      const data = await response.json();
+                      setCustomerKycStatus(data.status || "unknown");
+                      if (data.status === "verified") {
+                        setStep("confirm");
+                      }
+                    }
+                  } catch (err) {
+                    console.error("[KYC] Error checking status:", err);
+                  } finally {
+                    setCheckingKyc(false);
+                  }
+                }}
+                disabled={checkingKyc}
+                className="w-full py-4 bg-zinc-800 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-zinc-700 transition-colors disabled:opacity-50"
+              >
+                {checkingKyc ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Checking...
+                  </>
+                ) : (
+                  <>
+                    <Shield className="w-5 h-5" />
+                    Check Verification Status
+                  </>
+                )}
+              </button>
+            )}
+
+            <p className="text-center text-zinc-500 text-xs mt-4">
+              Your data is securely processed by Sumsub. We never store your
+              documents.
+            </p>
           </div>
         </motion.div>
       </div>

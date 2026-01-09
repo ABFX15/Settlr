@@ -21,13 +21,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   // Pages that have their own header/layout
-  const noGlobalHeader = [
-    "/",
-    "/waitlist",
-    "/pricing",
-    "/checkout",
-    "/demo/store",
-  ];
+  const noGlobalHeader = ["/", "/waitlist", "/checkout", "/demo/store"];
   const showHeader = !noGlobalHeader.includes(pathname);
 
   return (

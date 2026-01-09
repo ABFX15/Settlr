@@ -263,6 +263,14 @@ export default function DashboardPage() {
                 "bg-purple-500/10 border-purple-500/30 hover:border-purple-500/50",
             },
             {
+              title: "Compliance",
+              description: "KYC/AML settings",
+              icon: Shield,
+              href: "/dashboard/compliance",
+              color:
+                "bg-green-500/10 border-green-500/30 hover:border-green-500/50",
+            },
+            {
               title: "Gasless Payments",
               description: "Zero gas for customers",
               icon: Zap,
@@ -273,7 +281,7 @@ export default function DashboardPage() {
             {
               title: "SDK Docs",
               description: "npm install @settlr/sdk",
-              icon: Shield,
+              icon: Globe,
               href: "https://github.com/ABFX15/x402-hack-payment",
               color:
                 "bg-purple-500/10 border-purple-500/30 hover:border-purple-500/50",

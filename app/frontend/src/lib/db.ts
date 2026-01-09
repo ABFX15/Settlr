@@ -15,6 +15,19 @@ export interface Merchant {
     walletAddress: string;
     webhookUrl?: string | null;
     webhookSecret?: string | null;
+    kycEnabled?: boolean;
+    kycLevel?: "basic-kyc-level" | "gaming-kyc-level" | "enhanced-kyc-level";
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface CustomerKYC {
+    id: string;
+    externalUserId: string; // wallet address or email
+    merchantId?: string; // null = global verification
+    sumsubApplicantId?: string;
+    status: "not_started" | "pending" | "verified" | "rejected";
+    verifiedAt?: Date;
     createdAt: Date;
     updatedAt: Date;
 }

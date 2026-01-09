@@ -761,28 +761,28 @@ export default function LandingPage() {
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             <Link
+              href="/igaming"
+              className="text-sm text-white/50 transition-colors hover:text-white"
+            >
+              iGaming
+            </Link>
+            <Link
               href="/demo/store"
               className="text-sm text-white/50 transition-colors hover:text-white"
             >
               Try Demo
             </Link>
             <Link
-              href="#demo"
-              className="text-sm text-white/50 transition-colors hover:text-white"
-            >
-              How it Works
-            </Link>
-            <Link
-              href="#compare"
-              className="text-sm text-white/50 transition-colors hover:text-white"
-            >
-              Compare
-            </Link>
-            <Link
               href="/docs"
               className="text-sm text-white/50 transition-colors hover:text-white"
             >
               Docs
+            </Link>
+            <Link
+              href="/help"
+              className="text-sm text-white/50 transition-colors hover:text-white"
+            >
+              Help
             </Link>
           </nav>
           <Link
