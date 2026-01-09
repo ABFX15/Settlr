@@ -96,7 +96,7 @@ const faqs = [
   {
     question: "When do I receive my funds?",
     answer:
-      "Instantly! Payments go directly to your Solana wallet. There's no holding period or withdrawal process.",
+      "Instantly! Payments are non-custodial \u2014 they go directly to your Solana wallet. No holding period, no middlemen.",
   },
   {
     question: "Is there a minimum transaction amount?",
@@ -110,7 +110,7 @@ const faqs = [
   {
     question: "What verification is required?",
     answer:
-      "We have a simple onboarding process. Basic verification is handled seamlessly through our partners. For enterprise features, additional business verification may be required.",
+      "Simple onboarding \u2014 connect your wallet and add business details. For enterprise features or higher volumes, additional verification may be required.",
   },
 ];
 

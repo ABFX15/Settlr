@@ -3,7 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Simple, transparent pricing for Settlr crypto payments. Start free with 2% fees, or go Pro at $29/month with 0.5% fees. No hidden costs.",
+    "Simple, transparent pricing for Settlr crypto payments. Start free with 2% fees, or go Pro at $29/month with 1.5% fees. Enterprise at 1%. No hidden costs.",
   keywords: [
     "settlr pricing",
     "crypto payment fees",
@@ -14,13 +14,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Settlr Pricing - Simple & Transparent",
     description:
-      "Start free with 2% fees, or go Pro at $29/month with 0.5% fees. No hidden costs, no surprises.",
+      "Start free with 2% fees, or go Pro at $29/month with 1.5% fees. Enterprise from 1%.",
     url: "https://settlr.dev/pricing",
   },
   twitter: {
     title: "Settlr Pricing - Simple & Transparent",
     description:
-      "Start free with 2% fees, or go Pro at $29/month with 0.5% fees. No hidden costs.",
+      "Start free with 2% fees, or go Pro at $29/month with 1.5% fees. Enterprise from 1%.",
   },
 };
 

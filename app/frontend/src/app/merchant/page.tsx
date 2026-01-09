@@ -88,8 +88,8 @@ export default function MerchantPage() {
             Become a Merchant
           </h2>
           <p className="text-zinc-400 mb-6">
-            Sign in to get your merchant wallet address and start accepting USDC
-            payments.
+            Sign in to get your non-custodial merchant wallet. Funds go directly
+            to you — no middlemen.
           </p>
           <button
             onClick={login}
@@ -116,8 +116,8 @@ export default function MerchantPage() {
           </div>
           <h1 className="text-4xl font-bold text-white mb-4">Merchant Setup</h1>
           <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-            Start accepting USDC payments in minutes. Simple onboarding, no
-            monthly fees.
+            Non-custodial payments. Instant settlement. Full control of your
+            funds.
           </p>
         </motion.div>
 
@@ -268,37 +268,33 @@ export default function MerchantPage() {
           transition={{ delay: 0.4 }}
           className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6"
         >
-          <h2 className="text-lg font-semibold text-white mb-6">
-            What You Get
-          </h2>
+          <h2 className="text-lg font-semibold text-white mb-6">Why Settlr</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mx-auto mb-3">
                 <Shield className="w-6 h-6 text-cyan-400" />
               </div>
-              <h3 className="text-white font-medium mb-1">
-                Instant Settlement
-              </h3>
+              <h3 className="text-white font-medium mb-1">Non-Custodial</h3>
               <p className="text-zinc-500 text-sm">
-                USDC lands directly in your wallet
+                Funds settle directly to your wallet
               </p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center mx-auto mb-3">
                 <Zap className="w-6 h-6 text-amber-400" />
               </div>
-              <h3 className="text-white font-medium mb-1">Gasless for Users</h3>
+              <h3 className="text-white font-medium mb-1">Embedded Wallets</h3>
               <p className="text-zinc-500 text-sm">
-                Your customers pay zero gas fees
+                Customers pay with email, no extensions
               </p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mx-auto mb-3">
                 <Globe className="w-6 h-6 text-blue-400" />
               </div>
-              <h3 className="text-white font-medium mb-1">Global Payments</h3>
+              <h3 className="text-white font-medium mb-1">Instant & Global</h3>
               <p className="text-zinc-500 text-sm">
-                Accept from anywhere, instantly
+                Accept from anywhere, settle instantly
               </p>
             </div>
           </div>
@@ -313,9 +309,9 @@ export default function MerchantPage() {
         >
           <p className="text-zinc-500">
             <span className="text-[#a855f7] font-semibold">
-              1% transaction fee
+              From 2% per transaction
             </span>{" "}
-            · No monthly fees · No setup costs
+            · No monthly fees · No payment holds
           </p>
           <Link
             href="/pricing"

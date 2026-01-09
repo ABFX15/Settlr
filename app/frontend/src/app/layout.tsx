@@ -15,15 +15,15 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Settlr | Crypto Payment Solution for Merchants & iGaming",
+    default: "Settlr | Non-Custodial Crypto Payments for Web3 Apps",
     template: "%s | Settlr",
   },
   description:
-    "The easiest crypto payment solution for merchants. Accept payments in any token, receive USDC instantly. No wallet required, gasless transactions, 5-minute integration. Built on Solana.",
+    "Instant crypto payments, directly to your wallet. Non-custodial, no extensions needed. Embedded wallets let customers pay with email. Built on Solana.",
   keywords: [
     "crypto payment solution",
-    "crypto payment solutions",
-    "cryptocurrency payment solution",
+    "non-custodial payments",
+    "embedded wallets",
     "crypto payments",
     "accept crypto payments",
     "crypto payment gateway",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     "crypto payment SDK",
     "iGaming crypto payments",
     "accept USDC",
-    "Stripe for crypto",
+    "Stripe alternative crypto",
   ],
   authors: [{ name: "Settlr" }],
   creator: "Settlr",
@@ -56,22 +56,23 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://settlr.dev",
     siteName: "Settlr",
-    title: "Settlr | Seamless iGaming Payments on Solana",
+    title: "Settlr | Non-Custodial Crypto Payments",
     description:
-      "No wallet required. Gasless on Solana. Accept USDC from any chain in minutes.",
+      "Instant crypto payments, directly to your wallet. No custody, no delays. Embedded wallets for seamless checkout.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Settlr - Seamless iGaming Payments",
+        alt: "Settlr - Non-Custodial Crypto Payments",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr | Seamless iGaming Payments on Solana",
-    description: "No wallet required. Gasless on Solana. Fees from 2%.",
+    title: "Settlr | Non-Custodial Crypto Payments",
+    description:
+      "Instant settlement, directly to your wallet. No custody risk. From 2% fees.",
     images: ["/opengraph-image"],
     creator: "@SettlrPay",
   },

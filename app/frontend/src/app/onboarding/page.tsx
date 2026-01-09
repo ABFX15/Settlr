@@ -147,7 +147,8 @@ export default function OnboardingPage() {
             Become a Merchant
           </h2>
           <p className="text-zinc-400 mb-6">
-            Sign in to register your business and start accepting USDC payments.
+            Sign in to set up non-custodial payments. Full control of your funds
+            — no middlemen.
           </p>
           <button
             onClick={login}
@@ -186,8 +187,8 @@ export default function OnboardingPage() {
             Merchant Onboarding
           </h1>
           <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-            Set up your account to start accepting USDC payments. Simple setup,
-            no monthly fees.
+            Set up non-custodial payments. Funds settle directly to your wallet
+            — instant and secure.
           </p>
         </motion.div>
 

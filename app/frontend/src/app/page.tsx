@@ -17,6 +17,8 @@ import {
   CheckCircle2,
   X,
   Globe,
+  Wallet,
+  Shield,
 } from "lucide-react";
 
 // Code block component with syntax highlighting
@@ -294,49 +296,49 @@ import { SettlrCheckout } from 'settlr/vue'
 function ComparisonTable() {
   const comparisonData = [
     {
-      feature: "Transaction Fees",
-      stripe: { value: "2.9% + $0.30", isNegative: true },
-      settlr: { value: "From 2%", isPositive: true },
+      feature: "Custody Model",
+      competitor: { value: "Custodial", isNegative: true },
+      settlr: { value: "Non-Custodial", isPositive: true },
     },
     {
       feature: "Settlement Time",
-      stripe: { value: "2-7 days", isNegative: true },
+      competitor: { value: "1-2 days", isNegative: true },
       settlr: { value: "Instant", isPositive: true },
     },
     {
+      feature: "Transaction Fees",
+      competitor: { value: "1%", isNegative: false },
+      settlr: { value: "From 1%", isPositive: true },
+    },
+    {
       feature: "Chargebacks",
-      stripe: { value: "Yes + fees", isNegative: true },
+      competitor: { value: "Yes", isNegative: true },
       settlr: { value: "Zero", isPositive: true },
     },
     {
       feature: "Wallet Required",
-      stripe: { value: "N/A", isNegative: false },
+      competitor: { value: "Yes", isNegative: true },
       settlr: { value: "No", isPositive: true },
     },
     {
       feature: "Gas Fees",
-      stripe: { value: "N/A", isNegative: false },
-      settlr: { value: "Zero", isPositive: true },
+      competitor: { value: "User pays", isNegative: true },
+      settlr: { value: "We Cover It", isPositive: true },
     },
     {
-      feature: "Payment Holds",
-      stripe: { value: "Yes", isNegative: true },
-      settlr: { value: "None", isPositive: true },
-    },
-    {
-      feature: "Global Reach",
-      stripe: { value: "Limited", isNegative: true },
-      settlr: { value: "Worldwide", isPositive: true },
-    },
-    {
-      feature: "Multichain",
-      stripe: { value: "N/A", isNegative: false },
-      settlr: { value: "6 Chains", isPositive: true },
-    },
-    {
-      feature: "Compliance",
-      stripe: { value: "Complex KYC", isNegative: true },
+      feature: "KYC Required",
+      competitor: { value: "Heavy", isNegative: true },
       settlr: { value: "Simple", isPositive: true },
+    },
+    {
+      feature: "Embedded Wallets",
+      competitor: { value: "No", isNegative: true },
+      settlr: { value: "Yes", isPositive: true },
+    },
+    {
+      feature: "Chains Supported",
+      competitor: { value: "16", isNegative: false },
+      settlr: { value: "6 (more coming)", isPositive: true },
     },
   ];
 
@@ -350,7 +352,7 @@ function ComparisonTable() {
           transition={{ duration: 0.6 }}
           className="mb-16 text-center text-5xl font-bold text-white md:text-6xl"
         >
-          Why Gaming Platforms Choose Settlr
+          Why Developers Choose Settlr
         </motion.h2>
 
         <motion.div
@@ -369,7 +371,7 @@ function ComparisonTable() {
           <div className="grid grid-cols-3 border-b border-purple-500/20 bg-purple-500/5 p-6">
             <div className="text-lg font-semibold text-gray-400">Feature</div>
             <div className="text-center text-lg font-semibold text-gray-300">
-              Stripe
+              BitPay
             </div>
             <div className="text-center text-lg font-semibold text-white">
               <span
@@ -403,19 +405,21 @@ function ComparisonTable() {
                   {row.feature}
                 </div>
 
-                {/* Stripe Column */}
+                {/* BitPay Column */}
                 <div className="flex items-center justify-center gap-2">
-                  {row.stripe.isNegative && (
+                  {row.competitor.isNegative && (
                     <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500/20">
                       <X className="h-3 w-3 text-red-400" />
                     </div>
                   )}
                   <span
                     className={
-                      row.stripe.isNegative ? "text-red-400" : "text-gray-400"
+                      row.competitor.isNegative
+                        ? "text-red-400"
+                        : "text-gray-400"
                     }
                   >
-                    {row.stripe.value}
+                    {row.competitor.value}
                   </span>
                 </div>
 
@@ -814,7 +818,7 @@ export default function LandingPage() {
                 backgroundImage: "linear-gradient(to right, #a855f7, #22d3ee)",
               }}
             >
-              Accept Payments Without Wallets
+              Instant Crypto Payments, Directly to Your Wallet
             </span>
           </motion.h1>
 
@@ -825,8 +829,8 @@ export default function LandingPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            Customers pay with email from any chain. You get USDC instantly on
-            Solana.
+            Non-custodial payments with embedded wallets. No extensions, no seed
+            phrases, no delays.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -868,11 +872,11 @@ export default function LandingPage() {
             transition={{ delay: 0.7, duration: 0.8 }}
           >
             {[
-              { icon: Mail, label: "Email Checkout" },
+              { icon: Wallet, label: "Non-Custodial" },
               { icon: Zap, label: "Gasless" },
-              { icon: Globe, label: "Multichain" },
-              { icon: DollarSign, label: "From 2%" },
-              { icon: Clock, label: "Instant" },
+              { icon: Mail, label: "Email Checkout" },
+              { icon: Clock, label: "Instant Settlement" },
+              { icon: Globe, label: "6 Chains" },
             ].map((feature, index) => (
               <span
                 key={feature.label}
@@ -913,11 +917,11 @@ export default function LandingPage() {
             viewport={{ once: true }}
           >
             <h2 className="mb-6 text-4xl font-bold text-white md:text-5xl">
-              Ready to accept payments?
+              Start accepting crypto today
             </h2>
             <p className="mb-8 text-lg text-white/50">
-              Set up your merchant account and start accepting payments in
-              minutes.
+              Full control of your funds. No custody risk. No payment holds. Get
+              started in minutes.
             </p>
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
