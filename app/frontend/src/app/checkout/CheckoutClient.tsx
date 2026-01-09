@@ -264,32 +264,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     checkMerchantKyc();
   }, [merchantWallet]);
 
-  // Check customer KYC status when merchant requires it
-  useEffect(() => {
-    async function checkCustomerKyc() {
-      if (!merchantKycEnabled || !activeWallet?.address || !merchantWallet)
-        return;
-
-      setCheckingKyc(true);
-      try {
-        const response = await fetch(
-          `/api/kyc/status?customerId=${activeWallet.address}&merchantId=${merchantWallet}`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setCustomerKycStatus(data.status || "unknown");
-          console.log("[KYC] Customer status:", data.status);
-        }
-      } catch (err) {
-        console.log("[KYC] Could not fetch customer status:", err);
-        setCustomerKycStatus("unknown");
-      } finally {
-        setCheckingKyc(false);
-      }
-    }
-    checkCustomerKyc();
-  }, [merchantKycEnabled, activeWallet?.address, merchantWallet]);
-
   // Fetch Mayan quote preview when EVM chain is selected
   useEffect(() => {
     async function fetchMayanQuote() {
@@ -353,6 +327,32 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       account.type === "wallet" && account.walletClientType !== "privy"
   );
   const isExternalWallet = hasExternalWallet ?? false;
+
+  // Check customer KYC status when merchant requires it
+  useEffect(() => {
+    async function checkCustomerKyc() {
+      if (!merchantKycEnabled || !activeWallet?.address || !merchantWallet)
+        return;
+
+      setCheckingKyc(true);
+      try {
+        const response = await fetch(
+          `/api/kyc/status?customerId=${activeWallet.address}&merchantId=${merchantWallet}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setCustomerKycStatus(data.status || "unknown");
+          console.log("[KYC] Customer status:", data.status);
+        }
+      } catch (err) {
+        console.log("[KYC] Could not fetch customer status:", err);
+        setCustomerKycStatus("unknown");
+      } finally {
+        setCheckingKyc(false);
+      }
+    }
+    checkCustomerKyc();
+  }, [merchantKycEnabled, activeWallet?.address, merchantWallet]);
 
   // Fetch USDC balance
   const fetchBalance = useCallback(async () => {
