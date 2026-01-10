@@ -739,6 +739,16 @@ export async function createApiKey(
     return { apiKey, rawKey };
 }
 
+// Demo API key for documentation examples - works out of the box
+const DEMO_API_KEY = "sk_test_demo_xxxxxxxxxxxx";
+const DEMO_MERCHANT = {
+    id: "demo_merchant",
+    name: "Demo Store",
+    // Devnet demo wallet - this is a burn address for testing only
+    // All 1s is a valid base58 address that no one controls
+    walletAddress: "11111111111111111111111111111111",
+};
+
 export async function validateApiKey(rawKey: string): Promise<{
     valid: boolean;
     merchantId?: string;
@@ -748,6 +758,18 @@ export async function validateApiKey(rawKey: string): Promise<{
     rateLimit?: number;
     error?: string;
 }> {
+    // Handle demo API key - allows copy-paste from docs to work immediately
+    if (rawKey === DEMO_API_KEY) {
+        return {
+            valid: true,
+            merchantId: DEMO_MERCHANT.id,
+            merchantWallet: DEMO_MERCHANT.walletAddress,
+            merchantName: DEMO_MERCHANT.name,
+            tier: "free",
+            rateLimit: 60,
+        };
+    }
+
     // All API keys (test and live) should be looked up in the database
     if (isSupabaseConfigured()) {
         const keyHash = hashApiKey(rawKey);
