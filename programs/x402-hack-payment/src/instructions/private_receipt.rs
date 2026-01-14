@@ -55,17 +55,15 @@ impl<'info> IssuePrivateReceipt<'info> {
     /// The client must pass allowance PDAs via remaining_accounts:
     /// - [0] customer_allowance_pda (derived from [handle_bytes, customer_pubkey])
     /// - [1] merchant_allowance_pda (derived from [handle_bytes, merchant_pubkey])
+    /// 
+    /// If remaining_accounts is empty, the receipt is created but no decryption access is granted.
+    /// This allows for a two-step flow: create receipt first (to get handle), then grant access.
     pub fn issue_private_receipt(
         ctx: Context<'_, '_, 'info, 'info, IssuePrivateReceipt<'info>>,
         payment_id: String,
         encrypted_amount_ciphertext: Vec<u8>,
     ) -> Result<()> {
         require!(!payment_id.is_empty() && payment_id.len() <= 64, PaymentError::InvalidPaymentId);
-        
-        // Validate remaining accounts for allowance PDAs
-        require!(ctx.remaining_accounts.len() >= 2, PaymentError::MissingAllowanceAccounts);
-        let customer_allowance = &ctx.remaining_accounts[0];
-        let merchant_allowance = &ctx.remaining_accounts[1];
         
         // Create CPI context for creating encrypted value
         let operation_ctx = CpiContext::new(
@@ -86,39 +84,51 @@ impl<'info> IssuePrivateReceipt<'info> {
         // Extract the u128 handle from Euint128
         let handle: u128 = encrypted_amount.0;
         
-        // Grant decryption access to customer
-        let customer_allow_ctx = CpiContext::new(
-            ctx.accounts.inco_lightning_program.to_account_info(),
-            Allow {
-                allowance_account: customer_allowance.to_account_info(),
-                signer: ctx.accounts.customer.to_account_info(),
-                allowed_address: ctx.accounts.customer.to_account_info(),
-                system_program: ctx.accounts.system_program.to_account_info(),
-            },
-        );
-        allow(
-            customer_allow_ctx,
-            handle,
-            true, // is_self = true (granting access)
-            ctx.accounts.customer.key(),
-        )?;
-        
-        // Grant decryption access to merchant
-        let merchant_allow_ctx = CpiContext::new(
-            ctx.accounts.inco_lightning_program.to_account_info(),
-            Allow {
-                allowance_account: merchant_allowance.to_account_info(),
-                signer: ctx.accounts.customer.to_account_info(),
-                allowed_address: ctx.accounts.merchant.to_account_info(),
-                system_program: ctx.accounts.system_program.to_account_info(),
-            },
-        );
-        allow(
-            merchant_allow_ctx,
-            handle,
-            true, // is_self = true (granting access)
-            ctx.accounts.merchant.key(),
-        )?;
+        // Grant decryption access if allowance accounts are provided
+        // This allows for simulation-first pattern: simulate without, then execute with allowances
+        if ctx.remaining_accounts.len() >= 2 {
+            let customer_allowance = &ctx.remaining_accounts[0];
+            let merchant_allowance = &ctx.remaining_accounts[1];
+            
+            // Grant decryption access to customer
+            let customer_allow_ctx = CpiContext::new(
+                ctx.accounts.inco_lightning_program.to_account_info(),
+                Allow {
+                    allowance_account: customer_allowance.to_account_info(),
+                    signer: ctx.accounts.customer.to_account_info(),
+                    allowed_address: ctx.accounts.customer.to_account_info(),
+                    system_program: ctx.accounts.system_program.to_account_info(),
+                },
+            );
+            allow(
+                customer_allow_ctx,
+                handle,
+                true, // is_self = true (granting access)
+                ctx.accounts.customer.key(),
+            )?;
+            
+            // Grant decryption access to merchant
+            let merchant_allow_ctx = CpiContext::new(
+                ctx.accounts.inco_lightning_program.to_account_info(),
+                Allow {
+                    allowance_account: merchant_allowance.to_account_info(),
+                    signer: ctx.accounts.customer.to_account_info(),
+                    allowed_address: ctx.accounts.merchant.to_account_info(),
+                    system_program: ctx.accounts.system_program.to_account_info(),
+                },
+            );
+            allow(
+                merchant_allow_ctx,
+                handle,
+                true, // is_self = true (granting access)
+                ctx.accounts.merchant.key(),
+            )?;
+            
+            msg!("   Customer {} granted decrypt access", ctx.accounts.customer.key());
+            msg!("   Merchant {} granted decrypt access", ctx.accounts.merchant.key());
+        } else {
+            msg!("⚠️  No allowance accounts provided - access not granted yet");
+        }
         
         // Initialize the private receipt with the encrypted handle
         let receipt = &mut ctx.accounts.private_receipt;
