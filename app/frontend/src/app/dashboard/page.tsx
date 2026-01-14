@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Webhook,
   RefreshCw,
+  Download,
   Key,
   LogIn,
 } from "lucide-react";
@@ -271,6 +272,15 @@ export default function DashboardPage() {
                 "bg-green-500/10 border-green-500/30 hover:border-green-500/50",
             },
             {
+              title: "Export CSV",
+              description: "Download for accounting",
+              icon: Download,
+              href: publicKey ? `/api/merchants/${publicKey}/export` : "#",
+              color:
+                "bg-emerald-500/10 border-emerald-500/30 hover:border-emerald-500/50",
+              download: true,
+            },
+            {
               title: "Gasless Payments",
               description: "Zero gas for customers",
               icon: Zap,
@@ -286,8 +296,8 @@ export default function DashboardPage() {
               color:
                 "bg-purple-500/10 border-purple-500/30 hover:border-purple-500/50",
             },
-          ].map((action, i) => (
-            <Link key={action.title} href={action.href}>
+          ].map((action, i) => {
+            const content = (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -308,8 +318,23 @@ export default function DashboardPage() {
                   <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-white transition-colors" />
                 </div>
               </motion.div>
-            </Link>
-          ))}
+            );
+
+            // Use anchor tag for downloads, Link for navigation
+            if ("download" in action && action.download) {
+              return (
+                <a key={action.title} href={action.href} download>
+                  {content}
+                </a>
+              );
+            }
+
+            return (
+              <Link key={action.title} href={action.href}>
+                {content}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Recent Payments Table */}
