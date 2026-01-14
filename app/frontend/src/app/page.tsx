@@ -19,6 +19,10 @@ import {
   Globe,
   Wallet,
   Shield,
+  AlertTriangle,
+  TrendingDown,
+  Ban,
+  Users,
 } from "lucide-react";
 
 // Code block component with syntax highlighting
@@ -899,6 +903,148 @@ export default function LandingPage() {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Problem → Solution Section */}
+      <section className="relative z-10 px-4 py-24">
+        <div className="mx-auto max-w-6xl">
+          {/* Section Title */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Getting Paid Shouldn&apos;t Be This Hard
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              If you&apos;re a freelancer, remote worker, or creator getting
+              paid internationally — you know the pain.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-16">
+            {/* The Problem */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="rounded-2xl border border-red-500/20 bg-red-500/5 p-8"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-red-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-red-400">The Problem</h3>
+              </div>
+              <ul className="space-y-4">
+                {[
+                  {
+                    icon: DollarSign,
+                    text: "PayPal charges 5%+ fees on international transfers",
+                  },
+                  {
+                    icon: Clock,
+                    text: "Bank transfers take 3-5 business days",
+                  },
+                  {
+                    icon: TrendingDown,
+                    text: "Your local currency loses value while you wait",
+                  },
+                  {
+                    icon: Ban,
+                    text: "Many countries can't even access PayPal or Wise",
+                  },
+                ].map((item, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex items-start gap-3 text-gray-300"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <item.icon className="w-3.5 h-3.5 text-red-400" />
+                    </div>
+                    {item.text}
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* The Solution */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="rounded-2xl border border-green-500/20 bg-green-500/5 p-8"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5 text-green-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-green-400">
+                  The Solution
+                </h3>
+              </div>
+              <ul className="space-y-4">
+                {[
+                  {
+                    icon: Shield,
+                    text: "Receive USDC — stable, dollar-pegged, yours instantly",
+                  },
+                  {
+                    icon: Zap,
+                    text: "Instant settlement — no waiting, no holds",
+                  },
+                  {
+                    icon: DollarSign,
+                    text: "1% flat fee — no hidden currency conversion costs",
+                  },
+                  {
+                    icon: Globe,
+                    text: "Works in 180+ countries — no restrictions",
+                  },
+                ].map((item, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex items-start gap-3 text-gray-300"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <item.icon className="w-3.5 h-3.5 text-green-400" />
+                    </div>
+                    {item.text}
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+
+          {/* Use Case Callout */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12 text-center"
+          >
+            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-6 py-3">
+              <Users className="w-5 h-5 text-purple-400" />
+              <span className="text-gray-300">
+                Perfect for{" "}
+                <span className="text-white font-semibold">freelancers</span>,{" "}
+                <span className="text-white font-semibold">remote workers</span>
+                , and <span className="text-white font-semibold">creators</span>{" "}
+                who need to get paid from anywhere.
+              </span>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Demo Showcase Section */}
       <div id="demo">
