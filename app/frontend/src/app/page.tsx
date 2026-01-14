@@ -771,12 +771,6 @@ export default function LandingPage() {
               Dashboard
             </Link>
             <Link
-              href="/igaming"
-              className="text-sm text-white/50 transition-colors hover:text-white"
-            >
-              iGaming
-            </Link>
-            <Link
               href="/demo/store"
               className="text-sm text-white/50 transition-colors hover:text-white"
             >
