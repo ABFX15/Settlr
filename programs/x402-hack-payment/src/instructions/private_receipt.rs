@@ -39,7 +39,7 @@ pub struct IssuePrivateReceipt<'info> {
     /// CHECK: Verified by address constraint
     #[account(address = INCO_LIGHTNING_ID)]
     pub inco_lightning_program: AccountInfo<'info>,
-    
+
     pub system_program: Program<'info, System>,
 }
 

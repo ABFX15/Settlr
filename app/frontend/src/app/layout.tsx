@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import ClientLayout from "@/components/ClientLayout";
 import "./globals.css";
 
@@ -100,6 +101,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" style={{ background: "#0a0a12" }}>
+      <head>
+        {/* Google Ads Tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17871897491"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17871897491');
+          `}
+        </Script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{ background: "#0a0a12" }}
