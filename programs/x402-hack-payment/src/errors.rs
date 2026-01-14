@@ -32,4 +32,6 @@ pub enum PaymentError {
     PaymentAlreadyRefunded,
     #[msg("Refund not authorized.")]
     RefundNotAuthorized,
+    #[msg("Missing allowance accounts for Inco decryption access.")]
+    MissingAllowanceAccounts,
 }

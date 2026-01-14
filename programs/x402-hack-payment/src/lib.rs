@@ -36,6 +36,21 @@ pub mod x402_hack_payment {
     pub fn transfer_authority(ctx: Context<TransferAuthority>) -> Result<()> {
         instructions::transfer::handler(ctx)
     }
+
+    /// Issue a private receipt for a payment using Inco Lightning
+    /// The payment amount is encrypted - only merchant and customer can decrypt
+    /// 
+    /// # Remaining Accounts
+    /// Client must pass allowance PDAs:
+    /// - [0] customer_allowance_pda (mut)
+    /// - [1] merchant_allowance_pda (mut)
+    pub fn issue_private_receipt<'info>(
+        ctx: Context<'_, '_, 'info, 'info, IssuePrivateReceipt<'info>>,
+        payment_id: String,
+        encrypted_amount_ciphertext: Vec<u8>,
+    ) -> Result<()> {
+        IssuePrivateReceipt::issue_private_receipt(ctx, payment_id, encrypted_amount_ciphertext)
+    }
 }
 
 

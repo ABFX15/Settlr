@@ -8,6 +8,10 @@ skip-lint = false
 [programs.localnet]
 x402_hack_payment = "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5"
 
+[programs.devnet]
+x402_hack_payment = "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5"
+inco_lightning = "5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj"
+
 [registry]
 url = "https://api.apr.dev"
 
