@@ -51,60 +51,6 @@ pub mod x402_hack_payment {
     ) -> Result<()> {
         IssuePrivateReceipt::issue_private_receipt(ctx, payment_id, encrypted_amount_ciphertext)
     }
-
-    // ============================================================================
-    // PRIVATE SETTLR - Confidential Commerce Features
-    // ============================================================================
-
-    /// Initiate a private payout (confidential merchant settlement)
-    /// Amount is FHE-encrypted - only merchant and optional auditor can decrypt
-    /// B2B use case: hide settlement amounts from competitors
-    /// 
-    /// # Remaining Accounts
-    /// - [0] merchant_allowance_pda (mut)
-    /// - [1] auditor_allowance_pda (mut, optional)
-    pub fn initiate_private_payout<'info>(
-        ctx: Context<'_, '_, 'info, 'info, InitiatePrivatePayout<'info>>,
-        payout_id: String,
-        encrypted_amount_ciphertext: Vec<u8>,
-    ) -> Result<()> {
-        InitiatePrivatePayout::initiate_private_payout(ctx, payout_id, encrypted_amount_ciphertext)
-    }
-
-    /// Complete a pending private payout
-    pub fn complete_private_payout(ctx: Context<CompletePrivatePayout>) -> Result<()> {
-        CompletePrivatePayout::complete_private_payout(ctx)
-    }
-
-    /// Create a private subscription (recurring payments with hidden amounts)
-    /// Killer feature: subscription pricing hidden from chain observers
-    /// 
-    /// # Remaining Accounts
-    /// - [0] customer_allowance_pda (mut)
-    /// - [1] merchant_allowance_pda (mut)
-    pub fn create_private_subscription<'info>(
-        ctx: Context<'_, '_, 'info, 'info, CreatePrivateSubscription<'info>>,
-        subscription_id: String,
-        encrypted_amount_ciphertext: Vec<u8>,
-        billing_cycle_seconds: i64,
-    ) -> Result<()> {
-        CreatePrivateSubscription::create_private_subscription(
-            ctx,
-            subscription_id,
-            encrypted_amount_ciphertext,
-            billing_cycle_seconds,
-        )
-    }
-
-    /// Process a subscription payment when due
-    pub fn process_subscription_payment(ctx: Context<ProcessSubscriptionPayment>) -> Result<()> {
-        ProcessSubscriptionPayment::process_subscription_payment(ctx)
-    }
-
-    /// Cancel a subscription (customer only)
-    pub fn cancel_subscription(ctx: Context<CancelSubscription>) -> Result<()> {
-        CancelSubscription::cancel_subscription(ctx)
-    }
 }
 
 
