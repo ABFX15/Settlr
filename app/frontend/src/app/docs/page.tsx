@@ -26,24 +26,24 @@ const docsTabs = [
   { id: "troubleshooting", label: "Troubleshooting", icon: HelpCircle },
 ];
 
+type TabId =
+  | "quickstart"
+  | "playground"
+  | "react"
+  | "api"
+  | "webhooks"
+  | "troubleshooting";
+
 export default function DocsPage() {
   const searchParams = useSearchParams();
-  const initialTab =
-    (searchParams.get("tab") as typeof activeTab) || "quickstart";
-  const [activeTab, setActiveTab] = useState<
-    | "quickstart"
-    | "playground"
-    | "react"
-    | "api"
-    | "webhooks"
-    | "troubleshooting"
-  >(initialTab);
+  const initialTab: TabId = (searchParams.get("tab") as TabId) || "quickstart";
+  const [activeTab, setActiveTab] = useState<TabId>(initialTab);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const tab = searchParams.get("tab");
     if (tab && docsTabs.some((t) => t.id === tab)) {
-      setActiveTab(tab as typeof activeTab);
+      setActiveTab(tab as TabId);
     }
   }, [searchParams]);
 

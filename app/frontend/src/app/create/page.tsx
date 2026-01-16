@@ -339,7 +339,7 @@ export default function CreatePaymentPage() {
                               new XMLSerializer().serializeToString(svg);
                             const canvas = document.createElement("canvas");
                             const ctx = canvas.getContext("2d");
-                            const img = new Image();
+                            const img = document.createElement("img");
                             img.onload = () => {
                               canvas.width = 400;
                               canvas.height = 400;
