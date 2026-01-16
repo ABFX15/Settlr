@@ -626,6 +626,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     setStep("processing");
     setError("");
 
+    // Track extracted signature for use in catch block
+    let extractedSignature: string | null = null;
+
     try {
       // Generate a unique nonce for this payment to prevent duplicate transaction errors
       const paymentNonce = `${Date.now()}-${Math.random()
@@ -675,6 +678,40 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         signedResult.signedTransaction
       ).toString("base64");
 
+      // Try to extract the signature from the signed transaction before broadcasting
+      // This helps us get the signature even if the wallet auto-submitted
+      try {
+        const { Transaction, VersionedTransaction } = await import(
+          "@solana/web3.js"
+        );
+        const txBytes = signedResult.signedTransaction;
+        // Try parsing as versioned transaction first
+        try {
+          const vtx = VersionedTransaction.deserialize(txBytes);
+          if (vtx.signatures[0]) {
+            const bs58 = await import("bs58");
+            extractedSignature = bs58.default.encode(vtx.signatures[0]);
+            console.log(
+              "[Gasless] Extracted signature from versioned tx:",
+              extractedSignature
+            );
+          }
+        } catch {
+          // Try legacy transaction
+          const tx = Transaction.from(txBytes);
+          if (tx.signature) {
+            const bs58 = await import("bs58");
+            extractedSignature = bs58.default.encode(tx.signature);
+            console.log(
+              "[Gasless] Extracted signature from legacy tx:",
+              extractedSignature
+            );
+          }
+        }
+      } catch (extractErr) {
+        console.log("[Gasless] Could not extract signature:", extractErr);
+      }
+
       const broadcastResponse = await fetch("/api/gasless", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -690,19 +727,28 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       }
 
       const broadcastResult = await broadcastResponse.json();
-      const { signature, alreadyProcessed } = broadcastResult;
+      let { signature } = broadcastResult;
+      const { alreadyProcessed } = broadcastResult;
+
+      // If already processed but we extracted the signature, use that
+      if (alreadyProcessed && !signature && extractedSignature) {
+        signature = extractedSignature;
+        console.log("[Gasless] Using extracted signature:", signature);
+      }
 
       if (alreadyProcessed) {
         console.log(
-          "[Gasless] Transaction was already processed - treating as success"
+          "[Gasless] Transaction was already processed - wallet likely auto-submitted"
         );
       } else {
         console.log("[Gasless] Transaction sent:", signature);
       }
 
-      // Set signature if available (may be null if already processed)
+      // Set signature if available
       if (signature) {
         setTxSignature(signature);
+      } else if (extractedSignature) {
+        setTxSignature(extractedSignature);
       }
 
       // Complete checkout session if applicable
@@ -750,11 +796,19 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         errorMessage.includes("-32002")
       ) {
         console.log(
-          "[Gasless] Transaction already processed - treating as success"
+          "[Gasless] Transaction already processed - wallet likely auto-submitted"
         );
+        // Use extracted signature if available
+        if (extractedSignature) {
+          setTxSignature(extractedSignature);
+          console.log(
+            "[Gasless] Using extracted signature:",
+            extractedSignature
+          );
+        }
         setStep("success");
         sendToParent("settlr:success", {
-          signature: null,
+          signature: extractedSignature,
           amount,
           merchantWallet,
           memo,
