@@ -26,6 +26,8 @@ import {
   X,
   ArrowLeft,
   Fuel,
+  Lock,
+  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -173,6 +175,13 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     "pending" | "verified" | "rejected" | "unknown"
   >("unknown");
   const [checkingKyc, setCheckingKyc] = useState(false);
+
+  // Privacy state (Inco Lightning FHE)
+  const [privacyEnabled, setPrivacyEnabled] = useState(true); // Enable by default
+  const [privateReceiptHandle, setPrivateReceiptHandle] = useState<
+    string | null
+  >(null);
+  const [issuingPrivateReceipt, setIssuingPrivateReceipt] = useState(false);
 
   // Multichain state
   const [selectedChain, setSelectedChain] = useState<ChainType>("solana");
@@ -436,6 +445,59 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
   }, [activeWallet?.address]);
 
+  // Issue a private receipt for the payment (Inco Lightning FHE encryption)
+  const issuePrivateReceipt = useCallback(
+    async (
+      paymentId: string,
+      paymentAmount: number,
+      customerAddress: string,
+      merchantAddress: string
+    ) => {
+      if (!privacyEnabled) return;
+
+      setIssuingPrivateReceipt(true);
+      try {
+        console.log(
+          "[Privacy] Issuing private receipt for payment:",
+          paymentId
+        );
+
+        const response = await fetch("/api/privacy/receipt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "issue", // Issue private receipt with FHE encryption
+            paymentId,
+            amount: paymentAmount,
+            customer: customerAddress,
+            merchant: merchantAddress,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("[Privacy] Private receipt issued:", data);
+          // Use the short handle for display, full handle for verification
+          if (data.handleShort) {
+            setPrivateReceiptHandle(data.handleShort);
+          } else if (data.handle) {
+            setPrivateReceiptHandle(`0x${data.handle.slice(-12)}`);
+          }
+        } else {
+          console.error(
+            "[Privacy] Failed to issue private receipt:",
+            await response.text()
+          );
+        }
+      } catch (err) {
+        console.error("[Privacy] Error issuing private receipt:", err);
+      } finally {
+        setIssuingPrivateReceipt(false);
+      }
+    },
+    [privacyEnabled]
+  );
+
   // Check auth and wallet status
   useEffect(() => {
     if (!ready) {
@@ -593,6 +655,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         }
       }
 
+      // Issue private receipt for the payment (Inco Lightning FHE)
+      const paymentId = transactionHash || `payment_${Date.now()}`;
+      issuePrivateReceipt(
+        paymentId,
+        amount,
+        activeWallet.address,
+        merchantWallet
+      );
+
       setStep("success");
       sendToParent("settlr:success", {
         signature: transactionHash,
@@ -600,6 +671,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         merchantWallet,
         memo,
         sponsored: true,
+        privacy: privacyEnabled,
       });
     } catch (err: unknown) {
       console.error("[Sponsored] Payment error:", err);
@@ -781,6 +853,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         }
       }
 
+      // Issue private receipt for the payment (Inco Lightning FHE)
+      const paymentId = signature || `payment_${Date.now()}`;
+      issuePrivateReceipt(
+        paymentId,
+        amount,
+        activeWallet.address,
+        merchantWallet
+      );
+
       setStep("success");
       sendToParent("settlr:success", {
         signature: signature,
@@ -788,6 +869,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         merchantWallet,
         memo,
         gasless: true,
+        privacy: privacyEnabled,
       });
     } catch (err: unknown) {
       console.error("[Gasless] Payment error:", err);
@@ -811,6 +893,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             extractedSignature
           );
         }
+        // Issue private receipt
+        const paymentId = extractedSignature || `payment_${Date.now()}`;
+        issuePrivateReceipt(
+          paymentId,
+          amount,
+          activeWallet?.address || "",
+          merchantWallet
+        );
+
         setStep("success");
         sendToParent("settlr:success", {
           signature: extractedSignature,
@@ -819,6 +910,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           memo,
           gasless: true,
           alreadyProcessed: true,
+          privacy: privacyEnabled,
         });
         return;
       }
@@ -886,6 +978,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         }
       }
 
+      // Issue private receipt for EVM cross-chain payment
+      const paymentId = result.hash || `payment_${Date.now()}`;
+      issuePrivateReceipt(
+        paymentId,
+        amount,
+        activeEvmWallet.address,
+        merchantWallet
+      );
+
       setStep("success");
       sendToParent("settlr:success", {
         signature: result.hash,
@@ -895,6 +996,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         sourceChain: selectedChain,
         destinationChain: "solana",
         bridgeType: "mayan",
+        privacy: privacyEnabled,
       });
     } catch (err: unknown) {
       console.error("[EVM] Payment error:", err);
@@ -1034,6 +1136,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         }
       }
 
+      // Issue private receipt for Jupiter swap payment
+      const paymentId = transferSignature || `payment_${Date.now()}`;
+      issuePrivateReceipt(
+        paymentId,
+        amount,
+        activeWallet.address,
+        merchantWallet
+      );
+
       setStep("success");
       sendToParent("settlr:success", {
         signature: transferSignature,
@@ -1043,6 +1154,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         memo,
         paymentToken: selectedToken.symbol,
         swapType: "jupiter",
+        privacy: privacyEnabled,
       });
     } catch (err: unknown) {
       console.error("[Jupiter] Payment error:", err);
@@ -1196,6 +1308,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         }
       }
 
+      // Issue private receipt for standard payment
+      const paymentId = signatureBase58 || `payment_${Date.now()}`;
+      issuePrivateReceipt(
+        paymentId,
+        amount,
+        activeWallet.address,
+        merchantWallet
+      );
+
       setStep("success");
 
       // Notify parent window if embedded
@@ -1204,6 +1325,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         amount,
         merchantWallet,
         memo,
+        privacy: privacyEnabled,
       });
     } catch (err: unknown) {
       console.error("Payment error:", err);
@@ -1867,6 +1989,43 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </div>
               )}
 
+            {/* Privacy Toggle (Always visible on Solana) */}
+            {!isEvmChain && (
+              <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl p-4 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                      <Lock className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <div>
+                      <p className="text-white font-medium">Private Receipt</p>
+                      <p className="text-zinc-400 text-xs">
+                        FHE-encrypted via Inco Lightning
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setPrivacyEnabled(!privacyEnabled)}
+                    className={`relative w-12 h-6 rounded-full transition-colors ${
+                      privacyEnabled ? "bg-purple-500" : "bg-zinc-600"
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
+                        privacyEnabled ? "translate-x-6" : "translate-x-0.5"
+                      }`}
+                    />
+                  </button>
+                </div>
+                {privacyEnabled && (
+                  <p className="text-purple-400 text-xs mt-2 flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3" />
+                    Amount encrypted on-chain
+                  </p>
+                )}
+              </div>
+            )}
+
             {/* Low balance warning with fund options */}
             {!hasEnoughBalance && balance !== null && activeWallet && (
               <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl mb-6">
@@ -2131,6 +2290,34 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               </span>
             )}
           </p>
+
+          {/* Privacy Badge */}
+          {privacyEnabled && (
+            <div className="mb-4 p-3 bg-purple-500/10 border border-purple-500/20 rounded-xl">
+              <div className="flex items-center justify-center gap-2 text-purple-400">
+                <Shield className="w-4 h-4" />
+                <span className="text-sm font-medium">
+                  Private Receipt Enabled
+                </span>
+              </div>
+              <p className="text-xs text-purple-300/60 mt-1">
+                Payment amount is FHE-encrypted via Inco Lightning
+              </p>
+              {privateReceiptHandle && (
+                <div className="mt-2 px-3 py-1.5 bg-purple-900/30 rounded-lg inline-block">
+                  <p className="text-xs text-purple-300 font-mono">
+                    🔐 {privateReceiptHandle}
+                  </p>
+                </div>
+              )}
+              {issuingPrivateReceipt && (
+                <div className="flex items-center justify-center gap-2 text-purple-300/60 mt-2">
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                  <span className="text-xs">Encrypting receipt...</span>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="space-y-3 mb-6">
             {txSignature ? (

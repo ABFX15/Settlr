@@ -122,7 +122,8 @@ export default function DemoStorePage() {
   const handleCheckout = () => {
     if (entries.length === 0) return;
 
-    const demoWallet = "Ac52MMouwRypY7WPxMnUGwi6ZDRuBDgbmt9aXKSp43By";
+    // Demo merchant wallet - separate from user's wallet to show actual transfers
+    const demoWallet = "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV";
     const tournamentNames = entries
       .map((item) => item.tournament.name)
       .join(", ");

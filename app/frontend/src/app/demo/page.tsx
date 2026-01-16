@@ -19,7 +19,8 @@ import {
 import { useState } from "react";
 
 export default function DemoPage() {
-  const demoWallet = "Ac52MMouwRypY7WPxMnUGwi6ZDRuBDgbmt9aXKSp43By";
+  // Demo merchant wallet - separate from user's wallet to show actual transfers
+  const demoWallet = "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV";
   const [showPrivateExplorer, setShowPrivateExplorer] = useState(true);
 
   return (
