@@ -155,6 +155,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   >("loading");
   const [error, setError] = useState("");
   const [txSignature, setTxSignature] = useState("");
+  const [paidFromWallet, setPaidFromWallet] = useState<string>(""); // Store customer wallet for success screen
   const [balance, setBalance] = useState<number | null>(null);
   const [solBalance, setSolBalance] = useState<number | null>(null); // SOL balance for gas
   const [loadingBalance, setLoadingBalance] = useState(false);
@@ -175,6 +176,17 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     "pending" | "verified" | "rejected" | "unknown"
   >("unknown");
   const [checkingKyc, setCheckingKyc] = useState(false);
+
+  // One-Click payment state
+  const [hasOneClickApproval, setHasOneClickApproval] = useState(false);
+  const [oneClickApproval, setOneClickApproval] = useState<{
+    id: string;
+    spendingLimit: number;
+    amountSpent: number;
+    remainingLimit: number;
+  } | null>(null);
+  const [checkingOneClick, setCheckingOneClick] = useState(false);
+  const [processingOneClick, setProcessingOneClick] = useState(false);
 
   // Privacy state (Inco Lightning FHE)
   const [privacyEnabled, setPrivacyEnabled] = useState(true); // Enable by default
@@ -387,6 +399,53 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       account.type === "wallet" && account.walletClientType !== "privy"
   );
   const isExternalWallet = hasExternalWallet ?? false;
+
+  // Check for existing one-click approval
+  useEffect(() => {
+    async function checkOneClickApproval() {
+      if (!activeWallet?.address || !merchantWallet) return;
+
+      setCheckingOneClick(true);
+      try {
+        const response = await fetch("/api/one-click", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "check",
+            customerWallet: activeWallet.address,
+            merchantWallet: merchantWallet,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.hasApproval && data.approval) {
+            const remainingLimit =
+              data.approval.spending_limit - data.approval.amount_spent;
+            if (remainingLimit >= amount) {
+              setHasOneClickApproval(true);
+              setOneClickApproval({
+                id: data.approval.id,
+                spendingLimit: data.approval.spending_limit,
+                amountSpent: data.approval.amount_spent,
+                remainingLimit,
+              });
+              console.log("[One-Click] Found active approval:", {
+                limit: data.approval.spending_limit,
+                spent: data.approval.amount_spent,
+                remaining: remainingLimit,
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.log("[One-Click] Could not check approval:", err);
+      } finally {
+        setCheckingOneClick(false);
+      }
+    }
+    checkOneClickApproval();
+  }, [activeWallet?.address, merchantWallet, amount]);
 
   // Check customer KYC status when merchant requires it
   useEffect(() => {
@@ -664,6 +723,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         merchantWallet
       );
 
+      setPaidFromWallet(activeWallet.address);
       setStep("success");
       sendToParent("settlr:success", {
         signature: transactionHash,
@@ -680,6 +740,101 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       setError(errorMessage);
       setStep("error");
       sendToParent("settlr:error", { message: errorMessage });
+    }
+  };
+
+  // Process one-click payment
+  // For embedded wallets: server signs on behalf of user (true one-click)
+  // For external wallets: validates approval, then uses gasless flow (faster checkout)
+  const processOneClickPayment = async () => {
+    if (!activeWallet?.address || !merchantWallet || !oneClickApproval) {
+      setError("Missing wallet, merchant, or approval");
+      setStep("error");
+      return;
+    }
+
+    setProcessingOneClick(true);
+    setStep("processing");
+    setError("");
+
+    try {
+      console.log("[One-Click] Processing payment...", { isExternalWallet });
+
+      const response = await fetch("/api/one-click", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "charge",
+          customerWallet: activeWallet.address,
+          merchantWallet: merchantWallet,
+          amount: amount,
+          memo: memo || `Payment to ${merchantName}`,
+          isEmbeddedWallet: !isExternalWallet,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "One-click payment failed");
+      }
+
+      // For embedded wallets, payment is complete
+      if (data.success && data.signature) {
+        console.log(
+          "[One-Click] Embedded wallet payment successful:",
+          data.signature
+        );
+        setTxSignature(data.signature);
+        setPaidFromWallet(activeWallet.address);
+
+        // Issue private receipt
+        issuePrivateReceipt(
+          data.signature,
+          amount,
+          activeWallet.address,
+          merchantWallet
+        );
+
+        setStep("success");
+        sendToParent("settlr:success", {
+          signature: data.signature,
+          amount,
+          merchantWallet,
+          memo,
+          oneClick: true,
+          privacy: privacyEnabled,
+        });
+        return;
+      }
+
+      // For external wallets, approval is validated - now use gasless payment
+      if (data.requiresSignature) {
+        console.log(
+          "[One-Click] External wallet - approval validated, using gasless..."
+        );
+        setProcessingOneClick(false);
+
+        // Use gasless payment flow (which requires wallet signature)
+        if (useGasless && gaslessAvailable) {
+          return processGaslessPayment();
+        } else if (privyFeePayerAddress) {
+          return processSponsoredPayment();
+        } else {
+          return processPayment();
+        }
+      }
+
+      throw new Error("Unexpected response from one-click API");
+    } catch (err: unknown) {
+      console.error("[One-Click] Payment error:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "One-click payment failed";
+      setError(errorMessage);
+      setStep("error");
+      sendToParent("settlr:error", { message: errorMessage });
+    } finally {
+      setProcessingOneClick(false);
     }
   };
 
@@ -862,6 +1017,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         merchantWallet
       );
 
+      setPaidFromWallet(activeWallet.address);
       setStep("success");
       sendToParent("settlr:success", {
         signature: signature,
@@ -902,6 +1058,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           merchantWallet
         );
 
+        setPaidFromWallet(activeWallet?.address || "");
         setStep("success");
         sendToParent("settlr:success", {
           signature: extractedSignature,
@@ -987,6 +1144,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         merchantWallet
       );
 
+      setPaidFromWallet(activeEvmWallet.address);
       setStep("success");
       sendToParent("settlr:success", {
         signature: result.hash,
@@ -1145,6 +1303,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         merchantWallet
       );
 
+      setPaidFromWallet(activeWallet.address);
       setStep("success");
       sendToParent("settlr:success", {
         signature: transferSignature,
@@ -1178,16 +1337,26 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       return processJupiterPayment();
     }
 
-    // If gasless is enabled (Kora), use that flow (for external wallets)
-    if (useGasless && gaslessAvailable) {
-      return processGaslessPayment();
+    // Gasless payment handling
+    if (useGasless) {
+      // External wallets use Kora
+      if (isExternalWallet && gaslessAvailable) {
+        return processGaslessPayment();
+      }
+      // Embedded wallets use Privy-sponsored flow
+      if (!isExternalWallet && privyFeePayerAddress) {
+        console.log(
+          "[Payment] Using Privy-sponsored gasless for embedded wallet"
+        );
+        return processSponsoredPayment();
+      }
     }
 
-    // For embedded wallets with no SOL, use Privy-sponsored flow
-    // This is the Pump.fun / Helius pattern where server pays gas
+    // Fallback: For embedded wallets with no SOL, always use Privy-sponsored flow
     if (!isExternalWallet && privyFeePayerAddress) {
-      // Use sponsored payment for embedded wallets (they never have SOL)
-      console.log("[Payment] Using Privy-sponsored flow for embedded wallet");
+      console.log(
+        "[Payment] Using Privy-sponsored flow for embedded wallet (fallback)"
+      );
       return processSponsoredPayment();
     }
 
@@ -1317,6 +1486,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         merchantWallet
       );
 
+      setPaidFromWallet(activeWallet.address);
       setStep("success");
 
       // Notify parent window if embedded
@@ -1946,12 +2116,11 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               </div>
             )}
 
-            {/* Gasless Toggle (Solana only, external wallets only) */}
-            {/* Note: Gasless requires partial signing which Privy embedded wallets don't support */}
+            {/* Gasless Toggle (Solana only) */}
+            {/* External wallets use Kora, embedded wallets use Privy fee payer */}
             {!isEvmChain &&
               !checkingGasless &&
-              gaslessAvailable &&
-              isExternalWallet && (
+              (gaslessAvailable || privyFeePayerAddress) && (
                 <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 rounded-xl p-4 mb-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -2140,6 +2309,36 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   )}
                 </div>
               )}
+
+            {/* One-Click Payment Button (when customer has active approval) */}
+            {hasOneClickApproval && oneClickApproval && !checkingOneClick && (
+              <div className="mb-4">
+                <button
+                  onClick={processOneClickPayment}
+                  disabled={processingOneClick}
+                  className="w-full py-4 font-semibold rounded-xl flex items-center justify-center gap-2 transition-all bg-gradient-to-r from-cyan-500 to-purple-500 text-white hover:opacity-90 shadow-lg hover:shadow-cyan-500/25"
+                >
+                  {processingOneClick ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="w-5 h-5" />
+                      One-Click Pay ${amount.toFixed(2)} USDC
+                    </>
+                  )}
+                </button>
+                <p className="text-center text-xs text-zinc-500 mt-2">
+                  Spending limit: ${oneClickApproval.remainingLimit.toFixed(2)}{" "}
+                  remaining
+                </p>
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <span className="text-zinc-600 text-xs">or</span>
+                </div>
+              </div>
+            )}
 
             <button
               onClick={processPayment}
@@ -2350,25 +2549,47 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             </p>
             <button
               onClick={async () => {
+                const customerWallet = paidFromWallet || activeWallet?.address;
+                if (!customerWallet) {
+                  alert("Error: No wallet address available");
+                  return;
+                }
                 try {
+                  console.log("[One-Click] Requesting approval for:", {
+                    customerWallet,
+                    merchantWallet,
+                  });
                   const response = await fetch("/api/one-click", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                       action: "approve",
-                      customerWallet: activeWallet?.address,
+                      customerWallet: customerWallet,
                       merchantWallet: merchantWallet,
                       spendingLimit: 100, // $100 default limit
                       expiresInDays: 30,
                     }),
                   });
-                  if (response.ok) {
+                  const data = await response.json();
+                  console.log("[One-Click] Response:", data);
+                  if (response.ok && data.success) {
                     alert(
                       "✓ One-click payments enabled! Future purchases will be instant."
+                    );
+                  } else {
+                    alert(
+                      `Error: ${
+                        data.error || "Failed to enable one-click payments"
+                      }`
                     );
                   }
                 } catch (e) {
                   console.error("One-click approval failed:", e);
+                  alert(
+                    `Error: ${
+                      e instanceof Error ? e.message : "Failed to enable"
+                    }`
+                  );
                 }
               }}
               className="w-full py-2 px-4 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-medium rounded-lg transition-colors"

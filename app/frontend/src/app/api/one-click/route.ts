@@ -136,7 +136,9 @@ export async function POST(request: NextRequest) {
 
             case 'charge': {
                 // Merchant charges customer (one-click)
-                const { customerWallet, merchantWallet, amount, memo } = body;
+                // NOTE: True one-click only works with embedded wallets (Privy server signing)
+                // For external wallets, this validates approval and returns instructions
+                const { customerWallet, merchantWallet, amount, memo, isEmbeddedWallet } = body;
 
                 if (!customerWallet || !merchantWallet || !amount) {
                     return NextResponse.json(
@@ -149,8 +151,8 @@ export async function POST(request: NextRequest) {
                     return NextResponse.json({
                         success: true,
                         demo: true,
-                        message: `Demo: Would charge $${amount} USDC from ${customerWallet}`,
-                        txSignature: 'demo-tx-' + Date.now(),
+                        signature: 'demo-tx-' + Date.now(),
+                        message: `Demo: Charged $${amount} USDC from ${customerWallet}`,
                     });
                 }
 
@@ -179,41 +181,72 @@ export async function POST(request: NextRequest) {
                     );
                 }
 
-                // Execute the payment via gasless API
-                // In production, this would use Privy server SDK to sign on behalf of customer
-                const gaslessResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/gasless`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'transfer',
-                        amount: Math.floor(amount * 1_000_000),
-                        token: '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU', // USDC devnet
-                        source: customerWallet,
-                        destination: merchantWallet,
-                    }),
-                });
+                // For embedded wallets, we can use Privy server SDK to sign
+                // For now, we'll use the sponsor-transaction API which handles this
+                if (isEmbeddedWallet) {
+                    try {
+                        // Create transaction via sponsor API
+                        const createResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/sponsor-transaction`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                action: 'create-and-submit',
+                                amount: Math.floor(amount * 1_000_000),
+                                source: customerWallet,
+                                destination: merchantWallet,
+                                memo: memo,
+                            }),
+                        });
 
-                if (!gaslessResponse.ok) {
-                    const error = await gaslessResponse.json();
-                    throw new Error(error.error || 'Payment failed');
+                        if (!createResponse.ok) {
+                            const error = await createResponse.json();
+                            throw new Error(error.error || 'Server-side payment failed');
+                        }
+
+                        const txData = await createResponse.json();
+
+                        // Update spent amount
+                        await supabase
+                            .from('spending_approvals')
+                            .update({ amount_spent: approval.amount_spent + amount })
+                            .eq('id', approval.id);
+
+                        // Log the payment
+                        await supabase
+                            .from('one_click_payments')
+                            .insert({
+                                approval_id: approval.id,
+                                customer_wallet: customerWallet,
+                                merchant_wallet: merchantWallet,
+                                amount: amount,
+                                tx_signature: txData.transactionHash,
+                                memo: memo,
+                            });
+
+                        return NextResponse.json({
+                            success: true,
+                            signature: txData.transactionHash,
+                            charged: amount,
+                            remainingLimit: remaining - amount,
+                            message: `Charged $${amount} USDC via one-click`,
+                        });
+                    } catch (err) {
+                        console.error('[OneClick] Embedded wallet charge failed:', err);
+                        throw err;
+                    }
                 }
 
-                // Update spent amount
-                await supabase
-                    .from('spending_approvals')
-                    .update({
-                        amount_spent: approval.amount_spent + amount
-                    })
-                    .eq('id', approval.id);
-
-                const gaslessData = await gaslessResponse.json();
-
+                // For external wallets, return approval validation
+                // Client will need to request user signature
                 return NextResponse.json({
                     success: true,
-                    charged: amount,
-                    remainingLimit: remaining - amount,
-                    transaction: gaslessData.transaction,
-                    message: `Charged $${amount} USDC via one-click`,
+                    approved: true,
+                    requiresSignature: true,
+                    approval: {
+                        id: approval.id,
+                        remaining: remaining,
+                    },
+                    message: 'Approval valid. Signature required from external wallet.',
                 });
             }
 
