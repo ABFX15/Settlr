@@ -179,8 +179,28 @@ export function InteractivePlayground({
 
   // Parse amount from code
   const parseAmount = () => {
-    const match = code.match(/amount[=:]\s*\{?\s*(\d+\.?\d*)/);
-    return match ? parseFloat(match[1]) : 9.99;
+    // First try direct number: amount={9.99} or amount: 9.99
+    const directMatch = code.match(/amount[=:]\s*\{?\s*(\d+\.?\d*)/);
+    if (directMatch && directMatch[1]) {
+      return parseFloat(directMatch[1]);
+    }
+
+    // Check if amount uses a variable like amount={cartTotal}
+    const varMatch = code.match(
+      /amount[=:]\s*\{?\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}?/
+    );
+    if (varMatch && varMatch[1]) {
+      const varName = varMatch[1];
+      // Look for the variable assignment: const cartTotal = 129.99 or let cartTotal = 129.99
+      const varValueMatch = code.match(
+        new RegExp(`(?:const|let|var)\\s+${varName}\\s*=\\s*(\\d+\\.?\\d*)`)
+      );
+      if (varValueMatch && varValueMatch[1]) {
+        return parseFloat(varValueMatch[1]);
+      }
+    }
+
+    return 9.99;
   };
 
   // Parse memo from code

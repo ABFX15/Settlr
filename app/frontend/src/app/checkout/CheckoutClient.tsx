@@ -1524,7 +1524,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Auth step - login with email/social
   if (step === "auth") {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 pb-safe">
         {/* Close/Back button */}
         <button
           onClick={() => {
@@ -1536,7 +1536,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               router.push("/");
             }
           }}
-          className="fixed top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-50"
+          className="fixed top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-50 sm:top-6 sm:right-6"
           aria-label="Close"
         >
           <X className="w-5 h-5 text-zinc-400" />
@@ -1545,14 +1545,16 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md"
+          className="w-full max-w-md px-2 sm:px-0"
         >
-          <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-6 mb-6">
+          <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-4 sm:p-6 mb-6">
             <div className="text-center mb-6">
               <p className="text-zinc-400 text-sm mb-1">Pay {merchantName}</p>
-              <p className="text-4xl font-bold text-white">
+              <p className="text-3xl sm:text-4xl font-bold text-white">
                 ${amount.toFixed(2)}
-                <span className="text-lg text-zinc-500 ml-2">USDC</span>
+                <span className="text-base sm:text-lg text-zinc-500 ml-2">
+                  USDC
+                </span>
               </p>
               {memo && <p className="text-zinc-500 text-sm mt-2">{memo}</p>}
             </div>
@@ -1875,7 +1877,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     const hasCorrectWallet = isEvmChain ? hasEvmWallet : !!activeWallet;
 
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 relative">
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 pb-safe relative overflow-y-auto">
         {/* Close/Back button */}
         <button
           onClick={() => {
@@ -1887,7 +1889,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               router.push("/");
             }
           }}
-          className="absolute top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-10"
+          className="absolute top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-10 sm:top-6 sm:right-6"
           aria-label="Close"
         >
           <X className="w-5 h-5 text-zinc-400" />
@@ -1896,14 +1898,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md"
+          className="w-full max-w-md px-2 sm:px-0 my-4"
         >
-          <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-6">
+          <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-4 sm:p-6">
             {/* User info */}
-            <div className="flex items-center justify-between mb-6 p-3 bg-zinc-800/50 rounded-xl">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-white" />
+            <div className="flex items-center justify-between mb-4 sm:mb-6 p-3 bg-zinc-800/50 rounded-xl">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
                 <div>
                   <p className="text-white text-sm font-medium">

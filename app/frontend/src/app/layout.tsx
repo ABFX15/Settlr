@@ -114,6 +114,18 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ background: "#0a0a12" }}>
       <head>
+        {/* Mobile viewport with safe area support */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+        <meta name="theme-color" content="#0a0a12" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+
         {/* Google Ads Tag (gtag.js) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17871897491"

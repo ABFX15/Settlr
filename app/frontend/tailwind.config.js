@@ -16,6 +16,9 @@ module.exports = {
                 primary: 'var(--primary)',
                 secondary: 'var(--secondary)',
             },
+            padding: {
+                'safe': 'env(safe-area-inset-bottom)',
+            },
         },
     },
     plugins: [],
