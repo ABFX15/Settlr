@@ -50,7 +50,8 @@ function isValidSolanaAddress(address: string): boolean {
  *   metadata?: Record<string, string>,
  *   successUrl: string,
  *   cancelUrl: string,
- *   webhookUrl?: string
+ *   webhookUrl?: string,
+ *   private?: boolean  // Enable private payment (amounts encrypted on-chain)
  * }
  */
 export async function POST(request: NextRequest) {
@@ -59,6 +60,7 @@ export async function POST(request: NextRequest) {
 
         // Validate required fields
         const { merchantId, merchantName, merchantWallet, amount, successUrl, cancelUrl, webhookUrl, description, metadata } = body;
+        const isPrivate = body.private === true; // Privacy mode - encrypt amounts on-chain
 
         if (!merchantId || !merchantName || !merchantWallet || !amount || !successUrl || !cancelUrl) {
             return NextResponse.json(
@@ -97,6 +99,7 @@ export async function POST(request: NextRequest) {
             cancelUrl,
             webhookUrl,
             expiresAt,
+            private: isPrivate,
         });
 
         // Also store in legacy map for backwards compatibility

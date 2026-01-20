@@ -50,6 +50,11 @@ export interface CheckoutSession {
     createdAt: number;
     expiresAt: number;
     completedAt?: number;
+    // Privacy fields (Inco Lightning FHE encryption)
+    private?: boolean;              // Is this a private payment?
+    encryptedAmount?: string;       // FHE-encrypted amount (base64)
+    encryptedHandle?: string;       // Inco handle for decryption (u128 as string)
+    privateReceiptPda?: string;     // PDA of private receipt on-chain
 }
 
 export interface Payment {
@@ -188,6 +193,9 @@ export async function createCheckoutSession(
             cancel_url: session.cancelUrl,
             status: session.status,
             expires_at: new Date(session.expiresAt).toISOString(),
+            is_private: session.private || false,
+            encrypted_amount: session.encryptedAmount || null,
+            encrypted_handle: session.encryptedHandle || null,
         });
 
         if (error) {
@@ -236,6 +244,11 @@ export async function getCheckoutSession(id: string): Promise<CheckoutSession | 
             status: data.status as CheckoutSession["status"],
             createdAt: new Date(data.created_at).getTime(),
             expiresAt: new Date(data.expires_at).getTime(),
+            // Privacy fields
+            private: data.is_private || false,
+            encryptedAmount: data.encrypted_amount || undefined,
+            encryptedHandle: data.encrypted_handle || undefined,
+            privateReceiptPda: data.private_receipt_pda || undefined,
         };
     } else {
         return memorySessions.get(id) || null;

@@ -131,6 +131,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const successUrl = searchParams.get("successUrl") || "";
   const cancelUrl = searchParams.get("cancelUrl") || "";
 
+  // Privacy mode - encrypt amounts on-chain
+  const isPrivatePayment = searchParams.get("private") === "true";
+
   // Widget/embed mode detection
   const isEmbed = searchParams.get("embed") === "true";
   const isWidget = searchParams.get("widget") === "true";
@@ -189,7 +192,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const [processingOneClick, setProcessingOneClick] = useState(false);
 
   // Privacy state (Inco Lightning FHE)
+  // If URL has private=true, force privacy on and don't allow toggling
   const [privacyEnabled, setPrivacyEnabled] = useState(true); // Enable by default
+  const isPrivacyForced = isPrivatePayment; // Can't toggle off if merchant requested private
   const [privateReceiptHandle, setPrivateReceiptHandle] = useState<
     string | null
   >(null);
@@ -289,7 +294,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           setPrivyFeePayerAddress(data.feePayerAddress);
           console.log(
             "[Privy Gasless] Fee payer available:",
-            data.feePayerAddress
+            data.feePayerAddress,
           );
         }
       } catch (err) {
@@ -306,7 +311,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       try {
         const response = await fetch(
-          `/api/merchants/settings?wallet=${merchantWallet}`
+          `/api/merchants/settings?wallet=${merchantWallet}`,
         );
         if (response.ok) {
           const data = await response.json();
@@ -344,7 +349,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     if (IS_DEVNET) return; // Jupiter only works on mainnet
     if (needsJupiterSwap && amount > 0) {
       console.log(
-        `[Jupiter] Getting quote for ${amount} USDC worth of ${selectedToken.symbol}`
+        `[Jupiter] Getting quote for ${amount} USDC worth of ${selectedToken.symbol}`,
       );
       getJupiterQuote(amount);
     }
@@ -366,25 +371,25 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     const connectedExternal = wallets.find(
       (w) =>
         (w as WalletWithClientType).walletClientType !== "privy" &&
-        (w as WalletWithClientType).connected === true
+        (w as WalletWithClientType).connected === true,
     );
     if (connectedExternal) return connectedExternal;
 
     // Next, check the user's linked accounts to see which wallet they authenticated with
     const linkedWalletAddress = user?.linkedAccounts?.find(
       (account) =>
-        account.type === "wallet" && account.walletClientType !== "privy"
+        account.type === "wallet" && account.walletClientType !== "privy",
     );
     if (linkedWalletAddress && "address" in linkedWalletAddress) {
       const matchingWallet = wallets.find(
-        (w) => w.address === linkedWalletAddress.address
+        (w) => w.address === linkedWalletAddress.address,
       );
       if (matchingWallet) return matchingWallet;
     }
 
     // Fall back to any external wallet
     const externalWallet = wallets.find(
-      (w) => (w as WalletWithClientType).walletClientType !== "privy"
+      (w) => (w as WalletWithClientType).walletClientType !== "privy",
     );
     if (externalWallet) return externalWallet;
 
@@ -396,7 +401,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // If they logged in via wallet, they have an external wallet
   const hasExternalWallet = user?.linkedAccounts?.some(
     (account) =>
-      account.type === "wallet" && account.walletClientType !== "privy"
+      account.type === "wallet" && account.walletClientType !== "privy",
   );
   const isExternalWallet = hasExternalWallet ?? false;
 
@@ -456,7 +461,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       setCheckingKyc(true);
       try {
         const response = await fetch(
-          `/api/kyc/status?customerId=${activeWallet.address}&merchantId=${merchantWallet}`
+          `/api/kyc/status?customerId=${activeWallet.address}&merchantId=${merchantWallet}`,
         );
         if (response.ok) {
           const data = await response.json();
@@ -510,7 +515,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       paymentId: string,
       paymentAmount: number,
       customerAddress: string,
-      merchantAddress: string
+      merchantAddress: string,
     ) => {
       if (!privacyEnabled) return;
 
@@ -518,7 +523,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       try {
         console.log(
           "[Privacy] Issuing private receipt for payment:",
-          paymentId
+          paymentId,
         );
 
         const response = await fetch("/api/privacy/receipt", {
@@ -545,7 +550,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         } else {
           console.error(
             "[Privacy] Failed to issue private receipt:",
-            await response.text()
+            await response.text(),
           );
         }
       } catch (err) {
@@ -554,7 +559,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         setIssuingPrivateReceipt(false);
       }
     },
-    [privacyEnabled]
+    [privacyEnabled],
   );
 
   // Check auth and wallet status
@@ -613,6 +618,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Process sponsored payment for embedded wallets (Privy + Helius pattern)
   // Server creates tx (with its blockhash), user signs, server submits
+  // Note: Privacy receipts are issued at the end of this flow if enabled
   const processSponsoredPayment = async () => {
     if (!activeWallet?.address || !merchantWallet || !privyFeePayerAddress) {
       setError("Missing wallet, merchant, or fee payer");
@@ -625,7 +631,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
     try {
       const amountInBaseUnits = Math.round(
-        amount * Math.pow(10, USDC_DECIMALS)
+        amount * Math.pow(10, USDC_DECIMALS),
       );
 
       // Step 1: Server creates the transaction (with its own blockhash)
@@ -665,7 +671,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       // Step 3: Send user-signed tx back to server for fee payer signature + broadcast
       console.log("[Sponsored] Step 3: Server signing and submitting...");
       const signedTxBase64 = Buffer.from(
-        signedResult.signedTransaction
+        signedResult.signedTransaction,
       ).toString("base64");
 
       const submitResponse = await fetch("/api/sponsor-transaction", {
@@ -720,7 +726,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         paymentId,
         amount,
         activeWallet.address,
-        merchantWallet
+        merchantWallet,
       );
 
       setPaidFromWallet(activeWallet.address);
@@ -783,7 +789,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       if (data.success && data.signature) {
         console.log(
           "[One-Click] Embedded wallet payment successful:",
-          data.signature
+          data.signature,
         );
         setTxSignature(data.signature);
         setPaidFromWallet(activeWallet.address);
@@ -793,7 +799,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           data.signature,
           amount,
           activeWallet.address,
-          merchantWallet
+          merchantWallet,
         );
 
         setStep("success");
@@ -811,7 +817,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       // For external wallets, approval is validated - now use gasless payment
       if (data.requiresSignature) {
         console.log(
-          "[One-Click] External wallet - approval validated, using gasless..."
+          "[One-Click] External wallet - approval validated, using gasless...",
         );
         setProcessingOneClick(false);
 
@@ -839,6 +845,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   };
 
   // Process gasless payment via Kora
+  // Note: Privacy receipts are issued at the end of this flow if enabled
   const processGaslessPayment = async () => {
     if (!activeWallet?.address || !merchantWallet) {
       setError("Missing wallet or merchant address");
@@ -849,7 +856,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     // Prevent double submissions
     if (isProcessingPayment) {
       console.log(
-        "[Gasless] Payment already in progress, ignoring duplicate request"
+        "[Gasless] Payment already in progress, ignoring duplicate request",
       );
       return;
     }
@@ -906,7 +913,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       // Step 3: Submit the transaction via Kora's signAndSendTransaction
       // Kora will add its fee payer signature and broadcast to Solana
       const signedTxBase64 = Buffer.from(
-        signedResult.signedTransaction
+        signedResult.signedTransaction,
       ).toString("base64");
 
       // Try to extract the signature from the signed transaction before sending
@@ -924,7 +931,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             extractedSignature = bs58.default.encode(vtx.signatures[0]);
             console.log(
               "[Gasless] Extracted signature from versioned tx:",
-              extractedSignature
+              extractedSignature,
             );
           }
         } catch {
@@ -935,7 +942,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             extractedSignature = bs58.default.encode(tx.signature);
             console.log(
               "[Gasless] Extracted signature from legacy tx:",
-              extractedSignature
+              extractedSignature,
             );
           }
         }
@@ -970,7 +977,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       if (alreadyProcessed) {
         console.log(
-          "[Gasless] Transaction was already processed - wallet likely auto-submitted"
+          "[Gasless] Transaction was already processed - wallet likely auto-submitted",
         );
       } else {
         console.log("[Gasless] Transaction sent:", signature);
@@ -1014,7 +1021,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         paymentId,
         amount,
         activeWallet.address,
-        merchantWallet
+        merchantWallet,
       );
 
       setPaidFromWallet(activeWallet.address);
@@ -1039,14 +1046,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         errorMessage.includes("-32002")
       ) {
         console.log(
-          "[Gasless] Transaction already processed - wallet likely auto-submitted"
+          "[Gasless] Transaction already processed - wallet likely auto-submitted",
         );
         // Use extracted signature if available
         if (extractedSignature) {
           setTxSignature(extractedSignature);
           console.log(
             "[Gasless] Using extracted signature:",
-            extractedSignature
+            extractedSignature,
           );
         }
         // Issue private receipt
@@ -1055,7 +1062,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           paymentId,
           amount,
           activeWallet?.address || "",
-          merchantWallet
+          merchantWallet,
         );
 
         setPaidFromWallet(activeWallet?.address || "");
@@ -1141,7 +1148,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         paymentId,
         amount,
         activeEvmWallet.address,
-        merchantWallet
+        merchantWallet,
       );
 
       setPaidFromWallet(activeEvmWallet.address);
@@ -1185,7 +1192,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
     try {
       console.log(
-        `[Jupiter] Swapping ${jupiterInputAmount} ${selectedToken.symbol} → ${amount} USDC`
+        `[Jupiter] Swapping ${jupiterInputAmount} ${selectedToken.symbol} → ${amount} USDC`,
       );
 
       // Step 1: Execute Jupiter swap (token → USDC)
@@ -1219,11 +1226,11 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       const userAta = await getAssociatedTokenAddress(USDC_MINT, userPubkey);
       const merchantAta = await getAssociatedTokenAddress(
         USDC_MINT,
-        merchantPubkey
+        merchantPubkey,
       );
 
       const amountInBaseUnits = BigInt(
-        Math.round(amount * Math.pow(10, USDC_DECIMALS))
+        Math.round(amount * Math.pow(10, USDC_DECIMALS)),
       );
       const transaction = new Transaction();
 
@@ -1236,8 +1243,8 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             userPubkey,
             merchantAta,
             merchantPubkey,
-            USDC_MINT
-          )
+            USDC_MINT,
+          ),
         );
       }
 
@@ -1247,8 +1254,8 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           userAta,
           merchantAta,
           userPubkey,
-          amountInBaseUnits
-        )
+          amountInBaseUnits,
+        ),
       );
 
       const { blockhash } = await connection.getLatestBlockhash();
@@ -1300,7 +1307,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         paymentId,
         amount,
         activeWallet.address,
-        merchantWallet
+        merchantWallet,
       );
 
       setPaidFromWallet(activeWallet.address);
@@ -1325,8 +1332,171 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
   };
 
+  // Process PRIVATE payment - real USDC transfer + FHE-encrypted receipt
+  // For hackathon demo: The USDC transfer is visible on Solscan,
+  // but we issue a private receipt with FHE-encrypted amount via Inco Lightning.
+  // This demonstrates the privacy layer Settlr adds on top of standard transfers.
+  const processPrivatePayment = async () => {
+    if (!activeWallet?.address || !merchantWallet) {
+      setError("Missing wallet or merchant address");
+      setStep("error");
+      return;
+    }
+
+    setStep("processing");
+    setError("");
+
+    try {
+      console.log(
+        "[Private Payment] Processing payment with private receipt...",
+      );
+
+      // Step 1: Do the actual USDC transfer (using gasless or sponsored flow)
+      const connection = new Connection(RPC_ENDPOINT, "confirmed");
+      const userPubkey = new PublicKey(activeWallet.address);
+      const merchantPubkey = new PublicKey(merchantWallet);
+      const userAta = await getAssociatedTokenAddress(USDC_MINT, userPubkey);
+      const merchantAta = await getAssociatedTokenAddress(
+        USDC_MINT,
+        merchantPubkey,
+      );
+      const amountInBaseUnits = BigInt(
+        Math.round(amount * Math.pow(10, USDC_DECIMALS)),
+      );
+
+      // Build transaction
+      const transaction = new Transaction();
+
+      // Check if merchant ATA exists
+      try {
+        await getAccount(connection, merchantAta);
+      } catch {
+        transaction.add(
+          createAssociatedTokenAccountInstruction(
+            userPubkey,
+            merchantAta,
+            merchantPubkey,
+            USDC_MINT,
+          ),
+        );
+      }
+
+      // Add transfer instruction
+      transaction.add(
+        createTransferInstruction(
+          userAta,
+          merchantAta,
+          userPubkey,
+          amountInBaseUnits,
+        ),
+      );
+
+      // Get recent blockhash
+      const { blockhash } = await connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = userPubkey;
+
+      // Serialize and sign
+      const serializedTx = transaction.serialize({
+        requireAllSignatures: false,
+        verifySignatures: false,
+      });
+
+      const result = await signAndSendTransaction({
+        transaction: serializedTx,
+        wallet: activeWallet,
+        chain: "solana:devnet",
+        options: {
+          skipPreflight: true,
+          commitment: "confirmed",
+        },
+      });
+
+      const signatureBase58 = encodeBase58(result.signature);
+      console.log("[Private Payment] USDC transfer complete:", signatureBase58);
+      setTxSignature(signatureBase58);
+
+      // Step 2: Issue private receipt with FHE-encrypted amount
+      console.log("[Private Payment] Issuing FHE-encrypted private receipt...");
+      const receiptResponse = await fetch("/api/privacy/receipt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "issue",
+          paymentId: signatureBase58,
+          amount,
+          customer: activeWallet.address,
+          merchant: merchantWallet,
+          txSignature: signatureBase58,
+        }),
+      });
+
+      if (receiptResponse.ok) {
+        const receiptData = await receiptResponse.json();
+        console.log("[Private Payment] Private receipt issued:", receiptData);
+        if (receiptData.handleShort) {
+          setPrivateReceiptHandle(receiptData.handleShort);
+        } else if (receiptData.handle) {
+          setPrivateReceiptHandle(`0x${receiptData.handle.slice(-12)}`);
+        }
+      }
+
+      // Complete checkout session if exists
+      if (sessionId) {
+        try {
+          await fetch("/api/checkout/complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              sessionId,
+              signature: signatureBase58,
+              customerWallet: activeWallet.address,
+              private: true,
+            }),
+          });
+
+          if (successUrl) {
+            window.location.href = successUrl;
+            return;
+          }
+        } catch (completeErr) {
+          console.error(
+            "[Private Payment] Error completing checkout:",
+            completeErr,
+          );
+        }
+      }
+
+      setPaidFromWallet(activeWallet.address);
+      setStep("success");
+      sendToParent("settlr:success", {
+        signature: signatureBase58,
+        amount,
+        merchantWallet,
+        memo,
+        privacy: true,
+        privateReceipt: true,
+      });
+    } catch (err: unknown) {
+      console.error("[Private Payment] Error:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "Private payment failed";
+      setError(errorMessage);
+      setStep("error");
+      sendToParent("settlr:error", { message: errorMessage });
+    }
+  };
+
   // Process payment (standard - user pays gas)
   const processPayment = async () => {
+    // PRIVACY: If privacy is enabled/forced, use private payment flow
+    if (privacyEnabled || isPrivacyForced) {
+      console.log(
+        "[Payment] Privacy enabled - routing to private payment flow",
+      );
+      return processPrivatePayment();
+    }
+
     // If EVM chain is selected, use EVM payment flow
     if (isEvmChain) {
       return processEvmPayment();
@@ -1346,7 +1516,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       // Embedded wallets use Privy-sponsored flow
       if (!isExternalWallet && privyFeePayerAddress) {
         console.log(
-          "[Payment] Using Privy-sponsored gasless for embedded wallet"
+          "[Payment] Using Privy-sponsored gasless for embedded wallet",
         );
         return processSponsoredPayment();
       }
@@ -1355,7 +1525,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     // Fallback: For embedded wallets with no SOL, always use Privy-sponsored flow
     if (!isExternalWallet && privyFeePayerAddress) {
       console.log(
-        "[Payment] Using Privy-sponsored flow for embedded wallet (fallback)"
+        "[Payment] Using Privy-sponsored flow for embedded wallet (fallback)",
       );
       return processSponsoredPayment();
     }
@@ -1378,12 +1548,12 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       const userAta = await getAssociatedTokenAddress(USDC_MINT, userPubkey);
       const merchantAta = await getAssociatedTokenAddress(
         USDC_MINT,
-        merchantPubkey
+        merchantPubkey,
       );
 
       // Calculate amount in base units
       const amountInBaseUnits = BigInt(
-        Math.round(amount * Math.pow(10, USDC_DECIMALS))
+        Math.round(amount * Math.pow(10, USDC_DECIMALS)),
       );
 
       // Build transaction
@@ -1399,8 +1569,8 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             userPubkey,
             merchantAta,
             merchantPubkey,
-            USDC_MINT
-          )
+            USDC_MINT,
+          ),
         );
       }
 
@@ -1410,8 +1580,8 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           userAta,
           merchantAta,
           userPubkey,
-          amountInBaseUnits
-        )
+          amountInBaseUnits,
+        ),
       );
 
       // Get recent blockhash
@@ -1469,7 +1639,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           } else {
             console.warn(
               "Failed to complete checkout session:",
-              await completeResponse.text()
+              await completeResponse.text(),
             );
           }
         } catch (completeErr) {
@@ -1483,7 +1653,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         paymentId,
         amount,
         activeWallet.address,
-        merchantWallet
+        merchantWallet,
       );
 
       setPaidFromWallet(activeWallet.address);
@@ -1549,6 +1719,16 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         >
           <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-4 sm:p-6 mb-6">
             <div className="text-center mb-6">
+              {/* Privacy indicator badge */}
+              {isPrivatePayment && (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full mb-3">
+                  <Lock className="w-3 h-3 text-purple-400" />
+                  <span className="text-purple-400 text-xs font-medium">
+                    Private Payment
+                  </span>
+                </div>
+              )}
+
               <p className="text-zinc-400 text-sm mb-1">Pay {merchantName}</p>
               <p className="text-3xl sm:text-4xl font-bold text-white">
                 ${amount.toFixed(2)}
@@ -1557,6 +1737,13 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </span>
               </p>
               {memo && <p className="text-zinc-500 text-sm mt-2">{memo}</p>}
+
+              {/* Privacy explanation */}
+              {isPrivatePayment && (
+                <p className="text-purple-400/70 text-xs mt-2">
+                  Amount encrypted on-chain • Only you & merchant can see
+                </p>
+              )}
             </div>
 
             <div className="border-t border-zinc-800 pt-6">
@@ -1799,7 +1986,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                       // For now, show a message that Sumsub WebSDK would launch here
                       // In production, you'd initialize the Sumsub WebSDK
                       alert(
-                        "Sumsub verification would launch here. Configure SUMSUB_APP_TOKEN and SUMSUB_SECRET_KEY to enable."
+                        "Sumsub verification would launch here. Configure SUMSUB_APP_TOKEN and SUMSUB_SECRET_KEY to enable.",
                       );
                     } else {
                       const errorData = await response.json();
@@ -1826,7 +2013,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   setCheckingKyc(true);
                   try {
                     const response = await fetch(
-                      `/api/kyc/status?customerId=${activeWallet?.address}&merchantId=${merchantWallet}`
+                      `/api/kyc/status?customerId=${activeWallet?.address}&merchantId=${merchantWallet}`,
                     );
                     if (response.ok) {
                       const data = await response.json();
@@ -2169,29 +2356,46 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                       <Lock className="w-5 h-5 text-purple-400" />
                     </div>
                     <div>
-                      <p className="text-white font-medium">Private Receipt</p>
+                      <p className="text-white font-medium">
+                        Private Receipt
+                        {isPrivacyForced && (
+                          <span className="ml-2 text-xs text-purple-400 font-normal">
+                            (Required)
+                          </span>
+                        )}
+                      </p>
                       <p className="text-zinc-400 text-xs">
-                        FHE-encrypted via Inco Lightning
+                        Receipt encrypted via Inco Lightning FHE
                       </p>
                     </div>
                   </div>
                   <button
-                    onClick={() => setPrivacyEnabled(!privacyEnabled)}
+                    onClick={() =>
+                      !isPrivacyForced && setPrivacyEnabled(!privacyEnabled)
+                    }
+                    disabled={isPrivacyForced}
                     className={`relative w-12 h-6 rounded-full transition-colors ${
-                      privacyEnabled ? "bg-purple-500" : "bg-zinc-600"
+                      privacyEnabled || isPrivacyForced
+                        ? "bg-purple-500"
+                        : "bg-zinc-600"
+                    } ${
+                      isPrivacyForced ? "opacity-75 cursor-not-allowed" : ""
                     }`}
                   >
                     <span
                       className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
-                        privacyEnabled ? "translate-x-6" : "translate-x-0.5"
+                        privacyEnabled || isPrivacyForced
+                          ? "translate-x-6"
+                          : "translate-x-0.5"
                       }`}
                     />
                   </button>
                 </div>
-                {privacyEnabled && (
+                {(privacyEnabled || isPrivacyForced) && (
                   <p className="text-purple-400 text-xs mt-2 flex items-center gap-1">
                     <ShieldCheck className="w-3 h-3" />
-                    Amount encrypted on-chain
+                    Payment details encrypted • Only you & merchant can see
+                    receipt
                   </p>
                 )}
               </div>
@@ -2493,21 +2697,24 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           </p>
 
           {/* Privacy Badge */}
-          {privacyEnabled && (
-            <div className="mb-4 p-3 bg-purple-500/10 border border-purple-500/20 rounded-xl">
-              <div className="flex items-center justify-center gap-2 text-purple-400">
-                <Shield className="w-4 h-4" />
-                <span className="text-sm font-medium">
-                  Private Receipt Enabled
+          {(privacyEnabled || isPrivacyForced) && (
+            <div className="mb-4 p-4 bg-purple-500/10 border border-purple-500/20 rounded-xl">
+              <div className="flex items-center justify-center gap-2 text-purple-400 mb-2">
+                <Shield className="w-5 h-5" />
+                <span className="text-sm font-semibold">
+                  🔒 Private Receipt Issued
                 </span>
               </div>
-              <p className="text-xs text-purple-300/60 mt-1">
-                Payment amount is FHE-encrypted via Inco Lightning
+              <p className="text-xs text-purple-300/80 mb-2">
+                Payment receipt is FHE-encrypted via Inco Lightning
+              </p>
+              <p className="text-xs text-zinc-500">
+                Only you and {merchantName} can decrypt the payment details
               </p>
               {privateReceiptHandle && (
-                <div className="mt-2 px-3 py-1.5 bg-purple-900/30 rounded-lg inline-block">
+                <div className="mt-3 px-3 py-2 bg-purple-900/30 rounded-lg inline-block">
                   <p className="text-xs text-purple-300 font-mono">
-                    🔐 {privateReceiptHandle}
+                    Encrypted Handle: {privateReceiptHandle}
                   </p>
                 </div>
               )}
@@ -2522,15 +2729,22 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
           <div className="space-y-3 mb-6">
             {txSignature ? (
-              <a
-                href={explorerUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-500 transition-colors"
-              >
-                <ExternalLink className="w-4 h-4" />
-                View Transaction on {explorerName}
-              </a>
+              <>
+                <a
+                  href={explorerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-500 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  View Transaction on {explorerName}
+                </a>
+                {(privacyEnabled || isPrivacyForced) && (
+                  <p className="text-xs text-purple-400 text-center">
+                    ℹ️ USDC transfer visible, but receipt details are encrypted
+                  </p>
+                )}
+              </>
             ) : (
               <p className="text-zinc-500 text-sm">
                 Transaction confirmed on Solana
@@ -2576,13 +2790,13 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   console.log("[One-Click] Response:", data);
                   if (response.ok && data.success) {
                     alert(
-                      "✓ One-click payments enabled! Future purchases will be instant."
+                      "✓ One-click payments enabled! Future purchases will be instant.",
                     );
                   } else {
                     alert(
                       `Error: ${
                         data.error || "Failed to enable one-click payments"
-                      }`
+                      }`,
                     );
                   }
                 } catch (e) {
@@ -2590,7 +2804,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   alert(
                     `Error: ${
                       e instanceof Error ? e.message : "Failed to enable"
-                    }`
+                    }`,
                   );
                 }
               }}

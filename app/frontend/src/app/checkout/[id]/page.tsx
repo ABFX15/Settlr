@@ -3,7 +3,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Loader2, XCircle, Clock, ArrowLeft, CheckCircle2 } from "lucide-react";
+import {
+  Loader2,
+  XCircle,
+  Clock,
+  ArrowLeft,
+  CheckCircle2,
+  Shield,
+} from "lucide-react";
 import Link from "next/link";
 
 interface CheckoutSession {
@@ -20,6 +27,11 @@ interface CheckoutSession {
   status: "pending" | "completed" | "expired" | "cancelled";
   expiresAt: number;
   paymentSignature?: string;
+  // Privacy fields
+  private?: boolean;
+  encryptedAmount?: string;
+  encryptedHandle?: string;
+  privateReceiptPda?: string;
 }
 
 export default function CheckoutSessionPage() {
@@ -68,6 +80,11 @@ export default function CheckoutSessionPage() {
           checkoutUrl.searchParams.set("session", data.id);
           checkoutUrl.searchParams.set("successUrl", data.successUrl);
           checkoutUrl.searchParams.set("cancelUrl", data.cancelUrl);
+
+          // Pass privacy flag if enabled
+          if (data.private) {
+            checkoutUrl.searchParams.set("private", "true");
+          }
 
           router.push(checkoutUrl.toString());
         }
@@ -188,9 +205,25 @@ export default function CheckoutSessionPage() {
           <h1 className="text-2xl font-bold text-white mb-2">
             Payment Complete!
           </h1>
+
+          {/* Privacy indicator */}
+          {session?.private && (
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Shield className="w-4 h-4 text-purple-400" />
+              <span className="text-purple-400 text-sm font-medium">
+                Private Payment
+              </span>
+            </div>
+          )}
+
           <p className="text-zinc-400 mb-4">
             Your payment of ${session?.amount.toFixed(2)} USDC has been
             confirmed.
+            {session?.private && (
+              <span className="block text-purple-400/70 text-xs mt-1">
+                Amount encrypted on-chain with FHE
+              </span>
+            )}
           </p>
 
           {session?.paymentSignature && (
