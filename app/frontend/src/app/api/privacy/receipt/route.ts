@@ -4,8 +4,8 @@
  * Issues FHE-encrypted private receipts for payments using Inco Lightning.
  * Only authorized parties (merchant + customer) can decrypt payment amounts.
  * 
- * For demo: Stores privacy metadata in Supabase with simulated encryption handles.
- * For production: Would make actual on-chain CPI to Inco Lightning program.
+ * Uses @inco/solana-sdk for real client-side encryption.
+ * Stores encrypted handles in Supabase for off-chain verification.
  * 
  * POST: Issue a private receipt for a completed payment
  * GET: Retrieve/verify a private receipt
@@ -14,10 +14,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PublicKey } from '@solana/web3.js';
 import { createClient } from '@supabase/supabase-js';
+import {
+    encryptAmount,
+    usdcToMicroUnits,
+    findPrivateReceiptPda as findReceiptPda,
+    findAllowancePda as findAllowance,
+    INCO_LIGHTNING_PROGRAM_ID,
+    SETTLR_PROGRAM_ID,
+} from '@/lib/inco-lightning';
 
-// Program IDs for reference
-const SETTLR_PROGRAM_ID = new PublicKey('339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5');
-const INCO_LIGHTNING_PROGRAM_ID = new PublicKey('5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj');
+// Flag to use real Inco encryption vs simulated
+const USE_REAL_INCO_ENCRYPTION = true;
 
 // Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -28,77 +35,91 @@ const supabase = supabaseUrl && supabaseServiceKey
     : null;
 
 /**
- * Generate a deterministic encrypted handle from payment data.
- * In production, this would come from Inco Lightning's FHE encryption.
+ * Generate an encrypted handle using Inco Lightning FHE encryption.
  * 
- * The handle is a u128 that uniquely identifies the encrypted value
- * in Inco's covalidator network.
+ * When USE_REAL_INCO_ENCRYPTION is true:
+ * - Uses @inco/solana-sdk to encrypt the amount with Inco's TEE public key
+ * - Returns the ciphertext hex which can be used with the on-chain program
+ * 
+ * When false (fallback):
+ * - Uses SHA-256 to generate a deterministic handle (for testing)
  */
 async function generateEncryptedHandle(
     paymentId: string,
     amount: number,
     customer: string,
     merchant: string
-): Promise<{ handle: string; hash: string }> {
-    // Create a deterministic hash of the payment data
+): Promise<{ handle: string; hash: string; ciphertext?: string; isRealEncryption: boolean }> {
+
+    if (USE_REAL_INCO_ENCRYPTION) {
+        try {
+            // Convert USDC amount to micro-units (6 decimals)
+            const microUnits = usdcToMicroUnits(amount);
+
+            // Encrypt using Inco SDK - this calls Inco's TEE endpoint
+            const ciphertextHex = await encryptAmount(microUnits);
+
+            console.log('[Privacy] Real Inco encryption successful');
+            console.log(`  Amount: $${amount} USDC → ${microUnits} micro-units`);
+            console.log(`  Ciphertext: ${ciphertextHex.slice(0, 32)}...`);
+
+            // Generate a handle from the ciphertext (first 16 bytes as u128)
+            const ciphertextBytes = Buffer.from(ciphertextHex.replace(/^0x/, ''), 'hex');
+            let handle = BigInt(0);
+            for (let i = 15; i >= 0 && i < ciphertextBytes.length; i--) {
+                handle = (handle << BigInt(8)) | BigInt(ciphertextBytes[i]);
+            }
+
+            // Short hash for display
+            const hashHex = ciphertextHex.slice(2, 18); // First 8 bytes after 0x
+
+            return {
+                handle: handle.toString(),
+                hash: hashHex,
+                ciphertext: ciphertextHex,
+                isRealEncryption: true
+            };
+        } catch (error) {
+            console.error('[Privacy] Real Inco encryption failed, falling back to simulated:', error);
+            // Fall through to simulated encryption
+        }
+    }
+
+    // Fallback: Simulated encryption using SHA-256
     const encoder = new TextEncoder();
     const data = encoder.encode(`${paymentId}:${amount}:${customer}:${merchant}:${Date.now()}`);
 
-    // Use Web Crypto API for hashing
     const hashBuffer = await crypto.subtle.digest('SHA-256', data.buffer as ArrayBuffer);
     const hashArray = new Uint8Array(hashBuffer);
 
-    // Convert first 16 bytes to u128 handle (little-endian)
     let handle = BigInt(0);
     for (let i = 15; i >= 0; i--) {
         handle = (handle << BigInt(8)) | BigInt(hashArray[i]);
     }
 
-    // Create display hash (hex of first 8 bytes of full hash)
     const hashHex = Array.from(hashArray.slice(0, 8))
         .map(b => b.toString(16).padStart(2, '0'))
         .join('');
 
     return {
         handle: handle.toString(),
-        hash: hashHex
+        hash: hashHex,
+        isRealEncryption: false
     };
 }
 
 /**
  * Find the private receipt PDA (for on-chain verification)
- * Uses first 32 bytes of paymentId hash to fit PDA seed limit
  */
 function findPrivateReceiptPda(paymentId: string): [PublicKey, number] {
-    // PDA seeds have max 32 bytes - hash long payment IDs (like tx signatures)
-    let paymentIdSeed: Buffer;
-    if (paymentId.length > 32) {
-        // Use first 32 chars of the paymentId as seed (tx signatures are base58)
-        paymentIdSeed = Buffer.from(paymentId.slice(0, 32));
-    } else {
-        paymentIdSeed = Buffer.from(paymentId);
-    }
-
-    return PublicKey.findProgramAddressSync(
-        [Buffer.from('private_receipt'), paymentIdSeed],
-        SETTLR_PROGRAM_ID
-    );
+    return findReceiptPda(paymentId);
 }
 
 /**
  * Find allowance PDA for a given handle and address
  */
 function findAllowancePda(handle: bigint, allowedAddress: PublicKey): [PublicKey, number] {
-    const handleBuffer = Buffer.alloc(16);
-    let h = handle;
-    for (let i = 0; i < 16; i++) {
-        handleBuffer[i] = Number(h & BigInt(0xff));
-        h = h >> BigInt(8);
-    }
-    return PublicKey.findProgramAddressSync(
-        [handleBuffer, allowedAddress.toBuffer()],
-        INCO_LIGHTNING_PROGRAM_ID
-    );
+    return findAllowance(handle, allowedAddress);
 }
 
 export async function POST(request: NextRequest) {
@@ -136,13 +157,15 @@ export async function POST(request: NextRequest) {
                     );
                 }
 
-                // Generate encrypted handle
-                const { handle, hash } = await generateEncryptedHandle(
+                // Generate encrypted handle using Inco Lightning
+                const encryptionResult = await generateEncryptedHandle(
                     paymentId,
                     amount,
                     customer,
                     merchant
                 );
+
+                const { handle, hash, ciphertext, isRealEncryption } = encryptionResult;
 
                 // Derive PDAs
                 const [privateReceiptPda] = findPrivateReceiptPda(paymentId);
@@ -162,9 +185,10 @@ export async function POST(request: NextRequest) {
                                 merchant_wallet: merchant,
                                 encrypted_handle: handle,
                                 encrypted_hash: hash,
+                                encrypted_ciphertext: ciphertext,
                                 payment_timestamp: new Date().toISOString(),
                                 privacy_version: 1,
-                                encryption_method: 'inco_lightning_fhe_demo',
+                                encryption_method: isRealEncryption ? 'inco_lightning_fhe' : 'simulated_sha256',
                                 customer_allowance_granted: true,
                                 merchant_allowance_granted: true,
                                 status: 'active'
@@ -188,10 +212,16 @@ export async function POST(request: NextRequest) {
                     action: action,
                     paymentId,
 
-                    // Encrypted handle (would be from Inco in production)
+                    // Encrypted handle from Inco Lightning
                     handle,
                     encryptedHandle: handle, // Alias for backwards compat
                     encryptedHash: hash,
+
+                    // Ciphertext for on-chain program (if using real encryption)
+                    ciphertext: ciphertext || null,
+
+                    // Whether real Inco FHE encryption was used
+                    isRealEncryption,
 
                     // PDA addresses for on-chain verification
                     privateReceiptPda: privateReceiptPda.toBase58(),
@@ -200,11 +230,15 @@ export async function POST(request: NextRequest) {
 
                     // Storage status
                     stored,
-                    demo: true, // Flag indicating demo mode
+                    demo: !isRealEncryption, // Only demo if not using real Inco encryption
 
                     // Privacy info
-                    message: 'Private receipt issued successfully',
-                    privacyNote: 'Payment amount is encrypted. Only customer and merchant can decrypt via Inco Lightning.',
+                    message: isRealEncryption
+                        ? 'Private receipt issued with Inco Lightning FHE encryption'
+                        : 'Private receipt issued (simulated encryption)',
+                    privacyNote: isRealEncryption
+                        ? 'Amount encrypted with Inco TEE. Only customer and merchant can decrypt via attested decryption.'
+                        : 'Simulated encryption - for production, enable USE_REAL_INCO_ENCRYPTION.',
 
                     // Display-friendly shortened handle
                     handleShort: `0x${handle.slice(-12)}`,

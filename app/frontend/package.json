@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1",
+    "@inco/solana-sdk": "^0.0.2",
     "@magicblock-labs/ephemeral-rollups-sdk": "^0.8.0",
     "@mayanfinance/swap-sdk": "^12.2.3",
     "@moonpay/moonpay-react": "^1.10.6",
