@@ -31,7 +31,7 @@ import { Footer } from "@/components/ui/Footer";
 function CodeBlock() {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<"react" | "nextjs" | "vue">(
-    "react"
+    "react",
   );
 
   const codeSnippets = {
@@ -779,7 +779,7 @@ export default function LandingPage() {
                 backgroundImage: "linear-gradient(to right, #a855f7, #22d3ee)",
               }}
             >
-              Accept Any Crypto. Receive Instant USDC.
+              Get Paid Globally. No Banks. No Holds.
             </span>
           </motion.h1>
 
@@ -790,7 +790,8 @@ export default function LandingPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            No wallets. No gas fees. No custody risk. Just payments that work.
+            Instant stablecoin payments. No 5-day wire delays. No 3% processor
+            fees. No chargebacks. No underwriting.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -832,11 +833,11 @@ export default function LandingPage() {
             transition={{ delay: 0.7, duration: 0.8 }}
           >
             {[
-              { icon: DollarSign, label: "Any Token" },
-              { icon: Zap, label: "Zero Gas" },
-              { icon: Clock, label: "Instant Settlement" },
-              { icon: Wallet, label: "Non-Custodial" },
               { icon: Shield, label: "No Chargebacks" },
+              { icon: Globe, label: "180+ Countries" },
+              { icon: Clock, label: "Same-Day Settlement" },
+              { icon: Wallet, label: "No Reserves" },
+              { icon: DollarSign, label: "1% Flat Fee" },
             ].map((feature, index) => (
               <span
                 key={feature.label}
@@ -986,14 +987,145 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-6 py-3">
               <Users className="w-5 h-5 text-purple-400" />
               <span className="text-gray-300">
-                Perfect for{" "}
-                <span className="text-white font-semibold">freelancers</span>,{" "}
-                <span className="text-white font-semibold">remote workers</span>
-                , and <span className="text-white font-semibold">creators</span>{" "}
-                who need to get paid from anywhere.
+                Built for{" "}
+                <span className="text-white font-semibold">
+                  digital agencies
+                </span>
+                ,{" "}
+                <span className="text-white font-semibold">SaaS companies</span>
+                ,{" "}
+                <span className="text-white font-semibold">
+                  course creators
+                </span>
+                , and merchants who can&apos;t get approved by traditional
+                processors.
               </span>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Who It's For Section */}
+      <section className="relative px-4 py-24 overflow-hidden">
+        <div className="mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold text-white md:text-5xl mb-4">
+              Who It&apos;s For
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Settlr is built for businesses that need reliable global payments
+              without traditional banking friction.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Segment 1: Global E-commerce */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="relative p-8 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-500/10 to-transparent"
+            >
+              <div className="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center mb-6">
+                <Globe className="w-7 h-7 text-purple-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">
+                Global E-commerce & Digital Goods
+              </h3>
+              <p className="text-gray-400 mb-4">
+                SaaS companies, course creators, and digital sellers with
+                international customers.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  No 40% card decline rates in emerging markets
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  Skip PayPal&apos;s 21-day holds on new accounts
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  Customers in LatAm/Africa already use USDC
+                </li>
+              </ul>
+            </motion.div>
+
+            {/* Segment 2: B2B Services */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="relative p-8 rounded-2xl border border-cyan-500/20 bg-gradient-to-b from-cyan-500/10 to-transparent"
+            >
+              <div className="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-6">
+                <CreditCard className="w-7 h-7 text-cyan-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">
+                B2B Service Providers
+              </h3>
+              <p className="text-gray-400 mb-4">
+                Digital agencies, dev shops, consultants, and freelancers with
+                international clients.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  Same-day settlement vs 3-5 day wires
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  1% flat fee vs $30-100 wire fees
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  No currency conversion losses (2-4%)
+                </li>
+              </ul>
+            </motion.div>
+
+            {/* Segment 3: Underserved Merchants */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="relative p-8 rounded-2xl border border-green-500/20 bg-gradient-to-b from-green-500/10 to-transparent"
+            >
+              <div className="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center mb-6">
+                <Shield className="w-7 h-7 text-green-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">
+                Underserved Merchants
+              </h3>
+              <p className="text-gray-400 mb-4">
+                CBD, supplements, adult content creators, crypto services —
+                legal but hard to bank.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  No underwriting or approval process
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  No reserves held on your funds
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  No chargebacks — stablecoin payments are final
+                </li>
+              </ul>
+            </motion.div>
+          </div>
         </div>
       </section>
 
