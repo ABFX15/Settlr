@@ -36,7 +36,7 @@ export function Navbar() {
             alt="Settlr"
             width={100}
             height={28}
-            quality={100}
+            priority
             className="object-contain"
           />
         </Link>
