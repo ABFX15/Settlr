@@ -298,6 +298,192 @@ import { SettlrCheckout } from 'settlr/vue'
   );
 }
 
+// Savings Calculator component
+function SavingsCalculator() {
+  const [volume, setVolume] = useState(10000);
+  const [avgTransaction, setAvgTransaction] = useState(100);
+
+  // Calculate fees
+  const transactions = Math.round(volume / avgTransaction);
+
+  // Stripe: 2.9% + $0.30 per transaction
+  const stripeFee = volume * 0.029 + transactions * 0.3;
+
+  // Wire fees: ~$35 per transaction (for B2B)
+  const wireFee = transactions * 35;
+
+  // PayPal: 2.9% + $0.30 (same as Stripe, but often holds funds)
+  const paypalFee = volume * 0.029 + transactions * 0.3;
+
+  // Settlr: 1% flat
+  const settlrFee = volume * 0.01;
+
+  // Savings
+  const stripeSavings = stripeFee - settlrFee;
+  const wireSavings = wireFee - settlrFee;
+  const paypalSavings = paypalFee - settlrFee;
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat("en-US").format(num);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-500/5 to-transparent p-8"
+    >
+      {/* Input Section */}
+      <div className="grid md:grid-cols-2 gap-8 mb-10">
+        <div>
+          <label className="block text-sm font-medium text-gray-400 mb-3">
+            Monthly Payment Volume
+          </label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400">
+              $
+            </span>
+            <input
+              type="text"
+              value={formatNumber(volume)}
+              onChange={(e) => {
+                const val = parseInt(e.target.value.replace(/,/g, "")) || 0;
+                setVolume(Math.min(val, 10000000));
+              }}
+              className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-4 text-2xl font-bold text-white focus:outline-none focus:border-purple-500 transition-colors"
+            />
+          </div>
+          <input
+            type="range"
+            min="1000"
+            max="500000"
+            step="1000"
+            value={volume}
+            onChange={(e) => setVolume(parseInt(e.target.value))}
+            className="w-full mt-4 accent-purple-500"
+          />
+          <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <span>$1K</span>
+            <span>$500K</span>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-400 mb-3">
+            Average Transaction Size
+          </label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400">
+              $
+            </span>
+            <input
+              type="text"
+              value={formatNumber(avgTransaction)}
+              onChange={(e) => {
+                const val = parseInt(e.target.value.replace(/,/g, "")) || 1;
+                setAvgTransaction(Math.max(1, Math.min(val, 100000)));
+              }}
+              className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-4 text-2xl font-bold text-white focus:outline-none focus:border-purple-500 transition-colors"
+            />
+          </div>
+          <input
+            type="range"
+            min="10"
+            max="5000"
+            step="10"
+            value={avgTransaction}
+            onChange={(e) => setAvgTransaction(parseInt(e.target.value))}
+            className="w-full mt-4 accent-purple-500"
+          />
+          <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <span>$10</span>
+            <span>$5,000</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="border-t border-white/10 my-8" />
+
+      {/* Results Section */}
+      <div className="grid md:grid-cols-3 gap-6 mb-8">
+        {/* vs Stripe */}
+        <div className="bg-white/5 rounded-xl p-6 text-center">
+          <div className="text-sm text-gray-400 mb-2">
+            vs Stripe (2.9% + $0.30)
+          </div>
+          <div className="text-3xl font-bold text-green-400 mb-1">
+            {formatCurrency(stripeSavings)}
+          </div>
+          <div className="text-xs text-gray-500">saved per month</div>
+          <div className="mt-3 text-xs text-gray-400">
+            Stripe: {formatCurrency(stripeFee)} → Settlr:{" "}
+            {formatCurrency(settlrFee)}
+          </div>
+        </div>
+
+        {/* vs Wire */}
+        <div className="bg-white/5 rounded-xl p-6 text-center">
+          <div className="text-sm text-gray-400 mb-2">
+            vs Wire Transfers (~$35/tx)
+          </div>
+          <div className="text-3xl font-bold text-green-400 mb-1">
+            {formatCurrency(wireSavings)}
+          </div>
+          <div className="text-xs text-gray-500">saved per month</div>
+          <div className="mt-3 text-xs text-gray-400">
+            Wire: {formatCurrency(wireFee)} → Settlr:{" "}
+            {formatCurrency(settlrFee)}
+          </div>
+        </div>
+
+        {/* vs PayPal */}
+        <div className="bg-white/5 rounded-xl p-6 text-center">
+          <div className="text-sm text-gray-400 mb-2">
+            vs PayPal (2.9% + $0.30)
+          </div>
+          <div className="text-3xl font-bold text-green-400 mb-1">
+            {formatCurrency(paypalSavings)}
+          </div>
+          <div className="text-xs text-gray-500">saved per month</div>
+          <div className="mt-3 text-xs text-gray-400">
+            + No 21-day holds on new accounts
+          </div>
+        </div>
+      </div>
+
+      {/* Annual Savings Callout */}
+      <motion.div
+        initial={{ scale: 0.95 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true }}
+        className="text-center p-6 rounded-xl bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30"
+      >
+        <div className="text-lg text-gray-300 mb-2">
+          Annual Savings vs Stripe
+        </div>
+        <div className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+          {formatCurrency(stripeSavings * 12)}
+        </div>
+        <div className="text-sm text-gray-400 mt-2">
+          Based on {formatNumber(transactions)} transactions/month at{" "}
+          {formatCurrency(avgTransaction)} avg
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 // Comparison table component
 function ComparisonTable() {
   const comparisonData = [
@@ -1126,6 +1312,27 @@ export default function LandingPage() {
               </ul>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Savings Calculator Section */}
+      <section className="relative px-4 py-24 overflow-hidden" id="calculator">
+        <div className="mx-auto max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold text-white md:text-5xl mb-4">
+              See How Much You&apos;d Save
+            </h2>
+            <p className="text-xl text-gray-400">
+              Enter your monthly payment volume to calculate your savings
+            </p>
+          </motion.div>
+
+          <SavingsCalculator />
         </div>
       </section>
 
