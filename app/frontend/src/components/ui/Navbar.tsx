@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
@@ -51,12 +51,14 @@ const industryLinks = [
   },
 ];
 
-export function Navbar() {
+export function Navbar({ variant = "dark" }: { variant?: "dark" | "light" }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [industriesOpen, setIndustriesOpen] = useState(false);
   const industriesRef = useRef<HTMLDivElement>(null);
   const { ready, authenticated, login, logout, user } = usePrivy();
+
+  const isLight = variant === "light";
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -80,18 +82,11 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0a0a0f]/90 backdrop-blur-xl">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#0a0a0f] shadow-lg">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/logo-new.png"
-            alt="Settlr"
-            width={100}
-            height={28}
-            priority
-            className="object-contain"
-          />
+          <SettlrLogoWithIcon size="sm" variant="light" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -185,13 +180,21 @@ export function Navbar() {
             <>
               <Link
                 href="/client-dashboard"
-                className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-white/10"
+                className={`rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
+                  isLight
+                    ? "border-black/20 bg-black/5 text-black hover:bg-black/10"
+                    : "border-white/10 bg-white/5 text-white hover:bg-white/10"
+                }`}
               >
                 Dashboard
               </Link>
               <button
                 onClick={logout}
-                className="text-sm text-white/60 transition-colors hover:text-white"
+                className={`text-sm transition-colors ${
+                  isLight
+                    ? "text-black/60 hover:text-black"
+                    : "text-white/60 hover:text-white"
+                }`}
               >
                 Sign Out
               </button>
@@ -200,13 +203,21 @@ export function Navbar() {
             <>
               <button
                 onClick={login}
-                className="text-sm font-medium text-white/60 transition-colors hover:text-white"
+                className={`text-sm font-medium transition-colors ${
+                  isLight
+                    ? "text-black/60 hover:text-black"
+                    : "text-white/60 hover:text-white"
+                }`}
               >
                 Sign In
               </button>
               <Link
                 href="/onboarding"
-                className="rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40"
+                className={`rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-lg transition-all ${
+                  isLight
+                    ? "bg-[#E42575] hover:bg-[#c91f64] shadow-[#E42575]/25 hover:shadow-[#E42575]/40"
+                    : "bg-gradient-to-r from-purple-500 to-cyan-500 shadow-purple-500/25 hover:shadow-purple-500/40"
+                }`}
               >
                 Get Started
               </Link>
@@ -217,7 +228,11 @@ export function Navbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white md:hidden"
+          className={`rounded-lg p-2 transition-colors md:hidden ${
+            isLight
+              ? "text-black/60 hover:bg-black/5 hover:text-black"
+              : "text-white/60 hover:bg-white/5 hover:text-white"
+          }`}
         >
           {mobileMenuOpen ? (
             <X className="h-5 w-5" />
