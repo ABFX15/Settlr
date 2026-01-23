@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
+import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { usePrivy } from "@privy-io/react-auth";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
@@ -147,14 +147,7 @@ export default function CreatePaymentPage() {
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0a0a0f]/80 px-4 py-4 backdrop-blur-xl md:px-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/logo-new.png"
-              alt="Settlr"
-              width={100}
-              height={28}
-              quality={100}
-              className="object-contain"
-            />
+            <SettlrLogoWithIcon size="sm" variant="light" />
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             <Link
@@ -393,7 +386,7 @@ export default function CreatePaymentPage() {
                   <Link
                     href={paymentLink.replace(
                       window?.location?.origin || "",
-                      ""
+                      "",
                     )}
                     className="btn-primary flex-1 flex items-center justify-center gap-2"
                   >

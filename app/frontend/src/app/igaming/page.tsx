@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
+import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import {
   Zap,
   Shield,
@@ -106,14 +106,7 @@ export default function IGamingPage() {
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0a0a0f]/80 px-4 py-4 backdrop-blur-xl md:px-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/logo-new.png"
-              alt="Settlr"
-              width={100}
-              height={28}
-              quality={100}
-              className="object-contain"
-            />
+            <SettlrLogoWithIcon size="sm" variant="light" />
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             <Link
@@ -373,13 +366,7 @@ export default function IGamingPage() {
       <footer className="border-t border-white/5 px-4 py-12">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
           <div className="flex items-center gap-2">
-            <Image
-              src="/logo-new.png"
-              alt="Settlr"
-              width={80}
-              height={22}
-              className="object-contain opacity-50"
-            />
+            <SettlrLogoWithIcon size="sm" variant="light" />
           </div>
           <div className="flex gap-6 text-sm text-white/30">
             <Link

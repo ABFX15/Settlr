@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
+import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
@@ -53,14 +53,7 @@ export default function WaitlistPage() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/logo-new.png"
-              alt="Settlr"
-              width={100}
-              height={28}
-              quality={100}
-              className="object-contain"
-            />
+            <SettlrLogoWithIcon size="sm" variant="light" />
           </Link>
           <nav className="flex items-center gap-6">
             <Link

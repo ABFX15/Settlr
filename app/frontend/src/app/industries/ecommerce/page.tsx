@@ -2,20 +2,22 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRef } from "react";
 import {
   Zap,
   Shield,
   Clock,
-  Globe,
   ArrowRight,
   Check,
   ShoppingCart,
   Wallet,
   CreditCard,
   Lock,
-  Users,
+  Globe,
   DollarSign,
-  TrendingDown,
+  TrendingUp,
+  X,
+  Percent,
   RotateCcw,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
@@ -27,106 +29,85 @@ const features = [
     title: "2% Flat Fee",
     description:
       "No per-transaction fees. No monthly minimums. Save 30%+ compared to Stripe.",
+    stat: "2%",
+    statLabel: "flat, always",
   },
   {
     icon: Shield,
     title: "Zero Chargebacks",
     description:
       "Blockchain payments are final. No more losing revenue to friendly fraud.",
+    stat: "0%",
+    statLabel: "chargeback rate",
   },
   {
     icon: Wallet,
     title: "No Wallet Required",
     description:
       "Customers pay with email. Same checkout UX as cards, powered by crypto.",
+    stat: "3x",
+    statLabel: "higher conversion",
   },
   {
     icon: Zap,
     title: "Instant Settlement",
     description:
       "Get your money in seconds, not days. No rolling reserves or holds.",
+    stat: "400ms",
+    statLabel: "settlement time",
   },
   {
     icon: Globe,
     title: "195 Countries",
     description:
       "Accept payments from anywhere. No international transaction fees.",
+    stat: "195+",
+    statLabel: "countries",
   },
   {
     icon: Lock,
     title: "Privacy Option",
     description:
       "Customers can checkout privately. Great for sensitive product categories.",
+    stat: "FHE",
+    statLabel: "encryption",
   },
 ];
 
-const savingsCalculation = [
+const painPoints = [
   {
-    volume: "$10,000/mo",
-    stripeFee: "$320",
-    settlrFee: "$200",
-    savings: "$120",
+    icon: Percent,
+    problem: "High Fees",
+    detail: "2.9% + $0.30 per transaction",
+  },
+  { icon: Clock, problem: "Slow Payouts", detail: "2-7 day settlement delays" },
+  { icon: RotateCcw, problem: "Chargebacks", detail: "$15 fee + lost revenue" },
+  {
+    icon: Globe,
+    problem: "International Fees",
+    detail: "+1.5% for global customers",
   },
   {
-    volume: "$50,000/mo",
-    stripeFee: "$1,600",
-    settlrFee: "$1,000",
-    savings: "$600",
-  },
-  {
-    volume: "$100,000/mo",
-    stripeFee: "$3,200",
-    settlrFee: "$2,000",
-    savings: "$1,200",
-  },
-  {
-    volume: "$500,000/mo",
-    stripeFee: "$16,000",
-    settlrFee: "$10,000",
-    savings: "$6,000",
+    icon: DollarSign,
+    problem: "Rolling Reserves",
+    detail: "Up to 10% held back",
   },
 ];
 
-const comparisonData = [
-  {
-    feature: "Transaction Fee",
-    stripe: "2.9% + $0.30",
-    settlr: "2% flat",
-  },
-  {
-    feature: "International Fee",
-    stripe: "+1.5%",
-    settlr: "0%",
-  },
-  {
-    feature: "Settlement Time",
-    stripe: "2-7 days",
-    settlr: "Instant",
-  },
-  {
-    feature: "Chargebacks",
-    stripe: "$15 + lost sale",
-    settlr: "Zero",
-  },
-  {
-    feature: "Rolling Reserve",
-    stripe: "Up to 10%",
-    settlr: "None",
-  },
-  {
-    feature: "Wallet Required",
-    stripe: "No",
-    settlr: "No",
-  },
+const stats = [
+  { value: "2%", label: "Flat Fee" },
+  { value: "Instant", label: "Settlement" },
+  { value: "0%", label: "Chargebacks" },
+  { value: "195+", label: "Countries" },
 ];
 
 const integrations = [
   "Shopify",
   "WooCommerce",
-  "React / Next.js",
-  "Custom checkout",
-  "Payment links",
-  "API integration",
+  "Next.js",
+  "React",
+  "Payment Links",
+  "API",
 ];
 
 export default function EcommercePage() {
@@ -134,208 +115,415 @@ export default function EcommercePage() {
     <main className="min-h-screen bg-[#0a0a0f]">
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative px-4 pb-24 pt-32">
-        <div className="mx-auto max-w-6xl text-center">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2"
-          >
-            <ShoppingCart className="h-4 w-4 text-purple-400" />
-            <span className="text-sm text-purple-300">For E-Commerce</span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-6 text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl"
-          >
-            <span className="bg-gradient-to-r from-[#a855f7] to-[#22d3ee] bg-clip-text text-transparent">
-              Lower Fees.
-            </span>
-            <br />
-            Zero Chargebacks.
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mx-auto mb-8 max-w-2xl text-xl text-gray-400"
-          >
-            Accept payments globally at 2% flat. Customers pay with email—no
-            wallets needed. Get paid instantly with zero chargeback risk.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col items-center justify-center gap-4 sm:flex-row"
-          >
-            <Link
-              href="/onboarding"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#22d3ee] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-purple-500/30 transition-all hover:shadow-purple-500/50"
-            >
-              Start Saving Today
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-            <Link
-              href="/demo"
-              className="inline-flex items-center gap-2 rounded-xl border-2 border-purple-500/50 px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-white/5"
-            >
-              See Demo
-            </Link>
-          </motion.div>
+      {/* Hero Section */}
+      <section className="relative min-h-screen overflow-hidden px-4 pt-24">
+        {/* Animated gradient mesh background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(168,85,247,0.3),transparent)]" />
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
         </div>
-      </section>
 
-      {/* Savings Calculator */}
-      <section className="px-4 py-24 bg-gradient-to-b from-green-500/5 to-transparent">
-        <div className="mx-auto max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-16 text-center"
-          >
-            <h2 className="mb-4 text-4xl font-bold text-white">
-              See Your Savings
-            </h2>
-            <p className="mx-auto max-w-2xl text-lg text-gray-400">
-              At 2% flat vs Stripe's 2.9% + $0.30, the savings add up fast
-            </p>
-          </motion.div>
+        {/* Floating orbs */}
+        <motion.div
+          animate={{
+            y: [0, -20, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute right-[10%] top-[20%] h-72 w-72 rounded-full bg-gradient-to-br from-[#a855f7]/20 to-[#14F195]/20 blur-3xl"
+        />
+        <motion.div
+          animate={{
+            y: [0, 20, 0],
+            scale: [1, 0.9, 1],
+          }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute left-[5%] top-[40%] h-48 w-48 rounded-full bg-gradient-to-br from-[#14F195]/20 to-[#a855f7]/20 blur-3xl"
+        />
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="overflow-hidden rounded-2xl border border-white/10"
-          >
-            <div className="grid grid-cols-4 border-b border-white/10 bg-white/5 p-4">
-              <div className="font-semibold text-gray-400">Volume</div>
-              <div className="text-center font-semibold text-gray-400">
-                Stripe
+        <div className="relative mx-auto max-w-7xl">
+          <div className="grid min-h-[80vh] items-center gap-12 lg:grid-cols-2">
+            {/* Left - Hero content */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#a855f7]/30 bg-[#a855f7]/10 px-4 py-2">
+                <ShoppingCart className="h-4 w-4 text-[#a855f7]" />
+                <span className="text-sm font-medium text-[#a855f7]">
+                  Built for E-Commerce
+                </span>
               </div>
-              <div className="text-center font-semibold text-gray-400">
-                Settlr
+
+              <h1 className="mb-6 text-5xl font-bold leading-[1.1] tracking-tight text-white md:text-7xl">
+                Stop losing
+                <br />
+                30% to
+                <br />
+                <span className="relative">
+                  <span className="bg-gradient-to-r from-[#a855f7] via-[#14F195] to-[#00D4FF] bg-clip-text text-transparent">
+                    payment fees
+                  </span>
+                  <motion.svg
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 1.5, delay: 0.5 }}
+                    className="absolute -bottom-2 left-0 w-full"
+                    viewBox="0 0 300 12"
+                    fill="none"
+                  >
+                    <motion.path
+                      d="M2 10C50 2 150 2 298 10"
+                      stroke="url(#ecom-underline)"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                    <defs>
+                      <linearGradient
+                        id="ecom-underline"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stopColor="#a855f7" />
+                        <stop offset="50%" stopColor="#14F195" />
+                        <stop offset="100%" stopColor="#00D4FF" />
+                      </linearGradient>
+                    </defs>
+                  </motion.svg>
+                </span>
+              </h1>
+
+              <p className="mb-8 max-w-lg text-lg text-gray-400">
+                2% flat fee. Instant settlement. Zero chargebacks. Same checkout
+                UX your customers expect, powered by crypto rails.
+              </p>
+
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href="/waitlist"
+                  className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#14F195] px-6 py-3.5 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#a855f7]/25"
+                >
+                  Start Saving Today
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link
+                  href="/docs"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3.5 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                >
+                  View Documentation
+                </Link>
               </div>
-              <div className="text-center font-semibold text-green-400">
-                Savings
-              </div>
-            </div>
-            {savingsCalculation.map((row, index) => (
-              <div
-                key={row.volume}
-                className={`grid grid-cols-4 p-4 ${
-                  index < savingsCalculation.length - 1
-                    ? "border-b border-white/5"
-                    : ""
-                }`}
-              >
-                <div className="text-white font-medium">{row.volume}</div>
-                <div className="text-center text-red-400">{row.stripeFee}</div>
-                <div className="text-center text-gray-300">{row.settlrFee}</div>
-                <div className="text-center font-bold text-green-400">
-                  {row.savings}
+            </motion.div>
+
+            {/* Right - Bento-style preview */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="grid gap-4">
+                {/* Top row */}
+                <div className="grid grid-cols-2 gap-4">
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className="rounded-2xl border border-[#14F195]/20 bg-gradient-to-br from-[#14F195]/10 to-transparent p-6 backdrop-blur-sm"
+                  >
+                    <DollarSign className="mb-3 h-8 w-8 text-[#14F195]" />
+                    <div className="text-3xl font-bold text-white">2%</div>
+                    <div className="text-sm text-gray-400">Flat fee</div>
+                  </motion.div>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className="rounded-2xl border border-[#a855f7]/20 bg-gradient-to-br from-[#a855f7]/10 to-transparent p-6 backdrop-blur-sm"
+                  >
+                    <Shield className="mb-3 h-8 w-8 text-[#a855f7]" />
+                    <div className="text-3xl font-bold text-white">0%</div>
+                    <div className="text-sm text-gray-400">Chargebacks</div>
+                  </motion.div>
+                </div>
+
+                {/* Large card */}
+                <motion.div
+                  whileHover={{ scale: 1.01 }}
+                  className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-sm"
+                >
+                  <div className="absolute right-0 top-0 h-32 w-32 bg-gradient-to-bl from-[#14F195]/20 to-transparent" />
+                  <div className="relative">
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className="rounded-lg bg-[#14F195]/20 p-2">
+                        <Zap className="h-6 w-6 text-[#14F195]" />
+                      </div>
+                      <span className="text-lg font-semibold text-white">
+                        Instant Settlement
+                      </span>
+                    </div>
+                    <p className="text-gray-400">
+                      Get your money in 400ms, not 7 days. No rolling reserves.
+                      No holds.
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Bottom row */}
+                <div className="grid grid-cols-2 gap-4">
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className="rounded-2xl border border-[#00D4FF]/20 bg-gradient-to-br from-[#00D4FF]/10 to-transparent p-6 backdrop-blur-sm"
+                  >
+                    <Globe className="mb-3 h-8 w-8 text-[#00D4FF]" />
+                    <div className="text-3xl font-bold text-white">195+</div>
+                    <div className="text-sm text-gray-400">Countries</div>
+                  </motion.div>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-6 backdrop-blur-sm"
+                  >
+                    <Wallet className="mb-3 h-8 w-8 text-white" />
+                    <div className="text-3xl font-bold text-white">No</div>
+                    <div className="text-sm text-gray-400">Wallet needed</div>
+                  </motion.div>
                 </div>
               </div>
-            ))}
-          </motion.div>
-
-          <p className="mt-4 text-center text-sm text-gray-500">
-            Based on $50 average order value. Higher-ticket items save even
-            more.
-          </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="px-4 py-24">
-        <div className="mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-16 text-center"
-          >
-            <h2 className="mb-4 text-4xl font-bold text-white">
-              Why E-Commerce Brands Choose Settlr
-            </h2>
-            <p className="mx-auto max-w-2xl text-lg text-gray-400">
-              Same checkout experience. Lower fees. Better economics.
-            </p>
-          </motion.div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature, index) => (
+      {/* Stats Banner - Bright Purple */}
+      <section className="relative bg-[#a855f7] px-4 py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+            {stats.map((stat, index) => (
               <motion.div
-                key={feature.title}
+                key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-purple-500/30 hover:bg-white/10"
+                className="text-center"
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20">
-                  <feature.icon className="h-6 w-6 text-purple-400" />
+                <div className="mb-2 text-4xl font-bold text-white md:text-5xl">
+                  {stat.value}
                 </div>
-                <h3 className="mb-2 text-xl font-semibold text-white">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-400">{feature.description}</p>
+                <div className="text-sm font-medium text-white/80">
+                  {stat.label}
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Comparison Table */}
-      <section className="px-4 py-24">
-        <div className="mx-auto max-w-4xl">
+      {/* Problems Section - White background */}
+      <section className="relative overflow-hidden bg-white px-4 py-24">
+        <div className="mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="mb-16 text-center"
           >
-            <h2 className="mb-4 text-4xl font-bold text-white">vs Stripe</h2>
-            <p className="text-lg text-gray-400">
-              Same simplicity. Better economics.
+            <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">
+              Stripe & PayPal are
+              <span className="text-red-500"> eating your margin</span>
+            </h2>
+            <p className="mx-auto max-w-2xl text-gray-600">
+              Traditional payment processors charge excessive fees, hold your
+              money, and leave you exposed to chargeback fraud.
             </p>
+          </motion.div>
+
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+            {painPoints.map((point, index) => {
+              const Icon = point.icon;
+              return (
+                <motion.div
+                  key={point.problem}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group relative overflow-hidden rounded-2xl border-2 border-red-200 bg-red-50 p-6 transition-all hover:border-red-300 hover:bg-red-100"
+                >
+                  <div className="absolute right-2 top-2 text-red-300">
+                    <X className="h-8 w-8" />
+                  </div>
+                  <Icon className="mb-4 h-8 w-8 text-red-500" />
+                  <h3 className="mb-2 font-semibold text-gray-900">
+                    {point.problem}
+                  </h3>
+                  <p className="text-sm text-gray-600">{point.detail}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Integrations Section */}
+      <section className="relative bg-gray-50 px-4 py-16">
+        <div className="mx-auto max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-10 text-center"
+          >
+            <h2 className="mb-4 text-3xl font-bold text-gray-900">
+              Works with your stack
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-6">
+            {integrations.map((integration, index) => (
+              <motion.div
+                key={integration}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center justify-center rounded-xl border-2 border-[#a855f7]/30 bg-white p-4 text-center font-medium text-gray-900 shadow-sm transition-all hover:border-[#a855f7] hover:shadow-lg"
+              >
+                {integration}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section - Purple gradient */}
+      <section className="relative bg-gradient-to-br from-[#a855f7] to-[#7c3aed] px-4 py-24">
+        <div className="relative mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-16 text-center"
+          >
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2">
+              <Check className="h-4 w-4 text-white" />
+              <span className="text-sm font-medium text-white">
+                The Settlr Advantage
+              </span>
+            </div>
+            <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
+              Keep more of
+              <br />
+              <span className="text-[#14F195]">every sale</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="group relative rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-sm transition-all hover:bg-white/20"
+                >
+                  <div className="relative">
+                    <div className="mb-4 inline-flex rounded-xl bg-white/20 p-3">
+                      <Icon className="h-6 w-6 text-[#14F195]" />
+                    </div>
+
+                    <div className="mb-4">
+                      <span className="text-3xl font-bold text-white">
+                        {feature.stat}
+                      </span>
+                      <span className="ml-2 text-sm text-white/70">
+                        {feature.statLabel}
+                      </span>
+                    </div>
+
+                    <h3 className="mb-2 text-xl font-semibold text-white">
+                      {feature.title}
+                    </h3>
+                    <p className="text-white/80">{feature.description}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Section */}
+      <section className="relative bg-[#0a0a0f] px-4 py-24">
+        <div className="mx-auto max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12 text-center"
+          >
+            <h2 className="mb-4 text-4xl font-bold text-white">
+              Stripe vs. <span className="text-[#14F195]">Settlr</span>
+            </h2>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="overflow-hidden rounded-2xl border border-white/10"
+            className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]"
           >
-            <div className="grid grid-cols-3 border-b border-white/10 bg-white/5 p-4">
-              <div className="font-semibold text-gray-400">Feature</div>
-              <div className="text-center font-semibold text-gray-400">
+            <div className="grid grid-cols-3 border-b border-white/10 bg-white/[0.02]">
+              <div className="p-4 text-sm font-medium text-gray-400">
+                Feature
+              </div>
+              <div className="p-4 text-center text-sm font-medium text-gray-400">
                 Stripe
               </div>
-              <div className="text-center font-semibold text-purple-400">
+              <div className="p-4 text-center text-sm font-medium text-[#14F195]">
                 Settlr
               </div>
             </div>
-            {comparisonData.map((row, index) => (
+
+            {[
+              {
+                feature: "Transaction Fee",
+                stripe: "2.9% + $0.30",
+                settlr: "2% flat",
+              },
+              { feature: "International Fee", stripe: "+1.5%", settlr: "0%" },
+              {
+                feature: "Settlement Time",
+                stripe: "2-7 days",
+                settlr: "Instant",
+              },
+              {
+                feature: "Chargebacks",
+                stripe: "$15 + lost sale",
+                settlr: "Zero",
+              },
+              {
+                feature: "Rolling Reserve",
+                stripe: "Up to 10%",
+                settlr: "None",
+              },
+              { feature: "Wallet Required", stripe: "No", settlr: "No" },
+            ].map((row, index) => (
               <div
                 key={row.feature}
-                className={`grid grid-cols-3 p-4 ${
-                  index < comparisonData.length - 1
-                    ? "border-b border-white/5"
-                    : ""
+                className={`grid grid-cols-3 ${
+                  index !== 5 ? "border-b border-white/5" : ""
                 }`}
               >
-                <div className="text-white">{row.feature}</div>
-                <div className="text-center text-red-400">{row.stripe}</div>
-                <div className="text-center font-medium text-green-400">
+                <div className="p-4 text-white">{row.feature}</div>
+                <div className="p-4 text-center text-gray-400">
+                  {row.stripe}
+                </div>
+                <div className="p-4 text-center font-medium text-[#14F195]">
                   {row.settlr}
                 </div>
               </div>
@@ -344,74 +532,46 @@ export default function EcommercePage() {
         </div>
       </section>
 
-      {/* Integration Options */}
-      <section className="px-4 py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid gap-12 lg:grid-cols-2">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="mb-6 text-4xl font-bold text-white">
-                Integrate in Minutes
-              </h2>
-              <p className="mb-8 text-lg text-gray-400">
-                Drop-in SDK for React and Next.js. Payment links for no-code.
-                Full API for custom integrations.
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                {integrations.map((integration, index) => (
-                  <motion.div
-                    key={integration}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05 }}
-                    className="flex items-center gap-2"
-                  >
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500/20">
-                      <Check className="h-3 w-3 text-green-400" />
-                    </div>
-                    <span className="text-sm text-gray-300">{integration}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+      {/* CTA Section */}
+      <section className="relative overflow-hidden px-4 py-24">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#a855f7]/10 to-transparent" />
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 p-8"
-            >
-              <h3 className="mb-4 text-2xl font-bold text-white">
-                Ready to Cut Your Payment Costs?
-              </h3>
-              <p className="mb-6 text-gray-400">
-                Start accepting payments in under 10 minutes. No contracts, no
-                minimums, no hidden fees.
-              </p>
-              <Link
-                href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#22d3ee] px-6 py-3 font-semibold text-white transition-all hover:opacity-90"
-              >
-                Get Started
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-              <div className="mt-6 flex items-center gap-4 text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <TrendingDown className="h-4 w-4" />
-                  <span>Save 30%+ on fees</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RotateCcw className="h-4 w-4" />
-                  <span>Zero chargebacks</span>
-                </div>
-              </div>
-            </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative mx-auto max-w-3xl text-center"
+        >
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#14F195]/30 bg-[#14F195]/10 px-4 py-2">
+            <TrendingUp className="h-4 w-4 text-[#14F195]" />
+            <span className="text-sm font-medium text-[#14F195]">
+              Ready to save?
+            </span>
           </div>
-        </div>
+
+          <h2 className="mb-6 text-4xl font-bold text-white md:text-5xl">
+            Every sale,
+            <br />
+            <span className="bg-gradient-to-r from-[#a855f7] to-[#14F195] bg-clip-text text-transparent">
+              more profit
+            </span>
+          </h2>
+
+          <p className="mb-8 text-lg text-gray-400">
+            Join e-commerce stores saving thousands per month by switching to
+            crypto-powered checkout.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href="/waitlist"
+              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#14F195] px-8 py-4 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#a855f7]/25"
+            >
+              Start Saving Today
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </motion.div>
       </section>
 
       <Footer />

@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { usePrivy } from "@privy-io/react-auth";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
@@ -112,18 +112,18 @@ export default function ClientDashboardPage() {
           const total =
             data.payments?.reduce(
               (sum: number, p: PaymentRecord) => sum + p.amount,
-              0
+              0,
             ) || 0;
           const count = data.payments?.length || 0;
           const today = new Date().toDateString();
           const todayPayments =
             data.payments?.filter(
               (p: PaymentRecord) =>
-                new Date(p.completedAt).toDateString() === today
+                new Date(p.completedAt).toDateString() === today,
             ) || [];
           const todayTotal = todayPayments.reduce(
             (sum: number, p: PaymentRecord) => sum + p.amount,
-            0
+            0,
           );
 
           setStats({
@@ -178,13 +178,9 @@ export default function ClientDashboardPage() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0a0f] px-4">
         <div className="text-center">
-          <Image
-            src="/logo-new.png"
-            alt="Settlr"
-            width={120}
-            height={34}
-            className="mx-auto mb-8 opacity-80"
-          />
+          <div className="mx-auto mb-8 flex justify-center">
+            <SettlrLogoWithIcon size="md" variant="light" />
+          </div>
           <h1 className="mb-4 text-3xl font-bold text-white">
             Welcome to Settlr
           </h1>
@@ -214,13 +210,7 @@ export default function ClientDashboardPage() {
         <div className="flex h-16 items-center justify-between border-b border-white/5 px-4">
           {!sidebarCollapsed && (
             <Link href="/" className="flex items-center gap-2">
-              <Image
-                src="/logo-new.png"
-                alt="Settlr"
-                width={90}
-                height={26}
-                className="object-contain"
-              />
+              <SettlrLogoWithIcon size="sm" variant="light" />
             </Link>
           )}
           <button
@@ -305,13 +295,7 @@ export default function ClientDashboardPage() {
       {/* Mobile Header */}
       <div className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/5 bg-[#0a0a0f]/90 px-4 backdrop-blur-xl md:hidden">
         <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/logo-new.png"
-            alt="Settlr"
-            width={90}
-            height={26}
-            className="object-contain"
-          />
+          <SettlrLogoWithIcon size="sm" variant="light" />
         </Link>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -504,7 +488,7 @@ export default function ClientDashboardPage() {
                         <span className="text-xs text-white/40">{day}</span>
                       </div>
                     );
-                  }
+                  },
                 )}
               </div>
             </motion.div>
