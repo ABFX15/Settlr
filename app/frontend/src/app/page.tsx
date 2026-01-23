@@ -867,7 +867,7 @@ export default function LandingPage() {
         />
 
         {/* Unified Navbar */}
-        <Navbar variant="light" />
+        <Navbar />
 
         {/* Hero Content - Two Column Layout */}
         <div className="relative z-10 flex min-h-screen items-center px-4 pt-20">
