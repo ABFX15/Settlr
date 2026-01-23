@@ -1,14 +1,14 @@
 # Settlr Architecture Documentation
 
-> **Last Updated:** January 2025  
-> **SDK Version:** @settlr/sdk@0.4.4  
+> **Last Updated:** January 2026  
+> **SDK Version:** @settlr/sdk@0.6.0  
 > **Program ID:** `339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5` (Devnet)
 
 ---
 
 ## Overview
 
-Settlr is a USDC checkout solution built on Solana. It provides merchants with an embeddable payment widget, gasless transactions for customers, and optional KYC integration.
+Settlr is a USDC checkout solution built on Solana. It provides merchants with an embeddable payment widget, gasless transactions for customers, privacy-preserving payments, and optional KYC integration.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -23,6 +23,8 @@ Settlr is a USDC checkout solution built on Solana. It provides merchants with a
 │  • React component or hosted page                               │
 │  • Privy embedded wallets                                       │
 │  • Gasless transactions                                         │
+│  • Privacy mode (ZK-shielded payments)                          │
+│  • One-click payments                                           │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -31,16 +33,19 @@ Settlr is a USDC checkout solution built on Solana. It provides merchants with a
 │                 (Next.js App Router)                            │
 │  • API routes for checkout, payments, webhooks                  │
 │  • Supabase for persistence                                     │
-│  • Kora for gasless sponsorship                                 │
+│  • Kora for gasless sponsorship (external wallets)              │
+│  • Privy for gasless sponsorship (embedded wallets)             │
+│  • Range Security for wallet risk screening                     │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                    SOLANA ANCHOR PROGRAM                        │
-│                    (paymenmts)                                  │
+│                    (payments + privacy)                         │
 │  • On-chain payment processing                                  │
 │  • Platform fee collection                                      │
 │  • Merchant management                                          │
+│  • Inco Lightning private receipts                              │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -51,9 +56,12 @@ Settlr is a USDC checkout solution built on Solana. It provides merchants with a
 | Layer       | Technology                         | Status                            |
 | ----------- | ---------------------------------- | --------------------------------- |
 | Frontend    | Next.js 16 (App Router)            | ✅ Implemented                    |
-| SDK         | @settlr/sdk (npm)                  | ✅ v0.4.4 published               |
+| SDK         | @settlr/sdk (npm)                  | ✅ v0.6.0 published               |
 | Auth        | Privy (embedded wallets)           | ✅ Implemented                    |
-| Gasless     | Kora (Solana Foundation)           | ✅ Implemented                    |
+| Gasless     | Kora + Privy fee payer             | ✅ Implemented                    |
+| Privacy     | Inco Lightning + Privacy Cash      | ✅ Implemented                    |
+| Security    | Range (wallet risk screening)      | ✅ Implemented                    |
+| One-Click   | Saved payment methods              | ✅ Implemented                    |
 | Database    | Supabase (with in-memory fallback) | ✅ Implemented                    |
 | KYC         | Sumsub                             | ⚠️ Scaffolded, not enforced       |
 | Cross-chain | Mayan                              | ❌ Documented but NOT implemented |
@@ -310,10 +318,35 @@ pub struct Payment {
 
 ### Gasless
 
-| Endpoint                       | Method | Description             |
-| ------------------------------ | ------ | ----------------------- |
-| `/api/gasless/sponsor`         | POST   | Request gas sponsorship |
-| `/api/privy-gasless/submit-tx` | POST   | Submit sponsored tx     |
+| Endpoint                   | Method | Description                     |
+| -------------------------- | ------ | ------------------------------- |
+| `/api/gasless`             | GET    | Check gasless availability      |
+| `/api/gasless`             | POST   | Create/submit gasless tx (Kora) |
+| `/api/sponsor-transaction` | GET    | Check Privy fee payer status    |
+| `/api/sponsor-transaction` | POST   | Privy-sponsored tx flow         |
+
+### Privacy
+
+| Endpoint               | Method | Description                   |
+| ---------------------- | ------ | ----------------------------- |
+| `/api/privacy/payment` | POST   | Execute ZK-shielded payment   |
+| `/api/privacy/receipt` | POST   | Issue Inco FHE encrypted rcpt |
+| `/api/privacy/payout`  | POST   | B2B private settlement        |
+| `/api/privacy/gaming`  | POST   | MagicBlock PER gaming session |
+
+### Security
+
+| Endpoint          | Method | Description              |
+| ----------------- | ------ | ------------------------ |
+| `/api/risk-check` | GET    | Screen wallet for risk   |
+| `/api/risk-check` | POST   | Full payment risk assess |
+
+### One-Click
+
+| Endpoint         | Method | Description                |
+| ---------------- | ------ | -------------------------- |
+| `/api/one-click` | GET    | Check saved payment method |
+| `/api/one-click` | POST   | Execute one-click payment  |
 
 ### KYC (Sumsub)
 
@@ -404,6 +437,85 @@ verifyWebhookSignature(body, signature): boolean
 - `applicantActionPending` - Additional docs needed
 
 **Status:** ⚠️ Scaffolded but NOT enforced (merchants can enable per-account)
+
+---
+
+### Range Security (Wallet Risk Screening)
+
+**Purpose:** Screen merchant wallets before payments to block malicious actors
+
+**Location:** `app/frontend/src/app/api/risk-check/route.ts`
+
+**Key Functions:**
+
+```typescript
+GET /api/risk-check?address={wallet}&network=solana
+POST /api/risk-check (full payment risk assessment)
+```
+
+**Risk Scoring:**
+
+| Score | Level              | Action            |
+| ----- | ------------------ | ----------------- |
+| 1-4   | Low risk           | ✅ Allow payment  |
+| 5-6   | Medium risk        | ⚠️ Warn but allow |
+| 7-10  | High/Critical risk | 🚫 Block payment  |
+
+**Features:**
+
+- Sanctions list checking (OFAC, EU, UK, UN)
+- Address poisoning detection
+- ML-based behavioral analysis
+- Distance-to-malicious scoring
+
+**Status:** ✅ Fully implemented
+
+---
+
+### Privacy (Inco Lightning + Privacy Cash)
+
+**Purpose:** Private payments where amount and sender-recipient link are hidden
+
+**Locations:**
+
+- `app/frontend/src/lib/privacy-cash.ts` - Privacy Cash SDK wrapper
+- `app/frontend/src/app/api/privacy/payment/route.ts` - Private payment API
+- `app/frontend/src/app/api/privacy/receipt/route.ts` - Inco FHE receipts
+- `programs/x402-hack-payment/src/instructions/private_receipt.rs` - On-chain
+
+**Privacy Layers:**
+
+1. **Privacy Cash (ZK Shielding)** - Hides amount on-chain via shield/unshield
+2. **Inco Lightning (FHE)** - Encrypts receipt amount, only authorized parties decrypt
+
+**Key Endpoints:**
+
+```typescript
+POST / api / privacy / payment; // Execute ZK-shielded payment
+POST / api / privacy / receipt; // Issue FHE-encrypted receipt
+POST / api / privacy / payout; // B2B private settlements
+```
+
+**Status:** ✅ Implemented (demo mode - simulates Privacy Cash for devnet)
+
+---
+
+### One-Click Payments
+
+**Purpose:** Save payment method for returning customers
+
+**Location:** `app/frontend/src/app/api/one-click/route.ts`
+
+**Database Table:** `one_click_payments`
+
+**Flow:**
+
+1. Customer completes first payment
+2. System saves wallet + approval for merchant
+3. Future checkouts show "One-Click Pay" button
+4. Customer confirms without re-entering details
+
+**Status:** ✅ Fully implemented
 
 ---
 
@@ -509,6 +621,12 @@ SUMSUB_SECRET_KEY=
 # Kora Gasless
 KORA_RPC_URL=
 KORA_FEE_PAYER_KEYPAIR=
+
+# Range Security (wallet risk screening)
+RANGE_API_KEY=
+
+# Inco Lightning (FHE encryption for private receipts)
+INCO_GATEWAY_URL=
 ```
 
 ---
@@ -541,6 +659,8 @@ KORA_FEE_PAYER_KEYPAIR=
 4. **Webhook Retry** - No automatic retry on webhook delivery failure
 5. **Rate Limiting** - Basic implementation, needs Redis for production
 6. **Multi-sig** - Squads integration scaffolded in `init-with-squads.ts`
+7. **Privacy Cash Production** - Currently in demo mode (devnet simulation)
+8. **Kora Local Server** - Requires running Kora locally for gasless (Privy works independently)
 
 ---
 

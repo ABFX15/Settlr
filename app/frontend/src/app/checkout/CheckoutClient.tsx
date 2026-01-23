@@ -630,6 +630,35 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     setError("");
 
     try {
+      // Step 0: Check merchant wallet safety with Range Security
+      console.log("[Sponsored] Checking merchant wallet safety...");
+      const riskCheck = await fetch(
+        `/api/risk-check?address=${merchantWallet}`,
+      );
+      const riskData = await riskCheck.json();
+
+      if (riskData.blocked) {
+        console.error(
+          "[Sponsored] Merchant wallet blocked:",
+          riskData.riskLevel,
+        );
+        throw new Error(
+          `Payment blocked: Merchant wallet flagged as ${riskData.riskLevel}. ${riskData.reasoning}`,
+        );
+      }
+
+      if (riskData.warning) {
+        console.warn(
+          "[Sponsored] Merchant wallet warning:",
+          riskData.riskLevel,
+        );
+      }
+
+      console.log(
+        "[Sponsored] Merchant wallet safe, risk score:",
+        riskData.riskScore,
+      );
+
       const amountInBaseUnits = Math.round(
         amount * Math.pow(10, USDC_DECIMALS),
       );
@@ -869,6 +898,29 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     let extractedSignature: string | null = null;
 
     try {
+      // Step 0: Check merchant wallet safety with Range Security
+      console.log("[Gasless] Checking merchant wallet safety...");
+      const riskCheck = await fetch(
+        `/api/risk-check?address=${merchantWallet}`,
+      );
+      const riskData = await riskCheck.json();
+
+      if (riskData.blocked) {
+        console.error("[Gasless] Merchant wallet blocked:", riskData.riskLevel);
+        throw new Error(
+          `Payment blocked: Merchant wallet flagged as ${riskData.riskLevel}. ${riskData.reasoning}`,
+        );
+      }
+
+      if (riskData.warning) {
+        console.warn("[Gasless] Merchant wallet warning:", riskData.riskLevel);
+      }
+
+      console.log(
+        "[Gasless] Merchant wallet safe, risk score:",
+        riskData.riskScore,
+      );
+
       // Generate a unique nonce for this payment to prevent duplicate transaction errors
       const paymentNonce = `${Date.now()}-${Math.random()
         .toString(36)
@@ -1348,76 +1400,44 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
     try {
       console.log(
-        "[Private Payment] Processing payment with private receipt...",
+        "[Private Payment] Processing ZK-shielded payment via Privacy Cash...",
       );
 
-      // Step 1: Do the actual USDC transfer (using gasless or sponsored flow)
-      const connection = new Connection(RPC_ENDPOINT, "confirmed");
-      const userPubkey = new PublicKey(activeWallet.address);
-      const merchantPubkey = new PublicKey(merchantWallet);
-      const userAta = await getAssociatedTokenAddress(USDC_MINT, userPubkey);
-      const merchantAta = await getAssociatedTokenAddress(
-        USDC_MINT,
-        merchantPubkey,
-      );
-      const amountInBaseUnits = BigInt(
-        Math.round(amount * Math.pow(10, USDC_DECIMALS)),
-      );
+      // Use Privacy Cash for true on-chain privacy
+      // This shields the USDC and unshields to merchant - no visible link or amount
+      const privacyResponse = await fetch("/api/privacy/payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount,
+          customerWallet: activeWallet.address,
+          merchantWallet,
+          memo,
+          sessionId,
+        }),
+      });
 
-      // Build transaction
-      const transaction = new Transaction();
-
-      // Check if merchant ATA exists
-      try {
-        await getAccount(connection, merchantAta);
-      } catch {
-        transaction.add(
-          createAssociatedTokenAccountInstruction(
-            userPubkey,
-            merchantAta,
-            merchantPubkey,
-            USDC_MINT,
-          ),
-        );
+      if (!privacyResponse.ok) {
+        const errorData = await privacyResponse.json();
+        throw new Error(errorData.error || "Private payment failed");
       }
 
-      // Add transfer instruction
-      transaction.add(
-        createTransferInstruction(
-          userAta,
-          merchantAta,
-          userPubkey,
-          amountInBaseUnits,
-        ),
-      );
+      const privacyData = await privacyResponse.json();
+      console.log("[Private Payment] ZK payment complete:", privacyData);
 
-      // Get recent blockhash
-      const { blockhash } = await connection.getLatestBlockhash();
-      transaction.recentBlockhash = blockhash;
-      transaction.feePayer = userPubkey;
-
-      // Serialize and sign
-      const serializedTx = transaction.serialize({
-        requireAllSignatures: false,
-        verifySignatures: false,
-      });
-
-      const result = await signAndSendTransaction({
-        transaction: serializedTx,
-        wallet: activeWallet,
-        chain: "solana:devnet",
-        options: {
-          skipPreflight: true,
-          commitment: "confirmed",
-        },
-      });
-
-      const signatureBase58 = encodeBase58(result.signature);
-      console.log("[Private Payment] USDC transfer complete:", signatureBase58);
+      const signatureBase58 =
+        privacyData.signature || privacyData.unshieldTxSignature;
       setTxSignature(signatureBase58);
 
-      // Step 2: Issue private receipt with FHE-encrypted amount
-      console.log("[Private Payment] Issuing FHE-encrypted private receipt...");
+      // Set private receipt handle if available
+      if (privacyData.privateHandle) {
+        setPrivateReceiptHandle(`0x${privacyData.privateHandle.slice(-12)}`);
+      }
+
+      // Also issue Inco FHE receipt for additional encryption layer
+      console.log(
+        "[Private Payment] Issuing FHE-encrypted receipt via Inco...",
+      );
       const receiptResponse = await fetch("/api/privacy/receipt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1433,11 +1453,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       if (receiptResponse.ok) {
         const receiptData = await receiptResponse.json();
-        console.log("[Private Payment] Private receipt issued:", receiptData);
+        console.log("[Private Payment] Inco receipt issued:", receiptData);
         if (receiptData.handleShort) {
           setPrivateReceiptHandle(receiptData.handleShort);
-        } else if (receiptData.handle) {
-          setPrivateReceiptHandle(`0x${receiptData.handle.slice(-12)}`);
         }
       }
 
@@ -1540,6 +1558,29 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     setError("");
 
     try {
+      // Step 0: Check merchant wallet safety with Range Security
+      console.log("[Payment] Checking merchant wallet safety...");
+      const riskCheck = await fetch(
+        `/api/risk-check?address=${merchantWallet}`,
+      );
+      const riskData = await riskCheck.json();
+
+      if (riskData.blocked) {
+        console.error("[Payment] Merchant wallet blocked:", riskData.riskLevel);
+        throw new Error(
+          `Payment blocked: Merchant wallet flagged as ${riskData.riskLevel}. ${riskData.reasoning}`,
+        );
+      }
+
+      if (riskData.warning) {
+        console.warn("[Payment] Merchant wallet warning:", riskData.riskLevel);
+      }
+
+      console.log(
+        "[Payment] Merchant wallet safe, risk score:",
+        riskData.riskScore,
+      );
+
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
 
       // Get the user's ATA

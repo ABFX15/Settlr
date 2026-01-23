@@ -111,6 +111,7 @@ Customer pays USDC on Ethereum/Base/Arbitrum/Polygon/Optimism
 - **Mayan**: Cross-chain swaps for EVM → Solana USDC payments
 - **Privy**: Embedded wallets with email/social login and fiat on-ramp
 - **Squads**: Multisig protection for platform treasury
+- **Range Security**: Wallet risk screening to block bad actors
 
 ### ⚡ One-Click Payments
 
@@ -155,6 +156,21 @@ await oneClick.charge({
 **Inco Lightning Program ID**: `5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj`
 
 See [PRIVATE_SETTLR.md](PRIVATE_SETTLR.md) for full privacy architecture.
+
+### 🛡️ Risk Screening (Range Security)
+
+All payments are screened for wallet risk before processing:
+
+- **Risk Scoring**: Wallets scored 1-10 based on on-chain behavior
+- **Automatic Blocking**: High-risk wallets (score ≥7) are blocked
+- **Warning Threshold**: Medium-risk wallets (score 5-6) show warnings
+- **OFAC Compliance**: Sanctioned addresses automatically rejected
+
+| Risk Score | Action   | Description          |
+| ---------- | -------- | -------------------- |
+| 1-4        | ✅ Allow | Clean wallet         |
+| 5-6        | ⚠️ Warn  | Proceed with caution |
+| 7-10       | ❌ Block | Payment rejected     |
 
 ## Project Structure
 
