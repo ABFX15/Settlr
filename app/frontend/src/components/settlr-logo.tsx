@@ -1,111 +1,229 @@
 "use client";
 
-// Simple class name merger (replaces cn from utils)
-function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(" ");
-}
-
-interface LogoProps {
-  size?: "sm" | "md" | "lg" | "xl";
-  variant?: "light" | "dark";
-  className?: string;
-}
-
-const sizeMap = {
-  sm: { text: "text-xl", icon: 20 },
-  md: { text: "text-2xl", icon: 24 },
-  lg: { text: "text-3xl", icon: 32 },
-  xl: { text: "text-4xl", icon: 40 },
-};
-
-// Main wordmark logo
 export function SettlrLogo({
-  size = "md",
-  variant = "light",
-  className,
-}: LogoProps) {
-  const { text } = sizeMap[size];
-  const textColor = variant === "light" ? "text-white" : "text-gray-900";
+  size = "lg",
+  variant = "default",
+}: {
+  size?: "sm" | "md" | "lg" | "xl";
+  variant?: "default" | "light" | "dark";
+}) {
+  const sizeClasses = {
+    sm: "text-5xl",
+    md: "text-7xl",
+    lg: "text-8xl",
+    xl: "text-[10rem]",
+  };
 
-  return (
-    <span
-      className={cn(
-        "font-bold tracking-tight select-none",
-        text,
-        textColor,
-        className,
-      )}
-    >
-      <span className="bg-gradient-to-r from-[#9945FF] to-[#14F195] bg-clip-text text-transparent">
-        Settlr
-      </span>
-    </span>
-  );
-}
+  const underlineHeight = {
+    sm: "h-[4px]",
+    md: "h-[6px]",
+    lg: "h-[8px]",
+    xl: "h-[12px]",
+  };
 
-// Icon mark (S with gradient)
-export function SettlrIcon({
-  size = "md",
-  variant = "light",
-  className,
-}: LogoProps) {
-  const { icon } = sizeMap[size];
+  const variantClasses = {
+    default: "text-foreground",
+    light: "text-white",
+    dark: "text-zinc-900",
+  };
 
   return (
     <div
-      className={cn(
-        "flex items-center justify-center rounded-lg bg-gradient-to-br from-[#9945FF] to-[#14F195]",
-        className,
-      )}
-      style={{ width: icon + 8, height: icon + 8 }}
+      className={`font-[family-name:var(--font-display)] tracking-wide ${sizeClasses[size]} ${variantClasses[variant]} select-none uppercase`}
+      style={{ fontStyle: "italic" }}
     >
-      <span className="font-bold text-white" style={{ fontSize: icon * 0.6 }}>
-        S
-      </span>
-    </div>
-  );
-}
-
-// Logo with icon mark
-export function SettlrLogoWithIcon({
-  size = "md",
-  variant = "light",
-  className,
-}: LogoProps) {
-  const { text, icon } = sizeMap[size];
-  const textColor = variant === "light" ? "text-white" : "text-gray-900";
-
-  return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <SettlrIcon size={size} variant={variant} />
-      <span
-        className={cn("font-bold tracking-tight select-none", text, textColor)}
-      >
-        <span className="bg-gradient-to-r from-[#9945FF] to-[#14F195] bg-clip-text text-transparent">
-          Settlr
+      <span className="relative inline-block -skew-x-12">
+        <span
+          className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent"
+          style={{
+            filter:
+              "drop-shadow(0 0 40px rgba(153, 69, 255, 0.8)) drop-shadow(0 0 80px rgba(0, 212, 255, 0.5))",
+          }}
+        >
+          SETTL
+        </span>
+        <span className="relative inline-block">
+          <span
+            className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent"
+            style={{
+              filter: "drop-shadow(0 0 40px rgba(20, 241, 149, 0.8))",
+            }}
+          >
+            R
+          </span>
+          {/* Thick underline accent */}
+          <span
+            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195]`}
+            style={{
+              boxShadow:
+                "0 0 30px rgba(153, 69, 255, 0.9), 0 0 60px rgba(20, 241, 149, 0.6)",
+            }}
+          />
         </span>
       </span>
     </div>
   );
 }
 
-// Monochrome version with single accent color
-export function SettlrLogoMono({
-  size = "md",
-  variant = "light",
-  className,
-}: LogoProps) {
-  const { text } = sizeMap[size];
-  // Light variant uses Solana green accent, dark uses Solana purple
-  const accentColor = variant === "light" ? "text-[#14F195]" : "text-[#9945FF]";
-  const textColor = variant === "light" ? "text-white" : "text-gray-900";
+export function SettlrLogoWithIcon({
+  size = "lg",
+  variant = "default",
+}: {
+  size?: "sm" | "md" | "lg" | "xl";
+  variant?: "default" | "light" | "dark";
+}) {
+  const sizeClasses = {
+    sm: "text-xl",
+    md: "text-2xl",
+    lg: "text-3xl",
+    xl: "text-4xl",
+  };
+
+  const iconSizes = {
+    sm: "w-6 h-6",
+    md: "w-8 h-8",
+    lg: "w-10 h-10",
+    xl: "w-12 h-12",
+  };
+
+  const barHeights = {
+    sm: "h-[2px]",
+    md: "h-[3px]",
+    lg: "h-[4px]",
+    xl: "h-[5px]",
+  };
+
+  const underlineHeight = {
+    sm: "h-[2px]",
+    md: "h-[3px]",
+    lg: "h-[4px]",
+    xl: "h-[5px]",
+  };
+
+  const gapSizes = {
+    sm: "gap-2",
+    md: "gap-3",
+    lg: "gap-4",
+    xl: "gap-5",
+  };
+
+  const variantClasses = {
+    default: "text-foreground",
+    light: "text-white",
+    dark: "text-zinc-900",
+  };
 
   return (
-    <span
-      className={cn("font-bold tracking-tight select-none", text, className)}
+    <div
+      className={`flex items-center ${gapSizes[size]} font-[family-name:var(--font-display)] tracking-wide ${sizeClasses[size]} ${variantClasses[variant]} select-none uppercase`}
     >
-      <span className={accentColor}>S</span>
-      <span className={textColor}>ettlr</span>
-    </span>
+      {/* Aggressive stacked bars icon */}
+      <div
+        className={`${iconSizes[size]} relative flex flex-col justify-center gap-[2px] -skew-x-12`}
+      >
+        <div
+          className={`${barHeights[size]} bg-[#00D4FF] ml-1`}
+          style={{ boxShadow: "0 0 10px rgba(0, 212, 255, 0.9)" }}
+        />
+        <div
+          className={`${barHeights[size]} bg-[#9945FF]`}
+          style={{ boxShadow: "0 0 10px rgba(153, 69, 255, 0.9)" }}
+        />
+        <div
+          className={`${barHeights[size]} bg-[#14F195] ml-0.5`}
+          style={{ boxShadow: "0 0 10px rgba(20, 241, 149, 0.9)" }}
+        />
+      </div>
+      <span
+        className="relative inline-block -skew-x-12"
+        style={{ fontStyle: "italic" }}
+      >
+        <span
+          className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent"
+          style={{
+            filter:
+              "drop-shadow(0 0 20px rgba(153, 69, 255, 0.8)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.5))",
+          }}
+        >
+          SETTL
+        </span>
+        <span className="relative inline-block">
+          <span
+            className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent"
+            style={{
+              filter: "drop-shadow(0 0 20px rgba(20, 241, 149, 0.8))",
+            }}
+          >
+            R
+          </span>
+          <span
+            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195]`}
+            style={{
+              boxShadow:
+                "0 0 15px rgba(153, 69, 255, 0.9), 0 0 30px rgba(20, 241, 149, 0.6)",
+            }}
+          />
+        </span>
+      </span>
+    </div>
+  );
+}
+
+// Monochrome version with glow
+export function SettlrLogoMono({
+  size = "lg",
+  variant = "light",
+}: {
+  size?: "sm" | "md" | "lg" | "xl";
+  variant?: "light" | "dark";
+}) {
+  const sizeClasses = {
+    sm: "text-5xl",
+    md: "text-7xl",
+    lg: "text-8xl",
+    xl: "text-[10rem]",
+  };
+
+  const underlineHeight = {
+    sm: "h-[4px]",
+    md: "h-[6px]",
+    lg: "h-[8px]",
+    xl: "h-[12px]",
+  };
+
+  const variantStyles = {
+    light: {
+      text: "text-white",
+      accent: "bg-[#14F195]",
+      shadow: "0 0 30px rgba(20, 241, 149, 0.9)",
+      textShadow: "0 0 40px rgba(255, 255, 255, 0.5)",
+    },
+    dark: {
+      text: "text-zinc-900",
+      accent: "bg-[#9945FF]",
+      shadow: "0 0 30px rgba(153, 69, 255, 0.9)",
+      textShadow: "none",
+    },
+  };
+
+  return (
+    <div
+      className={`font-[family-name:var(--font-display)] tracking-wide ${sizeClasses[size]} ${variantStyles[variant].text} select-none uppercase`}
+      style={{
+        fontStyle: "italic",
+        filter: `drop-shadow(${variantStyles[variant].textShadow})`,
+      }}
+    >
+      <span className="relative inline-block -skew-x-12">
+        SETTL
+        <span className="relative inline-block">
+          <span className="relative z-10">R</span>
+          <span
+            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} ${variantStyles[variant].accent}`}
+            style={{ boxShadow: variantStyles[variant].shadow }}
+          />
+        </span>
+      </span>
+    </div>
   );
 }
