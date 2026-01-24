@@ -18,11 +18,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Settlr | Non-Custodial Crypto Payment Processor",
+    default: "Settlr | Accept Crypto Without Wallets",
     template: "%s | Settlr",
   },
   description:
-    "Accept USDC payments with instant settlement directly to your wallet. Non-custodial, no wallet extensions needed. Customers pay with email. From 1% fees. Built on Solana.",
+    "Accept crypto payments without wallets. Customers pay with email, you get USDC instantly. Zero gas fees. Private payments. One React component. Built on Solana.",
   keywords: [
     "crypto payment processor",
     "crypto payment gateway",
@@ -69,23 +69,23 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://settlr.dev",
     siteName: "Settlr",
-    title: "Settlr | Non-Custodial Crypto Payment Processor",
+    title: "Settlr | Accept Crypto Without Wallets",
     description:
-      "Accept USDC payments with instant settlement to your wallet. No custody risk, no delays. Embedded wallets for seamless checkout. From 1% fees.",
+      "Customers pay with email. You get USDC instantly. Zero gas fees. Private payments. One React component.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Settlr - Non-Custodial Crypto Payment Processor",
+        alt: "Settlr - Accept Crypto Without Wallets",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr | Non-Custodial Crypto Payments",
+    title: "Settlr | Accept Crypto Without Wallets",
     description:
-      "Instant settlement to your wallet. No custody risk. Embedded wallets. From 1% fees.",
+      "Customers pay with email. You get USDC instantly. Zero gas fees. Private payments.",
     images: ["/opengraph-image"],
     creator: "@SettlrPay",
   },

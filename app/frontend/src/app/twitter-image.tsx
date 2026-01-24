@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Settlr - Instant Crypto Payments";
+export const alt = "Settlr - Accept Crypto Without Wallets";
 export const size = {
   width: 1200,
   height: 630,
@@ -56,7 +56,7 @@ export default async function Image() {
               textAlign: "center",
             }}
           >
-            Instant Crypto Payments for the Modern Web
+            Customers pay with email. You get USDC instantly.
           </div>
 
           {/* Features */}
@@ -76,8 +76,8 @@ export default async function Image() {
                 fontSize: 24,
               }}
             >
-              <span>⚡</span>
-              <span>Gasless</span>
+              <span>✉️</span>
+              <span>No Wallets</span>
             </div>
             <div
               style={{
@@ -88,8 +88,8 @@ export default async function Image() {
                 fontSize: 24,
               }}
             >
-              <span>🔒</span>
-              <span>Secure</span>
+              <span>⚡</span>
+              <span>Zero Gas</span>
             </div>
             <div
               style={{
@@ -100,8 +100,8 @@ export default async function Image() {
                 fontSize: 24,
               }}
             >
-              <span>💰</span>
-              <span>Instant</span>
+              <span>🔐</span>
+              <span>Private</span>
             </div>
           </div>
         </div>
@@ -121,6 +121,6 @@ export default async function Image() {
     ),
     {
       ...size,
-    }
+    },
   );
 }

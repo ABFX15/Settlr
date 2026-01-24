@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Settlr - Non-Custodial Crypto Payment Processor";
+export const alt = "Settlr - Accept Crypto Without Wallets";
 export const size = {
   width: 1200,
   height: 630,
@@ -113,26 +113,26 @@ export default async function Image() {
           {/* Tagline */}
           <div
             style={{
-              fontSize: 44,
+              fontSize: 48,
               color: "#ffffff",
               marginBottom: 16,
               textAlign: "center",
-              fontWeight: 600,
+              fontWeight: 700,
             }}
           >
-            Ship Payments in 5 Minutes
+            Accept Crypto Without Wallets
           </div>
 
           {/* Subtitle */}
           <div
             style={{
-              fontSize: 28,
+              fontSize: 30,
               color: "#a3a3a3",
               marginBottom: 48,
               textAlign: "center",
             }}
           >
-            Non-custodial • Instant settlement • From 1% fees
+            Customers pay with email. You get USDC instantly.
           </div>
 
           {/* Features */}
@@ -151,8 +151,8 @@ export default async function Image() {
                 fontSize: 26,
               }}
             >
-              <span>💳</span>
-              <span>Accept USDC</span>
+              <span>✉️</span>
+              <span>No Wallets</span>
             </div>
             <div
               style={{
@@ -164,7 +164,7 @@ export default async function Image() {
               }}
             >
               <span>⚡</span>
-              <span>Built on Solana</span>
+              <span>Zero Gas Fees</span>
             </div>
             <div
               style={{
@@ -176,7 +176,7 @@ export default async function Image() {
               }}
             >
               <span>🔐</span>
-              <span>Your Keys</span>
+              <span>Private Payments</span>
             </div>
           </div>
         </div>
