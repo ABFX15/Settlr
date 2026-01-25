@@ -20,7 +20,20 @@ import {
 
 const RPC_ENDPOINT = process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com";
 const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"); // Devnet USDC
-const SOLANA_DEVNET_CAIP2 = "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1" as const;
+
+// Platform fee configuration
+const PLATFORM_FEE_BPS = 100; // 1% = 100 basis points
+const PROGRAM_ID = new PublicKey("339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5");
+
+// Platform Treasury PDA - this is the actual on-chain treasury token account
+// Derived with seeds = ["platform_treasury"]
+function getPlatformTreasuryPDA(): PublicKey {
+    const [pda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_treasury")],
+        PROGRAM_ID
+    );
+    return pda;
+}
 
 /**
  * GET /api/sponsor-transaction
@@ -87,6 +100,7 @@ export async function POST(req: NextRequest) {
         switch (action) {
             case "create": {
                 // Create a USDC transfer transaction with fee payer paying gas
+                // Includes platform fee collection (1%)
                 const { amount, source, destination } = body;
 
                 if (!amount || !source || !destination) {
@@ -96,16 +110,27 @@ export async function POST(req: NextRequest) {
                     );
                 }
 
+                const totalAmount = BigInt(amount);
+
+                // Calculate platform fee (1%)
+                const platformFee = (totalAmount * BigInt(PLATFORM_FEE_BPS)) / BigInt(10000);
+                const merchantAmount = totalAmount - platformFee;
+
+                console.log(`[Sponsor] Total: ${totalAmount}, Fee: ${platformFee}, Merchant: ${merchantAmount}`);
+
                 const sourcePubkey = new PublicKey(source);
                 const destinationPubkey = new PublicKey(destination);
                 const feePayerPubkey = new PublicKey(feePayerAddress);
+
+                // Use the on-chain program's treasury PDA (already initialized as token account)
+                const treasuryPDA = getPlatformTreasuryPDA();
 
                 const sourceAta = await getAssociatedTokenAddress(USDC_MINT, sourcePubkey);
                 const destinationAta = await getAssociatedTokenAddress(USDC_MINT, destinationPubkey);
 
                 const tx = new Transaction();
 
-                // Check if destination ATA exists
+                // Check if destination (merchant) ATA exists
                 try {
                     await getAccount(connection, destinationAta);
                 } catch {
@@ -120,15 +145,30 @@ export async function POST(req: NextRequest) {
                     );
                 }
 
-                // Add transfer instruction (user authorizes)
+                // Treasury is already initialized on-chain, no need to create
+
+                // Transfer merchant amount (99%) to merchant
                 tx.add(
                     createTransferInstruction(
                         sourceAta,
                         destinationAta,
                         sourcePubkey, // User is the authority
-                        BigInt(amount)
+                        merchantAmount
                     )
                 );
+
+                // Transfer platform fee (1%) to treasury
+                if (platformFee > BigInt(0)) {
+                    tx.add(
+                        createTransferInstruction(
+                            sourceAta,
+                            treasuryPDA,
+                            sourcePubkey, // User is the authority
+                            platformFee
+                        )
+                    );
+                    console.log(`[Sponsor] Added fee transfer: ${platformFee} to treasury ${treasuryPDA.toBase58()}`);
+                }
 
                 // Get REAL blockhash from our RPC - we'll use this same RPC to send later
                 const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash("confirmed");
@@ -146,6 +186,8 @@ export async function POST(req: NextRequest) {
                     blockhash,
                     lastValidBlockHeight,
                     feePayerAddress,
+                    platformFee: platformFee.toString(),
+                    merchantAmount: merchantAmount.toString(),
                 });
             }
 

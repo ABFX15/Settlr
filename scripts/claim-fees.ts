@@ -22,17 +22,25 @@ const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
 async function main() {
     console.log("🏦 Settlr Fee Claim Tool\n");
 
-    // Load wallet from default Solana keypair location
-    const keypairPath = path.join(process.env.HOME || "", ".config/solana/id.json");
+    // Try to load the platform authority wallet
+    // First check for phantom-wallet.json (used to initialize platform on devnet)
+    // Then fall back to default Solana keypair
+    let keypairPath = path.join(__dirname, "../phantom-wallet.json");
+
     if (!fs.existsSync(keypairPath)) {
-        console.error("❌ No wallet found at ~/.config/solana/id.json");
-        console.error("   Run: solana-keygen new");
+        keypairPath = path.join(process.env.HOME || "", ".config/solana/id.json");
+    }
+
+    if (!fs.existsSync(keypairPath)) {
+        console.error("❌ No wallet found");
+        console.error("   Need phantom-wallet.json or ~/.config/solana/id.json");
         process.exit(1);
     }
 
     const secretKey = JSON.parse(fs.readFileSync(keypairPath, "utf-8"));
     const authority = Keypair.fromSecretKey(new Uint8Array(secretKey));
     console.log(`👛 Authority wallet: ${authority.publicKey.toBase58()}`);
+    console.log(`   (loaded from: ${keypairPath})`);
 
     // Connect to devnet
     const connection = new Connection("https://api.devnet.solana.com", "confirmed");
@@ -50,11 +58,9 @@ async function main() {
     );
     console.log(`💰 Platform Treasury PDA: ${platformTreasuryPDA.toBase58()}`);
 
-    // Get treasury USDC balance
-    const treasuryAta = await getAssociatedTokenAddress(USDC_MINT, platformConfigPDA, true);
-
+    // Get treasury USDC balance - the treasury PDA IS the token account
     try {
-        const treasuryBalance = await connection.getTokenAccountBalance(treasuryAta);
+        const treasuryBalance = await connection.getTokenAccountBalance(platformTreasuryPDA);
         const balanceUsdc = parseFloat(treasuryBalance.value.uiAmountString || "0");
 
         console.log(`\n💵 Treasury Balance: $${balanceUsdc.toFixed(2)} USDC`);
@@ -67,6 +73,26 @@ async function main() {
         // Authority's USDC ATA
         const authorityAta = await getAssociatedTokenAddress(USDC_MINT, authority.publicKey);
         console.log(`📥 Your USDC ATA: ${authorityAta.toBase58()}`);
+
+        // Check if authority ATA exists, create if needed
+        try {
+            await connection.getTokenAccountBalance(authorityAta);
+        } catch {
+            console.log("\n📝 Creating your USDC token account...");
+            const { createAssociatedTokenAccountInstruction } = await import("@solana/spl-token");
+            const { Transaction, sendAndConfirmTransaction } = await import("@solana/web3.js");
+
+            const createAtaTx = new Transaction().add(
+                createAssociatedTokenAccountInstruction(
+                    authority.publicKey,
+                    authorityAta,
+                    authority.publicKey,
+                    USDC_MINT
+                )
+            );
+            await sendAndConfirmTransaction(connection, createAtaTx, [authority]);
+            console.log("   ✅ Token account created");
+        }
 
         // Set up Anchor
         const wallet = new anchor.Wallet(authority);
@@ -92,7 +118,7 @@ async function main() {
             .accounts({
                 authority: authority.publicKey,
                 platformConfig: platformConfigPDA,
-                platformTreasuryUsdc: treasuryAta,
+                platformTreasuryUsdc: platformTreasuryPDA,
                 authorityUsdc: authorityAta,
                 usdcMint: USDC_MINT,
                 tokenProgram: TOKEN_PROGRAM_ID,

@@ -214,29 +214,110 @@ export async function POST(req: NextRequest) {
                     );
                 }
 
+                // Platform fee configuration
+                const PLATFORM_FEE_BPS = 100; // 1% = 100 basis points
+                const PROGRAM_ID_STR = "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5";
+
+                // Calculate fee split
+                const totalAmount = BigInt(amount);
+                const platformFee = (totalAmount * BigInt(PLATFORM_FEE_BPS)) / BigInt(10000);
+                const merchantAmount = totalAmount - platformFee;
+
                 console.log(`[Gasless] Creating transfer: ${amount} of ${token} from ${source} to ${destination} (nonce: ${nonce || 'none'})`);
+                console.log(`[Gasless] Fee split: merchant=${merchantAmount}, platform=${platformFee}`);
 
-                // Always create a fresh client for transfers to ensure fresh blockhash
-                const { KoraClient } = await import("@solana/kora");
-                const freshClient = new KoraClient({
-                    rpcUrl: process.env.NEXT_PUBLIC_KORA_RPC_URL || "http://localhost:8080",
-                    apiKey: process.env.KORA_API_KEY,
-                    hmacSecret: process.env.KORA_HMAC_SECRET,
-                });
+                // Import required modules
+                const { Connection, PublicKey, Transaction } = await import("@solana/web3.js");
+                const {
+                    getAssociatedTokenAddress,
+                    createTransferInstruction,
+                    createAssociatedTokenAccountInstruction,
+                    getAccount,
+                } = await import("@solana/spl-token");
 
-                const result = await freshClient.transferTransaction({
-                    amount,
-                    token,
-                    source,
-                    destination,
-                });
+                const connection = new Connection(
+                    process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com",
+                    "confirmed"
+                );
 
-                console.log(`[Gasless] Transfer transaction created with fresh blockhash`);
+                const sourcePubkey = new PublicKey(source);
+                const destinationPubkey = new PublicKey(destination);
+                const tokenMint = new PublicKey(token);
+                const programId = new PublicKey(PROGRAM_ID_STR);
+
+                // Platform Treasury PDA (on-chain treasury token account)
+                const [treasuryPDA] = PublicKey.findProgramAddressSync(
+                    [Buffer.from("platform_treasury")],
+                    programId
+                );
+
+                // Get ATAs
+                const sourceAta = await getAssociatedTokenAddress(tokenMint, sourcePubkey);
+                const destinationAta = await getAssociatedTokenAddress(tokenMint, destinationPubkey);
+
+                // Get Kora signer for fee payer
+                const koraSigner = await getKoraSigner();
+                const feePayerPubkey = new PublicKey(koraSigner.signerAddress);
+
+                const tx = new Transaction();
+
+                // Check if destination ATA exists
+                try {
+                    await getAccount(connection, destinationAta);
+                } catch {
+                    tx.add(
+                        createAssociatedTokenAccountInstruction(
+                            feePayerPubkey,
+                            destinationAta,
+                            destinationPubkey,
+                            tokenMint
+                        )
+                    );
+                }
+
+                // Treasury is already initialized on-chain, no need to create
+
+                // Transfer merchant amount (99%)
+                tx.add(
+                    createTransferInstruction(
+                        sourceAta,
+                        destinationAta,
+                        sourcePubkey,
+                        merchantAmount
+                    )
+                );
+
+                // Transfer platform fee (1%)
+                if (platformFee > BigInt(0)) {
+                    tx.add(
+                        createTransferInstruction(
+                            sourceAta,
+                            treasuryPDA,
+                            sourcePubkey,
+                            platformFee
+                        )
+                    );
+                    console.log(`[Gasless] Added fee transfer: ${platformFee} to treasury ${treasuryPDA.toBase58()}`);
+                }
+
+                // Get blockhash and set fee payer
+                const { blockhash } = await connection.getLatestBlockhash("confirmed");
+                tx.recentBlockhash = blockhash;
+                tx.feePayer = feePayerPubkey;
+
+                // Serialize for client signing
+                const serialized = tx.serialize({
+                    requireAllSignatures: false,
+                    verifySignatures: false,
+                }).toString("base64");
+
+                console.log(`[Gasless] Transfer transaction created with fee split`);
 
                 return NextResponse.json({
-                    transaction: result.transaction,
-                    instructions: result.instructions,
-                    nonce: nonce, // Echo back nonce for debugging
+                    transaction: serialized,
+                    nonce: nonce,
+                    platformFee: platformFee.toString(),
+                    merchantAmount: merchantAmount.toString(),
                 });
             }
 

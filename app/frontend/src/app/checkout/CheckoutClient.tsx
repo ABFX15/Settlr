@@ -1270,9 +1270,21 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         console.log(`[Jupiter] Swap complete: ${swapSignature}`);
       }
 
-      // Step 2: Now transfer USDC to merchant
+      // Step 2: Now transfer USDC to merchant with platform fee
       // At this point, user has USDC from the swap
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
+
+      // Platform fee configuration
+      const PLATFORM_FEE_BPS_JUPITER = BigInt(100); // 1% = 100 basis points
+      const PROGRAM_ID_JUPITER = new PublicKey(
+        "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5",
+      );
+      // Use the on-chain program's treasury PDA (already initialized as token account)
+      const [treasuryPDAJupiter] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_treasury")],
+        PROGRAM_ID_JUPITER,
+      );
+
       const userPubkey = new PublicKey(activeWallet.address);
       const merchantPubkey = new PublicKey(merchantWallet);
       const userAta = await getAssociatedTokenAddress(USDC_MINT, userPubkey);
@@ -1281,9 +1293,18 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         merchantPubkey,
       );
 
-      const amountInBaseUnits = BigInt(
+      // Calculate fee split
+      const totalAmountJupiter = BigInt(
         Math.round(amount * Math.pow(10, USDC_DECIMALS)),
       );
+      const platformFeeJupiter =
+        (totalAmountJupiter * PLATFORM_FEE_BPS_JUPITER) / BigInt(10000);
+      const merchantAmountJupiter = totalAmountJupiter - platformFeeJupiter;
+
+      console.log(
+        `[Jupiter] Fee split: merchant=${merchantAmountJupiter}, platform=${platformFeeJupiter}`,
+      );
+
       const transaction = new Transaction();
 
       // Check if merchant ATA exists
@@ -1300,15 +1321,32 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         );
       }
 
-      // Add transfer instruction
+      // Treasury is already initialized on-chain, no need to create
+
+      // Transfer merchant amount (99%)
       transaction.add(
         createTransferInstruction(
           userAta,
           merchantAta,
           userPubkey,
-          amountInBaseUnits,
+          merchantAmountJupiter,
         ),
       );
+
+      // Transfer platform fee (1%)
+      if (platformFeeJupiter > BigInt(0)) {
+        transaction.add(
+          createTransferInstruction(
+            userAta,
+            treasuryPDAJupiter,
+            userPubkey,
+            platformFeeJupiter,
+          ),
+        );
+        console.log(
+          `[Jupiter] Added fee transfer: ${platformFeeJupiter} to treasury`,
+        );
+      }
 
       const { blockhash } = await connection.getLatestBlockhash();
       transaction.recentBlockhash = blockhash;
@@ -1583,6 +1621,17 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
 
+      // Platform fee configuration
+      const PLATFORM_FEE_BPS = BigInt(100); // 1% = 100 basis points
+      const PROGRAM_ID = new PublicKey(
+        "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5",
+      );
+      // Use the on-chain program's treasury PDA (already initialized as token account)
+      const [treasuryPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_treasury")],
+        PROGRAM_ID,
+      );
+
       // Get the user's ATA
       const userPubkey = new PublicKey(activeWallet.address);
       const merchantPubkey = new PublicKey(merchantWallet);
@@ -1592,9 +1641,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         merchantPubkey,
       );
 
-      // Calculate amount in base units
-      const amountInBaseUnits = BigInt(
+      // Calculate amount in base units and split for fees
+      const totalAmount = BigInt(
         Math.round(amount * Math.pow(10, USDC_DECIMALS)),
+      );
+      const platformFee = (totalAmount * PLATFORM_FEE_BPS) / BigInt(10000);
+      const merchantAmount = totalAmount - platformFee;
+
+      console.log(
+        `[Payment] Total: ${totalAmount}, Fee: ${platformFee}, Merchant: ${merchantAmount}`,
       );
 
       // Build transaction
@@ -1615,15 +1670,32 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         );
       }
 
-      // Add transfer instruction
+      // Treasury is already initialized on-chain, no need to create
+
+      // Transfer merchant amount (99%)
       transaction.add(
         createTransferInstruction(
           userAta,
           merchantAta,
           userPubkey,
-          amountInBaseUnits,
+          merchantAmount,
         ),
       );
+
+      // Transfer platform fee (1%) to treasury
+      if (platformFee > BigInt(0)) {
+        transaction.add(
+          createTransferInstruction(
+            userAta,
+            treasuryPDA,
+            userPubkey,
+            platformFee,
+          ),
+        );
+        console.log(
+          `[Payment] Added fee transfer: ${platformFee} to treasury ${treasuryPDA.toBase58()}`,
+        );
+      }
 
       // Get recent blockhash
       const { blockhash, lastValidBlockHeight } =
