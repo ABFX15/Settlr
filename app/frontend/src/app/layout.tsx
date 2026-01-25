@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     title: "Settlr | Accept Crypto Without Wallets",
     description:
       "Customers pay with email. You get USDC instantly. Zero gas fees. Private payments.",
-    images: ["/opengraph-image"],
+    images: ["/twitter-image?v=2"],
     creator: "@SettlrPay",
   },
   robots: {
