@@ -884,22 +884,23 @@ export default function LandingPage() {
                 <h1 className="text-5xl font-bold leading-tight tracking-tight md:text-6xl lg:text-7xl text-white">
                   CRYPTO PAYMENTS
                   <br />
-                  <span className="italic font-black">MADE SIMPLE.</span>
+                  <span className="italic font-black">MADE PRIVATE.</span>
                 </h1>
 
                 {/* Description */}
                 <p className="text-xl text-white/90 md:text-2xl max-w-xl">
-                  The world&apos;s first email-based crypto checkout. Your
-                  customers pay with any token. You receive USDC. Instantly.
+                  The first privacy-first crypto checkout for merchants.
+                  Gasless, any wallet, shielded transactions. You receive USDC.
+                  Instantly.
                 </p>
 
                 {/* Feature List */}
                 <div className="flex flex-wrap gap-4">
                   {[
-                    "No wallet required",
+                    "Private payments",
+                    "Gasless",
+                    "Any wallet",
                     "1% flat fees",
-                    "Instant settlement",
-                    "Zero chargebacks",
                   ].map((feature) => (
                     <div
                       key={feature}
