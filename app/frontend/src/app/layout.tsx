@@ -83,10 +83,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr | Accept Crypto Without Wallets",
-    description:
-      "Customers pay with email. You get USDC instantly. Zero gas fees. Private payments.",
-    images: ["/twitter-image?v=2"],
+    title: "Settlr | Private Crypto Payments",
+    description: "Shielded transactions. Gasless. Any wallet. 1% fees.",
+    images: ["/twitter-image?v=3"],
     creator: "@SettlrPay",
   },
   robots: {
