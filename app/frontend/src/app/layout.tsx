@@ -74,10 +74,10 @@ export const metadata: Metadata = {
       "Customers pay with email. You get USDC instantly. Zero gas fees. Private payments. One React component.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Settlr - Accept Crypto Without Wallets",
+        alt: "Settlr - Crypto Payments Made Private",
       },
     ],
   },
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     title: "Settlr | Accept Crypto Without Wallets",
     description:
       "Customers pay with email. You get USDC instantly. Zero gas fees. Private payments.",
-    images: ["/twitter-image?v=4"],
+    images: ["/og-image.png"],
     creator: "@SettlrPay",
   },
   robots: {
