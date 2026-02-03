@@ -747,6 +747,24 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         } catch (completeErr) {
           console.error("[Sponsored] Error completing checkout:", completeErr);
         }
+      } else {
+        // No session - record payment for redirect-based checkouts
+        try {
+          await fetch("/api/payments/record", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              signature: transactionHash,
+              merchantWallet,
+              customerWallet: activeWallet.address,
+              amount,
+              memo,
+            }),
+          });
+          console.log("[Sponsored] Payment recorded for redirect flow");
+        } catch (recordErr) {
+          console.error("[Sponsored] Error recording payment:", recordErr);
+        }
       }
 
       // Issue private receipt for the payment (Inco Lightning FHE)
@@ -1065,6 +1083,24 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         } catch (completeErr) {
           console.error("Error completing checkout:", completeErr);
         }
+      } else {
+        // No session - record payment for redirect-based checkouts
+        try {
+          await fetch("/api/payments/record", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              signature: signature || extractedSignature,
+              merchantWallet,
+              customerWallet: activeWallet.address,
+              amount,
+              memo,
+            }),
+          });
+          console.log("[Gasless] Payment recorded for redirect flow");
+        } catch (recordErr) {
+          console.error("[Gasless] Error recording payment:", recordErr);
+        }
       }
 
       // Issue private receipt for the payment (Inco Lightning FHE)
@@ -1191,6 +1227,24 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           }
         } catch (completeErr) {
           console.error("Error completing checkout:", completeErr);
+        }
+      } else if (result.hash) {
+        // No session - record payment for redirect-based checkouts
+        try {
+          await fetch("/api/payments/record", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              signature: result.hash,
+              merchantWallet,
+              customerWallet: activeEvmWallet.address,
+              amount,
+              memo,
+            }),
+          });
+          console.log("[Mayan] Payment recorded for redirect flow");
+        } catch (recordErr) {
+          console.error("[Mayan] Error recording payment:", recordErr);
         }
       }
 
@@ -1389,6 +1443,24 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         } catch (completeErr) {
           console.error("Error completing checkout:", completeErr);
         }
+      } else {
+        // No session - record payment for redirect-based checkouts
+        try {
+          await fetch("/api/payments/record", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              signature: transferSignature,
+              merchantWallet,
+              customerWallet: activeWallet.address,
+              amount,
+              memo,
+            }),
+          });
+          console.log("[Jupiter] Payment recorded for redirect flow");
+        } catch (recordErr) {
+          console.error("[Jupiter] Error recording payment:", recordErr);
+        }
       }
 
       // Issue private receipt for Jupiter swap payment
@@ -1519,6 +1591,27 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           console.error(
             "[Private Payment] Error completing checkout:",
             completeErr,
+          );
+        }
+      } else {
+        // No session - record payment for redirect-based checkouts
+        try {
+          await fetch("/api/payments/record", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              signature: signatureBase58,
+              merchantWallet,
+              customerWallet: activeWallet.address,
+              amount,
+              memo,
+            }),
+          });
+          console.log("[Private Payment] Payment recorded for redirect flow");
+        } catch (recordErr) {
+          console.error(
+            "[Private Payment] Error recording payment:",
+            recordErr,
           );
         }
       }
@@ -1757,6 +1850,24 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           }
         } catch (completeErr) {
           console.error("Error completing checkout:", completeErr);
+        }
+      } else {
+        // No session - record payment for redirect-based checkouts
+        try {
+          await fetch("/api/payments/record", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              signature: signatureBase58,
+              merchantWallet,
+              customerWallet: activeWallet.address,
+              amount,
+              memo,
+            }),
+          });
+          console.log("[Checkout] Payment recorded for redirect flow");
+        } catch (recordErr) {
+          console.error("Error recording payment:", recordErr);
         }
       }
 
@@ -2928,18 +3039,29 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           </div>
 
           <div className="space-y-3">
-            <Link
-              href="/demo/store"
-              className="block w-full py-3 bg-zinc-800 text-white font-semibold rounded-xl hover:bg-zinc-700 transition-colors text-center"
-            >
-              Continue Shopping
-            </Link>
-            <Link
-              href="/"
-              className="block w-full py-2 text-zinc-400 hover:text-white transition-colors text-sm text-center"
-            >
-              Back to Home
-            </Link>
+            {successUrl ? (
+              <a
+                href={successUrl}
+                className="block w-full py-3 bg-zinc-800 text-white font-semibold rounded-xl hover:bg-zinc-700 transition-colors text-center"
+              >
+                Return to Store
+              </a>
+            ) : (
+              <Link
+                href="/demo/store"
+                className="block w-full py-3 bg-zinc-800 text-white font-semibold rounded-xl hover:bg-zinc-700 transition-colors text-center"
+              >
+                Continue Shopping
+              </Link>
+            )}
+            {!successUrl && (
+              <Link
+                href="/"
+                className="block w-full py-2 text-zinc-400 hover:text-white transition-colors text-sm text-center"
+              >
+                Back to Home
+              </Link>
+            )}
           </div>
         </motion.div>
       </div>
