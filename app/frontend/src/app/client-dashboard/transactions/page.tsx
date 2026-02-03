@@ -351,10 +351,9 @@ export default function TransactionsPage() {
                                 {payment.description || "Payment"}
                               </span>
                               {payment.isPrivate && (
-                                <Shield
-                                  className="w-4 h-4 text-purple-400"
-                                  title="Private payment"
-                                />
+                                <span title="Private payment">
+                                  <Shield className="w-4 h-4 text-purple-400" />
+                                </span>
                               )}
                             </div>
                           </td>
