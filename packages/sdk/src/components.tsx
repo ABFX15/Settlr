@@ -100,7 +100,8 @@ const defaultStyles: Record<string, CSSProperties> = {
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   },
   primary: {
-    background: "linear-gradient(135deg, rgb(168, 85, 247) 0%, rgb(34, 211, 238) 100%)",
+    background:
+      "linear-gradient(135deg, rgb(168, 85, 247) 0%, rgb(34, 211, 238) 100%)",
     color: "white",
   },
   secondary: {
@@ -151,7 +152,7 @@ export function BuyButton({
   variant = "primary",
   size = "md",
 }: BuyButtonProps) {
-  const { getCheckoutUrl, createPayment } = useSettlr();
+  const { getCheckoutUrl, createPayment, ready, error: sdkError } = useSettlr();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<
     "idle" | "processing" | "success" | "error"
@@ -159,6 +160,16 @@ export function BuyButton({
 
   const handleClick = useCallback(async () => {
     if (disabled || loading) return;
+
+    // Check if SDK is ready
+    if (!ready) {
+      const notReadyError = new Error(
+        sdkError?.message ||
+          "Settlr SDK not ready. Please check your API key configuration.",
+      );
+      onError?.(notReadyError);
+      return;
+    }
 
     setLoading(true);
     setStatus("processing");
@@ -185,6 +196,8 @@ export function BuyButton({
     orderId,
     disabled,
     loading,
+    ready,
+    sdkError,
     successUrl,
     cancelUrl,
     getCheckoutUrl,
@@ -554,7 +567,7 @@ export function usePaymentLink(config: {
 
       return `${baseUrl}?${params.toString()}`;
     },
-    [merchantWallet, merchantName, baseUrl]
+    [merchantWallet, merchantName, baseUrl],
   );
 
   const generateQRCode = useCallback(
@@ -562,11 +575,11 @@ export function usePaymentLink(config: {
       const link = generateLink(options);
       // Simple QR code generation using Google Charts API
       const qrUrl = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${encodeURIComponent(
-        link
+        link,
       )}&choe=UTF-8`;
       return qrUrl;
     },
-    [generateLink]
+    [generateLink],
   );
 
   return {
@@ -865,7 +878,7 @@ export function usePaymentModal(config: {
         ...options,
       });
     },
-    []
+    [],
   );
 
   const closePayment = useCallback(() => {

@@ -270,8 +270,10 @@ declare class Settlr {
     constructor(config: SettlrConfig);
     /**
      * Validate API key with Settlr backend
+     * This is called automatically by SettlrProvider, but can also be called manually.
+     * Fetches merchant wallet address if not provided in config.
      */
-    private validateApiKey;
+    validateApiKey(): Promise<void>;
     /**
      * Get the current tier
      */
@@ -455,6 +457,10 @@ interface SettlrContextValue {
     settlr: Settlr | null;
     /** Whether user is authenticated */
     authenticated: boolean;
+    /** Whether the SDK is ready (API key validated) */
+    ready: boolean;
+    /** Error if initialization failed */
+    error: Error | null;
     /** Create a payment link (redirect flow) */
     createPayment: (options: CreatePaymentOptions) => Promise<Payment>;
     /** Generate checkout URL for redirect */
@@ -1143,4 +1149,114 @@ declare class OneClickClient {
  */
 declare function createOneClickClient(baseUrl?: string): OneClickClient;
 
-export { type ApproveOneClickOptions, BuyButton, type BuyButtonProps, type ChargeOneClickOptions, CheckoutWidget, type CheckoutWidgetProps, type CreatePaymentOptions, type CreateSubscriptionOptions, INCO_LIGHTNING_PROGRAM_ID, type IssuePrivateReceiptResult, type MerchantConfig, OneClickClient, type OneClickResult, type Payment, PaymentModal, type PaymentModalProps, type PaymentResult, type PaymentStatus, PrivacyFeatures, type PrivateReceiptConfig, SETTLR_CHECKOUT_URL, SETTLR_PROGRAM_ID, SUPPORTED_NETWORKS, SUPPORTED_TOKENS, Settlr, type SettlrConfig, SettlrProvider, type SpendingApproval, type Subscription, type SubscriptionInterval, type SubscriptionPlan, type SubscriptionStatus, type SupportedToken, type TransactionOptions, USDC_MINT_DEVNET, USDC_MINT_MAINNET, USDT_MINT_DEVNET, USDT_MINT_MAINNET, type WebhookEventType, type WebhookHandler, type WebhookHandlers, type WebhookPayload, buildAllowanceRemainingAccounts, buildPrivateReceiptAccounts, createOneClickClient, createWebhookHandler, encryptAmount, findAllowancePda, findPrivateReceiptPda, formatUSDC, getTokenDecimals, getTokenMint, parseUSDC, parseWebhookPayload, shortenAddress, simulateAndGetHandle, usePaymentLink, usePaymentModal, useSettlr, verifyWebhookSignature };
+/**
+ * Mobile Game Integration Utilities
+ *
+ * Simple helpers for integrating Settlr payments in mobile games.
+ * Works with Unity, Unreal, native iOS/Android, React Native, etc.
+ *
+ * The simplest integration is URL-based - just open the checkout URL
+ * and listen for the callback.
+ */
+interface MobileCheckoutOptions {
+    /** Amount in USDC */
+    amount: number;
+    /** Merchant wallet address */
+    merchantWallet: string;
+    /** Optional: Merchant display name */
+    merchantName?: string;
+    /** Optional: Payment description */
+    memo?: string;
+    /** URL to redirect after success */
+    successUrl?: string;
+    /** URL to redirect on cancel */
+    cancelUrl?: string;
+    /** Optional: Your order/transaction ID */
+    orderId?: string;
+    /** Optional: Customer ID for one-click */
+    customerId?: string;
+}
+interface MobileCheckoutResult {
+    success: boolean;
+    signature?: string;
+    orderId?: string;
+    error?: string;
+}
+/**
+ * Generate a checkout URL for mobile games
+ *
+ * Usage in Unity (C#):
+ * ```csharp
+ * string url = $"https://settlr.dev/checkout?amount={amount}&merchant={wallet}";
+ * Application.OpenURL(url);
+ * ```
+ *
+ * Usage in Swift:
+ * ```swift
+ * let url = "https://settlr.dev/checkout?amount=\(amount)&merchant=\(wallet)"
+ * UIApplication.shared.open(URL(string: url)!)
+ * ```
+ */
+declare function generateCheckoutUrl(options: MobileCheckoutOptions, baseUrl?: string): string;
+/**
+ * Generate a deep link for mobile app integration
+ *
+ * For apps that register a custom URL scheme (e.g., mygame://)
+ * the success/cancel URLs can redirect back to the app.
+ *
+ * Example:
+ * - successUrl: "mygame://payment-success?order=123"
+ * - cancelUrl: "mygame://payment-cancel?order=123"
+ */
+declare function generateDeepLinkCheckout(options: MobileCheckoutOptions, appScheme: string, baseUrl?: string): string;
+/**
+ * Parse the callback URL when user returns to app
+ *
+ * Usage in Swift:
+ * ```swift
+ * func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+ *     if url.scheme == "mygame" && url.host == "payment-success" {
+ *         let signature = URLComponents(url: url, resolvingAgainstBaseURL: true)?
+ *             .queryItems?.first(where: { $0.name == "signature" })?.value
+ *         // Handle success
+ *     }
+ * }
+ * ```
+ */
+declare function parseCallbackUrl(url: string): MobileCheckoutResult;
+/**
+ * REST API endpoint info for server-side integration
+ *
+ * Mobile games can use these APIs directly without the SDK:
+ *
+ * 1. Create checkout session:
+ *    POST /api/checkout/create
+ *    { amount, merchantWallet, memo }
+ *    → { sessionId, checkoutUrl }
+ *
+ * 2. Check payment status:
+ *    GET /api/checkout/status?session={sessionId}
+ *    → { status: 'pending' | 'completed' | 'expired', signature? }
+ *
+ * 3. One-click payment (for returning players):
+ *    POST /api/one-click
+ *    { action: 'charge', customerWallet, merchantWallet, amount }
+ *    → { success, signature }
+ */
+declare const REST_API: {
+    createSession: string;
+    checkStatus: string;
+    oneClick: string;
+    webhook: string;
+};
+/**
+ * Example Unity C# integration code
+ * (For documentation purposes)
+ */
+declare const UNITY_EXAMPLE = "\n// SettlrPayment.cs - Drop into your Unity project\n\nusing UnityEngine;\nusing UnityEngine.Networking;\nusing System.Collections;\n\npublic class SettlrPayment : MonoBehaviour\n{\n    public string merchantWallet = \"YOUR_WALLET_ADDRESS\";\n    public string settlrUrl = \"https://settlr.dev\";\n    \n    // Call this to start a payment\n    public void StartPayment(float amount, string orderId, System.Action<bool, string> callback)\n    {\n        string url = $\"{settlrUrl}/checkout?amount={amount}&merchant={merchantWallet}&order_id={orderId}\";\n        \n        // Add deep link callback (register mygame:// scheme in your app)\n        url += $\"&success_url=mygame://payment-success?order={orderId}\";\n        url += $\"&cancel_url=mygame://payment-cancel?order={orderId}\";\n        \n        Application.OpenURL(url);\n        \n        // Start polling for completion\n        StartCoroutine(PollPaymentStatus(orderId, callback));\n    }\n    \n    IEnumerator PollPaymentStatus(string orderId, System.Action<bool, string> callback)\n    {\n        string statusUrl = $\"{settlrUrl}/api/checkout/status?order_id={orderId}\";\n        \n        for (int i = 0; i < 60; i++) // Poll for 5 minutes\n        {\n            using (UnityWebRequest request = UnityWebRequest.Get(statusUrl))\n            {\n                yield return request.SendWebRequest();\n                \n                if (request.result == UnityWebRequest.Result.Success)\n                {\n                    var response = JsonUtility.FromJson<PaymentStatusResponse>(request.downloadHandler.text);\n                    \n                    if (response.status == \"completed\")\n                    {\n                        callback(true, response.signature);\n                        yield break;\n                    }\n                    else if (response.status == \"expired\" || response.status == \"cancelled\")\n                    {\n                        callback(false, null);\n                        yield break;\n                    }\n                }\n            }\n            \n            yield return new WaitForSeconds(5f); // Check every 5 seconds\n        }\n        \n        callback(false, \"Timeout\");\n    }\n    \n    [System.Serializable]\n    class PaymentStatusResponse\n    {\n        public string status;\n        public string signature;\n    }\n}\n";
+/**
+ * Example React Native integration
+ */
+declare const REACT_NATIVE_EXAMPLE = "\n// SettlrPayment.tsx - React Native component\n\nimport { Linking, Alert } from 'react-native';\nimport { useEffect } from 'react';\n\nconst SETTLR_URL = 'https://settlr.dev';\nconst APP_SCHEME = 'mygame';\n\nexport function useSettlrPayment(onSuccess: (sig: string) => void) {\n  useEffect(() => {\n    const handleDeepLink = ({ url }: { url: string }) => {\n      if (url.includes('payment-success')) {\n        const sig = new URL(url).searchParams.get('signature');\n        if (sig) onSuccess(sig);\n      }\n    };\n    \n    Linking.addEventListener('url', handleDeepLink);\n    return () => Linking.removeAllListeners('url');\n  }, [onSuccess]);\n  \n  const startPayment = async (amount: number, merchantWallet: string) => {\n    const orderId = `order_${Date.now()}`;\n    const url = `${SETTLR_URL}/checkout?amount=${amount}&merchant=${merchantWallet}` +\n      `&success_url=${APP_SCHEME}://payment-success?order=${orderId}` +\n      `&cancel_url=${APP_SCHEME}://payment-cancel?order=${orderId}`;\n    \n    await Linking.openURL(url);\n  };\n  \n  return { startPayment };\n}\n";
+
+export { type ApproveOneClickOptions, BuyButton, type BuyButtonProps, type ChargeOneClickOptions, CheckoutWidget, type CheckoutWidgetProps, type CreatePaymentOptions, type CreateSubscriptionOptions, INCO_LIGHTNING_PROGRAM_ID, type IssuePrivateReceiptResult, type MerchantConfig, type MobileCheckoutOptions, type MobileCheckoutResult, OneClickClient, type OneClickResult, type Payment, PaymentModal, type PaymentModalProps, type PaymentResult, type PaymentStatus, PrivacyFeatures, type PrivateReceiptConfig, REACT_NATIVE_EXAMPLE, REST_API, SETTLR_CHECKOUT_URL, SETTLR_PROGRAM_ID, SUPPORTED_NETWORKS, SUPPORTED_TOKENS, Settlr, type SettlrConfig, SettlrProvider, type SpendingApproval, type Subscription, type SubscriptionInterval, type SubscriptionPlan, type SubscriptionStatus, type SupportedToken, type TransactionOptions, UNITY_EXAMPLE, USDC_MINT_DEVNET, USDC_MINT_MAINNET, USDT_MINT_DEVNET, USDT_MINT_MAINNET, type WebhookEventType, type WebhookHandler, type WebhookHandlers, type WebhookPayload, buildAllowanceRemainingAccounts, buildPrivateReceiptAccounts, createOneClickClient, createWebhookHandler, encryptAmount, findAllowancePda, findPrivateReceiptPda, formatUSDC, generateCheckoutUrl, generateDeepLinkCheckout, getTokenDecimals, getTokenMint, parseCallbackUrl, parseUSDC, parseWebhookPayload, shortenAddress, simulateAndGetHandle, usePaymentLink, usePaymentModal, useSettlr, verifyWebhookSignature };

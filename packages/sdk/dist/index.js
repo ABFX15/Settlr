@@ -36,12 +36,15 @@ __export(index_exports, {
   OneClickClient: () => OneClickClient,
   PaymentModal: () => PaymentModal,
   PrivacyFeatures: () => PrivacyFeatures,
+  REACT_NATIVE_EXAMPLE: () => REACT_NATIVE_EXAMPLE,
+  REST_API: () => REST_API,
   SETTLR_CHECKOUT_URL: () => SETTLR_CHECKOUT_URL,
   SETTLR_PROGRAM_ID: () => SETTLR_PROGRAM_ID,
   SUPPORTED_NETWORKS: () => SUPPORTED_NETWORKS,
   SUPPORTED_TOKENS: () => SUPPORTED_TOKENS,
   Settlr: () => Settlr,
   SettlrProvider: () => SettlrProvider,
+  UNITY_EXAMPLE: () => UNITY_EXAMPLE,
   USDC_MINT_DEVNET: () => USDC_MINT_DEVNET,
   USDC_MINT_MAINNET: () => USDC_MINT_MAINNET,
   USDT_MINT_DEVNET: () => USDT_MINT_DEVNET,
@@ -54,8 +57,11 @@ __export(index_exports, {
   findAllowancePda: () => findAllowancePda,
   findPrivateReceiptPda: () => findPrivateReceiptPda,
   formatUSDC: () => formatUSDC,
+  generateCheckoutUrl: () => generateCheckoutUrl,
+  generateDeepLinkCheckout: () => generateDeepLinkCheckout,
   getTokenDecimals: () => getTokenDecimals,
   getTokenMint: () => getTokenMint,
+  parseCallbackUrl: () => parseCallbackUrl,
   parseUSDC: () => parseUSDC,
   parseWebhookPayload: () => parseWebhookPayload,
   shortenAddress: () => shortenAddress,
@@ -197,6 +203,8 @@ var Settlr = class {
   }
   /**
    * Validate API key with Settlr backend
+   * This is called automatically by SettlrProvider, but can also be called manually.
+   * Fetches merchant wallet address if not provided in config.
    */
   async validateApiKey() {
     if (this.validated) return;
@@ -224,6 +232,7 @@ var Settlr = class {
       this.tier = data.tier;
       if (data.merchantWallet && !this.merchantWallet) {
         this.merchantWallet = new import_web32.PublicKey(data.merchantWallet);
+        this.merchantWalletFromValidation = data.merchantWallet;
         this.config.merchant.walletAddress = data.merchantWallet;
       }
       if (data.merchantName && !this.config.merchant.name) {
@@ -595,27 +604,54 @@ function SettlrProvider({
   config,
   authenticated = false
 }) {
+  const [ready, setReady] = (0, import_react.useState)(false);
+  const [error, setError] = (0, import_react.useState)(null);
   const settlr = (0, import_react.useMemo)(() => {
     return new Settlr({
       ...config,
       rpcEndpoint: config.rpcEndpoint ?? "https://api.devnet.solana.com"
     });
   }, [config]);
+  (0, import_react.useEffect)(() => {
+    let cancelled = false;
+    settlr.validateApiKey().then(() => {
+      if (!cancelled) {
+        setReady(true);
+        setError(null);
+      }
+    }).catch((err) => {
+      if (!cancelled) {
+        console.error("[Settlr] API key validation failed:", err);
+        setError(err instanceof Error ? err : new Error(String(err)));
+        if (config.apiKey?.startsWith("sk_test_")) {
+          setReady(true);
+        }
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [settlr, config.apiKey]);
   const value = (0, import_react.useMemo)(
     () => ({
       settlr,
       authenticated,
+      ready,
+      error,
       createPayment: (options) => {
         return settlr.createPayment(options);
       },
       getCheckoutUrl: (options) => {
+        if (!ready) {
+          console.warn("[Settlr] SDK not ready yet. Ensure API key is valid.");
+        }
         return settlr.getCheckoutUrl(options);
       },
       getBalance: () => {
         return settlr.getMerchantBalance();
       }
     }),
-    [settlr, authenticated]
+    [settlr, authenticated, ready, error]
   );
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SettlrContext.Provider, { value, children });
 }
@@ -695,11 +731,18 @@ function BuyButton({
   variant = "primary",
   size = "md"
 }) {
-  const { getCheckoutUrl, createPayment } = useSettlr();
+  const { getCheckoutUrl, createPayment, ready, error: sdkError } = useSettlr();
   const [loading, setLoading] = (0, import_react2.useState)(false);
   const [status, setStatus] = (0, import_react2.useState)("idle");
   const handleClick = (0, import_react2.useCallback)(async () => {
     if (disabled || loading) return;
+    if (!ready) {
+      const notReadyError = new Error(
+        sdkError?.message || "Settlr SDK not ready. Please check your API key configuration."
+      );
+      onError?.(notReadyError);
+      return;
+    }
     setLoading(true);
     setStatus("processing");
     onProcessing?.();
@@ -723,6 +766,8 @@ function BuyButton({
     orderId,
     disabled,
     loading,
+    ready,
+    sdkError,
     successUrl,
     cancelUrl,
     getCheckoutUrl,
@@ -1426,6 +1471,167 @@ var OneClickClient = class {
 function createOneClickClient(baseUrl) {
   return new OneClickClient(baseUrl);
 }
+
+// src/mobile.ts
+function generateCheckoutUrl(options, baseUrl = "https://settlr.dev") {
+  const params = new URLSearchParams();
+  params.set("amount", options.amount.toString());
+  params.set("merchant", options.merchantWallet);
+  if (options.merchantName) params.set("name", options.merchantName);
+  if (options.memo) params.set("memo", options.memo);
+  if (options.successUrl) params.set("success_url", options.successUrl);
+  if (options.cancelUrl) params.set("cancel_url", options.cancelUrl);
+  if (options.orderId) params.set("order_id", options.orderId);
+  if (options.customerId) params.set("customer_id", options.customerId);
+  return `${baseUrl}/checkout?${params.toString()}`;
+}
+function generateDeepLinkCheckout(options, appScheme, baseUrl = "https://settlr.dev") {
+  const orderId = options.orderId || `order_${Date.now()}`;
+  return generateCheckoutUrl({
+    ...options,
+    orderId,
+    successUrl: `${appScheme}://payment-success?order=${orderId}`,
+    cancelUrl: `${appScheme}://payment-cancel?order=${orderId}`
+  }, baseUrl);
+}
+function parseCallbackUrl(url) {
+  try {
+    const parsed = new URL(url);
+    const params = parsed.searchParams;
+    if (parsed.host === "payment-success" || parsed.pathname.includes("success")) {
+      return {
+        success: true,
+        signature: params.get("signature") || void 0,
+        orderId: params.get("order") || params.get("order_id") || void 0
+      };
+    }
+    if (parsed.host === "payment-cancel" || parsed.pathname.includes("cancel")) {
+      return {
+        success: false,
+        orderId: params.get("order") || params.get("order_id") || void 0,
+        error: "Payment cancelled by user"
+      };
+    }
+    return {
+      success: false,
+      error: "Unknown callback URL format"
+    };
+  } catch {
+    return {
+      success: false,
+      error: "Failed to parse callback URL"
+    };
+  }
+}
+var REST_API = {
+  createSession: "/api/checkout/create",
+  checkStatus: "/api/checkout/status",
+  oneClick: "/api/one-click",
+  webhook: "/api/webhooks"
+  // For server-to-server notifications
+};
+var UNITY_EXAMPLE = `
+// SettlrPayment.cs - Drop into your Unity project
+
+using UnityEngine;
+using UnityEngine.Networking;
+using System.Collections;
+
+public class SettlrPayment : MonoBehaviour
+{
+    public string merchantWallet = "YOUR_WALLET_ADDRESS";
+    public string settlrUrl = "https://settlr.dev";
+    
+    // Call this to start a payment
+    public void StartPayment(float amount, string orderId, System.Action<bool, string> callback)
+    {
+        string url = $"{settlrUrl}/checkout?amount={amount}&merchant={merchantWallet}&order_id={orderId}";
+        
+        // Add deep link callback (register mygame:// scheme in your app)
+        url += $"&success_url=mygame://payment-success?order={orderId}";
+        url += $"&cancel_url=mygame://payment-cancel?order={orderId}";
+        
+        Application.OpenURL(url);
+        
+        // Start polling for completion
+        StartCoroutine(PollPaymentStatus(orderId, callback));
+    }
+    
+    IEnumerator PollPaymentStatus(string orderId, System.Action<bool, string> callback)
+    {
+        string statusUrl = $"{settlrUrl}/api/checkout/status?order_id={orderId}";
+        
+        for (int i = 0; i < 60; i++) // Poll for 5 minutes
+        {
+            using (UnityWebRequest request = UnityWebRequest.Get(statusUrl))
+            {
+                yield return request.SendWebRequest();
+                
+                if (request.result == UnityWebRequest.Result.Success)
+                {
+                    var response = JsonUtility.FromJson<PaymentStatusResponse>(request.downloadHandler.text);
+                    
+                    if (response.status == "completed")
+                    {
+                        callback(true, response.signature);
+                        yield break;
+                    }
+                    else if (response.status == "expired" || response.status == "cancelled")
+                    {
+                        callback(false, null);
+                        yield break;
+                    }
+                }
+            }
+            
+            yield return new WaitForSeconds(5f); // Check every 5 seconds
+        }
+        
+        callback(false, "Timeout");
+    }
+    
+    [System.Serializable]
+    class PaymentStatusResponse
+    {
+        public string status;
+        public string signature;
+    }
+}
+`;
+var REACT_NATIVE_EXAMPLE = `
+// SettlrPayment.tsx - React Native component
+
+import { Linking, Alert } from 'react-native';
+import { useEffect } from 'react';
+
+const SETTLR_URL = 'https://settlr.dev';
+const APP_SCHEME = 'mygame';
+
+export function useSettlrPayment(onSuccess: (sig: string) => void) {
+  useEffect(() => {
+    const handleDeepLink = ({ url }: { url: string }) => {
+      if (url.includes('payment-success')) {
+        const sig = new URL(url).searchParams.get('signature');
+        if (sig) onSuccess(sig);
+      }
+    };
+    
+    Linking.addEventListener('url', handleDeepLink);
+    return () => Linking.removeAllListeners('url');
+  }, [onSuccess]);
+  
+  const startPayment = async (amount: number, merchantWallet: string) => {
+    const orderId = \`order_\${Date.now()}\`;
+    const url = \`\${SETTLR_URL}/checkout?amount=\${amount}&merchant=\${merchantWallet}\` +
+      \`&success_url=\${APP_SCHEME}://payment-success?order=\${orderId}\` +
+      \`&cancel_url=\${APP_SCHEME}://payment-cancel?order=\${orderId}\`;
+    
+    await Linking.openURL(url);
+  };
+  
+  return { startPayment };
+}
+`;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   BuyButton,
@@ -1434,12 +1640,15 @@ function createOneClickClient(baseUrl) {
   OneClickClient,
   PaymentModal,
   PrivacyFeatures,
+  REACT_NATIVE_EXAMPLE,
+  REST_API,
   SETTLR_CHECKOUT_URL,
   SETTLR_PROGRAM_ID,
   SUPPORTED_NETWORKS,
   SUPPORTED_TOKENS,
   Settlr,
   SettlrProvider,
+  UNITY_EXAMPLE,
   USDC_MINT_DEVNET,
   USDC_MINT_MAINNET,
   USDT_MINT_DEVNET,
@@ -1452,8 +1661,11 @@ function createOneClickClient(baseUrl) {
   findAllowancePda,
   findPrivateReceiptPda,
   formatUSDC,
+  generateCheckoutUrl,
+  generateDeepLinkCheckout,
   getTokenDecimals,
   getTokenMint,
+  parseCallbackUrl,
   parseUSDC,
   parseWebhookPayload,
   shortenAddress,

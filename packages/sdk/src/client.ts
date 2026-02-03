@@ -140,8 +140,10 @@ export class Settlr {
 
     /**
      * Validate API key with Settlr backend
+     * This is called automatically by SettlrProvider, but can also be called manually.
+     * Fetches merchant wallet address if not provided in config.
      */
-    private async validateApiKey(): Promise<void> {
+    async validateApiKey(): Promise<void> {
         if (this.validated) return;
 
         try {
@@ -174,6 +176,7 @@ export class Settlr {
             // Update merchant wallet from server if not provided in config
             if (data.merchantWallet && !this.merchantWallet) {
                 this.merchantWallet = new PublicKey(data.merchantWallet);
+                this.merchantWalletFromValidation = data.merchantWallet;
                 this.config.merchant.walletAddress = data.merchantWallet;
             }
 

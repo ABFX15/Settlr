@@ -1,4 +1,11 @@
-import { createContext, useContext, useMemo, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import { Settlr, type SettlrConfig } from "./client";
 import type { CreatePaymentOptions, Payment } from "./types";
 
@@ -22,6 +29,12 @@ interface SettlrContextValue {
 
   /** Whether user is authenticated */
   authenticated: boolean;
+
+  /** Whether the SDK is ready (API key validated) */
+  ready: boolean;
+
+  /** Error if initialization failed */
+  error: Error | null;
 
   /** Create a payment link (redirect flow) */
   createPayment: (options: CreatePaymentOptions) => Promise<Payment>;
@@ -80,6 +93,9 @@ export function SettlrProvider({
   config,
   authenticated = false,
 }: SettlrProviderProps) {
+  const [ready, setReady] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
   const settlr = useMemo(() => {
     return new Settlr({
       ...config,
@@ -87,16 +103,49 @@ export function SettlrProvider({
     });
   }, [config]);
 
+  // Auto-validate API key on mount to fetch merchant wallet address
+  useEffect(() => {
+    let cancelled = false;
+
+    settlr
+      .validateApiKey()
+      .then(() => {
+        if (!cancelled) {
+          setReady(true);
+          setError(null);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          console.error("[Settlr] API key validation failed:", err);
+          setError(err instanceof Error ? err : new Error(String(err)));
+          // Still mark as ready for test keys
+          if (config.apiKey?.startsWith("sk_test_")) {
+            setReady(true);
+          }
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [settlr, config.apiKey]);
+
   const value = useMemo<SettlrContextValue>(
     () => ({
       settlr,
       authenticated,
+      ready,
+      error,
 
       createPayment: (options: CreatePaymentOptions) => {
         return settlr.createPayment(options);
       },
 
       getCheckoutUrl: (options: { amount: number; memo?: string }) => {
+        if (!ready) {
+          console.warn("[Settlr] SDK not ready yet. Ensure API key is valid.");
+        }
         return settlr.getCheckoutUrl(options);
       },
 
@@ -104,7 +153,7 @@ export function SettlrProvider({
         return settlr.getMerchantBalance();
       },
     }),
-    [settlr, authenticated]
+    [settlr, authenticated, ready, error],
   );
 
   return (

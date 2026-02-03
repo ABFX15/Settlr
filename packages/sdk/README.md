@@ -97,6 +97,71 @@ const accounts = await buildPrivateReceiptAccounts({
 
 > **Private on-chain. Compliant off-chain.** Your competitors can't see your revenue, but your accountant can.
 
+## 🛡️ Wallet Security (Range)
+
+Settlr integrates Range Security to screen wallets before processing payments:
+
+```typescript
+import { screenWallet, isWalletBlocked, RiskLevel } from "@settlr/sdk";
+
+// Screen a wallet for sanctions, fraud, mixers, etc.
+const result = await screenWallet("SomeWalletAddress...");
+
+if (result.riskLevel === RiskLevel.SEVERE || result.isSanctioned) {
+  console.log("Wallet is blocked:", result.categories);
+  // Don't process payment
+}
+
+// Quick check
+const blocked = await isWalletBlocked("SuspiciousWallet...");
+if (blocked) {
+  return { error: "Payment blocked for compliance" };
+}
+```
+
+**What Range screens for:**
+
+- 🚫 **Sanctions** - OFAC, EU sanctions lists
+- 🕵️ **Fraud** - Known scam wallets
+- 🌀 **Mixers** - Tornado Cash, etc.
+- 🌑 **Darknet** - Illicit marketplace activity
+- 💀 **Ransomware** - Known attack wallets
+- 🎰 **Gambling** - Unlicensed gambling (configurable)
+
+## 💸 Private Payouts (Privacy Cash)
+
+Enable ZK-shielded payments for privacy-conscious merchants:
+
+```typescript
+import {
+  createPrivacyCashClient,
+  shieldPayment,
+  privateTransfer,
+} from "@settlr/sdk";
+
+// Initialize Privacy Cash
+const privacy = createPrivacyCashClient({
+  connection,
+  wallet,
+  network: "mainnet-beta",
+});
+
+// Shield funds (move to private pool)
+const shieldTx = await shieldPayment(privacy, 100); // $100 USDC
+console.log("Shielded:", shieldTx);
+
+// Private transfer (ZK-shielded, amount hidden)
+const transferTx = await privateTransfer(privacy, "RecipientWallet...", 50);
+console.log("Private transfer:", transferTx);
+```
+
+**Privacy Cash features:**
+
+- 🔐 ZK-shielded transactions
+- 👁️ Amount hidden from on-chain observers
+- ⚡ Fast finality on Solana
+- 💰 Supports USDC and SOL
+
 ## Installation
 
 ```bash
@@ -499,7 +564,7 @@ app.post(
         await fulfillOrder(event.payment.orderId);
       },
     },
-  })
+  }),
 );
 ```
 
