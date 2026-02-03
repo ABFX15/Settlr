@@ -37,13 +37,13 @@ export type SupportedToken = keyof typeof SUPPORTED_TOKENS;
 // Settlr API URLs
 export const SETTLR_API_URL = {
     production: 'https://settlr.dev/api',
-    development: 'http://localhost:3000/api',
+    development: 'https://settlr.dev/api',  // Always use production API
 } as const;
 
 // Settlr checkout URLs (embedded wallet checkout)
 export const SETTLR_CHECKOUT_URL = {
     production: 'https://settlr.dev/checkout',
-    development: 'http://localhost:3000/checkout',
+    development: 'https://settlr.dev/checkout',  // Always use production checkout
 } as const;
 
 // Supported networks

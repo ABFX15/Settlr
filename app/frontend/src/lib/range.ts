@@ -353,20 +353,22 @@ function getMockRiskResult(
 
     const badResult = knownBadAddresses[address];
     if (badResult) {
+        const riskScore = badResult.riskScore ?? 80;
+        const isSanctioned = badResult.isSanctioned ?? false;
         const shouldBlock =
-            (badResult.riskScore ?? 0) >= blockThreshold ||
-            (alwaysBlockSanctioned && badResult.isSanctioned);
+            riskScore >= blockThreshold ||
+            (alwaysBlockSanctioned && isSanctioned);
 
         return {
             address,
             riskLevel: badResult.riskLevel ?? RiskLevel.HIGH,
-            riskScore: badResult.riskScore ?? 80,
+            riskScore,
             categories: badResult.categories ?? [RiskCategory.FRAUD],
-            isSanctioned: badResult.isSanctioned ?? false,
+            isSanctioned,
             summary: generateSummary(
                 badResult.riskLevel ?? RiskLevel.HIGH,
                 badResult.categories ?? [],
-                badResult.isSanctioned ?? false
+                isSanctioned
             ),
             screenedAt: new Date(),
             shouldBlock,
