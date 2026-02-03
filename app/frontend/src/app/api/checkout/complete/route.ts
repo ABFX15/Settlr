@@ -6,12 +6,14 @@ import {
     createPayment,
     Payment,
 } from "@/lib/db";
+import { screenPaymentParties } from "@/lib/range";
 import crypto from "crypto";
 
 /**
  * POST /api/checkout/complete
  * 
  * Called after a successful payment to update session and trigger webhook
+ * Includes Range Security wallet screening before completing payment
  * 
  * Request body:
  * {
@@ -51,6 +53,36 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
+
+        // Range Security: Screen both payer and merchant wallets
+        const riskScreening = await screenPaymentParties(
+            customerWallet,
+            session.merchantWallet,
+            { testMode: process.env.NODE_ENV !== 'production' }
+        );
+
+        if (!riskScreening.canProceed) {
+            console.warn(`[Range] Payment blocked: ${riskScreening.blockedParty}`, {
+                sessionId,
+                customerWallet,
+                merchantWallet: session.merchantWallet,
+                payerRisk: riskScreening.payer.summary,
+                merchantRisk: riskScreening.merchant.summary,
+            });
+
+            return NextResponse.json(
+                {
+                    error: "Payment blocked by risk screening",
+                    reason: riskScreening.blockedParty === 'payer'
+                        ? riskScreening.payer.summary
+                        : riskScreening.merchant.summary,
+                    blockedParty: riskScreening.blockedParty,
+                },
+                { status: 403 }
+            );
+        }
+
+        console.log(`[Range] Payment parties cleared: payer=${riskScreening.payer.riskLevel}, merchant=${riskScreening.merchant.riskLevel}`);
 
         // Update session status
         await updateCheckoutSession(sessionId, { status: "completed" });

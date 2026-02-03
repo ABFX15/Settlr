@@ -9,11 +9,16 @@
   --border: rgba(255, 255, 255, 0.1);
   --border-hover: rgba(255, 255, 255, 0.2);
 
-  /* NEW: Pop card style - white cards with dark borders */
-  --card-pop: #ffffff;
-  --card-pop-border: #000000;
-  --card-pop-text: #000000;
+  /* NEW: Pop card style - cream cards with dark borders (Mission Control style) */
+  --card-pop: #fffef5;
+  --card-pop-header: #f5f4eb;
+  --card-pop-border: #1a1a1a;
+  --card-pop-text: #1a1a1a;
   --card-pop-text-secondary: #52525b;
+  --card-pop-accent-red: #ff5252;
+  --card-pop-accent-green: #4caf50;
+  --card-pop-accent-blue: #2196f3;
+  --card-pop-accent-orange: #ff9800;
 
   /* Brand gradient - purple/cyan neon theme */
   --primary: rgb(168, 85, 247);
@@ -92,38 +97,140 @@ body {
   background: var(--glass);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
+  border: 2px solid var(--glass-border);
+  border-radius: 12px;
 }
 
-/* POP CARD - White card with black border (like Secret Santa UI) */
+/* Glass card with pop style border */
+.glass-card-pop {
+  background: rgba(255, 254, 245, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2.5px solid var(--card-pop-border);
+  border-radius: 12px;
+  color: var(--card-pop-text);
+  box-shadow: 0 3px 0 var(--card-pop-border);
+}
+
+/* POP CARD - Cream card with dark border (Mission Control style) */
 .card-pop {
   background: var(--card-pop);
-  border: 3px solid var(--card-pop-border);
-  border-radius: 16px;
+  border: 2.5px solid var(--card-pop-border);
+  border-radius: 12px;
   color: var(--card-pop-text);
-  box-shadow: 0 4px 0 var(--card-pop-border);
+  box-shadow: 0 3px 0 var(--card-pop-border);
   transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.card-pop-header {
+  background: var(--card-pop-header);
+  border-bottom: 2.5px solid var(--card-pop-border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-pop-header-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.card-pop-body {
+  padding: 16px;
 }
 
 .card-pop:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 0 var(--card-pop-border);
+  box-shadow: 0 5px 0 var(--card-pop-border);
 }
 
 .card-pop:active {
-  transform: translateY(2px);
+  transform: translateY(1px);
   box-shadow: 0 2px 0 var(--card-pop-border);
+}
+
+/* Card pop badge/tag (like the "TEST" and "CODE" badges) */
+.badge-pop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid var(--card-pop-border);
+}
+
+.badge-pop-red {
+  background: var(--card-pop-accent-red);
+  color: white;
+  border-color: var(--card-pop-border);
+}
+
+.badge-pop-green {
+  background: var(--card-pop-accent-green);
+  color: white;
+  border-color: var(--card-pop-border);
+}
+
+.badge-pop-blue {
+  background: var(--card-pop-accent-blue);
+  color: white;
+  border-color: var(--card-pop-border);
+}
+
+.badge-pop-dark {
+  background: var(--card-pop-border);
+  color: white;
+}
+
+/* Agent card style (like Buzz and Spark in the screenshot) */
+.card-pop-agent {
+  background: var(--card-pop);
+  border: 2.5px solid var(--card-pop-border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 3px 0 var(--card-pop-border);
+  transition: all 0.2s ease;
+}
+
+.card-pop-agent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 var(--card-pop-border);
+}
+
+.card-pop-agent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-pop-agent-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 2px solid var(--card-pop-border);
 }
 
 /* Pop input style */
 .input-pop {
   background: var(--card-pop);
-  border: 3px solid var(--card-pop-border);
-  border-radius: 12px;
-  padding: 14px 18px;
+  border: 2.5px solid var(--card-pop-border);
+  border-radius: 10px;
+  padding: 12px 16px;
   color: var(--card-pop-text);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   transition: all 0.2s ease;
   width: 100%;
@@ -142,49 +249,49 @@ body {
 /* Pop button style */
 .btn-pop {
   background: var(--card-pop);
-  border: 3px solid var(--card-pop-border);
-  border-radius: 12px;
-  padding: 14px 28px;
+  border: 2.5px solid var(--card-pop-border);
+  border-radius: 10px;
+  padding: 12px 24px;
   color: var(--card-pop-text);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
-  box-shadow: 0 4px 0 var(--card-pop-border);
+  box-shadow: 0 3px 0 var(--card-pop-border);
 }
 
 .btn-pop:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 0 var(--card-pop-border);
+  box-shadow: 0 5px 0 var(--card-pop-border);
 }
 
 .btn-pop:active {
-  transform: translateY(2px);
+  transform: translateY(1px);
   box-shadow: 0 2px 0 var(--card-pop-border);
 }
 
 /* Pop button - primary colored */
 .btn-pop-primary {
   background: var(--primary);
-  border: 3px solid var(--card-pop-border);
-  border-radius: 12px;
-  padding: 14px 28px;
+  border: 2.5px solid var(--card-pop-border);
+  border-radius: 10px;
+  padding: 12px 24px;
   color: white;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
-  box-shadow: 0 4px 0 var(--card-pop-border);
+  box-shadow: 0 3px 0 var(--card-pop-border);
 }
 
 .btn-pop-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 0 var(--card-pop-border);
+  box-shadow: 0 5px 0 var(--card-pop-border);
   background: var(--primary-hover);
 }
 
 .btn-pop-primary:active {
-  transform: translateY(2px);
+  transform: translateY(1px);
   box-shadow: 0 2px 0 var(--card-pop-border);
 }
 
@@ -195,9 +302,9 @@ body {
   justify-content: center;
   background: var(--card-pop);
   border: 2px solid var(--card-pop-border);
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 14px;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--card-pop-text);
   cursor: pointer;

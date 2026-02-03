@@ -42,13 +42,18 @@
   },
   "devDependencies": {
     "@types/bs58": "^4.0.4",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chai": "^6.2.2",
     "eslint": "^9",
     "eslint-config-next": "16.0.6",
     "ignore-loader": "^0.1.2",
     "lightningcss": "^1.30.2",
+    "mocha": "^11.7.5",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

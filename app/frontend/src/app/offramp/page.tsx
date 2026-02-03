@@ -84,28 +84,28 @@ function OfframpContent() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="glass-card p-4 text-center"
+            className="card-pop p-4 text-center"
           >
-            <Zap className="w-6 h-6 text-[var(--secondary)] mx-auto mb-2" />
-            <p className="text-xs text-[var(--text-muted)]">Instant</p>
+            <Zap className="w-6 h-6 text-[var(--card-pop-accent-blue)] mx-auto mb-2" />
+            <p className="text-xs font-semibold">Instant</p>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="glass-card p-4 text-center"
+            className="card-pop p-4 text-center"
           >
-            <Banknote className="w-6 h-6 text-[var(--success)] mx-auto mb-2" />
-            <p className="text-xs text-[var(--text-muted)]">Low Fees</p>
+            <Banknote className="w-6 h-6 text-[var(--card-pop-accent-green)] mx-auto mb-2" />
+            <p className="text-xs font-semibold">Low Fees</p>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="glass-card p-4 text-center"
+            className="card-pop p-4 text-center"
           >
-            <Shield className="w-6 h-6 text-[var(--primary)] mx-auto mb-2" />
-            <p className="text-xs text-[var(--text-muted)]">Secure</p>
+            <Shield className="w-6 h-6 text-[var(--card-pop-accent-orange)] mx-auto mb-2" />
+            <p className="text-xs font-semibold">Secure</p>
           </motion.div>
         </div>
 
@@ -114,54 +114,61 @@ function OfframpContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="glass-card p-8 text-center"
+          className="card-pop"
         >
-          <div className="mb-6">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center mb-4">
-              <Banknote className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
-              Ready to Cash Out?
-            </h3>
-            <p className="text-[var(--text-muted)] text-sm max-w-sm mx-auto">
-              Sign in to your Sphere account to convert USDC to fiat and
-              withdraw directly to your bank account.
-            </p>
+          <div className="card-pop-header">
+            <Wallet className="w-5 h-5" />
+            <span>Cash Out</span>
+            <span className="badge-pop badge-pop-green ml-auto">Live</span>
           </div>
-
-          <a
-            href={buildSphereUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary inline-flex items-center gap-2"
-          >
-            <Wallet className="w-4 h-4" />
-            Open Sphere
-            <ExternalLink className="w-4 h-4" />
-          </a>
-
-          <p className="text-[var(--text-muted)] text-xs mt-4">
-            Don&apos;t have a Sphere account?{" "}
-            <a
-              href="https://spherepay.co/signup"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--primary)] hover:underline"
-            >
-              Sign up free →
-            </a>
-          </p>
-
-          <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
-            <div className="p-3 rounded-lg bg-[var(--card)] border border-[var(--border)]">
-              <p className="text-[var(--text-muted)]">Supported</p>
-              <p className="font-medium text-[var(--text-primary)]">
-                40+ Countries
+          <div className="card-pop-body text-center">
+            <div className="mb-6">
+              <div className="w-16 h-16 mx-auto rounded-xl border-2 border-[var(--card-pop-border)] bg-[var(--card-pop-header)] flex items-center justify-center mb-4">
+                <Banknote className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Ready to Cash Out?</h3>
+              <p className="text-[var(--card-pop-text-secondary)] text-sm max-w-sm mx-auto">
+                Sign in to your Sphere account to convert USDC to fiat and
+                withdraw directly to your bank account.
               </p>
             </div>
-            <div className="p-3 rounded-lg bg-[var(--card)] border border-[var(--border)]">
-              <p className="text-[var(--text-muted)]">Settlement</p>
-              <p className="font-medium text-[var(--text-primary)]">1-2 Days</p>
+
+            <a
+              href={buildSphereUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-pop-primary inline-flex items-center gap-2"
+            >
+              <Wallet className="w-4 h-4" />
+              Open Sphere
+              <ExternalLink className="w-4 h-4" />
+            </a>
+
+            <p className="text-[var(--card-pop-text-secondary)] text-xs mt-4">
+              Don&apos;t have a Sphere account?{" "}
+              <a
+                href="https://spherepay.co/signup"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--primary)] hover:underline font-semibold"
+              >
+                Sign up free →
+              </a>
+            </p>
+
+            <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
+              <div className="p-3 rounded-lg bg-[var(--card-pop-header)] border-2 border-[var(--card-pop-border)]">
+                <p className="text-[var(--card-pop-text-secondary)] text-xs">
+                  Supported
+                </p>
+                <p className="font-bold">40+ Countries</p>
+              </div>
+              <div className="p-3 rounded-lg bg-[var(--card-pop-header)] border-2 border-[var(--card-pop-border)]">
+                <p className="text-[var(--card-pop-text-secondary)] text-xs">
+                  Settlement
+                </p>
+                <p className="font-bold">1-2 Days</p>
+              </div>
             </div>
           </div>
         </motion.div>
