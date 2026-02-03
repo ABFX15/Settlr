@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
 
         // Create payment record
         const payment = await createPayment({
-            sessionId: undefined,
+            sessionId: "",
             merchantId,
             merchantName,
             merchantWallet,
