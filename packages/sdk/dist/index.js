@@ -107,11 +107,13 @@ var SUPPORTED_TOKENS = {
 };
 var SETTLR_API_URL = {
   production: "https://settlr.dev/api",
-  development: "http://localhost:3000/api"
+  development: "https://settlr.dev/api"
+  // Always use production API
 };
 var SETTLR_CHECKOUT_URL = {
   production: "https://settlr.dev/checkout",
-  development: "http://localhost:3000/checkout"
+  development: "https://settlr.dev/checkout"
+  // Always use production checkout
 };
 var SUPPORTED_NETWORKS = ["devnet", "mainnet-beta"];
 var USDC_DECIMALS = 6;
@@ -207,8 +209,13 @@ var Settlr = class {
    * Fetches merchant wallet address if not provided in config.
    */
   async validateApiKey() {
-    if (this.validated) return;
+    console.log("[Settlr] validateApiKey called, validated:", this.validated, "apiBaseUrl:", this.apiBaseUrl);
+    if (this.validated) {
+      console.log("[Settlr] Already validated, skipping. merchantWallet:", this.merchantWallet?.toString(), "merchantWalletFromValidation:", this.merchantWalletFromValidation);
+      return;
+    }
     try {
+      console.log("[Settlr] Fetching validation from:", `${this.apiBaseUrl}/sdk/validate`);
       const response = await fetch(`${this.apiBaseUrl}/sdk/validate`, {
         method: "POST",
         headers: {
@@ -224,16 +231,19 @@ var Settlr = class {
         throw new Error(error.error || "API key validation failed");
       }
       const data = await response.json();
+      console.log("[Settlr] Validation response:", data);
       if (!data.valid) {
         throw new Error(data.error || "Invalid API key");
       }
       this.validated = true;
       this.merchantId = data.merchantId;
       this.tier = data.tier;
+      console.log("[Settlr] Setting wallet. data.merchantWallet:", data.merchantWallet, "this.merchantWallet:", this.merchantWallet?.toString());
       if (data.merchantWallet && !this.merchantWallet) {
         this.merchantWallet = new import_web32.PublicKey(data.merchantWallet);
         this.merchantWalletFromValidation = data.merchantWallet;
         this.config.merchant.walletAddress = data.merchantWallet;
+        console.log("[Settlr] Wallet SET! merchantWallet:", this.merchantWallet.toString(), "merchantWalletFromValidation:", this.merchantWalletFromValidation);
       }
       if (data.merchantName && !this.config.merchant.name) {
         this.config.merchant.name = data.merchantName;
@@ -274,8 +284,10 @@ var Settlr = class {
    */
   getCheckoutUrl(options) {
     const { amount, memo, orderId, successUrl, cancelUrl } = options;
+    console.log("[Settlr] getCheckoutUrl - config.wallet:", this.config.merchant.walletAddress, "merchantWalletFromValidation:", this.merchantWalletFromValidation, "validated:", this.validated);
     const walletAddress = this.config.merchant.walletAddress?.toString() || this.merchantWalletFromValidation;
     if (!walletAddress) {
+      console.error("[Settlr] No wallet address available!");
       throw new Error("Wallet address not available. Either provide walletAddress in config or call validateApiKey() first.");
     }
     const baseUrl = this.config.testMode ? SETTLR_CHECKOUT_URL.development : SETTLR_CHECKOUT_URL.production;
@@ -514,7 +526,7 @@ var Settlr = class {
     if (amount <= 0) {
       throw new Error("Amount must be greater than 0");
     }
-    const baseUrl = this.config.testMode ? "http://localhost:3000" : "https://settlr.dev";
+    const baseUrl = "https://settlr.dev";
     const response = await fetch(`${baseUrl}/api/checkout/sessions`, {
       method: "POST",
       headers: {
@@ -614,6 +626,13 @@ function SettlrProvider({
   }, [config]);
   (0, import_react.useEffect)(() => {
     let cancelled = false;
+    if (config.merchant.walletAddress) {
+      console.log(
+        "[Settlr] Wallet address provided in config, skipping API validation"
+      );
+      setReady(true);
+      return;
+    }
     settlr.validateApiKey().then(() => {
       if (!cancelled) {
         setReady(true);
@@ -631,7 +650,7 @@ function SettlrProvider({
     return () => {
       cancelled = true;
     };
-  }, [settlr, config.apiKey]);
+  }, [settlr, config.apiKey, config.merchant.walletAddress]);
   const value = (0, import_react.useMemo)(
     () => ({
       settlr,
@@ -737,11 +756,10 @@ function BuyButton({
   const handleClick = (0, import_react2.useCallback)(async () => {
     if (disabled || loading) return;
     if (!ready) {
-      const notReadyError = new Error(
-        sdkError?.message || "Settlr SDK not ready. Please check your API key configuration."
-      );
+      const errorMsg = sdkError?.message || "Settlr SDK not ready. Please check your API key configuration.";
+      console.error("[Settlr BuyButton]", errorMsg);
+      const notReadyError = new Error(errorMsg);
       onError?.(notReadyError);
-      return;
     }
     setLoading(true);
     setStatus("processing");

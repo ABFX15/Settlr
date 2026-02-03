@@ -31,7 +31,7 @@ declare const SUPPORTED_TOKENS: {
 type SupportedToken = keyof typeof SUPPORTED_TOKENS;
 declare const SETTLR_CHECKOUT_URL: {
     readonly production: "https://settlr.dev/checkout";
-    readonly development: "http://localhost:3000/checkout";
+    readonly development: "https://settlr.dev/checkout";
 };
 declare const SUPPORTED_NETWORKS: readonly ["devnet", "mainnet-beta"];
 type SupportedNetwork = typeof SUPPORTED_NETWORKS[number];

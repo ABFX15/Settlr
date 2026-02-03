@@ -161,14 +161,15 @@ export function BuyButton({
   const handleClick = useCallback(async () => {
     if (disabled || loading) return;
 
-    // Check if SDK is ready
+    // Check if SDK is ready - but allow if wallet is in config
     if (!ready) {
-      const notReadyError = new Error(
+      const errorMsg =
         sdkError?.message ||
-          "Settlr SDK not ready. Please check your API key configuration.",
-      );
+        "Settlr SDK not ready. Please check your API key configuration.";
+      console.error("[Settlr BuyButton]", errorMsg);
+      const notReadyError = new Error(errorMsg);
       onError?.(notReadyError);
-      return;
+      // Don't return early - try anyway if we can
     }
 
     setLoading(true);

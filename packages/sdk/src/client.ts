@@ -144,9 +144,14 @@ export class Settlr {
      * Fetches merchant wallet address if not provided in config.
      */
     async validateApiKey(): Promise<void> {
-        if (this.validated) return;
+        console.log('[Settlr] validateApiKey called, validated:', this.validated, 'apiBaseUrl:', this.apiBaseUrl);
+        if (this.validated) {
+            console.log('[Settlr] Already validated, skipping. merchantWallet:', this.merchantWallet?.toString(), 'merchantWalletFromValidation:', this.merchantWalletFromValidation);
+            return;
+        }
 
         try {
+            console.log('[Settlr] Fetching validation from:', `${this.apiBaseUrl}/sdk/validate`);
             const response = await fetch(`${this.apiBaseUrl}/sdk/validate`, {
                 method: 'POST',
                 headers: {
@@ -164,6 +169,7 @@ export class Settlr {
             }
 
             const data: ApiKeyValidation = await response.json();
+            console.log('[Settlr] Validation response:', data);
 
             if (!data.valid) {
                 throw new Error(data.error || 'Invalid API key');
@@ -174,10 +180,12 @@ export class Settlr {
             this.tier = data.tier;
 
             // Update merchant wallet from server if not provided in config
+            console.log('[Settlr] Setting wallet. data.merchantWallet:', data.merchantWallet, 'this.merchantWallet:', this.merchantWallet?.toString());
             if (data.merchantWallet && !this.merchantWallet) {
                 this.merchantWallet = new PublicKey(data.merchantWallet);
                 this.merchantWalletFromValidation = data.merchantWallet;
                 this.config.merchant.walletAddress = data.merchantWallet;
+                console.log('[Settlr] Wallet SET! merchantWallet:', this.merchantWallet.toString(), 'merchantWalletFromValidation:', this.merchantWalletFromValidation);
             }
 
             // Update merchant name from server if available
@@ -231,8 +239,10 @@ export class Settlr {
         const { amount, memo, orderId, successUrl, cancelUrl } = options;
 
         // Get wallet from config or from API validation
+        console.log('[Settlr] getCheckoutUrl - config.wallet:', this.config.merchant.walletAddress, 'merchantWalletFromValidation:', this.merchantWalletFromValidation, 'validated:', this.validated);
         const walletAddress = this.config.merchant.walletAddress?.toString() || this.merchantWalletFromValidation;
         if (!walletAddress) {
+            console.error('[Settlr] No wallet address available!');
             throw new Error('Wallet address not available. Either provide walletAddress in config or call validateApiKey() first.');
         }
 
@@ -554,9 +564,8 @@ export class Settlr {
             throw new Error('Amount must be greater than 0');
         }
 
-        const baseUrl = this.config.testMode
-            ? 'http://localhost:3000'
-            : 'https://settlr.dev';
+        // Always use production URL - Settlr is deployed to Vercel
+        const baseUrl = 'https://settlr.dev';
 
         const response = await fetch(`${baseUrl}/api/checkout/sessions`, {
             method: 'POST',

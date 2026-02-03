@@ -1,6 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateApiKey, checkRateLimit } from "@/lib/db";
 
+// CORS headers for SDK requests from any origin
+const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, X-API-Key",
+};
+
+/**
+ * OPTIONS /api/sdk/validate
+ * Handle CORS preflight requests
+ */
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
+
 /**
  * POST /api/sdk/validate
  * Validates an API key and checks rate limits
@@ -12,7 +30,7 @@ export async function POST(request: NextRequest) {
         if (!apiKey) {
             return NextResponse.json(
                 { valid: false, error: "API key required" },
-                { status: 401 }
+                { status: 401, headers: corsHeaders }
             );
         }
 
@@ -29,6 +47,7 @@ export async function POST(request: NextRequest) {
                 {
                     status: 429,
                     headers: {
+                        ...corsHeaders,
                         "X-RateLimit-Remaining": rateLimit.remaining.toString(),
                         "X-RateLimit-Reset": rateLimit.resetAt.toString(),
                         "Retry-After": Math.ceil((rateLimit.resetAt - Date.now()) / 1000).toString(),
@@ -43,7 +62,7 @@ export async function POST(request: NextRequest) {
         if (!validation.valid) {
             return NextResponse.json(
                 { valid: false, error: validation.error || "Invalid API key" },
-                { status: 401 }
+                { status: 401, headers: corsHeaders }
             );
         }
 
@@ -59,6 +78,7 @@ export async function POST(request: NextRequest) {
             },
             {
                 headers: {
+                    ...corsHeaders,
                     "X-RateLimit-Limit": (validation.rateLimit || 60).toString(),
                     "X-RateLimit-Remaining": rateLimit.remaining.toString(),
                     "X-RateLimit-Reset": rateLimit.resetAt.toString(),
@@ -69,7 +89,7 @@ export async function POST(request: NextRequest) {
         console.error("API key validation error:", error);
         return NextResponse.json(
             { valid: false, error: "Validation failed" },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }

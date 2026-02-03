@@ -107,6 +107,15 @@ export function SettlrProvider({
   useEffect(() => {
     let cancelled = false;
 
+    // If wallet is already in config, we're ready immediately
+    if (config.merchant.walletAddress) {
+      console.log(
+        "[Settlr] Wallet address provided in config, skipping API validation",
+      );
+      setReady(true);
+      return;
+    }
+
     settlr
       .validateApiKey()
       .then(() => {
@@ -119,7 +128,7 @@ export function SettlrProvider({
         if (!cancelled) {
           console.error("[Settlr] API key validation failed:", err);
           setError(err instanceof Error ? err : new Error(String(err)));
-          // Still mark as ready for test keys
+          // Still mark as ready for test keys (they work without validation)
           if (config.apiKey?.startsWith("sk_test_")) {
             setReady(true);
           }
@@ -129,7 +138,7 @@ export function SettlrProvider({
     return () => {
       cancelled = true;
     };
-  }, [settlr, config.apiKey]);
+  }, [settlr, config.apiKey, config.merchant.walletAddress]);
 
   const value = useMemo<SettlrContextValue>(
     () => ({
