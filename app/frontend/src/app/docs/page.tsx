@@ -1174,12 +1174,12 @@ function CodeBlock({
           .replace(/"([^"]+)":/g, '<span class="text-purple-400">"$1"</span>:')
           .replace(
             /: "([^"]+)"/g,
-            ': <span class="text-purple-400">"$1"</span>'
+            ': <span class="text-purple-400">"$1"</span>',
           )
           .replace(/: (\d+)/g, ': <span class="text-orange-400">$1</span>')
           .replace(
             /: (true|false|null)/g,
-            ': <span class="text-blue-400">$1</span>'
+            ': <span class="text-blue-400">$1</span>',
           );
         return (
           <div key={i} dangerouslySetInnerHTML={{ __html: highlighted }} />

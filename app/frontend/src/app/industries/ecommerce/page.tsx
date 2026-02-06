@@ -18,18 +18,17 @@ import {
   TrendingUp,
   X,
   Percent,
-    title: "1% Flat Fee",
+  RotateCcw,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
-    stat: "1%",
 
 const features = [
   {
     icon: DollarSign,
-    title: "2% Flat Fee",
+    title: "1% Flat Fee",
     description:
       "No per-transaction fees. No monthly minimums. Save 30%+ compared to Stripe.",
-    stat: "2%",
+    stat: "1%",
     statLabel: "flat, always",
   },
   {

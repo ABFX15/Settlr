@@ -36,8 +36,8 @@ const features = [
     icon: DollarSign,
     title: "No Wire Fees",
     description:
-      "Save $25-50 per transaction. 2% flat beats wire fees every time.",
-    stat: "2%",
+      "Save $25-50 per transaction. 1% flat beats wire fees every time.",
+    stat: "1%",
     statLabel: "flat fee",
   },
   {
@@ -90,7 +90,7 @@ const painPoints = [
 ];
 
 const stats = [
-  { value: "2%", label: "Flat Fee" },
+  { value: "1%", label: "Flat Fee" },
   { value: "Instant", label: "Settlement" },
   { value: "24/7", label: "Processing" },
   { value: "195+", label: "Countries" },
@@ -234,7 +234,7 @@ export default function B2BPage() {
                     className="rounded-2xl border border-[#a855f7]/20 bg-gradient-to-br from-[#a855f7]/10 to-transparent p-6 backdrop-blur-sm"
                   >
                     <DollarSign className="mb-3 h-8 w-8 text-[#a855f7]" />
-                    <div className="text-3xl font-bold text-white">2%</div>
+                    <div className="text-3xl font-bold text-white">1%</div>
                     <div className="text-sm text-gray-400">vs $25+ wire</div>
                   </motion.div>
                 </div>
@@ -492,7 +492,7 @@ export default function B2BPage() {
               {
                 feature: "Fee Structure",
                 wire: "$25-50 + FX",
-                settlr: "2% flat",
+                settlr: "1% flat",
               },
               {
                 feature: "Settlement Time",

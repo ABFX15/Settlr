@@ -27,14 +27,14 @@ import { getAssociatedTokenAddress } from "@solana/spl-token";
 
 // Constants
 const PROGRAM_ID = new PublicKey(
-  "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5"
+  "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5",
 );
 const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
 const RPC_ENDPOINT = "https://api.devnet.solana.com";
 
 // Your Squads multisig vault address
 const SQUADS_VAULT = new PublicKey(
-  "DthkuDsPKR6MqqV28rVSBEqdgnuNtEU6QpLACZ7bCBpD"
+  "DthkuDsPKR6MqqV28rVSBEqdgnuNtEU6QpLACZ7bCBpD",
 );
 
 // Authorized admin wallets (Squads members)
@@ -62,7 +62,7 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [treasuryBalance, setTreasuryBalance] = useState<number>(0);
   const [platformConfig, setPlatformConfig] = useState<PlatformConfig | null>(
-    null
+    null,
   );
   const [copied, setCopied] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -88,14 +88,14 @@ export default function AdminDashboardPage() {
       // Derive Platform Config PDA
       const [platformConfigPDA] = PublicKey.findProgramAddressSync(
         [Buffer.from("platform_config")],
-        PROGRAM_ID
+        PROGRAM_ID,
       );
 
       // Get treasury ATA
       const treasuryAta = await getAssociatedTokenAddress(
         USDC_MINT,
         platformConfigPDA,
-        true
+        true,
       );
 
       // Fetch treasury balance

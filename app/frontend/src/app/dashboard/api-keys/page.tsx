@@ -42,7 +42,7 @@ export default function ApiKeysPage() {
   const [creating, setCreating] = useState(false);
   const [newKeyName, setNewKeyName] = useState("");
   const [newKeyTier, setNewKeyTier] = useState<"free" | "pro" | "enterprise">(
-    "free"
+    "free",
   );
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newlyCreatedKey, setNewlyCreatedKey] = useState<string | null>(null);
@@ -110,7 +110,7 @@ export default function ApiKeysPage() {
   const revokeKey = async (keyId: string) => {
     if (
       !confirm(
-        "Are you sure you want to revoke this API key? This cannot be undone."
+        "Are you sure you want to revoke this API key? This cannot be undone.",
       )
     ) {
       return;
@@ -273,7 +273,7 @@ export default function ApiKeysPage() {
                           <h3 className="font-semibold">{key.name}</h3>
                           <span
                             className={`px-2 py-0.5 rounded-full text-xs border ${getTierColor(
-                              key.tier
+                              key.tier,
                             )}`}
                           >
                             <TierIcon className="w-3 h-3 inline mr-1" />
