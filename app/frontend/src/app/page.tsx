@@ -882,19 +882,21 @@ export default function LandingPage() {
               >
                 {/* Main Headline */}
                 <h1 className="text-5xl font-bold leading-tight tracking-tight md:text-6xl lg:text-7xl text-white">
-                  CRYPTO PAYMENTS
+                  AI &amp; SAAS PAYMENTS
                   <br />
-                  <span className="italic font-black">MADE PRIVATE.</span>
+                  <span className="italic font-black">IN PRIVATE USDC.</span>
                 </h1>
 
                 {/* Subheadline */}
                 <p className="text-2xl md:text-3xl font-semibold text-white">
-                  Accept stablecoin payments in your app in 10 minutes.
+                  Stripe alternative for AI/SaaS. Accept stablecoin payments in
+                  10 minutes.
                 </p>
 
                 {/* Description */}
                 <p className="text-xl text-white/90 md:text-2xl max-w-xl">
-                  Private, gasless USDC payments & subscriptions for modern apps. Stripe-like SDK for crypto.
+                  Private, gasless USDC checkout and subscriptions with a
+                  drop-in SDK. Users pay by email, you settle instantly.
                 </p>
 
                 {/* Feature List */}
@@ -1229,17 +1231,10 @@ export default function LandingPage() {
               <span className="text-lg">We</span>
               <span className="text-lg italic">Empower</span>
             </div>
-            {[
-              { icon: "💜", label: "Creators", active: false },
-              { icon: "🏪", label: "Marketplace", active: true },
-              { icon: "🛒", label: "E-Commerce", active: false },
-              { icon: "🎮", label: "iGaming", active: false },
-            ].map((item) => (
+            {[{ icon: "🤖", label: "AI/SaaS", active: true }].map((item) => (
               <Link
                 key={item.label}
-                href={`/industries/${item.label
-                  .toLowerCase()
-                  .replace("-", "")}`}
+                href="/industries/ai-saas"
                 className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
                   item.active
                     ? "text-gray-900 font-semibold"
@@ -1854,13 +1849,13 @@ export default function LandingPage() {
                 Who It&apos;s For
               </h2>
               <p className="text-xl text-white/80 max-w-2xl mx-auto">
-                Settlr is built for businesses that need reliable global
-                payments without traditional banking friction.
+                Settlr is built for AI and SaaS teams that need reliable global
+                payments without processor risk.
               </p>
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-6">
-              {/* Card 1: Global E-commerce - Dark Green like PayRam */}
+              {/* Card 1: AI APIs */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -1873,26 +1868,26 @@ export default function LandingPage() {
                 <div className="absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-tl from-[#14F195]/20 to-transparent rounded-tl-full" />
 
                 <div className="relative z-10">
-                  <div className="text-[#14F195] text-4xl mb-4">🌍</div>
+                  <div className="text-[#14F195] text-4xl mb-4">🤖</div>
                   <h3 className="text-[#14F195] text-xl font-bold mb-3">
-                    Global E-commerce
+                    AI APIs
                   </h3>
                   <p className="text-gray-300 text-sm mb-6">
-                    SaaS companies, course creators, and digital sellers
-                    reaching customers worldwide.
+                    Usage-based billing with instant settlement and no account
+                    holds.
                   </p>
                   <ul className="space-y-3 text-sm text-gray-400">
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#14F195] mt-0.5 flex-shrink-0" />
-                      <span>No 40% decline rates in emerging markets</span>
+                      <span>Accept USDC from global customers</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#14F195] mt-0.5 flex-shrink-0" />
-                      <span>Skip PayPal&apos;s 21-day holds</span>
+                      <span>Settle instantly to your wallet</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#14F195] mt-0.5 flex-shrink-0" />
-                      <span>LatAm/Africa customers use USDC daily</span>
+                      <span>No chargebacks on API usage</span>
                     </li>
                   </ul>
                 </div>
@@ -1916,7 +1911,7 @@ export default function LandingPage() {
                 </div>
               </motion.div>
 
-              {/* Card 2: B2B Services - White/Light with purple accents */}
+              {/* Card 2: SaaS Subscriptions */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -1926,26 +1921,25 @@ export default function LandingPage() {
                 className="group relative rounded-2xl bg-white p-8 min-h-[420px] overflow-hidden"
               >
                 <div className="relative z-10">
-                  <div className="text-[#9945FF] text-4xl mb-4">💼</div>
+                  <div className="text-[#9945FF] text-4xl mb-4">🔁</div>
                   <h3 className="text-gray-900 text-xl font-bold mb-3">
-                    B2B & Freelancers
+                    SaaS Subscriptions
                   </h3>
                   <p className="text-gray-500 text-sm mb-6">
-                    Agencies, dev shops, consultants with international clients
-                    tired of wire fees.
+                    Recurring billing without processor risk or reserve holds.
                   </p>
                   <ul className="space-y-3 text-sm text-gray-600">
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#9945FF] mt-0.5 flex-shrink-0" />
-                      <span>Same-day vs 3-5 day wires</span>
+                      <span>Subscription checkout in minutes</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#9945FF] mt-0.5 flex-shrink-0" />
-                      <span>1% flat vs $30-100 wire fees</span>
+                      <span>Gasless payments for users</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#9945FF] mt-0.5 flex-shrink-0" />
-                      <span>No FX conversion losses</span>
+                      <span>No chargebacks on subscriptions</span>
                     </li>
                   </ul>
                 </div>
@@ -1974,7 +1968,7 @@ export default function LandingPage() {
                 </div>
               </motion.div>
 
-              {/* Card 3: High-Risk Merchants - Purple gradient */}
+              {/* Card 3: Stripe-Blocked Startups */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -1991,22 +1985,22 @@ export default function LandingPage() {
                 <div className="absolute top-0 right-0 w-40 h-40 bg-[#9945FF]/30 rounded-full blur-3xl" />
 
                 <div className="relative z-10">
-                  <div className="text-4xl mb-4">🛡️</div>
+                  <div className="text-4xl mb-4">🚫</div>
                   <h3 className="text-white text-xl font-bold mb-3">
-                    Underserved Industries
+                    Stripe-Blocked Startups
                   </h3>
                   <p className="text-gray-400 text-sm mb-6">
-                    CBD, supplements, adult creators, crypto services — legal
-                    but hard to bank.
+                    Get live fast when Stripe says no. Keep shipping and
+                    collecting revenue.
                   </p>
                   <ul className="space-y-3 text-sm text-gray-400">
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#14F195] mt-0.5 flex-shrink-0" />
-                      <span>No underwriting needed</span>
+                      <span>No underwriting or reserve holds</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#14F195] mt-0.5 flex-shrink-0" />
-                      <span>No reserve holds on funds</span>
+                      <span>Accept global USDC instantly</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-[#14F195] mt-0.5 flex-shrink-0" />

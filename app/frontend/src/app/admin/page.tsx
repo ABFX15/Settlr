@@ -110,7 +110,7 @@ export default function AdminDashboardPage() {
       const config: PlatformConfig = {
         authority: SQUADS_VAULT.toBase58(),
         treasury: treasuryAta.toBase58(),
-        feeBps: 200, // 2%
+        feeBps: 100, // 1%
         isActive: true,
       };
       setPlatformConfig(config);

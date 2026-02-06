@@ -192,7 +192,7 @@ export default async function Image() {
               }}
             >
               <span>💰</span>
-              <span>2% Fee</span>
+              <span>1% Fee</span>
             </div>
           </div>
         </div>

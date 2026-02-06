@@ -5,15 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Menu,
-  X,
-  ChevronDown,
-  Gamepad2,
-  ShoppingCart,
-  Users,
-  Palette,
-} from "lucide-react";
+import { Menu, X, ChevronDown, Palette } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
 
 const navLinks = [
@@ -26,28 +18,10 @@ const navLinks = [
 
 const industryLinks = [
   {
-    href: "/industries/creators",
-    label: "Creators",
+    href: "/industries/ai-saas",
+    label: "AI/SaaS (Stripe-blocked)",
     icon: Palette,
-    description: "Digital products & content",
-  },
-  {
-    href: "/industries/ecommerce",
-    label: "E-Commerce",
-    icon: ShoppingCart,
-    description: "Online stores & DTC",
-  },
-  {
-    href: "/industries/b2b",
-    label: "B2B & Freelancers",
-    icon: Users,
-    description: "Cross-border services",
-  },
-  {
-    href: "/industries/igaming",
-    label: "iGaming",
-    icon: Gamepad2,
-    description: "Casinos & betting",
+    description: "Launch payments when Stripe blocks you",
   },
 ];
 
@@ -110,7 +84,7 @@ export function Navbar() {
             </Link>
           ))}
 
-          {/* Industries Dropdown */}
+          {/* AI/SaaS Dropdown */}
           <div ref={industriesRef} className="relative">
             <button
               onClick={() => setIndustriesOpen(!industriesOpen)}
@@ -120,7 +94,7 @@ export function Navbar() {
                   : "text-white/60 hover:text-white"
               }`}
             >
-              Industries
+              AI/SaaS
               <ChevronDown
                 className={`h-4 w-4 transition-transform ${
                   industriesOpen ? "rotate-180" : ""
@@ -245,10 +219,10 @@ export function Navbar() {
                 </Link>
               ))}
 
-              {/* Mobile Industries Section */}
+              {/* Mobile AI/SaaS Section */}
               <div className="mt-2 border-t border-white/10 pt-2">
                 <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white/40">
-                  Industries
+                  AI/SaaS
                 </div>
                 {industryLinks.map((link) => (
                   <Link

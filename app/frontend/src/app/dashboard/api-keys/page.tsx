@@ -338,7 +338,7 @@ export default function ApiKeysPage() {
           <h3 className="font-semibold mb-4">Rate Limits by Tier</h3>
           <div className="grid grid-cols-3 gap-4">
             {[
-              { tier: "Free", limit: "60/min", fee: "2%", icon: Shield },
+              { tier: "Free", limit: "60/min", fee: "1%", icon: Shield },
               { tier: "Pro", limit: "300/min", fee: "1.5%", icon: Zap },
               {
                 tier: "Enterprise",

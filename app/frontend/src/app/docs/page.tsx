@@ -286,7 +286,7 @@ function CheckoutPage() {
           </div>
           <p className="text-gray-400">
             Your users can now pay with their wallet or email. Payments settle
-            instantly to your registered wallet with a 2% fee.
+            instantly to your registered wallet with a 1% fee.
           </p>
           <div className="mt-4 grid md:grid-cols-2 gap-4">
             <div className="bg-gray-900 rounded-lg p-4">
