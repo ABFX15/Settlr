@@ -887,11 +887,14 @@ export default function LandingPage() {
                   <span className="italic font-black">MADE PRIVATE.</span>
                 </h1>
 
+                {/* Subheadline */}
+                <p className="text-2xl md:text-3xl font-semibold text-white">
+                  Accept stablecoin payments in your app in 10 minutes.
+                </p>
+
                 {/* Description */}
                 <p className="text-xl text-white/90 md:text-2xl max-w-xl">
-                  The first privacy-first crypto checkout for merchants.
-                  Gasless, any wallet, shielded transactions. You receive USDC.
-                  Instantly.
+                  Private, gasless USDC payments & subscriptions for modern apps. Stripe-like SDK for crypto.
                 </p>
 
                 {/* Feature List */}
