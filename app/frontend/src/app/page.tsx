@@ -880,11 +880,18 @@ export default function LandingPage() {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="space-y-8"
               >
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur">
+                  <span className="h-2 w-2 rounded-full bg-[#14F195]" />
+                  Built for AI/SaaS teams blocked by Stripe
+                </div>
+
                 {/* Main Headline */}
                 <h1 className="text-5xl font-bold leading-tight tracking-tight md:text-6xl lg:text-7xl text-white">
-                  AI &amp; SAAS PAYMENTS
+                  AI &amp; SaaS payments
                   <br />
-                  <span className="italic font-black">IN PRIVATE USDC.</span>
+                  <span className="bg-gradient-to-r from-white via-[#14F195] to-white bg-clip-text text-transparent italic font-black">
+                    in private USDC.
+                  </span>
                 </h1>
 
                 {/* Subheadline */}
@@ -895,8 +902,9 @@ export default function LandingPage() {
 
                 {/* Description */}
                 <p className="text-xl text-white/90 md:text-2xl max-w-xl">
-                  Private, gasless USDC checkout and subscriptions with a
-                  drop-in SDK. Users pay by email, you settle instantly.
+                  Settlr is a drop-in payments SDK for AI and SaaS products.
+                  Private, gasless USDC checkout and subscriptions. Users pay by
+                  email, you settle instantly.
                 </p>
 
                 {/* Feature List */}
@@ -955,6 +963,21 @@ export default function LandingPage() {
                   >
                     View Demo
                   </Link>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
+                  <span className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/80" />
+                    1% flat fee
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/80" />
+                    No setup fees
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/80" />
+                    Go live today
+                  </span>
                 </div>
               </motion.div>
 

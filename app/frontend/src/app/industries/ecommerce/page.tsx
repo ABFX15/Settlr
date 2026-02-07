@@ -21,6 +21,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
+import { Footer } from "@/components/ui/Footer";
 
 const features = [
   {
