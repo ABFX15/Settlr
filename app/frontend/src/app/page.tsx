@@ -880,40 +880,42 @@ export default function LandingPage() {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="space-y-8"
               >
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur">
-                  <span className="h-2 w-2 rounded-full bg-[#14F195]" />
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/90 bg-white px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[#0a0a0f] shadow-[0_12px_30px_rgba(255,255,255,0.45)]">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#14F195] shadow-[0_0_12px_rgba(20,241,149,0.9)]" />
                   Built for AI/SaaS teams blocked by Stripe
                 </div>
 
                 {/* Main Headline */}
                 <h1 className="text-5xl font-bold leading-tight tracking-tight md:text-6xl lg:text-7xl text-white">
-                  AI &amp; SaaS payments
+                  The private payment stack for global-first
                   <br />
                   <span className="bg-gradient-to-r from-white via-[#14F195] to-white bg-clip-text text-transparent italic font-black">
-                    in private USDC.
+                    AI &amp; SaaS companies
                   </span>
                 </h1>
 
                 {/* Subheadline */}
                 <p className="text-2xl md:text-3xl font-semibold text-white">
-                  Stripe alternative for AI/SaaS. Accept stablecoin payments in
-                  10 minutes.
+                  Accept recurring payments in stablecoins, hold global revenue
+                  privately, and move money without banks or Stripe limitations.
                 </p>
 
                 {/* Description */}
                 <p className="text-xl text-white/90 md:text-2xl max-w-xl">
-                  Settlr is a drop-in payments SDK for AI and SaaS products.
-                  Private, gasless USDC checkout and subscriptions. Users pay by
-                  email, you settle instantly.
+                  Settlr is stablecoin-native billing and payments
+                  infrastructure designed for internet companies. Integrate once
+                  to accept subscriptions, invoices and one-off payments
+                  globally — with instant settlement and no public transaction
+                  exposure.
                 </p>
 
                 {/* Feature List */}
                 <div className="flex flex-wrap gap-4">
                   {[
-                    "Private payments",
-                    "Gasless",
-                    "Any wallet",
-                    "1% flat fees",
+                    "Stablecoin subscriptions",
+                    "Instant global settlement",
+                    "No Stripe limitations",
+                    "Drop-in SDK",
                   ].map((feature) => (
                     <div
                       key={feature}
@@ -952,7 +954,7 @@ export default function LandingPage() {
                     className="group relative overflow-hidden rounded-xl px-8 py-4 text-lg font-semibold text-[#9945FF] bg-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
                   >
                     <span className="flex items-center gap-2">
-                      Get Started Free
+                      Start accepting payments in minutes
                       <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </Link>
