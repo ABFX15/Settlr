@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Palette } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
 
 const navLinks = [
@@ -19,9 +19,8 @@ const navLinks = [
 const industryLinks = [
   {
     href: "/industries/ai-saas",
-    label: "AI/SaaS (Stripe-blocked)",
-    icon: Palette,
-    description: "Launch payments when Stripe blocks you",
+    label: "AI / SaaS",
+    description: "Payments when Stripe says no",
   },
 ];
 
@@ -39,7 +38,6 @@ export function Navbar() {
 
   const isIndustriesActive = pathname.startsWith("/industries");
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -54,8 +52,8 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#0a0a0f] shadow-lg">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-xl">
+      <nav className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 md:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <SettlrLogoWithIcon size="sm" variant="light" />
@@ -67,43 +65,43 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`relative px-4 py-2 text-sm font-medium transition-colors ${
+              className={`relative px-3 py-1.5 text-sm font-medium transition-colors rounded-md ${
                 isActive(link.href)
-                  ? "text-white"
-                  : "text-white/60 hover:text-white"
+                  ? "text-[var(--text-primary)]"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
               }`}
             >
               {link.label}
               {isActive(link.href) && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500"
+                  className="absolute -bottom-[13px] left-0 right-0 h-px bg-[var(--accent)]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
             </Link>
           ))}
 
-          {/* AI/SaaS Dropdown */}
+          {/* Industries Dropdown */}
           <div ref={industriesRef} className="relative">
             <button
               onClick={() => setIndustriesOpen(!industriesOpen)}
-              className={`relative flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors ${
+              className={`relative flex items-center gap-1 px-3 py-1.5 text-sm font-medium transition-colors rounded-md ${
                 isIndustriesActive
-                  ? "text-white"
-                  : "text-white/60 hover:text-white"
+                  ? "text-[var(--text-primary)]"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
               }`}
             >
-              AI/SaaS
+              Industries
               <ChevronDown
-                className={`h-4 w-4 transition-transform ${
+                className={`h-3.5 w-3.5 transition-transform ${
                   industriesOpen ? "rotate-180" : ""
                 }`}
               />
               {isIndustriesActive && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500"
+                  className="absolute -bottom-[13px] left-0 right-0 h-px bg-[var(--accent)]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -112,32 +110,27 @@ export function Navbar() {
             <AnimatePresence>
               {industriesOpen && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-64 rounded-xl border border-white/10 bg-[#0a0a0f]/95 p-2 shadow-xl backdrop-blur-xl"
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute left-0 top-full mt-3 w-56 rounded-lg border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-xl"
                 >
                   {industryLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
                       onClick={() => setIndustriesOpen(false)}
-                      className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-colors ${
+                      className={`flex flex-col gap-0.5 rounded-md px-3 py-2.5 transition-colors ${
                         pathname === link.href
-                          ? "bg-purple-500/20 text-white"
-                          : "text-white/70 hover:bg-white/5 hover:text-white"
+                          ? "bg-[var(--accent-muted)] text-[var(--text-primary)]"
+                          : "text-[var(--text-secondary)] hover:bg-[var(--card-hover)] hover:text-[var(--text-primary)]"
                       }`}
                     >
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-cyan-500/20">
-                        <link.icon className="h-4 w-4 text-purple-400" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium">{link.label}</div>
-                        <div className="text-xs text-white/40">
-                          {link.description}
-                        </div>
-                      </div>
+                      <span className="text-sm font-medium">{link.label}</span>
+                      <span className="text-xs text-[var(--text-muted)]">
+                        {link.description}
+                      </span>
                     </Link>
                   ))}
                 </motion.div>
@@ -152,13 +145,13 @@ export function Navbar() {
             <>
               <Link
                 href="/client-dashboard"
-                className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-white/10"
+                className="rounded-md border border-[var(--border)] bg-[var(--card)] px-3.5 py-1.5 text-sm font-medium text-[var(--text-primary)] transition-all hover:border-[var(--border-hover)]"
               >
                 Dashboard
               </Link>
               <button
                 onClick={logout}
-                className="text-sm text-white/60 transition-colors hover:text-white"
+                className="text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--text-secondary)]"
               >
                 Sign Out
               </button>
@@ -167,13 +160,13 @@ export function Navbar() {
             <>
               <button
                 onClick={login}
-                className="text-sm font-medium text-white/60 transition-colors hover:text-white"
+                className="text-sm font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
               >
                 Sign In
               </button>
               <Link
                 href="/onboarding"
-                className="rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40"
+                className="rounded-md bg-[var(--accent)] px-3.5 py-1.5 text-sm font-semibold text-[#09090b] transition-all hover:shadow-[0_0_16px_var(--accent-glow)]"
               >
                 Get Started
               </Link>
@@ -184,7 +177,7 @@ export function Navbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white md:hidden"
+          className="rounded-md p-2 text-[var(--text-muted)] transition-colors hover:bg-[var(--card)] hover:text-[var(--text-primary)] md:hidden"
         >
           {mobileMenuOpen ? (
             <X className="h-5 w-5" />
@@ -201,53 +194,51 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-b border-white/5 bg-[#0a0a0f]/95 backdrop-blur-xl md:hidden"
+            className="border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur-xl md:hidden"
           >
-            <div className="flex flex-col px-4 py-4">
+            <div className="flex flex-col px-4 py-3 gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                  className={`rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
                     isActive(link.href)
-                      ? "bg-white/5 text-white"
-                      : "text-white/60 hover:bg-white/5 hover:text-white"
+                      ? "bg-[var(--card)] text-[var(--text-primary)]"
+                      : "text-[var(--text-muted)] hover:bg-[var(--card)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
 
-              {/* Mobile AI/SaaS Section */}
-              <div className="mt-2 border-t border-white/10 pt-2">
-                <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white/40">
-                  AI/SaaS
+              <div className="mt-1 border-t border-[var(--border)] pt-2">
+                <div className="px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
+                  Industries
                 </div>
                 {industryLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                    className={`flex flex-col rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
                       pathname === link.href
-                        ? "bg-white/5 text-white"
-                        : "text-white/60 hover:bg-white/5 hover:text-white"
+                        ? "bg-[var(--card)] text-[var(--text-primary)]"
+                        : "text-[var(--text-muted)] hover:bg-[var(--card)] hover:text-[var(--text-primary)]"
                     }`}
                   >
-                    <link.icon className="h-4 w-4 text-purple-400" />
                     {link.label}
                   </Link>
                 ))}
               </div>
 
-              <div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-4">
+              <div className="mt-2 flex flex-col gap-2 border-t border-[var(--border)] pt-3">
                 {ready && authenticated ? (
                   <>
                     <Link
                       href="/client-dashboard"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-medium text-white"
+                      className="rounded-md border border-[var(--border)] bg-[var(--card)] px-3 py-2.5 text-center text-sm font-medium text-[var(--text-primary)]"
                     >
                       Dashboard
                     </Link>
@@ -256,7 +247,7 @@ export function Navbar() {
                         logout();
                         setMobileMenuOpen(false);
                       }}
-                      className="rounded-lg px-4 py-3 text-sm font-medium text-white/60"
+                      className="rounded-md px-3 py-2.5 text-sm font-medium text-[var(--text-muted)]"
                     >
                       Sign Out
                     </button>
@@ -268,14 +259,14 @@ export function Navbar() {
                         login();
                         setMobileMenuOpen(false);
                       }}
-                      className="rounded-lg border border-white/10 px-4 py-3 text-sm font-medium text-white/60"
+                      className="rounded-md border border-[var(--border)] px-3 py-2.5 text-sm font-medium text-[var(--text-muted)]"
                     >
                       Sign In
                     </button>
                     <Link
                       href="/onboarding"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-4 py-3 text-center text-sm font-semibold text-white"
+                      className="rounded-md bg-[var(--accent)] px-3 py-2.5 text-center text-sm font-semibold text-[#09090b]"
                     >
                       Get Started
                     </Link>

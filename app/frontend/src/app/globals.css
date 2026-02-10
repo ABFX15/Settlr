@@ -1,54 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  /* Core colors - dark theme matching homepage */
-  --background: #0a0a0f;
+  /* Core palette - deep charcoal base with emerald accent */
+  --background: #09090b;
+  --background-secondary: #0f0f12;
   --foreground: #fafafa;
-  --card: #12121a;
-  --card-hover: #1a1a24;
-  --border: rgba(255, 255, 255, 0.1);
-  --border-hover: rgba(255, 255, 255, 0.2);
+  --card: #111113;
+  --card-hover: #18181b;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
 
-  /* NEW: Pop card style - cream cards with dark borders (Mission Control style) */
-  --card-pop: #fffef5;
-  --card-pop-header: #f5f4eb;
-  --card-pop-border: #1a1a1a;
-  --card-pop-text: #1a1a1a;
-  --card-pop-text-secondary: #52525b;
-  --card-pop-accent-red: #ff5252;
-  --card-pop-accent-green: #4caf50;
-  --card-pop-accent-blue: #2196f3;
-  --card-pop-accent-orange: #ff9800;
+  /* Brand accent - Solana green as primary accent */
+  --accent: #14F195;
+  --accent-hover: #2dffa5;
+  --accent-muted: rgba(20, 241, 149, 0.1);
+  --accent-glow: rgba(20, 241, 149, 0.25);
 
-  /* Brand gradient - purple/cyan neon theme */
-  --primary: rgb(168, 85, 247);
-  --primary-hover: rgb(192, 132, 252);
-  --primary-glow: rgba(168, 85, 247, 0.4);
-  --secondary: rgb(34, 211, 238);
-  --secondary-hover: rgb(103, 232, 249);
-
-  /* Accent colors for components */
-  --accent-primary: rgb(168, 85, 247);
-  --accent-muted: rgba(168, 85, 247, 0.1);
-
-  /* Card backgrounds */
-  --card-bg: #12121a;
-  --border-color: rgba(139, 92, 246, 0.2);
+  /* Secondary accent - muted teal */
+  --secondary: #06b6d4;
+  --secondary-muted: rgba(6, 182, 212, 0.1);
 
   /* Status colors */
   --success: #22c55e;
-  --success-glow: rgba(34, 197, 94, 0.3);
   --error: #ef4444;
   --warning: #f59e0b;
 
   /* Text hierarchy */
-  --text-primary: #ffffff;
+  --text-primary: #fafafa;
   --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
+  --text-muted: #52525b;
 
-  /* Glassmorphism */
-  --glass: rgba(18, 18, 26, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  /* Radius */
+  --radius: 0.75rem;
 }
 
 @theme inline {
@@ -63,7 +46,7 @@
 }
 
 html {
-  background: #09090b;
+  background: var(--background);
 }
 
 body {
@@ -74,291 +57,57 @@ body {
   overflow-x: hidden;
 }
 
-/* Animated gradient background */
+/* Subtle ambient glow */
 .gradient-bg {
   position: fixed;
   inset: 0;
   z-index: -1;
   background: radial-gradient(
-      ellipse 80% 50% at 50% -20%,
-      rgba(139, 92, 246, 0.15),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 60% 40% at 100% 100%,
-      rgba(6, 182, 212, 0.1),
+      ellipse 60% 40% at 50% -10%,
+      rgba(20, 241, 149, 0.06),
       transparent
     ),
     var(--background);
 }
 
-/* Glass card effect */
+/* Glass card */
 .glass-card {
-  background: var(--glass);
+  background: rgba(17, 17, 19, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--glass-border);
-  border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
-/* Glass card with pop style border */
-.glass-card-pop {
-  background: rgba(255, 254, 245, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2.5px solid var(--card-pop-border);
-  border-radius: 12px;
-  color: var(--card-pop-text);
-  box-shadow: 0 3px 0 var(--card-pop-border);
-}
-
-/* POP CARD - Cream card with dark border (Mission Control style) */
-.card-pop {
-  background: var(--card-pop);
-  border: 2.5px solid var(--card-pop-border);
-  border-radius: 12px;
-  color: var(--card-pop-text);
-  box-shadow: 0 3px 0 var(--card-pop-border);
-  transition: all 0.2s ease;
-  overflow: hidden;
-}
-
-.card-pop-header {
-  background: var(--card-pop-header);
-  border-bottom: 2.5px solid var(--card-pop-border);
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.card-pop-header-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.card-pop-body {
-  padding: 16px;
-}
-
-.card-pop:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 0 var(--card-pop-border);
-}
-
-.card-pop:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 0 var(--card-pop-border);
-}
-
-/* Card pop badge/tag (like the "TEST" and "CODE" badges) */
-.badge-pop {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border: 2px solid var(--card-pop-border);
-}
-
-.badge-pop-red {
-  background: var(--card-pop-accent-red);
-  color: white;
-  border-color: var(--card-pop-border);
-}
-
-.badge-pop-green {
-  background: var(--card-pop-accent-green);
-  color: white;
-  border-color: var(--card-pop-border);
-}
-
-.badge-pop-blue {
-  background: var(--card-pop-accent-blue);
-  color: white;
-  border-color: var(--card-pop-border);
-}
-
-.badge-pop-dark {
-  background: var(--card-pop-border);
-  color: white;
-}
-
-/* Agent card style (like Buzz and Spark in the screenshot) */
-.card-pop-agent {
-  background: var(--card-pop);
-  border: 2.5px solid var(--card-pop-border);
-  border-radius: 12px;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 3px 0 var(--card-pop-border);
-  transition: all 0.2s ease;
-}
-
-.card-pop-agent:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 0 var(--card-pop-border);
-}
-
-.card-pop-agent-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.card-pop-agent-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: 2px solid var(--card-pop-border);
-}
-
-/* Pop input style */
-.input-pop {
-  background: var(--card-pop);
-  border: 2.5px solid var(--card-pop-border);
-  border-radius: 10px;
-  padding: 12px 16px;
-  color: var(--card-pop-text);
-  font-size: 15px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  width: 100%;
-}
-
-.input-pop:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-glow);
-}
-
-.input-pop::placeholder {
-  color: var(--card-pop-text-secondary);
-}
-
-/* Pop button style */
-.btn-pop {
-  background: var(--card-pop);
-  border: 2.5px solid var(--card-pop-border);
-  border-radius: 10px;
-  padding: 12px 24px;
-  color: var(--card-pop-text);
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  box-shadow: 0 3px 0 var(--card-pop-border);
-}
-
-.btn-pop:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 0 var(--card-pop-border);
-}
-
-.btn-pop:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 0 var(--card-pop-border);
-}
-
-/* Pop button - primary colored */
-.btn-pop-primary {
-  background: var(--primary);
-  border: 2.5px solid var(--card-pop-border);
-  border-radius: 10px;
-  padding: 12px 24px;
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  box-shadow: 0 3px 0 var(--card-pop-border);
-}
-
-.btn-pop-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 0 var(--card-pop-border);
-  background: var(--primary-hover);
-}
-
-.btn-pop-primary:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 0 var(--card-pop-border);
-}
-
-/* Pop tag/chip style */
-.tag-pop {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--card-pop);
-  border: 2px solid var(--card-pop-border);
-  border-radius: 6px;
-  padding: 5px 10px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--card-pop-text);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.tag-pop:hover {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-
-.tag-pop.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--card-pop-border);
-}
-
-/* Primary button with glow */
+/* Primary button */
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
+  background: var(--accent);
+  color: #09090b;
   font-weight: 600;
-  padding: 16px 32px;
-  border-radius: 16px;
+  padding: 12px 28px;
+  border-radius: var(--radius);
   border: none;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 0 0 var(--primary-glow);
+  transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px var(--primary-glow);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
+  background: var(--accent-hover);
+  box-shadow: 0 0 24px var(--accent-glow);
 }
 
 .btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
 }
 
-/* Secondary/ghost button */
+/* Ghost button */
 .btn-ghost {
   background: transparent;
   color: var(--text-secondary);
   font-weight: 500;
   padding: 12px 24px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -370,33 +119,11 @@ body {
   color: var(--text-primary);
 }
 
-/* Secondary button (outlined with color) */
-.btn-secondary {
-  background: transparent;
-  color: var(--secondary);
-  font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 12px;
-  border: 2px solid var(--secondary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-secondary:hover {
-  background: var(--secondary);
-  color: white;
-  transform: translateY(-1px);
-}
-
-.btn-secondary:active {
-  transform: translateY(0);
-}
-
-/* Input styling */
+/* Input */
 .input {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: 14px 18px;
   color: var(--text-primary);
   font-size: 16px;
@@ -406,112 +133,12 @@ body {
 
 .input:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-glow);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-muted);
 }
 
 .input::placeholder {
   color: var(--text-muted);
-}
-
-/* Shimmer loading effect */
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--card) 25%,
-    var(--card-hover) 50%,
-    var(--card) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-/* Pulse animation for success */
-@keyframes pulse-success {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 var(--success-glow);
-  }
-  50% {
-    box-shadow: 0 0 0 20px transparent;
-  }
-}
-
-.pulse-success {
-  animation: pulse-success 2s infinite;
-}
-
-/* Fade in animation */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fade-in 0.4s ease-out forwards;
-}
-
-/* Stagger children animations */
-.stagger-children > * {
-  opacity: 0;
-  animation: fade-in 0.4s ease-out forwards;
-}
-
-.stagger-children > *:nth-child(1) {
-  animation-delay: 0.1s;
-}
-.stagger-children > *:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.stagger-children > *:nth-child(3) {
-  animation-delay: 0.3s;
-}
-.stagger-children > *:nth-child(4) {
-  animation-delay: 0.4s;
-}
-.stagger-children > *:nth-child(5) {
-  animation-delay: 0.5s;
-}
-
-/* Tooltip */
-.tooltip {
-  position: relative;
-}
-
-.tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  background: var(--card);
-  border: 1px solid var(--border);
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.tooltip:hover::after {
-  opacity: 1;
 }
 
 /* Custom scrollbar */
@@ -533,32 +160,28 @@ body {
   background: var(--border-hover);
 }
 
-/* Wallet adapter overrides for consistent styling */
+/* Wallet adapter overrides */
 .wallet-adapter-button {
-  background: linear-gradient(
-    135deg,
-    var(--primary),
-    var(--secondary)
-  ) !important;
-  border-radius: 12px !important;
+  background: var(--accent) !important;
+  color: #09090b !important;
+  border-radius: var(--radius) !important;
   font-weight: 600 !important;
   height: 48px !important;
   padding: 0 24px !important;
-  transition: all 0.3s ease !important;
+  transition: all 0.2s ease !important;
 }
 
 .wallet-adapter-button:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 30px var(--primary-glow) !important;
+  box-shadow: 0 0 24px var(--accent-glow) !important;
 }
 
 .wallet-adapter-modal-wrapper {
-  background: var(--glass) !important;
+  background: rgba(9, 9, 11, 0.8) !important;
   backdrop-filter: blur(20px) !important;
 }
 
 .wallet-adapter-modal-container {
   background: var(--card) !important;
-  border: 1px solid var(--glass-border) !important;
-  border-radius: 24px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 1rem !important;
 }

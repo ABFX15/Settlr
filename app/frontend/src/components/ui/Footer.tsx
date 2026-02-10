@@ -42,29 +42,29 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/5 bg-[#0a0a0f]">
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">
+    <footer className="border-t border-[var(--border)] bg-[var(--background)]">
+      <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-14">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block">
               <SettlrLogoWithIcon size="sm" variant="light" />
             </Link>
-            <p className="mt-4 max-w-xs text-sm text-white/50">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-[var(--text-muted)]">
               Non-custodial crypto payment processor. Accept any token, receive
               USDC instantly. Built on Solana.
             </p>
-            <div className="mt-6 flex gap-4">
+            <div className="mt-5 flex gap-2">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg p-2 text-white/40 transition-colors hover:bg-white/5 hover:text-white"
+                  className="rounded-md p-2 text-[var(--text-muted)] transition-colors hover:bg-[var(--card)] hover:text-[var(--text-secondary)]"
                   aria-label={social.label}
                 >
-                  <social.icon className="h-5 w-5" />
+                  <social.icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
@@ -72,13 +72,15 @@ export function Footer() {
 
           {/* Product Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">Product</h4>
-            <ul className="space-y-3">
+            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+              Product
+            </h4>
+            <ul className="space-y-2.5">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/50 transition-colors hover:text-white"
+                    className="text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--text-secondary)]"
                   >
                     {link.label}
                   </Link>
@@ -89,10 +91,10 @@ export function Footer() {
 
           {/* Developer Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">
+            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
               Developers
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {footerLinks.developers.map((link) => (
                 <li key={link.href}>
                   {link.external ? (
@@ -100,14 +102,14 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-white/50 transition-colors hover:text-white"
+                      className="text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--text-secondary)]"
                     >
                       {link.label}
                     </a>
                   ) : (
                     <Link
                       href={link.href}
-                      className="text-sm text-white/50 transition-colors hover:text-white"
+                      className="text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--text-secondary)]"
                     >
                       {link.label}
                     </Link>
@@ -119,13 +121,15 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">Company</h4>
-            <ul className="space-y-3">
+            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+              Company
+            </h4>
+            <ul className="space-y-2.5">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/50 transition-colors hover:text-white"
+                    className="text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--text-secondary)]"
                   >
                     {link.label}
                   </Link>
@@ -136,15 +140,13 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 md:flex-row">
-          <p className="text-sm text-white/30">
-            © {new Date().getFullYear()} Settlr. Built on Solana.
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-[var(--border)] pt-6 md:flex-row">
+          <p className="text-xs text-[var(--text-muted)]">
+            {new Date().getFullYear()} Settlr. Built on Solana.
           </p>
-          <div className="flex items-center gap-2 text-sm text-white/30">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-2 py-1 text-xs text-green-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
-              All systems operational
-            </span>
+          <div className="flex items-center gap-1.5 rounded-full border border-[var(--accent)]/20 bg-[var(--accent)]/[0.05] px-2.5 py-1 text-xs text-[var(--accent)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
+            All systems operational
           </div>
         </div>
       </div>
