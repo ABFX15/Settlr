@@ -1,0 +1,3 @@
+module.exports=[91287,a=>{"use strict";a.i(87924),a.i(50898),a.i(38246),a.i(56201),a.i(52486),a.i(88951),a.i(44045),a.i(86652),a.i(40412),a.i(55628),a.i(58889),a.i(99901),a.i(552),a.i(49735),a.i(16441),a.i(8177);a.i(3950);let b=Error("Cannot find module '@/components/ui/Navbar'");throw b.code="MODULE_NOT_FOUND",b}];
+
+//# sourceMappingURL=app_frontend_src_app_industries_ai-saas_page_tsx_0ce05870._.js.map

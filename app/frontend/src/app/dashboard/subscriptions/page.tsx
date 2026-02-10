@@ -79,7 +79,7 @@ export default function SubscriptionsPage() {
 
     try {
       const response = await fetch(
-        `/api/subscriptions/plans?merchantId=${publicKey}`
+        `/api/subscriptions/plans?merchantId=${publicKey}`,
       );
       if (response.ok) {
         const data = await response.json();
@@ -147,7 +147,7 @@ export default function SubscriptionsPage() {
 
       if (response.ok) {
         setPlans((prev) =>
-          prev.map((p) => (p.id === planId ? { ...p, active: !active } : p))
+          prev.map((p) => (p.id === planId ? { ...p, active: !active } : p)),
         );
       }
     } catch (error) {
@@ -248,13 +248,22 @@ export default function SubscriptionsPage() {
               </p>
             </div>
           </div>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:from-indigo-500 hover:to-purple-500 transition-all"
-          >
-            <Plus className="w-4 h-4" />
-            Create Plan
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/dashboard/subscriptions/subscribers"
+              className="flex items-center gap-2 bg-white/5 border border-white/10 text-white px-4 py-2 rounded-xl font-medium hover:bg-white/10 transition-all text-sm"
+            >
+              <Users className="w-4 h-4" />
+              View Subscribers
+            </Link>
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:from-indigo-500 hover:to-purple-500 transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              Create Plan
+            </button>
+          </div>
         </div>
 
         {/* Stats */}

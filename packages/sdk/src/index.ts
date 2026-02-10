@@ -101,3 +101,16 @@ export {
     type MobileCheckoutOptions,
     type MobileCheckoutResult,
 } from './mobile';
+
+// Subscriptions
+export {
+    SubscriptionClient,
+    createSubscriptionClient,
+    type SubscriptionClientConfig,
+    type CreatePlanOptions,
+    type UpdatePlanOptions,
+    type SubscribeOptions,
+    type ListSubscriptionsOptions,
+    type SubscriptionPayment,
+    type SubscriptionDetail,
+} from './subscriptions';

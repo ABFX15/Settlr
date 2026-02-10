@@ -1,0 +1,3 @@
+module.exports=[22916,a=>{"use strict";function b({children:a}){return a}a.s(["default",()=>b,"metadata",0,{title:"Help Center",description:"Get help with Settlr crypto payments. FAQs, documentation, and support for merchants accepting USDC payments.",keywords:["settlr help","crypto payment help","USDC payment support","settlr faq","crypto merchant support"],openGraph:{title:"Settlr Help Center",description:"Find answers to common questions about accepting crypto payments with Settlr.",url:"https://settlr.dev/help"}}])}];
+
+//# sourceMappingURL=app_frontend_src_app_help_layout_tsx_5b6ab8d4._.js.map
