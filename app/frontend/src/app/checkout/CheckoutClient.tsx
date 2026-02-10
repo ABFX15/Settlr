@@ -3051,7 +3051,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 href="/demo/store"
                 className="block w-full py-3 bg-white/[0.06] text-white font-semibold rounded-xl hover:bg-white/[0.08] transition-colors text-center"
               >
-                Continue Shopping
+                Browse Plans
               </Link>
             )}
             {!successUrl && (

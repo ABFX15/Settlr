@@ -407,10 +407,10 @@ function PlaygroundContent() {
           </h3>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="rounded-lg border border-white/5 bg-white/5 p-4">
-              <span className="text-2xl">🎮</span>
-              <h4 className="font-medium text-white mt-2">Gaming</h4>
+              <span className="text-2xl">🤖</span>
+              <h4 className="font-medium text-white mt-2">AI &amp; SaaS</h4>
               <p className="text-sm text-white/50 mt-1">
-                Tournament entries, in-game purchases, deposits
+                Subscriptions, API credits, usage-based billing
               </p>
             </div>
             <div className="rounded-lg border border-white/5 bg-white/5 p-4">
@@ -482,8 +482,8 @@ function ReactSDKContent() {
           1. Payment Modal (Recommended)
         </h3>
         <p className="text-white/50 mb-4">
-          Keep users on your site with an embedded payment modal. Perfect for
-          iGaming, e-commerce, and subscriptions.
+          Keep users on your site with an embedded payment modal. Perfect for AI
+          platforms, SaaS, and e-commerce.
         </p>
         <CodeBlock language="tsx">
           {`import { usePaymentModal, Settlr } from '@settlr/sdk';
@@ -491,27 +491,27 @@ function ReactSDKContent() {
 // Initialize with your API key from onboarding
 const settlr = new Settlr({
   apiKey: 'sk_live_your_api_key',
-  merchant: { name: 'Arena GG' },
+  merchant: { name: 'Acme AI' },
 });
 
-function TournamentPage() {
+function SubscriptionPage() {
   const { openPayment, PaymentModalComponent } = usePaymentModal();
 
-  const handleEnterTournament = () => {
+  const handleSubscribe = () => {
     openPayment({
-      amount: 25.00,
-      memo: "Tournament Entry Fee",
+      amount: 49.00,
+      memo: "Pro Plan Subscription",
       onSuccess: (result) => {
         console.log("Paid!", result.signature);
-        unlockTournament();
+        activateSubscription();
       },
     });
   };
 
   return (
     <>
-      <button onClick={handleEnterTournament}>
-        Enter Tournament - $25.00
+      <button onClick={handleSubscribe}>
+        Subscribe to Pro - $49.00/mo
       </button>
       <PaymentModalComponent />
     </>

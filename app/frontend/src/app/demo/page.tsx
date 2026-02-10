@@ -23,9 +23,9 @@ import { useState } from "react";
 
 const demoCards = [
   {
-    title: "Gaming Tournament Store",
+    title: "AI SaaS Subscription Store",
     description:
-      "Full e-commerce experience with tournament entries, deposits, and instant USDC checkout.",
+      "Full checkout experience with subscription plans, add-ons, and instant USDC payment.",
     href: "/demo/store",
     icon: Play,
     color: "#a78bfa",
@@ -34,8 +34,8 @@ const demoCards = [
   {
     title: "Quick Checkout",
     description:
-      "Skip straight to the checkout flow. See a $10 USDC payment in action.",
-    href: "/checkout?amount=10.00&merchant=Arena%20GG&to=DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV&memo=Tournament%20Deposit",
+      "Skip straight to the checkout flow. See a $49 USDC subscription payment in action.",
+    href: "/checkout?amount=49.00&merchant=Acme%20AI&to=DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV&memo=Pro%20Plan%20Subscription",
     icon: Zap,
     color: "#38bdf8",
     cta: "Try Checkout",
