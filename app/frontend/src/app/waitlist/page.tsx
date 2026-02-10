@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
+import { Check } from "lucide-react";
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
@@ -18,12 +19,9 @@ export default function WaitlistPage() {
     setLoading(true);
 
     try {
-      // Send to Web3Forms (free email forwarding service)
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           access_key: "916743a4-5ef7-472a-a41b-f4b2f997c489",
           subject: `Settlr Inquiry: ${company || name}`,
@@ -48,23 +46,23 @@ export default function WaitlistPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div className="max-w-5xl mx-auto px-4 md:px-8 py-3.5 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
-            <SettlrLogoWithIcon size="sm" variant="light" />
+            <SettlrLogoWithIcon size="sm" />
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-4">
             <Link
               href="/docs"
-              className="text-sm text-white/60 hover:text-white transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Docs
             </Link>
             <Link
               href="/demo/store"
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-white text-sm font-medium"
+              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
             >
               Try Demo
             </Link>
@@ -74,20 +72,17 @@ export default function WaitlistPage() {
 
       {/* Main Content */}
       <section className="pt-32 pb-20 px-4 md:px-8">
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-lg mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
+            className="text-center mb-10"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Get Started with{" "}
-              <span className="bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-transparent bg-clip-text">
-                Settlr
-              </span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 text-foreground text-balance">
+              Get Started with Settlr
             </h1>
-            <p className="text-lg text-white/60">
-              Tell us about your project and we&apos;ll help you get set up.
+            <p className="text-lg text-muted-foreground">
+              {"Tell us about your project and we'll help you get set up."}
             </p>
           </motion.div>
 
@@ -95,30 +90,20 @@ export default function WaitlistPage() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center"
+              className="rounded-2xl border border-border bg-card p-8 text-center"
             >
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
-                <svg
-                  className="w-8 h-8 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                <Check className="w-7 h-7 text-primary" />
               </div>
-              <h2 className="text-2xl font-bold mb-2">Request Submitted!</h2>
-              <p className="text-white/60 mb-6">
-                Thanks for your interest. We&apos;ll be in touch soon.
+              <h2 className="text-2xl font-bold mb-2 text-foreground">
+                Request Submitted!
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                {"Thanks for your interest. We'll be in touch soon."}
               </p>
               <Link
                 href="/demo/store"
-                className="inline-block px-6 py-3 rounded-lg bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-white font-medium"
+                className="inline-block px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
               >
                 Try the Demo
               </Link>
@@ -129,10 +114,10 @@ export default function WaitlistPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               onSubmit={handleSubmit}
-              className="bg-white/5 border border-white/10 rounded-2xl p-8 space-y-6"
+              className="rounded-2xl border border-border bg-card p-8 space-y-5"
             >
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Name *
                 </label>
                 <input
@@ -141,12 +126,12 @@ export default function WaitlistPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[#a855f7]/50"
+                  className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Email *
                 </label>
                 <input
@@ -155,12 +140,12 @@ export default function WaitlistPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@company.com"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[#a855f7]/50"
+                  className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Company
                 </label>
                 <input
@@ -168,36 +153,36 @@ export default function WaitlistPage() {
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   placeholder="Your company (optional)"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[#a855f7]/50"
+                  className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   What are you building?
                 </label>
                 <textarea
                   value={useCase}
                   onChange={(e) => setUseCase(e.target.value)}
-                  placeholder="Tell us about your project and how you plan to use Settlr..."
+                  placeholder="Tell us about your project..."
                   rows={4}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[#a855f7]/50 resize-none"
+                  className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-colors resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-lg bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="w-full py-3.5 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
               >
                 {loading ? "Submitting..." : "Submit Request"}
               </button>
 
-              <p className="text-center text-sm text-white/40">
+              <p className="text-center text-sm text-muted-foreground">
                 Or{" "}
                 <Link
                   href="/demo/store"
-                  className="text-[#a855f7] hover:underline"
+                  className="text-primary hover:underline"
                 >
                   try the demo
                 </Link>{" "}

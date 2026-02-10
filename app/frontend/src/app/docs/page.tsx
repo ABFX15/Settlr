@@ -50,20 +50,20 @@ export default function DocsPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-[#0a0a0f] text-white pt-16">
+      <div className="min-h-screen bg-background text-foreground pt-16">
         <div className="flex">
           {/* Sidebar */}
-          <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 border-r border-white/5 bg-[#0d0d14] overflow-y-auto">
+          <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 border-r border-border bg-card overflow-y-auto">
             <div className="p-4">
               {/* Search */}
               <div className="relative mb-6">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder="Search docs..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:border-purple-500/50 focus:outline-none"
+                  className="w-full rounded-lg border border-border bg-muted py-2 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary/50 focus:outline-none"
                 />
               </div>
 
@@ -78,8 +78,8 @@ export default function DocsPage() {
                       onClick={() => setActiveTab(tab.id as typeof activeTab)}
                       className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                         isActive
-                          ? "bg-purple-500/10 text-purple-400"
-                          : "text-white/60 hover:bg-white/5 hover:text-white"
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
                       }`}
                     >
                       <Icon className="h-4 w-4" />
@@ -90,8 +90,8 @@ export default function DocsPage() {
               </nav>
 
               {/* External Links */}
-              <div className="mt-8 border-t border-white/5 pt-6">
-                <p className="mb-3 text-xs font-semibold uppercase text-white/40">
+              <div className="mt-8 border-t border-border pt-6">
+                <p className="mb-3 text-xs font-semibold uppercase text-muted-foreground">
                   Resources
                 </p>
                 <div className="space-y-1">
@@ -99,7 +99,7 @@ export default function DocsPage() {
                     href="https://www.npmjs.com/package/@settlr/sdk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/60 hover:bg-white/5 hover:text-white"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
                   >
                     npm Package
                     <ExternalLink className="h-3 w-3" />
@@ -108,7 +108,7 @@ export default function DocsPage() {
                     href="https://github.com/ABFX15/x402-hack-payment"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/60 hover:bg-white/5 hover:text-white"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
                   >
                     GitHub
                     <ExternalLink className="h-3 w-3" />
@@ -124,21 +124,21 @@ export default function DocsPage() {
               {/* Hero */}
               <div className="mb-10">
                 <h1 className="text-4xl font-bold mb-4">Documentation</h1>
-                <p className="text-xl text-white/60">
+                <p className="text-xl text-muted-foreground">
                   Everything you need to accept USDC payments with Settlr.
                 </p>
               </div>
 
               {/* Mobile Navigation Tabs */}
-              <div className="flex gap-1 mb-8 border-b border-white/10 overflow-x-auto lg:hidden">
+              <div className="flex gap-1 mb-8 border-b border-border overflow-x-auto lg:hidden">
                 {docsTabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as typeof activeTab)}
                     className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
                       activeTab === tab.id
-                        ? "text-purple-400 border-b-2 border-purple-400"
-                        : "text-white/50 hover:text-white/80"
+                        ? "text-primary border-b-2 border-primary"
+                        : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     {tab.label}
@@ -171,38 +171,38 @@ function QuickStartContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Get Started in 5 Minutes</h2>
-        <p className="text-gray-400 mb-6">
+        <p className="text-muted-foreground mb-6">
           Accept USDC payments on your website with just a few lines of code.
         </p>
 
         {/* Step 1 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
               1
             </div>
             <h3 className="text-xl font-semibold">
               Create Your Merchant Account
             </h3>
           </div>
-          <p className="text-gray-400 mb-4">
+          <p className="text-muted-foreground mb-4">
             Sign up to get your API key. Quick setup with your wallet address.
           </p>
           <a
             href="/onboarding"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors"
           >
             Create Account →
           </a>
-          <div className="mt-4 bg-gray-900 rounded-lg p-4">
-            <p className="text-gray-500 text-sm mb-2">You&apos;ll receive:</p>
-            <ul className="text-gray-400 text-sm space-y-1">
+          <div className="mt-4 bg-muted rounded-lg p-4">
+            <p className="text-muted-foreground/70 text-sm mb-2">You&apos;ll receive:</p>
+            <ul className="text-muted-foreground text-sm space-y-1">
               <li>
-                • <span className="text-purple-400 font-mono">API Key</span> -
+                • <span className="text-primary font-mono">API Key</span> -
                 Your secret key for SDK initialization
               </li>
               <li>
-                • <span className="text-purple-400 font-mono">Merchant ID</span>{" "}
+                • <span className="text-primary font-mono">Merchant ID</span>{" "}
                 - Your unique merchant identifier
               </li>
             </ul>
@@ -212,7 +212,7 @@ function QuickStartContent() {
         {/* Step 2 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
               2
             </div>
             <h3 className="text-xl font-semibold">Install the SDK</h3>
@@ -223,14 +223,14 @@ function QuickStartContent() {
         {/* Step 3 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
               3
             </div>
             <h3 className="text-xl font-semibold">
               Initialize with Your API Key
             </h3>
           </div>
-          <p className="text-gray-400 mb-4">
+          <p className="text-muted-foreground mb-4">
             Use the API key from onboarding to initialize the SDK.
           </p>
           <CodeBlock language="tsx">
@@ -249,7 +249,7 @@ const settlr = new Settlr({
         {/* Step 4 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
               4
             </div>
             <h3 className="text-xl font-semibold">Add a Payment Button</h3>
@@ -270,7 +270,7 @@ function CheckoutPage() {
   );
 }`}
           </CodeBlock>
-          <p className="text-gray-500 text-sm mt-3">
+          <p className="text-muted-foreground/70 text-sm mt-3">
             💡 No need to specify recipient - payments go to the wallet you
             registered during onboarding.
           </p>
@@ -279,27 +279,27 @@ function CheckoutPage() {
         {/* Step 5 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
               5
             </div>
             <h3 className="text-xl font-semibold">That&apos;s It!</h3>
           </div>
-          <p className="text-gray-400">
+          <p className="text-muted-foreground">
             Your users can now pay with their wallet or email. Payments settle
             instantly to your registered wallet with a 1% fee.
           </p>
           <div className="mt-4 grid md:grid-cols-2 gap-4">
-            <div className="bg-gray-900 rounded-lg p-4">
-              <p className="text-purple-400 font-medium mb-1">
+            <div className="bg-muted rounded-lg p-4">
+              <p className="text-primary font-medium mb-1">
                 Solana Payments
               </p>
-              <p className="text-gray-500 text-sm">
+              <p className="text-muted-foreground/70 text-sm">
                 Instant, gasless transfers directly to your wallet
               </p>
             </div>
-            <div className="bg-gray-900 rounded-lg p-4">
-              <p className="text-cyan-400 font-medium mb-1">Cross-chain USDC</p>
-              <p className="text-gray-500 text-sm">
+            <div className="bg-muted rounded-lg p-4">
+              <p className="text-accent font-medium mb-1">Cross-chain USDC</p>
+              <p className="text-muted-foreground/70 text-sm">
                 Customers pay with USDC from ETH/Base/Arbitrum - you receive on
                 Solana
               </p>
@@ -329,7 +329,7 @@ function CheckoutPage() {
         {/* Interactive Playground */}
         <div className="mt-16">
           <h2 className="text-2xl font-bold mb-4">Try It Live</h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-muted-foreground mb-6">
             Edit the code below and click "Try It" to see how the checkout
             works. No setup required.
           </p>
@@ -345,7 +345,7 @@ function PlaygroundContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Interactive Playground</h2>
-        <p className="text-gray-400 mb-6">
+        <p className="text-muted-foreground mb-6">
           Experiment with the Settlr SDK in real-time. Edit the code, try
           different configurations, and see the checkout flow in action — no
           setup required.
@@ -356,28 +356,28 @@ function PlaygroundContent() {
 
         {/* Tips Section */}
         <div className="mt-12 grid md:grid-cols-2 gap-6">
-          <div className="rounded-xl border border-white/10 bg-[#12121a] p-6">
+          <div className="rounded-xl border border-border bg-card p-6">
             <h3 className="text-lg font-semibold text-white mb-3">
               💡 Pro Tips
             </h3>
-            <ul className="text-sm text-white/60 space-y-2">
+            <ul className="text-sm text-muted-foreground space-y-2">
               <li>
                 • Change the{" "}
-                <code className="text-purple-400 bg-purple-500/10 px-1 rounded">
+                <code className="text-primary bg-primary/10 px-1 rounded">
                   amount
                 </code>{" "}
                 prop to test different prices
               </li>
               <li>
                 • Add a{" "}
-                <code className="text-purple-400 bg-purple-500/10 px-1 rounded">
+                <code className="text-primary bg-primary/10 px-1 rounded">
                   memo
                 </code>{" "}
                 for order descriptions
               </li>
               <li>
                 • Use{" "}
-                <code className="text-purple-400 bg-purple-500/10 px-1 rounded">
+                <code className="text-primary bg-primary/10 px-1 rounded">
                   onSuccess
                 </code>{" "}
                 to handle completed payments
@@ -385,17 +385,17 @@ function PlaygroundContent() {
               <li>• Try the dropdown to load different examples</li>
             </ul>
           </div>
-          <div className="rounded-xl border border-white/10 bg-[#12121a] p-6">
+          <div className="rounded-xl border border-border bg-card p-6">
             <h3 className="text-lg font-semibold text-white mb-3">
               🚀 Ready to Integrate?
             </h3>
-            <p className="text-sm text-white/60 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               When you're ready to accept real payments, create an account to
               get your API key.
             </p>
             <a
               href="/onboarding"
-              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white"
             >
               Get API Key →
             </a>
@@ -408,24 +408,24 @@ function PlaygroundContent() {
             Example Use Cases
           </h3>
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="rounded-lg border border-white/5 bg-white/5 p-4">
+            <div className="rounded-lg border border-border bg-muted/50 p-4">
               <span className="text-2xl">🎮</span>
               <h4 className="font-medium text-white mt-2">Gaming</h4>
-              <p className="text-sm text-white/50 mt-1">
+              <p className="text-sm text-muted-foreground/70 mt-1">
                 Tournament entries, in-game purchases, deposits
               </p>
             </div>
-            <div className="rounded-lg border border-white/5 bg-white/5 p-4">
+            <div className="rounded-lg border border-border bg-muted/50 p-4">
               <span className="text-2xl">🛒</span>
               <h4 className="font-medium text-white mt-2">E-commerce</h4>
-              <p className="text-sm text-white/50 mt-1">
+              <p className="text-sm text-muted-foreground/70 mt-1">
                 Product checkout, cart payments, subscriptions
               </p>
             </div>
-            <div className="rounded-lg border border-white/5 bg-white/5 p-4">
+            <div className="rounded-lg border border-border bg-muted/50 p-4">
               <span className="text-2xl">💼</span>
               <h4 className="font-medium text-white mt-2">Freelance</h4>
-              <p className="text-sm text-white/50 mt-1">
+              <p className="text-sm text-muted-foreground/70 mt-1">
                 Invoice payments, project deposits, tips
               </p>
             </div>
@@ -441,29 +441,29 @@ function ReactSDKContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">React SDK</h2>
-        <p className="text-gray-400 mb-6">
+        <p className="text-muted-foreground mb-6">
           Full control over the payment flow with React hooks and components.
         </p>
 
         {/* Prerequisites */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 mb-8">
+        <div className="bg-muted border border-border rounded-lg p-4 mb-8">
           <h3 className="text-lg font-semibold text-white mb-2">
             Prerequisites
           </h3>
-          <p className="text-gray-400 text-sm mb-3">
+          <p className="text-muted-foreground text-sm mb-3">
             Before using the SDK, you need to:
           </p>
-          <ol className="text-gray-400 text-sm space-y-2">
+          <ol className="text-muted-foreground text-sm space-y-2">
             <li>
               1.{" "}
-              <a href="/onboarding" className="text-purple-400 hover:underline">
+              <a href="/onboarding" className="text-primary hover:underline">
                 Create a merchant account
               </a>{" "}
               to get your API key
             </li>
             <li>
               2. Install the SDK:{" "}
-              <code className="text-cyan-400 bg-gray-800 px-2 py-0.5 rounded">
+              <code className="text-accent bg-card px-2 py-0.5 rounded">
                 npm install @settlr/sdk
               </code>
             </li>
@@ -471,11 +471,11 @@ function ReactSDKContent() {
         </div>
 
         {/* Payment Modal - NEW */}
-        <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-purple-400 mb-2">
+        <div className="bg-primary/10 border border-primary/30 rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-primary mb-2">
             ✨ New: Embedded Payment Modal
           </h3>
-          <p className="text-gray-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             Accept payments without redirecting users away from your site!
           </p>
         </div>
@@ -483,7 +483,7 @@ function ReactSDKContent() {
         <h3 className="text-xl font-semibold mb-4">
           1. Payment Modal (Recommended)
         </h3>
-        <p className="text-gray-400 mb-4">
+        <p className="text-muted-foreground mb-4">
           Keep users on your site with an embedded payment modal. Perfect for
           iGaming, e-commerce, and subscriptions.
         </p>
@@ -525,7 +525,7 @@ function TournamentPage() {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           2. Direct Modal Component
         </h3>
-        <p className="text-gray-400 mb-4">
+        <p className="text-muted-foreground mb-4">
           For more control, use the PaymentModal component directly.
         </p>
         <CodeBlock language="tsx">
@@ -564,7 +564,7 @@ function ProductPage() {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           3. Redirect Flow (Alternative)
         </h3>
-        <p className="text-gray-400 mb-4">
+        <p className="text-muted-foreground mb-4">
           For simpler integrations, redirect users to Settlr checkout.
         </p>
         <CodeBlock language="tsx">
@@ -590,7 +590,7 @@ window.location.href = url;`}
 
         {/* Pay Button */}
         <h3 className="text-xl font-semibold mb-4 mt-8">2. Add a Pay Button</h3>
-        <p className="text-gray-400 mb-4">
+        <p className="text-muted-foreground mb-4">
           The simplest way to accept payments.
         </p>
         <CodeBlock language="tsx">
@@ -624,7 +624,7 @@ function ProductPage({ product }) {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           3. Custom UI with useSettlr Hook
         </h3>
-        <p className="text-gray-400 mb-4">
+        <p className="text-muted-foreground mb-4">
           Build your own payment UI with full control.
         </p>
         <CodeBlock language="tsx">
@@ -651,7 +651,7 @@ function CustomCheckout() {
       <button 
         onClick={handlePayment}
         disabled={status === 'processing'}
-        className="bg-gradient-to-r from-purple-500 to-cyan-500 px-6 py-3 rounded-lg"
+        className="bg-primary px-6 py-3 rounded-lg"
       >
         {status === 'processing' ? 'Processing...' : 'Pay $25.00'}
       </button>
@@ -664,9 +664,9 @@ function CustomCheckout() {
 
         {/* Props Reference */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Props Reference</h3>
-        <div className="bg-gray-900 rounded-lg overflow-hidden">
+        <div className="bg-muted rounded-lg overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-800">
+            <thead className="bg-card">
               <tr>
                 <th className="px-4 py-3 font-medium">Prop</th>
                 <th className="px-4 py-3 font-medium">Type</th>
@@ -675,64 +675,64 @@ function CustomCheckout() {
             </thead>
             <tbody className="divide-y divide-gray-800">
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">
+                <td className="px-4 py-3 font-mono text-primary">
                   recipient
                 </td>
-                <td className="px-4 py-3 text-gray-400">string</td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 text-muted-foreground">string</td>
+                <td className="px-4 py-3 text-muted-foreground">
                   Wallet address to receive payment
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">amount</td>
-                <td className="px-4 py-3 text-gray-400">number</td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 font-mono text-primary">amount</td>
+                <td className="px-4 py-3 text-muted-foreground">number</td>
+                <td className="px-4 py-3 text-muted-foreground">
                   Payment amount in the specified currency
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">
+                <td className="px-4 py-3 font-mono text-primary">
                   currency
                 </td>
-                <td className="px-4 py-3 text-gray-400">'USDC' | 'SOL'</td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 text-muted-foreground">'USDC' | 'SOL'</td>
+                <td className="px-4 py-3 text-muted-foreground">
                   Token to accept (default: USDC)
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">
+                <td className="px-4 py-3 font-mono text-primary">
                   onSuccess
                 </td>
-                <td className="px-4 py-3 text-gray-400">(tx) =&gt; void</td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 text-muted-foreground">(tx) =&gt; void</td>
+                <td className="px-4 py-3 text-muted-foreground">
                   Called when payment succeeds
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">onError</td>
-                <td className="px-4 py-3 text-gray-400">(err) =&gt; void</td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 font-mono text-primary">onError</td>
+                <td className="px-4 py-3 text-muted-foreground">(err) =&gt; void</td>
+                <td className="px-4 py-3 text-muted-foreground">
                   Called when payment fails
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">label</td>
-                <td className="px-4 py-3 text-gray-400">string</td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 font-mono text-primary">label</td>
+                <td className="px-4 py-3 text-muted-foreground">string</td>
+                <td className="px-4 py-3 text-muted-foreground">
                   Button text (default: "Pay with USDC")
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">memo</td>
-                <td className="px-4 py-3 text-gray-400">string</td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 font-mono text-primary">memo</td>
+                <td className="px-4 py-3 text-muted-foreground">string</td>
+                <td className="px-4 py-3 text-muted-foreground">
                   Optional memo attached to transaction
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">gasless</td>
-                <td className="px-4 py-3 text-gray-400">boolean</td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 font-mono text-primary">gasless</td>
+                <td className="px-4 py-3 text-muted-foreground">boolean</td>
+                <td className="px-4 py-3 text-muted-foreground">
                   Enable gasless transactions (default: true)
                 </td>
               </tr>
@@ -749,24 +749,24 @@ function APIContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">API Reference</h2>
-        <p className="text-gray-400 mb-6">
+        <p className="text-muted-foreground mb-6">
           Use our REST API for server-side integrations.
         </p>
 
         {/* Base URL */}
-        <div className="bg-gray-900 rounded-lg p-4 mb-6">
-          <p className="text-gray-500 text-sm mb-1">Base URL</p>
-          <code className="text-purple-400">https://api.settlr.io/v1</code>
+        <div className="bg-muted rounded-lg p-4 mb-6">
+          <p className="text-muted-foreground/70 text-sm mb-1">Base URL</p>
+          <code className="text-primary">https://api.settlr.io/v1</code>
         </div>
 
         {/* Authentication */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 mb-8">
+        <div className="bg-muted border border-border rounded-lg p-4 mb-8">
           <h3 className="text-lg font-semibold text-white mb-2">
             🔐 Authentication
           </h3>
-          <p className="text-gray-400 text-sm mb-3">
+          <p className="text-muted-foreground text-sm mb-3">
             All API requests require your API key from{" "}
-            <a href="/onboarding" className="text-purple-400 hover:underline">
+            <a href="/onboarding" className="text-primary hover:underline">
               merchant onboarding
             </a>
             .
@@ -779,15 +779,15 @@ function APIContent() {
         </div>
 
         {/* Create Payment */}
-        <div className="border border-white/10 rounded-lg overflow-hidden mb-6">
-          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
-            <span className="bg-purple-500/20 text-purple-400 px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-border rounded-lg overflow-hidden mb-6">
+          <div className="bg-muted px-4 py-3 flex items-center gap-3">
+            <span className="bg-primary/10 text-primary px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
             <code className="text-white">/payments</code>
           </div>
           <div className="p-4">
-            <p className="text-gray-400 mb-4">
+            <p className="text-muted-foreground mb-4">
               Create a new payment request. The recipient is automatically set
               to your registered payout wallet.
             </p>
@@ -818,15 +818,15 @@ function APIContent() {
         </div>
 
         {/* Get Payment */}
-        <div className="border border-white/10 rounded-lg overflow-hidden mb-6">
-          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
+        <div className="border border-border rounded-lg overflow-hidden mb-6">
+          <div className="bg-muted px-4 py-3 flex items-center gap-3">
             <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
             <code className="text-white">/payments/:id</code>
           </div>
           <div className="p-4">
-            <p className="text-gray-400 mb-4">Retrieve a payment by ID.</p>
+            <p className="text-muted-foreground mb-4">Retrieve a payment by ID.</p>
             <h4 className="font-medium mb-2">Response</h4>
             <CodeBlock language="json">
               {`{
@@ -843,42 +843,42 @@ function APIContent() {
         </div>
 
         {/* List Payments */}
-        <div className="border border-white/10 rounded-lg overflow-hidden">
-          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
+        <div className="border border-border rounded-lg overflow-hidden">
+          <div className="bg-muted px-4 py-3 flex items-center gap-3">
             <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
             <code className="text-white">/payments</code>
           </div>
           <div className="p-4">
-            <p className="text-gray-400 mb-4">
+            <p className="text-muted-foreground mb-4">
               List all payments with optional filters.
             </p>
             <h4 className="font-medium mb-2">Query Parameters</h4>
-            <div className="bg-gray-900 rounded-lg overflow-hidden mb-4">
+            <div className="bg-muted rounded-lg overflow-hidden mb-4">
               <table className="w-full text-left">
                 <tbody className="divide-y divide-gray-800">
                   <tr>
-                    <td className="px-4 py-2 font-mono text-purple-400">
+                    <td className="px-4 py-2 font-mono text-primary">
                       status
                     </td>
-                    <td className="px-4 py-2 text-gray-400">
+                    <td className="px-4 py-2 text-muted-foreground">
                       pending | completed | expired
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-2 font-mono text-purple-400">
+                    <td className="px-4 py-2 font-mono text-primary">
                       limit
                     </td>
-                    <td className="px-4 py-2 text-gray-400">
+                    <td className="px-4 py-2 text-muted-foreground">
                       Number of results (default: 20, max: 100)
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-2 font-mono text-purple-400">
+                    <td className="px-4 py-2 font-mono text-primary">
                       cursor
                     </td>
-                    <td className="px-4 py-2 text-gray-400">
+                    <td className="px-4 py-2 text-muted-foreground">
                       Pagination cursor
                     </td>
                   </tr>
@@ -897,13 +897,13 @@ function WebhooksContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Webhooks</h2>
-        <p className="text-gray-400 mb-6">
+        <p className="text-muted-foreground mb-6">
           Get notified when payments are completed.
         </p>
 
         {/* Setup */}
         <h3 className="text-xl font-semibold mb-4">Setting Up Webhooks</h3>
-        <p className="text-gray-400 mb-4">
+        <p className="text-muted-foreground mb-4">
           Configure your webhook endpoint in the Settlr dashboard. We'll send a
           POST request whenever a payment is completed.
         </p>
@@ -967,9 +967,9 @@ export async function POST(req: NextRequest) {
 
         {/* Events */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Event Types</h3>
-        <div className="bg-gray-900 rounded-lg overflow-hidden">
+        <div className="bg-muted rounded-lg overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-800">
+            <thead className="bg-card">
               <tr>
                 <th className="px-4 py-3 font-medium">Event</th>
                 <th className="px-4 py-3 font-medium">Description</th>
@@ -977,26 +977,26 @@ export async function POST(req: NextRequest) {
             </thead>
             <tbody className="divide-y divide-gray-800">
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">
+                <td className="px-4 py-3 font-mono text-primary">
                   payment.completed
                 </td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 text-muted-foreground">
                   Payment was successful and confirmed
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">
+                <td className="px-4 py-3 font-mono text-primary">
                   payment.expired
                 </td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 text-muted-foreground">
                   Payment link expired before completion
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-purple-400">
+                <td className="px-4 py-3 font-mono text-primary">
                   payment.failed
                 </td>
-                <td className="px-4 py-3 text-gray-400">
+                <td className="px-4 py-3 text-muted-foreground">
                   Payment failed due to an error
                 </td>
               </tr>
@@ -1007,7 +1007,7 @@ export async function POST(req: NextRequest) {
         {/* Security */}
         <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 mt-8">
           <h4 className="font-medium text-yellow-400 mb-2">⚠️ Security Note</h4>
-          <p className="text-gray-400">
+          <p className="text-muted-foreground">
             Always verify the webhook signature before processing events. Never
             trust the payload without verification.
           </p>
@@ -1022,7 +1022,7 @@ function TroubleshootingContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Troubleshooting</h2>
-        <p className="text-gray-400 mb-6">Common issues and how to fix them.</p>
+        <p className="text-muted-foreground mb-6">Common issues and how to fix them.</p>
 
         {/* FAQ Items */}
         <div className="space-y-4">
@@ -1112,14 +1112,14 @@ function TroubleshootingItem({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-white/10 rounded-lg overflow-hidden">
+    <div className="border border-border rounded-lg overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-white/5 transition-colors"
+        className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-muted/50 transition-colors"
       >
         <span className="font-medium">{question}</span>
         <span
-          className={`text-purple-400 transition-transform ${
+          className={`text-primary transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         >
@@ -1128,7 +1128,7 @@ function TroubleshootingItem({
       </button>
       {isOpen && (
         <div className="px-4 pb-4">
-          <p className="text-gray-400 whitespace-pre-line">{answer}</p>
+          <p className="text-muted-foreground whitespace-pre-line">{answer}</p>
         </div>
       )}
     </div>
@@ -1156,11 +1156,11 @@ function CodeBlock({
       return code.split("\n").map((line, i) => (
         <div key={i}>
           {line.startsWith("#") ? (
-            <span className="text-gray-500">{line}</span>
+            <span className="text-muted-foreground/70">{line}</span>
           ) : (
             <>
-              <span className="text-gray-500">$ </span>
-              <span className="text-purple-400">{line}</span>
+              <span className="text-muted-foreground/70">$ </span>
+              <span className="text-primary">{line}</span>
             </>
           )}
         </div>
@@ -1171,10 +1171,10 @@ function CodeBlock({
       return code.split("\n").map((line, i) => {
         // Highlight JSON
         const highlighted = line
-          .replace(/"([^"]+)":/g, '<span class="text-purple-400">"$1"</span>:')
+          .replace(/"([^"]+)":/g, '<span class="text-primary">"$1"</span>:')
           .replace(
             /: "([^"]+)"/g,
-            ': <span class="text-purple-400">"$1"</span>',
+            ': <span class="text-primary">"$1"</span>',
           )
           .replace(/: (\d+)/g, ': <span class="text-orange-400">$1</span>')
           .replace(
@@ -1243,7 +1243,7 @@ function CodeBlock({
       // Handle comments
       if (line.trim().startsWith("//")) {
         return (
-          <div key={lineIndex} className="text-gray-500">
+          <div key={lineIndex} className="text-muted-foreground/70">
             {line}
           </div>
         );
@@ -1347,13 +1347,13 @@ function CodeBlock({
                 );
               case "string":
                 return (
-                  <span key={tokenIndex} className="text-purple-400">
+                  <span key={tokenIndex} className="text-primary">
                     {token.value}
                   </span>
                 );
               case "comment":
                 return (
-                  <span key={tokenIndex} className="text-gray-500">
+                  <span key={tokenIndex} className="text-muted-foreground/70">
                     {token.value}
                   </span>
                 );
@@ -1365,13 +1365,13 @@ function CodeBlock({
                 );
               case "builtin":
                 return (
-                  <span key={tokenIndex} className="text-cyan-400">
+                  <span key={tokenIndex} className="text-accent">
                     {token.value}
                   </span>
                 );
               case "react":
                 return (
-                  <span key={tokenIndex} className="text-purple-400">
+                  <span key={tokenIndex} className="text-primary">
                     {token.value}
                   </span>
                 );
@@ -1389,7 +1389,7 @@ function CodeBlock({
                 );
               default:
                 return (
-                  <span key={tokenIndex} className="text-gray-300">
+                  <span key={tokenIndex} className="text-foreground/80">
                     {token.value}
                   </span>
                 );
@@ -1401,14 +1401,14 @@ function CodeBlock({
   };
 
   return (
-    <div className="relative bg-gray-900 rounded-lg overflow-hidden mb-4 border border-white/10">
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800/70 border-b border-gray-700">
-        <span className="text-xs text-gray-400 uppercase font-medium">
+    <div className="relative bg-muted rounded-lg overflow-hidden mb-4 border border-border">
+      <div className="flex items-center justify-between px-4 py-2 bg-card/70 border-b border-gray-700">
+        <span className="text-xs text-muted-foreground uppercase font-medium">
           {language}
         </span>
         <button
           onClick={handleCopy}
-          className="text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded hover:bg-gray-700"
+          className="text-xs text-muted-foreground hover:text-white transition-colors px-2 py-1 rounded hover:bg-gray-700"
         >
           {copied ? "✓ Copied" : "Copy"}
         </button>
@@ -1430,10 +1430,10 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="bg-gray-900 border border-white/10 rounded-lg p-6">
+    <div className="bg-muted border border-border rounded-lg p-6">
       <div className="text-3xl mb-3">{icon}</div>
       <h3 className="font-semibold mb-2">{title}</h3>
-      <p className="text-gray-400 text-sm">{description}</p>
+      <p className="text-muted-foreground text-sm">{description}</p>
     </div>
   );
 }

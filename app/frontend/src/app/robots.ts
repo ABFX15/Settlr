@@ -1,21 +1,21 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-    const baseUrl = 'https://settlr.dev'
-
-    return {
-        rules: [
-            {
-                userAgent: '*',
-                allow: '/',
-                disallow: ['/api/', '/admin/', '/dashboard/', '/analytics/', '/history/', '/offramp/', '/igaming/'],
-            },
-            {
-                userAgent: 'Googlebot',
-                allow: '/',
-                disallow: ['/igaming/'],
-            },
+  return {
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/api/",
+          "/admin/",
+          "/client-dashboard/",
+          "/dashboard/",
+          "/test-sdk/",
+          "/checkout/",
         ],
-        sitemap: `${baseUrl}/sitemap.xml`,
-    }
+      },
+    ],
+    sitemap: "https://settlr.dev/sitemap.xml",
+  };
 }

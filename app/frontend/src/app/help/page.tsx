@@ -12,7 +12,6 @@ import {
   Code2,
   ChevronDown,
   ArrowRight,
-  Sparkles,
   ExternalLink,
   Mail,
   Twitter,
@@ -21,16 +20,11 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 
 const categories = [
-  {
-    id: "getting-started",
-    label: "Getting Started",
-    icon: Zap,
-    color: "#14F195",
-  },
-  { id: "payments", label: "Payments", icon: RefreshCw, color: "#9945FF" },
-  { id: "security", label: "Security", icon: Shield, color: "#00D4FF" },
-  { id: "refunds", label: "Refunds", icon: RefreshCw, color: "#f59e0b" },
-  { id: "integration", label: "Integration", icon: Code2, color: "#ec4899" },
+  { id: "getting-started", label: "Getting Started", icon: Zap },
+  { id: "payments", label: "Payments", icon: RefreshCw },
+  { id: "security", label: "Security", icon: Shield },
+  { id: "refunds", label: "Refunds", icon: RefreshCw },
+  { id: "integration", label: "Integration", icon: Code2 },
 ];
 
 const faqs: Record<string, { q: string; a: string }[]> = {
@@ -111,22 +105,22 @@ const quickLinks = [
     title: "Documentation",
     description: "Comprehensive API docs and guides",
     icon: Book,
-    href: "https://docs.settlr.dev",
-    color: "#14F195",
+    href: "/docs",
+    external: false,
   },
   {
     title: "Contact Support",
     description: "Get help from our team",
     icon: Mail,
     href: "mailto:support@settlr.dev",
-    color: "#9945FF",
+    external: true,
   },
   {
     title: "Twitter / X",
     description: "Follow for updates",
     icon: Twitter,
     href: "https://twitter.com/settlrpay",
-    color: "#00D4FF",
+    external: true,
   },
 ];
 
@@ -134,18 +128,14 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl border border-gray-200 bg-white overflow-hidden transition-all hover:border-[#9945FF]/30"
-    >
+    <div className="rounded-xl border border-border bg-card overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between p-6 text-left"
+        className="flex w-full items-center justify-between p-5 text-left"
       >
-        <span className="font-semibold text-gray-900 pr-4">{question}</span>
+        <span className="font-medium text-foreground pr-4">{question}</span>
         <ChevronDown
-          className={`h-5 w-5 flex-shrink-0 text-gray-400 transition-transform ${
+          className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -158,11 +148,11 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="px-6 pb-6 text-gray-600">{answer}</div>
+            <p className="px-5 pb-5 text-muted-foreground">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 
@@ -172,92 +162,35 @@ export default function HelpPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#0a0a0f]">
-        {/* Hero Section */}
-        <section className="relative overflow-hidden px-4 pb-16 pt-32">
-          {/* Background effects */}
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,212,255,0.3),transparent)]" />
-            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
-          </div>
-
-          {/* Floating orbs */}
-          <motion.div
-            animate={{
-              y: [0, -20, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute right-[15%] top-[20%] h-64 w-64 rounded-full bg-gradient-to-br from-[#00D4FF]/20 to-[#9945FF]/20 blur-3xl"
-          />
-          <motion.div
-            animate={{
-              y: [0, 20, 0],
-              scale: [1, 0.9, 1],
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute left-[10%] top-[30%] h-48 w-48 rounded-full bg-gradient-to-br from-[#14F195]/20 to-[#00D4FF]/20 blur-3xl"
-          />
-
-          <div className="relative mx-auto max-w-6xl text-center">
+      <main className="min-h-screen bg-background">
+        {/* Hero */}
+        <section className="px-4 pb-16 pt-32">
+          <div className="mx-auto max-w-5xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#00D4FF]/30 bg-[#00D4FF]/10 px-4 py-2"
+              className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5"
             >
-              <MessageCircle className="h-4 w-4 text-[#00D4FF]" />
-              <span className="text-sm font-medium text-[#00D4FF]">
-                We&apos;re Here to Help
+              <MessageCircle className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium text-primary">
+                {"We're Here to Help"}
               </span>
             </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mb-6 text-5xl font-bold leading-tight text-white md:text-7xl"
+              transition={{ delay: 0.05 }}
+              className="mb-4 text-4xl font-bold text-foreground md:text-6xl text-balance"
             >
-              Help &{" "}
-              <span className="relative">
-                <span className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195] bg-clip-text text-transparent">
-                  Support
-                </span>
-                <motion.svg
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, delay: 0.5 }}
-                  className="absolute -bottom-2 left-0 w-full"
-                  viewBox="0 0 200 12"
-                  fill="none"
-                >
-                  <motion.path
-                    d="M2 10C40 2 160 2 198 10"
-                    stroke="url(#help-underline)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                  <defs>
-                    <linearGradient
-                      id="help-underline"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop offset="0%" stopColor="#00D4FF" />
-                      <stop offset="50%" stopColor="#9945FF" />
-                      <stop offset="100%" stopColor="#14F195" />
-                    </linearGradient>
-                  </defs>
-                </motion.svg>
-              </span>
+              Help & Support
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mx-auto mb-8 max-w-2xl text-lg text-gray-400"
+              transition={{ delay: 0.1 }}
+              className="mx-auto max-w-xl text-lg text-muted-foreground"
             >
               Find answers to common questions or reach out to our team.
             </motion.p>
@@ -265,69 +198,58 @@ export default function HelpPage() {
         </section>
 
         {/* Quick Links */}
-        <section className="relative px-4 pb-16">
-          <div className="mx-auto max-w-5xl">
-            <div className="grid gap-6 md:grid-cols-3">
+        <section className="px-4 pb-16">
+          <div className="mx-auto max-w-4xl">
+            <div className="grid gap-4 md:grid-cols-3">
               {quickLinks.map((link, index) => {
                 const Icon = link.icon;
+                const Tag = link.external ? "a" : Link;
+                const extraProps = link.external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {};
                 return (
-                  <motion.a
+                  <motion.div
                     key={link.title}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-all hover:border-white/20 hover:bg-white/5"
+                    transition={{ delay: index * 0.05 }}
                   >
-                    <div
-                      className="absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
-                      style={{
-                        background: `radial-gradient(circle at 50% 50%, ${link.color}10, transparent 70%)`,
-                      }}
-                    />
-                    <div className="relative">
-                      <div
-                        className="mb-4 inline-flex rounded-xl p-3"
-                        style={{ backgroundColor: `${link.color}20` }}
-                      >
-                        <Icon
-                          className="h-6 w-6"
-                          style={{ color: link.color }}
-                        />
+                    <Tag
+                      href={link.href}
+                      {...extraProps}
+                      className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/30 hover:bg-muted"
+                    >
+                      <div className="rounded-lg bg-muted p-2.5 group-hover:bg-primary/10">
+                        <Icon className="h-5 w-5 text-muted-foreground group-hover:text-primary" />
                       </div>
-                      <h3 className="mb-2 flex items-center gap-2 font-bold text-white">
-                        {link.title}
-                        <ExternalLink className="h-4 w-4 text-gray-500" />
-                      </h3>
-                      <p className="text-sm text-gray-400">
-                        {link.description}
-                      </p>
-                    </div>
-                  </motion.a>
+                      <div>
+                        <h3 className="flex items-center gap-1.5 font-semibold text-foreground">
+                          {link.title}
+                          {link.external && (
+                            <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+                          )}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {link.description}
+                        </p>
+                      </div>
+                    </Tag>
+                  </motion.div>
                 );
               })}
             </div>
           </div>
         </section>
 
-        {/* FAQ Section - White background */}
-        <section className="relative bg-white px-4 py-24">
-          <div className="mx-auto max-w-5xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mb-12 text-center"
-            >
-              <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-gray-600">
-                Browse by category to find what you need
-              </p>
-            </motion.div>
+        {/* FAQ Section */}
+        <section className="border-t border-border px-4 py-24">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="mb-3 text-center text-3xl font-bold text-foreground">
+              Frequently Asked Questions
+            </h2>
+            <p className="mb-10 text-center text-muted-foreground">
+              Browse by category to find what you need
+            </p>
 
             {/* Category Tabs */}
             <div className="mb-8 flex flex-wrap justify-center gap-2">
@@ -337,10 +259,10 @@ export default function HelpPage() {
                   <button
                     key={cat.id}
                     onClick={() => setActiveCategory(cat.id)}
-                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                       activeCategory === cat.id
-                        ? "bg-[#9945FF] text-white shadow-lg shadow-[#9945FF]/25"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -357,7 +279,7 @@ export default function HelpPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="grid gap-4"
+                className="space-y-3"
               >
                 {faqs[activeCategory]?.map((faq) => (
                   <FAQItem key={faq.q} question={faq.q} answer={faq.a} />
@@ -367,45 +289,31 @@ export default function HelpPage() {
           </div>
         </section>
 
-        {/* Still Have Questions CTA */}
-        <section className="relative overflow-hidden px-4 py-24">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00D4FF]/10 to-transparent" />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative mx-auto max-w-3xl text-center"
-          >
-            <div className="mb-6 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#00D4FF]/20 to-[#9945FF]/20 p-4">
-              <Sparkles className="h-8 w-8 text-[#00D4FF]" />
-            </div>
-            <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">
-              Still have{" "}
-              <span className="bg-gradient-to-r from-[#00D4FF] to-[#14F195] bg-clip-text text-transparent">
-                questions?
-              </span>
+        {/* Still Have Questions */}
+        <section className="border-t border-border px-4 py-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="mb-4 text-3xl font-bold text-foreground">
+              Still have questions?
             </h2>
-            <p className="mb-8 text-gray-400">
-              Our team is here to help. Reach out and we&apos;ll get back to you
-              within 24 hours.
+            <p className="mb-8 text-muted-foreground">
+              {"Our team is here to help. Reach out and we'll get back to you within 24 hours."}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
                 href="mailto:support@settlr.dev"
-                className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#00D4FF] to-[#14F195] px-8 py-4 font-semibold text-black transition-all hover:shadow-lg hover:shadow-[#00D4FF]/25"
+                className="group inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 Contact Support
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <Link
                 href="/demo"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-8 py-4 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-8 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
               >
                 Try Demo
               </Link>
             </div>
-          </motion.div>
+          </div>
         </section>
       </main>
       <Footer />

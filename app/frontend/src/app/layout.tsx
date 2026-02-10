@@ -108,6 +108,29 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Settlr",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  url: "https://settlr.dev",
+  description:
+    "Accept crypto payments without wallets. Customers pay with email, you get USDC instantly. Zero gas fees. Built on Solana.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    description: "1% per transaction, no monthly fees",
+  },
+  creator: {
+    "@type": "Organization",
+    name: "Settlr",
+    url: "https://settlr.dev",
+    sameAs: ["https://twitter.com/SettlrPay"],
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -116,6 +139,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
