@@ -73,8 +73,8 @@ export function ChainSelector({
           flex items-center gap-2 px-4 py-2 rounded-lg border transition-all
           ${
             disabled
-              ? "bg-zinc-800/50 border-zinc-700 cursor-not-allowed opacity-50"
-              : "bg-zinc-800 border-zinc-700 hover:border-zinc-600 cursor-pointer"
+              ? "bg-white/[0.04] border-white/[0.08] cursor-not-allowed opacity-50"
+              : "bg-white/[0.06] border-white/[0.08] hover:border-white/[0.1] cursor-pointer"
           }
         `}
       >
@@ -83,7 +83,7 @@ export function ChainSelector({
         </span>
         <span className="text-white font-medium">{selectedInfo.name}</span>
         <svg
-          className={`w-4 h-4 text-zinc-400 transition-transform ${
+          className={`w-4 h-4 text-white/50 transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
           fill="none"
@@ -108,7 +108,7 @@ export function ChainSelector({
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl z-50 overflow-hidden"
+            className="absolute top-full left-0 mt-2 w-48 bg-[#050507] border border-white/[0.08] rounded-lg shadow-xl z-50 overflow-hidden"
           >
             {availableChains.map((chain) => {
               const info = CHAIN_INFO[chain];
@@ -123,7 +123,7 @@ export function ChainSelector({
                   }}
                   className={`
                     w-full flex items-center gap-3 px-4 py-3 transition-colors
-                    ${isSelected ? "bg-zinc-800" : "hover:bg-zinc-800/50"}
+                    ${isSelected ? "bg-white/[0.06]" : "hover:bg-white/[0.04]"}
                   `}
                 >
                   <span className="text-lg" style={{ color: info.color }}>

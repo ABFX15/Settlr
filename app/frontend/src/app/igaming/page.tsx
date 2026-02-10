@@ -101,9 +101,9 @@ const comparisonData = [
 
 export default function IGamingPage() {
   return (
-    <main className="min-h-screen bg-[#0a0a0f]">
+    <main className="min-h-screen bg-[#050507]">
       {/* Header */}
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0a0a0f]/80 px-4 py-4 backdrop-blur-xl md:px-8">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#050507]/80 px-4 py-4 backdrop-blur-xl md:px-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <SettlrLogoWithIcon size="sm" variant="light" />
@@ -130,7 +130,7 @@ export default function IGamingPage() {
           </nav>
           <Link
             href="/waitlist"
-            className="rounded-lg bg-gradient-to-r from-[#a855f7] to-[#22d3ee] px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90"
+            className="rounded-lg bg-[#050507] px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90"
           >
             Join Waitlist
           </Link>
@@ -144,9 +144,9 @@ export default function IGamingPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2"
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#a78bfa]/30 bg-[#a78bfa]/10 px-4 py-2"
           >
-            <Gamepad2 className="h-4 w-4 text-purple-400" />
+            <Gamepad2 className="h-4 w-4 text-[#a78bfa]" />
             <span className="text-sm text-purple-300">Built for iGaming</span>
           </motion.div>
 
@@ -156,7 +156,7 @@ export default function IGamingPage() {
             transition={{ delay: 0.1 }}
             className="mb-6 text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl"
           >
-            <span className="bg-gradient-to-r from-[#a855f7] to-[#22d3ee] bg-clip-text text-transparent">
+            <span className="bg-white bg-clip-text text-transparent">
               Zero Chargebacks.
             </span>
             <br />
@@ -167,7 +167,7 @@ export default function IGamingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mx-auto mb-8 max-w-2xl text-xl text-gray-400"
+            className="mx-auto mb-8 max-w-2xl text-xl text-white/50"
           >
             Players pay with any crypto. You receive USDC instantly. No wallets,
             no gas, no custody risk.
@@ -181,14 +181,14 @@ export default function IGamingPage() {
           >
             <Link
               href="/waitlist"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#22d3ee] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-purple-500/30 transition-all hover:shadow-purple-500/50"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#050507] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-purple-500/30 transition-all hover:shadow-purple-500/50"
             >
               Request Access
               <ArrowRight className="h-5 w-5" />
             </Link>
             <Link
               href="/docs"
-              className="inline-flex items-center gap-2 rounded-xl border-2 border-purple-500/50 px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-white/5"
+              className="inline-flex items-center gap-2 rounded-xl border-2 border-[#a78bfa]/50 px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-white/5"
             >
               View Documentation
             </Link>
@@ -208,7 +208,7 @@ export default function IGamingPage() {
             <h2 className="mb-4 text-4xl font-bold text-white">
               Purpose-Built for Gaming
             </h2>
-            <p className="mx-auto max-w-2xl text-lg text-gray-400">
+            <p className="mx-auto max-w-2xl text-lg text-white/50">
               Every feature designed to solve real problems for iGaming
               operators
             </p>
@@ -222,15 +222,15 @@ export default function IGamingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-purple-500/30 hover:bg-white/10"
+                className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-[#a78bfa]/30 hover:bg-white/10"
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20">
-                  <feature.icon className="h-6 w-6 text-purple-400" />
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#a78bfa]/10">
+                  <feature.icon className="h-6 w-6 text-[#a78bfa]" />
                 </div>
                 <h3 className="mb-2 text-xl font-semibold text-white">
                   {feature.title}
                 </h3>
-                <p className="text-gray-400">{feature.description}</p>
+                <p className="text-white/50">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -249,7 +249,7 @@ export default function IGamingPage() {
             <h2 className="mb-4 text-4xl font-bold text-white">
               vs Traditional Payment Processors
             </h2>
-            <p className="text-lg text-gray-400">
+            <p className="text-lg text-white/50">
               See why crypto payments win for gaming
             </p>
           </motion.div>
@@ -261,11 +261,11 @@ export default function IGamingPage() {
             className="overflow-hidden rounded-2xl border border-white/10"
           >
             <div className="grid grid-cols-3 border-b border-white/10 bg-white/5 p-4">
-              <div className="font-semibold text-gray-400">Feature</div>
-              <div className="text-center font-semibold text-gray-400">
+              <div className="font-semibold text-white/50">Feature</div>
+              <div className="text-center font-semibold text-white/50">
                 Traditional
               </div>
-              <div className="text-center font-semibold text-purple-400">
+              <div className="text-center font-semibold text-[#a78bfa]">
                 Settlr
               </div>
             </div>
@@ -303,7 +303,7 @@ export default function IGamingPage() {
               <h2 className="mb-6 text-4xl font-bold text-white">
                 Everything You Need to Accept Crypto
               </h2>
-              <p className="mb-8 text-lg text-gray-400">
+              <p className="mb-8 text-lg text-white/50">
                 Integrate once and start accepting payments from players
                 worldwide. Players pay with SOL, BONK, JUP, or any Solana token
                 - you receive USDC.
@@ -321,7 +321,7 @@ export default function IGamingPage() {
                     <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500/20">
                       <Check className="h-4 w-4 text-green-400" />
                     </div>
-                    <span className="text-gray-300">{benefit}</span>
+                    <span className="text-white/70">{benefit}</span>
                   </motion.li>
                 ))}
               </ul>
@@ -331,23 +331,23 @@ export default function IGamingPage() {
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 p-8"
+              className="rounded-2xl border border-[#a78bfa]/20 bg-[#a78bfa]/[0.06] p-8"
             >
               <h3 className="mb-4 text-2xl font-bold text-white">
                 Ready to Get Started?
               </h3>
-              <p className="mb-6 text-gray-400">
+              <p className="mb-6 text-white/50">
                 Join the waitlist for early access. We're onboarding select
                 operators for our beta program.
               </p>
               <Link
                 href="/waitlist"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#22d3ee] px-6 py-3 font-semibold text-white transition-all hover:opacity-90"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#050507] px-6 py-3 font-semibold text-white transition-all hover:opacity-90"
               >
                 Join Waitlist
                 <ArrowRight className="h-5 w-5" />
               </Link>
-              <div className="mt-6 flex items-center gap-4 text-sm text-gray-500">
+              <div className="mt-6 flex items-center gap-4 text-sm text-white/30">
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   <span>Limited beta spots</span>

@@ -45,14 +45,14 @@ export function TokenSelector({
                     px-4 py-3 rounded-xl border transition-all
                     ${
                       disabled
-                        ? "bg-zinc-900/50 border-zinc-800 cursor-not-allowed opacity-60"
-                        : "bg-zinc-900 border-zinc-700 hover:border-purple-500/50 cursor-pointer"
+                        ? "bg-[#050507]/50 border-white/[0.06] cursor-not-allowed opacity-60"
+                        : "bg-[#050507] border-white/[0.08] hover:border-[#a78bfa]/50 cursor-pointer"
                     }
                 `}
       >
         <div className="flex items-center gap-3">
           {/* Token Logo */}
-          <div className="relative w-8 h-8 rounded-full overflow-hidden bg-zinc-800 flex-shrink-0">
+          <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/[0.06] flex-shrink-0">
             {selectedToken.logoURI ? (
               <Image
                 src={selectedToken.logoURI}
@@ -65,7 +65,7 @@ export function TokenSelector({
                 }}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-xs font-bold text-zinc-400">
+              <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white/50">
                 {selectedToken.symbol.slice(0, 2)}
               </div>
             )}
@@ -77,11 +77,11 @@ export function TokenSelector({
                 {selectedToken.symbol}
               </span>
               {isLoadingQuote && (
-                <Loader2 className="w-3 h-3 animate-spin text-purple-400" />
+                <Loader2 className="w-3 h-3 animate-spin text-[#a78bfa]" />
               )}
             </div>
             {showBalance && (
-              <div className="text-xs text-zinc-500">
+              <div className="text-xs text-white/40">
                 Balance:{" "}
                 {balance.toLocaleString(undefined, {
                   maximumFractionDigits: 4,
@@ -110,7 +110,7 @@ export function TokenSelector({
           )}
 
           <ChevronDown
-            className={`w-5 h-5 text-zinc-400 transition-transform ${
+            className={`w-5 h-5 text-white/50 transition-transform ${
               isOpen ? "rotate-180" : ""
             }`}
           />
@@ -148,7 +148,7 @@ export function TokenSelector({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute z-50 w-full mt-2 bg-zinc-900 border border-zinc-700 rounded-xl shadow-xl overflow-hidden"
+              className="absolute z-50 w-full mt-2 bg-[#050507] border border-white/[0.08] rounded-xl shadow-xl overflow-hidden"
             >
               <div className="py-2 max-h-64 overflow-y-auto">
                 {availableTokens.map((token) => {
@@ -167,14 +167,14 @@ export function TokenSelector({
                                                 transition-colors
                                                 ${
                                                   isSelected
-                                                    ? "bg-purple-500/20 text-purple-300"
-                                                    : "hover:bg-zinc-800 text-white"
+                                                    ? "bg-[#a78bfa]/15 text-[#a78bfa]"
+                                                    : "hover:bg-white/[0.06] text-white"
                                                 }
                                             `}
                     >
                       <div className="flex items-center gap-3">
                         {/* Token Logo */}
-                        <div className="relative w-8 h-8 rounded-full overflow-hidden bg-zinc-800 flex-shrink-0">
+                        <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/[0.06] flex-shrink-0">
                           {token.logoURI ? (
                             <Image
                               src={token.logoURI}
@@ -188,7 +188,7 @@ export function TokenSelector({
                               }}
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-xs font-bold text-zinc-400">
+                            <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white/50">
                               {token.symbol.slice(0, 2)}
                             </div>
                           )}
@@ -196,14 +196,14 @@ export function TokenSelector({
 
                         <div className="text-left">
                           <div className="font-medium">{token.symbol}</div>
-                          <div className="text-xs text-zinc-500">
+                          <div className="text-xs text-white/40">
                             {token.name}
                           </div>
                         </div>
                       </div>
 
                       {isSelected && (
-                        <Check className="w-4 h-4 text-purple-400" />
+                        <Check className="w-4 h-4 text-[#a78bfa]" />
                       )}
                     </button>
                   );
@@ -211,7 +211,7 @@ export function TokenSelector({
               </div>
 
               {/* Footer note */}
-              <div className="px-4 py-2 border-t border-zinc-800 text-xs text-zinc-500 text-center">
+              <div className="px-4 py-2 border-t border-white/[0.06] text-xs text-white/40 text-center">
                 Swap powered by Jupiter
               </div>
             </motion.div>
@@ -225,8 +225,8 @@ export function TokenSelector({
 // Compact version for inline use
 export function TokenBadge({ token }: { token: TokenInfo }) {
   return (
-    <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-zinc-800 rounded-full text-sm">
-      <div className="w-4 h-4 rounded-full overflow-hidden bg-zinc-700">
+    <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-white/[0.06] rounded-full text-sm">
+      <div className="w-4 h-4 rounded-full overflow-hidden bg-white/[0.06]">
         {token.logoURI && (
           <Image
             src={token.logoURI}

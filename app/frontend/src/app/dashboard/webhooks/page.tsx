@@ -189,33 +189,33 @@ export default function WebhooksPage() {
     setSelectedEvents((prev) =>
       prev.includes(eventId)
         ? prev.filter((e) => e !== eventId)
-        : [...prev, eventId]
+        : [...prev, eventId],
     );
   };
 
   // Not connected
   if (!connected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="min-h-screen bg-[#050507]">
         <div className="max-w-4xl mx-auto px-6 py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-indigo-500/30">
-              <Webhook className="w-10 h-10 text-indigo-400" />
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#a78bfa]/10 flex items-center justify-center border border-[#a78bfa]/20">
+              <Webhook className="w-10 h-10 text-[#a78bfa]" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-4">
               Webhook Configuration
             </h1>
-            <p className="text-slate-400 mb-8 max-w-md mx-auto">
+            <p className="text-white/50 mb-8 max-w-md mx-auto">
               Connect your wallet to configure webhooks for payment
               notifications.
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/25"
+              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-8 py-4 rounded-xl font-semibold hover:bg-white/90 transition-all "
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -227,7 +227,7 @@ export default function WebhooksPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-[#050507]">
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -236,18 +236,18 @@ export default function WebhooksPage() {
               href="/dashboard"
               className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-slate-400" />
+              <ArrowLeft className="w-5 h-5 text-white/50" />
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-white">Webhooks</h1>
-              <p className="text-slate-400 text-sm">
+              <p className="text-white/50 text-sm">
                 Receive real-time payment notifications
               </p>
             </div>
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:from-indigo-500 hover:to-purple-500 transition-all"
+            className="flex items-center gap-2 bg-[#050507] text-[#050507] px-4 py-2 rounded-xl font-medium hover:bg-white/90 transition-all"
           >
             <Plus className="w-4 h-4" />
             Add Webhook
@@ -258,25 +258,25 @@ export default function WebhooksPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 rounded-2xl p-6 mb-8"
+          className="bg-[#a78bfa]/[0.06] border border-[#a78bfa]/20 rounded-2xl p-6 mb-8"
         >
           <div className="flex items-start gap-4">
-            <div className="p-3 rounded-xl bg-indigo-500/20">
-              <Shield className="w-6 h-6 text-indigo-400" />
+            <div className="p-3 rounded-xl bg-[#a78bfa]/20">
+              <Shield className="w-6 h-6 text-[#a78bfa]" />
             </div>
             <div>
               <h3 className="font-semibold text-white mb-2">
                 Secure Webhook Delivery
               </h3>
-              <p className="text-slate-400 text-sm">
+              <p className="text-white/50 text-sm">
                 All webhook payloads are signed with HMAC-SHA256. Verify the{" "}
-                <code className="bg-slate-800 px-1.5 py-0.5 rounded text-indigo-400">
+                <code className="bg-white/[0.06] px-1.5 py-0.5 rounded text-[#a78bfa]">
                   X-Settlr-Signature
                 </code>{" "}
                 header to ensure authenticity. See our{" "}
                 <Link
                   href="/docs#webhooks"
-                  className="text-indigo-400 hover:underline"
+                  className="text-[#a78bfa] hover:underline"
                 >
                   webhook documentation
                 </Link>{" "}
@@ -289,27 +289,27 @@ export default function WebhooksPage() {
         {/* Webhooks List */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#a78bfa]" />
           </div>
         ) : webhooks.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-12 text-center"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center"
           >
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-slate-800 flex items-center justify-center">
-              <Webhook className="w-8 h-8 text-slate-500" />
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white/[0.06] flex items-center justify-center">
+              <Webhook className="w-8 h-8 text-white/30" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">
               No webhooks configured
             </h3>
-            <p className="text-slate-400 mb-6">
+            <p className="text-white/50 mb-6">
               Add a webhook endpoint to receive payment notifications in
               real-time.
             </p>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-indigo-500 transition-colors"
+              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-6 py-3 rounded-xl font-medium hover:bg-white/90 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add Your First Webhook
@@ -323,21 +323,21 @@ export default function WebhooksPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6"
+                className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <div
                         className={`w-2 h-2 rounded-full ${
-                          webhook.active ? "bg-emerald-400" : "bg-slate-500"
+                          webhook.active ? "bg-emerald-400" : "bg-white/30"
                         }`}
                       />
-                      <code className="text-white font-mono text-sm bg-slate-800 px-3 py-1 rounded-lg">
+                      <code className="text-white font-mono text-sm bg-white/[0.06] px-3 py-1 rounded-lg">
                         {webhook.url}
                       </code>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-slate-400">
+                    <div className="flex items-center gap-4 text-sm text-white/50">
                       <span>{webhook.events.length} events</span>
                       {webhook.lastDeliveryAt && (
                         <>
@@ -359,33 +359,33 @@ export default function WebhooksPage() {
                     <button
                       onClick={() => testWebhook(webhook.id)}
                       disabled={testing === webhook.id}
-                      className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors disabled:opacity-50"
+                      className="p-2 rounded-lg bg-white/[0.06] hover:bg-white/[0.08] transition-colors disabled:opacity-50"
                       title="Send test event"
                     >
                       {testing === webhook.id ? (
-                        <Loader2 className="w-4 h-4 text-slate-400 animate-spin" />
+                        <Loader2 className="w-4 h-4 text-white/50 animate-spin" />
                       ) : (
-                        <Send className="w-4 h-4 text-slate-400" />
+                        <Send className="w-4 h-4 text-white/50" />
                       )}
                     </button>
                     <button
                       onClick={() => deleteWebhook(webhook.id)}
-                      className="p-2 rounded-lg bg-slate-800 hover:bg-red-500/20 transition-colors"
+                      className="p-2 rounded-lg bg-white/[0.06] hover:bg-red-500/20 transition-colors"
                       title="Delete webhook"
                     >
-                      <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-400" />
+                      <Trash2 className="w-4 h-4 text-white/50 hover:text-red-400" />
                     </button>
                   </div>
                 </div>
 
                 {/* Secret */}
-                <div className="bg-slate-800/50 rounded-xl p-4 mb-4">
+                <div className="bg-white/[0.04] rounded-xl p-4 mb-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs text-slate-500 mb-1">
+                      <p className="text-xs text-white/30 mb-1">
                         Signing Secret
                       </p>
-                      <code className="text-sm text-slate-300 font-mono">
+                      <code className="text-sm text-white/70 font-mono">
                         {showSecret === webhook.id
                           ? webhook.secret
                           : "whsec_••••••••••••••••"}
@@ -395,30 +395,30 @@ export default function WebhooksPage() {
                       <button
                         onClick={() =>
                           setShowSecret(
-                            showSecret === webhook.id ? null : webhook.id
+                            showSecret === webhook.id ? null : webhook.id,
                           )
                         }
-                        className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
+                        className="p-2 rounded-lg hover:bg-white/[0.08] transition-colors"
                       >
                         {showSecret === webhook.id ? (
-                          <EyeOff className="w-4 h-4 text-slate-400" />
+                          <EyeOff className="w-4 h-4 text-white/50" />
                         ) : (
-                          <Eye className="w-4 h-4 text-slate-400" />
+                          <Eye className="w-4 h-4 text-white/50" />
                         )}
                       </button>
                       <button
                         onClick={() =>
                           copyToClipboard(
                             webhook.secret,
-                            `secret-${webhook.id}`
+                            `secret-${webhook.id}`,
                           )
                         }
-                        className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
+                        className="p-2 rounded-lg hover:bg-white/[0.08] transition-colors"
                       >
                         {copied === `secret-${webhook.id}` ? (
                           <Check className="w-4 h-4 text-emerald-400" />
                         ) : (
-                          <Copy className="w-4 h-4 text-slate-400" />
+                          <Copy className="w-4 h-4 text-white/50" />
                         )}
                       </button>
                     </div>
@@ -430,7 +430,7 @@ export default function WebhooksPage() {
                   {webhook.events.map((event) => (
                     <span
                       key={event}
-                      className="px-2 py-1 bg-indigo-500/10 text-indigo-400 text-xs rounded-lg"
+                      className="px-2 py-1 bg-[#a78bfa]/10 text-[#a78bfa] text-xs rounded-lg"
                     >
                       {event}
                     </span>
@@ -443,11 +443,11 @@ export default function WebhooksPage() {
 
         {/* Create Modal */}
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+              className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
             >
               <h2 className="text-xl font-semibold text-white mb-6">
                 Add Webhook Endpoint
@@ -456,7 +456,7 @@ export default function WebhooksPage() {
               <div className="space-y-6">
                 {/* URL Input */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">
+                  <label className="block text-sm font-medium text-white/50 mb-2">
                     Endpoint URL
                   </label>
                   <input
@@ -464,16 +464,16 @@ export default function WebhooksPage() {
                     value={newUrl}
                     onChange={(e) => setNewUrl(e.target.value)}
                     placeholder="https://your-site.com/webhooks/settlr"
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa] focus:border-transparent"
                   />
-                  <p className="text-xs text-slate-500 mt-2">
+                  <p className="text-xs text-white/30 mt-2">
                     Must be a valid HTTPS URL that can receive POST requests
                   </p>
                 </div>
 
                 {/* Event Selection */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-3">
+                  <label className="block text-sm font-medium text-white/50 mb-3">
                     Events to Subscribe
                   </label>
                   <div className="space-y-2">
@@ -482,21 +482,21 @@ export default function WebhooksPage() {
                         key={event.id}
                         className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-colors ${
                           selectedEvents.includes(event.id)
-                            ? "bg-indigo-500/10 border border-indigo-500/30"
-                            : "bg-slate-800/50 border border-transparent hover:bg-slate-800"
+                            ? "bg-[#a78bfa]/10 border border-[#a78bfa]/20"
+                            : "bg-white/[0.04] border border-transparent hover:bg-white/[0.06]"
                         }`}
                       >
                         <input
                           type="checkbox"
                           checked={selectedEvents.includes(event.id)}
                           onChange={() => toggleEvent(event.id)}
-                          className="mt-1 rounded border-slate-600 text-indigo-600 focus:ring-indigo-500"
+                          className="mt-1 rounded border-white/[0.12] text-[#a78bfa] focus:ring-[#a78bfa]"
                         />
                         <div>
                           <p className="text-sm font-medium text-white">
                             {event.label}
                           </p>
-                          <p className="text-xs text-slate-400">
+                          <p className="text-xs text-white/50">
                             {event.description}
                           </p>
                         </div>
@@ -509,14 +509,14 @@ export default function WebhooksPage() {
               <div className="flex gap-3 mt-8">
                 <button
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors"
+                  className="flex-1 px-4 py-3 rounded-xl bg-white/[0.06] text-white/70 hover:bg-white/[0.08] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={createWebhook}
                   disabled={creating || !newUrl || selectedEvents.length === 0}
-                  className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:from-indigo-500 hover:to-purple-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 rounded-xl bg-[#050507] text-[#050507] font-medium hover:bg-white/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {creating ? (
                     <>

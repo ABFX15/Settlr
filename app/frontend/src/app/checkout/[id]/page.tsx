@@ -101,14 +101,14 @@ export default function CheckoutSessionPage() {
   // Loading state
   if (status === "loading" || status === "redirecting") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
+      <div className="min-h-screen flex items-center justify-center bg-[#050507]">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="text-center"
         >
           <Loader2 className="w-12 h-12 text-[#f472b6] animate-spin mx-auto mb-4" />
-          <p className="text-zinc-400">
+          <p className="text-white/50">
             {status === "redirecting"
               ? "Redirecting to checkout..."
               : "Loading checkout..."}
@@ -121,17 +121,17 @@ export default function CheckoutSessionPage() {
   // Error state
   if (status === "error") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#050507] p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-md w-full text-center"
+          className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 max-w-md w-full text-center"
         >
           <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <XCircle className="w-8 h-8 text-red-500" />
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">Checkout Error</h1>
-          <p className="text-zinc-400 mb-6">{error}</p>
+          <p className="text-white/50 mb-6">{error}</p>
           <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#f472b6] to-[#67e8f9] text-white font-semibold rounded-xl"
@@ -147,11 +147,11 @@ export default function CheckoutSessionPage() {
   // Expired state
   if (status === "expired") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#050507] p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-md w-full text-center"
+          className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 max-w-md w-full text-center"
         >
           <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <Clock className="w-8 h-8 text-amber-500" />
@@ -159,7 +159,7 @@ export default function CheckoutSessionPage() {
           <h1 className="text-2xl font-bold text-white mb-2">
             Session Expired
           </h1>
-          <p className="text-zinc-400 mb-6">
+          <p className="text-white/50 mb-6">
             This checkout session has expired. Please request a new payment
             link.
           </p>
@@ -188,11 +188,11 @@ export default function CheckoutSessionPage() {
   // Completed state
   if (status === "completed") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#050507] p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-md w-full text-center"
+          className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 max-w-md w-full text-center"
         >
           <motion.div
             initial={{ scale: 0 }}
@@ -209,18 +209,18 @@ export default function CheckoutSessionPage() {
           {/* Privacy indicator */}
           {session?.private && (
             <div className="flex items-center justify-center gap-2 mb-3">
-              <Shield className="w-4 h-4 text-purple-400" />
-              <span className="text-purple-400 text-sm font-medium">
+              <Shield className="w-4 h-4 text-[#a78bfa]" />
+              <span className="text-[#a78bfa] text-sm font-medium">
                 Private Payment
               </span>
             </div>
           )}
 
-          <p className="text-zinc-400 mb-4">
+          <p className="text-white/50 mb-4">
             Your payment of ${session?.amount.toFixed(2)} USDC has been
             confirmed.
             {session?.private && (
-              <span className="block text-purple-400/70 text-xs mt-1">
+              <span className="block text-[#a78bfa]/70 text-xs mt-1">
                 Amount encrypted on-chain with FHE
               </span>
             )}

@@ -12,7 +12,6 @@ import {
   Code2,
   ChevronDown,
   ArrowRight,
-  Sparkles,
   ExternalLink,
   Mail,
   Twitter,
@@ -20,28 +19,46 @@ import {
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 
+/* ─── Reveal ─── */
+function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 const categories = [
-  {
-    id: "getting-started",
-    label: "Getting Started",
-    icon: Zap,
-    color: "#14F195",
-  },
-  { id: "payments", label: "Payments", icon: RefreshCw, color: "#9945FF" },
-  { id: "security", label: "Security", icon: Shield, color: "#00D4FF" },
-  { id: "refunds", label: "Refunds", icon: RefreshCw, color: "#f59e0b" },
-  { id: "integration", label: "Integration", icon: Code2, color: "#ec4899" },
+  { id: "getting-started", label: "Getting Started", icon: Zap },
+  { id: "payments", label: "Payments", icon: RefreshCw },
+  { id: "security", label: "Security", icon: Shield },
+  { id: "refunds", label: "Refunds", icon: RefreshCw },
+  { id: "integration", label: "Integration", icon: Code2 },
 ];
 
 const faqs: Record<string, { q: string; a: string }[]> = {
   "getting-started": [
     {
       q: "How do I get started with Settlr?",
-      a: "Getting started is easy! Simply sign up, complete KYB verification, and you'll receive your API keys. Our SDK handles the rest - gasless payments, embedded wallets, and instant USDC settlements.",
+      a: "Getting started is easy! Simply sign up, complete KYB verification, and you'll receive your API keys. Our SDK handles the rest — gasless payments, embedded wallets, and instant USDC settlements.",
     },
     {
       q: "Do I need any crypto knowledge?",
-      a: "Not at all! Settlr abstracts away all blockchain complexity. You integrate with simple REST APIs, and your customers see a familiar payment experience - no wallets or crypto knowledge required.",
+      a: "Not at all! Settlr abstracts away all blockchain complexity. You integrate with simple REST APIs, and your customers see a familiar payment experience — no wallets or crypto knowledge required.",
     },
     {
       q: "What currencies do you support?",
@@ -51,7 +68,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   payments: [
     {
       q: "How fast are payments settled?",
-      a: "Payments are settled instantly! As soon as a customer completes a payment, the USDC arrives in your wallet - typically within 2 seconds.",
+      a: "Payments are settled instantly! As soon as a customer completes a payment, the USDC arrives in your wallet — typically within 2 seconds.",
     },
     {
       q: "Who pays for transaction fees?",
@@ -65,7 +82,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   security: [
     {
       q: "How secure is Settlr?",
-      a: "Security is our top priority. We use MPC wallets, never store private keys, and all transactions are verified on-chain. Funds go directly to your wallet - we never custody your money.",
+      a: "Security is our top priority. We use MPC wallets, never store private keys, and all transactions are verified on-chain. Funds go directly to your wallet — we never custody your money.",
     },
     {
       q: "Is Settlr compliant?",
@@ -79,7 +96,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   refunds: [
     {
       q: "How do refunds work?",
-      a: "Refunds are initiated through our dashboard or API. The USDC is returned to the customer's original payment method - their embedded wallet or connected wallet.",
+      a: "Refunds are initiated through our dashboard or API. The USDC is returned to the customer's original payment method — their embedded wallet or connected wallet.",
     },
     {
       q: "How long do refunds take?",
@@ -111,22 +128,22 @@ const quickLinks = [
     title: "Documentation",
     description: "Comprehensive API docs and guides",
     icon: Book,
-    href: "https://docs.settlr.dev",
-    color: "#14F195",
+    href: "/docs",
+    external: false,
   },
   {
     title: "Contact Support",
     description: "Get help from our team",
     icon: Mail,
     href: "mailto:support@settlr.dev",
-    color: "#9945FF",
+    external: true,
   },
   {
     title: "Twitter / X",
     description: "Follow for updates",
     icon: Twitter,
-    href: "https://twitter.com/settlrpay",
-    color: "#00D4FF",
+    href: "https://x.com/SettlrPay",
+    external: true,
   },
 ];
 
@@ -134,18 +151,16 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl border border-gray-200 bg-white overflow-hidden transition-all hover:border-[#9945FF]/30"
-    >
+    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] transition-colors hover:border-white/[0.1]">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex w-full items-center justify-between p-6 text-left"
       >
-        <span className="font-semibold text-gray-900 pr-4">{question}</span>
+        <span className="pr-4 text-[15px] font-semibold text-white">
+          {question}
+        </span>
         <ChevronDown
-          className={`h-5 w-5 flex-shrink-0 text-gray-400 transition-transform ${
+          className={`h-4 w-4 flex-shrink-0 text-white/30 transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -158,11 +173,13 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="px-6 pb-6 text-gray-600">{answer}</div>
+            <div className="px-6 pb-6 text-sm leading-relaxed text-white/40">
+              {answer}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 
@@ -170,245 +187,168 @@ export default function HelpPage() {
   const [activeCategory, setActiveCategory] = useState("getting-started");
 
   return (
-    <>
+    <main className="relative min-h-screen bg-[#050507] text-white antialiased">
       <Navbar />
-      <main className="min-h-screen bg-[#0a0a0f]">
-        {/* Hero Section */}
-        <section className="relative overflow-hidden px-4 pb-16 pt-32">
-          {/* Background effects */}
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,212,255,0.3),transparent)]" />
-            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
-          </div>
 
-          {/* Floating orbs */}
-          <motion.div
-            animate={{
-              y: [0, -20, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute right-[15%] top-[20%] h-64 w-64 rounded-full bg-gradient-to-br from-[#00D4FF]/20 to-[#9945FF]/20 blur-3xl"
-          />
-          <motion.div
-            animate={{
-              y: [0, 20, 0],
-              scale: [1, 0.9, 1],
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute left-[10%] top-[30%] h-48 w-48 rounded-full bg-gradient-to-br from-[#14F195]/20 to-[#00D4FF]/20 blur-3xl"
-          />
+      {/* ── Hero ── */}
+      <section className="relative pt-32 pb-20 md:pt-44 md:pb-24">
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-[#38bdf8]/[0.05] blur-[128px]" />
 
-          <div className="relative mx-auto max-w-6xl text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#00D4FF]/30 bg-[#00D4FF]/10 px-4 py-2"
-            >
-              <MessageCircle className="h-4 w-4 text-[#00D4FF]" />
-              <span className="text-sm font-medium text-[#00D4FF]">
-                We&apos;re Here to Help
-              </span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mb-6 text-5xl font-bold leading-tight text-white md:text-7xl"
-            >
+        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+          <Reveal>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-1.5 text-[13px] text-white/60">
+              <MessageCircle className="h-3.5 w-3.5" />
+              We&apos;re here to help
+            </div>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h1 className="text-4xl font-semibold tracking-tight md:text-6xl">
               Help &{" "}
-              <span className="relative">
-                <span className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195] bg-clip-text text-transparent">
-                  Support
-                </span>
-                <motion.svg
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, delay: 0.5 }}
-                  className="absolute -bottom-2 left-0 w-full"
-                  viewBox="0 0 200 12"
-                  fill="none"
-                >
-                  <motion.path
-                    d="M2 10C40 2 160 2 198 10"
-                    stroke="url(#help-underline)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                  <defs>
-                    <linearGradient
-                      id="help-underline"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop offset="0%" stopColor="#00D4FF" />
-                      <stop offset="50%" stopColor="#9945FF" />
-                      <stop offset="100%" stopColor="#14F195" />
-                    </linearGradient>
-                  </defs>
-                </motion.svg>
+              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
+                support
               </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mx-auto mb-8 max-w-2xl text-lg text-gray-400"
-            >
+            </h1>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="mx-auto mt-5 max-w-xl text-lg text-white/50">
               Find answers to common questions or reach out to our team.
-            </motion.p>
-          </div>
-        </section>
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
-        {/* Quick Links */}
-        <section className="relative px-4 pb-16">
-          <div className="mx-auto max-w-5xl">
-            <div className="grid gap-6 md:grid-cols-3">
-              {quickLinks.map((link, index) => {
-                const Icon = link.icon;
-                return (
-                  <motion.a
-                    key={link.title}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-all hover:border-white/20 hover:bg-white/5"
-                  >
-                    <div
-                      className="absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
-                      style={{
-                        background: `radial-gradient(circle at 50% 50%, ${link.color}10, transparent 70%)`,
-                      }}
-                    />
-                    <div className="relative">
-                      <div
-                        className="mb-4 inline-flex rounded-xl p-3"
-                        style={{ backgroundColor: `${link.color}20` }}
-                      >
-                        <Icon
-                          className="h-6 w-6"
-                          style={{ color: link.color }}
-                        />
-                      </div>
-                      <h3 className="mb-2 flex items-center gap-2 font-bold text-white">
-                        {link.title}
-                        <ExternalLink className="h-4 w-4 text-gray-500" />
-                      </h3>
-                      <p className="text-sm text-gray-400">
-                        {link.description}
-                      </p>
-                    </div>
-                  </motion.a>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+      {/* ── Quick Links ── */}
+      <section className="mx-auto max-w-5xl px-6 pb-20">
+        <div className="grid gap-6 md:grid-cols-3">
+          {quickLinks.map((link, i) => {
+            const Icon = link.icon;
+            const Tag = link.external ? "a" : Link;
+            const extraProps = link.external
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {};
+            return (
+              <Reveal key={link.title} delay={i * 0.08}>
+                <Tag
+                  href={link.href}
+                  {...(extraProps as any)}
+                  className="group flex h-full flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 transition-colors hover:border-white/[0.1] hover:bg-white/[0.03]"
+                >
+                  <div className="mb-4 inline-flex rounded-xl bg-white/[0.05] p-2.5 self-start">
+                    <Icon className="h-5 w-5 text-white/60" />
+                  </div>
+                  <h3 className="flex items-center gap-2 text-[15px] font-semibold text-white">
+                    {link.title}
+                    {link.external && (
+                      <ExternalLink className="h-3.5 w-3.5 text-white/30" />
+                    )}
+                  </h3>
+                  <p className="mt-2 text-sm text-white/40">
+                    {link.description}
+                  </p>
+                </Tag>
+              </Reveal>
+            );
+          })}
+        </div>
+      </section>
 
-        {/* FAQ Section - White background */}
-        <section className="relative bg-white px-4 py-24">
-          <div className="mx-auto max-w-5xl">
+      {/* ── FAQ ── */}
+      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+        <div className="mx-auto max-w-4xl px-6 py-28">
+          <Reveal>
+            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+              FAQ
+            </p>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
+              Frequently asked questions
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mt-3 text-base text-white/40">
+              Browse by category to find what you need
+            </p>
+          </Reveal>
+
+          {/* Category tabs */}
+          <div className="mt-10 flex flex-wrap gap-2">
+            {categories.map((cat) => {
+              const Icon = cat.icon;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                    activeCategory === cat.id
+                      ? "bg-white text-[#050507]"
+                      : "bg-white/[0.04] text-white/50 hover:bg-white/[0.08] hover:text-white"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {cat.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* FAQ items */}
+          <AnimatePresence mode="wait">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mb-12 text-center"
+              key={activeCategory}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="mt-8 space-y-4"
             >
-              <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-gray-600">
-                Browse by category to find what you need
-              </p>
+              {faqs[activeCategory]?.map((faq) => (
+                <FAQItem key={faq.q} question={faq.q} answer={faq.a} />
+              ))}
             </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
 
-            {/* Category Tabs */}
-            <div className="mb-8 flex flex-wrap justify-center gap-2">
-              {categories.map((cat) => {
-                const Icon = cat.icon;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => setActiveCategory(cat.id)}
-                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                      activeCategory === cat.id
-                        ? "bg-[#9945FF] text-white shadow-lg shadow-[#9945FF]/25"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {cat.label}
-                  </button>
-                );
-              })}
-            </div>
+      {/* ── CTA ── */}
+      <section className="relative isolate overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#a78bfa]/[0.06] via-transparent to-transparent" />
 
-            {/* FAQ Items */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeCategory}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="grid gap-4"
-              >
-                {faqs[activeCategory]?.map((faq) => (
-                  <FAQItem key={faq.q} question={faq.q} answer={faq.a} />
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </section>
-
-        {/* Still Have Questions CTA */}
-        <section className="relative overflow-hidden px-4 py-24">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00D4FF]/10 to-transparent" />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative mx-auto max-w-3xl text-center"
-          >
-            <div className="mb-6 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#00D4FF]/20 to-[#9945FF]/20 p-4">
-              <Sparkles className="h-8 w-8 text-[#00D4FF]" />
-            </div>
-            <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">
+        <div className="mx-auto max-w-3xl px-6 py-32 text-center">
+          <Reveal>
+            <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
               Still have{" "}
-              <span className="bg-gradient-to-r from-[#00D4FF] to-[#14F195] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
                 questions?
               </span>
             </h2>
-            <p className="mb-8 text-gray-400">
+          </Reveal>
+          <Reveal delay={0.05}>
+            <p className="mx-auto mt-5 max-w-md text-base text-white/45">
               Our team is here to help. Reach out and we&apos;ll get back to you
               within 24 hours.
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <a
                 href="mailto:support@settlr.dev"
-                className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#00D4FF] to-[#14F195] px-8 py-4 font-semibold text-black transition-all hover:shadow-lg hover:shadow-[#00D4FF]/25"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#050507] px-8 py-4 text-[15px] font-semibold text-[#050507] transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                Contact Support
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                Contact support
+                <ArrowRight className="h-4 w-4" />
               </a>
               <Link
                 href="/demo"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-8 py-4 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.04] hover:text-white"
               >
-                Try Demo
+                Try demo
               </Link>
             </div>
-          </motion.div>
-        </section>
-      </main>
+          </Reveal>
+        </div>
+      </section>
+
       <Footer />
-    </>
+    </main>
   );
 }

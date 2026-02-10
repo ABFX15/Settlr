@@ -64,7 +64,7 @@ export default function WaitlistPage() {
             </Link>
             <Link
               href="/demo/store"
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-white text-sm font-medium"
+              className="px-4 py-2 rounded-lg bg-[#050507] text-white text-sm font-medium"
             >
               Try Demo
             </Link>
@@ -82,7 +82,7 @@ export default function WaitlistPage() {
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Get Started with{" "}
-              <span className="bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-transparent bg-clip-text">
+              <span className="bg-white text-transparent bg-clip-text">
                 Settlr
               </span>
             </h1>
@@ -118,7 +118,7 @@ export default function WaitlistPage() {
               </p>
               <Link
                 href="/demo/store"
-                className="inline-block px-6 py-3 rounded-lg bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-white font-medium"
+                className="inline-block px-6 py-3 rounded-lg bg-[#050507] text-white font-medium"
               >
                 Try the Demo
               </Link>
@@ -188,7 +188,7 @@ export default function WaitlistPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-lg bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="w-full py-4 rounded-lg bg-[#050507] text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {loading ? "Submitting..." : "Submit Request"}
               </button>

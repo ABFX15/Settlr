@@ -88,8 +88,8 @@ const STATUS_CONFIG: Record<
     icon: AlertTriangle,
   },
   paused: {
-    color: "text-slate-400",
-    bg: "bg-slate-500/10",
+    color: "text-white/50",
+    bg: "bg-white/[0.06]",
     label: "Paused",
     icon: Pause,
   },
@@ -214,23 +214,23 @@ export default function SubscribersPage() {
 
   if (!connected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="min-h-screen bg-[#050507]">
         <div className="max-w-4xl mx-auto px-6 py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-indigo-500/30">
-              <Users className="w-10 h-10 text-indigo-400" />
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#a78bfa]/10 flex items-center justify-center border border-[#a78bfa]/20">
+              <Users className="w-10 h-10 text-[#a78bfa]" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-4">Subscribers</h1>
-            <p className="text-slate-400 mb-8 max-w-md mx-auto">
+            <p className="text-white/50 mb-8 max-w-md mx-auto">
               Connect your wallet to manage your subscribers and billing.
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/25"
+              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-8 py-4 rounded-xl font-semibold hover:bg-white/90 transition-all "
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -242,7 +242,7 @@ export default function SubscribersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-[#050507]">
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -251,11 +251,11 @@ export default function SubscribersPage() {
               href="/dashboard"
               className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-slate-400" />
+              <ArrowLeft className="w-5 h-5 text-white/50" />
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-white">Subscribers</h1>
-              <p className="text-slate-400 text-sm">
+              <p className="text-white/50 text-sm">
                 Manage active subscriptions and billing
               </p>
             </div>
@@ -274,13 +274,13 @@ export default function SubscribersPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-emerald-500/10">
                 <Users className="w-5 h-5 text-emerald-400" />
               </div>
-              <span className="text-slate-400 text-sm">Active</span>
+              <span className="text-white/50 text-sm">Active</span>
             </div>
             <p className="text-2xl font-bold text-white">{activeSubs.length}</p>
           </motion.div>
@@ -289,13 +289,13 @@ export default function SubscribersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg bg-purple-500/10">
-                <DollarSign className="w-5 h-5 text-purple-400" />
+              <div className="p-2 rounded-lg bg-[#a78bfa]/10">
+                <DollarSign className="w-5 h-5 text-[#a78bfa]" />
               </div>
-              <span className="text-slate-400 text-sm">MRR</span>
+              <span className="text-white/50 text-sm">MRR</span>
             </div>
             <p className="text-2xl font-bold text-white">${mrr.toFixed(2)}</p>
           </motion.div>
@@ -304,13 +304,13 @@ export default function SubscribersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-amber-500/10">
                 <AlertTriangle className="w-5 h-5 text-amber-400" />
               </div>
-              <span className="text-slate-400 text-sm">Past Due</span>
+              <span className="text-white/50 text-sm">Past Due</span>
             </div>
             <p className="text-2xl font-bold text-white">{pastDueCount}</p>
           </motion.div>
@@ -319,13 +319,13 @@ export default function SubscribersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-cyan-500/10">
                 <Calendar className="w-5 h-5 text-cyan-400" />
               </div>
-              <span className="text-slate-400 text-sm">Total</span>
+              <span className="text-white/50 text-sm">Total</span>
             </div>
             <p className="text-2xl font-bold text-white">
               {subscriptions.length}
@@ -345,8 +345,8 @@ export default function SubscribersPage() {
                 }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === filter
-                    ? "bg-indigo-600 text-white"
-                    : "bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700"
+                    ? "bg-white text-[#050507]"
+                    : "bg-white/[0.06] text-white/50 hover:text-white hover:bg-white/[0.08]"
                 }`}
               >
                 {filter === "all"
@@ -362,26 +362,26 @@ export default function SubscribersPage() {
         {/* Subscriptions List */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#a78bfa]" />
           </div>
         ) : subscriptions.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-12 text-center"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center"
           >
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-slate-800 flex items-center justify-center">
-              <Users className="w-8 h-8 text-slate-500" />
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white/[0.06] flex items-center justify-center">
+              <Users className="w-8 h-8 text-white/30" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">
               No subscribers yet
             </h3>
-            <p className="text-slate-400 mb-6">
+            <p className="text-white/50 mb-6">
               Share your plan checkout links to start getting subscribers.
             </p>
             <Link
               href="/dashboard/subscriptions"
-              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-indigo-500 transition-colors"
+              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-6 py-3 rounded-xl font-medium hover:bg-white/90 transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
               View Plans
@@ -401,7 +401,7 @@ export default function SubscribersPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden"
+                  className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden"
                 >
                   {/* Main Row */}
                   <div
@@ -428,11 +428,11 @@ export default function SubscribersPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-slate-400 text-sm truncate mt-1">
+                        <p className="text-white/50 text-sm truncate mt-1">
                           {sub.customerWallet.slice(0, 8)}...
                           {sub.customerWallet.slice(-4)}
                           {sub.customerEmail && (
-                            <span className="ml-2 text-slate-500">
+                            <span className="ml-2 text-white/30">
                               ({sub.customerEmail})
                             </span>
                           )}
@@ -445,14 +445,14 @@ export default function SubscribersPage() {
                         <p className="text-white font-semibold">
                           ${sub.amount} {sub.currency}
                         </p>
-                        <p className="text-slate-400 text-xs">
+                        <p className="text-white/50 text-xs">
                           per {sub.interval}
                         </p>
                       </div>
 
                       <div className="text-right hidden md:block">
-                        <p className="text-slate-300 text-sm">Next charge</p>
-                        <p className="text-slate-400 text-xs">
+                        <p className="text-white/70 text-sm">Next charge</p>
+                        <p className="text-white/50 text-xs">
                           {new Date(sub.currentPeriodEnd).toLocaleDateString()}
                         </p>
                       </div>
@@ -468,10 +468,10 @@ export default function SubscribersPage() {
                                 handleAction(sub.id, "pause");
                               }}
                               disabled={actionLoading === sub.id}
-                              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors"
+                              className="p-2 rounded-lg bg-white/[0.06] hover:bg-white/[0.08] transition-colors"
                               title="Pause subscription"
                             >
-                              <Pause className="w-4 h-4 text-slate-400" />
+                              <Pause className="w-4 h-4 text-white/50" />
                             </button>
                             <button
                               onClick={(e) => {
@@ -479,10 +479,10 @@ export default function SubscribersPage() {
                                 handleAction(sub.id, "cancel");
                               }}
                               disabled={actionLoading === sub.id}
-                              className="p-2 rounded-lg bg-slate-800 hover:bg-red-500/20 transition-colors"
+                              className="p-2 rounded-lg bg-white/[0.06] hover:bg-red-500/20 transition-colors"
                               title="Cancel at period end"
                             >
-                              <XCircle className="w-4 h-4 text-slate-400 hover:text-red-400" />
+                              <XCircle className="w-4 h-4 text-white/50 hover:text-red-400" />
                             </button>
                           </>
                         )}
@@ -513,9 +513,9 @@ export default function SubscribersPage() {
                           </button>
                         )}
                         {isExpanded ? (
-                          <ChevronUp className="w-4 h-4 text-slate-500" />
+                          <ChevronUp className="w-4 h-4 text-white/30" />
                         ) : (
-                          <ChevronDown className="w-4 h-4 text-slate-500" />
+                          <ChevronDown className="w-4 h-4 text-white/30" />
                         )}
                       </div>
                     </div>
@@ -527,18 +527,18 @@ export default function SubscribersPage() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       transition={{ duration: 0.2 }}
-                      className="border-t border-slate-800"
+                      className="border-t border-white/[0.06]"
                     >
-                      <div className="p-6 bg-slate-950/50">
+                      <div className="p-6 bg-[#050507]/50">
                         <div className="flex items-center gap-2 mb-4">
-                          <Receipt className="w-4 h-4 text-slate-400" />
-                          <h4 className="text-sm font-medium text-slate-300">
+                          <Receipt className="w-4 h-4 text-white/50" />
+                          <h4 className="text-sm font-medium text-white/70">
                             Payment History
                           </h4>
                         </div>
 
                         {subPayments.length === 0 ? (
-                          <p className="text-slate-500 text-sm">
+                          <p className="text-white/30 text-sm">
                             No payments yet.
                           </p>
                         ) : (
@@ -546,7 +546,7 @@ export default function SubscribersPage() {
                             {subPayments.map((payment) => (
                               <div
                                 key={payment.id}
-                                className="flex items-center justify-between bg-slate-900/50 rounded-xl px-4 py-3"
+                                className="flex items-center justify-between bg-white/[0.02] rounded-xl px-4 py-3"
                               >
                                 <div className="flex items-center gap-3">
                                   <div
@@ -562,7 +562,7 @@ export default function SubscribersPage() {
                                     <span className="text-white text-sm font-medium">
                                       ${payment.amount.toFixed(2)} USDC
                                     </span>
-                                    <span className="text-slate-500 text-xs ml-2">
+                                    <span className="text-white/30 text-xs ml-2">
                                       {new Date(
                                         payment.createdAt,
                                       ).toLocaleDateString()}
@@ -586,7 +586,7 @@ export default function SubscribersPage() {
                                       href={`https://explorer.solana.com/tx/${payment.txSignature}?cluster=devnet`}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="text-indigo-400 hover:text-indigo-300"
+                                      className="text-[#a78bfa] hover:text-[#c4b5fd]"
                                     >
                                       <ExternalLink className="w-3.5 h-3.5" />
                                     </a>
@@ -598,34 +598,34 @@ export default function SubscribersPage() {
                         )}
 
                         {/* Subscription metadata */}
-                        <div className="mt-4 pt-4 border-t border-slate-800 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                        <div className="mt-4 pt-4 border-t border-white/[0.06] grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
                           <div>
-                            <span className="text-slate-500">Created</span>
-                            <p className="text-slate-300">
+                            <span className="text-white/30">Created</span>
+                            <p className="text-white/70">
                               {new Date(sub.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
-                            <span className="text-slate-500">Period Start</span>
-                            <p className="text-slate-300">
+                            <span className="text-white/30">Period Start</span>
+                            <p className="text-white/70">
                               {new Date(
                                 sub.currentPeriodStart,
                               ).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
-                            <span className="text-slate-500">Period End</span>
-                            <p className="text-slate-300">
+                            <span className="text-white/30">Period End</span>
+                            <p className="text-white/70">
                               {new Date(
                                 sub.currentPeriodEnd,
                               ).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
-                            <span className="text-slate-500">
+                            <span className="text-white/30">
                               Subscription ID
                             </span>
-                            <p className="text-slate-300 font-mono truncate">
+                            <p className="text-white/70 font-mono truncate">
                               {sub.id}
                             </p>
                           </div>

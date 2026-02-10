@@ -2,7 +2,8 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Settlr - Accept Crypto Without Wallets";
+export const alt =
+  "Settlr – The payment stack for global-first AI and SaaS companies";
 export const size = {
   width: 1200,
   height: 630,
@@ -20,11 +21,23 @@ export default async function Image() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#0a0a0f",
+          backgroundColor: "#050507",
           backgroundImage:
-            "radial-gradient(circle at 25% 25%, rgba(153, 69, 255, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(0, 212, 255, 0.3) 0%, transparent 50%)",
+            "radial-gradient(circle at 25% 25%, rgba(167, 139, 250, 0.25) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(56, 189, 248, 0.2) 0%, transparent 50%)",
         }}
       >
+        {/* Top accent bar */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 4,
+            background: "linear-gradient(90deg, #a78bfa, #38bdf8)",
+          }}
+        />
+
         <div
           style={{
             display: "flex",
@@ -33,151 +46,121 @@ export default async function Image() {
             justifyContent: "center",
           }}
         >
-          {/* Logo/Brand - Italic skewed style */}
+          {/* Logo — bubble graffiti "settlr." */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 16,
-              marginBottom: 32,
+              gap: 20,
+              marginBottom: 40,
             }}
           >
-            {/* Stacked bars icon */}
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
-                gap: 6,
-                transform: "skewX(-12deg)",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 72,
+                height: 72,
+                borderRadius: 16,
+                background: "linear-gradient(135deg, #c4b5fd, #a78bfa)",
+                border: "2px solid #7c3aed",
+                boxShadow: "4px 4px 0 rgba(0,0,0,0.4)",
               }}
             >
-              <div
+              <span
                 style={{
-                  width: 40,
-                  height: 8,
-                  background: "#00D4FF",
-                  marginLeft: 8,
-                  boxShadow: "0 0 20px rgba(0, 212, 255, 0.9)",
+                  fontSize: 42,
+                  fontWeight: 700,
+                  color: "#ffffff",
+                  textShadow: "1px 1px 0 rgba(0,0,0,0.2)",
                 }}
-              />
-              <div
-                style={{
-                  width: 40,
-                  height: 8,
-                  background: "#9945FF",
-                  boxShadow: "0 0 20px rgba(153, 69, 255, 0.9)",
-                }}
-              />
-              <div
-                style={{
-                  width: 40,
-                  height: 8,
-                  background: "#14F195",
-                  marginLeft: 4,
-                  boxShadow: "0 0 20px rgba(20, 241, 149, 0.9)",
-                }}
-              />
+              >
+                S
+              </span>
             </div>
+            {/* Wordmark — layered outline for bubble effect */}
             <div
               style={{
-                fontSize: 100,
-                fontWeight: 800,
-                fontStyle: "italic",
-                transform: "skewX(-12deg)",
                 display: "flex",
+                alignItems: "baseline",
+                fontSize: 88,
+                fontWeight: 700,
+                letterSpacing: "-0.01em",
+                color: "#ffffff",
+                textShadow:
+                  "3px 3px 0 rgba(0,0,0,0.45), -2px -2px 0 #1a1a2e, 2px -2px 0 #1a1a2e, -2px 2px 0 #1a1a2e, 2px 2px 0 #1a1a2e, 0 -2px 0 #1a1a2e, 0 2px 0 #1a1a2e, -2px 0 0 #1a1a2e, 2px 0 0 #1a1a2e",
               }}
             >
-              <span
+              settlr
+              <div
                 style={{
-                  background:
-                    "linear-gradient(90deg, #00D4FF 0%, #9945FF 50%, #FF00E5 100%)",
-                  backgroundClip: "text",
-                  color: "transparent",
+                  width: 16,
+                  height: 16,
+                  borderRadius: 8,
+                  background: "linear-gradient(135deg, #c4b5fd, #a78bfa)",
+                  border: "2px solid #1a1a2e",
+                  marginLeft: 4,
+                  marginBottom: 10,
+                  boxShadow: "2px 2px 0 rgba(0,0,0,0.4)",
                 }}
-              >
-                SETTL
-              </span>
-              <span
-                style={{
-                  background:
-                    "linear-gradient(90deg, #FF00E5 0%, #14F195 100%)",
-                  backgroundClip: "text",
-                  color: "transparent",
-                }}
-              >
-                R
-              </span>
+              />
             </div>
           </div>
 
           {/* Tagline */}
           <div
             style={{
-              fontSize: 48,
+              fontSize: 44,
               color: "#ffffff",
               marginBottom: 16,
               textAlign: "center",
               fontWeight: 700,
+              letterSpacing: "-0.02em",
             }}
           >
-            Accept Crypto Without Wallets
+            The payment stack for AI &amp; SaaS
           </div>
 
           {/* Subtitle */}
           <div
             style={{
-              fontSize: 30,
-              color: "#a3a3a3",
+              fontSize: 28,
+              color: "rgba(255,255,255,0.5)",
               marginBottom: 48,
               textAlign: "center",
             }}
           >
-            Customers pay with email. You get USDC instantly.
+            Accept USDC globally. No wallets. No gas. 1% flat fee.
           </div>
 
-          {/* Features */}
+          {/* Feature pills */}
           <div
             style={{
               display: "flex",
-              gap: 48,
+              gap: 32,
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                color: "#00D4FF",
-                fontSize: 26,
-              }}
-            >
-              <span>✉️</span>
-              <span>No Wallets</span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                color: "#9945FF",
-                fontSize: 26,
-              }}
-            >
-              <span>⚡</span>
-              <span>Zero Gas Fees</span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                color: "#14F195",
-                fontSize: 26,
-              }}
-            >
-              <span>🔐</span>
-              <span>Private Payments</span>
-            </div>
+            {[
+              { emoji: "🔒", label: "Private by Default", color: "#a78bfa" },
+              { emoji: "⚡", label: "Zero Gas Fees", color: "#38bdf8" },
+              { emoji: "💸", label: "Instant Payouts", color: "#a78bfa" },
+            ].map((item) => (
+              <div
+                key={item.label}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  fontSize: 24,
+                  fontWeight: 600,
+                  color: item.color,
+                }}
+              >
+                <span>{item.emoji}</span>
+                <span>{item.label}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -185,9 +168,10 @@ export default async function Image() {
         <div
           style={{
             position: "absolute",
-            bottom: 40,
-            fontSize: 24,
-            color: "#737373",
+            bottom: 36,
+            fontSize: 22,
+            color: "rgba(255,255,255,0.3)",
+            letterSpacing: "0.05em",
           }}
         >
           settlr.dev

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Fredoka } from "next/font/google";
 import Script from "next/script";
 import ClientLayout from "@/components/ClientLayout";
 import "./globals.css";
@@ -16,13 +16,20 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+const fredoka = Fredoka({
+  variable: "--font-fredoka",
+  subsets: ["latin"],
+  weight: ["700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
-    default: "Settlr | Accept Crypto Without Wallets",
+    default: "Settlr | The Payment Stack for AI and SaaS",
     template: "%s | Settlr",
   },
   description:
-    "Accept crypto payments without wallets. Customers pay with email, you get USDC instantly. Zero gas fees. Private payments. One React component. Built on Solana.",
+    "The payment stack for global-first AI and SaaS companies. Accept USDC with no wallets, zero gas fees, and private payments. One React component. Built on Solana.",
   keywords: [
     "crypto payment processor",
     "crypto payment gateway",
@@ -114,7 +121,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{ background: "#0a0a12" }}>
+    <html lang="en" style={{ background: "#050507" }}>
       <head>
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -130,7 +137,7 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
-        <meta name="theme-color" content="#0a0a12" />
+        <meta name="theme-color" content="#050507" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta
           name="apple-mobile-web-app-status-bar-style"
@@ -152,8 +159,8 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ background: "#0a0a12" }}
+        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} antialiased`}
+        style={{ background: "#050507" }}
       >
         <ClientLayout>{children}</ClientLayout>
       </body>

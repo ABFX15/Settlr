@@ -21,10 +21,10 @@ export default function TestSDKPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a12] flex items-center justify-center p-4">
-      <div className="bg-zinc-900 rounded-2xl p-8 max-w-md w-full text-center">
+    <div className="min-h-screen bg-[#050507] flex items-center justify-center p-4">
+      <div className="bg-white/[0.03] rounded-2xl p-8 max-w-md w-full text-center">
         <h1 className="text-2xl font-bold text-white mb-4">SDK Test</h1>
-        <p className="text-zinc-400 mb-6">
+        <p className="text-white/50 mb-6">
           Click the button to test the checkout flow
         </p>
 
@@ -36,7 +36,7 @@ export default function TestSDKPage() {
           {loading ? "Redirecting..." : "Buy Test Item - $0.01"}
         </button>
 
-        <p className="text-zinc-500 text-sm mt-4">
+        <p className="text-white/30 text-sm mt-4">
           This simulates what the SDK BuyButton does
         </p>
       </div>

@@ -76,18 +76,18 @@ export default function DashboardPage() {
           const total =
             data.payments?.reduce(
               (sum: number, p: PaymentRecord) => sum + p.amount,
-              0
+              0,
             ) || 0;
           const count = data.payments?.length || 0;
           const today = new Date().toDateString();
           const todayPayments =
             data.payments?.filter(
               (p: PaymentRecord) =>
-                new Date(p.completedAt).toDateString() === today
+                new Date(p.completedAt).toDateString() === today,
             ) || [];
           const todayTotal = todayPayments.reduce(
             (sum: number, p: PaymentRecord) => sum + p.amount,
-            0
+            0,
           );
 
           setStats({
@@ -134,7 +134,7 @@ export default function DashboardPage() {
       {/* Unified Navbar */}
       <Navbar />
 
-      <div className="min-h-screen bg-[#0a0a0f] text-white p-8 pt-32">
+      <div className="min-h-screen bg-[#050507] text-white p-8 pt-32">
         <div className="max-w-7xl mx-auto">
           {/* Header with Visa News Banner */}
           <motion.div
@@ -145,7 +145,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-4xl font-bold mb-2">Merchant Dashboard</h1>
-                <p className="text-zinc-400">
+                <p className="text-white/50">
                   {connected
                     ? `Connected: ${formatAddress(publicKey!)}`
                     : "Sign in to view your payments"}
@@ -156,7 +156,7 @@ export default function DashboardPage() {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="px-6 py-3 bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-white font-semibold rounded-xl flex items-center gap-2"
+                    className="px-6 py-3 bg-[#050507] text-white font-semibold rounded-xl flex items-center gap-2"
                   >
                     <Zap className="w-4 h-4" />
                     Create Payment
@@ -186,7 +186,7 @@ export default function DashboardPage() {
                   maximumFractionDigits: 2,
                 })}`,
                 icon: DollarSign,
-                color: "from-purple-500 to-purple-600",
+                color: "from-[#a78bfa] to-[#a78bfa]",
                 change: "+12.5%",
               },
               {
@@ -200,7 +200,7 @@ export default function DashboardPage() {
                 label: "Avg. Transaction",
                 value: `$${stats.avgTransaction.toFixed(2)}`,
                 icon: TrendingUp,
-                color: "from-purple-500 to-purple-600",
+                color: "from-[#a78bfa] to-[#a78bfa]",
                 change: "+5.2%",
               },
               {
@@ -229,7 +229,7 @@ export default function DashboardPage() {
                     {stat.change}
                   </span>
                 </div>
-                <p className="text-zinc-400 text-sm mb-1">{stat.label}</p>
+                <p className="text-white/50 text-sm mb-1">{stat.label}</p>
                 <p className="text-2xl font-bold">{stat.value}</p>
               </motion.div>
             ))}
@@ -244,7 +244,7 @@ export default function DashboardPage() {
                 icon: Globe,
                 href: "/create",
                 color:
-                  "bg-blue-500/10 border-blue-500/30 hover:border-blue-500/50",
+                  "bg-[#38bdf8]/10 border-[#38bdf8]/20 hover:border-blue-500/50",
               },
               {
                 title: "Subscriptions",
@@ -252,7 +252,7 @@ export default function DashboardPage() {
                 icon: RefreshCw,
                 href: "/dashboard/subscriptions",
                 color:
-                  "bg-purple-500/10 border-purple-500/30 hover:border-purple-500/50",
+                  "bg-[#a78bfa]/10 border-[#a78bfa]/30 hover:border-[#a78bfa]/50",
               },
               {
                 title: "Webhooks",
@@ -268,7 +268,7 @@ export default function DashboardPage() {
                 icon: Key,
                 href: "/dashboard/api-keys",
                 color:
-                  "bg-purple-500/10 border-purple-500/30 hover:border-purple-500/50",
+                  "bg-[#a78bfa]/10 border-[#a78bfa]/30 hover:border-[#a78bfa]/50",
               },
               {
                 title: "Compliance",
@@ -301,7 +301,7 @@ export default function DashboardPage() {
                 icon: Globe,
                 href: "https://github.com/ABFX15/x402-hack-payment",
                 color:
-                  "bg-purple-500/10 border-purple-500/30 hover:border-purple-500/50",
+                  "bg-[#a78bfa]/10 border-[#a78bfa]/30 hover:border-[#a78bfa]/50",
               },
             ].map((action, i) => {
               const content = (
@@ -319,12 +319,12 @@ export default function DashboardPage() {
                         <h3 className="font-semibold text-lg">
                           {action.title}
                         </h3>
-                        <p className="text-zinc-400 text-sm">
+                        <p className="text-white/50 text-sm">
                           {action.description}
                         </p>
                       </div>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-white transition-colors" />
+                    <ChevronRight className="w-5 h-5 text-white/30 group-hover:text-white transition-colors" />
                   </div>
                 </motion.div>
               );
@@ -355,7 +355,7 @@ export default function DashboardPage() {
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold">Recent Payments</h2>
-              <span className="text-zinc-400 text-sm">
+              <span className="text-white/50 text-sm">
                 Last 10 transactions
               </span>
             </div>
@@ -366,13 +366,13 @@ export default function DashboardPage() {
               </div>
             ) : !connected ? (
               <div className="text-center py-12">
-                <Wallet className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                <p className="text-zinc-400 mb-4">
+                <Wallet className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                <p className="text-white/50 mb-4">
                   Sign in to view your payments
                 </p>
                 <button
                   onClick={login}
-                  className="px-6 py-3 bg-gradient-to-r from-[#a855f7] to-[#22d3ee] text-white font-semibold rounded-xl flex items-center gap-2 mx-auto"
+                  className="px-6 py-3 bg-[#050507] text-white font-semibold rounded-xl flex items-center gap-2 mx-auto"
                 >
                   <LogIn className="w-4 h-4" />
                   Sign In
@@ -380,10 +380,10 @@ export default function DashboardPage() {
               </div>
             ) : payments.length === 0 ? (
               <div className="text-center py-12">
-                <Receipt className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                <p className="text-zinc-400 mb-4">No payments yet</p>
+                <Receipt className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                <p className="text-white/50 mb-4">No payments yet</p>
                 <Link href="/create">
-                  <button className="px-6 py-2 bg-white text-black rounded-lg font-medium">
+                  <button className="px-6 py-2 bg-[#050507] text-black rounded-lg font-medium">
                     Create your first payment
                   </button>
                 </Link>
@@ -392,7 +392,7 @@ export default function DashboardPage() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="text-left text-zinc-500 text-sm border-b border-zinc-800">
+                    <tr className="text-left text-white/30 text-sm border-b border-white/[0.06]">
                       <th className="pb-4 font-medium">Payment ID</th>
                       <th className="pb-4 font-medium">Customer</th>
                       <th className="pb-4 font-medium">Amount</th>
@@ -408,18 +408,18 @@ export default function DashboardPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: i * 0.05 }}
-                        className="border-b border-zinc-800/50 hover:bg-zinc-900/50 transition-colors"
+                        className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors"
                       >
                         <td className="py-4">
                           <div className="flex items-center gap-2">
-                            <code className="text-sm font-mono text-zinc-300">
+                            <code className="text-sm font-mono text-white/70">
                               {payment.id.slice(0, 12)}...
                             </code>
                             <button
                               onClick={() =>
                                 copyToClipboard(payment.id, `id-${payment.id}`)
                               }
-                              className="text-zinc-500 hover:text-white"
+                              className="text-white/30 hover:text-white"
                             >
                               {copied === `id-${payment.id}` ? (
                                 <Check className="w-4 h-4 text-cyan-400" />
@@ -430,7 +430,7 @@ export default function DashboardPage() {
                           </div>
                         </td>
                         <td className="py-4">
-                          <span className="text-zinc-300 font-mono text-sm">
+                          <span className="text-white/70 font-mono text-sm">
                             {formatAddress(payment.customerWallet)}
                           </span>
                         </td>
@@ -438,7 +438,7 @@ export default function DashboardPage() {
                           <span className="font-semibold text-white">
                             ${payment.amount.toFixed(2)}
                           </span>
-                          <span className="text-zinc-500 text-sm ml-1">
+                          <span className="text-white/30 text-sm ml-1">
                             USDC
                           </span>
                         </td>
@@ -446,16 +446,16 @@ export default function DashboardPage() {
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-medium ${
                               payment.status === "completed"
-                                ? "bg-purple-500/20 text-cyan-400"
+                                ? "bg-[#a78bfa]/20 text-cyan-400"
                                 : payment.status === "refunded"
                                 ? "bg-amber-500/20 text-amber-400"
-                                : "bg-zinc-500/20 text-zinc-400"
+                                : "bg-white/[0.06] text-white/50"
                             }`}
                           >
                             {payment.status}
                           </span>
                         </td>
-                        <td className="py-4 text-zinc-400 text-sm">
+                        <td className="py-4 text-white/50 text-sm">
                           {formatDate(payment.completedAt)}
                         </td>
                         <td className="py-4">
@@ -464,7 +464,7 @@ export default function DashboardPage() {
                               href={`https://explorer.solana.com/tx/${payment.txSignature}?cluster=devnet`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+                              className="p-2 text-white/30 hover:text-white hover:bg-white/[0.06] rounded-lg transition-colors"
                             >
                               <ExternalLink className="w-4 h-4" />
                             </a>
@@ -501,10 +501,10 @@ export default function DashboardPage() {
   })
 });
 // Redirect to session.url`,
-                    "code"
+                    "code",
                   )
                 }
-                className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white"
+                className="flex items-center gap-2 text-sm text-white/50 hover:text-white"
               >
                 {copied === "code" ? (
                   <>
@@ -517,74 +517,74 @@ export default function DashboardPage() {
                 )}
               </button>
             </div>
-            <pre className="bg-zinc-900 rounded-xl p-4 overflow-x-auto text-sm">
+            <pre className="bg-white/[0.03] rounded-xl p-4 overflow-x-auto text-sm">
               <code>
-                <span className="text-purple-400">const</span>{" "}
+                <span className="text-[#a78bfa]">const</span>{" "}
                 <span className="text-cyan-300">session</span>{" "}
                 <span className="text-pink-400">=</span>{" "}
-                <span className="text-purple-400">await</span>{" "}
+                <span className="text-[#a78bfa]">await</span>{" "}
                 <span className="text-yellow-300">fetch</span>
-                <span className="text-zinc-300">(</span>
+                <span className="text-white/70">(</span>
                 <span className="text-green-400">
                   &apos;/api/checkout/sessions&apos;
                 </span>
-                <span className="text-zinc-300">, {"{"}</span>
+                <span className="text-white/70">, {"{"}</span>
                 {"\n"}
                 {"  "}
                 <span className="text-cyan-300">method</span>
-                <span className="text-zinc-300">: </span>
+                <span className="text-white/70">: </span>
                 <span className="text-green-400">&apos;POST&apos;</span>
-                <span className="text-zinc-300">,</span>
+                <span className="text-white/70">,</span>
                 {"\n"}
                 {"  "}
                 <span className="text-cyan-300">body</span>
-                <span className="text-zinc-300">: </span>
+                <span className="text-white/70">: </span>
                 <span className="text-yellow-300">JSON</span>
-                <span className="text-zinc-300">.</span>
+                <span className="text-white/70">.</span>
                 <span className="text-yellow-300">stringify</span>
-                <span className="text-zinc-300">({"{"}</span>
+                <span className="text-white/70">({"{"}</span>
                 {"\n"}
                 {"    "}
                 <span className="text-cyan-300">merchantId</span>
-                <span className="text-zinc-300">: </span>
+                <span className="text-white/70">: </span>
                 <span className="text-green-400">&apos;your-store&apos;</span>
-                <span className="text-zinc-300">,</span>
+                <span className="text-white/70">,</span>
                 {"\n"}
                 {"    "}
                 <span className="text-cyan-300">merchantWallet</span>
-                <span className="text-zinc-300">: </span>
+                <span className="text-white/70">: </span>
                 <span className="text-green-400">
                   &apos;{publicKey?.slice(0, 20) || "YOUR_WALLET"}...&apos;
                 </span>
-                <span className="text-zinc-300">,</span>
+                <span className="text-white/70">,</span>
                 {"\n"}
                 {"    "}
                 <span className="text-cyan-300">amount</span>
-                <span className="text-zinc-300">: </span>
+                <span className="text-white/70">: </span>
                 <span className="text-orange-400">29.99</span>
-                <span className="text-zinc-300">,</span>
+                <span className="text-white/70">,</span>
                 {"\n"}
                 {"    "}
                 <span className="text-cyan-300">successUrl</span>
-                <span className="text-zinc-300">: </span>
+                <span className="text-white/70">: </span>
                 <span className="text-green-400">
                   &apos;https://yoursite.com/success&apos;
                 </span>
-                <span className="text-zinc-300">,</span>
+                <span className="text-white/70">,</span>
                 {"\n"}
                 {"    "}
                 <span className="text-cyan-300">cancelUrl</span>
-                <span className="text-zinc-300">: </span>
+                <span className="text-white/70">: </span>
                 <span className="text-green-400">
                   &apos;https://yoursite.com/cancel&apos;
                 </span>
                 {"\n"}
                 {"  "}
-                <span className="text-zinc-300">{"}"})</span>
+                <span className="text-white/70">{"}"})</span>
                 {"\n"}
-                <span className="text-zinc-300">{"}"});</span>
+                <span className="text-white/70">{"}"});</span>
                 {"\n"}
-                <span className="text-zinc-500">
+                <span className="text-white/30">
                   // Redirect customer to session.url
                 </span>
               </code>

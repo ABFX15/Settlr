@@ -116,7 +116,7 @@ export default function IGamingPage() {
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0f]" ref={containerRef}>
+    <main className="min-h-screen bg-[#050507]" ref={containerRef}>
       <Navbar />
 
       {/* Hero Section - Unique asymmetric layout */}
@@ -124,7 +124,7 @@ export default function IGamingPage() {
         {/* Animated gradient mesh background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(153,69,255,0.3),transparent)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#050507] to-transparent" />
         </div>
 
         {/* Floating orbs */}
@@ -134,7 +134,7 @@ export default function IGamingPage() {
             scale: [1, 1.1, 1],
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute right-[10%] top-[20%] h-72 w-72 rounded-full bg-gradient-to-br from-[#9945FF]/20 to-[#14F195]/20 blur-3xl"
+          className="absolute right-[10%] top-[20%] h-72 w-72 rounded-full bg-gradient-to-br from-[#a78bfa]/20 to-[#14F195]/20 blur-3xl"
         />
         <motion.div
           animate={{
@@ -142,7 +142,7 @@ export default function IGamingPage() {
             scale: [1, 0.9, 1],
           }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute left-[5%] top-[40%] h-48 w-48 rounded-full bg-gradient-to-br from-[#14F195]/20 to-[#00D4FF]/20 blur-3xl"
+          className="absolute left-[5%] top-[40%] h-48 w-48 rounded-full bg-gradient-to-br from-[#14F195]/20 to-[#38bdf8]/20 blur-3xl"
         />
 
         <div className="relative mx-auto max-w-7xl">
@@ -153,7 +153,7 @@ export default function IGamingPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#9945FF]/30 bg-[#9945FF]/10 px-4 py-2">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#9945FF]/30 bg-[#a78bfa]/10 px-4 py-2">
                 <Gamepad2 className="h-4 w-4 text-[#9945FF]" />
                 <span className="text-sm font-medium text-[#9945FF]">
                   Built for iGaming
@@ -200,7 +200,7 @@ export default function IGamingPage() {
                 </span>
               </h1>
 
-              <p className="mb-8 max-w-lg text-lg text-gray-400">
+              <p className="mb-8 max-w-lg text-lg text-white/50">
                 Non-custodial crypto payments with instant deposits, instant
                 withdrawals, zero chargebacks, and no payment processor can shut
                 you down.
@@ -209,7 +209,7 @@ export default function IGamingPage() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/waitlist"
-                  className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#14F195] to-[#00D4FF] px-6 py-3.5 font-semibold text-black transition-all hover:shadow-lg hover:shadow-[#14F195]/25"
+                  className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#14F195] to-[#38bdf8] px-6 py-3.5 font-semibold text-black transition-all hover:shadow-lg hover:shadow-[#14F195]/25"
                 >
                   Get Early Access
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -237,17 +237,17 @@ export default function IGamingPage() {
                     whileHover={{ scale: 1.02 }}
                     className="rounded-2xl border border-[#14F195]/20 bg-gradient-to-br from-[#14F195]/10 to-transparent p-6 backdrop-blur-sm"
                   >
-                    <Zap className="mb-3 h-8 w-8 text-[#14F195]" />
+                    <Zap className="mb-3 h-8 w-8 text-[#a78bfa]" />
                     <div className="text-3xl font-bold text-white">400ms</div>
-                    <div className="text-sm text-gray-400">Settlement time</div>
+                    <div className="text-sm text-white/50">Settlement time</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="rounded-2xl border border-[#9945FF]/20 bg-gradient-to-br from-[#9945FF]/10 to-transparent p-6 backdrop-blur-sm"
+                    className="rounded-2xl border border-[#9945FF]/20 bg-gradient-to-br from-[#a78bfa]/10 to-transparent p-6 backdrop-blur-sm"
                   >
                     <Shield className="mb-3 h-8 w-8 text-[#9945FF]" />
                     <div className="text-3xl font-bold text-white">0%</div>
-                    <div className="text-sm text-gray-400">Chargebacks</div>
+                    <div className="text-sm text-white/50">Chargebacks</div>
                   </motion.div>
                 </div>
 
@@ -260,13 +260,13 @@ export default function IGamingPage() {
                   <div className="relative">
                     <div className="mb-4 flex items-center gap-3">
                       <div className="rounded-lg bg-[#14F195]/20 p-2">
-                        <Globe className="h-6 w-6 text-[#14F195]" />
+                        <Globe className="h-6 w-6 text-[#a78bfa]" />
                       </div>
                       <span className="text-lg font-semibold text-white">
                         Global Reach
                       </span>
                     </div>
-                    <p className="text-gray-400">
+                    <p className="text-white/50">
                       Accept payments from 150+ countries. No payment processor
                       restrictions. Crypto has no borders.
                     </p>
@@ -279,9 +279,9 @@ export default function IGamingPage() {
                     whileHover={{ scale: 1.02 }}
                     className="rounded-2xl border border-[#00D4FF]/20 bg-gradient-to-br from-[#00D4FF]/10 to-transparent p-6 backdrop-blur-sm"
                   >
-                    <DollarSign className="mb-3 h-8 w-8 text-[#00D4FF]" />
+                    <DollarSign className="mb-3 h-8 w-8 text-[#38bdf8]" />
                     <div className="text-3xl font-bold text-white">0.5%</div>
-                    <div className="text-sm text-gray-400">Transaction fee</div>
+                    <div className="text-sm text-white/50">Transaction fee</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
@@ -289,7 +289,7 @@ export default function IGamingPage() {
                   >
                     <Wallet className="mb-3 h-8 w-8 text-white" />
                     <div className="text-3xl font-bold text-white">No KYC</div>
-                    <div className="text-sm text-gray-400">For players</div>
+                    <div className="text-sm text-white/50">For players</div>
                   </motion.div>
                 </div>
               </div>
@@ -324,7 +324,7 @@ export default function IGamingPage() {
       </section>
 
       {/* Problems Section - White background */}
-      <section className="relative overflow-hidden bg-white px-4 py-24">
+      <section className="relative overflow-hidden bg-white/[0.01] px-4 py-24">
         <div className="mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -332,11 +332,11 @@ export default function IGamingPage() {
             viewport={{ once: true }}
             className="mb-16 text-center"
           >
-            <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">
+            <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
               Traditional payments are
               <span className="text-red-500"> broken</span>
             </h2>
-            <p className="mx-auto max-w-2xl text-gray-600">
+            <p className="mx-auto max-w-2xl text-white/40">
               iGaming operators face unique challenges that traditional payment
               processors either can't or won't solve.
             </p>
@@ -358,10 +358,10 @@ export default function IGamingPage() {
                     <X className="h-8 w-8" />
                   </div>
                   <Icon className="mb-4 h-8 w-8 text-red-500" />
-                  <h3 className="mb-2 font-semibold text-gray-900">
+                  <h3 className="mb-2 font-semibold text-white">
                     {point.problem}
                   </h3>
-                  <p className="text-sm text-gray-600">{point.detail}</p>
+                  <p className="text-sm text-white/40">{point.detail}</p>
                 </motion.div>
               );
             })}
@@ -370,7 +370,7 @@ export default function IGamingPage() {
       </section>
 
       {/* Features Section - Purple gradient background */}
-      <section className="relative bg-gradient-to-br from-[#9945FF] to-[#7B2FE0] px-4 py-24">
+      <section className="relative bg-gradient-to-br from-[#a78bfa] to-[#7B2FE0] px-4 py-24">
         <div className="relative mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -387,7 +387,7 @@ export default function IGamingPage() {
             <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
               Everything you need.
               <br />
-              <span className="text-[#14F195]">Nothing you don't.</span>
+              <span className="text-[#a78bfa]">Nothing you don't.</span>
             </h2>
           </motion.div>
 
@@ -406,7 +406,7 @@ export default function IGamingPage() {
                 >
                   <div className="relative">
                     <div className="mb-4 inline-flex rounded-xl bg-white/20 p-3">
-                      <Icon className="h-6 w-6 text-[#14F195]" />
+                      <Icon className="h-6 w-6 text-[#a78bfa]" />
                     </div>
 
                     <div className="mb-4">
@@ -440,7 +440,7 @@ export default function IGamingPage() {
             className="mb-12 text-center"
           >
             <h2 className="mb-4 text-4xl font-bold text-white">
-              Traditional vs. <span className="text-[#14F195]">Settlr</span>
+              Traditional vs. <span className="text-[#a78bfa]">Settlr</span>
             </h2>
           </motion.div>
 
@@ -451,13 +451,13 @@ export default function IGamingPage() {
             className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]"
           >
             <div className="grid grid-cols-3 border-b border-white/10 bg-white/[0.02]">
-              <div className="p-4 text-sm font-medium text-gray-400">
+              <div className="p-4 text-sm font-medium text-white/50">
                 Feature
               </div>
-              <div className="p-4 text-center text-sm font-medium text-gray-400">
+              <div className="p-4 text-center text-sm font-medium text-white/50">
                 Traditional
               </div>
-              <div className="p-4 text-center text-sm font-medium text-[#14F195]">
+              <div className="p-4 text-center text-sm font-medium text-[#a78bfa]">
                 Settlr
               </div>
             </div>
@@ -497,10 +497,10 @@ export default function IGamingPage() {
                 }`}
               >
                 <div className="p-4 text-white">{row.feature}</div>
-                <div className="p-4 text-center text-gray-400">
+                <div className="p-4 text-center text-white/50">
                   {row.traditional}
                 </div>
-                <div className="p-4 text-center font-medium text-[#14F195]">
+                <div className="p-4 text-center font-medium text-[#a78bfa]">
                   {row.settlr}
                 </div>
               </div>
@@ -519,9 +519,9 @@ export default function IGamingPage() {
           viewport={{ once: true }}
           className="relative mx-auto max-w-3xl text-center"
         >
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#14F195]/30 bg-[#14F195]/10 px-4 py-2">
-            <TrendingUp className="h-4 w-4 text-[#14F195]" />
-            <span className="text-sm font-medium text-[#14F195]">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2">
+            <TrendingUp className="h-4 w-4 text-[#a78bfa]" />
+            <span className="text-sm font-medium text-[#a78bfa]">
               Ready to scale?
             </span>
           </div>
@@ -529,12 +529,12 @@ export default function IGamingPage() {
           <h2 className="mb-6 text-4xl font-bold text-white md:text-5xl">
             Your players deserve
             <br />
-            <span className="bg-gradient-to-r from-[#14F195] to-[#00D4FF] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#14F195] to-[#38bdf8] bg-clip-text text-transparent">
               instant everything
             </span>
           </h2>
 
-          <p className="mb-8 text-lg text-gray-400">
+          <p className="mb-8 text-lg text-white/50">
             Join forward-thinking casinos already using Settlr to eliminate
             payment friction and maximize player lifetime value.
           </p>
@@ -542,7 +542,7 @@ export default function IGamingPage() {
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/waitlist"
-              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#14F195] to-[#00D4FF] px-8 py-4 font-semibold text-black transition-all hover:shadow-lg hover:shadow-[#14F195]/25"
+              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#14F195] to-[#38bdf8] px-8 py-4 font-semibold text-black transition-all hover:shadow-lg hover:shadow-[#14F195]/25"
             >
               Get Started Today
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

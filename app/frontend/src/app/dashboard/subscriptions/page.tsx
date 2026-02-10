@@ -198,25 +198,25 @@ export default function SubscriptionsPage() {
   // Not connected
   if (!connected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="min-h-screen bg-[#050507]">
         <div className="max-w-4xl mx-auto px-6 py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-indigo-500/30">
-              <RefreshCw className="w-10 h-10 text-indigo-400" />
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#a78bfa]/10 flex items-center justify-center border border-[#a78bfa]/20">
+              <RefreshCw className="w-10 h-10 text-[#a78bfa]" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-4">
               Subscription Plans
             </h1>
-            <p className="text-slate-400 mb-8 max-w-md mx-auto">
+            <p className="text-white/50 mb-8 max-w-md mx-auto">
               Connect your wallet to create and manage recurring payment plans.
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/25"
+              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-8 py-4 rounded-xl font-semibold hover:bg-white/90 transition-all "
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -228,7 +228,7 @@ export default function SubscriptionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-[#050507]">
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -237,13 +237,13 @@ export default function SubscriptionsPage() {
               href="/dashboard"
               className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-slate-400" />
+              <ArrowLeft className="w-5 h-5 text-white/50" />
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-white">
                 Subscription Plans
               </h1>
-              <p className="text-slate-400 text-sm">
+              <p className="text-white/50 text-sm">
                 Create recurring payment plans for your customers
               </p>
             </div>
@@ -258,7 +258,7 @@ export default function SubscriptionsPage() {
             </Link>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:from-indigo-500 hover:to-purple-500 transition-all"
+              className="flex items-center gap-2 bg-[#050507] text-[#050507] px-4 py-2 rounded-xl font-medium hover:bg-white/90 transition-all"
             >
               <Plus className="w-4 h-4" />
               Create Plan
@@ -271,13 +271,13 @@ export default function SubscriptionsPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg bg-indigo-500/10">
-                <RefreshCw className="w-5 h-5 text-indigo-400" />
+              <div className="p-2 rounded-lg bg-[#a78bfa]/10">
+                <RefreshCw className="w-5 h-5 text-[#a78bfa]" />
               </div>
-              <span className="text-slate-400 text-sm">Active Plans</span>
+              <span className="text-white/50 text-sm">Active Plans</span>
             </div>
             <p className="text-2xl font-bold text-white">
               {plans.filter((p) => p.active).length}
@@ -288,13 +288,13 @@ export default function SubscriptionsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-cyan-500/10">
                 <Users className="w-5 h-5 text-cyan-400" />
               </div>
-              <span className="text-slate-400 text-sm">Total Subscribers</span>
+              <span className="text-white/50 text-sm">Total Subscribers</span>
             </div>
             <p className="text-2xl font-bold text-white">
               {plans.reduce((sum, p) => sum + (p.subscriberCount || 0), 0)}
@@ -305,13 +305,13 @@ export default function SubscriptionsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg bg-purple-500/10">
-                <DollarSign className="w-5 h-5 text-purple-400" />
+              <div className="p-2 rounded-lg bg-[#a78bfa]/10">
+                <DollarSign className="w-5 h-5 text-[#a78bfa]" />
               </div>
-              <span className="text-slate-400 text-sm">Monthly Revenue</span>
+              <span className="text-white/50 text-sm">Monthly Revenue</span>
             </div>
             <p className="text-2xl font-bold text-white">$0.00</p>
           </motion.div>
@@ -320,27 +320,27 @@ export default function SubscriptionsPage() {
         {/* Plans List */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#a78bfa]" />
           </div>
         ) : plans.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-2xl p-12 text-center"
+            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center"
           >
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-slate-800 flex items-center justify-center">
-              <RefreshCw className="w-8 h-8 text-slate-500" />
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white/[0.06] flex items-center justify-center">
+              <RefreshCw className="w-8 h-8 text-white/30" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">
               No subscription plans yet
             </h3>
-            <p className="text-slate-400 mb-6">
+            <p className="text-white/50 mb-6">
               Create your first subscription plan to start accepting recurring
               payments.
             </p>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-indigo-500 transition-colors"
+              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-6 py-3 rounded-xl font-medium hover:bg-white/90 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Create Your First Plan
@@ -354,10 +354,10 @@ export default function SubscriptionsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`bg-slate-900/50 border rounded-2xl p-6 ${
+                className={`bg-white/[0.02] border rounded-2xl p-6 ${
                   plan.active
-                    ? "border-slate-800"
-                    : "border-slate-800/50 opacity-60"
+                    ? "border-white/[0.06]"
+                    : "border-white/[0.04] opacity-60"
                 }`}
               >
                 <div className="flex items-start justify-between mb-4">
@@ -366,14 +366,14 @@ export default function SubscriptionsPage() {
                       {plan.name}
                     </h3>
                     {plan.description && (
-                      <p className="text-sm text-slate-400 mt-1">
+                      <p className="text-sm text-white/50 mt-1">
                         {plan.description}
                       </p>
                     )}
                   </div>
                   <button
                     onClick={() => togglePlanActive(plan.id, plan.active)}
-                    className="text-slate-400 hover:text-white transition-colors"
+                    className="text-white/50 hover:text-white transition-colors"
                   >
                     {plan.active ? (
                       <ToggleRight className="w-6 h-6 text-cyan-400" />
@@ -387,7 +387,7 @@ export default function SubscriptionsPage() {
                   <span className="text-3xl font-bold text-white">
                     ${plan.amount}
                   </span>
-                  <span className="text-slate-400 ml-1">
+                  <span className="text-white/50 ml-1">
                     /{plan.intervalCount > 1 ? `${plan.intervalCount} ` : ""}
                     {INTERVAL_LABELS[plan.interval]}
                     {plan.intervalCount > 1 ? "s" : ""}
@@ -395,7 +395,7 @@ export default function SubscriptionsPage() {
                 </div>
 
                 {plan.trialDays && plan.trialDays > 0 && (
-                  <div className="flex items-center gap-2 text-sm text-indigo-400 mb-4">
+                  <div className="flex items-center gap-2 text-sm text-[#a78bfa] mb-4">
                     <Clock className="w-4 h-4" />
                     {plan.trialDays} day free trial
                   </div>
@@ -406,21 +406,21 @@ export default function SubscriptionsPage() {
                     {plan.features.slice(0, 3).map((feature, i) => (
                       <li
                         key={i}
-                        className="flex items-center gap-2 text-sm text-slate-300"
+                        className="flex items-center gap-2 text-sm text-white/70"
                       >
-                        <Star className="w-3 h-3 text-indigo-400" />
+                        <Star className="w-3 h-3 text-[#a78bfa]" />
                         {feature}
                       </li>
                     ))}
                     {plan.features.length > 3 && (
-                      <li className="text-xs text-slate-500">
+                      <li className="text-xs text-white/30">
                         +{plan.features.length - 3} more features
                       </li>
                     )}
                   </ul>
                 )}
 
-                <div className="flex items-center gap-2 text-xs text-slate-500 mb-4">
+                <div className="flex items-center gap-2 text-xs text-white/30 mb-4">
                   <Users className="w-3 h-3" />
                   {plan.subscriberCount || 0} subscribers
                 </div>
@@ -430,7 +430,7 @@ export default function SubscriptionsPage() {
                     onClick={() =>
                       copyToClipboard(getCheckoutLink(plan), plan.id)
                     }
-                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-slate-300 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white/[0.06] hover:bg-white/[0.08] rounded-lg text-sm text-white/70 transition-colors"
                   >
                     {copied === plan.id ? (
                       <>
@@ -446,10 +446,10 @@ export default function SubscriptionsPage() {
                   </button>
                   <button
                     onClick={() => deletePlan(plan.id)}
-                    className="p-2 rounded-lg bg-slate-800 hover:bg-red-500/20 transition-colors"
+                    className="p-2 rounded-lg bg-white/[0.06] hover:bg-red-500/20 transition-colors"
                     title="Delete plan"
                   >
-                    <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-400" />
+                    <Trash2 className="w-4 h-4 text-white/50 hover:text-red-400" />
                   </button>
                 </div>
               </motion.div>
@@ -459,11 +459,11 @@ export default function SubscriptionsPage() {
 
         {/* Create Modal */}
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+              className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
             >
               <h2 className="text-xl font-semibold text-white mb-6">
                 Create Subscription Plan
@@ -472,7 +472,7 @@ export default function SubscriptionsPage() {
               <div className="space-y-5">
                 {/* Name */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">
+                  <label className="block text-sm font-medium text-white/50 mb-2">
                     Plan Name
                   </label>
                   <input
@@ -482,13 +482,13 @@ export default function SubscriptionsPage() {
                       setNewPlan({ ...newPlan, name: e.target.value })
                     }
                     placeholder="e.g., Pro Monthly"
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                   />
                 </div>
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">
+                  <label className="block text-sm font-medium text-white/50 mb-2">
                     Description (optional)
                   </label>
                   <textarea
@@ -498,14 +498,14 @@ export default function SubscriptionsPage() {
                     }
                     placeholder="Describe what's included..."
                     rows={2}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa] resize-none"
                   />
                 </div>
 
                 {/* Price & Interval */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-400 mb-2">
+                    <label className="block text-sm font-medium text-white/50 mb-2">
                       Price (USDC)
                     </label>
                     <input
@@ -516,11 +516,11 @@ export default function SubscriptionsPage() {
                         setNewPlan({ ...newPlan, amount: e.target.value })
                       }
                       placeholder="9.99"
-                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-400 mb-2">
+                    <label className="block text-sm font-medium text-white/50 mb-2">
                       Billing Interval
                     </label>
                     <select
@@ -531,7 +531,7 @@ export default function SubscriptionsPage() {
                           interval: e.target.value as typeof newPlan.interval,
                         })
                       }
-                      className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                     >
                       <option value="daily">Daily</option>
                       <option value="weekly">Weekly</option>
@@ -543,7 +543,7 @@ export default function SubscriptionsPage() {
 
                 {/* Trial Days */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">
+                  <label className="block text-sm font-medium text-white/50 mb-2">
                     Free Trial (days)
                   </label>
                   <input
@@ -556,13 +556,13 @@ export default function SubscriptionsPage() {
                       })
                     }
                     placeholder="0"
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                   />
                 </div>
 
                 {/* Features */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">
+                  <label className="block text-sm font-medium text-white/50 mb-2">
                     Features
                   </label>
                   <div className="space-y-2">
@@ -573,12 +573,12 @@ export default function SubscriptionsPage() {
                           value={feature}
                           onChange={(e) => updateFeature(index, e.target.value)}
                           placeholder="e.g., Unlimited access"
-                          className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          className="flex-1 bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                         />
                         {newPlan.features.length > 1 && (
                           <button
                             onClick={() => removeFeature(index)}
-                            className="p-2 text-slate-400 hover:text-red-400"
+                            className="p-2 text-white/50 hover:text-red-400"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -588,7 +588,7 @@ export default function SubscriptionsPage() {
                   </div>
                   <button
                     onClick={addFeature}
-                    className="mt-2 text-sm text-indigo-400 hover:text-indigo-300"
+                    className="mt-2 text-sm text-[#a78bfa] hover:text-[#c4b5fd]"
                   >
                     + Add feature
                   </button>
@@ -598,14 +598,14 @@ export default function SubscriptionsPage() {
               <div className="flex gap-3 mt-8">
                 <button
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors"
+                  className="flex-1 px-4 py-3 rounded-xl bg-white/[0.06] text-white/70 hover:bg-white/[0.08] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={createPlan}
                   disabled={creating || !newPlan.name || !newPlan.amount}
-                  className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:from-indigo-500 hover:to-purple-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 rounded-xl bg-[#050507] text-[#050507] font-medium hover:bg-white/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {creating ? (
                     <>

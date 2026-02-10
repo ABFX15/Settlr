@@ -112,7 +112,7 @@ const integrations = [
 
 export default function EcommercePage() {
   return (
-    <main className="min-h-screen bg-[#0a0a0f]">
+    <main className="min-h-screen bg-[#050507]">
       <Navbar />
 
       {/* Hero Section */}
@@ -120,7 +120,7 @@ export default function EcommercePage() {
         {/* Animated gradient mesh background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(168,85,247,0.3),transparent)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#050507] to-transparent" />
         </div>
 
         {/* Floating orbs */}
@@ -162,7 +162,7 @@ export default function EcommercePage() {
                 30% to
                 <br />
                 <span className="relative">
-                  <span className="bg-gradient-to-r from-[#a855f7] via-[#14F195] to-[#00D4FF] bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-[#a855f7] via-[#38bdf8] to-[#38bdf8] bg-clip-text text-transparent">
                     payment fees
                   </span>
                   <motion.svg
@@ -196,7 +196,7 @@ export default function EcommercePage() {
                 </span>
               </h1>
 
-              <p className="mb-8 max-w-lg text-lg text-gray-400">
+              <p className="mb-8 max-w-lg text-lg text-white/50">
                 1% flat fee. Instant settlement. Zero chargebacks. Same checkout
                 UX your customers expect, powered by crypto rails.
               </p>
@@ -232,9 +232,9 @@ export default function EcommercePage() {
                     whileHover={{ scale: 1.02 }}
                     className="rounded-2xl border border-[#14F195]/20 bg-gradient-to-br from-[#14F195]/10 to-transparent p-6 backdrop-blur-sm"
                   >
-                    <DollarSign className="mb-3 h-8 w-8 text-[#14F195]" />
+                    <DollarSign className="mb-3 h-8 w-8 text-[#a78bfa]" />
                     <div className="text-3xl font-bold text-white">1%</div>
-                    <div className="text-sm text-gray-400">Flat fee</div>
+                    <div className="text-sm text-white/50">Flat fee</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
@@ -242,7 +242,7 @@ export default function EcommercePage() {
                   >
                     <Shield className="mb-3 h-8 w-8 text-[#a855f7]" />
                     <div className="text-3xl font-bold text-white">0%</div>
-                    <div className="text-sm text-gray-400">Chargebacks</div>
+                    <div className="text-sm text-white/50">Chargebacks</div>
                   </motion.div>
                 </div>
 
@@ -255,13 +255,13 @@ export default function EcommercePage() {
                   <div className="relative">
                     <div className="mb-4 flex items-center gap-3">
                       <div className="rounded-lg bg-[#14F195]/20 p-2">
-                        <Zap className="h-6 w-6 text-[#14F195]" />
+                        <Zap className="h-6 w-6 text-[#a78bfa]" />
                       </div>
                       <span className="text-lg font-semibold text-white">
                         Instant Settlement
                       </span>
                     </div>
-                    <p className="text-gray-400">
+                    <p className="text-white/50">
                       Get your money in 400ms, not 7 days. No rolling reserves.
                       No holds.
                     </p>
@@ -274,9 +274,9 @@ export default function EcommercePage() {
                     whileHover={{ scale: 1.02 }}
                     className="rounded-2xl border border-[#00D4FF]/20 bg-gradient-to-br from-[#00D4FF]/10 to-transparent p-6 backdrop-blur-sm"
                   >
-                    <Globe className="mb-3 h-8 w-8 text-[#00D4FF]" />
+                    <Globe className="mb-3 h-8 w-8 text-[#38bdf8]" />
                     <div className="text-3xl font-bold text-white">195+</div>
-                    <div className="text-sm text-gray-400">Countries</div>
+                    <div className="text-sm text-white/50">Countries</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
@@ -284,7 +284,7 @@ export default function EcommercePage() {
                   >
                     <Wallet className="mb-3 h-8 w-8 text-white" />
                     <div className="text-3xl font-bold text-white">No</div>
-                    <div className="text-sm text-gray-400">Wallet needed</div>
+                    <div className="text-sm text-white/50">Wallet needed</div>
                   </motion.div>
                 </div>
               </div>
@@ -319,7 +319,7 @@ export default function EcommercePage() {
       </section>
 
       {/* Problems Section - White background */}
-      <section className="relative overflow-hidden bg-white px-4 py-24">
+      <section className="relative overflow-hidden bg-white/[0.01] px-4 py-24">
         <div className="mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -327,11 +327,11 @@ export default function EcommercePage() {
             viewport={{ once: true }}
             className="mb-16 text-center"
           >
-            <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">
+            <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
               Stripe & PayPal are
               <span className="text-red-500"> eating your margin</span>
             </h2>
-            <p className="mx-auto max-w-2xl text-gray-600">
+            <p className="mx-auto max-w-2xl text-white/40">
               Traditional payment processors charge excessive fees, hold your
               money, and leave you exposed to chargeback fraud.
             </p>
@@ -353,10 +353,10 @@ export default function EcommercePage() {
                     <X className="h-8 w-8" />
                   </div>
                   <Icon className="mb-4 h-8 w-8 text-red-500" />
-                  <h3 className="mb-2 font-semibold text-gray-900">
+                  <h3 className="mb-2 font-semibold text-white">
                     {point.problem}
                   </h3>
-                  <p className="text-sm text-gray-600">{point.detail}</p>
+                  <p className="text-sm text-white/40">{point.detail}</p>
                 </motion.div>
               );
             })}
@@ -365,7 +365,7 @@ export default function EcommercePage() {
       </section>
 
       {/* Integrations Section */}
-      <section className="relative bg-gray-50 px-4 py-16">
+      <section className="relative bg-white/[0.02] px-4 py-16">
         <div className="mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -373,7 +373,7 @@ export default function EcommercePage() {
             viewport={{ once: true }}
             className="mb-10 text-center"
           >
-            <h2 className="mb-4 text-3xl font-bold text-gray-900">
+            <h2 className="mb-4 text-3xl font-bold text-white">
               Works with your stack
             </h2>
           </motion.div>
@@ -387,7 +387,7 @@ export default function EcommercePage() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
                 whileHover={{ scale: 1.05 }}
-                className="flex items-center justify-center rounded-xl border-2 border-[#a855f7]/30 bg-white p-4 text-center font-medium text-gray-900 shadow-sm transition-all hover:border-[#a855f7] hover:shadow-lg"
+                className="flex items-center justify-center rounded-xl border-2 border-[#a855f7]/30 bg-[#050507] p-4 text-center font-medium text-white shadow-sm transition-all hover:border-[#a855f7] hover:shadow-lg"
               >
                 {integration}
               </motion.div>
@@ -414,7 +414,7 @@ export default function EcommercePage() {
             <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
               Keep more of
               <br />
-              <span className="text-[#14F195]">every sale</span>
+              <span className="text-[#a78bfa]">every sale</span>
             </h2>
           </motion.div>
 
@@ -433,7 +433,7 @@ export default function EcommercePage() {
                 >
                   <div className="relative">
                     <div className="mb-4 inline-flex rounded-xl bg-white/20 p-3">
-                      <Icon className="h-6 w-6 text-[#14F195]" />
+                      <Icon className="h-6 w-6 text-[#a78bfa]" />
                     </div>
 
                     <div className="mb-4">
@@ -458,7 +458,7 @@ export default function EcommercePage() {
       </section>
 
       {/* Comparison Section */}
-      <section className="relative bg-[#0a0a0f] px-4 py-24">
+      <section className="relative bg-[#050507] px-4 py-24">
         <div className="mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -467,7 +467,7 @@ export default function EcommercePage() {
             className="mb-12 text-center"
           >
             <h2 className="mb-4 text-4xl font-bold text-white">
-              Stripe vs. <span className="text-[#14F195]">Settlr</span>
+              Stripe vs. <span className="text-[#a78bfa]">Settlr</span>
             </h2>
           </motion.div>
 
@@ -478,13 +478,13 @@ export default function EcommercePage() {
             className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]"
           >
             <div className="grid grid-cols-3 border-b border-white/10 bg-white/[0.02]">
-              <div className="p-4 text-sm font-medium text-gray-400">
+              <div className="p-4 text-sm font-medium text-white/50">
                 Feature
               </div>
-              <div className="p-4 text-center text-sm font-medium text-gray-400">
+              <div className="p-4 text-center text-sm font-medium text-white/50">
                 Stripe
               </div>
-              <div className="p-4 text-center text-sm font-medium text-[#14F195]">
+              <div className="p-4 text-center text-sm font-medium text-[#a78bfa]">
                 Settlr
               </div>
             </div>
@@ -520,10 +520,10 @@ export default function EcommercePage() {
                 }`}
               >
                 <div className="p-4 text-white">{row.feature}</div>
-                <div className="p-4 text-center text-gray-400">
+                <div className="p-4 text-center text-white/50">
                   {row.stripe}
                 </div>
-                <div className="p-4 text-center font-medium text-[#14F195]">
+                <div className="p-4 text-center font-medium text-[#a78bfa]">
                   {row.settlr}
                 </div>
               </div>
@@ -542,9 +542,9 @@ export default function EcommercePage() {
           viewport={{ once: true }}
           className="relative mx-auto max-w-3xl text-center"
         >
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#14F195]/30 bg-[#14F195]/10 px-4 py-2">
-            <TrendingUp className="h-4 w-4 text-[#14F195]" />
-            <span className="text-sm font-medium text-[#14F195]">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2">
+            <TrendingUp className="h-4 w-4 text-[#a78bfa]" />
+            <span className="text-sm font-medium text-[#a78bfa]">
               Ready to save?
             </span>
           </div>
@@ -557,7 +557,7 @@ export default function EcommercePage() {
             </span>
           </h2>
 
-          <p className="mb-8 text-lg text-gray-400">
+          <p className="mb-8 text-lg text-white/50">
             Join e-commerce stores saving thousands per month by switching to
             crypto-powered checkout.
           </p>

@@ -95,8 +95,8 @@ export default function CreatePaymentPage() {
     return (
       <main className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-zinc-400">Loading...</p>
+          <div className="w-12 h-12 border-4 border-[#a78bfa] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white/50">Loading...</p>
         </div>
       </main>
     );
@@ -110,13 +110,13 @@ export default function CreatePaymentPage() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md text-center"
         >
-          <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center mb-6">
+          <div className="w-20 h-20 mx-auto rounded-2xl bg-[#a78bfa] flex items-center justify-center mb-6">
             <Wallet className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-4">
             Create Payment Links
           </h1>
-          <p className="text-zinc-400 mb-8">
+          <p className="text-white/50 mb-8">
             Sign in to create payment links that send USDC directly to your
             wallet.
           </p>
@@ -124,14 +124,14 @@ export default function CreatePaymentPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={login}
-            className="w-full py-4 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
+            className="w-full py-4 bg-white text-[#050507] font-semibold rounded-xl flex items-center justify-center gap-2"
           >
             <LogIn className="w-5 h-5" />
             Sign In to Continue
           </motion.button>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-zinc-500 hover:text-zinc-300 transition-colors mt-6"
+            className="inline-flex items-center gap-2 text-white/30 hover:text-white/70 transition-colors mt-6"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -144,7 +144,7 @@ export default function CreatePaymentPage() {
   return (
     <>
       {/* Fixed Header */}
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0a0a0f]/80 px-4 py-4 backdrop-blur-xl md:px-8">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#050507]/80 px-4 py-4 backdrop-blur-xl md:px-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <SettlrLogoWithIcon size="sm" variant="light" />
@@ -200,7 +200,7 @@ export default function CreatePaymentPage() {
             </h1>
             <p className="text-[var(--text-muted)]">
               Payments go directly to:{" "}
-              <span className="font-mono text-purple-400">
+              <span className="font-mono text-[#a78bfa]">
                 {publicKey?.slice(0, 4)}...{publicKey?.slice(-4)}
               </span>
             </p>

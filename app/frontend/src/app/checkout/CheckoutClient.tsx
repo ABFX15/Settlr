@@ -1906,10 +1906,10 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Loading step
   if (step === "loading") {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center p-4">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-purple-500 animate-spin mx-auto mb-4" />
-          <p className="text-zinc-400">Loading checkout...</p>
+          <Loader2 className="w-12 h-12 text-[#a78bfa] animate-spin mx-auto mb-4" />
+          <p className="text-white/50">Loading checkout...</p>
         </div>
       </div>
     );
@@ -1918,7 +1918,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Auth step - login with email/social
   if (step === "auth") {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 pb-safe">
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center p-4 pb-safe">
         {/* Close/Back button */}
         <button
           onClick={() => {
@@ -1930,10 +1930,10 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               router.push("/");
             }
           }}
-          className="fixed top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-50 sm:top-6 sm:right-6"
+          className="fixed top-4 right-4 p-2 bg-white/[0.06] hover:bg-white/[0.08] rounded-full transition-colors z-50 sm:top-6 sm:right-6"
           aria-label="Close"
         >
-          <X className="w-5 h-5 text-zinc-400" />
+          <X className="w-5 h-5 text-white/50" />
         </button>
 
         <motion.div
@@ -1941,65 +1941,65 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md px-2 sm:px-0"
         >
-          <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-4 sm:p-6 mb-6">
+          <div className="bg-[#050507]/80 backdrop-blur-xl rounded-3xl border border-white/[0.06] p-4 sm:p-6 mb-6">
             <div className="text-center mb-6">
               {/* Privacy indicator badge */}
               {isPrivatePayment && (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full mb-3">
-                  <Lock className="w-3 h-3 text-purple-400" />
-                  <span className="text-purple-400 text-xs font-medium">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-500/20 border border-[#a78bfa]/20 rounded-full mb-3">
+                  <Lock className="w-3 h-3 text-[#a78bfa]" />
+                  <span className="text-[#a78bfa] text-xs font-medium">
                     Private Payment
                   </span>
                 </div>
               )}
 
-              <p className="text-zinc-400 text-sm mb-1">Pay {merchantName}</p>
+              <p className="text-white/50 text-sm mb-1">Pay {merchantName}</p>
               <p className="text-3xl sm:text-4xl font-bold text-white">
                 ${amount.toFixed(2)}
-                <span className="text-base sm:text-lg text-zinc-500 ml-2">
+                <span className="text-base sm:text-lg text-white/40 ml-2">
                   USDC
                 </span>
               </p>
-              {memo && <p className="text-zinc-500 text-sm mt-2">{memo}</p>}
+              {memo && <p className="text-white/40 text-sm mt-2">{memo}</p>}
 
               {/* Privacy explanation */}
               {isPrivatePayment && (
-                <p className="text-purple-400/70 text-xs mt-2">
+                <p className="text-[#a78bfa]/70 text-xs mt-2">
                   Amount encrypted on-chain • Only you & merchant can see
                 </p>
               )}
             </div>
 
-            <div className="border-t border-zinc-800 pt-6">
-              <p className="text-center text-zinc-300 mb-4">
+            <div className="border-t border-white/[0.06] pt-6">
+              <p className="text-center text-white/70 mb-4">
                 Choose how to pay
               </p>
 
               {!ready ? (
                 <div className="flex justify-center py-8">
-                  <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
+                  <Loader2 className="w-8 h-8 text-[#a78bfa] animate-spin" />
                 </div>
               ) : (
                 <div className="space-y-3">
                   {/* Connect existing wallet - Using login with wallet */}
                   <button
                     onClick={() => login({ loginMethods: ["wallet"] })}
-                    className="w-full py-4 bg-gradient-to-r from-purple-500 to-purple-500 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+                    className="w-full py-4 bg-white text-[#050507] font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
                   >
                     <Wallet className="w-5 h-5" />
                     Connect Wallet (Phantom/Solflare)
                   </button>
 
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 h-px bg-zinc-700" />
-                    <span className="text-zinc-500 text-xs">or</span>
-                    <div className="flex-1 h-px bg-zinc-700" />
+                    <div className="flex-1 h-px bg-white/[0.06]" />
+                    <span className="text-white/40 text-xs">or</span>
+                    <div className="flex-1 h-px bg-white/[0.06]" />
                   </div>
 
                   {/* Email login - Creates embedded wallet */}
                   <button
                     onClick={() => login({ loginMethods: ["email"] })}
-                    className="w-full py-4 bg-zinc-800 border border-zinc-700 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-zinc-700 transition-colors"
+                    className="w-full py-4 bg-white/[0.06] border border-white/[0.08] text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-white/[0.08] transition-colors"
                   >
                     <Mail className="w-5 h-5" />
                     Continue with Email
@@ -2007,13 +2007,13 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </div>
               )}
 
-              <p className="text-center text-zinc-500 text-xs mt-4">
+              <p className="text-center text-white/40 text-xs mt-4">
                 Use Phantom, Solflare, or create a new wallet with email
               </p>
             </div>
           </div>
 
-          <div className="flex justify-center gap-6 text-zinc-500 text-xs">
+          <div className="flex justify-center gap-6 text-white/40 text-xs">
             <div className="flex items-center gap-1">
               <Shield className="w-4 h-4" />
               <span>Secure</span>
@@ -2028,9 +2028,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             </div>
           </div>
 
-          <p className="text-center text-zinc-600 text-xs mt-6">
+          <p className="text-center text-white/30 text-xs mt-6">
             Powered by{" "}
-            <Link href="/" className="text-purple-400 hover:text-purple-300">
+            <Link href="/" className="text-[#a78bfa] hover:text-[#a78bfa]">
               Settlr
             </Link>
           </p>
@@ -2042,17 +2042,17 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Wallet creation step
   if (step === "wallet") {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 relative">
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center p-4 relative">
         {/* Close/Back button */}
         <button
           onClick={() => {
             logout();
             setStep("auth");
           }}
-          className="absolute top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-10"
+          className="absolute top-4 right-4 p-2 bg-white/[0.06] hover:bg-white/[0.08] rounded-full transition-colors z-10"
           aria-label="Close"
         >
-          <X className="w-5 h-5 text-zinc-400" />
+          <X className="w-5 h-5 text-white/50" />
         </button>
 
         <motion.div
@@ -2060,15 +2060,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md"
         >
-          <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-6">
+          <div className="bg-[#050507]/80 backdrop-blur-xl rounded-3xl border border-white/[0.06] p-6">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4">
                 <Wallet className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">
                 Create Your Wallet
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-white/50">
                 We&apos;ll create a secure wallet for you automatically
               </p>
             </div>
@@ -2082,7 +2082,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             <button
               onClick={handleCreateWallet}
               disabled={creatingWallet}
-              className="w-full py-4 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="w-full py-4 bg-white text-[#050507] font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity disabled:opacity-50"
             >
               {creatingWallet ? (
                 <>
@@ -2105,7 +2105,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // KYC verification step
   if (step === "kyc") {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 relative">
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center p-4 relative">
         {/* Close/Back button */}
         <button
           onClick={() => {
@@ -2117,10 +2117,10 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               router.push("/");
             }
           }}
-          className="absolute top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-10"
+          className="absolute top-4 right-4 p-2 bg-white/[0.06] hover:bg-white/[0.08] rounded-full transition-colors z-10"
           aria-label="Close"
         >
-          <X className="w-5 h-5 text-zinc-400" />
+          <X className="w-5 h-5 text-white/50" />
         </button>
 
         <motion.div
@@ -2128,23 +2128,23 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md"
         >
-          <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-6">
+          <div className="bg-[#050507]/80 backdrop-blur-xl rounded-3xl border border-white/[0.06] p-6">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">
                 Identity Verification
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-white/50">
                 {merchantName} requires identity verification before payment
               </p>
             </div>
 
             {/* Payment preview */}
-            <div className="p-4 bg-zinc-800/50 rounded-xl mb-6">
+            <div className="p-4 bg-white/[0.04] rounded-xl mb-6">
               <div className="flex justify-between items-center">
-                <span className="text-zinc-400">Amount</span>
+                <span className="text-white/50">Amount</span>
                 <span className="text-white font-semibold">
                   ${amount.toFixed(2)} USDC
                 </span>
@@ -2221,7 +2221,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                     alert("Failed to start verification. Please try again.");
                   }
                 }}
-                className="w-full py-4 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+                className="w-full py-4 bg-white text-[#050507] font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
               >
                 <Shield className="w-5 h-5" />
                 {customerKycStatus === "rejected"
@@ -2253,7 +2253,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   }
                 }}
                 disabled={checkingKyc}
-                className="w-full py-4 bg-zinc-800 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-zinc-700 transition-colors disabled:opacity-50"
+                className="w-full py-4 bg-white/[0.06] text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-white/[0.08] transition-colors disabled:opacity-50"
               >
                 {checkingKyc ? (
                   <>
@@ -2269,7 +2269,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               </button>
             )}
 
-            <p className="text-center text-zinc-500 text-xs mt-4">
+            <p className="text-center text-white/40 text-xs mt-4">
               Your data is securely processed by Sumsub. We never store your
               documents.
             </p>
@@ -2288,7 +2288,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     const hasCorrectWallet = isEvmChain ? hasEvmWallet : !!activeWallet;
 
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 pb-safe relative overflow-y-auto">
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center p-4 pb-safe relative overflow-y-auto">
         {/* Close/Back button */}
         <button
           onClick={() => {
@@ -2300,10 +2300,10 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               router.push("/");
             }
           }}
-          className="absolute top-4 right-4 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors z-10 sm:top-6 sm:right-6"
+          className="absolute top-4 right-4 p-2 bg-white/[0.06] hover:bg-white/[0.08] rounded-full transition-colors z-10 sm:top-6 sm:right-6"
           aria-label="Close"
         >
-          <X className="w-5 h-5 text-zinc-400" />
+          <X className="w-5 h-5 text-white/50" />
         </button>
 
         <motion.div
@@ -2311,23 +2311,23 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md px-2 sm:px-0 my-4"
         >
-          <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl border border-zinc-800 p-4 sm:p-6">
+          <div className="bg-[#050507]/80 backdrop-blur-xl rounded-3xl border border-white/[0.06] p-4 sm:p-6">
             {/* User info */}
-            <div className="flex items-center justify-between mb-4 sm:mb-6 p-3 bg-zinc-800/50 rounded-xl">
+            <div className="flex items-center justify-between mb-4 sm:mb-6 p-3 bg-white/[0.04] rounded-xl">
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#a78bfa] flex items-center justify-center">
                   <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
                 <div>
                   <p className="text-white text-sm font-medium">
                     {user?.email?.address || user?.google?.email || "User"}
                   </p>
-                  <p className="text-zinc-500 text-xs">Signed in</p>
+                  <p className="text-white/40 text-xs">Signed in</p>
                 </div>
               </div>
               <button
                 onClick={logout}
-                className="text-zinc-500 text-xs hover:text-zinc-300"
+                className="text-white/40 text-xs hover:text-white/70"
               >
                 Sign out
               </button>
@@ -2335,10 +2335,10 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
             {/* Wallet info */}
             {activeWallet && (
-              <div className="flex items-center gap-3 mb-6 p-3 bg-zinc-800/50 rounded-xl">
-                <Wallet className="w-5 h-5 text-purple-400" />
+              <div className="flex items-center gap-3 mb-6 p-3 bg-white/[0.04] rounded-xl">
+                <Wallet className="w-5 h-5 text-[#a78bfa]" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-zinc-400 text-xs">
+                  <p className="text-white/50 text-xs">
                     {isExternalWallet ? "Connected Wallet" : "Your Wallet"}
                   </p>
                   <p className="text-white text-sm font-mono truncate">
@@ -2347,9 +2347,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-zinc-400 text-xs">Balance</p>
+                  <p className="text-white/50 text-xs">Balance</p>
                   {loadingBalance ? (
-                    <Loader2 className="w-4 h-4 text-purple-400 animate-spin" />
+                    <Loader2 className="w-4 h-4 text-[#a78bfa] animate-spin" />
                   ) : (
                     <p
                       className={`text-sm font-medium ${
@@ -2364,10 +2364,10 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             )}
 
             {/* Chain Selector */}
-            <div className="mb-4 p-3 bg-zinc-800/50 rounded-xl">
+            <div className="mb-4 p-3 bg-white/[0.04] rounded-xl">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-zinc-400 text-xs mb-1">Pay with USDC on</p>
+                  <p className="text-white/50 text-xs mb-1">Pay with USDC on</p>
                   <ChainSelector
                     selectedChain={selectedChain}
                     onSelect={(chain) => {
@@ -2385,7 +2385,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </div>
                 {isEvmChain && activeEvmWallet && (
                   <div className="text-right">
-                    <p className="text-zinc-400 text-xs">Balance</p>
+                    <p className="text-white/50 text-xs">Balance</p>
                     <p
                       className={`text-sm font-medium ${
                         (evmBalance || 0) >= amount
@@ -2415,7 +2415,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             {/* Token Selector (for Solana - pay with SOL, BONK, etc.) */}
             {selectedChain === "solana" && !IS_DEVNET && (
               <div className="mb-4">
-                <p className="text-zinc-400 text-xs mb-2">Pay with</p>
+                <p className="text-white/50 text-xs mb-2">Pay with</p>
                 <TokenSelector
                   selectedToken={selectedToken}
                   availableTokens={availableTokens}
@@ -2430,13 +2430,13 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 {needsJupiterSwap && jupiterQuote && (
                   <div className="mt-2 p-3 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/30 rounded-xl">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-zinc-400">You pay</span>
+                      <span className="text-white/50">You pay</span>
                       <span className="text-white font-medium">
                         {jupiterInputAmount} {selectedToken.symbol}
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-sm mt-1">
-                      <span className="text-zinc-400">You get</span>
+                      <span className="text-white/50">You get</span>
                       <span className="text-green-400 font-medium">
                         ${amount.toFixed(2)} USDC
                       </span>
@@ -2447,7 +2447,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                         Price impact: {jupiterPriceImpact}%
                       </p>
                     )}
-                    <p className="text-zinc-500 text-xs mt-2 text-center">
+                    <p className="text-white/40 text-xs mt-2 text-center">
                       Swap powered by Jupiter
                     </p>
                   </div>
@@ -2462,20 +2462,20 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             )}
 
             {/* Payment details */}
-            <div className="bg-zinc-800/50 rounded-2xl p-4 mb-4">
+            <div className="bg-white/[0.04] rounded-2xl p-4 mb-4">
               <div className="flex justify-between items-center mb-3">
-                <span className="text-zinc-400">To</span>
+                <span className="text-white/50">To</span>
                 <span className="text-white">{merchantName}</span>
               </div>
               <div className="flex justify-between items-center mb-3">
-                <span className="text-zinc-400">Amount</span>
+                <span className="text-white/50">Amount</span>
                 <span className="text-white font-bold">
                   ${amount.toFixed(2)} USDC
                 </span>
               </div>
               {memo && (
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400">For</span>
+                  <span className="text-white/50">For</span>
                   <span className="text-white text-sm">{memo}</span>
                 </div>
               )}
@@ -2483,45 +2483,45 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
             {/* Mayan Cross-chain Info (for EVM chains) */}
             {isEvmChain && (
-              <div className="bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/30 rounded-xl p-4 mb-4">
+              <div className="bg-[#a78bfa]/[0.06] border border-[#a78bfa]/20 rounded-xl p-4 mb-4">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
-                    <Zap className="w-4 h-4 text-purple-400" />
+                  <div className="w-8 h-8 rounded-full bg-[#a78bfa]/15 flex items-center justify-center">
+                    <Zap className="w-4 h-4 text-[#a78bfa]" />
                   </div>
                   <div>
                     <p className="text-white font-medium text-sm">
                       Cross-Chain Payment
                     </p>
-                    <p className="text-zinc-400 text-xs">
+                    <p className="text-white/50 text-xs">
                       Bridged to Solana via Mayan
                     </p>
                   </div>
                 </div>
                 {mayanQuotePreview ? (
                   <div className="space-y-2 text-xs">
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-white/50">
                       <span>You pay ({selectedChain})</span>
                       <span className="text-white">
                         ${amount.toFixed(2)} USDC
                       </span>
                     </div>
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-white/50">
                       <span>Merchant receives (Solana)</span>
                       <span className="text-green-400">
                         ~${mayanQuotePreview.expectedOut.toFixed(2)} USDC
                       </span>
                     </div>
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-white/50">
                       <span>Bridge fee</span>
                       <span>${mayanQuotePreview.fee.toFixed(4)}</span>
                     </div>
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-white/50">
                       <span>Estimated time</span>
                       <span>{mayanQuotePreview.eta}</span>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2 text-zinc-500 text-xs">
+                  <div className="flex items-center gap-2 text-white/40 text-xs">
                     <Loader2 className="w-3 h-3 animate-spin" />
                     <span>Fetching best route...</span>
                   </div>
@@ -2544,7 +2544,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                         <p className="text-white font-medium">
                           Gasless Payment
                         </p>
-                        <p className="text-zinc-400 text-xs">
+                        <p className="text-white/50 text-xs">
                           No SOL needed for gas fees
                         </p>
                       </div>
@@ -2552,7 +2552,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                     <button
                       onClick={() => setUseGasless(!useGasless)}
                       className={`relative w-12 h-6 rounded-full transition-colors ${
-                        useGasless ? "bg-emerald-500" : "bg-zinc-600"
+                        useGasless ? "bg-emerald-500" : "bg-white/20"
                       }`}
                     >
                       <span
@@ -2573,22 +2573,22 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
             {/* Privacy Toggle (Always visible on Solana) */}
             {!isEvmChain && (
-              <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl p-4 mb-4">
+              <div className="bg-[#a78bfa]/[0.06] border border-[#a78bfa]/20 rounded-xl p-4 mb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
-                      <Lock className="w-5 h-5 text-purple-400" />
+                    <div className="w-10 h-10 rounded-full bg-[#a78bfa]/15 flex items-center justify-center">
+                      <Lock className="w-5 h-5 text-[#a78bfa]" />
                     </div>
                     <div>
                       <p className="text-white font-medium">
                         Private Receipt
                         {isPrivacyForced && (
-                          <span className="ml-2 text-xs text-purple-400 font-normal">
+                          <span className="ml-2 text-xs text-[#a78bfa] font-normal">
                             (Required)
                           </span>
                         )}
                       </p>
-                      <p className="text-zinc-400 text-xs">
+                      <p className="text-white/50 text-xs">
                         Receipt encrypted via Inco Lightning FHE
                       </p>
                     </div>
@@ -2600,8 +2600,8 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                     disabled={isPrivacyForced}
                     className={`relative w-12 h-6 rounded-full transition-colors ${
                       privacyEnabled || isPrivacyForced
-                        ? "bg-purple-500"
-                        : "bg-zinc-600"
+                        ? "bg-[#a78bfa]"
+                        : "bg-white/20"
                     } ${
                       isPrivacyForced ? "opacity-75 cursor-not-allowed" : ""
                     }`}
@@ -2616,7 +2616,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   </button>
                 </div>
                 {(privacyEnabled || isPrivacyForced) && (
-                  <p className="text-purple-400 text-xs mt-2 flex items-center gap-1">
+                  <p className="text-[#a78bfa] text-xs mt-2 flex items-center gap-1">
                     <ShieldCheck className="w-3 h-3" />
                     Payment details encrypted • Only you & merchant can see
                     receipt
@@ -2643,7 +2643,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                         address: activeWallet.address,
                       });
                     }}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-600 hover:to-purple-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-purple-500/25 mb-3"
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white text-[#050507] font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-white/10 mb-3"
                   >
                     <CreditCard className="w-5 h-5" />
                     Add Funds
@@ -2653,14 +2653,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 {/* Devnet: Get test USDC from faucet */}
                 {IS_DEVNET && (
                   <>
-                    <div className="text-center text-zinc-500 text-xs mb-2">
+                    <div className="text-center text-white/40 text-xs mb-2">
                       — or for testing —
                     </div>
                     <a
                       href="https://faucet.circle.com/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-2 bg-zinc-800 text-zinc-300 text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-zinc-700 transition-colors mb-3"
+                      className="w-full py-2 bg-white/[0.06] text-white/70 text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-white/[0.08] transition-colors mb-3"
                     >
                       <Plus className="w-4 h-4" />
                       Get Devnet USDC (Circle Faucet)
@@ -2670,21 +2670,21 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
                 {/* Or send from another wallet */}
                 <div className="text-center">
-                  <p className="text-zinc-500 text-xs mb-2">Or send USDC to:</p>
+                  <p className="text-white/40 text-xs mb-2">Or send USDC to:</p>
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(activeWallet.address);
                       alert("Address copied!");
                     }}
-                    className="flex items-center justify-center gap-2 mx-auto px-3 py-1.5 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors"
+                    className="flex items-center justify-center gap-2 mx-auto px-3 py-1.5 bg-white/[0.06] rounded-lg hover:bg-white/[0.08] transition-colors"
                   >
-                    <span className="text-xs font-mono text-zinc-300">
+                    <span className="text-xs font-mono text-white/70">
                       {activeWallet.address.slice(0, 8)}...
                       {activeWallet.address.slice(-6)}
                     </span>
-                    <Copy className="w-3 h-3 text-zinc-400" />
+                    <Copy className="w-3 h-3 text-white/50" />
                   </button>
-                  <p className="text-zinc-600 text-xs mt-1">Solana Devnet</p>
+                  <p className="text-white/30 text-xs mt-1">Solana Devnet</p>
                 </div>
               </div>
             )}
@@ -2703,7 +2703,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                     <Fuel className="w-4 h-4" />
                     <p className="text-sm font-medium">Need SOL for gas</p>
                   </div>
-                  <p className="text-zinc-400 text-xs mb-3">
+                  <p className="text-white/50 text-xs mb-3">
                     You need a small amount of SOL (~0.001) to pay for
                     transaction fees.
                   </p>
@@ -2731,7 +2731,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                       href="https://faucet.solana.com/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-2 bg-zinc-800 text-zinc-300 text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-zinc-700 transition-colors"
+                      className="w-full py-2 bg-white/[0.06] text-white/70 text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-white/[0.08] transition-colors"
                     >
                       <Fuel className="w-4 h-4" />
                       Get Devnet SOL (Faucet)
@@ -2746,7 +2746,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 <button
                   onClick={processOneClickPayment}
                   disabled={processingOneClick}
-                  className="w-full py-4 font-semibold rounded-xl flex items-center justify-center gap-2 transition-all bg-gradient-to-r from-cyan-500 to-purple-500 text-white hover:opacity-90 shadow-lg hover:shadow-cyan-500/25"
+                  className="w-full py-4 font-semibold rounded-xl flex items-center justify-center gap-2 transition-all bg-white text-[#050507] hover:opacity-90 shadow-lg hover:shadow-white/10"
                 >
                   {processingOneClick ? (
                     <>
@@ -2760,12 +2760,12 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                     </>
                   )}
                 </button>
-                <p className="text-center text-xs text-zinc-500 mt-2">
+                <p className="text-center text-xs text-white/40 mt-2">
                   Spending limit: ${oneClickApproval.remainingLimit.toFixed(2)}{" "}
                   remaining
                 </p>
                 <div className="flex items-center justify-center gap-2 mt-2">
-                  <span className="text-zinc-600 text-xs">or</span>
+                  <span className="text-white/30 text-xs">or</span>
                 </div>
               </div>
             )}
@@ -2793,11 +2793,11 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   !isExternalWallet || // Embedded wallets always enabled (Privy sponsors gas)
                   (solBalance !== null && solBalance >= 0.001))
                   ? isEvmChain
-                    ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90"
+                    ? "bg-[#38bdf8] text-[#050507] hover:opacity-90"
                     : useGasless && gaslessAvailable
                     ? "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:opacity-90"
-                    : "bg-gradient-to-r from-purple-500 to-cyan-500 text-white hover:opacity-90"
-                  : "bg-zinc-700 text-zinc-400 cursor-not-allowed"
+                    : "bg-white text-[#050507] hover:opacity-90"
+                  : "bg-white/[0.06] text-white/50 cursor-not-allowed"
               }`}
             >
               {isEvmChain ? (
@@ -2827,7 +2827,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
             <button
               onClick={() => fetchBalance()}
-              className="w-full mt-3 py-2 text-zinc-400 text-sm hover:text-zinc-300"
+              className="w-full mt-3 py-2 text-white/50 text-sm hover:text-white/70"
             >
               Refresh Balance
             </button>
@@ -2865,19 +2865,19 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
 
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mx-auto mb-6">
             <Loader2 className="w-10 h-10 text-white animate-spin" />
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">{statusTitle}</h2>
-          <p className="text-zinc-400">{statusMessage}</p>
+          <p className="text-white/50">{statusMessage}</p>
           {isEvmChain && (
-            <p className="text-xs text-zinc-500 mt-4">
+            <p className="text-xs text-white/40 mt-4">
               Cross-chain payment powered by Mayan
             </p>
           )}
@@ -2897,7 +2897,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     const explorerName = isCrossChain ? "Mayan Explorer" : "Solscan";
 
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -2909,10 +2909,10 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           <h2 className="text-2xl font-bold text-white mb-2">
             Payment Successful!
           </h2>
-          <p className="text-zinc-400 mb-6">
+          <p className="text-white/50 mb-6">
             You paid ${amount.toFixed(2)} USDC to {merchantName}
             {selectedChain !== "solana" && (
-              <span className="block text-sm text-zinc-500 mt-1">
+              <span className="block text-sm text-white/40 mt-1">
                 Bridged from{" "}
                 {selectedChain.charAt(0).toUpperCase() + selectedChain.slice(1)}{" "}
                 → Solana via Mayan
@@ -2923,27 +2923,27 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           {/* Privacy Badge */}
           {(privacyEnabled || isPrivacyForced) && (
             <div className="mb-4 p-4 bg-purple-500/10 border border-purple-500/20 rounded-xl">
-              <div className="flex items-center justify-center gap-2 text-purple-400 mb-2">
+              <div className="flex items-center justify-center gap-2 text-[#a78bfa] mb-2">
                 <Shield className="w-5 h-5" />
                 <span className="text-sm font-semibold">
                   🔒 Private Receipt Issued
                 </span>
               </div>
-              <p className="text-xs text-purple-300/80 mb-2">
+              <p className="text-xs text-[#a78bfa]/80 mb-2">
                 Payment receipt is FHE-encrypted via Inco Lightning
               </p>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-white/40">
                 Only you and {merchantName} can decrypt the payment details
               </p>
               {privateReceiptHandle && (
                 <div className="mt-3 px-3 py-2 bg-purple-900/30 rounded-lg inline-block">
-                  <p className="text-xs text-purple-300 font-mono">
+                  <p className="text-xs text-[#a78bfa] font-mono">
                     Encrypted Handle: {privateReceiptHandle}
                   </p>
                 </div>
               )}
               {issuingPrivateReceipt && (
-                <div className="flex items-center justify-center gap-2 text-purple-300/60 mt-2">
+                <div className="flex items-center justify-center gap-2 text-[#a78bfa]/60 mt-2">
                   <Loader2 className="w-3 h-3 animate-spin" />
                   <span className="text-xs">Encrypting receipt...</span>
                 </div>
@@ -2964,27 +2964,27 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   View Transaction on {explorerName}
                 </a>
                 {(privacyEnabled || isPrivacyForced) && (
-                  <p className="text-xs text-purple-400 text-center">
+                  <p className="text-xs text-[#a78bfa] text-center">
                     ℹ️ USDC transfer visible, but receipt details are encrypted
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-zinc-500 text-sm">
+              <p className="text-white/40 text-sm">
                 Transaction confirmed on Solana
               </p>
             )}
           </div>
 
           {/* One-Click Payment Opt-in */}
-          <div className="mb-6 p-4 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 rounded-xl">
+          <div className="mb-6 p-4 bg-[#38bdf8]/[0.06] border border-[#38bdf8]/20 rounded-xl">
             <div className="flex items-center gap-3 mb-2">
               <Zap className="w-5 h-5 text-cyan-400" />
               <span className="text-white font-medium">
                 Enable One-Click Payments?
               </span>
             </div>
-            <p className="text-zinc-400 text-xs mb-3">
+            <p className="text-white/50 text-xs mb-3">
               Skip approval next time. Set a spending limit for {merchantName}.
             </p>
             <button
@@ -3042,14 +3042,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             {successUrl ? (
               <a
                 href={successUrl}
-                className="block w-full py-3 bg-zinc-800 text-white font-semibold rounded-xl hover:bg-zinc-700 transition-colors text-center"
+                className="block w-full py-3 bg-white/[0.06] text-white font-semibold rounded-xl hover:bg-white/[0.08] transition-colors text-center"
               >
                 Return to Store
               </a>
             ) : (
               <Link
                 href="/demo/store"
-                className="block w-full py-3 bg-zinc-800 text-white font-semibold rounded-xl hover:bg-zinc-700 transition-colors text-center"
+                className="block w-full py-3 bg-white/[0.06] text-white font-semibold rounded-xl hover:bg-white/[0.08] transition-colors text-center"
               >
                 Continue Shopping
               </Link>
@@ -3057,7 +3057,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             {!successUrl && (
               <Link
                 href="/"
-                className="block w-full py-2 text-zinc-400 hover:text-white transition-colors text-sm text-center"
+                className="block w-full py-2 text-white/50 hover:text-white transition-colors text-sm text-center"
               >
                 Back to Home
               </Link>
@@ -3071,7 +3071,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Error step
   if (step === "error") {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -3081,7 +3081,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             <AlertCircle className="w-10 h-10 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">Payment Failed</h2>
-          <p className="text-zinc-400 mb-2">Something went wrong</p>
+          <p className="text-white/50 mb-2">Something went wrong</p>
           {error && (
             <p className="text-red-400 text-sm mb-6 p-3 bg-red-500/10 rounded-xl">
               {error}
@@ -3091,13 +3091,13 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           <div className="space-y-3">
             <button
               onClick={() => setStep("confirm")}
-              className="block w-full py-3 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
+              className="block w-full py-3 bg-white text-[#050507] font-semibold rounded-xl hover:opacity-90 transition-opacity"
             >
               Try Again
             </button>
             <Link
               href="/"
-              className="block w-full py-3 bg-zinc-800 text-white font-semibold rounded-xl hover:bg-zinc-700 transition-colors"
+              className="block w-full py-3 bg-white/[0.06] text-white font-semibold rounded-xl hover:bg-white/[0.08] transition-colors"
             >
               Cancel
             </Link>

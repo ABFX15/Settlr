@@ -54,7 +54,7 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#0a0a0f] shadow-lg">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/[0.06] bg-[#050507]/80 backdrop-blur-xl">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -77,7 +77,7 @@ export function Navbar() {
               {isActive(link.href) && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500"
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-white"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -103,7 +103,7 @@ export function Navbar() {
               {isIndustriesActive && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500"
+                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#a78bfa]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -116,7 +116,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-64 rounded-xl border border-white/10 bg-[#0a0a0f]/95 p-2 shadow-xl backdrop-blur-xl"
+                  className="absolute left-0 top-full mt-2 w-64 rounded-xl border border-white/[0.08] bg-[#050507]/95 p-2 shadow-xl backdrop-blur-xl"
                 >
                   {industryLinks.map((link) => (
                     <Link
@@ -125,12 +125,12 @@ export function Navbar() {
                       onClick={() => setIndustriesOpen(false)}
                       className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-colors ${
                         pathname === link.href
-                          ? "bg-purple-500/20 text-white"
+                          ? "bg-white/[0.08] text-white"
                           : "text-white/70 hover:bg-white/5 hover:text-white"
                       }`}
                     >
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500/20 to-cyan-500/20">
-                        <link.icon className="h-4 w-4 text-purple-400" />
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#a78bfa]/15">
+                        <link.icon className="h-4 w-4 text-[#a78bfa]" />
                       </div>
                       <div>
                         <div className="text-sm font-medium">{link.label}</div>
@@ -173,7 +173,7 @@ export function Navbar() {
               </button>
               <Link
                 href="/onboarding"
-                className="rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40"
+                className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#050507] transition-colors hover:bg-white/90"
               >
                 Get Started
               </Link>
@@ -201,7 +201,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-b border-white/5 bg-[#0a0a0f]/95 backdrop-blur-xl md:hidden"
+            className="border-b border-white/[0.06] bg-[#050507]/95 backdrop-blur-xl md:hidden"
           >
             <div className="flex flex-col px-4 py-4">
               {navLinks.map((link) => (
@@ -275,7 +275,7 @@ export function Navbar() {
                     <Link
                       href="/onboarding"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-4 py-3 text-center text-sm font-semibold text-white"
+                      className="rounded-lg bg-white px-4 py-3 text-center text-sm font-semibold text-[#050507]"
                     >
                       Get Started
                     </Link>

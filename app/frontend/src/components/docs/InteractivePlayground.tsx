@@ -187,13 +187,13 @@ export function InteractivePlayground({
 
     // Check if amount uses a variable like amount={cartTotal}
     const varMatch = code.match(
-      /amount[=:]\s*\{?\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}?/
+      /amount[=:]\s*\{?\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}?/,
     );
     if (varMatch && varMatch[1]) {
       const varName = varMatch[1];
       // Look for the variable assignment: const cartTotal = 129.99 or let cartTotal = 129.99
       const varValueMatch = code.match(
-        new RegExp(`(?:const|let|var)\\s+${varName}\\s*=\\s*(\\d+\\.?\\d*)`)
+        new RegExp(`(?:const|let|var)\\s+${varName}\\s*=\\s*(\\d+\\.?\\d*)`),
       );
       if (varValueMatch && varValueMatch[1]) {
         return parseFloat(varValueMatch[1]);
@@ -252,9 +252,9 @@ export function InteractivePlayground({
   };
 
   return (
-    <div className="rounded-2xl border border-purple-500/20 bg-[#0d0d14] overflow-hidden">
+    <div className="rounded-2xl border border-white/[0.06] bg-[#0d0d14] overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/5 bg-[#0a0a0f] px-4 py-3">
+      <div className="flex items-center justify-between border-b border-white/5 bg-[#050507] px-4 py-3">
         <div className="flex items-center gap-3">
           <div className="flex gap-1.5">
             <div className="h-3 w-3 rounded-full bg-red-500/60" />
@@ -294,7 +294,7 @@ export function InteractivePlayground({
                       onClick={() => handleLoadExample(example)}
                       className={`flex w-full flex-col items-start rounded-lg px-3 py-2 text-left transition-colors ${
                         selectedExample.id === example.id
-                          ? "bg-purple-500/10 text-purple-400"
+                          ? "bg-[#a78bfa]/10 text-[#a78bfa]"
                           : "text-white/70 hover:bg-white/5 hover:text-white"
                       }`}
                     >
@@ -397,7 +397,7 @@ export function InteractivePlayground({
             <button
               onClick={handleRun}
               disabled={isRunning}
-              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#050507] shadow-lg shadow-white/10 transition-all hover:shadow-white/20 disabled:opacity-50"
             >
               {isRunning ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -462,12 +462,12 @@ export function InteractivePlayground({
       </div>
 
       {/* Footer */}
-      <div className="border-t border-white/5 bg-[#0a0a0f] px-4 py-3">
+      <div className="border-t border-white/5 bg-[#050507] px-4 py-3">
         <div className="flex items-center justify-between text-xs text-white/40">
           <span>💡 Edit the code above and click "Try It" to see changes</span>
           <a
             href="/demo"
-            className="text-purple-400 transition-colors hover:text-purple-300"
+            className="text-[#a78bfa] transition-colors hover:text-[#a78bfa]/80"
           >
             Try with real payments →
           </a>
@@ -499,7 +499,7 @@ function CheckoutSimulator({
     return (
       <button
         onClick={onStartCheckout}
-        className="w-full rounded-xl bg-gradient-to-r from-purple-500 to-cyan-500 py-4 text-lg font-semibold text-white shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40"
+        className="w-full rounded-xl bg-white py-4 text-lg font-semibold text-[#050507] shadow-lg shadow-white/10 transition-all hover:shadow-white/20"
       >
         Pay ${amount.toFixed(2)}
       </button>

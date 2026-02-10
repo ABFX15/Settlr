@@ -2,16 +2,32 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  Check,
-  Zap,
-  Building2,
-  Rocket,
-  ArrowRight,
-  Sparkles,
-} from "lucide-react";
+import { Check, Zap, Building2, Rocket, ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
+
+/* ─── Reveal helper ─── */
+function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 const plans = [
   {
@@ -20,7 +36,6 @@ const plans = [
     price: "1%",
     priceSubtext: "per transaction",
     icon: Zap,
-    color: "#14F195",
     features: [
       "Unlimited transactions",
       "Gasless payments",
@@ -39,7 +54,6 @@ const plans = [
     price: "0.75%",
     priceSubtext: "per transaction",
     icon: Rocket,
-    color: "#9945FF",
     features: [
       "Everything in Starter",
       "Priority support",
@@ -59,7 +73,6 @@ const plans = [
     price: "Custom",
     priceSubtext: "volume-based pricing",
     icon: Building2,
-    color: "#00D4FF",
     features: [
       "Everything in Growth",
       "Dedicated support",
@@ -82,7 +95,7 @@ const faqs = [
   },
   {
     q: "Who pays for gas fees?",
-    a: "We cover all gas fees for your customers. They only pay the transaction amount - no SOL required.",
+    a: "We cover all gas fees for your customers. They only pay the transaction amount — no SOL required.",
   },
   {
     q: "How fast are settlements?",
@@ -96,259 +109,182 @@ const faqs = [
 
 export default function PricingPage() {
   return (
-    <>
+    <main className="relative min-h-screen bg-[#050507] text-white antialiased">
       <Navbar />
-      <main className="min-h-screen bg-[#0a0a0f]">
-        {/* Hero Section */}
-        <section className="relative overflow-hidden px-4 pb-16 pt-32">
-          {/* Background effects */}
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(153,69,255,0.3),transparent)]" />
-            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
-          </div>
 
-          {/* Floating orbs */}
-          <motion.div
-            animate={{
-              y: [0, -20, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute right-[15%] top-[20%] h-64 w-64 rounded-full bg-gradient-to-br from-[#9945FF]/20 to-[#14F195]/20 blur-3xl"
-          />
-          <motion.div
-            animate={{
-              y: [0, 20, 0],
-              scale: [1, 0.9, 1],
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute left-[10%] top-[30%] h-48 w-48 rounded-full bg-gradient-to-br from-[#00D4FF]/20 to-[#9945FF]/20 blur-3xl"
-          />
+      {/* ── Hero ── */}
+      <section className="relative pt-32 pb-20 md:pt-44 md:pb-24">
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-[#a78bfa]/[0.06] blur-[128px]" />
 
-          <div className="relative mx-auto max-w-6xl text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#14F195]/30 bg-[#14F195]/10 px-4 py-2"
-            >
-              <Sparkles className="h-4 w-4 text-[#14F195]" />
-              <span className="text-sm font-medium text-[#14F195]">
-                No Hidden Fees
+        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+          <Reveal>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-1.5 text-[13px] text-white/60">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#a78bfa]" />
+              No hidden fees
+            </div>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h1 className="text-4xl font-semibold tracking-tight md:text-6xl">
+              Simple, transparent{" "}
+              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
+                pricing
               </span>
-            </motion.div>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="mx-auto mt-5 max-w-xl text-lg text-white/50">
+              No monthly charges. Just pay per transaction. Start accepting
+              stablecoin payments today.
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mb-6 text-5xl font-bold leading-tight text-white md:text-7xl"
-            >
-              Simple, Transparent{" "}
-              <span className="relative">
-                <span className="bg-gradient-to-r from-[#9945FF] via-[#14F195] to-[#00D4FF] bg-clip-text text-transparent">
-                  Pricing
-                </span>
-                <motion.svg
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, delay: 0.5 }}
-                  className="absolute -bottom-2 left-0 w-full"
-                  viewBox="0 0 200 12"
-                  fill="none"
+      {/* ── Pricing Cards ── */}
+      <section className="mx-auto max-w-5xl px-6 pb-28">
+        <div className="grid gap-6 md:grid-cols-3">
+          {plans.map((plan, i) => {
+            const Icon = plan.icon;
+            return (
+              <Reveal key={plan.name} delay={i * 0.08}>
+                <div
+                  className={`relative flex h-full flex-col rounded-2xl border p-8 transition-colors ${
+                    plan.popular
+                      ? "border-[#a78bfa]/30 bg-[#a78bfa]/[0.04]"
+                      : "border-white/[0.06] bg-white/[0.02] hover:border-white/[0.1]"
+                  }`}
                 >
-                  <motion.path
-                    d="M2 10C40 2 160 2 198 10"
-                    stroke="url(#pricing-underline)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                  <defs>
-                    <linearGradient
-                      id="pricing-underline"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop offset="0%" stopColor="#9945FF" />
-                      <stop offset="50%" stopColor="#14F195" />
-                      <stop offset="100%" stopColor="#00D4FF" />
-                    </linearGradient>
-                  </defs>
-                </motion.svg>
-              </span>
-            </motion.h1>
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <span className="rounded-full bg-[#a78bfa] px-4 py-1 text-xs font-semibold text-white">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mx-auto mb-8 max-w-2xl text-lg text-gray-400"
-            >
-              No hidden fees. No monthly charges. Just pay per transaction.
-              Start accepting crypto payments today.
-            </motion.p>
-          </div>
-        </section>
+                  <div className="mb-6">
+                    <div className="mb-4 inline-flex rounded-xl bg-white/[0.05] p-2.5">
+                      <Icon className="h-5 w-5 text-white/60" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white">
+                      {plan.name}
+                    </h3>
+                    <p className="mt-1 text-sm text-white/40">
+                      {plan.description}
+                    </p>
+                  </div>
 
-        {/* Pricing Cards */}
-        <section className="relative px-4 pb-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="grid gap-8 md:grid-cols-3">
-              {plans.map((plan, index) => {
-                const Icon = plan.icon;
-                return (
-                  <motion.div
-                    key={plan.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * index }}
-                    className={`relative overflow-hidden rounded-2xl border p-8 transition-all ${
+                  <div className="mb-6">
+                    <span className="text-4xl font-semibold text-white">
+                      {plan.price}
+                    </span>
+                    <span className="ml-2 text-sm text-white/40">
+                      {plan.priceSubtext}
+                    </span>
+                  </div>
+
+                  <ul className="mb-8 flex-1 space-y-3">
+                    {plan.features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="flex items-center gap-3 text-sm text-white/50"
+                      >
+                        <Check className="h-4 w-4 flex-shrink-0 text-[#a78bfa]" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link
+                    href={plan.href}
+                    className={`group flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[15px] font-semibold transition-all ${
                       plan.popular
-                        ? "border-[#9945FF]/50 bg-gradient-to-b from-[#9945FF]/10 to-transparent shadow-lg shadow-[#9945FF]/10"
-                        : "border-white/10 bg-white/[0.02] hover:border-white/20"
+                        ? "bg-white text-[#050507] hover:bg-white/90"
+                        : "border border-white/[0.1] text-white/70 hover:bg-white/[0.04] hover:text-white"
                     }`}
                   >
-                    {plan.popular && (
-                      <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-[#9945FF] via-[#14F195] to-[#00D4FF]" />
-                    )}
-                    {plan.popular && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <span className="rounded-full bg-gradient-to-r from-[#9945FF] to-[#14F195] px-4 py-1 text-xs font-semibold text-white">
-                          Most Popular
-                        </span>
-                      </div>
-                    )}
+                    {plan.cta}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+      </section>
 
-                    <div className="mb-6">
-                      <div
-                        className="mb-4 inline-flex rounded-xl p-3"
-                        style={{ backgroundColor: `${plan.color}20` }}
-                      >
-                        <Icon
-                          className="h-6 w-6"
-                          style={{ color: plan.color }}
-                        />
-                      </div>
-                      <h3 className="mb-2 text-xl font-bold text-white">
-                        {plan.name}
-                      </h3>
-                      <p className="text-sm text-gray-400">
-                        {plan.description}
-                      </p>
-                    </div>
+      {/* ── FAQ ── */}
+      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+        <div className="mx-auto max-w-3xl px-6 py-28">
+          <Reveal>
+            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+              FAQ
+            </p>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
+              Frequently asked questions
+            </h2>
+          </Reveal>
 
-                    <div className="mb-6">
-                      <span className="text-5xl font-bold text-white">
-                        {plan.price}
-                      </span>
-                      <span className="ml-2 text-gray-400">
-                        {plan.priceSubtext}
-                      </span>
-                    </div>
-
-                    <ul className="mb-8 space-y-3">
-                      {plan.features.map((feature) => (
-                        <li
-                          key={feature}
-                          className="flex items-center gap-3 text-sm text-gray-300"
-                        >
-                          <Check className="h-4 w-4 flex-shrink-0 text-[#14F195]" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <Link
-                      href={plan.href}
-                      className={`group flex w-full items-center justify-center gap-2 rounded-xl py-3.5 font-semibold transition-all ${
-                        plan.popular
-                          ? "bg-gradient-to-r from-[#9945FF] to-[#14F195] text-white shadow-lg shadow-[#9945FF]/25 hover:shadow-[#9945FF]/40"
-                          : "border border-white/10 text-white hover:bg-white/5"
-                      }`}
-                    >
-                      {plan.cta}
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </motion.div>
-                );
-              })}
-            </div>
+          <div className="mt-12 space-y-4">
+            {faqs.map((faq, i) => (
+              <Reveal key={faq.q} delay={i * 0.06}>
+                <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+                  <h4 className="text-[15px] font-semibold text-white">
+                    {faq.q}
+                  </h4>
+                  <p className="mt-2 text-sm leading-relaxed text-white/40">
+                    {faq.a}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* FAQ Section - White background */}
-        <section className="relative bg-white px-4 py-24">
-          <div className="mx-auto max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mb-12 text-center"
-            >
-              <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-                Frequently Asked Questions
-              </h2>
-            </motion.div>
+      {/* ── CTA ── */}
+      <section className="relative isolate overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#a78bfa]/[0.06] via-transparent to-transparent" />
 
-            <div className="grid gap-4">
-              {faqs.map((faq, index) => (
-                <motion.div
-                  key={faq.q}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="rounded-2xl border-2 border-gray-100 bg-gray-50 p-6 transition-all hover:border-[#9945FF]/30"
-                >
-                  <h4 className="mb-2 font-semibold text-gray-900">{faq.q}</h4>
-                  <p className="text-gray-600">{faq.a}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="relative overflow-hidden px-4 py-24">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#9945FF]/10 to-transparent" />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative mx-auto max-w-3xl text-center"
-          >
-            <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">
+        <div className="mx-auto max-w-3xl px-6 py-32 text-center">
+          <Reveal>
+            <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
               Ready to start accepting
               <br />
-              <span className="bg-gradient-to-r from-[#14F195] to-[#00D4FF] bg-clip-text text-transparent">
-                crypto payments?
+              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
+                stablecoin payments?
               </span>
             </h2>
-            <p className="mb-8 text-gray-400">
-              Join hundreds of merchants already using Settlr for gasless USDC
+          </Reveal>
+          <Reveal delay={0.05}>
+            <p className="mx-auto mt-5 max-w-md text-base text-white/45">
+              Join merchants already using Settlr for instant, gasless USDC
               payments.
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                 href="/onboarding"
-                className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#14F195] to-[#00D4FF] px-8 py-4 font-semibold text-black transition-all hover:shadow-lg hover:shadow-[#14F195]/25"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#050507] px-8 py-4 text-[15px] font-semibold text-[#050507] transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                Get Started Free
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                Get started free
+                <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/demo"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-8 py-4 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.04] hover:text-white"
               >
-                Try Demo
+                Try demo
               </Link>
             </div>
-          </motion.div>
-        </section>
-      </main>
+          </Reveal>
+        </div>
+      </section>
+
       <Footer />
-    </>
+    </main>
   );
 }

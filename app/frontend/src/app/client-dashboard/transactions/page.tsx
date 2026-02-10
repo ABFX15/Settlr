@@ -112,14 +112,14 @@ export default function TransactionsPage() {
 
   if (!ready) {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#a78bfa]"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex">
+    <div className="min-h-screen bg-[#050507] flex">
       {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <div
@@ -130,7 +130,7 @@ export default function TransactionsPage() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 flex flex-col bg-[#0d0d14] border-r border-zinc-800/50 transition-all duration-300 ${
+        className={`fixed lg:static inset-y-0 left-0 z-50 flex flex-col bg-[#0d0d14] border-r border-white/[0.04] transition-all duration-300 ${
           sidebarCollapsed ? "w-20" : "w-64"
         } ${
           mobileMenuOpen
@@ -139,19 +139,19 @@ export default function TransactionsPage() {
         }`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between p-4 border-b border-zinc-800/50">
+        <div className="flex items-center justify-between p-4 border-b border-white/[0.04]">
           {!sidebarCollapsed && <SettlrLogoWithIcon />}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="p-2 rounded-lg hover:bg-zinc-800/50 transition-colors hidden lg:block"
+            className="p-2 rounded-lg hover:bg-white/[0.04] transition-colors hidden lg:block"
           >
-            <Menu className="w-5 h-5 text-zinc-400" />
+            <Menu className="w-5 h-5 text-white/50" />
           </button>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="p-2 rounded-lg hover:bg-zinc-800/50 transition-colors lg:hidden"
+            className="p-2 rounded-lg hover:bg-white/[0.04] transition-colors lg:hidden"
           >
-            <X className="w-5 h-5 text-zinc-400" />
+            <X className="w-5 h-5 text-white/50" />
           </button>
         </div>
 
@@ -165,8 +165,8 @@ export default function TransactionsPage() {
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
                   isActive
-                    ? "bg-purple-500/20 text-purple-400"
-                    : "text-zinc-400 hover:bg-zinc-800/50 hover:text-white"
+                    ? "bg-[#a78bfa]/20 text-[#a78bfa]"
+                    : "text-white/50 hover:bg-white/[0.04] hover:text-white"
                 }`}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
@@ -177,13 +177,13 @@ export default function TransactionsPage() {
         </nav>
 
         {/* Wallet Section */}
-        <div className="p-4 border-t border-zinc-800/50">
+        <div className="p-4 border-t border-white/[0.04]">
           {authenticated && connected ? (
             <div className="space-y-3">
               {!sidebarCollapsed && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-zinc-800/50 rounded-xl">
-                  <Wallet className="w-4 h-4 text-purple-400" />
-                  <span className="text-sm text-zinc-300 truncate">
+                <div className="flex items-center gap-2 px-3 py-2 bg-white/[0.04] rounded-xl">
+                  <Wallet className="w-4 h-4 text-[#a78bfa]" />
+                  <span className="text-sm text-white/70 truncate">
                     {publicKey?.slice(0, 4)}...{publicKey?.slice(-4)}
                   </span>
                   <button
@@ -193,14 +193,14 @@ export default function TransactionsPage() {
                     {copied ? (
                       <Check className="w-4 h-4 text-green-400" />
                     ) : (
-                      <Copy className="w-4 h-4 text-zinc-500 hover:text-zinc-300" />
+                      <Copy className="w-4 h-4 text-white/30 hover:text-white/70" />
                     )}
                   </button>
                 </div>
               )}
               <button
                 onClick={logout}
-                className={`flex items-center gap-3 w-full px-3 py-2.5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all ${
+                className={`flex items-center gap-3 w-full px-3 py-2.5 text-white/50 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all ${
                   sidebarCollapsed ? "justify-center" : ""
                 }`}
               >
@@ -211,7 +211,7 @@ export default function TransactionsPage() {
           ) : (
             <button
               onClick={login}
-              className={`flex items-center gap-3 w-full px-3 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl transition-all ${
+              className={`flex items-center gap-3 w-full px-3 py-2.5 bg-purple-600 hover:bg-[#a78bfa] text-white rounded-xl transition-all ${
                 sidebarCollapsed ? "justify-center" : ""
               }`}
             >
@@ -228,9 +228,9 @@ export default function TransactionsPage() {
         <div className="flex items-center justify-between lg:hidden mb-6">
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="p-2 rounded-lg hover:bg-zinc-800/50"
+            className="p-2 rounded-lg hover:bg-white/[0.04]"
           >
-            <Menu className="w-6 h-6 text-zinc-400" />
+            <Menu className="w-6 h-6 text-white/50" />
           </button>
           <SettlrLogoWithIcon />
           <div className="w-10" />
@@ -241,21 +241,21 @@ export default function TransactionsPage() {
           <h1 className="text-2xl lg:text-3xl font-bold text-white mb-2">
             Transactions
           </h1>
-          <p className="text-zinc-400">View and manage your payment history</p>
+          <p className="text-white/50">View and manage your payment history</p>
         </div>
 
         {!authenticated ? (
-          <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 text-center">
-            <Wallet className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 text-center">
+            <Wallet className="w-12 h-12 text-white/20 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">
               Connect Your Wallet
             </h3>
-            <p className="text-zinc-400 mb-6">
+            <p className="text-white/50 mb-6">
               Sign in to view your transaction history
             </p>
             <button
               onClick={login}
-              className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-medium rounded-xl transition-colors"
+              className="px-6 py-3 bg-purple-600 hover:bg-[#a78bfa] text-white font-medium rounded-xl transition-colors"
             >
               Connect Wallet
             </button>
@@ -272,7 +272,7 @@ export default function TransactionsPage() {
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       filter === f
                         ? "bg-purple-600 text-white"
-                        : "bg-zinc-800 text-zinc-400 hover:text-white"
+                        : "bg-white/[0.06] text-white/50 hover:text-white"
                     }`}
                   >
                     {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -280,25 +280,25 @@ export default function TransactionsPage() {
                 ))}
               </div>
               <div className="flex-1" />
-              <button className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg transition-colors">
+              <button className="flex items-center gap-2 px-4 py-2 bg-white/[0.06] hover:bg-white/[0.08] text-white/70 rounded-lg transition-colors">
                 <Download className="w-4 h-4" />
                 Export
               </button>
             </div>
 
             {/* Transactions Table */}
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden">
+            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
               {loading ? (
                 <div className="p-8 text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mx-auto"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#a78bfa] mx-auto"></div>
                 </div>
               ) : filteredPayments.length === 0 ? (
                 <div className="p-8 text-center">
-                  <ArrowLeftRight className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+                  <ArrowLeftRight className="w-12 h-12 text-white/20 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-white mb-2">
                     No transactions yet
                   </h3>
-                  <p className="text-zinc-400">
+                  <p className="text-white/50">
                     Your payment history will appear here
                   </p>
                 </div>
@@ -306,23 +306,23 @@ export default function TransactionsPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-zinc-800">
-                        <th className="text-left text-zinc-400 font-medium px-6 py-4">
+                      <tr className="border-b border-white/[0.06]">
+                        <th className="text-left text-white/50 font-medium px-6 py-4">
                           Date
                         </th>
-                        <th className="text-left text-zinc-400 font-medium px-6 py-4">
+                        <th className="text-left text-white/50 font-medium px-6 py-4">
                           Description
                         </th>
-                        <th className="text-left text-zinc-400 font-medium px-6 py-4">
+                        <th className="text-left text-white/50 font-medium px-6 py-4">
                           Customer
                         </th>
-                        <th className="text-right text-zinc-400 font-medium px-6 py-4">
+                        <th className="text-right text-white/50 font-medium px-6 py-4">
                           Amount
                         </th>
-                        <th className="text-left text-zinc-400 font-medium px-6 py-4">
+                        <th className="text-left text-white/50 font-medium px-6 py-4">
                           Status
                         </th>
-                        <th className="text-left text-zinc-400 font-medium px-6 py-4">
+                        <th className="text-left text-white/50 font-medium px-6 py-4">
                           TX
                         </th>
                       </tr>
@@ -331,15 +331,15 @@ export default function TransactionsPage() {
                       {filteredPayments.map((payment) => (
                         <tr
                           key={payment.id}
-                          className="border-b border-zinc-800/50 hover:bg-zinc-800/30"
+                          className="border-b border-white/[0.04] hover:bg-white/[0.06]/30"
                         >
                           <td className="px-6 py-4">
-                            <span className="text-zinc-300">
+                            <span className="text-white/70">
                               {new Date(
                                 payment.completedAt,
                               ).toLocaleDateString()}
                             </span>
-                            <span className="block text-xs text-zinc-500">
+                            <span className="block text-xs text-white/30">
                               {new Date(
                                 payment.completedAt,
                               ).toLocaleTimeString()}
@@ -352,13 +352,13 @@ export default function TransactionsPage() {
                               </span>
                               {payment.isPrivate && (
                                 <span title="Private payment">
-                                  <Shield className="w-4 h-4 text-purple-400" />
+                                  <Shield className="w-4 h-4 text-[#a78bfa]" />
                                 </span>
                               )}
                             </div>
                           </td>
                           <td className="px-6 py-4">
-                            <span className="text-zinc-400 font-mono text-sm">
+                            <span className="text-white/50 font-mono text-sm">
                               {payment.customerWallet.slice(0, 4)}...
                               {payment.customerWallet.slice(-4)}
                             </span>
@@ -367,7 +367,7 @@ export default function TransactionsPage() {
                             <span className="text-green-400 font-semibold">
                               +${payment.amount.toFixed(2)}
                             </span>
-                            <span className="block text-xs text-zinc-500">
+                            <span className="block text-xs text-white/30">
                               {payment.currency}
                             </span>
                           </td>
@@ -387,7 +387,7 @@ export default function TransactionsPage() {
                               href={`https://solscan.io/tx/${payment.txSignature}?cluster=devnet`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center gap-1 text-purple-400 hover:text-purple-300"
+                              className="flex items-center gap-1 text-[#a78bfa] hover:text-purple-300"
                             >
                               <ExternalLink className="w-4 h-4" />
                             </a>

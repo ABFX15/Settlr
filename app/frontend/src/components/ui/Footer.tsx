@@ -42,7 +42,7 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/5 bg-[#0a0a0f]">
+    <footer className="border-t border-white/[0.06] bg-[#050507]">
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand Column */}
@@ -136,7 +136,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 md:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 md:flex-row">
           <p className="text-sm text-white/30">
             © {new Date().getFullYear()} Settlr. Built on Solana.
           </p>

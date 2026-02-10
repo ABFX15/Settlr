@@ -105,7 +105,7 @@ const useCases = [
 
 export default function B2BPage() {
   return (
-    <main className="min-h-screen bg-[#0a0a0f]">
+    <main className="min-h-screen bg-[#050507]">
       <Navbar />
 
       {/* Hero Section */}
@@ -113,7 +113,7 @@ export default function B2BPage() {
         {/* Animated gradient mesh background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(34,211,238,0.3),transparent)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#050507] to-transparent" />
         </div>
 
         {/* Floating orbs */}
@@ -189,7 +189,7 @@ export default function B2BPage() {
                 </span>
               </h1>
 
-              <p className="mb-8 max-w-lg text-lg text-gray-400">
+              <p className="mb-8 max-w-lg text-lg text-white/50">
                 Ditch expensive wire transfers. Send invoices, get paid in USDC
                 instantly, from clients in 195+ countries. 24/7/365.
               </p>
@@ -227,7 +227,7 @@ export default function B2BPage() {
                   >
                     <Zap className="mb-3 h-8 w-8 text-[#22d3ee]" />
                     <div className="text-3xl font-bold text-white">Instant</div>
-                    <div className="text-sm text-gray-400">Settlement</div>
+                    <div className="text-sm text-white/50">Settlement</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
@@ -235,7 +235,7 @@ export default function B2BPage() {
                   >
                     <DollarSign className="mb-3 h-8 w-8 text-[#a855f7]" />
                     <div className="text-3xl font-bold text-white">1%</div>
-                    <div className="text-sm text-gray-400">vs $25+ wire</div>
+                    <div className="text-sm text-white/50">vs $25+ wire</div>
                   </motion.div>
                 </div>
 
@@ -254,7 +254,7 @@ export default function B2BPage() {
                         Global Payments
                       </span>
                     </div>
-                    <p className="text-gray-400">
+                    <p className="text-white/50">
                       Accept payments from any country. No SWIFT, no
                       correspondent banks, no currency conversion headaches.
                     </p>
@@ -267,9 +267,9 @@ export default function B2BPage() {
                     whileHover={{ scale: 1.02 }}
                     className="rounded-2xl border border-[#14F195]/20 bg-gradient-to-br from-[#14F195]/10 to-transparent p-6 backdrop-blur-sm"
                   >
-                    <Clock className="mb-3 h-8 w-8 text-[#14F195]" />
+                    <Clock className="mb-3 h-8 w-8 text-[#a78bfa]" />
                     <div className="text-3xl font-bold text-white">24/7</div>
-                    <div className="text-sm text-gray-400">Processing</div>
+                    <div className="text-sm text-white/50">Processing</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
@@ -277,7 +277,7 @@ export default function B2BPage() {
                   >
                     <Shield className="mb-3 h-8 w-8 text-white" />
                     <div className="text-3xl font-bold text-white">Final</div>
-                    <div className="text-sm text-gray-400">No reversals</div>
+                    <div className="text-sm text-white/50">No reversals</div>
                   </motion.div>
                 </div>
               </div>
@@ -312,7 +312,7 @@ export default function B2BPage() {
       </section>
 
       {/* Problems Section - White background */}
-      <section className="relative overflow-hidden bg-white px-4 py-24">
+      <section className="relative overflow-hidden bg-white/[0.01] px-4 py-24">
         <div className="mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -320,11 +320,11 @@ export default function B2BPage() {
             viewport={{ once: true }}
             className="mb-16 text-center"
           >
-            <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">
+            <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
               Wire transfers are
               <span className="text-red-500"> stuck in the past</span>
             </h2>
-            <p className="mx-auto max-w-2xl text-gray-600">
+            <p className="mx-auto max-w-2xl text-white/40">
               International clients mean expensive wire fees, SWIFT delays, and
               lost weekends waiting for funds to clear.
             </p>
@@ -346,10 +346,10 @@ export default function B2BPage() {
                     <X className="h-8 w-8" />
                   </div>
                   <Icon className="mb-4 h-8 w-8 text-red-500" />
-                  <h3 className="mb-2 font-semibold text-gray-900">
+                  <h3 className="mb-2 font-semibold text-white">
                     {point.problem}
                   </h3>
-                  <p className="text-sm text-gray-600">{point.detail}</p>
+                  <p className="text-sm text-white/40">{point.detail}</p>
                 </motion.div>
               );
             })}
@@ -366,9 +366,7 @@ export default function B2BPage() {
             viewport={{ once: true }}
             className="mb-10 text-center"
           >
-            <h2 className="mb-4 text-3xl font-bold text-gray-900">
-              Perfect for
-            </h2>
+            <h2 className="mb-4 text-3xl font-bold text-white">Perfect for</h2>
           </motion.div>
 
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -382,14 +380,12 @@ export default function B2BPage() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
-                  className="flex flex-col items-center gap-3 rounded-2xl border-2 border-[#22d3ee]/30 bg-white p-6 text-center shadow-lg transition-all hover:border-[#22d3ee] hover:shadow-xl"
+                  className="flex flex-col items-center gap-3 rounded-2xl border-2 border-[#22d3ee]/30 bg-[#050507] p-6 text-center shadow-lg transition-all hover:border-[#22d3ee] hover:shadow-xl"
                 >
                   <div className="rounded-xl bg-gradient-to-br from-[#22d3ee] to-[#a855f7] p-3">
                     <Icon className="h-6 w-6 text-white" />
                   </div>
-                  <span className="font-medium text-gray-900">
-                    {useCase.name}
-                  </span>
+                  <span className="font-medium text-white">{useCase.name}</span>
                 </motion.div>
               );
             })}
@@ -413,7 +409,7 @@ export default function B2BPage() {
             <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
               Invoice. Send link.
               <br />
-              <span className="text-[#14F195]">Get paid instantly.</span>
+              <span className="text-[#a78bfa]">Get paid instantly.</span>
             </h2>
           </motion.div>
 
@@ -457,7 +453,7 @@ export default function B2BPage() {
       </section>
 
       {/* Comparison Section */}
-      <section className="relative bg-[#0a0a0f] px-4 py-24">
+      <section className="relative bg-[#050507] px-4 py-24">
         <div className="mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -477,10 +473,10 @@ export default function B2BPage() {
             className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]"
           >
             <div className="grid grid-cols-3 border-b border-white/10 bg-white/[0.02]">
-              <div className="p-4 text-sm font-medium text-gray-400">
+              <div className="p-4 text-sm font-medium text-white/50">
                 Feature
               </div>
-              <div className="p-4 text-center text-sm font-medium text-gray-400">
+              <div className="p-4 text-center text-sm font-medium text-white/50">
                 Wire Transfer
               </div>
               <div className="p-4 text-center text-sm font-medium text-[#22d3ee]">
@@ -523,7 +519,7 @@ export default function B2BPage() {
                 }`}
               >
                 <div className="p-4 text-white">{row.feature}</div>
-                <div className="p-4 text-center text-gray-400">{row.wire}</div>
+                <div className="p-4 text-center text-white/50">{row.wire}</div>
                 <div className="p-4 text-center font-medium text-[#22d3ee]">
                   {row.settlr}
                 </div>
@@ -558,7 +554,7 @@ export default function B2BPage() {
             </span>
           </h2>
 
-          <p className="mb-8 text-lg text-gray-400">
+          <p className="mb-8 text-lg text-white/50">
             Join freelancers and agencies saving thousands per year on wire fees
             while getting paid faster.
           </p>

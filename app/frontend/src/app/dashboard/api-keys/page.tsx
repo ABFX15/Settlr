@@ -143,11 +143,11 @@ export default function ApiKeysPage() {
   const getTierColor = (tier: string) => {
     switch (tier) {
       case "pro":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-blue-500/20 text-[#38bdf8] border-[#38bdf8]/20";
       case "enterprise":
-        return "bg-purple-500/20 text-purple-400 border-purple-500/30";
+        return "bg-[#a78bfa]/20 text-[#a78bfa] border-[#a78bfa]/30";
       default:
-        return "bg-zinc-500/20 text-zinc-400 border-zinc-500/30";
+        return "bg-white/[0.06] text-white/50 border-white/[0.08]";
     }
   };
 
@@ -163,7 +163,7 @@ export default function ApiKeysPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a12] text-white p-8 pt-28">
+    <div className="min-h-screen bg-[#050507] text-white p-8 pt-28">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <motion.div
@@ -173,7 +173,7 @@ export default function ApiKeysPage() {
         >
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-4 transition-colors"
+            className="inline-flex items-center gap-2 text-white/50 hover:text-white mb-4 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard
@@ -181,7 +181,7 @@ export default function ApiKeysPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold mb-2">API Keys</h1>
-              <p className="text-zinc-400">
+              <p className="text-white/50">
                 Manage your SDK API keys for authentication
               </p>
             </div>
@@ -196,7 +196,7 @@ export default function ApiKeysPage() {
                 setNewlyCreatedKey(null);
               }}
               disabled={!connected}
-              className="px-6 py-3 bg-white text-black font-semibold rounded-xl flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-[#050507] text-black font-semibold rounded-xl flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Plus className="w-4 h-4" />
               {connected ? "Create API Key" : "Connect Wallet First"}
@@ -208,14 +208,14 @@ export default function ApiKeysPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl flex items-start gap-3"
+          className="mb-8 p-4 bg-[#38bdf8]/10 border border-[#38bdf8]/20 rounded-xl flex items-start gap-3"
         >
-          <AlertCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-[#38bdf8] flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-blue-200 font-medium">
+            <p className="text-[#38bdf8] font-medium">
               Keep your API keys secure
             </p>
-            <p className="text-blue-300/70 text-sm">
+            <p className="text-white/40 text-sm">
               API keys grant access to your Settlr account. Never share them
               publicly or commit them to version control.
             </p>
@@ -234,17 +234,17 @@ export default function ApiKeysPage() {
               <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
             </div>
           ) : !connected ? (
-            <div className="text-center py-12 bg-zinc-900/50 rounded-2xl border border-zinc-800">
-              <Key className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-              <p className="text-zinc-400 mb-2">
+            <div className="text-center py-12 bg-white/[0.02] rounded-2xl border border-white/[0.06]">
+              <Key className="w-12 h-12 text-white/20 mx-auto mb-4" />
+              <p className="text-white/50 mb-2">
                 Connect your wallet to manage API keys
               </p>
             </div>
           ) : keys.length === 0 ? (
-            <div className="text-center py-12 bg-zinc-900/50 rounded-2xl border border-zinc-800">
-              <Key className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-              <p className="text-zinc-400 mb-2">No API keys yet</p>
-              <p className="text-zinc-500 text-sm">
+            <div className="text-center py-12 bg-white/[0.02] rounded-2xl border border-white/[0.06]">
+              <Key className="w-12 h-12 text-white/20 mx-auto mb-4" />
+              <p className="text-white/50 mb-2">No API keys yet</p>
+              <p className="text-white/30 text-sm">
                 Create your first API key to start using the SDK
               </p>
             </div>
@@ -259,14 +259,14 @@ export default function ApiKeysPage() {
                   transition={{ delay: i * 0.05 }}
                   className={`p-6 rounded-2xl border transition-all ${
                     key.active
-                      ? "bg-zinc-900/50 border-zinc-800"
-                      : "bg-zinc-900/20 border-zinc-800/50 opacity-60"
+                      ? "bg-white/[0.02] border-white/[0.06]"
+                      : "bg-white/[0.01] border-white/[0.04] opacity-60"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="p-3 bg-zinc-800 rounded-xl">
-                        <Key className="w-5 h-5 text-zinc-400" />
+                      <div className="p-3 bg-white/[0.06] rounded-xl">
+                        <Key className="w-5 h-5 text-white/50" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -285,7 +285,7 @@ export default function ApiKeysPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-zinc-500 text-sm font-mono">
+                        <p className="text-white/30 text-sm font-mono">
                           {key.keyPrefix}
                         </p>
                       </div>
@@ -293,10 +293,10 @@ export default function ApiKeysPage() {
 
                     <div className="flex items-center gap-6">
                       <div className="text-right">
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-white/50">
                           {key.requestCount.toLocaleString()} requests
                         </p>
-                        <p className="text-xs text-zinc-500">
+                        <p className="text-xs text-white/30">
                           {key.rateLimit}/min limit
                         </p>
                       </div>
@@ -305,7 +305,7 @@ export default function ApiKeysPage() {
                         <button
                           onClick={() => revokeKey(key.id)}
                           disabled={revoking === key.id}
-                          className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                          className="p-2 text-white/30 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                         >
                           {revoking === key.id ? (
                             <div className="w-4 h-4 border-2 border-red-400/20 border-t-red-400 rounded-full animate-spin" />
@@ -318,7 +318,7 @@ export default function ApiKeysPage() {
                   </div>
 
                   {key.lastUsedAt && (
-                    <p className="text-xs text-zinc-600 mt-3">
+                    <p className="text-xs text-white/20 mt-3">
                       Last used: {new Date(key.lastUsedAt).toLocaleDateString()}
                     </p>
                   )}
@@ -333,7 +333,7 @@ export default function ApiKeysPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mt-8 p-6 bg-zinc-900/50 rounded-2xl border border-zinc-800"
+          className="mt-8 p-6 bg-white/[0.02] rounded-2xl border border-white/[0.06]"
         >
           <h3 className="font-semibold mb-4">Rate Limits by Tier</h3>
           <div className="grid grid-cols-3 gap-4">
@@ -347,13 +347,13 @@ export default function ApiKeysPage() {
                 icon: Building2,
               },
             ].map((t) => (
-              <div key={t.tier} className="p-4 bg-zinc-800/50 rounded-xl">
+              <div key={t.tier} className="p-4 bg-white/[0.04] rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
-                  <t.icon className="w-4 h-4 text-zinc-400" />
+                  <t.icon className="w-4 h-4 text-white/50" />
                   <span className="font-medium">{t.tier}</span>
                 </div>
-                <p className="text-sm text-zinc-400">{t.limit}</p>
-                <p className="text-xs text-zinc-500">{t.fee} platform fee</p>
+                <p className="text-sm text-white/50">{t.limit}</p>
+                <p className="text-xs text-white/30">{t.fee} platform fee</p>
               </div>
             ))}
           </div>
@@ -366,7 +366,7 @@ export default function ApiKeysPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 w-full max-w-md"
+            className="bg-white/[0.03] rounded-2xl border border-white/[0.06] p-6 w-full max-w-md"
           >
             {newlyCreatedKey ? (
               <>
@@ -375,18 +375,18 @@ export default function ApiKeysPage() {
                     <Check className="w-8 h-8 text-emerald-400" />
                   </div>
                   <h2 className="text-xl font-bold">API Key Created!</h2>
-                  <p className="text-zinc-400 text-sm mt-2">
+                  <p className="text-white/50 text-sm mt-2">
                     Copy this key now. You won&apos;t be able to see it again.
                   </p>
                 </div>
 
-                <div className="p-4 bg-zinc-800 rounded-xl font-mono text-sm break-all mb-4">
+                <div className="p-4 bg-white/[0.06] rounded-xl font-mono text-sm break-all mb-4">
                   {newlyCreatedKey}
                 </div>
 
                 <button
                   onClick={() => copyKey(newlyCreatedKey)}
-                  className="w-full py-3 bg-white text-black font-semibold rounded-xl flex items-center justify-center gap-2 mb-3"
+                  className="w-full py-3 bg-[#050507] text-black font-semibold rounded-xl flex items-center justify-center gap-2 mb-3"
                 >
                   {copied ? (
                     <>
@@ -406,7 +406,7 @@ export default function ApiKeysPage() {
                     setShowCreateModal(false);
                     setNewlyCreatedKey(null);
                   }}
-                  className="w-full py-3 bg-zinc-800 text-white font-semibold rounded-xl"
+                  className="w-full py-3 bg-white/[0.06] text-white font-semibold rounded-xl"
                 >
                   Done
                 </button>
@@ -417,7 +417,7 @@ export default function ApiKeysPage() {
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm text-zinc-400 mb-2">
+                    <label className="block text-sm text-white/50 mb-2">
                       Key Name
                     </label>
                     <input
@@ -425,12 +425,12 @@ export default function ApiKeysPage() {
                       value={newKeyName}
                       onChange={(e) => setNewKeyName(e.target.value)}
                       placeholder="e.g., Production, Development"
-                      className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
+                      className="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#a78bfa]/40"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm text-zinc-400 mb-2">
+                    <label className="block text-sm text-white/50 mb-2">
                       Tier
                     </label>
                     <div className="grid grid-cols-3 gap-2">
@@ -441,7 +441,7 @@ export default function ApiKeysPage() {
                           className={`p-3 rounded-xl border text-sm font-medium transition-all ${
                             newKeyTier === tier
                               ? "bg-white text-black border-white"
-                              : "bg-zinc-800 text-zinc-400 border-zinc-700 hover:border-zinc-500"
+                              : "bg-white/[0.06] text-white/50 border-white/[0.08] hover:border-white/[0.1]"
                           }`}
                         >
                           {tier.charAt(0).toUpperCase() + tier.slice(1)}
@@ -453,14 +453,14 @@ export default function ApiKeysPage() {
                   <div className="flex gap-3 pt-4">
                     <button
                       onClick={() => setShowCreateModal(false)}
-                      className="flex-1 py-3 bg-zinc-800 text-white font-semibold rounded-xl"
+                      className="flex-1 py-3 bg-white/[0.06] text-white font-semibold rounded-xl"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={createKey}
                       disabled={creating || !newKeyName.trim()}
-                      className="flex-1 py-3 bg-white text-black font-semibold rounded-xl disabled:opacity-50"
+                      className="flex-1 py-3 bg-[#050507] text-black font-semibold rounded-xl disabled:opacity-50"
                     >
                       {creating ? "Creating..." : "Create Key"}
                     </button>

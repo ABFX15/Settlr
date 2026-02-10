@@ -133,8 +133,8 @@ export default function AdminDashboardPage() {
   // Not ready yet
   if (!ready) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-[#a78bfa]" />
       </div>
     );
   }
@@ -142,25 +142,25 @@ export default function AdminDashboardPage() {
   // Not connected
   if (!connected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="min-h-screen bg-[#050507]">
         <div className="max-w-4xl mx-auto px-6 py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-indigo-500/30">
-              <Key className="w-10 h-10 text-indigo-400" />
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#a78bfa]/10 flex items-center justify-center border border-[#a78bfa]/20">
+              <Key className="w-10 h-10 text-[#a78bfa]" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-4">
               Platform Admin Dashboard
             </h1>
-            <p className="text-slate-400 mb-8 max-w-md mx-auto">
+            <p className="text-white/50 mb-8 max-w-md mx-auto">
               Connect an authorized wallet to access the admin dashboard.
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/25"
+              className="inline-flex items-center gap-2 bg-[#050507] text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/90 transition-all "
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -178,7 +178,7 @@ export default function AdminDashboardPage() {
 
   if (!isAuthorized || !publicKey) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="min-h-screen bg-[#050507]">
         <div className="max-w-4xl mx-auto px-6 py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -191,10 +191,10 @@ export default function AdminDashboardPage() {
             <h1 className="text-3xl font-bold text-white mb-4">
               Access Denied
             </h1>
-            <p className="text-slate-400 mb-4 max-w-md mx-auto">
+            <p className="text-white/50 mb-4 max-w-md mx-auto">
               This wallet is not authorized to access the admin dashboard.
             </p>
-            <p className="text-sm text-slate-500 mb-8">
+            <p className="text-sm text-white/30 mb-8">
               {publicKey
                 ? `Connected: ${publicKey.slice(0, 8)}...${publicKey.slice(-6)}`
                 : "No wallet connected"}
@@ -212,16 +212,16 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-[#050507]">
       {/* Header */}
       <header className="border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-[#a78bfa] flex items-center justify-center">
                 <DollarSign className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 text-transparent bg-clip-text">
+              <span className="text-xl font-bold text-[#a78bfa]">
                 Settlr Admin
               </span>
             </Link>
@@ -233,14 +233,14 @@ export default function AdminDashboardPage() {
               className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all"
             >
               <RefreshCw
-                className={`w-5 h-5 text-slate-400 ${
+                className={`w-5 h-5 text-white/50 ${
                   loading ? "animate-spin" : ""
                 }`}
               />
             </button>
             <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
-              <Wallet className="w-4 h-4 text-indigo-400" />
-              <span className="text-sm text-slate-300">
+              <Wallet className="w-4 h-4 text-[#a78bfa]" />
+              <span className="text-sm text-white/70">
                 {shortenAddress(publicKey)}
               </span>
             </div>
@@ -296,7 +296,7 @@ export default function AdminDashboardPage() {
                 Protected by Squads Multisig
                 <Lock className="w-4 h-4 text-cyan-400" />
               </h2>
-              <p className="text-sm text-slate-400 mb-3">
+              <p className="text-sm text-white/50 mb-3">
                 Platform authority is controlled by a Squads multisig. Fee
                 claims require multiple signatures.
               </p>
@@ -314,7 +314,7 @@ export default function AdminDashboardPage() {
                   onClick={() =>
                     copyToClipboard(SQUADS_VAULT.toBase58(), "squads")
                   }
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 text-white/70 hover:bg-white/10 transition-colors text-sm"
                 >
                   {copied === "squads" ? (
                     <Check className="w-4 h-4 text-green-400" />
@@ -334,16 +334,16 @@ export default function AdminDashboardPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 p-6"
+            className="relative overflow-hidden rounded-2xl bg-[#a78bfa]/[0.06] border border-[#a78bfa]/20 p-6"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#a78bfa]/10 rounded-full blur-3xl" />
             <div className="relative">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-indigo-400" />
+                <div className="w-12 h-12 rounded-xl bg-[#a78bfa]/20 flex items-center justify-center">
+                  <DollarSign className="w-6 h-6 text-[#a78bfa]" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400">Treasury Balance</p>
+                  <p className="text-sm text-white/50">Treasury Balance</p>
                   <p className="text-2xl font-bold text-white">
                     ${treasuryBalance.toFixed(2)}
                   </p>
@@ -353,12 +353,12 @@ export default function AdminDashboardPage() {
                 href={`https://devnet.squads.so/squads/${SQUADS_VAULT.toBase58()}/transactions`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-[#050507] text-white font-semibold hover:bg-white/90 transition-all flex items-center justify-center gap-2"
               >
                 <TrendingUp className="w-4 h-4" />
                 Claim via Squads
               </a>
-              <p className="text-xs text-slate-500 mt-2 text-center">
+              <p className="text-xs text-white/30 mt-2 text-center">
                 Requires multisig approval
               </p>
             </div>
@@ -376,13 +376,13 @@ export default function AdminDashboardPage() {
                 <TrendingUp className="w-6 h-6 text-cyan-400" />
               </div>
               <div>
-                <p className="text-sm text-slate-400">Platform Fee</p>
+                <p className="text-sm text-white/50">Platform Fee</p>
                 <p className="text-2xl font-bold text-white">
                   {platformConfig?.feeBps ? platformConfig.feeBps / 100 : 2}%
                 </p>
               </div>
             </div>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-white/30">
               Fee taken from each payment processed through the platform
             </p>
           </motion.div>
@@ -407,7 +407,7 @@ export default function AdminDashboardPage() {
                 />
               </div>
               <div>
-                <p className="text-sm text-slate-400">Platform Status</p>
+                <p className="text-sm text-white/50">Platform Status</p>
                 <p className="text-2xl font-bold text-white">
                   {platformConfig?.isActive ? "Active" : "Inactive"}
                 </p>
@@ -419,7 +419,7 @@ export default function AdminDashboardPage() {
                   platformConfig?.isActive ? "bg-green-400" : "bg-red-400"
                 } animate-pulse`}
               />
-              <span className="text-sm text-slate-500">
+              <span className="text-sm text-white/30">
                 {platformConfig?.isActive
                   ? "Processing payments"
                   : "Payments paused"}
@@ -436,13 +436,13 @@ export default function AdminDashboardPage() {
           className="rounded-2xl bg-white/5 border border-white/10 p-6 mb-8"
         >
           <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-            <Wallet className="w-5 h-5 text-indigo-400" />
+            <Wallet className="w-5 h-5 text-[#a78bfa]" />
             On-Chain Details
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 rounded-xl bg-black/30 border border-white/5">
-              <span className="text-sm text-slate-400 block mb-2">
+              <span className="text-sm text-white/50 block mb-2">
                 Squads Vault (Authority)
               </span>
               <div className="flex items-center gap-2">
@@ -455,13 +455,13 @@ export default function AdminDashboardPage() {
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                 >
-                  <ExternalLink className="w-4 h-4 text-slate-400" />
+                  <ExternalLink className="w-4 h-4 text-white/50" />
                 </a>
               </div>
             </div>
 
             <div className="p-4 rounded-xl bg-black/30 border border-white/5">
-              <span className="text-sm text-slate-400 block mb-2">
+              <span className="text-sm text-white/50 block mb-2">
                 Treasury Token Account
               </span>
               <div className="flex items-center gap-2">
@@ -474,13 +474,13 @@ export default function AdminDashboardPage() {
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                 >
-                  <ExternalLink className="w-4 h-4 text-slate-400" />
+                  <ExternalLink className="w-4 h-4 text-white/50" />
                 </a>
               </div>
             </div>
 
             <div className="p-4 rounded-xl bg-black/30 border border-white/5">
-              <span className="text-sm text-slate-400 block mb-2">
+              <span className="text-sm text-white/50 block mb-2">
                 USDC Mint
               </span>
               <div className="flex items-center gap-2">
@@ -493,13 +493,13 @@ export default function AdminDashboardPage() {
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                 >
-                  <ExternalLink className="w-4 h-4 text-slate-400" />
+                  <ExternalLink className="w-4 h-4 text-white/50" />
                 </a>
               </div>
             </div>
 
             <div className="p-4 rounded-xl bg-black/30 border border-white/5">
-              <span className="text-sm text-slate-400 block mb-2">
+              <span className="text-sm text-white/50 block mb-2">
                 Program ID
               </span>
               <div className="flex items-center gap-2">
@@ -512,7 +512,7 @@ export default function AdminDashboardPage() {
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                 >
-                  <ExternalLink className="w-4 h-4 text-slate-400" />
+                  <ExternalLink className="w-4 h-4 text-white/50" />
                 </a>
               </div>
             </div>
@@ -524,25 +524,25 @@ export default function AdminDashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="rounded-2xl bg-gradient-to-br from-indigo-500/5 to-purple-500/5 border border-white/10 p-6 mb-8"
+          className="rounded-2xl bg-[#a78bfa]/[0.03] border border-white/10 p-6 mb-8"
         >
           <h2 className="text-xl font-bold text-white mb-4">
             How to Claim Fees
           </h2>
           <div className="space-y-4">
             <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0 text-indigo-400 font-bold">
+              <div className="w-8 h-8 rounded-full bg-[#a78bfa]/20 flex items-center justify-center flex-shrink-0 text-[#a78bfa] font-bold">
                 1
               </div>
               <div>
                 <p className="text-white font-medium">Open Squads Dashboard</p>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-white/50">
                   Go to{" "}
                   <a
                     href={`https://devnet.squads.so/squads/${SQUADS_VAULT.toBase58()}/home`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-indigo-400 hover:underline"
+                    className="text-[#a78bfa] hover:underline"
                   >
                     devnet.squads.so
                   </a>{" "}
@@ -551,12 +551,12 @@ export default function AdminDashboardPage() {
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0 text-indigo-400 font-bold">
+              <div className="w-8 h-8 rounded-full bg-[#a78bfa]/20 flex items-center justify-center flex-shrink-0 text-[#a78bfa] font-bold">
                 2
               </div>
               <div>
                 <p className="text-white font-medium">Create a Transaction</p>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-white/50">
                   Use &quot;Program Interaction&quot; to call{" "}
                   <code className="text-xs bg-white/10 px-1 rounded">
                     claim_platform_fees
@@ -566,12 +566,12 @@ export default function AdminDashboardPage() {
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0 text-indigo-400 font-bold">
+              <div className="w-8 h-8 rounded-full bg-[#a78bfa]/20 flex items-center justify-center flex-shrink-0 text-[#a78bfa] font-bold">
                 3
               </div>
               <div>
                 <p className="text-white font-medium">Get Signatures</p>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-white/50">
                   Other multisig members approve the transaction
                 </p>
               </div>
@@ -582,7 +582,7 @@ export default function AdminDashboardPage() {
               </div>
               <div>
                 <p className="text-white font-medium">Execute</p>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-white/50">
                   Once threshold is met, execute the transaction to claim fees
                   to the vault
                 </p>
@@ -603,20 +603,20 @@ export default function AdminDashboardPage() {
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
-              <Wallet className="w-5 h-5 text-slate-400" />
+              <Wallet className="w-5 h-5 text-white/50" />
               <span className="text-white">Merchant Dashboard</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="/docs"
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
-              <Key className="w-5 h-5 text-slate-400" />
+              <Key className="w-5 h-5 text-white/50" />
               <span className="text-white">API Documentation</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 transition-transform" />
           </Link>
           <a
             href={`https://devnet.squads.so/squads/${SQUADS_VAULT.toBase58()}/home`}
@@ -625,10 +625,10 @@ export default function AdminDashboardPage() {
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
-              <Users className="w-5 h-5 text-slate-400" />
+              <Users className="w-5 h-5 text-white/50" />
               <span className="text-white">Squads Multisig</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 transition-transform" />
           </a>
         </motion.div>
       </main>

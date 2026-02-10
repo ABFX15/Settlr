@@ -168,15 +168,15 @@ export default function ClientDashboardPage() {
   // Auth check
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0f]">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-[#050507]">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#a78bfa] border-t-transparent" />
       </div>
     );
   }
 
   if (!authenticated) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0a0f] px-4">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#050507] px-4">
         <div className="text-center">
           <div className="mx-auto mb-8 flex justify-center">
             <SettlrLogoWithIcon size="md" variant="light" />
@@ -189,7 +189,7 @@ export default function ClientDashboardPage() {
           </p>
           <button
             onClick={login}
-            className="rounded-xl bg-gradient-to-r from-purple-500 to-cyan-500 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40"
+            className="rounded-xl bg-white px-8 py-4 text-lg font-semibold text-[#050507] shadow-lg shadow-white/10 transition-all hover:shadow-white/20"
           >
             Sign In to Dashboard
           </button>
@@ -199,7 +199,7 @@ export default function ClientDashboardPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a0f]">
+    <div className="flex min-h-screen bg-[#050507]">
       {/* Sidebar */}
       <aside
         className={`fixed left-0 top-0 z-40 hidden h-full border-r border-white/5 bg-[#0d0d14] transition-all duration-300 md:block ${
@@ -235,18 +235,18 @@ export default function ClientDashboardPage() {
                 href={item.href}
                 className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all ${
                   isActive
-                    ? "bg-gradient-to-r from-purple-500/20 to-cyan-500/10 text-white"
+                    ? "bg-white/[0.08] text-white"
                     : "text-white/60 hover:bg-white/5 hover:text-white"
                 }`}
               >
                 <item.icon
                   className={`h-5 w-5 flex-shrink-0 ${
-                    isActive ? "text-purple-400" : ""
+                    isActive ? "text-[#a78bfa]" : ""
                   }`}
                 />
                 {!sidebarCollapsed && <span>{item.label}</span>}
                 {isActive && !sidebarCollapsed && (
-                  <div className="ml-auto h-2 w-2 rounded-full bg-purple-400" />
+                  <div className="ml-auto h-2 w-2 rounded-full bg-[#a78bfa]" />
                 )}
               </Link>
             );
@@ -258,7 +258,7 @@ export default function ClientDashboardPage() {
           {!sidebarCollapsed && connected && publicKey && (
             <div className="mb-4 rounded-xl bg-white/5 p-3">
               <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-cyan-500">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#a78bfa]">
                   <Wallet className="h-4 w-4 text-white" />
                 </div>
                 <div className="flex-1 overflow-hidden">
@@ -293,7 +293,7 @@ export default function ClientDashboardPage() {
       </aside>
 
       {/* Mobile Header */}
-      <div className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/5 bg-[#0a0a0f]/90 px-4 backdrop-blur-xl md:hidden">
+      <div className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/5 bg-[#050507]/90 px-4 backdrop-blur-xl md:hidden">
         <Link href="/" className="flex items-center gap-2">
           <SettlrLogoWithIcon size="sm" variant="light" />
         </Link>
@@ -329,12 +329,12 @@ export default function ClientDashboardPage() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all ${
                       isActive
-                        ? "bg-gradient-to-r from-purple-500/20 to-cyan-500/10 text-white"
+                        ? "bg-white/[0.08] text-white"
                         : "text-white/60 hover:bg-white/5 hover:text-white"
                     }`}
                   >
                     <item.icon
-                      className={`h-5 w-5 ${isActive ? "text-purple-400" : ""}`}
+                      className={`h-5 w-5 ${isActive ? "text-[#a78bfa]" : ""}`}
                     />
                     <span>{item.label}</span>
                   </Link>
@@ -359,11 +359,11 @@ export default function ClientDashboardPage() {
           <div className="flex items-center gap-3">
             <button className="relative rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white">
               <Bell className="h-5 w-5" />
-              <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-purple-500" />
+              <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[#a78bfa]" />
             </button>
             <Link
               href="/create"
-              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40"
+              className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#050507] shadow-lg shadow-white/10 transition-all hover:shadow-white/20"
             >
               <Plus className="h-4 w-4" />
               New Payment
@@ -430,8 +430,8 @@ export default function ClientDashboardPage() {
                 className="rounded-2xl border border-white/5 bg-[#12121a] p-6"
               >
                 <div className="mb-4 flex items-start justify-between">
-                  <div className="rounded-xl bg-purple-500/10 p-3">
-                    <stat.icon className="h-5 w-5 text-purple-400" />
+                  <div className="rounded-xl bg-[#a78bfa]/10 p-3">
+                    <stat.icon className="h-5 w-5 text-[#a78bfa]" />
                   </div>
                   <span
                     className={`flex items-center gap-1 text-sm font-medium ${
@@ -482,7 +482,7 @@ export default function ClientDashboardPage() {
                         className="flex flex-1 flex-col items-center gap-2"
                       >
                         <div
-                          className="w-full rounded-t-lg bg-gradient-to-t from-purple-600 to-purple-400"
+                          className="w-full rounded-t-lg bg-gradient-to-t from-[#a78bfa] to-[#a78bfa]/60"
                           style={{ height: `${heights[i]}%` }}
                         />
                         <span className="text-xs text-white/40">{day}</span>
@@ -522,7 +522,7 @@ export default function ClientDashboardPage() {
                 </div>
                 <div className="flex items-center justify-between rounded-xl bg-white/5 p-4">
                   <span className="text-sm text-white/60">Webhooks</span>
-                  <span className="text-lg font-bold text-purple-400">
+                  <span className="text-lg font-bold text-[#a78bfa]">
                     Active
                   </span>
                 </div>
@@ -543,7 +543,7 @@ export default function ClientDashboardPage() {
               </h3>
               <Link
                 href="/client-dashboard/transactions"
-                className="text-sm text-purple-400 hover:text-purple-300"
+                className="text-sm text-[#a78bfa] hover:text-purple-300"
               >
                 View All →
               </Link>
@@ -551,14 +551,14 @@ export default function ClientDashboardPage() {
 
             {loading ? (
               <div className="flex h-32 items-center justify-center">
-                <div className="h-6 w-6 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#a78bfa] border-t-transparent" />
               </div>
             ) : payments.length === 0 ? (
               <div className="flex h-32 flex-col items-center justify-center text-center">
                 <p className="text-white/60">No transactions yet</p>
                 <Link
                   href="/create"
-                  className="mt-2 text-sm text-purple-400 hover:text-purple-300"
+                  className="mt-2 text-sm text-[#a78bfa] hover:text-purple-300"
                 >
                   Create your first payment link →
                 </Link>
@@ -581,8 +581,8 @@ export default function ClientDashboardPage() {
                       <tr key={payment.id} className="border-b border-white/5">
                         <td className="py-4">
                           <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-500/10">
-                              <DollarSign className="h-5 w-5 text-purple-400" />
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#a78bfa]/10">
+                              <DollarSign className="h-5 w-5 text-[#a78bfa]" />
                             </div>
                             <div>
                               <p className="font-medium text-white">
