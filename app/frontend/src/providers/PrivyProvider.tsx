@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useRef, ReactNode } from "react";
+import { useEffect, useState, useRef, ReactNode, useMemo } from "react";
+import { PrivyStatusContext } from "./PrivyStatusContext";
 
 interface PrivyProviderProps {
   children: ReactNode;
@@ -87,20 +88,32 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
       });
   }, [appId]);
 
+  const notAvailable = useMemo(() => ({ available: false }), []);
+  const isAvailable = useMemo(() => ({ available: true }), []);
+
   if (!appId) {
-    return <>{children}</>;
+    return (
+      <PrivyStatusContext.Provider value={notAvailable}>
+        {children}
+      </PrivyStatusContext.Provider>
+    );
   }
 
   if (!mounted || !ready || !providerRef.current) {
-    // Show children without Privy context while loading
-    return <>{children}</>;
+    return (
+      <PrivyStatusContext.Provider value={notAvailable}>
+        {children}
+      </PrivyStatusContext.Provider>
+    );
   }
 
   const { Comp, config } = providerRef.current;
 
   return (
-    <Comp appId={appId} config={config}>
-      {children}
-    </Comp>
+    <PrivyStatusContext.Provider value={isAvailable}>
+      <Comp appId={appId} config={config}>
+        {children}
+      </Comp>
+    </PrivyStatusContext.Provider>
   );
 }

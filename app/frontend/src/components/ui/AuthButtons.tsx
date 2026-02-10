@@ -1,28 +1,12 @@
 "use client";
 
-import { useState, useEffect, Component, ReactNode } from "react";
 import Link from "next/link";
 import { usePrivy } from "@privy-io/react-auth";
+import { usePrivyStatus } from "@/providers/PrivyStatusContext";
 
-/* ---------- Error boundary: catches if usePrivy has no context ---------- */
-class PrivyGuard extends Component<
-  { children: ReactNode; fallback: ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: { children: ReactNode; fallback: ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-  render() {
-    return this.state.hasError ? this.props.fallback : this.props.children;
-  }
-}
+/* ── Privy-connected buttons (only rendered when Privy context exists) ── */
 
-/* ---------- Privy-powered buttons ---------- */
-function PrivyDesktopButtons() {
+function PrivyDesktop() {
   const { ready, authenticated, login, logout } = usePrivy();
 
   if (!ready) {
@@ -39,7 +23,7 @@ function PrivyDesktopButtons() {
           Dashboard
         </Link>
         <button
-          onClick={logout}
+          onClick={() => logout()}
           className="rounded-md border border-border px-3.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           Sign Out
@@ -66,7 +50,7 @@ function PrivyDesktopButtons() {
   );
 }
 
-function PrivyMobileButtons() {
+function PrivyMobile() {
   const { ready, authenticated, login, logout } = usePrivy();
 
   if (!ready) {
@@ -83,7 +67,7 @@ function PrivyMobileButtons() {
           Dashboard
         </Link>
         <button
-          onClick={logout}
+          onClick={() => logout()}
           className="rounded-md bg-muted px-4 py-2.5 text-sm font-medium text-muted-foreground"
         >
           Sign Out
@@ -110,12 +94,13 @@ function PrivyMobileButtons() {
   );
 }
 
-/* ---------- Static fallback links (no Privy) ---------- */
+/* ── Static fallback (shown while Privy is loading or not configured) ── */
+
 function FallbackDesktop() {
   return (
     <>
       <Link
-        href="/waitlist"
+        href="/onboarding"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
       >
         Sign In
@@ -134,7 +119,7 @@ function FallbackMobile() {
   return (
     <>
       <Link
-        href="/waitlist"
+        href="/onboarding"
         className="rounded-md border border-border px-4 py-2.5 text-sm font-medium text-muted-foreground"
       >
         Sign In
@@ -149,19 +134,16 @@ function FallbackMobile() {
   );
 }
 
-/* ---------- Exports ---------- */
+/* ── Exports: check PrivyStatus context before deciding which to render ── */
+
 export default function AuthButtons() {
-  return (
-    <PrivyGuard fallback={<FallbackDesktop />}>
-      <PrivyDesktopButtons />
-    </PrivyGuard>
-  );
+  const { available } = usePrivyStatus();
+  if (!available) return <FallbackDesktop />;
+  return <PrivyDesktop />;
 }
 
 export function MobileAuthButtons() {
-  return (
-    <PrivyGuard fallback={<FallbackMobile />}>
-      <PrivyMobileButtons />
-    </PrivyGuard>
-  );
+  const { available } = usePrivyStatus();
+  if (!available) return <FallbackMobile />;
+  return <PrivyMobile />;
 }
