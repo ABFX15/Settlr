@@ -2,11 +2,39 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { usePrivy } from "@privy-io/react-auth";
+
+/* Dynamically loaded auth buttons -- avoids crashing when Privy context is absent */
+const AuthButtons = dynamic(() => import("@/components/ui/AuthButtons"), {
+  ssr: false,
+  loading: () => (
+    <Link
+      href="/onboarding"
+      className="rounded-md bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+    >
+      Get Started
+    </Link>
+  ),
+});
+
+const MobileAuthButtons = dynamic(
+  () => import("@/components/ui/AuthButtons").then((m) => m.MobileAuthButtons),
+  {
+    ssr: false,
+    loading: () => (
+      <Link
+        href="/onboarding"
+        className="rounded-md bg-primary px-4 py-2.5 text-center text-sm font-semibold text-primary-foreground"
+      >
+        Get Started
+      </Link>
+    ),
+  }
+);
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -20,14 +48,12 @@ const navLinks = [
 export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { ready, authenticated, login, logout } = usePrivy();
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
@@ -35,7 +61,6 @@ export function Navbar() {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <nav className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <SettlrLogoWithIcon size="sm" variant="light" />
         </Link>
@@ -66,37 +91,7 @@ export function Navbar() {
 
         {/* Right side - Auth */}
         <div className="hidden items-center gap-3 md:flex">
-          {ready && authenticated ? (
-            <>
-              <Link
-                href="/client-dashboard"
-                className="rounded-md border border-border bg-muted px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-card"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={logout}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={login}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                Sign In
-              </button>
-              <Link
-                href="/onboarding"
-                className="rounded-md bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                Get Started
-              </Link>
-            </>
-          )}
+          <AuthButtons />
         </div>
 
         {/* Mobile toggle */}
@@ -138,37 +133,7 @@ export function Navbar() {
               ))}
 
               <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4">
-                {ready && authenticated ? (
-                  <>
-                    <Link
-                      href="/client-dashboard"
-                      className="rounded-md border border-border bg-muted px-4 py-2.5 text-center text-sm font-medium text-foreground"
-                    >
-                      Dashboard
-                    </Link>
-                    <button
-                      onClick={logout}
-                      className="rounded-md px-4 py-2.5 text-sm font-medium text-muted-foreground"
-                    >
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      onClick={login}
-                      className="rounded-md border border-border px-4 py-2.5 text-sm font-medium text-muted-foreground"
-                    >
-                      Sign In
-                    </button>
-                    <Link
-                      href="/onboarding"
-                      className="rounded-md bg-primary px-4 py-2.5 text-center text-sm font-semibold text-primary-foreground"
-                    >
-                      Get Started
-                    </Link>
-                  </>
-                )}
+                <MobileAuthButtons />
               </div>
             </div>
           </motion.div>

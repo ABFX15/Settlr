@@ -4,10 +4,16 @@ const nextConfig: NextConfig = {
   // Silence workspace root warning
   turbopack: {
     root: ".",
+    resolveAlias: {
+      // Stub out Node-only modules for client bundles
+      pino: { browser: "./empty-module.js" },
+      "pino-pretty": { browser: "./empty-module.js" },
+      "thread-stream": { browser: "./empty-module.js" },
+    },
   },
   // Image optimization
   images: {
-    formats: ['image/avif', 'image/webp'],
+    formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
@@ -33,13 +39,11 @@ const nextConfig: NextConfig = {
       "why-is-node-running": false,
     };
 
-    // Handle WASM files
     config.experiments = {
       ...config.experiments,
       asyncWebAssembly: true,
     };
 
-    // Handle pino and thread-stream which have Node.js-only dependencies
     config.resolve.alias = {
       ...config.resolve.alias,
       "why-is-node-running": false,
@@ -53,12 +57,6 @@ const nextConfig: NextConfig = {
         "thread-stream": false,
       };
     }
-
-    // Ignore problematic test files from node_modules
-    config.module.rules.push({
-      test: /node_modules[/\\](thread-stream|pino)[/\\].*\.(js|ts)$/,
-      loader: "ignore-loader",
-    });
 
     return config;
   },
