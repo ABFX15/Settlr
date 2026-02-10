@@ -22,9 +22,9 @@ import { useState } from "react";
 
 const demoCards = [
   {
-    title: "Gaming Tournament Store",
+    title: "SaaS Demo Store",
     description:
-      "Full e-commerce experience with tournament entries, deposits, and instant USDC checkout.",
+      "Full checkout experience with subscriptions, API credits, and instant USDC payment.",
     href: "/demo/store",
     icon: Play,
     cta: "Try Demo",
@@ -33,7 +33,7 @@ const demoCards = [
     title: "Quick Checkout",
     description:
       "Skip straight to the checkout flow. See a $10 USDC payment in action.",
-    href: "/checkout?amount=10.00&merchant=Arena%20GG&to=DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV&memo=Tournament%20Deposit",
+    href: "/checkout?amount=10.00&merchant=Settlr%20Demo&to=DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV&memo=API%20Credits",
     icon: Zap,
     cta: "Try Checkout",
   },

@@ -4,6 +4,7 @@ import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 
 const footerLinks = {
   product: [
+    { href: "/industries/ai-saas", label: "AI/SaaS" },
     { href: "/demo", label: "Demo" },
     { href: "/docs", label: "Documentation" },
     { href: "/pricing", label: "Pricing" },
