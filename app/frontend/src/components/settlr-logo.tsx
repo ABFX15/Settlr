@@ -1,190 +1,122 @@
 "use client";
 
+/**
+ * Professional Settlr logo components.
+ *
+ * Uses the Geist Sans font-family through the `font-sans` utility,
+ * with a single accent color (#14F195) used sparingly for brand recognition.
+ */
+
+/* ── Sizes ────────────────────────────────── */
+const SIZE_MAP = {
+  sm: { text: "text-lg", icon: "h-4 w-4", gap: "gap-2", dot: "h-1 w-1" },
+  md: { text: "text-xl", icon: "h-5 w-5", gap: "gap-2.5", dot: "h-1.5 w-1.5" },
+  lg: { text: "text-2xl", icon: "h-6 w-6", gap: "gap-3", dot: "h-2 w-2" },
+  xl: { text: "text-3xl", icon: "h-7 w-7", gap: "gap-3", dot: "h-2.5 w-2.5" },
+} as const;
+
+const HERO_SIZE_MAP = {
+  sm: { text: "text-5xl", underline: "h-[3px]" },
+  md: { text: "text-6xl", underline: "h-[4px]" },
+  lg: { text: "text-7xl", underline: "h-[5px]" },
+  xl: { text: "text-8xl", underline: "h-[6px]" },
+} as const;
+
+type Size = "sm" | "md" | "lg" | "xl";
+type Variant = "default" | "light" | "dark";
+
+const VARIANT_TEXT: Record<Variant, string> = {
+  default: "text-foreground",
+  light: "text-white",
+  dark: "text-zinc-900",
+};
+
+/* ── Mark icon (small "S" mark) ───────────── */
+function SettlrMark({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect width="32" height="32" rx="8" fill="#14F195" />
+      <path
+        d="M10 12.5C10 10.567 11.567 9 13.5 9H18.5C20.433 9 22 10.567 22 12.5C22 14.433 20.433 16 18.5 16H13.5C11.567 16 10 17.567 10 19.5C10 21.433 11.567 23 13.5 23H18.5C20.433 23 22 21.433 22 19.5"
+        stroke="#09090b"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/* ── Inline logo (icon + wordmark, for nav/footer) ── */
+export function SettlrLogoWithIcon({
+  size = "sm",
+  variant = "default",
+}: {
+  size?: Size;
+  variant?: Variant;
+}) {
+  const s = SIZE_MAP[size];
+
+  return (
+    <span className={`inline-flex items-center ${s.gap}`}>
+      <SettlrMark className={s.icon} />
+      <span
+        className={`${s.text} font-sans font-bold tracking-tight ${VARIANT_TEXT[variant]}`}
+      >
+        Settlr
+      </span>
+    </span>
+  );
+}
+
+/* ── Hero-sized wordmark (for landing page) ── */
 export function SettlrLogo({
   size = "lg",
   variant = "default",
 }: {
-  size?: "sm" | "md" | "lg" | "xl";
-  variant?: "default" | "light" | "dark";
+  size?: Size;
+  variant?: Variant;
 }) {
-  const sizeClasses = {
-    sm: "text-5xl",
-    md: "text-7xl",
-    lg: "text-8xl",
-    xl: "text-[10rem]",
-  };
-
-  const underlineHeight = {
-    sm: "h-[4px]",
-    md: "h-[6px]",
-    lg: "h-[8px]",
-    xl: "h-[12px]",
-  };
-
-  const variantClasses = {
-    default: "text-foreground",
-    light: "text-white",
-    dark: "text-zinc-900",
-  };
+  const s = HERO_SIZE_MAP[size];
 
   return (
-    <div
-      className={`font-[family-name:var(--font-display)] font-black tracking-wider ${sizeClasses[size]} ${variantClasses[variant]} select-none uppercase`}
-      style={{ fontStyle: "italic" }}
+    <span
+      className={`relative inline-block font-sans font-extrabold tracking-tight ${s.text} ${VARIANT_TEXT[variant]}`}
     >
-      <span className="relative inline-block -skew-x-12">
-        <span className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent">
-          SETTL
-        </span>
-        <span className="relative inline-block">
-          <span className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent">
-            R
-          </span>
-          {/* Thick underline accent */}
-          <span
-            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195]`}
-          />
-        </span>
-      </span>
-    </div>
-  );
-}
-
-export function SettlrLogoWithIcon({
-  size = "lg",
-  variant = "default",
-}: {
-  size?: "sm" | "md" | "lg" | "xl";
-  variant?: "default" | "light" | "dark";
-}) {
-  const sizeClasses = {
-    sm: "text-xl",
-    md: "text-2xl",
-    lg: "text-3xl",
-    xl: "text-4xl",
-  };
-
-  const iconSizes = {
-    sm: "w-6 h-6",
-    md: "w-8 h-8",
-    lg: "w-10 h-10",
-    xl: "w-12 h-12",
-  };
-
-  const barHeights = {
-    sm: "h-[2px]",
-    md: "h-[3px]",
-    lg: "h-[4px]",
-    xl: "h-[5px]",
-  };
-
-  const underlineHeight = {
-    sm: "h-[2px]",
-    md: "h-[3px]",
-    lg: "h-[4px]",
-    xl: "h-[5px]",
-  };
-
-  const gapSizes = {
-    sm: "gap-2",
-    md: "gap-3",
-    lg: "gap-4",
-    xl: "gap-5",
-  };
-
-  const variantClasses = {
-    default: "text-foreground",
-    light: "text-white",
-    dark: "text-zinc-900",
-  };
-
-  return (
-    <div
-      className={`flex items-center ${gapSizes[size]} font-[family-name:var(--font-display)] font-black tracking-wider ${sizeClasses[size]} ${variantClasses[variant]} select-none uppercase`}
-    >
-      {/* Aggressive stacked bars icon */}
-      <div
-        className={`${iconSizes[size]} relative flex flex-col justify-center gap-[2px] -skew-x-12`}
-      >
-        <div className={`${barHeights[size]} bg-[#00D4FF] ml-1`} />
-        <div className={`${barHeights[size]} bg-[#9945FF]`} />
-        <div className={`${barHeights[size]} bg-[#14F195] ml-0.5`} />
-      </div>
+      Settlr
       <span
-        className="relative inline-block -skew-x-12"
-        style={{ fontStyle: "italic" }}
-      >
-        <span className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent">
-          SETTL
-        </span>
-        <span className="relative inline-block">
-          <span className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent">
-            R
-          </span>
-          <span
-            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195]`}
-          />
-        </span>
-      </span>
-    </div>
+        className={`absolute bottom-[0.08em] left-0 right-0 ${s.underline} rounded-full bg-primary`}
+      />
+    </span>
   );
 }
 
-// Monochrome version with glow
+/* ── Mono logo (single-color, for dark overlays) ── */
 export function SettlrLogoMono({
   size = "lg",
   variant = "light",
 }: {
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: Size;
   variant?: "light" | "dark";
 }) {
-  const sizeClasses = {
-    sm: "text-5xl",
-    md: "text-7xl",
-    lg: "text-8xl",
-    xl: "text-[10rem]",
-  };
-
-  const underlineHeight = {
-    sm: "h-[4px]",
-    md: "h-[6px]",
-    lg: "h-[8px]",
-    xl: "h-[12px]",
-  };
-
-  const variantStyles = {
-    light: {
-      text: "text-white",
-      accent: "bg-[#14F195]",
-      shadow: "0 0 30px rgba(20, 241, 149, 0.9)",
-      textShadow: "0 0 40px rgba(255, 255, 255, 0.5)",
-    },
-    dark: {
-      text: "text-zinc-900",
-      accent: "bg-[#9945FF]",
-      shadow: "0 0 30px rgba(153, 69, 255, 0.9)",
-      textShadow: "none",
-    },
-  };
+  const s = HERO_SIZE_MAP[size];
+  const textColor = variant === "light" ? "text-white" : "text-zinc-900";
 
   return (
-    <div
-      className={`font-[family-name:var(--font-display)] tracking-wide ${sizeClasses[size]} ${variantStyles[variant].text} select-none uppercase`}
-      style={{
-        fontStyle: "italic",
-        filter: `drop-shadow(${variantStyles[variant].textShadow})`,
-      }}
+    <span
+      className={`relative inline-block font-sans font-extrabold tracking-tight ${s.text} ${textColor}`}
     >
-      <span className="relative inline-block -skew-x-12">
-        SETTL
-        <span className="relative inline-block">
-          <span className="relative z-10">R</span>
-          <span
-            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} ${variantStyles[variant].accent}`}
-            style={{ boxShadow: variantStyles[variant].shadow }}
-          />
-        </span>
-      </span>
-    </div>
+      Settlr
+      <span
+        className={`absolute bottom-[0.08em] left-0 right-0 ${s.underline} rounded-full bg-primary`}
+      />
+    </span>
   );
 }
+
+export { SettlrMark };
