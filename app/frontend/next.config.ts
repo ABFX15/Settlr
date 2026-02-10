@@ -4,12 +4,6 @@ const nextConfig: NextConfig = {
   // Silence workspace root warning
   turbopack: {
     root: ".",
-    resolveAlias: {
-      // Stub out Node-only modules for client bundles
-      pino: { browser: "./empty-module.js" },
-      "pino-pretty": { browser: "./empty-module.js" },
-      "thread-stream": { browser: "./empty-module.js" },
-    },
   },
   // Image optimization
   images: {

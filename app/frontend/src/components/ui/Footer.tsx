@@ -2,7 +2,13 @@ import Link from "next/link";
 import { Twitter, Github, Mail } from "lucide-react";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 
-const footerLinks = {
+interface FooterLink {
+  href: string;
+  label: string;
+  external?: boolean;
+}
+
+const footerLinks: Record<string, FooterLink[]> = {
   product: [
     { href: "/industries/ai-saas", label: "AI/SaaS" },
     { href: "/demo", label: "Demo" },
