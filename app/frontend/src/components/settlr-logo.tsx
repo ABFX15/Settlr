@@ -29,35 +29,20 @@ export function SettlrLogo({
 
   return (
     <div
-      className={`font-[family-name:var(--font-display)] tracking-wide ${sizeClasses[size]} ${variantClasses[variant]} select-none uppercase`}
+      className={`font-[family-name:var(--font-display)] font-black tracking-wider ${sizeClasses[size]} ${variantClasses[variant]} select-none uppercase`}
       style={{ fontStyle: "italic" }}
     >
       <span className="relative inline-block -skew-x-12">
-        <span
-          className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent"
-          style={{
-            filter:
-              "drop-shadow(0 0 40px rgba(153, 69, 255, 0.8)) drop-shadow(0 0 80px rgba(0, 212, 255, 0.5))",
-          }}
-        >
+        <span className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent">
           SETTL
         </span>
         <span className="relative inline-block">
-          <span
-            className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent"
-            style={{
-              filter: "drop-shadow(0 0 40px rgba(20, 241, 149, 0.8))",
-            }}
-          >
+          <span className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent">
             R
           </span>
           {/* Thick underline accent */}
           <span
             className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195]`}
-            style={{
-              boxShadow:
-                "0 0 30px rgba(153, 69, 255, 0.9), 0 0 60px rgba(20, 241, 149, 0.6)",
-            }}
           />
         </span>
       </span>
@@ -115,53 +100,29 @@ export function SettlrLogoWithIcon({
 
   return (
     <div
-      className={`flex items-center ${gapSizes[size]} font-[family-name:var(--font-display)] tracking-wide ${sizeClasses[size]} ${variantClasses[variant]} select-none uppercase`}
+      className={`flex items-center ${gapSizes[size]} font-[family-name:var(--font-display)] font-black tracking-wider ${sizeClasses[size]} ${variantClasses[variant]} select-none uppercase`}
     >
       {/* Aggressive stacked bars icon */}
       <div
         className={`${iconSizes[size]} relative flex flex-col justify-center gap-[2px] -skew-x-12`}
       >
-        <div
-          className={`${barHeights[size]} bg-[#00D4FF] ml-1`}
-          style={{ boxShadow: "0 0 10px rgba(0, 212, 255, 0.9)" }}
-        />
-        <div
-          className={`${barHeights[size]} bg-[#9945FF]`}
-          style={{ boxShadow: "0 0 10px rgba(153, 69, 255, 0.9)" }}
-        />
-        <div
-          className={`${barHeights[size]} bg-[#14F195] ml-0.5`}
-          style={{ boxShadow: "0 0 10px rgba(20, 241, 149, 0.9)" }}
-        />
+        <div className={`${barHeights[size]} bg-[#00D4FF] ml-1`} />
+        <div className={`${barHeights[size]} bg-[#9945FF]`} />
+        <div className={`${barHeights[size]} bg-[#14F195] ml-0.5`} />
       </div>
       <span
         className="relative inline-block -skew-x-12"
         style={{ fontStyle: "italic" }}
       >
-        <span
-          className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent"
-          style={{
-            filter:
-              "drop-shadow(0 0 20px rgba(153, 69, 255, 0.8)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.5))",
-          }}
-        >
+        <span className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent">
           SETTL
         </span>
         <span className="relative inline-block">
-          <span
-            className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent"
-            style={{
-              filter: "drop-shadow(0 0 20px rgba(20, 241, 149, 0.8))",
-            }}
-          >
+          <span className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent">
             R
           </span>
           <span
             className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195]`}
-            style={{
-              boxShadow:
-                "0 0 15px rgba(153, 69, 255, 0.9), 0 0 30px rgba(20, 241, 149, 0.6)",
-            }}
           />
         </span>
       </span>
