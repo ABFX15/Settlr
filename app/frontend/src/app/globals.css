@@ -1,24 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  /* Core palette - deep charcoal base with emerald accent */
+  /* Core palette */
   --background: #09090b;
-  --background-secondary: #0f0f12;
+  --background-secondary: #0c0c10;
   --foreground: #fafafa;
-  --card: #111113;
-  --card-hover: #18181b;
+  --card: #111114;
+  --card-hover: #18181c;
   --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.15);
+  --border-hover: rgba(255, 255, 255, 0.16);
 
-  /* Brand accent - Solana green as primary accent */
+  /* Brand accent - Solana green */
   --accent: #14F195;
-  --accent-hover: #2dffa5;
+  --accent-hover: #3dffa8;
   --accent-muted: rgba(20, 241, 149, 0.1);
-  --accent-glow: rgba(20, 241, 149, 0.25);
+  --accent-glow: rgba(20, 241, 149, 0.3);
 
-  /* Secondary accent - muted teal */
-  --secondary: #06b6d4;
-  --secondary-muted: rgba(6, 182, 212, 0.1);
+  /* Secondary accent - cool cyan for variety */
+  --secondary: #38bdf8;
+  --secondary-muted: rgba(56, 189, 248, 0.1);
 
   /* Status colors */
   --success: #22c55e;
@@ -55,19 +55,6 @@ body {
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
-}
-
-/* Subtle ambient glow */
-.gradient-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(
-      ellipse 60% 40% at 50% -10%,
-      rgba(20, 241, 149, 0.06),
-      transparent
-    ),
-    var(--background);
 }
 
 /* Glass card */
@@ -158,6 +145,47 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--border-hover);
+}
+
+/* Range slider styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  height: 6px;
+}
+
+input[type="range"]::-webkit-slider-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  height: 6px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+  margin-top: -6px;
+}
+
+input[type="range"]::-moz-range-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  height: 6px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+  border: none;
 }
 
 /* Wallet adapter overrides */

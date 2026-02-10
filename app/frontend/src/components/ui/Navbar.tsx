@@ -53,6 +53,8 @@ export function Navbar() {
 
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-xl">
+      {/* Accent glow line */}
+      <div className="absolute bottom-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent" />
       <nav className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 md:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -166,7 +168,7 @@ export function Navbar() {
               </button>
               <Link
                 href="/onboarding"
-                className="rounded-md bg-[var(--accent)] px-3.5 py-1.5 text-sm font-semibold text-[#09090b] transition-all hover:shadow-[0_0_16px_var(--accent-glow)]"
+                className="rounded-lg bg-[var(--accent)] px-4 py-1.5 text-sm font-semibold text-[#09090b] transition-all hover:shadow-[0_0_24px_rgba(20,241,149,0.35)] hover:scale-[1.02] active:scale-[0.98]"
               >
                 Get Started
               </Link>

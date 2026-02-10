@@ -33,16 +33,12 @@ export function SettlrLogo({
       style={{ fontStyle: "italic" }}
     >
       <span className="relative inline-block -skew-x-12">
-        <span className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent">
-          SETTL
-        </span>
+        <span className="text-white">SETTL</span>
         <span className="relative inline-block">
-          <span className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent">
-            R
-          </span>
-          {/* Thick underline accent */}
+          <span className="relative z-10 text-[#14F195]">R</span>
           <span
-            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195]`}
+            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-[#14F195]`}
+            style={{ boxShadow: "0 0 20px rgba(20, 241, 149, 0.5)" }}
           />
         </span>
       </span>
@@ -92,37 +88,34 @@ export function SettlrLogoWithIcon({
     xl: "gap-5",
   };
 
-  const variantClasses = {
-    default: "text-foreground",
-    light: "text-white",
-    dark: "text-zinc-900",
-  };
-
   return (
     <div
-      className={`flex items-center ${gapSizes[size]} font-[family-name:var(--font-display)] font-black tracking-wider ${sizeClasses[size]} ${variantClasses[variant]} select-none uppercase`}
+      className={`flex items-center ${gapSizes[size]} font-[family-name:var(--font-display)] font-black tracking-wider ${sizeClasses[size]} select-none uppercase`}
     >
-      {/* Aggressive stacked bars icon */}
+      {/* Stacked bars icon */}
       <div
         className={`${iconSizes[size]} relative flex flex-col justify-center gap-[2px] -skew-x-12`}
       >
-        <div className={`${barHeights[size]} bg-[#00D4FF] ml-1`} />
-        <div className={`${barHeights[size]} bg-[#9945FF]`} />
-        <div className={`${barHeights[size]} bg-[#14F195] ml-0.5`} />
+        <div
+          className={`${barHeights[size]} bg-[#14F195] ml-1`}
+          style={{ opacity: 0.4 }}
+        />
+        <div className={`${barHeights[size]} bg-[#14F195]`} />
+        <div
+          className={`${barHeights[size]} bg-[#14F195] ml-0.5`}
+          style={{ opacity: 0.6 }}
+        />
       </div>
       <span
         className="relative inline-block -skew-x-12"
         style={{ fontStyle: "italic" }}
       >
-        <span className="bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#FF00E5] bg-clip-text text-transparent">
-          SETTL
-        </span>
+        <span className="text-white">SETTL</span>
         <span className="relative inline-block">
-          <span className="relative z-10 bg-gradient-to-r from-[#FF00E5] to-[#14F195] bg-clip-text text-transparent">
-            R
-          </span>
+          <span className="relative z-10 text-[#14F195]">R</span>
           <span
-            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-gradient-to-r from-[#00D4FF] via-[#9945FF] to-[#14F195]`}
+            className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} bg-[#14F195]`}
+            style={{ boxShadow: "0 0 12px rgba(20, 241, 149, 0.4)" }}
           />
         </span>
       </span>
@@ -161,8 +154,8 @@ export function SettlrLogoMono({
     },
     dark: {
       text: "text-zinc-900",
-      accent: "bg-[#9945FF]",
-      shadow: "0 0 30px rgba(153, 69, 255, 0.9)",
+      accent: "bg-[#14F195]",
+      shadow: "0 0 30px rgba(20, 241, 149, 0.9)",
       textShadow: "none",
     },
   };
@@ -178,7 +171,7 @@ export function SettlrLogoMono({
       <span className="relative inline-block -skew-x-12">
         SETTL
         <span className="relative inline-block">
-          <span className="relative z-10">R</span>
+          <span className="relative z-10 text-[#14F195]">R</span>
           <span
             className={`absolute bottom-[0.05em] -left-[0.1em] right-[-0.1em] ${underlineHeight[size]} ${variantStyles[variant].accent}`}
             style={{ boxShadow: variantStyles[variant].shadow }}

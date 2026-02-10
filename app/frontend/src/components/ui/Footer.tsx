@@ -42,7 +42,9 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--background)]">
+    <footer className="relative border-t border-[var(--border)] bg-[var(--background)]">
+      {/* Accent glow line */}
+      <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-14">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand Column */}
@@ -61,7 +63,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-md p-2 text-[var(--text-muted)] transition-colors hover:bg-[var(--card)] hover:text-[var(--text-secondary)]"
+                  className="rounded-lg p-2 text-[var(--text-muted)] transition-all hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]"
                   aria-label={social.label}
                 >
                   <social.icon className="h-4 w-4" />
