@@ -1,0 +1,12 @@
+.anchor
+target
+test-ledger
+.next
+node_modules
+programs
+migrations
+tests
+kora
+scripts
+demo-wallet.json
+phantom-wallet.json
