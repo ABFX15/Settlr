@@ -256,391 +256,454 @@ export default function LandingPage() {
               </Reveal>
             </div>
 
-            {/* ─── Right: Isometric payment visual ─── */}
+            {/* ─── Right: Premium payment visual ─── */}
             <Reveal delay={0.15}>
               <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
-                {/* Glow behind the graphic */}
-                <div className="absolute left-1/2 top-1/2 -z-10 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#a78bfa]/[0.12] blur-[100px]" />
-                <div className="absolute left-[60%] top-[40%] -z-10 h-60 w-60 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#38bdf8]/[0.08] blur-[80px]" />
+                {/* ── Multi-layer ambient glow ── */}
+                <div className="absolute left-1/2 top-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#a78bfa]/[0.14] blur-[140px]" />
+                <div className="absolute left-[65%] top-[35%] -z-10 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#38bdf8]/[0.10] blur-[100px]" />
+                <div className="absolute left-[30%] top-[65%] -z-10 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#34d399]/[0.06] blur-[80px]" />
 
-                {/* Isometric container with perspective */}
                 <div className="relative" style={{ perspective: "1200px" }}>
-                  {/* ── Floating card: Checkout ── */}
-                  <motion.div
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{
-                      duration: 5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="relative z-30 mx-auto w-[280px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c10]/90 shadow-2xl shadow-black/40 backdrop-blur-sm"
-                    style={{
-                      transform: "rotateY(-8deg) rotateX(4deg)",
-                    }}
-                  >
-                    <div className="border-b border-white/[0.06] px-4 py-2.5">
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full bg-white/10" />
-                        <span className="h-2 w-2 rounded-full bg-white/10" />
-                        <span className="h-2 w-2 rounded-full bg-white/10" />
-                        <span className="ml-2 text-[10px] text-white/20">
-                          checkout
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-5">
-                      <div className="mb-4 flex items-center gap-2.5">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#a78bfa]/20">
-                          <CreditCard className="h-4 w-4 text-[#a78bfa]" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold text-white">
-                            Pro Plan
-                          </p>
-                          <p className="text-[10px] text-white/30">Monthly</p>
-                        </div>
-                      </div>
-                      <div className="mb-4 rounded-lg bg-white/[0.03] p-3">
-                        <p className="text-[10px] text-white/30">Amount</p>
-                        <div className="flex items-center gap-2">
-                          <p className="text-xl font-semibold text-white">
-                            $49
-                            <span className="text-sm text-white/40">.99</span>
-                          </p>
-                          <img
-                            src="/usdc.png"
-                            alt="USDC"
-                            className="h-7 w-7 rounded-full"
-                          />
-                        </div>
-                        <p className="text-[10px] text-white/20">
-                          USDC · Solana
-                        </p>
-                      </div>
-                      <div className="rounded-lg bg-white py-2 text-center text-xs font-semibold text-[#050507]">
-                        Pay with USDC
-                      </div>
-                      <p className="mt-2 text-center text-[9px] text-white/20">
-                        No wallet needed · Zero gas
-                      </p>
-                    </div>
-                  </motion.div>
-
-                  {/* ── Floating card: Subscription (behind left) ── */}
-                  <motion.div
-                    animate={{ y: [0, 6, 0] }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 1,
-                    }}
-                    className="absolute -left-4 top-12 z-20 w-[220px] overflow-hidden rounded-xl border border-white/[0.06] bg-[#0c0c10]/80 shadow-xl shadow-black/30 backdrop-blur-sm md:-left-8"
-                    style={{
-                      transform: "rotateY(6deg) rotateX(2deg)",
-                    }}
-                  >
-                    <div className="p-4">
-                      <div className="mb-3 flex items-center gap-2">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#38bdf8]/20">
-                          <RefreshCw className="h-3.5 w-3.5 text-[#38bdf8]" />
-                        </div>
-                        <p className="text-[11px] font-semibold text-white">
-                          Subscriptions
-                        </p>
-                      </div>
-                      <div className="space-y-2">
-                        {[
-                          { name: "Pro", price: "$49/mo", active: true },
-                          {
-                            name: "API Credits",
-                            price: "$0.002/call",
-                            active: true,
-                          },
-                          {
-                            name: "Enterprise",
-                            price: "$199/mo",
-                            active: false,
-                          },
-                        ].map((s) => (
-                          <div
-                            key={s.name}
-                            className="flex items-center justify-between rounded-lg bg-white/[0.03] px-3 py-2"
-                          >
-                            <span className="text-[10px] text-white/60">
-                              {s.name}
-                            </span>
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-[10px] text-white/40">
-                                {s.price}
-                              </span>
-                              <span
-                                className={`h-1.5 w-1.5 rounded-full ${
-                                  s.active ? "bg-emerald-400" : "bg-amber-400"
-                                }`}
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  {/* ── Floating card: Settlement (behind right) ── */}
-                  <motion.div
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{
-                      duration: 5.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 0.5,
-                    }}
-                    className="absolute -right-2 top-8 z-10 w-[200px] overflow-hidden rounded-xl border border-white/[0.06] bg-[#0c0c10]/80 shadow-xl shadow-black/30 backdrop-blur-sm md:-right-6"
-                    style={{
-                      transform: "rotateY(-12deg) rotateX(3deg)",
-                    }}
-                  >
-                    <div className="p-4">
-                      <div className="mb-3 flex items-center gap-2">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/20">
-                          <Zap className="h-3.5 w-3.5 text-emerald-400" />
-                        </div>
-                        <p className="text-[11px] font-semibold text-white">
-                          Settlement
-                        </p>
-                      </div>
-                      <div className="rounded-lg bg-emerald-500/10 p-3 ring-1 ring-emerald-500/20">
-                        <p className="text-[10px] text-emerald-400">Received</p>
-                        <p className="text-lg font-semibold text-white">
-                          $249<span className="text-xs text-white/30">.98</span>
-                        </p>
-                        <p className="text-[10px] text-emerald-400/60">
-                          ✓ Instant · 0.4s
-                        </p>
-                      </div>
-                      <div className="mt-2 flex items-center gap-1.5 text-[9px] text-white/20">
-                        <Shield className="h-3 w-3" />
-                        Encrypted receipt
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  {/* ── Bottom floating badge: Supported stablecoins ── */}
-                  <motion.div
-                    animate={{ y: [0, 5, 0] }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 2,
-                    }}
-                    className="absolute -bottom-4 left-1/2 z-40 -translate-x-1/2"
-                  >
-                    <div className="flex items-center gap-3 rounded-full border border-white/[0.08] bg-[#0c0c10]/90 px-5 py-2.5 shadow-lg shadow-black/30 backdrop-blur-sm">
-                      {/* USDC */}
-                      <span className="flex items-center gap-1.5">
-                        <img
-                          src="/usdc.png"
-                          alt="USDC"
-                          className="h-6 w-6 rounded-full"
-                        />
-                        <span className="text-[11px] font-medium text-white/60">
-                          USDC
-                        </span>
-                      </span>
-                      <span className="text-white/10">|</span>
-                      {/* USDT */}
-                      <span className="flex items-center gap-1.5">
-                        <img
-                          src="/usdt.png"
-                          alt="USDT"
-                          className="h-6 w-6 rounded-full"
-                        />
-                        <span className="text-[11px] font-medium text-white/60">
-                          USDT
-                        </span>
-                      </span>
-                      <span className="text-white/10">|</span>
-                      {/* USDG (Paxos) */}
-                      <span className="flex items-center gap-1.5">
-                        <img
-                          src="/usdg.png"
-                          alt="USDG"
-                          className="h-6 w-6 rounded-full"
-                        />
-                        <span className="text-[11px] font-medium text-white/60">
-                          USDG
-                        </span>
-                      </span>
-                    </div>
-                  </motion.div>
-
-                  {/* ── Orbiting stablecoin logos ── */}
-                  {/* USDC — top-right orbit */}
-                  <motion.div
-                    animate={{
-                      y: [0, -10, 0],
-                      x: [0, 4, 0],
-                      rotate: [0, 8, 0],
-                    }}
-                    transition={{
-                      duration: 7,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="absolute -top-2 right-8 z-50"
-                  >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#2775CA]/20 shadow-lg shadow-[#2775CA]/10 ring-1 ring-[#2775CA]/30 backdrop-blur-sm">
-                      <img
-                        src="/usdc.png"
-                        alt="USDC"
-                        className="h-9 w-9 rounded-full"
-                      />
-                    </div>
-                  </motion.div>
-
-                  {/* USDT — left orbit */}
-                  <motion.div
-                    animate={{
-                      y: [0, 8, 0],
-                      x: [0, -5, 0],
-                      rotate: [0, -6, 0],
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 1.5,
-                    }}
-                    className="absolute left-0 top-[55%] z-50 md:-left-4"
-                  >
-                    <div className="flex h-13 w-13 items-center justify-center rounded-full bg-[#26A17B]/20 shadow-lg shadow-[#26A17B]/10 ring-1 ring-[#26A17B]/30 backdrop-blur-sm">
-                      <img
-                        src="/usdt.png"
-                        alt="USDT"
-                        className="h-8 w-8 rounded-full"
-                      />
-                    </div>
-                  </motion.div>
-
-                  {/* USDG — bottom-right orbit */}
-                  <motion.div
-                    animate={{ y: [0, 6, 0], x: [0, 6, 0], rotate: [0, 10, 0] }}
-                    transition={{
-                      duration: 6.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 3,
-                    }}
-                    className="absolute bottom-[15%] right-0 z-50 md:-right-2"
-                  >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FFD700]/10 shadow-lg shadow-[#FFD700]/5 ring-1 ring-[#FFD700]/25 backdrop-blur-sm">
-                      <img
-                        src="/usdg.png"
-                        alt="USDG"
-                        className="h-8 w-8 rounded-full"
-                      />
-                    </div>
-                  </motion.div>
-
-                  {/* ── Connecting dots/lines (decorative) ── */}
+                  {/* ── Background: Animated orbital rings + grid ── */}
                   <svg
                     className="pointer-events-none absolute inset-0 z-0 h-full w-full"
-                    viewBox="0 0 500 400"
+                    viewBox="0 0 500 460"
                     fill="none"
                   >
-                    {/* Connecting lines */}
-                    <line
-                      x1="120"
-                      y1="160"
-                      x2="200"
-                      y2="120"
-                      stroke="rgba(167,139,250,0.15)"
-                      strokeWidth="1"
-                      strokeDasharray="4 4"
-                    />
-                    <line
-                      x1="300"
-                      y1="120"
-                      x2="380"
-                      y2="160"
-                      stroke="rgba(56,189,248,0.15)"
-                      strokeWidth="1"
-                      strokeDasharray="4 4"
-                    />
-                    <line
-                      x1="250"
-                      y1="280"
-                      x2="250"
-                      y2="340"
-                      stroke="rgba(167,139,250,0.1)"
-                      strokeWidth="1"
-                      strokeDasharray="4 4"
-                    />
-                    {/* Glowing dots at intersections — stablecoin colors */}
-                    <circle
-                      cx="120"
-                      cy="160"
-                      r="4"
-                      fill="#2775CA"
-                      opacity="0.5"
-                    />
-                    <circle
-                      cx="120"
-                      cy="160"
-                      r="8"
-                      fill="#2775CA"
-                      opacity="0.15"
-                    />
-                    <circle
-                      cx="380"
-                      cy="160"
-                      r="4"
-                      fill="#26A17B"
-                      opacity="0.5"
-                    />
-                    <circle
-                      cx="380"
-                      cy="160"
-                      r="8"
-                      fill="#26A17B"
-                      opacity="0.15"
-                    />
-                    <circle
+                    {/* Perspective grid */}
+                    <g opacity="0.04" stroke="white" strokeWidth="0.5">
+                      {Array.from({ length: 11 }).map((_, i) => (
+                        <line
+                          key={`gh${i}`}
+                          x1="50"
+                          y1={80 + i * 30}
+                          x2="450"
+                          y2={80 + i * 30}
+                        />
+                      ))}
+                      {Array.from({ length: 11 }).map((_, i) => (
+                        <line
+                          key={`gv${i}`}
+                          x1={50 + i * 40}
+                          y1="80"
+                          x2={50 + i * 40}
+                          y2="380"
+                        />
+                      ))}
+                    </g>
+
+                    {/* Concentric orbital ellipses */}
+                    <ellipse
                       cx="250"
-                      cy="340"
-                      r="4"
-                      fill="#FFD700"
+                      cy="230"
+                      rx="200"
+                      ry="90"
+                      stroke="url(#ring1)"
+                      strokeWidth="0.8"
                       opacity="0.4"
-                    />
-                    <circle
+                    >
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        values="0 250 230;360 250 230"
+                        dur="40s"
+                        repeatCount="indefinite"
+                      />
+                    </ellipse>
+                    <ellipse
                       cx="250"
-                      cy="340"
-                      r="8"
-                      fill="#FFD700"
-                      opacity="0.1"
-                    />
-                    {/* Central glow orb */}
-                    <circle
+                      cy="230"
+                      rx="150"
+                      ry="65"
+                      stroke="url(#ring2)"
+                      strokeWidth="0.6"
+                      opacity="0.3"
+                    >
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        values="360 250 230;0 250 230"
+                        dur="30s"
+                        repeatCount="indefinite"
+                      />
+                    </ellipse>
+                    <ellipse
                       cx="250"
-                      cy="200"
-                      r="40"
-                      fill="url(#hero-orb)"
+                      cy="230"
+                      rx="95"
+                      ry="40"
+                      stroke="url(#ring3)"
+                      strokeWidth="0.5"
+                      opacity="0.25"
+                    >
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        values="0 250 230;360 250 230"
+                        dur="20s"
+                        repeatCount="indefinite"
+                      />
+                    </ellipse>
+
+                    {/* Animated flow paths — payment arcs */}
+                    <path
+                      d="M 100 170 Q 175 100 250 140"
+                      stroke="url(#flowPurple)"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
                       opacity="0.6"
-                    />
+                      strokeDasharray="6 8"
+                    >
+                      <animate
+                        attributeName="stroke-dashoffset"
+                        values="0;-80"
+                        dur="3s"
+                        repeatCount="indefinite"
+                      />
+                    </path>
+                    <path
+                      d="M 250 140 Q 325 100 400 170"
+                      stroke="url(#flowBlue)"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      opacity="0.6"
+                      strokeDasharray="6 8"
+                    >
+                      <animate
+                        attributeName="stroke-dashoffset"
+                        values="0;-80"
+                        dur="3.5s"
+                        repeatCount="indefinite"
+                      />
+                    </path>
+                    <path
+                      d="M 250 320 Q 250 270 250 220"
+                      stroke="url(#flowGreen)"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      opacity="0.5"
+                      strokeDasharray="6 8"
+                    >
+                      <animate
+                        attributeName="stroke-dashoffset"
+                        values="0;-60"
+                        dur="2.5s"
+                        repeatCount="indefinite"
+                      />
+                    </path>
+
+                    {/* Animated particles along flow paths */}
+                    <circle r="2.5" fill="#a78bfa" opacity="0.9">
+                      <animateMotion
+                        dur="3s"
+                        repeatCount="indefinite"
+                        path="M 100 170 Q 175 100 250 140"
+                      />
+                    </circle>
+                    <circle r="2" fill="#a78bfa" opacity="0.5">
+                      <animateMotion
+                        dur="3s"
+                        repeatCount="indefinite"
+                        path="M 100 170 Q 175 100 250 140"
+                        begin="1.5s"
+                      />
+                    </circle>
+                    <circle r="2.5" fill="#38bdf8" opacity="0.9">
+                      <animateMotion
+                        dur="3.5s"
+                        repeatCount="indefinite"
+                        path="M 250 140 Q 325 100 400 170"
+                      />
+                    </circle>
+                    <circle r="2" fill="#38bdf8" opacity="0.5">
+                      <animateMotion
+                        dur="3.5s"
+                        repeatCount="indefinite"
+                        path="M 250 140 Q 325 100 400 170"
+                        begin="1.75s"
+                      />
+                    </circle>
+                    <circle r="2.5" fill="#34d399" opacity="0.8">
+                      <animateMotion
+                        dur="2.5s"
+                        repeatCount="indefinite"
+                        path="M 250 320 Q 250 270 250 220"
+                      />
+                    </circle>
+
+                    {/* Node glow dots at card anchors */}
+                    <circle cx="100" cy="170" r="4" fill="#a78bfa">
+                      <animate
+                        attributeName="opacity"
+                        values="0.3;0.8;0.3"
+                        dur="2s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle
+                      cx="100"
+                      cy="170"
+                      r="12"
+                      fill="#a78bfa"
+                      opacity="0.08"
+                    >
+                      <animate
+                        attributeName="r"
+                        values="10;16;10"
+                        dur="2s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle cx="400" cy="170" r="4" fill="#38bdf8">
+                      <animate
+                        attributeName="opacity"
+                        values="0.3;0.8;0.3"
+                        dur="2.4s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle
+                      cx="400"
+                      cy="170"
+                      r="12"
+                      fill="#38bdf8"
+                      opacity="0.08"
+                    >
+                      <animate
+                        attributeName="r"
+                        values="10;16;10"
+                        dur="2.4s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle cx="250" cy="320" r="4" fill="#34d399">
+                      <animate
+                        attributeName="opacity"
+                        values="0.3;0.7;0.3"
+                        dur="1.8s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle
+                      cx="250"
+                      cy="320"
+                      r="12"
+                      fill="#34d399"
+                      opacity="0.06"
+                    >
+                      <animate
+                        attributeName="r"
+                        values="10;16;10"
+                        dur="1.8s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+
+                    {/* Central nexus orb */}
                     <circle
                       cx="250"
                       cy="200"
-                      r="20"
-                      fill="url(#hero-orb-inner)"
-                      opacity="0.8"
-                    />
+                      r="50"
+                      fill="url(#nexusOuter)"
+                      opacity="0.7"
+                    >
+                      <animate
+                        attributeName="r"
+                        values="48;54;48"
+                        dur="4s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle
+                      cx="250"
+                      cy="200"
+                      r="24"
+                      fill="url(#nexusInner)"
+                      opacity="0.9"
+                    >
+                      <animate
+                        attributeName="r"
+                        values="22;26;22"
+                        dur="3s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle cx="250" cy="200" r="6" fill="white" opacity="0.4">
+                      <animate
+                        attributeName="opacity"
+                        values="0.3;0.6;0.3"
+                        dur="2s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+
+                    {/* Floating particles */}
+                    {[
+                      { cx: 70, cy: 120, dur: "6s", delay: "0s" },
+                      { cx: 420, cy: 100, dur: "7s", delay: "1s" },
+                      { cx: 380, cy: 340, dur: "5s", delay: "2s" },
+                      { cx: 130, cy: 350, dur: "8s", delay: "0.5s" },
+                      { cx: 320, cy: 260, dur: "6.5s", delay: "3s" },
+                      { cx: 180, cy: 280, dur: "7.5s", delay: "1.5s" },
+                    ].map((p, i) => (
+                      <circle
+                        key={i}
+                        cx={p.cx}
+                        cy={p.cy}
+                        r="1.5"
+                        fill="white"
+                        opacity="0.15"
+                      >
+                        <animate
+                          attributeName="opacity"
+                          values="0.05;0.25;0.05"
+                          dur={p.dur}
+                          begin={p.delay}
+                          repeatCount="indefinite"
+                        />
+                        <animate
+                          attributeName="cy"
+                          values={`${p.cy};${p.cy - 12};${p.cy}`}
+                          dur={p.dur}
+                          begin={p.delay}
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+                    ))}
+
                     <defs>
-                      <radialGradient id="hero-orb">
+                      <linearGradient
+                        id="ring1"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
                         <stop
                           offset="0%"
                           stopColor="#a78bfa"
+                          stopOpacity="0.5"
+                        />
+                        <stop
+                          offset="50%"
+                          stopColor="#38bdf8"
                           stopOpacity="0.3"
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="#a78bfa"
+                          stopOpacity="0.5"
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="ring2"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor="#38bdf8"
+                          stopOpacity="0.4"
+                        />
+                        <stop
+                          offset="50%"
+                          stopColor="#34d399"
+                          stopOpacity="0.2"
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="#38bdf8"
+                          stopOpacity="0.4"
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="ring3"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor="#c084fc"
+                          stopOpacity="0.3"
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="#a78bfa"
+                          stopOpacity="0.3"
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="flowPurple"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stopColor="#a78bfa" stopOpacity="0" />
+                        <stop
+                          offset="50%"
+                          stopColor="#a78bfa"
+                          stopOpacity="1"
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="#a78bfa"
+                          stopOpacity="0"
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="flowBlue"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
+                        <stop
+                          offset="50%"
+                          stopColor="#38bdf8"
+                          stopOpacity="1"
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="#38bdf8"
+                          stopOpacity="0"
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="flowGreen"
+                        x1="0%"
+                        y1="100%"
+                        x2="0%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stopColor="#34d399" stopOpacity="0" />
+                        <stop
+                          offset="50%"
+                          stopColor="#34d399"
+                          stopOpacity="1"
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="#34d399"
+                          stopOpacity="0"
+                        />
+                      </linearGradient>
+                      <radialGradient id="nexusOuter">
+                        <stop
+                          offset="0%"
+                          stopColor="#a78bfa"
+                          stopOpacity="0.25"
+                        />
+                        <stop
+                          offset="60%"
+                          stopColor="#38bdf8"
+                          stopOpacity="0.08"
                         />
                         <stop
                           offset="100%"
@@ -648,11 +711,11 @@ export default function LandingPage() {
                           stopOpacity="0"
                         />
                       </radialGradient>
-                      <radialGradient id="hero-orb-inner">
+                      <radialGradient id="nexusInner">
                         <stop
                           offset="0%"
                           stopColor="#c4b5fd"
-                          stopOpacity="0.5"
+                          stopOpacity="0.6"
                         />
                         <stop
                           offset="100%"
@@ -663,8 +726,438 @@ export default function LandingPage() {
                     </defs>
                   </svg>
 
-                  {/* Spacer for floating elements */}
-                  <div className="h-[380px] md:h-[420px]" />
+                  {/* ── Main card: Checkout (glassmorphism) ── */}
+                  <motion.div
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="relative z-30 mx-auto w-[290px]"
+                    style={{ transform: "rotateY(-6deg) rotateX(3deg)" }}
+                  >
+                    {/* Gradient border wrapper */}
+                    <div className="rounded-2xl bg-gradient-to-b from-white/[0.12] to-white/[0.03] p-px">
+                      <div className="overflow-hidden rounded-2xl bg-[#0a0a0f]/90 shadow-2xl shadow-black/50 backdrop-blur-xl">
+                        {/* Top accent gradient */}
+                        <div className="h-px bg-gradient-to-r from-transparent via-[#a78bfa]/50 to-transparent" />
+                        {/* Window chrome */}
+                        <div className="flex items-center gap-1.5 border-b border-white/[0.04] px-4 py-2.5">
+                          <span className="h-2 w-2 rounded-full bg-[#ff5f57]/80" />
+                          <span className="h-2 w-2 rounded-full bg-[#febc2e]/80" />
+                          <span className="h-2 w-2 rounded-full bg-[#28c840]/80" />
+                          <span className="ml-auto text-[9px] font-medium tracking-wider text-white/15 uppercase">
+                            Settlr Checkout
+                          </span>
+                        </div>
+                        <div className="p-5">
+                          <div className="mb-4 flex items-center gap-3">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#a78bfa]/25 to-[#a78bfa]/10 ring-1 ring-[#a78bfa]/20">
+                              <CreditCard className="h-4 w-4 text-[#a78bfa]" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-semibold text-white">
+                                Acme AI Pro
+                              </p>
+                              <p className="text-[10px] text-white/25">
+                                Monthly subscription
+                              </p>
+                            </div>
+                          </div>
+                          {/* Amount display */}
+                          <div className="mb-4 overflow-hidden rounded-xl bg-white/[0.03] ring-1 ring-white/[0.04]">
+                            <div className="px-4 py-3">
+                              <p className="text-[10px] font-medium text-white/25 uppercase tracking-wide">
+                                Amount
+                              </p>
+                              <div className="mt-1 flex items-center justify-between">
+                                <p className="text-2xl font-bold text-white tracking-tight">
+                                  $49
+                                  <span className="text-base font-medium text-white/30">
+                                    .99
+                                  </span>
+                                </p>
+                                <div className="flex items-center gap-1.5 rounded-full bg-[#2775CA]/15 px-2.5 py-1 ring-1 ring-[#2775CA]/20">
+                                  <img
+                                    src="/usdc.png"
+                                    alt="USDC"
+                                    className="h-4 w-4 rounded-full"
+                                  />
+                                  <span className="text-[10px] font-semibold text-[#2775CA]">
+                                    USDC
+                                  </span>
+                                </div>
+                              </div>
+                              <p className="mt-1 text-[10px] text-white/15">
+                                49.99 USDC · Solana
+                              </p>
+                            </div>
+                            {/* Progress shimmer */}
+                            <div className="h-[2px] bg-gradient-to-r from-transparent via-[#a78bfa]/30 to-transparent">
+                              <motion.div
+                                animate={{ x: ["-100%", "200%"] }}
+                                transition={{
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: "linear",
+                                  repeatDelay: 3,
+                                }}
+                                className="h-full w-1/3 bg-gradient-to-r from-transparent via-[#a78bfa]/60 to-transparent"
+                              />
+                            </div>
+                          </div>
+                          {/* Pay button */}
+                          <div className="overflow-hidden rounded-xl bg-gradient-to-r from-[#a78bfa] to-[#8b5cf6] py-2.5 text-center shadow-lg shadow-[#a78bfa]/20">
+                            <span className="text-xs font-bold text-white tracking-wide">
+                              Pay with USDC
+                            </span>
+                          </div>
+                          <div className="mt-3 flex items-center justify-center gap-3 text-[9px] text-white/20">
+                            <span className="flex items-center gap-1">
+                              <Shield className="h-2.5 w-2.5" /> Non-custodial
+                            </span>
+                            <span className="h-2 w-px bg-white/10" />
+                            <span className="flex items-center gap-1">
+                              <Zap className="h-2.5 w-2.5" /> Zero gas
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* ── Left card: Subscription dashboard ── */}
+                  <motion.div
+                    animate={{ y: [0, 8, 0] }}
+                    transition={{
+                      duration: 6,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 1,
+                    }}
+                    className="absolute -left-6 top-12 z-20 w-[210px] md:-left-10"
+                    style={{ transform: "rotateY(8deg) rotateX(2deg)" }}
+                  >
+                    <div className="rounded-xl bg-gradient-to-b from-[#38bdf8]/[0.15] to-white/[0.03] p-px">
+                      <div className="overflow-hidden rounded-xl bg-[#0a0a0f]/85 shadow-xl shadow-black/30 backdrop-blur-xl">
+                        <div className="h-px bg-gradient-to-r from-transparent via-[#38bdf8]/40 to-transparent" />
+                        <div className="p-4">
+                          <div className="mb-3 flex items-center gap-2">
+                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[#38bdf8]/20 to-[#38bdf8]/5 ring-1 ring-[#38bdf8]/15">
+                              <RefreshCw className="h-3.5 w-3.5 text-[#38bdf8]" />
+                            </div>
+                            <p className="text-[11px] font-semibold text-white">
+                              Active Plans
+                            </p>
+                            <span className="ml-auto flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/15 text-[8px] font-bold text-emerald-400 ring-1 ring-emerald-500/20">
+                              3
+                            </span>
+                          </div>
+                          <div className="space-y-1.5">
+                            {[
+                              {
+                                name: "Pro",
+                                price: "$49/mo",
+                                active: true,
+                                color: "#a78bfa",
+                              },
+                              {
+                                name: "API Credits",
+                                price: "$0.002/call",
+                                active: true,
+                                color: "#38bdf8",
+                              },
+                              {
+                                name: "Enterprise",
+                                price: "$199/mo",
+                                active: false,
+                                color: "#fbbf24",
+                              },
+                            ].map((s) => (
+                              <div
+                                key={s.name}
+                                className="group flex items-center justify-between rounded-lg bg-white/[0.03] px-3 py-2 transition-colors hover:bg-white/[0.05]"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    className="h-1.5 w-1.5 rounded-full"
+                                    style={{
+                                      background: s.active
+                                        ? "#34d399"
+                                        : "#fbbf24",
+                                      boxShadow: s.active
+                                        ? "0 0 6px #34d39960"
+                                        : "none",
+                                    }}
+                                  />
+                                  <span className="text-[10px] text-white/60">
+                                    {s.name}
+                                  </span>
+                                </div>
+                                <span className="text-[10px] font-medium text-white/30">
+                                  {s.price}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                          {/* Mini revenue chart */}
+                          <div className="mt-3 flex items-end gap-[3px] h-8 px-1">
+                            {[
+                              40, 55, 35, 65, 50, 80, 60, 75, 90, 70, 85, 95,
+                            ].map((h, i) => (
+                              <motion.div
+                                key={i}
+                                initial={{ height: 0 }}
+                                animate={{ height: `${h}%` }}
+                                transition={{
+                                  delay: 0.5 + i * 0.08,
+                                  duration: 0.4,
+                                  ease: "easeOut",
+                                }}
+                                className="flex-1 rounded-sm"
+                                style={{
+                                  background: `linear-gradient(to top, ${
+                                    i >= 9 ? "#38bdf8" : "#38bdf830"
+                                  }, ${i >= 9 ? "#38bdf8" : "#38bdf815"})`,
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <p className="mt-1.5 text-[8px] text-white/15 text-center">
+                            Monthly recurring revenue
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* ── Right card: Settlement confirmation ── */}
+                  <motion.div
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{
+                      duration: 5.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 0.5,
+                    }}
+                    className="absolute -right-4 top-6 z-10 w-[200px] md:-right-8"
+                    style={{ transform: "rotateY(-10deg) rotateX(3deg)" }}
+                  >
+                    <div className="rounded-xl bg-gradient-to-b from-emerald-400/[0.15] to-white/[0.03] p-px">
+                      <div className="overflow-hidden rounded-xl bg-[#0a0a0f]/85 shadow-xl shadow-black/30 backdrop-blur-xl">
+                        <div className="h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
+                        <div className="p-4">
+                          <div className="mb-3 flex items-center gap-2">
+                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500/25 to-emerald-500/5 ring-1 ring-emerald-500/20">
+                              <Zap className="h-3.5 w-3.5 text-emerald-400" />
+                            </div>
+                            <p className="text-[11px] font-semibold text-white">
+                              Settlement
+                            </p>
+                          </div>
+                          <div className="rounded-xl bg-emerald-500/[0.07] p-3 ring-1 ring-emerald-500/15">
+                            <div className="flex items-center gap-1.5">
+                              <motion.div
+                                animate={{ scale: [1, 1.3, 1] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                                className="h-2 w-2 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/40"
+                              />
+                              <p className="text-[10px] font-medium text-emerald-400">
+                                Received
+                              </p>
+                            </div>
+                            <p className="mt-1 text-xl font-bold text-white tracking-tight">
+                              $249
+                              <span className="text-xs font-normal text-white/25">
+                                .98
+                              </span>
+                            </p>
+                            <div className="mt-1.5 flex items-center gap-2">
+                              <span className="text-[10px] text-emerald-400/70">
+                                ✓ 0.4s
+                              </span>
+                              <span className="h-3 w-px bg-emerald-500/15" />
+                              <span className="text-[10px] text-emerald-400/70">
+                                3 txns
+                              </span>
+                            </div>
+                          </div>
+                          {/* Transaction list */}
+                          <div className="mt-2.5 space-y-1">
+                            {[
+                              {
+                                hash: "7xK2..mF9p",
+                                amt: "$49.99",
+                                time: "0.3s",
+                              },
+                              {
+                                hash: "3bN8..uL2k",
+                                amt: "$199.99",
+                                time: "0.4s",
+                              },
+                            ].map((tx) => (
+                              <div
+                                key={tx.hash}
+                                className="flex items-center justify-between text-[9px]"
+                              >
+                                <span className="font-mono text-white/20">
+                                  {tx.hash}
+                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-white/30">
+                                    {tx.amt}
+                                  </span>
+                                  <span className="text-emerald-400/50">
+                                    {tx.time}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="mt-2.5 flex items-center gap-1.5 text-[9px] text-white/15">
+                            <Lock className="h-3 w-3" />
+                            Encrypted receipt · FHE
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* ── Bottom badge: Supported coins ── */}
+                  <motion.div
+                    animate={{ y: [0, 5, 0] }}
+                    transition={{
+                      duration: 4.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 2,
+                    }}
+                    className="absolute -bottom-6 left-1/2 z-40 -translate-x-1/2"
+                  >
+                    <div className="rounded-full bg-gradient-to-r from-white/[0.08] to-white/[0.04] p-px">
+                      <div className="flex items-center gap-3 rounded-full bg-[#0a0a0f]/90 px-5 py-2.5 shadow-xl shadow-black/40 backdrop-blur-xl">
+                        {[
+                          { img: "/usdc.png", name: "USDC", color: "#2775CA" },
+                          { img: "/usdt.png", name: "USDT", color: "#26A17B" },
+                          { img: "/usdg.png", name: "USDG", color: "#8B9A2B" },
+                        ].map((coin, i) => (
+                          <span
+                            key={coin.name}
+                            className="flex items-center gap-1.5"
+                          >
+                            {i > 0 && (
+                              <span className="mr-1.5 h-3 w-px bg-white/[0.06]" />
+                            )}
+                            <img
+                              src={coin.img}
+                              alt={coin.name}
+                              className="h-5 w-5 rounded-full"
+                            />
+                            <span
+                              className="text-[10px] font-semibold"
+                              style={{ color: `${coin.color}90` }}
+                            >
+                              {coin.name}
+                            </span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* ── Orbiting coin tokens ── */}
+                  <motion.div
+                    animate={{
+                      y: [0, -12, 0],
+                      x: [0, 5, 0],
+                      rotate: [0, 10, 0],
+                    }}
+                    transition={{
+                      duration: 7,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="absolute -top-4 right-6 z-50"
+                  >
+                    <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#2775CA]/15 ring-1 ring-[#2775CA]/25 backdrop-blur-sm">
+                      <img
+                        src="/usdc.png"
+                        alt="USDC"
+                        className="h-9 w-9 rounded-full"
+                      />
+                      <div className="absolute inset-0 rounded-full shadow-lg shadow-[#2775CA]/20" />
+                      <motion.div
+                        animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0, 0.2] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute inset-0 rounded-full ring-1 ring-[#2775CA]/40"
+                      />
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    animate={{
+                      y: [0, 10, 0],
+                      x: [0, -6, 0],
+                      rotate: [0, -8, 0],
+                    }}
+                    transition={{
+                      duration: 8,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 1.5,
+                    }}
+                    className="absolute left-0 top-[55%] z-50 md:-left-6"
+                  >
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-[#26A17B]/15 ring-1 ring-[#26A17B]/25 backdrop-blur-sm">
+                      <img
+                        src="/usdt.png"
+                        alt="USDT"
+                        className="h-7 w-7 rounded-full"
+                      />
+                      <div className="absolute inset-0 rounded-full shadow-lg shadow-[#26A17B]/20" />
+                      <motion.div
+                        animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0, 0.2] }}
+                        transition={{
+                          duration: 2.5,
+                          repeat: Infinity,
+                          delay: 0.5,
+                        }}
+                        className="absolute inset-0 rounded-full ring-1 ring-[#26A17B]/40"
+                      />
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    animate={{ y: [0, 7, 0], x: [0, 7, 0], rotate: [0, 12, 0] }}
+                    transition={{
+                      duration: 6.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 3,
+                    }}
+                    className="absolute bottom-[12%] right-0 z-50 md:-right-4"
+                  >
+                    <div className="relative flex h-11 w-11 items-center justify-center rounded-full bg-[#FFD700]/10 ring-1 ring-[#FFD700]/20 backdrop-blur-sm">
+                      <img
+                        src="/usdg.png"
+                        alt="USDG"
+                        className="h-7 w-7 rounded-full"
+                      />
+                      <div className="absolute inset-0 rounded-full shadow-lg shadow-[#FFD700]/15" />
+                      <motion.div
+                        animate={{
+                          scale: [1, 1.4, 1],
+                          opacity: [0.15, 0, 0.15],
+                        }}
+                        transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                        className="absolute inset-0 rounded-full ring-1 ring-[#FFD700]/30"
+                      />
+                    </div>
+                  </motion.div>
+
+                  {/* Spacer */}
+                  <div className="h-[400px] md:h-[440px]" />
                 </div>
               </div>
             </Reveal>
