@@ -26,7 +26,7 @@ const footerLinks = {
   company: [
     { href: "/help", label: "Support" },
     { href: "/privacy", label: "Privacy Policy" },
-    { href: "mailto:support@settlr.dev", label: "Contact Us" },
+    { href: "mailto:adam@settlr.dev", label: "Contact Us" },
   ],
 };
 
@@ -37,7 +37,7 @@ const socialLinks = [
     icon: Github,
     label: "GitHub",
   },
-  { href: "mailto:support@settlr.dev", icon: Mail, label: "Email" },
+  { href: "mailto:adam@settlr.dev", icon: Mail, label: "Email" },
 ];
 
 export function Footer() {
