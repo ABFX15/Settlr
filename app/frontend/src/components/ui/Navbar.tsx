@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Palette } from "lucide-react";
-import { usePrivy } from "@privy-io/react-auth";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -30,7 +29,6 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [industriesOpen, setIndustriesOpen] = useState(false);
   const industriesRef = useRef<HTMLDivElement>(null);
-  const { ready, authenticated, login, logout } = usePrivy();
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -39,7 +37,6 @@ export function Navbar() {
 
   const isIndustriesActive = pathname.startsWith("/industries");
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -54,14 +51,12 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/[0.08] bg-[#050507]/60 backdrop-blur-2xl backdrop-saturate-150">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/[0.06] bg-[#060608]/70 backdrop-blur-2xl backdrop-saturate-150">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <SettlrLogoWithIcon size="sm" variant="light" />
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
             <Link
@@ -70,28 +65,27 @@ export function Navbar() {
               className={`relative px-4 py-2 text-sm font-medium transition-colors ${
                 isActive(link.href)
                   ? "text-white"
-                  : "text-white/60 hover:text-white"
+                  : "text-white/50 hover:text-white/80"
               }`}
             >
               {link.label}
               {isActive(link.href) && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-white"
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-[#c8a2ff]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
             </Link>
           ))}
 
-          {/* AI/SaaS Dropdown */}
           <div ref={industriesRef} className="relative">
             <button
               onClick={() => setIndustriesOpen(!industriesOpen)}
               className={`relative flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors ${
                 isIndustriesActive
                   ? "text-white"
-                  : "text-white/60 hover:text-white"
+                  : "text-white/50 hover:text-white/80"
               }`}
             >
               AI/SaaS
@@ -100,13 +94,6 @@ export function Navbar() {
                   industriesOpen ? "rotate-180" : ""
                 }`}
               />
-              {isIndustriesActive && (
-                <motion.div
-                  layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#a78bfa]"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
             </button>
 
             <AnimatePresence>
@@ -116,7 +103,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-64 rounded-xl border border-white/[0.08] bg-[#050507]/95 p-2 shadow-xl backdrop-blur-xl"
+                  className="absolute left-0 top-full mt-2 w-64 rounded-xl border border-white/[0.08] bg-[#0a0a10]/95 p-2 shadow-2xl backdrop-blur-2xl"
                 >
                   {industryLinks.map((link) => (
                     <Link
@@ -129,8 +116,8 @@ export function Navbar() {
                           : "text-white/70 hover:bg-white/5 hover:text-white"
                       }`}
                     >
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#a78bfa]/15">
-                        <link.icon className="h-4 w-4 text-[#a78bfa]" />
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#c8a2ff]/15">
+                        <link.icon className="h-4 w-4 text-[#c8a2ff]" />
                       </div>
                       <div>
                         <div className="text-sm font-medium">{link.label}</div>
@@ -146,42 +133,15 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Right Side - Auth */}
         <div className="hidden items-center gap-3 md:flex">
-          {ready && authenticated ? (
-            <>
-              <Link
-                href="/client-dashboard"
-                className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-white/10"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={logout}
-                className="text-sm text-white/60 transition-colors hover:text-white"
-              >
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={login}
-                className="text-sm font-medium text-white/60 transition-colors hover:text-white"
-              >
-                Sign In
-              </button>
-              <Link
-                href="/onboarding"
-                className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#050507] transition-colors hover:bg-white/90"
-              >
-                Get Started
-              </Link>
-            </>
-          )}
+          <Link
+            href="/onboarding"
+            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#060608] transition-all hover:bg-white/90 hover:shadow-lg hover:shadow-white/10"
+          >
+            Get Started
+          </Link>
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white md:hidden"
@@ -194,14 +154,13 @@ export function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-b border-white/[0.06] bg-[#050507]/95 backdrop-blur-xl md:hidden"
+            className="border-b border-white/[0.06] bg-[#060608]/95 backdrop-blur-2xl md:hidden"
           >
             <div className="flex flex-col px-4 py-4">
               {navLinks.map((link) => (
@@ -219,7 +178,6 @@ export function Navbar() {
                 </Link>
               ))}
 
-              {/* Mobile AI/SaaS Section */}
               <div className="mt-2 border-t border-white/10 pt-2">
                 <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white/40">
                   AI/SaaS
@@ -229,58 +187,22 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
-                      pathname === link.href
-                        ? "bg-white/5 text-white"
-                        : "text-white/60 hover:bg-white/5 hover:text-white"
-                    }`}
+                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-white/60 transition-colors hover:bg-white/5 hover:text-white"
                   >
-                    <link.icon className="h-4 w-4 text-purple-400" />
+                    <link.icon className="h-4 w-4 text-[#c8a2ff]" />
                     {link.label}
                   </Link>
                 ))}
               </div>
 
-              <div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-4">
-                {ready && authenticated ? (
-                  <>
-                    <Link
-                      href="/client-dashboard"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-medium text-white"
-                    >
-                      Dashboard
-                    </Link>
-                    <button
-                      onClick={() => {
-                        logout();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="rounded-lg px-4 py-3 text-sm font-medium text-white/60"
-                    >
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => {
-                        login();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="rounded-lg border border-white/10 px-4 py-3 text-sm font-medium text-white/60"
-                    >
-                      Sign In
-                    </button>
-                    <Link
-                      href="/onboarding"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-lg bg-white px-4 py-3 text-center text-sm font-semibold text-[#050507]"
-                    >
-                      Get Started
-                    </Link>
-                  </>
-                )}
+              <div className="mt-4 border-t border-white/10 pt-4">
+                <Link
+                  href="/onboarding"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block rounded-lg bg-white px-4 py-3 text-center text-sm font-semibold text-[#060608]"
+                >
+                  Get Started
+                </Link>
               </div>
             </div>
           </motion.div>

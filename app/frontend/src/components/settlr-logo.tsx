@@ -1,7 +1,7 @@
 "use client";
 
 /* ─── Design tokens ─── */
-const ACCENT = "#a78bfa";
+const ACCENT = "#c8a2ff";
 const OUTLINE = "#1a1a2e";
 const HIGHLIGHT = "rgba(255,255,255,0.95)";
 const SHADOW_COLOR = "rgba(0,0,0,0.5)";
@@ -51,7 +51,7 @@ function BubbleText({
 
         {/* Purple dot gradient */}
         <radialGradient id={`${id}-dot`} cx="0.35" cy="0.35" r="0.65">
-          <stop offset="0%" stopColor="#c4b5fd" />
+          <stop offset="0%" stopColor="#dbc4ff" />
           <stop offset="100%" stopColor={ACCENT} />
         </radialGradient>
 
@@ -166,7 +166,7 @@ function BubbleTextSmall({
           <stop offset="100%" stopColor="#d4d4d8" />
         </linearGradient>
         <radialGradient id={`${id}-dot`} cx="0.35" cy="0.35" r="0.65">
-          <stop offset="0%" stopColor="#c4b5fd" />
+          <stop offset="0%" stopColor="#dbc4ff" />
           <stop offset="100%" stopColor={ACCENT} />
         </radialGradient>
       </defs>
@@ -289,7 +289,7 @@ export function SettlrLogoWithIcon({
       >
         <defs>
           <radialGradient id={`s-mark-grad-${size}`} cx="0.35" cy="0.3" r="0.7">
-            <stop offset="0%" stopColor="#c4b5fd" />
+            <stop offset="0%" stopColor="#dbc4ff" />
             <stop offset="100%" stopColor={ACCENT} />
           </radialGradient>
           <linearGradient id={`s-letter-${size}`} x1="0" y1="0" x2="0" y2="1">
@@ -305,7 +305,7 @@ export function SettlrLogoWithIcon({
           height="36"
           rx="10"
           fill={`url(#s-mark-grad-${size})`}
-          stroke="#7c3aed"
+          stroke="#9b6dff"
           strokeWidth="1.5"
         />
         {/* Shadow */}
@@ -335,7 +335,7 @@ export function SettlrLogoWithIcon({
           fontWeight="700"
           fontSize="24"
           fill={`url(#s-letter-${size})`}
-          stroke="#7c3aed"
+          stroke="#9b6dff"
           strokeWidth="1.5"
           strokeLinejoin="round"
           paintOrder="stroke fill"

@@ -1,18 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { ReactNode } from "react";
-
-// Dynamic import PrivyProvider to avoid SSR issues with pino/thread-stream
-const PrivyProvider = dynamic(
-  () => import("@/providers/PrivyProvider").then((mod) => mod.PrivyProvider),
-  { ssr: false }
-);
-
-const WalletProvider = dynamic(
-  () => import("@/providers/WalletProvider").then((mod) => mod.WalletProvider),
-  { ssr: false }
-);
+import { PrivyProvider } from "@/providers/PrivyProvider";
+import { WalletProvider } from "@/providers/WalletProvider";
 
 export default function ClientLayout({ children }: { children: ReactNode }) {
   return (

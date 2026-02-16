@@ -74,7 +74,7 @@ function SavingsCalculator() {
           step={1000}
           value={volume}
           onChange={(e) => setVolume(+e.target.value)}
-          className="mt-4 w-full accent-[#a78bfa]"
+          className="mt-4 w-full accent-[#c8a2ff]"
         />
         <div className="mt-1 flex justify-between text-xs text-white/30">
           <span>$1K</span>
@@ -97,9 +97,9 @@ function SavingsCalculator() {
             {fmt(settlrFee)}
           </p>
         </div>
-        <div className="rounded-xl bg-[#a78bfa]/10 p-5 ring-1 ring-[#a78bfa]/20">
-          <p className="text-xs font-medium text-[#a78bfa]">You save</p>
-          <p className="mt-1 text-2xl font-semibold text-[#a78bfa]">
+        <div className="rounded-xl bg-[#c8a2ff]/10 p-5 ring-1 ring-[#c8a2ff]/20">
+          <p className="text-xs font-medium text-[#c8a2ff]">You save</p>
+          <p className="mt-1 text-2xl font-semibold text-[#c8a2ff]">
             {fmt(saved)}
           </p>
           <p className="mt-0.5 text-xs text-white/30">{fmt(saved * 12)}/yr</p>
@@ -122,7 +122,7 @@ export default function LandingPage() {
   };
 
   return (
-    <main className="relative min-h-screen bg-[#050507] text-white antialiased">
+    <main className="relative min-h-screen bg-[#060608] text-white antialiased">
       {/* ── Global noise texture ── */}
       <div
         className="pointer-events-none fixed inset-0 z-0 opacity-[0.03]"
@@ -149,10 +149,10 @@ export default function LandingPage() {
           }}
         />
         {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#050507]/40 via-[#050507]/60 to-[#050507]" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#060608]/40 via-[#060608]/60 to-[#060608]" />
         {/* Subtle ambient glow */}
-        <div className="absolute -top-40 left-[10%] h-[600px] w-[600px] rounded-full bg-[#a78bfa]/[0.07] blur-[128px]" />
-        <div className="absolute top-[20%] right-[5%] h-[500px] w-[500px] rounded-full bg-[#38bdf8]/[0.05] blur-[128px]" />
+        <div className="absolute -top-40 left-[10%] h-[600px] w-[600px] rounded-full bg-[#c8a2ff]/[0.07] blur-[128px]" />
+        <div className="absolute top-[20%] right-[5%] h-[500px] w-[500px] rounded-full bg-[#7dd3fc]/[0.05] blur-[128px]" />
 
         <div className="relative z-10 mx-auto max-w-6xl px-6">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -160,7 +160,7 @@ export default function LandingPage() {
             <div>
               <Reveal>
                 <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.10] bg-white/[0.06] px-4 py-1.5 text-[13px] text-white/60 backdrop-blur-xl shadow-lg shadow-black/10">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#a78bfa]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#c8a2ff]" />
                   Built for AI &amp; SaaS teams blocked by Stripe
                 </div>
               </Reveal>
@@ -168,7 +168,7 @@ export default function LandingPage() {
               <Reveal delay={0.05}>
                 <h1 className="max-w-xl text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.08] tracking-tight">
                   The payment stack for{" "}
-                  <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-[#c8a2ff] to-[#7dd3fc] bg-clip-text text-transparent">
                     global-first AI and SaaS
                   </span>
                 </h1>
@@ -186,7 +186,7 @@ export default function LandingPage() {
                 <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Link
                     href="/onboarding"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 text-[15px] font-semibold text-[#050507] shadow-lg shadow-white/10 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 text-[15px] font-semibold text-[#060608] shadow-lg shadow-white/10 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
                   >
                     Get started
                     <ArrowRight className="h-4 w-4" />
@@ -207,7 +207,7 @@ export default function LandingPage() {
                   className="group mt-8 inline-flex items-center gap-3 rounded-lg border border-white/[0.06] bg-white/[0.02] px-5 py-3 font-mono text-sm text-white/50 transition-colors hover:border-white/[0.12] hover:text-white/70"
                 >
                   <span>
-                    <span className="text-[#a78bfa]">npm</span> install
+                    <span className="text-[#c8a2ff]">npm</span> install
                     @settlr/sdk
                   </span>
                   {copied ? (
@@ -252,7 +252,7 @@ export default function LandingPage() {
                       <circle cx="55.5" cy="55.5" r="55.5" />
                       <path
                         d="M55.2 23C37.5 23 23 37.3 23 55s14.5 32 32.2 32c15.4 0 28.3-10.9 31.4-25.4H62.5v-13.2h24.1C83.5 33.9 70.6 23 55.2 23z"
-                        fill="#050507"
+                        fill="#060608"
                       />
                     </svg>
                     {/* Arbitrum */}
@@ -272,8 +272,8 @@ export default function LandingPage() {
             <Reveal delay={0.15}>
               <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
                 {/* ── Multi-layer ambient glow ── */}
-                <div className="absolute left-1/2 top-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#a78bfa]/[0.14] blur-[140px]" />
-                <div className="absolute left-[65%] top-[35%] -z-10 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#38bdf8]/[0.10] blur-[100px]" />
+                <div className="absolute left-1/2 top-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c8a2ff]/[0.14] blur-[140px]" />
+                <div className="absolute left-[65%] top-[35%] -z-10 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#7dd3fc]/[0.10] blur-[100px]" />
                 <div className="absolute left-[30%] top-[65%] -z-10 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#34d399]/[0.06] blur-[80px]" />
 
                 <div className="relative" style={{ perspective: "1200px" }}>
@@ -406,14 +406,14 @@ export default function LandingPage() {
                     </path>
 
                     {/* Animated particles along flow paths */}
-                    <circle r="2.5" fill="#a78bfa" opacity="0.9">
+                    <circle r="2.5" fill="#c8a2ff" opacity="0.9">
                       <animateMotion
                         dur="3s"
                         repeatCount="indefinite"
                         path="M 100 170 Q 175 100 250 140"
                       />
                     </circle>
-                    <circle r="2" fill="#a78bfa" opacity="0.5">
+                    <circle r="2" fill="#c8a2ff" opacity="0.5">
                       <animateMotion
                         dur="3s"
                         repeatCount="indefinite"
@@ -421,14 +421,14 @@ export default function LandingPage() {
                         begin="1.5s"
                       />
                     </circle>
-                    <circle r="2.5" fill="#38bdf8" opacity="0.9">
+                    <circle r="2.5" fill="#7dd3fc" opacity="0.9">
                       <animateMotion
                         dur="3.5s"
                         repeatCount="indefinite"
                         path="M 250 140 Q 325 100 400 170"
                       />
                     </circle>
-                    <circle r="2" fill="#38bdf8" opacity="0.5">
+                    <circle r="2" fill="#7dd3fc" opacity="0.5">
                       <animateMotion
                         dur="3.5s"
                         repeatCount="indefinite"
@@ -445,7 +445,7 @@ export default function LandingPage() {
                     </circle>
 
                     {/* Node glow dots at card anchors */}
-                    <circle cx="100" cy="170" r="4" fill="#a78bfa">
+                    <circle cx="100" cy="170" r="4" fill="#c8a2ff">
                       <animate
                         attributeName="opacity"
                         values="0.3;0.8;0.3"
@@ -457,7 +457,7 @@ export default function LandingPage() {
                       cx="100"
                       cy="170"
                       r="12"
-                      fill="#a78bfa"
+                      fill="#c8a2ff"
                       opacity="0.08"
                     >
                       <animate
@@ -467,7 +467,7 @@ export default function LandingPage() {
                         repeatCount="indefinite"
                       />
                     </circle>
-                    <circle cx="400" cy="170" r="4" fill="#38bdf8">
+                    <circle cx="400" cy="170" r="4" fill="#7dd3fc">
                       <animate
                         attributeName="opacity"
                         values="0.3;0.8;0.3"
@@ -479,7 +479,7 @@ export default function LandingPage() {
                       cx="400"
                       cy="170"
                       r="12"
-                      fill="#38bdf8"
+                      fill="#7dd3fc"
                       opacity="0.08"
                     >
                       <animate
@@ -594,17 +594,17 @@ export default function LandingPage() {
                       >
                         <stop
                           offset="0%"
-                          stopColor="#a78bfa"
+                          stopColor="#c8a2ff"
                           stopOpacity="0.5"
                         />
                         <stop
                           offset="50%"
-                          stopColor="#38bdf8"
+                          stopColor="#7dd3fc"
                           stopOpacity="0.3"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#a78bfa"
+                          stopColor="#c8a2ff"
                           stopOpacity="0.5"
                         />
                       </linearGradient>
@@ -617,7 +617,7 @@ export default function LandingPage() {
                       >
                         <stop
                           offset="0%"
-                          stopColor="#38bdf8"
+                          stopColor="#7dd3fc"
                           stopOpacity="0.4"
                         />
                         <stop
@@ -627,7 +627,7 @@ export default function LandingPage() {
                         />
                         <stop
                           offset="100%"
-                          stopColor="#38bdf8"
+                          stopColor="#7dd3fc"
                           stopOpacity="0.4"
                         />
                       </linearGradient>
@@ -640,12 +640,12 @@ export default function LandingPage() {
                       >
                         <stop
                           offset="0%"
-                          stopColor="#c084fc"
+                          stopColor="#d4b5ff"
                           stopOpacity="0.3"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#a78bfa"
+                          stopColor="#c8a2ff"
                           stopOpacity="0.3"
                         />
                       </linearGradient>
@@ -656,15 +656,15 @@ export default function LandingPage() {
                         x2="100%"
                         y2="0%"
                       >
-                        <stop offset="0%" stopColor="#a78bfa" stopOpacity="0" />
+                        <stop offset="0%" stopColor="#c8a2ff" stopOpacity="0" />
                         <stop
                           offset="50%"
-                          stopColor="#a78bfa"
+                          stopColor="#c8a2ff"
                           stopOpacity="1"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#a78bfa"
+                          stopColor="#c8a2ff"
                           stopOpacity="0"
                         />
                       </linearGradient>
@@ -675,15 +675,15 @@ export default function LandingPage() {
                         x2="100%"
                         y2="0%"
                       >
-                        <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
+                        <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0" />
                         <stop
                           offset="50%"
-                          stopColor="#38bdf8"
+                          stopColor="#7dd3fc"
                           stopOpacity="1"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#38bdf8"
+                          stopColor="#7dd3fc"
                           stopOpacity="0"
                         />
                       </linearGradient>
@@ -709,29 +709,29 @@ export default function LandingPage() {
                       <radialGradient id="nexusOuter">
                         <stop
                           offset="0%"
-                          stopColor="#a78bfa"
+                          stopColor="#c8a2ff"
                           stopOpacity="0.25"
                         />
                         <stop
                           offset="60%"
-                          stopColor="#38bdf8"
+                          stopColor="#7dd3fc"
                           stopOpacity="0.08"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#a78bfa"
+                          stopColor="#c8a2ff"
                           stopOpacity="0"
                         />
                       </radialGradient>
                       <radialGradient id="nexusInner">
                         <stop
                           offset="0%"
-                          stopColor="#c4b5fd"
+                          stopColor="#dbc4ff"
                           stopOpacity="0.6"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#a78bfa"
+                          stopColor="#c8a2ff"
                           stopOpacity="0"
                         />
                       </radialGradient>
@@ -750,10 +750,10 @@ export default function LandingPage() {
                     style={{ transform: "rotateY(-6deg) rotateX(3deg)" }}
                   >
                     {/* Gradient border wrapper */}
-                    <div className="rounded-2xl bg-gradient-to-b from-white/[0.18] to-white/[0.04] p-px shadow-2xl shadow-[#a78bfa]/10">
-                      <div className="overflow-hidden rounded-2xl bg-[#0a0a0f]/80 shadow-2xl shadow-black/50 backdrop-blur-2xl">
+                    <div className="rounded-2xl bg-gradient-to-b from-white/[0.18] to-white/[0.04] p-px shadow-2xl shadow-[#c8a2ff]/10">
+                      <div className="overflow-hidden rounded-2xl bg-[#0a0a12]/80 shadow-2xl shadow-black/50 backdrop-blur-2xl">
                         {/* Top accent gradient */}
-                        <div className="h-px bg-gradient-to-r from-transparent via-[#a78bfa]/50 to-transparent" />
+                        <div className="h-px bg-gradient-to-r from-transparent via-[#c8a2ff]/50 to-transparent" />
                         {/* Window chrome */}
                         <div className="flex items-center gap-1.5 border-b border-white/[0.04] px-4 py-2.5">
                           <span className="h-2 w-2 rounded-full bg-[#ff5f57]/80" />
@@ -765,8 +765,8 @@ export default function LandingPage() {
                         </div>
                         <div className="p-5">
                           <div className="mb-4 flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#a78bfa]/25 to-[#a78bfa]/10 ring-1 ring-[#a78bfa]/20">
-                              <CreditCard className="h-4 w-4 text-[#a78bfa]" />
+                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#c8a2ff]/25 to-[#c8a2ff]/10 ring-1 ring-[#c8a2ff]/20">
+                              <CreditCard className="h-4 w-4 text-[#c8a2ff]" />
                             </div>
                             <div>
                               <p className="text-xs font-semibold text-white">
@@ -806,7 +806,7 @@ export default function LandingPage() {
                               </p>
                             </div>
                             {/* Progress shimmer */}
-                            <div className="h-[2px] bg-gradient-to-r from-transparent via-[#a78bfa]/30 to-transparent">
+                            <div className="h-[2px] bg-gradient-to-r from-transparent via-[#c8a2ff]/30 to-transparent">
                               <motion.div
                                 animate={{ x: ["-100%", "200%"] }}
                                 transition={{
@@ -815,12 +815,12 @@ export default function LandingPage() {
                                   ease: "linear",
                                   repeatDelay: 3,
                                 }}
-                                className="h-full w-1/3 bg-gradient-to-r from-transparent via-[#a78bfa]/60 to-transparent"
+                                className="h-full w-1/3 bg-gradient-to-r from-transparent via-[#c8a2ff]/60 to-transparent"
                               />
                             </div>
                           </div>
                           {/* Pay button */}
-                          <div className="overflow-hidden rounded-xl bg-gradient-to-r from-[#a78bfa] to-[#8b5cf6] py-2.5 text-center shadow-lg shadow-[#a78bfa]/20">
+                          <div className="overflow-hidden rounded-xl bg-gradient-to-r from-[#c8a2ff] to-[#a87dff] py-2.5 text-center shadow-lg shadow-[#c8a2ff]/20">
                             <span className="text-xs font-bold text-white tracking-wide">
                               Pay with USDC
                             </span>
@@ -851,13 +851,13 @@ export default function LandingPage() {
                     className="absolute -left-6 top-12 z-20 w-[210px] md:-left-10"
                     style={{ transform: "rotateY(8deg) rotateX(2deg)" }}
                   >
-                    <div className="rounded-xl bg-gradient-to-b from-[#38bdf8]/[0.20] to-white/[0.04] p-px shadow-xl shadow-[#38bdf8]/10">
-                      <div className="overflow-hidden rounded-xl bg-[#0a0a0f]/75 shadow-xl shadow-black/30 backdrop-blur-2xl">
-                        <div className="h-px bg-gradient-to-r from-transparent via-[#38bdf8]/40 to-transparent" />
+                    <div className="rounded-xl bg-gradient-to-b from-[#7dd3fc]/[0.20] to-white/[0.04] p-px shadow-xl shadow-[#7dd3fc]/10">
+                      <div className="overflow-hidden rounded-xl bg-[#0a0a12]/75 shadow-xl shadow-black/30 backdrop-blur-2xl">
+                        <div className="h-px bg-gradient-to-r from-transparent via-[#7dd3fc]/40 to-transparent" />
                         <div className="p-4">
                           <div className="mb-3 flex items-center gap-2">
-                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[#38bdf8]/20 to-[#38bdf8]/5 ring-1 ring-[#38bdf8]/15">
-                              <RefreshCw className="h-3.5 w-3.5 text-[#38bdf8]" />
+                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[#7dd3fc]/20 to-[#7dd3fc]/5 ring-1 ring-[#7dd3fc]/15">
+                              <RefreshCw className="h-3.5 w-3.5 text-[#7dd3fc]" />
                             </div>
                             <p className="text-[11px] font-semibold text-white">
                               Active Plans
@@ -872,13 +872,13 @@ export default function LandingPage() {
                                 name: "Pro",
                                 price: "$49/mo",
                                 active: true,
-                                color: "#a78bfa",
+                                color: "#c8a2ff",
                               },
                               {
                                 name: "API Credits",
                                 price: "$0.002/call",
                                 active: true,
-                                color: "#38bdf8",
+                                color: "#7dd3fc",
                               },
                               {
                                 name: "Enterprise",
@@ -930,8 +930,8 @@ export default function LandingPage() {
                                 className="flex-1 rounded-sm"
                                 style={{
                                   background: `linear-gradient(to top, ${
-                                    i >= 9 ? "#38bdf8" : "#38bdf830"
-                                  }, ${i >= 9 ? "#38bdf8" : "#38bdf815"})`,
+                                    i >= 9 ? "#7dd3fc" : "#7dd3fc30"
+                                  }, ${i >= 9 ? "#7dd3fc" : "#7dd3fc15"})`,
                                 }}
                               />
                             ))}
@@ -957,7 +957,7 @@ export default function LandingPage() {
                     style={{ transform: "rotateY(-10deg) rotateX(3deg)" }}
                   >
                     <div className="rounded-xl bg-gradient-to-b from-emerald-400/[0.20] to-white/[0.04] p-px shadow-xl shadow-emerald-500/10">
-                      <div className="overflow-hidden rounded-xl bg-[#0a0a0f]/75 shadow-xl shadow-black/30 backdrop-blur-2xl">
+                      <div className="overflow-hidden rounded-xl bg-[#0a0a12]/75 shadow-xl shadow-black/30 backdrop-blur-2xl">
                         <div className="h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
                         <div className="p-4">
                           <div className="mb-3 flex items-center gap-2">
@@ -1048,7 +1048,7 @@ export default function LandingPage() {
                     className="absolute -bottom-6 left-1/2 z-40 -translate-x-1/2"
                   >
                     <div className="rounded-full bg-gradient-to-r from-white/[0.12] to-white/[0.05] p-px">
-                      <div className="flex items-center gap-3 rounded-full bg-[#0a0a0f]/75 px-5 py-2.5 shadow-xl shadow-black/40 backdrop-blur-2xl">
+                      <div className="flex items-center gap-3 rounded-full bg-[#0a0a12]/75 px-5 py-2.5 shadow-xl shadow-black/40 backdrop-blur-2xl">
                         {[
                           { img: "/usdc.png", name: "USDC", color: "#2775CA" },
                           { img: "/usdt.png", name: "USDT", color: "#26A17B" },
@@ -1187,13 +1187,13 @@ export default function LandingPage() {
               icon: Shield,
               title: "No middlemen",
               text: "Direct buyer-to-merchant payments on-chain",
-              color: "#a78bfa",
+              color: "#c8a2ff",
             },
             {
               icon: Zap,
               title: "Lower fees",
               text: "1% flat \u2014 keep more of every sale",
-              color: "#38bdf8",
+              color: "#7dd3fc",
             },
             {
               icon: Globe,
@@ -1328,10 +1328,10 @@ export default function LandingPage() {
          ═══════════════════════════════════════ */}
       <section className="relative isolate mx-auto max-w-5xl px-6 py-28">
         {/* Ambient glow */}
-        <div className="absolute left-1/2 top-1/2 -z-10 h-[500px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#a78bfa]/[0.04] blur-[150px]" />
+        <div className="absolute left-1/2 top-1/2 -z-10 h-[500px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c8a2ff]/[0.04] blur-[150px]" />
 
         <Reveal>
-          <p className="mb-4 text-center text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+          <p className="mb-4 text-center text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
             Traction
           </p>
           <h2 className="mb-16 text-center text-3xl font-semibold tracking-tight md:text-4xl">
@@ -1345,13 +1345,13 @@ export default function LandingPage() {
               value: "$2M+",
               label: "Volume processed",
               sub: "and counting",
-              color: "#a78bfa",
+              color: "#c8a2ff",
             },
             {
               value: "<1s",
               label: "Settlement time",
               sub: "on Solana",
-              color: "#38bdf8",
+              color: "#7dd3fc",
             },
             { value: "0", label: "Chargebacks", sub: "ever", color: "#34d399" },
             {
@@ -1401,7 +1401,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <Reveal>
-            <p className="text-center text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+            <p className="text-center text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
               Supported stablecoins
             </p>
           </Reveal>
@@ -1480,10 +1480,10 @@ export default function LandingPage() {
           WHY SETTLR — FEATURES (Bento Grid)
          ═══════════════════════════════════════ */}
       <section className="relative isolate mx-auto max-w-5xl px-6 py-28">
-        <div className="absolute right-0 top-1/3 -z-10 h-[400px] w-[400px] rounded-full bg-[#38bdf8]/[0.03] blur-[120px]" />
+        <div className="absolute right-0 top-1/3 -z-10 h-[400px] w-[400px] rounded-full bg-[#7dd3fc]/[0.03] blur-[120px]" />
 
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+          <p className="text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
             Why Settlr
           </p>
         </Reveal>
@@ -1498,10 +1498,10 @@ export default function LandingPage() {
         <div className="mt-16 grid gap-4 md:grid-cols-3">
           {/* Hero card 1 — Instant Settlement (spans 2 cols) */}
           <Reveal delay={0.06}>
-            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#a78bfa]/[0.10] via-white/[0.02] to-transparent p-8 backdrop-blur-xl transition-all duration-300 hover:border-[#a78bfa]/25 hover:shadow-lg hover:shadow-[#a78bfa]/5 md:col-span-2 md:p-10">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-[#a78bfa]/40 via-[#a78bfa]/10 to-transparent" />
-              <div className="mb-5 inline-flex rounded-xl bg-[#a78bfa]/15 p-3 ring-1 ring-[#a78bfa]/20">
-                <Zap className="h-6 w-6 text-[#a78bfa]" />
+            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#c8a2ff]/[0.10] via-white/[0.02] to-transparent p-8 backdrop-blur-xl transition-all duration-300 hover:border-[#c8a2ff]/25 hover:shadow-lg hover:shadow-[#c8a2ff]/5 md:col-span-2 md:p-10">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-[#c8a2ff]/40 via-[#c8a2ff]/10 to-transparent" />
+              <div className="mb-5 inline-flex rounded-xl bg-[#c8a2ff]/15 p-3 ring-1 ring-[#c8a2ff]/20">
+                <Zap className="h-6 w-6 text-[#c8a2ff]" />
               </div>
               <h3 className="text-xl font-semibold text-white">
                 Instant settlement
@@ -1522,10 +1522,10 @@ export default function LandingPage() {
 
           {/* Hero card 2 — Non-custodial */}
           <Reveal delay={0.12}>
-            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#38bdf8]/[0.10] via-white/[0.02] to-transparent p-8 backdrop-blur-xl transition-all duration-300 hover:border-[#38bdf8]/25 hover:shadow-lg hover:shadow-[#38bdf8]/5 md:p-10">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-[#38bdf8]/40 via-[#38bdf8]/10 to-transparent" />
-              <div className="mb-5 inline-flex rounded-xl bg-[#38bdf8]/15 p-3 ring-1 ring-[#38bdf8]/20">
-                <Shield className="h-6 w-6 text-[#38bdf8]" />
+            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#7dd3fc]/[0.10] via-white/[0.02] to-transparent p-8 backdrop-blur-xl transition-all duration-300 hover:border-[#7dd3fc]/25 hover:shadow-lg hover:shadow-[#7dd3fc]/5 md:p-10">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-[#7dd3fc]/40 via-[#7dd3fc]/10 to-transparent" />
+              <div className="mb-5 inline-flex rounded-xl bg-[#7dd3fc]/15 p-3 ring-1 ring-[#7dd3fc]/20">
+                <Shield className="h-6 w-6 text-[#7dd3fc]" />
               </div>
               <h3 className="text-xl font-semibold text-white">
                 Non-custodial
@@ -1547,7 +1547,7 @@ export default function LandingPage() {
               icon: Lock,
               title: "Privacy-first",
               text: "Encrypted receipts and private transaction data. Your revenue is nobody\u2019s business.",
-              accent: "#c084fc",
+              accent: "#d4b5ff",
             },
             {
               icon: RefreshCw,
@@ -1604,8 +1604,8 @@ export default function LandingPage() {
                   checkout in under 10 lines of code.
                 </p>
               </div>
-              <div className="shrink-0 rounded-xl bg-[#0c0c10] px-6 py-4 font-mono text-sm text-white/50 ring-1 ring-white/[0.06]">
-                <span className="text-[#a78bfa]">npm</span> install @settlr/sdk
+              <div className="shrink-0 rounded-xl bg-[#0c0c14] px-6 py-4 font-mono text-sm text-white/50 ring-1 ring-white/[0.06]">
+                <span className="text-[#c8a2ff]">npm</span> install @settlr/sdk
               </div>
             </div>
           </div>
@@ -1618,7 +1618,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
               How it works
             </p>
           </Reveal>
@@ -1630,7 +1630,7 @@ export default function LandingPage() {
 
           <div className="relative mt-16">
             {/* Connecting gradient line (desktop) */}
-            <div className="absolute top-[26px] left-[16.67%] right-[16.67%] hidden h-px bg-gradient-to-r from-[#a78bfa]/40 via-[#38bdf8]/30 to-[#34d399]/40 md:block" />
+            <div className="absolute top-[26px] left-[16.67%] right-[16.67%] hidden h-px bg-gradient-to-r from-[#c8a2ff]/40 via-[#7dd3fc]/30 to-[#34d399]/40 md:block" />
 
             <div className="grid gap-8 md:grid-cols-3 md:gap-6">
               {[
@@ -1639,14 +1639,14 @@ export default function LandingPage() {
                   title: "Install the SDK",
                   text: "Add @settlr/sdk to your project and configure your merchant wallet address.",
                   code: "npm install @settlr/sdk",
-                  color: "#a78bfa",
+                  color: "#c8a2ff",
                 },
                 {
                   step: "02",
                   title: "Drop in checkout",
                   text: "Use our React components or REST API to create payment sessions and subscription plans.",
                   code: "<SettlrCheckout amount={49.99} />",
-                  color: "#38bdf8",
+                  color: "#7dd3fc",
                 },
                 {
                   step: "03",
@@ -1708,7 +1708,7 @@ export default function LandingPage() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <Reveal>
-              <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+              <p className="text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
                 Developer experience
               </p>
             </Reveal>
@@ -1735,7 +1735,7 @@ export default function LandingPage() {
                   "Gasless \u2014 you cover gas, customers pay nothing extra",
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
-                    <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#a78bfa]" />
+                    <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#c8a2ff]" />
                     <span className="text-sm text-white/50">{item}</span>
                   </div>
                 ))}
@@ -1744,7 +1744,7 @@ export default function LandingPage() {
             <Reveal delay={0.2}>
               <Link
                 href="/docs"
-                className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-[#a78bfa] transition-colors hover:text-[#c4b5fd]"
+                className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-[#c8a2ff] transition-colors hover:text-[#dbc4ff]"
               >
                 Read the docs
                 <ChevronRight className="h-4 w-4" />
@@ -1754,7 +1754,7 @@ export default function LandingPage() {
 
           {/* Code block */}
           <Reveal delay={0.1}>
-            <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c10]/90 backdrop-blur-xl shadow-2xl shadow-black/30">
+            <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c14]/90 backdrop-blur-xl shadow-2xl shadow-black/30">
               {/* Tab bar */}
               <div className="flex items-center gap-3 border-b border-white/[0.06] px-5 py-3">
                 <div className="flex gap-1.5">
@@ -1766,20 +1766,20 @@ export default function LandingPage() {
               </div>
               <pre className="overflow-x-auto p-6 text-[13px] leading-6">
                 <code>
-                  <span className="text-[#c084fc]">import</span>{" "}
+                  <span className="text-[#d4b5ff]">import</span>{" "}
                   <span className="text-white/70">{"{ SettlrCheckout }"}</span>{" "}
-                  <span className="text-[#c084fc]">from</span>{" "}
+                  <span className="text-[#d4b5ff]">from</span>{" "}
                   <span className="text-[#86efac]">
                     &apos;@settlr/sdk&apos;
                   </span>
                   {"\n\n"}
-                  <span className="text-[#c084fc]">export default</span>{" "}
+                  <span className="text-[#d4b5ff]">export default</span>{" "}
                   <span className="text-[#93c5fd]">function</span>{" "}
                   <span className="text-white">Pricing</span>
                   <span className="text-white/50">() {"{"}</span>
                   {"\n"}
                   {"  "}
-                  <span className="text-[#c084fc]">return</span>{" "}
+                  <span className="text-[#d4b5ff]">return</span>{" "}
                   <span className="text-white/50">(</span>
                   {"\n"}
                   {"    "}
@@ -1830,7 +1830,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
               Comparison
             </p>
           </Reveal>
@@ -1849,8 +1849,8 @@ export default function LandingPage() {
                     <th className="px-6 py-4 font-medium text-white/40">
                       Traditional
                     </th>
-                    <th className="relative px-6 py-4 font-semibold text-[#a78bfa]">
-                      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#a78bfa]/40 to-transparent" />
+                    <th className="relative px-6 py-4 font-semibold text-[#c8a2ff]">
+                      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c8a2ff]/40 to-transparent" />
                       Settlr
                     </th>
                   </tr>
@@ -1891,7 +1891,7 @@ export default function LandingPage() {
          ═══════════════════════════════════════ */}
       <section className="mx-auto max-w-3xl px-6 py-28">
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+          <p className="text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
             Savings
           </p>
         </Reveal>
@@ -1918,7 +1918,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
               Built for
             </p>
           </Reveal>
@@ -1934,13 +1934,13 @@ export default function LandingPage() {
                 icon: CreditCard,
                 title: "AI & SaaS",
                 text: "Usage-based and subscription billing with instant settlement. No account holds or reserve requirements.",
-                color: "#a78bfa",
+                color: "#c8a2ff",
               },
               {
                 icon: RefreshCw,
                 title: "Recurring billing",
                 text: "Stablecoin subscriptions with automatic renewals, trial periods, and smart retry logic.",
-                color: "#38bdf8",
+                color: "#7dd3fc",
               },
               {
                 icon: Globe,
@@ -1950,7 +1950,7 @@ export default function LandingPage() {
               },
             ].map((c, i) => (
               <Reveal key={c.title} delay={i * 0.08}>
-                <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#050507]/80 p-8 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.16] hover:bg-white/[0.03] hover:shadow-lg hover:shadow-black/20">
+                <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#060608]/80 p-8 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.16] hover:bg-white/[0.03] hover:shadow-lg hover:shadow-black/20">
                   <div
                     className="absolute top-0 left-0 right-0 h-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                     style={{
@@ -1990,10 +1990,10 @@ export default function LandingPage() {
           SECURITY & TRUST
          ═══════════════════════════════════════ */}
       <section className="relative isolate mx-auto max-w-5xl px-6 py-28">
-        <div className="absolute left-0 top-1/2 -z-10 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-[#a78bfa]/[0.03] blur-[120px]" />
+        <div className="absolute left-0 top-1/2 -z-10 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-[#c8a2ff]/[0.03] blur-[120px]" />
 
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+          <p className="text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
             Security
           </p>
         </Reveal>
@@ -2014,13 +2014,13 @@ export default function LandingPage() {
               icon: Shield,
               title: "Non-custodial",
               text: "We never touch your funds. Payments flow directly from customer to your wallet via smart contracts.",
-              color: "#a78bfa",
+              color: "#c8a2ff",
             },
             {
               icon: Lock,
               title: "Encrypted receipts",
               text: "FHE-encrypted transaction data via Inco Lightning. Only you and your customer can see amounts.",
-              color: "#38bdf8",
+              color: "#7dd3fc",
             },
             {
               icon: Globe,
@@ -2070,7 +2070,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-3xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#c8a2ff]">
               FAQ
             </p>
           </Reveal>
@@ -2146,16 +2146,16 @@ export default function LandingPage() {
             transform: "rotate(180deg)",
           }}
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#050507]/50 via-[#050507]/70 to-[#050507]" />
-        <div className="absolute left-1/2 bottom-0 -z-10 h-[500px] w-[600px] -translate-x-1/2 rounded-full bg-[#a78bfa]/[0.08] blur-[150px]" />
-        <div className="absolute left-1/3 top-1/3 -z-10 h-[300px] w-[300px] rounded-full bg-[#38bdf8]/[0.06] blur-[100px]" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#060608]/50 via-[#060608]/70 to-[#060608]" />
+        <div className="absolute left-1/2 bottom-0 -z-10 h-[500px] w-[600px] -translate-x-1/2 rounded-full bg-[#c8a2ff]/[0.08] blur-[150px]" />
+        <div className="absolute left-1/3 top-1/3 -z-10 h-[300px] w-[300px] rounded-full bg-[#7dd3fc]/[0.06] blur-[100px]" />
 
         <div className="mx-auto max-w-3xl px-6 py-32 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
               Start accepting payments
               <br />
-              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#c8a2ff] to-[#7dd3fc] bg-clip-text text-transparent">
                 in minutes
               </span>
             </h2>
@@ -2170,7 +2170,7 @@ export default function LandingPage() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                     href="/onboarding"
-                    className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-[15px] font-semibold text-[#050507] shadow-lg shadow-white/10 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
+                    className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-[15px] font-semibold text-[#060608] shadow-lg shadow-white/10 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
                   >
                 Get started free
                 <ArrowRight className="h-4 w-4" />
