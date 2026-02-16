@@ -20,20 +20,20 @@
   --card-pop-accent-blue: #2196f3;
   --card-pop-accent-orange: #ff9800;
 
-  /* Brand gradient - purple/cyan neon theme */
-  --primary: rgb(168, 85, 247);
-  --primary-hover: rgb(192, 132, 252);
-  --primary-glow: rgba(168, 85, 247, 0.4);
-  --secondary: rgb(34, 211, 238);
-  --secondary-hover: rgb(103, 232, 249);
+  /* Brand - electric blue theme */
+  --primary: rgb(59, 130, 246);
+  --primary-hover: rgb(59, 130, 246);
+  --primary-glow: rgba(59, 130, 246, 0.4);
+  --secondary: rgb(59, 130, 246);
+  --secondary-hover: rgb(59, 130, 246);
 
   /* Accent colors for components */
-  --accent-primary: rgb(168, 85, 247);
-  --accent-muted: rgba(168, 85, 247, 0.1);
+  --accent-primary: rgb(59, 130, 246);
+  --accent-muted: rgba(59, 130, 246, 0.1);
 
   /* Card backgrounds */
   --card-bg: #12121a;
-  --border-color: rgba(139, 92, 246, 0.2);
+  --border-color: rgba(59, 130, 246, 0.2);
 
   /* Status colors */
   --success: #22c55e;

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SettlrLogoWithIcon } from "@/components/settlr-logo";
+import { SettlrLogo } from "@/components/settlr-logo";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Palette } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
@@ -58,7 +58,7 @@ export function Navbar() {
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <SettlrLogoWithIcon size="sm" variant="light" />
+          <SettlrLogo size="sm" variant="light" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -103,7 +103,7 @@ export function Navbar() {
               {isIndustriesActive && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#a78bfa]"
+                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#3B82F6]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -129,8 +129,8 @@ export function Navbar() {
                           : "text-white/70 hover:bg-white/5 hover:text-white"
                       }`}
                     >
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#a78bfa]/15">
-                        <link.icon className="h-4 w-4 text-[#a78bfa]" />
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#3B82F6]/15">
+                        <link.icon className="h-4 w-4 text-[#3B82F6]" />
                       </div>
                       <div>
                         <div className="text-sm font-medium">{link.label}</div>
@@ -235,7 +235,7 @@ export function Navbar() {
                         : "text-white/60 hover:bg-white/5 hover:text-white"
                     }`}
                   >
-                    <link.icon className="h-4 w-4 text-purple-400" />
+                    <link.icon className="h-4 w-4 text-blue-400" />
                     {link.label}
                   </Link>
                 ))}

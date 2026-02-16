@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Twitter, Github, Mail } from "lucide-react";
-import { SettlrLogoWithIcon } from "@/components/settlr-logo";
+import { SettlrLogo } from "@/components/settlr-logo";
 
 const footerLinks = {
   product: [
@@ -48,7 +48,7 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block">
-              <SettlrLogoWithIcon size="sm" variant="light" />
+              <SettlrLogo size="sm" variant="light" />
             </Link>
             <p className="mt-4 max-w-xs text-sm text-white/50">
               Non-custodial crypto payment processor. Accept any token, receive

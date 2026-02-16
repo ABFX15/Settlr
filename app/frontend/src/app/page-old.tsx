@@ -59,7 +59,7 @@ function SavingsCalculator() {
     });
 
   return (
-    <div className="rounded-2xl bg-[#08080d] p-8 md:p-10">
+    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 md:p-10">
       <div className="mb-8">
         <label className="mb-3 block text-sm font-medium text-white/50">
           Monthly volume
@@ -74,7 +74,7 @@ function SavingsCalculator() {
           step={1000}
           value={volume}
           onChange={(e) => setVolume(+e.target.value)}
-          className="mt-4 w-full accent-[#3B82F6]"
+          className="mt-4 w-full accent-[#a78bfa]"
         />
         <div className="mt-1 flex justify-between text-xs text-white/30">
           <span>$1K</span>
@@ -97,9 +97,9 @@ function SavingsCalculator() {
             {fmt(settlrFee)}
           </p>
         </div>
-        <div className="rounded-xl bg-[#3B82F6]/10 p-5 ring-1 ring-[#3B82F6]/20">
-          <p className="text-xs font-medium text-[#3B82F6]">You save</p>
-          <p className="mt-1 text-2xl font-semibold text-[#3B82F6]">
+        <div className="rounded-xl bg-[#a78bfa]/10 p-5 ring-1 ring-[#a78bfa]/20">
+          <p className="text-xs font-medium text-[#a78bfa]">You save</p>
+          <p className="mt-1 text-2xl font-semibold text-[#a78bfa]">
             {fmt(saved)}
           </p>
           <p className="mt-0.5 text-xs text-white/30">{fmt(saved * 12)}/yr</p>
@@ -122,10 +122,7 @@ export default function LandingPage() {
   };
 
   return (
-    <main
-      className="relative min-h-screen bg-[#050507] text-white antialiased"
-      style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
-    >
+    <main className="relative min-h-screen bg-[#050507] text-white antialiased">
       {/* ── Global noise texture ── */}
       <div
         className="pointer-events-none fixed inset-0 z-0 opacity-[0.03]"
@@ -140,34 +137,33 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════
           HERO — split layout: copy left, visual right
          ═══════════════════════════════════════ */}
-      <section className="relative isolate overflow-x-clip overflow-y-visible pt-28 pb-20 md:pt-40 md:pb-28 bg-[#edf2f8]">
-        {/* Subtle radial glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-[#3B82F6]/[0.06] blur-[120px]" />
-        {/* Bottom fade into dark page background */}
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050507] via-[#050507]/90 to-transparent" />
+      <section className="relative isolate overflow-hidden pt-28 pb-20 md:pt-40 md:pb-28">
+        {/* Subtle ambient glow */}
+        <div className="absolute -top-40 left-[10%] h-[600px] w-[600px] rounded-full bg-[#a78bfa]/[0.07] blur-[128px]" />
+        <div className="absolute top-[20%] right-[5%] h-[500px] w-[500px] rounded-full bg-[#38bdf8]/[0.05] blur-[128px]" />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6">
-          <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="relative z-10 mx-auto max-w-6xl px-6">
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             {/* ─── Left: Copy ─── */}
-            <div className="lg:col-span-5">
+            <div>
               <Reveal>
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/20 bg-[#3B82F6]/[0.08] px-4 py-1.5 text-[13px] text-[#3B82F6] font-medium">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]" />
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-1.5 text-[13px] text-white/60">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#a78bfa]" />
                   Built for AI &amp; SaaS teams blocked by Stripe
                 </div>
               </Reveal>
 
               <Reveal delay={0.05}>
-                <h1 className="max-w-xl text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.08] tracking-tight text-[#0a0a12]">
+                <h1 className="max-w-xl text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.08] tracking-tight">
                   The payment stack for{" "}
-                  <span className="text-[#3B82F6]">
+                  <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
                     global-first AI and SaaS
                   </span>
                 </h1>
               </Reveal>
 
               <Reveal delay={0.1}>
-                <p className="mt-6 max-w-md text-lg leading-relaxed text-[#4b5563]">
+                <p className="mt-6 max-w-md text-lg leading-relaxed text-white/50">
                   Accept stablecoin subscriptions, invoices, and one-off
                   payments. Instant settlement, no chargebacks, no bank
                   dependencies.
@@ -178,14 +174,14 @@ export default function LandingPage() {
                 <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Link
                     href="/onboarding"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#3B82F6] px-7 py-3.5 text-[15px] font-semibold text-white shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 text-[15px] font-semibold text-[#050507] transition-transform hover:scale-[1.02] active:scale-[0.98]"
                   >
                     Get started
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
                     href="/docs"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#0a0a12]/15 px-7 py-3.5 text-[15px] font-medium text-[#0a0a12]/70 transition-colors hover:bg-[#0a0a12]/[0.04] hover:text-[#0a0a12]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.1] px-7 py-3.5 text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.04] hover:text-white"
                   >
                     Documentation
                   </Link>
@@ -196,10 +192,10 @@ export default function LandingPage() {
               <Reveal delay={0.2}>
                 <button
                   onClick={copyInstall}
-                  className="group mt-8 inline-flex items-center gap-3 rounded-lg border border-[#0a0a12]/10 bg-white/60 px-5 py-3 font-mono text-sm text-[#0a0a12]/50 transition-colors hover:border-[#0a0a12]/20 hover:text-[#0a0a12]/70"
+                  className="group mt-8 inline-flex items-center gap-3 rounded-lg border border-white/[0.06] bg-white/[0.02] px-5 py-3 font-mono text-sm text-white/50 transition-colors hover:border-white/[0.12] hover:text-white/70"
                 >
                   <span>
-                    <span className="text-[#3B82F6]">npm</span> install
+                    <span className="text-[#a78bfa]">npm</span> install
                     @settlr/sdk
                   </span>
                   {copied ? (
@@ -213,14 +209,14 @@ export default function LandingPage() {
               {/* Chain logos — Helio-style */}
               <Reveal delay={0.25}>
                 <div className="mt-8 flex items-center gap-5">
-                  <span className="text-[11px] font-medium uppercase tracking-wider text-[#0a0a12]/30">
+                  <span className="text-[11px] font-medium uppercase tracking-wider text-white/20">
                     Powered by
                   </span>
                   <div className="flex items-center gap-4">
                     {/* Solana */}
                     <svg
                       viewBox="0 0 397.7 311.7"
-                      className="h-3.5 w-auto fill-[#0a0a12]/30 transition-colors hover:fill-[#0a0a12]/60"
+                      className="h-3.5 w-auto fill-white/25 transition-colors hover:fill-white/50"
                     >
                       <path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z" />
                       <path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z" />
@@ -229,7 +225,7 @@ export default function LandingPage() {
                     {/* Ethereum */}
                     <svg
                       viewBox="0 0 256 417"
-                      className="h-4 w-auto fill-[#0a0a12]/30 transition-colors hover:fill-[#0a0a12]/60"
+                      className="h-4 w-auto fill-white/25 transition-colors hover:fill-white/50"
                     >
                       <path d="M127.961 0l-2.795 9.5v275.668l2.795 2.79 127.962-75.638z" />
                       <path d="M127.962 0L0 212.32l127.962 75.639V154.158z" />
@@ -239,20 +235,20 @@ export default function LandingPage() {
                     {/* Base */}
                     <svg
                       viewBox="0 0 111 111"
-                      className="h-4 w-auto fill-[#0a0a12]/30 transition-colors hover:fill-[#0a0a12]/60"
+                      className="h-4 w-auto fill-white/25 transition-colors hover:fill-white/50"
                     >
                       <circle cx="55.5" cy="55.5" r="55.5" />
                       <path
                         d="M55.2 23C37.5 23 23 37.3 23 55s14.5 32 32.2 32c15.4 0 28.3-10.9 31.4-25.4H62.5v-13.2h24.1C83.5 33.9 70.6 23 55.2 23z"
-                        fill="#edf2f8"
+                        fill="#050507"
                       />
                     </svg>
                     {/* Arbitrum */}
-                    <span className="text-[11px] font-semibold text-[#0a0a12]/25 transition-colors hover:text-[#0a0a12]/50">
+                    <span className="text-[11px] font-semibold text-white/20 transition-colors hover:text-white/45">
                       ARB
                     </span>
                     {/* Polygon */}
-                    <span className="text-[11px] font-semibold text-[#0a0a12]/25 transition-colors hover:text-[#0a0a12]/50">
+                    <span className="text-[11px] font-semibold text-white/20 transition-colors hover:text-white/45">
                       MATIC
                     </span>
                   </div>
@@ -261,21 +257,14 @@ export default function LandingPage() {
             </div>
 
             {/* ─── Right: Premium payment visual ─── */}
-            <Reveal delay={0.15} className="lg:col-span-7">
-              <div className="relative mx-auto w-full max-w-lg lg:max-w-none overflow-visible">
-                {/* Rounded dark panel — gradient border for polish */}
-                <div className="absolute -inset-8 z-0 rounded-[2rem] bg-gradient-to-br from-[#3B82F6]/20 via-transparent to-[#34d399]/10 p-px">
-                  <div className="h-full w-full rounded-[2rem] bg-[#0c0c14]" />
-                </div>
+            <Reveal delay={0.15}>
+              <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
                 {/* ── Multi-layer ambient glow ── */}
-                <div className="absolute left-1/2 top-1/2 z-[1] h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3B82F6]/[0.18] blur-[120px]" />
-                <div className="absolute left-[65%] top-[35%] z-[1] h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3B82F6]/[0.12] blur-[80px]" />
-                <div className="absolute left-[30%] top-[65%] z-[1] h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#34d399]/[0.08] blur-[60px]" />
+                <div className="absolute left-1/2 top-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#a78bfa]/[0.14] blur-[140px]" />
+                <div className="absolute left-[65%] top-[35%] -z-10 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#38bdf8]/[0.10] blur-[100px]" />
+                <div className="absolute left-[30%] top-[65%] -z-10 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#34d399]/[0.06] blur-[80px]" />
 
-                <div
-                  className="relative z-[2]"
-                  style={{ perspective: "1200px" }}
-                >
+                <div className="relative" style={{ perspective: "1200px" }}>
                   {/* ── Background: Animated orbital rings + grid ── */}
                   <svg
                     className="pointer-events-none absolute inset-0 z-0 h-full w-full"
@@ -283,7 +272,7 @@ export default function LandingPage() {
                     fill="none"
                   >
                     {/* Perspective grid */}
-                    <g opacity="0.06" stroke="white" strokeWidth="0.5">
+                    <g opacity="0.04" stroke="white" strokeWidth="0.5">
                       {Array.from({ length: 11 }).map((_, i) => (
                         <line
                           key={`gh${i}`}
@@ -360,7 +349,7 @@ export default function LandingPage() {
                     {/* Animated flow paths — payment arcs */}
                     <path
                       d="M 100 170 Q 175 100 250 140"
-                      stroke="url(#flowBlue)"
+                      stroke="url(#flowPurple)"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       opacity="0.6"
@@ -405,14 +394,14 @@ export default function LandingPage() {
                     </path>
 
                     {/* Animated particles along flow paths */}
-                    <circle r="2.5" fill="#3B82F6" opacity="0.9">
+                    <circle r="2.5" fill="#a78bfa" opacity="0.9">
                       <animateMotion
                         dur="3s"
                         repeatCount="indefinite"
                         path="M 100 170 Q 175 100 250 140"
                       />
                     </circle>
-                    <circle r="2" fill="#3B82F6" opacity="0.5">
+                    <circle r="2" fill="#a78bfa" opacity="0.5">
                       <animateMotion
                         dur="3s"
                         repeatCount="indefinite"
@@ -420,14 +409,14 @@ export default function LandingPage() {
                         begin="1.5s"
                       />
                     </circle>
-                    <circle r="2.5" fill="#3B82F6" opacity="0.9">
+                    <circle r="2.5" fill="#38bdf8" opacity="0.9">
                       <animateMotion
                         dur="3.5s"
                         repeatCount="indefinite"
                         path="M 250 140 Q 325 100 400 170"
                       />
                     </circle>
-                    <circle r="2" fill="#3B82F6" opacity="0.5">
+                    <circle r="2" fill="#38bdf8" opacity="0.5">
                       <animateMotion
                         dur="3.5s"
                         repeatCount="indefinite"
@@ -444,7 +433,7 @@ export default function LandingPage() {
                     </circle>
 
                     {/* Node glow dots at card anchors */}
-                    <circle cx="100" cy="170" r="4" fill="#3B82F6">
+                    <circle cx="100" cy="170" r="4" fill="#a78bfa">
                       <animate
                         attributeName="opacity"
                         values="0.3;0.8;0.3"
@@ -456,7 +445,7 @@ export default function LandingPage() {
                       cx="100"
                       cy="170"
                       r="12"
-                      fill="#3B82F6"
+                      fill="#a78bfa"
                       opacity="0.08"
                     >
                       <animate
@@ -466,7 +455,7 @@ export default function LandingPage() {
                         repeatCount="indefinite"
                       />
                     </circle>
-                    <circle cx="400" cy="170" r="4" fill="#3B82F6">
+                    <circle cx="400" cy="170" r="4" fill="#38bdf8">
                       <animate
                         attributeName="opacity"
                         values="0.3;0.8;0.3"
@@ -478,7 +467,7 @@ export default function LandingPage() {
                       cx="400"
                       cy="170"
                       r="12"
-                      fill="#3B82F6"
+                      fill="#38bdf8"
                       opacity="0.08"
                     >
                       <animate
@@ -564,7 +553,7 @@ export default function LandingPage() {
                         cy={p.cy}
                         r="1.5"
                         fill="white"
-                        opacity="0.2"
+                        opacity="0.15"
                       >
                         <animate
                           attributeName="opacity"
@@ -593,17 +582,17 @@ export default function LandingPage() {
                       >
                         <stop
                           offset="0%"
-                          stopColor="#3B82F6"
+                          stopColor="#a78bfa"
                           stopOpacity="0.5"
                         />
                         <stop
                           offset="50%"
-                          stopColor="#3B82F6"
+                          stopColor="#38bdf8"
                           stopOpacity="0.3"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#3B82F6"
+                          stopColor="#a78bfa"
                           stopOpacity="0.5"
                         />
                       </linearGradient>
@@ -616,7 +605,7 @@ export default function LandingPage() {
                       >
                         <stop
                           offset="0%"
-                          stopColor="#3B82F6"
+                          stopColor="#38bdf8"
                           stopOpacity="0.4"
                         />
                         <stop
@@ -626,7 +615,7 @@ export default function LandingPage() {
                         />
                         <stop
                           offset="100%"
-                          stopColor="#3B82F6"
+                          stopColor="#38bdf8"
                           stopOpacity="0.4"
                         />
                       </linearGradient>
@@ -644,26 +633,26 @@ export default function LandingPage() {
                         />
                         <stop
                           offset="100%"
-                          stopColor="#3B82F6"
+                          stopColor="#a78bfa"
                           stopOpacity="0.3"
                         />
                       </linearGradient>
                       <linearGradient
-                        id="flowBlue"
+                        id="flowPurple"
                         x1="0%"
                         y1="0%"
                         x2="100%"
                         y2="0%"
                       >
-                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="0" />
+                        <stop offset="0%" stopColor="#a78bfa" stopOpacity="0" />
                         <stop
                           offset="50%"
-                          stopColor="#3B82F6"
+                          stopColor="#a78bfa"
                           stopOpacity="1"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#3B82F6"
+                          stopColor="#a78bfa"
                           stopOpacity="0"
                         />
                       </linearGradient>
@@ -674,15 +663,15 @@ export default function LandingPage() {
                         x2="100%"
                         y2="0%"
                       >
-                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="0" />
+                        <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
                         <stop
                           offset="50%"
-                          stopColor="#3B82F6"
+                          stopColor="#38bdf8"
                           stopOpacity="1"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#3B82F6"
+                          stopColor="#38bdf8"
                           stopOpacity="0"
                         />
                       </linearGradient>
@@ -708,17 +697,17 @@ export default function LandingPage() {
                       <radialGradient id="nexusOuter">
                         <stop
                           offset="0%"
-                          stopColor="#3B82F6"
+                          stopColor="#a78bfa"
                           stopOpacity="0.25"
                         />
                         <stop
                           offset="60%"
-                          stopColor="#3B82F6"
+                          stopColor="#38bdf8"
                           stopOpacity="0.08"
                         />
                         <stop
                           offset="100%"
-                          stopColor="#3B82F6"
+                          stopColor="#a78bfa"
                           stopOpacity="0"
                         />
                       </radialGradient>
@@ -730,7 +719,7 @@ export default function LandingPage() {
                         />
                         <stop
                           offset="100%"
-                          stopColor="#3B82F6"
+                          stopColor="#a78bfa"
                           stopOpacity="0"
                         />
                       </radialGradient>
@@ -745,14 +734,14 @@ export default function LandingPage() {
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
-                    className="relative z-30 mx-auto w-[300px]"
+                    className="relative z-30 mx-auto w-[290px]"
                     style={{ transform: "rotateY(-6deg) rotateX(3deg)" }}
                   >
                     {/* Gradient border wrapper */}
                     <div className="rounded-2xl bg-gradient-to-b from-white/[0.12] to-white/[0.03] p-px">
                       <div className="overflow-hidden rounded-2xl bg-[#0a0a0f]/90 shadow-2xl shadow-black/50 backdrop-blur-xl">
                         {/* Top accent gradient */}
-                        <div className="h-px bg-gradient-to-r from-transparent via-[#3B82F6]/50 to-transparent" />
+                        <div className="h-px bg-gradient-to-r from-transparent via-[#a78bfa]/50 to-transparent" />
                         {/* Window chrome */}
                         <div className="flex items-center gap-1.5 border-b border-white/[0.04] px-4 py-2.5">
                           <span className="h-2 w-2 rounded-full bg-[#ff5f57]/80" />
@@ -764,8 +753,8 @@ export default function LandingPage() {
                         </div>
                         <div className="p-5">
                           <div className="mb-4 flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#3B82F6]/25 to-[#3B82F6]/10 ring-1 ring-[#3B82F6]/20">
-                              <CreditCard className="h-4 w-4 text-[#3B82F6]" />
+                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#a78bfa]/25 to-[#a78bfa]/10 ring-1 ring-[#a78bfa]/20">
+                              <CreditCard className="h-4 w-4 text-[#a78bfa]" />
                             </div>
                             <div>
                               <p className="text-xs font-semibold text-white">
@@ -805,7 +794,7 @@ export default function LandingPage() {
                               </p>
                             </div>
                             {/* Progress shimmer */}
-                            <div className="h-[2px] bg-gradient-to-r from-transparent via-[#3B82F6]/30 to-transparent">
+                            <div className="h-[2px] bg-gradient-to-r from-transparent via-[#a78bfa]/30 to-transparent">
                               <motion.div
                                 animate={{ x: ["-100%", "200%"] }}
                                 transition={{
@@ -814,12 +803,12 @@ export default function LandingPage() {
                                   ease: "linear",
                                   repeatDelay: 3,
                                 }}
-                                className="h-full w-1/3 bg-gradient-to-r from-transparent via-[#3B82F6]/60 to-transparent"
+                                className="h-full w-1/3 bg-gradient-to-r from-transparent via-[#a78bfa]/60 to-transparent"
                               />
                             </div>
                           </div>
                           {/* Pay button */}
-                          <div className="overflow-hidden rounded-xl bg-gradient-to-r from-[#3B82F6] to-[#2563EB] py-2.5 text-center shadow-lg shadow-[#3B82F6]/20">
+                          <div className="overflow-hidden rounded-xl bg-gradient-to-r from-[#a78bfa] to-[#8b5cf6] py-2.5 text-center shadow-lg shadow-[#a78bfa]/20">
                             <span className="text-xs font-bold text-white tracking-wide">
                               Pay with USDC
                             </span>
@@ -847,16 +836,16 @@ export default function LandingPage() {
                       ease: "easeInOut",
                       delay: 1,
                     }}
-                    className="absolute left-0 top-[55%] z-20 w-[230px] md:-left-6"
+                    className="absolute -left-6 top-12 z-20 w-[210px] md:-left-10"
                     style={{ transform: "rotateY(8deg) rotateX(2deg)" }}
                   >
-                    <div className="rounded-xl bg-gradient-to-b from-[#3B82F6]/[0.15] to-white/[0.03] p-px">
+                    <div className="rounded-xl bg-gradient-to-b from-[#38bdf8]/[0.15] to-white/[0.03] p-px">
                       <div className="overflow-hidden rounded-xl bg-[#0a0a0f]/85 shadow-xl shadow-black/30 backdrop-blur-xl">
-                        <div className="h-px bg-gradient-to-r from-transparent via-[#3B82F6]/40 to-transparent" />
+                        <div className="h-px bg-gradient-to-r from-transparent via-[#38bdf8]/40 to-transparent" />
                         <div className="p-4">
                           <div className="mb-3 flex items-center gap-2">
-                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[#3B82F6]/20 to-[#3B82F6]/5 ring-1 ring-[#3B82F6]/15">
-                              <RefreshCw className="h-3.5 w-3.5 text-[#3B82F6]" />
+                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[#38bdf8]/20 to-[#38bdf8]/5 ring-1 ring-[#38bdf8]/15">
+                              <RefreshCw className="h-3.5 w-3.5 text-[#38bdf8]" />
                             </div>
                             <p className="text-[11px] font-semibold text-white">
                               Active Plans
@@ -871,13 +860,13 @@ export default function LandingPage() {
                                 name: "Pro",
                                 price: "$49/mo",
                                 active: true,
-                                color: "#3B82F6",
+                                color: "#a78bfa",
                               },
                               {
                                 name: "API Credits",
                                 price: "$0.002/call",
                                 active: true,
-                                color: "#3B82F6",
+                                color: "#38bdf8",
                               },
                               {
                                 name: "Enterprise",
@@ -929,8 +918,8 @@ export default function LandingPage() {
                                 className="flex-1 rounded-sm"
                                 style={{
                                   background: `linear-gradient(to top, ${
-                                    i >= 9 ? "#3B82F6" : "#3B82F630"
-                                  }, ${i >= 9 ? "#3B82F6" : "#3B82F615"})`,
+                                    i >= 9 ? "#38bdf8" : "#38bdf830"
+                                  }, ${i >= 9 ? "#38bdf8" : "#38bdf815"})`,
                                 }}
                               />
                             ))}
@@ -952,7 +941,7 @@ export default function LandingPage() {
                       ease: "easeInOut",
                       delay: 0.5,
                     }}
-                    className="absolute right-0 top-[48%] z-10 w-[220px] md:-right-4"
+                    className="absolute -right-4 top-6 z-10 w-[200px] md:-right-8"
                     style={{ transform: "rotateY(-10deg) rotateX(3deg)" }}
                   >
                     <div className="rounded-xl bg-gradient-to-b from-emerald-400/[0.15] to-white/[0.03] p-px">
@@ -1168,7 +1157,7 @@ export default function LandingPage() {
                   </motion.div>
 
                   {/* Spacer */}
-                  <div className="h-[520px] md:h-[560px]" />
+                  <div className="h-[400px] md:h-[440px]" />
                 </div>
               </div>
             </Reveal>
@@ -1186,13 +1175,13 @@ export default function LandingPage() {
               icon: Shield,
               title: "No middlemen",
               text: "Direct buyer-to-merchant payments on-chain",
-              color: "#3B82F6",
+              color: "#a78bfa",
             },
             {
               icon: Zap,
               title: "Lower fees",
-              text: "1% flat — keep more of every sale",
-              color: "#3B82F6",
+              text: "1% flat \u2014 keep more of every sale",
+              color: "#38bdf8",
             },
             {
               icon: Globe,
@@ -1213,20 +1202,26 @@ export default function LandingPage() {
                 {i > 0 && (
                   <div className="absolute left-0 top-[20%] bottom-[20%] hidden w-px bg-white/[0.04] md:block" />
                 )}
-                <div className="relative mb-5">
+                <div className="relative mb-4">
                   <div
-                    className="inline-flex rounded-2xl p-4 transition-all duration-300 group-hover:scale-105"
+                    className="inline-flex rounded-2xl border p-3.5 transition-all duration-300 group-hover:scale-110"
                     style={{
-                      background: `linear-gradient(135deg, ${v.color}18, ${v.color}06)`,
+                      background: `${v.color}12`,
+                      borderColor: `${v.color}25`,
                     }}
                   >
-                    <v.icon className="h-6 w-6" style={{ color: v.color }} />
+                    <v.icon className="h-5 w-5" style={{ color: v.color }} />
                   </div>
+                  {/* Glow behind icon on hover */}
+                  <div
+                    className="absolute inset-0 -z-10 rounded-2xl opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100"
+                    style={{ background: `${v.color}20` }}
+                  />
                 </div>
                 <h3 className="text-[15px] font-semibold text-white">
                   {v.title}
                 </h3>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-white/35">
+                <p className="mt-1.5 text-xs leading-relaxed text-white/35">
                   {v.text}
                 </p>
               </div>
@@ -1321,10 +1316,10 @@ export default function LandingPage() {
          ═══════════════════════════════════════ */}
       <section className="relative isolate mx-auto max-w-5xl px-6 py-28">
         {/* Ambient glow */}
-        <div className="absolute left-1/2 top-1/2 -z-10 h-[500px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3B82F6]/[0.04] blur-[150px]" />
+        <div className="absolute left-1/2 top-1/2 -z-10 h-[500px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#a78bfa]/[0.04] blur-[150px]" />
 
         <Reveal>
-          <p className="mb-4 text-center text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+          <p className="mb-4 text-center text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
             Traction
           </p>
           <h2 className="mb-16 text-center text-3xl font-semibold tracking-tight md:text-4xl">
@@ -1338,13 +1333,13 @@ export default function LandingPage() {
               value: "$2M+",
               label: "Volume processed",
               sub: "and counting",
-              color: "#3B82F6",
+              color: "#a78bfa",
             },
             {
               value: "<1s",
               label: "Settlement time",
               sub: "on Solana",
-              color: "#3B82F6",
+              color: "#38bdf8",
             },
             { value: "0", label: "Chargebacks", sub: "ever", color: "#34d399" },
             {
@@ -1355,35 +1350,33 @@ export default function LandingPage() {
             },
           ].map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08}>
-              <div
-                className="group relative overflow-hidden rounded-2xl p-px transition-all duration-500"
-                style={{
-                  background: `linear-gradient(to bottom, ${s.color}25, transparent 60%)`,
-                }}
-              >
-                <div className="relative overflow-hidden rounded-2xl bg-[#08080d] p-8 text-center">
-                  {/* Inner ambient glow */}
-                  <div
-                    className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-                    style={{
-                      background: `radial-gradient(circle at 50% 0%, ${s.color}10 0%, transparent 70%)`,
-                    }}
-                  />
-                  <div
-                    className="relative bg-clip-text text-5xl font-bold tracking-tight text-transparent md:text-6xl"
-                    style={{
-                      backgroundImage: `linear-gradient(to bottom, ${s.color}, ${s.color}80)`,
-                    }}
-                  >
-                    {s.value}
-                  </div>
-                  <div className="relative mt-3 text-sm font-medium text-white/60">
-                    {s.label}
-                  </div>
-                  <div className="relative mt-1 text-xs text-white/25">
-                    {s.sub}
-                  </div>
+              <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 text-center transition-all duration-500 hover:border-white/[0.14] hover:bg-white/[0.04]">
+                {/* Gradient glow on hover */}
+                <div
+                  className="absolute inset-0 -z-10 opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
+                  style={{
+                    background: `radial-gradient(circle at 50% 0%, ${s.color}15 0%, transparent 70%)`,
+                  }}
+                />
+                {/* Top accent line */}
+                <div
+                  className="absolute top-0 left-[15%] right-[15%] h-px opacity-50"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, ${s.color}, transparent)`,
+                  }}
+                />
+                <div
+                  className="bg-clip-text text-5xl font-bold tracking-tight text-transparent md:text-6xl"
+                  style={{
+                    backgroundImage: `linear-gradient(to bottom, ${s.color}, ${s.color}99)`,
+                  }}
+                >
+                  {s.value}
                 </div>
+                <div className="mt-3 text-sm font-medium text-white/60">
+                  {s.label}
+                </div>
+                <div className="mt-1 text-xs text-white/25">{s.sub}</div>
               </div>
             </Reveal>
           ))}
@@ -1396,7 +1389,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <Reveal>
-            <p className="text-center text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+            <p className="text-center text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
               Supported stablecoins
             </p>
           </Reveal>
@@ -1430,41 +1423,40 @@ export default function LandingPage() {
               },
             ].map((coin, i) => (
               <Reveal key={coin.name} delay={i * 0.08}>
-                <div
-                  className="group relative overflow-hidden rounded-2xl p-px transition-all duration-500"
-                  style={{
-                    background: `linear-gradient(to bottom, ${coin.color}30, transparent 50%)`,
-                  }}
-                >
-                  <div className="relative overflow-hidden rounded-2xl bg-[#08080d] p-8 text-center">
-                    {/* Coin-colored glow — always subtly visible */}
-                    <div
-                      className="absolute left-1/2 top-0 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-3xl transition-opacity duration-700 group-hover:opacity-60"
-                      style={{ background: coin.color }}
+                <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 text-center transition-all duration-500 hover:border-white/[0.14] hover:bg-white/[0.04]">
+                  {/* Coin-colored glow */}
+                  <div
+                    className="absolute left-1/2 top-0 -z-10 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
+                    style={{ background: coin.color }}
+                  />
+                  <div
+                    className="absolute top-0 left-[20%] right-[20%] h-px opacity-40"
+                    style={{
+                      background: `linear-gradient(90deg, transparent, ${coin.color}, transparent)`,
+                    }}
+                  />
+                  <div
+                    className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full ring-1 ring-white/[0.06]"
+                    style={{ background: `${coin.color}15` }}
+                  >
+                    <img
+                      src={coin.img}
+                      alt={coin.name}
+                      className="h-10 w-10 rounded-full"
                     />
-                    <div
-                      className="relative mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl"
-                      style={{ background: `${coin.color}12` }}
-                    >
-                      <img
-                        src={coin.img}
-                        alt={coin.name}
-                        className="h-10 w-10 rounded-full"
-                      />
-                    </div>
-                    <div className="relative text-xl font-semibold text-white">
-                      {coin.name}
-                    </div>
-                    <div
-                      className="relative mt-1 text-xs font-medium"
-                      style={{ color: `${coin.color}99` }}
-                    >
-                      by {coin.issuer}
-                    </div>
-                    <p className="relative mt-3 text-[13px] leading-relaxed text-white/40">
-                      {coin.desc}
-                    </p>
                   </div>
+                  <div className="text-xl font-semibold text-white">
+                    {coin.name}
+                  </div>
+                  <div
+                    className="mt-1 text-xs font-medium"
+                    style={{ color: `${coin.color}99` }}
+                  >
+                    by {coin.issuer}
+                  </div>
+                  <p className="mt-3 text-xs leading-relaxed text-white/35">
+                    {coin.desc}
+                  </p>
                 </div>
               </Reveal>
             ))}
@@ -1476,10 +1468,10 @@ export default function LandingPage() {
           WHY SETTLR — FEATURES (Bento Grid)
          ═══════════════════════════════════════ */}
       <section className="relative isolate mx-auto max-w-5xl px-6 py-28">
-        <div className="absolute right-0 top-1/3 -z-10 h-[400px] w-[400px] rounded-full bg-[#3B82F6]/[0.03] blur-[120px]" />
+        <div className="absolute right-0 top-1/3 -z-10 h-[400px] w-[400px] rounded-full bg-[#38bdf8]/[0.03] blur-[120px]" />
 
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+          <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
             Why Settlr
           </p>
         </Reveal>
@@ -1494,63 +1486,45 @@ export default function LandingPage() {
         <div className="mt-16 grid gap-4 md:grid-cols-3">
           {/* Hero card 1 — Instant Settlement (spans 2 cols) */}
           <Reveal delay={0.06}>
-            <div
-              className="group relative overflow-hidden rounded-2xl p-px md:col-span-2 transition-all duration-500"
-              style={{
-                background:
-                  "linear-gradient(135deg, #3B82F630, transparent 50%)",
-              }}
-            >
-              <div className="relative overflow-hidden rounded-2xl bg-[#08080d] p-8 md:p-10">
-                {/* Top accent */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#3B82F6] via-[#3B82F6]/30 to-transparent" />
-                <div className="mb-5 inline-flex rounded-xl bg-[#3B82F6]/12 p-3">
-                  <Zap className="h-6 w-6 text-[#3B82F6]" />
+            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#a78bfa]/[0.08] via-transparent to-transparent p-8 transition-all duration-300 hover:border-[#a78bfa]/20 md:col-span-2 md:p-10">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-[#a78bfa]/40 via-[#a78bfa]/10 to-transparent" />
+              <div className="mb-5 inline-flex rounded-xl bg-[#a78bfa]/15 p-3 ring-1 ring-[#a78bfa]/20">
+                <Zap className="h-6 w-6 text-[#a78bfa]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white">
+                Instant settlement
+              </h3>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-white/45">
+                Funds arrive in your wallet the moment a customer pays. No
+                holds, no processing delays. No 2-7 day bank settlement windows.
+              </p>
+              <div className="mt-6 flex items-center gap-3">
+                <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400 ring-1 ring-emerald-500/20">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+                  &lt; 1 second
                 </div>
-                <h3 className="text-xl font-semibold text-white">
-                  Instant settlement
-                </h3>
-                <p className="mt-3 max-w-md text-sm leading-relaxed text-white/45">
-                  Funds arrive in your wallet the moment a customer pays. No
-                  holds, no processing delays. No 2-7 day bank settlement
-                  windows.
-                </p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400 ring-1 ring-emerald-500/20">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-                    &lt; 1 second
-                  </div>
-                  <span className="text-xs text-white/20">on Solana</span>
-                </div>
+                <span className="text-xs text-white/20">on Solana</span>
               </div>
             </div>
           </Reveal>
 
           {/* Hero card 2 — Non-custodial */}
           <Reveal delay={0.12}>
-            <div
-              className="group relative overflow-hidden rounded-2xl p-px transition-all duration-500"
-              style={{
-                background:
-                  "linear-gradient(135deg, #3B82F630, transparent 50%)",
-              }}
-            >
-              <div className="relative overflow-hidden rounded-2xl bg-[#08080d] p-8 md:p-10">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#3B82F6] via-[#3B82F6]/30 to-transparent" />
-                <div className="mb-5 inline-flex rounded-xl bg-[#3B82F6]/12 p-3">
-                  <Shield className="h-6 w-6 text-[#3B82F6]" />
-                </div>
-                <h3 className="text-xl font-semibold text-white">
-                  Non-custodial
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/45">
-                  We never hold your money. Payments go directly to your wallet
-                  via on-chain smart contracts.
-                </p>
-                <div className="mt-6 flex items-center gap-2 text-xs text-white/25">
-                  <Lock className="h-3.5 w-3.5" />
-                  Your keys, your funds
-                </div>
+            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#38bdf8]/[0.08] via-transparent to-transparent p-8 transition-all duration-300 hover:border-[#38bdf8]/20 md:p-10">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-[#38bdf8]/40 via-[#38bdf8]/10 to-transparent" />
+              <div className="mb-5 inline-flex rounded-xl bg-[#38bdf8]/15 p-3 ring-1 ring-[#38bdf8]/20">
+                <Shield className="h-6 w-6 text-[#38bdf8]" />
+              </div>
+              <h3 className="text-xl font-semibold text-white">
+                Non-custodial
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-white/45">
+                We never hold your money. Payments go directly to your wallet
+                via on-chain smart contracts.
+              </p>
+              <div className="mt-6 flex items-center gap-2 text-xs text-white/25">
+                <Lock className="h-3.5 w-3.5" />
+                Your keys, your funds
               </div>
             </div>
           </Reveal>
@@ -1560,13 +1534,13 @@ export default function LandingPage() {
             {
               icon: Lock,
               title: "Privacy-first",
-              text: "Encrypted receipts and private transaction data. Your revenue is nobody's business.",
+              text: "Encrypted receipts and private transaction data. Your revenue is nobody\u2019s business.",
               accent: "#c084fc",
             },
             {
               icon: RefreshCw,
               title: "Subscriptions",
-              text: "Recurring billing with automatic renewal, trials, and dunning — all in stablecoins.",
+              text: "Recurring billing with automatic renewal, trials, and dunning \u2014 all in stablecoins.",
               accent: "#34d399",
             },
             {
@@ -1577,15 +1551,16 @@ export default function LandingPage() {
             },
           ].map((f, i) => (
             <Reveal key={f.title} delay={0.18 + i * 0.06}>
-              <div className="group relative overflow-hidden rounded-2xl bg-[#08080d] p-7 transition-all duration-300 hover:bg-[#0c0c14]">
-                {/* Always-visible left accent */}
+              <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.04]">
                 <div
-                  className="absolute left-0 top-4 bottom-4 w-[2px] rounded-full"
-                  style={{ background: f.accent }}
+                  className="absolute left-0 top-0 bottom-0 w-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    background: `linear-gradient(to bottom, ${f.accent}, transparent)`,
+                  }}
                 />
                 <div
                   className="mb-4 inline-flex rounded-xl p-2.5"
-                  style={{ background: `${f.accent}12` }}
+                  style={{ background: `${f.accent}15` }}
                 >
                   <f.icon className="h-5 w-5" style={{ color: f.accent }} />
                 </div>
@@ -1602,8 +1577,8 @@ export default function LandingPage() {
 
         {/* Full-width Developer card */}
         <Reveal delay={0.36}>
-          <div className="mt-4 group relative overflow-hidden rounded-2xl bg-[#08080d] p-8 transition-all duration-300 hover:bg-[#0c0c14] md:p-10">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-white/20 via-white/5 to-transparent" />
+          <div className="mt-4 group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-r from-white/[0.03] to-transparent p-8 transition-all duration-300 hover:border-white/[0.12] md:p-10">
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent" />
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
                 <div className="mb-4 inline-flex rounded-xl bg-white/[0.06] p-3 ring-1 ring-white/[0.08]">
@@ -1618,7 +1593,7 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="shrink-0 rounded-xl bg-[#0c0c10] px-6 py-4 font-mono text-sm text-white/50 ring-1 ring-white/[0.06]">
-                <span className="text-[#3B82F6]">npm</span> install @settlr/sdk
+                <span className="text-[#a78bfa]">npm</span> install @settlr/sdk
               </div>
             </div>
           </div>
@@ -1631,7 +1606,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
               How it works
             </p>
           </Reveal>
@@ -1643,7 +1618,7 @@ export default function LandingPage() {
 
           <div className="relative mt-16">
             {/* Connecting gradient line (desktop) */}
-            <div className="absolute top-[26px] left-[16.67%] right-[16.67%] hidden h-px bg-gradient-to-r from-[#3B82F6]/40 via-[#3B82F6]/30 to-[#34d399]/40 md:block" />
+            <div className="absolute top-[26px] left-[16.67%] right-[16.67%] hidden h-px bg-gradient-to-r from-[#a78bfa]/40 via-[#38bdf8]/30 to-[#34d399]/40 md:block" />
 
             <div className="grid gap-8 md:grid-cols-3 md:gap-6">
               {[
@@ -1652,20 +1627,20 @@ export default function LandingPage() {
                   title: "Install the SDK",
                   text: "Add @settlr/sdk to your project and configure your merchant wallet address.",
                   code: "npm install @settlr/sdk",
-                  color: "#3B82F6",
+                  color: "#a78bfa",
                 },
                 {
                   step: "02",
                   title: "Drop in checkout",
                   text: "Use our React components or REST API to create payment sessions and subscription plans.",
                   code: "<SettlrCheckout amount={49.99} />",
-                  color: "#3B82F6",
+                  color: "#38bdf8",
                 },
                 {
                   step: "03",
                   title: "Get paid instantly",
                   text: "Customers pay with USDC. Funds settle to your wallet in under one second.",
-                  code: "// Funds in your wallet ✓",
+                  code: "// Funds in your wallet \u2713",
                   color: "#34d399",
                 },
               ].map((s, i) => (
@@ -1673,22 +1648,22 @@ export default function LandingPage() {
                   <div className="flex flex-col items-center text-center">
                     {/* Step badge */}
                     <div
-                      className="relative z-10 mb-8 flex h-12 w-12 items-center justify-center rounded-full text-sm font-bold text-white"
+                      className="relative z-10 mb-8 flex h-[52px] w-[52px] items-center justify-center rounded-2xl text-lg font-bold"
                       style={{
-                        background: s.color,
-                        boxShadow: `0 0 30px ${s.color}40`,
+                        background: `linear-gradient(135deg, ${s.color}20, ${s.color}08)`,
+                        border: `1px solid ${s.color}30`,
+                        color: s.color,
                       }}
                     >
                       {s.step}
+                      <div
+                        className="absolute inset-0 -z-10 rounded-2xl blur-xl"
+                        style={{ background: `${s.color}15` }}
+                      />
                     </div>
 
                     {/* Card */}
-                    <div className="group relative w-full overflow-hidden rounded-2xl bg-[#08080d] p-7 transition-all duration-300 hover:bg-[#0c0c14]">
-                      {/* Left accent stripe */}
-                      <div
-                        className="absolute left-0 top-4 bottom-4 w-[2px] rounded-full"
-                        style={{ background: s.color }}
-                      />
+                    <div className="w-full overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 transition-all duration-300 hover:border-white/[0.1] hover:bg-white/[0.04]">
                       <h3 className="text-lg font-semibold text-white">
                         {s.title}
                       </h3>
@@ -1700,6 +1675,7 @@ export default function LandingPage() {
                         style={{
                           background: `${s.color}08`,
                           color: `${s.color}99`,
+                          border: `1px solid ${s.color}15`,
                         }}
                       >
                         {s.code}
@@ -1720,7 +1696,7 @@ export default function LandingPage() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <Reveal>
-              <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+              <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
                 Developer experience
               </p>
             </Reveal>
@@ -1747,7 +1723,7 @@ export default function LandingPage() {
                   "Gasless \u2014 you cover gas, customers pay nothing extra",
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
-                    <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#3B82F6]" />
+                    <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#a78bfa]" />
                     <span className="text-sm text-white/50">{item}</span>
                   </div>
                 ))}
@@ -1756,7 +1732,7 @@ export default function LandingPage() {
             <Reveal delay={0.2}>
               <Link
                 href="/docs"
-                className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-[#3B82F6] transition-colors hover:text-[#c4b5fd]"
+                className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-[#a78bfa] transition-colors hover:text-[#c4b5fd]"
               >
                 Read the docs
                 <ChevronRight className="h-4 w-4" />
@@ -1842,7 +1818,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
               Comparison
             </p>
           </Reveal>
@@ -1853,7 +1829,7 @@ export default function LandingPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="mt-12 overflow-hidden rounded-2xl bg-[#08080d]">
+            <div className="mt-12 overflow-hidden rounded-2xl border border-white/[0.06]">
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-white/[0.06] bg-white/[0.02]">
@@ -1861,8 +1837,8 @@ export default function LandingPage() {
                     <th className="px-6 py-4 font-medium text-white/40">
                       Traditional
                     </th>
-                    <th className="relative px-6 py-4 font-semibold text-[#3B82F6]">
-                      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#3B82F6]/40 to-transparent" />
+                    <th className="relative px-6 py-4 font-semibold text-[#a78bfa]">
+                      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#a78bfa]/40 to-transparent" />
                       Settlr
                     </th>
                   </tr>
@@ -1903,7 +1879,7 @@ export default function LandingPage() {
          ═══════════════════════════════════════ */}
       <section className="mx-auto max-w-3xl px-6 py-28">
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+          <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
             Savings
           </p>
         </Reveal>
@@ -1930,7 +1906,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
               Built for
             </p>
           </Reveal>
@@ -1946,13 +1922,13 @@ export default function LandingPage() {
                 icon: CreditCard,
                 title: "AI & SaaS",
                 text: "Usage-based and subscription billing with instant settlement. No account holds or reserve requirements.",
-                color: "#3B82F6",
+                color: "#a78bfa",
               },
               {
                 icon: RefreshCw,
                 title: "Recurring billing",
                 text: "Stablecoin subscriptions with automatic renewals, trial periods, and smart retry logic.",
-                color: "#3B82F6",
+                color: "#38bdf8",
               },
               {
                 icon: Globe,
@@ -1962,40 +1938,35 @@ export default function LandingPage() {
               },
             ].map((c, i) => (
               <Reveal key={c.title} delay={i * 0.08}>
-                <div
-                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl p-px transition-all duration-500"
-                  style={{
-                    background: `linear-gradient(to bottom, ${c.color}20, transparent 40%)`,
-                  }}
-                >
-                  <div className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-[#08080d] p-8">
-                    {/* Top accent bar */}
-                    <div
-                      className="absolute top-0 left-0 right-0 h-[2px]"
-                      style={{
-                        background: `linear-gradient(90deg, ${c.color}, transparent)`,
-                      }}
-                    />
-                    <div
-                      className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl"
-                      style={{ background: `${c.color}12` }}
-                    >
-                      <c.icon className="h-5 w-5" style={{ color: c.color }} />
-                    </div>
-                    <h3 className="text-lg font-semibold text-white">
-                      {c.title}
-                    </h3>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-white/40">
-                      {c.text}
-                    </p>
-                    <Link
-                      href="/onboarding"
-                      className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:brightness-125"
-                      style={{ color: c.color }}
-                    >
-                      Get started <ChevronRight className="h-3.5 w-3.5" />
-                    </Link>
+                <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-[#050507] p-8 transition-all duration-300 hover:border-white/[0.12]">
+                  <div
+                    className="absolute top-0 left-0 right-0 h-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    style={{
+                      background: `linear-gradient(90deg, transparent, ${c.color}, transparent)`,
+                    }}
+                  />
+                  <div
+                    className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl border"
+                    style={{
+                      background: `${c.color}12`,
+                      borderColor: `${c.color}25`,
+                    }}
+                  >
+                    <c.icon className="h-5 w-5" style={{ color: c.color }} />
                   </div>
+                  <h3 className="text-lg font-semibold text-white">
+                    {c.title}
+                  </h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-white/40">
+                    {c.text}
+                  </p>
+                  <Link
+                    href="/onboarding"
+                    className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:brightness-125"
+                    style={{ color: c.color }}
+                  >
+                    Get started <ChevronRight className="h-3.5 w-3.5" />
+                  </Link>
                 </div>
               </Reveal>
             ))}
@@ -2007,10 +1978,10 @@ export default function LandingPage() {
           SECURITY & TRUST
          ═══════════════════════════════════════ */}
       <section className="relative isolate mx-auto max-w-5xl px-6 py-28">
-        <div className="absolute left-0 top-1/2 -z-10 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-[#3B82F6]/[0.03] blur-[120px]" />
+        <div className="absolute left-0 top-1/2 -z-10 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-[#a78bfa]/[0.03] blur-[120px]" />
 
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+          <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
             Security
           </p>
         </Reveal>
@@ -2031,13 +2002,13 @@ export default function LandingPage() {
               icon: Shield,
               title: "Non-custodial",
               text: "We never touch your funds. Payments flow directly from customer to your wallet via smart contracts.",
-              color: "#3B82F6",
+              color: "#a78bfa",
             },
             {
               icon: Lock,
               title: "Encrypted receipts",
               text: "FHE-encrypted transaction data via Inco Lightning. Only you and your customer can see amounts.",
-              color: "#3B82F6",
+              color: "#38bdf8",
             },
             {
               icon: Globe,
@@ -2053,15 +2024,19 @@ export default function LandingPage() {
             },
           ].map((f, i) => (
             <Reveal key={f.title} delay={i * 0.06}>
-              <div className="group relative overflow-hidden rounded-2xl bg-[#08080d] p-6 transition-all duration-300 hover:bg-[#0c0c14]">
-                {/* Left accent stripe */}
+              <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.04]">
                 <div
-                  className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full"
-                  style={{ background: f.color }}
+                  className="absolute left-0 top-0 bottom-0 w-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    background: `linear-gradient(to bottom, ${f.color}, transparent)`,
+                  }}
                 />
                 <div
-                  className="mb-4 inline-flex rounded-xl p-2.5"
-                  style={{ background: `${f.color}12` }}
+                  className="mb-4 inline-flex rounded-xl border p-2.5"
+                  style={{
+                    background: `${f.color}15`,
+                    borderColor: `${f.color}25`,
+                  }}
                 >
                   <f.icon className="h-5 w-5" style={{ color: f.color }} />
                 </div>
@@ -2083,7 +2058,7 @@ export default function LandingPage() {
       <section className="border-y border-white/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-3xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
               FAQ
             </p>
           </Reveal>
@@ -2148,16 +2123,18 @@ export default function LandingPage() {
           FINAL CTA
          ═══════════════════════════════════════ */}
       <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#3B82F6]/[0.08] via-[#3B82F6]/[0.02] to-transparent" />
-        <div className="absolute left-1/2 bottom-0 -z-10 h-[500px] w-[600px] -translate-x-1/2 rounded-full bg-[#3B82F6]/[0.06] blur-[150px]" />
-        <div className="absolute left-1/3 top-1/3 -z-10 h-[300px] w-[300px] rounded-full bg-[#3B82F6]/[0.04] blur-[100px]" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#a78bfa]/[0.08] via-[#a78bfa]/[0.02] to-transparent" />
+        <div className="absolute left-1/2 bottom-0 -z-10 h-[500px] w-[600px] -translate-x-1/2 rounded-full bg-[#a78bfa]/[0.06] blur-[150px]" />
+        <div className="absolute left-1/3 top-1/3 -z-10 h-[300px] w-[300px] rounded-full bg-[#38bdf8]/[0.04] blur-[100px]" />
 
         <div className="mx-auto max-w-3xl px-6 py-32 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
               Start accepting payments
               <br />
-              <span className="text-[#3B82F6]">in minutes</span>
+              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
+                in minutes
+              </span>
             </h2>
           </Reveal>
           <Reveal delay={0.05}>

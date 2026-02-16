@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fredoka } from "next/font/google";
+import { Geist, Geist_Mono, Fredoka, Inter } from "next/font/google";
 import Script from "next/script";
 import ClientLayout from "@/components/ClientLayout";
 import "./globals.css";
@@ -20,6 +20,12 @@ const fredoka = Fredoka({
   variable: "--font-fredoka",
   subsets: ["latin"],
   weight: ["700"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
   display: "swap",
 });
 
@@ -159,7 +165,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} ${inter.variable} antialiased`}
         style={{ background: "#050507" }}
       >
         <ClientLayout>{children}</ClientLayout>
