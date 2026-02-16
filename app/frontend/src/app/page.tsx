@@ -59,7 +59,7 @@ function SavingsCalculator() {
     });
 
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 md:p-10">
+    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 backdrop-blur-xl shadow-xl shadow-black/20 md:p-10">
       <div className="mb-8">
         <label className="mb-3 block text-sm font-medium text-white/50">
           Monthly volume
@@ -138,6 +138,18 @@ export default function LandingPage() {
           HERO — split layout: copy left, visual right
          ═══════════════════════════════════════ */}
       <section className="relative isolate overflow-hidden pt-28 pb-20 md:pt-40 md:pb-28">
+        {/* Glass wave background image */}
+        <div
+          className="absolute inset-0 -z-20"
+          style={{
+            backgroundImage: "url('/glass-wave-hero.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center top",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#050507]/40 via-[#050507]/60 to-[#050507]" />
         {/* Subtle ambient glow */}
         <div className="absolute -top-40 left-[10%] h-[600px] w-[600px] rounded-full bg-[#a78bfa]/[0.07] blur-[128px]" />
         <div className="absolute top-[20%] right-[5%] h-[500px] w-[500px] rounded-full bg-[#38bdf8]/[0.05] blur-[128px]" />
@@ -147,7 +159,7 @@ export default function LandingPage() {
             {/* ─── Left: Copy ─── */}
             <div>
               <Reveal>
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-1.5 text-[13px] text-white/60">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.10] bg-white/[0.06] px-4 py-1.5 text-[13px] text-white/60 backdrop-blur-xl shadow-lg shadow-black/10">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#a78bfa]" />
                   Built for AI &amp; SaaS teams blocked by Stripe
                 </div>
@@ -174,7 +186,7 @@ export default function LandingPage() {
                 <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Link
                     href="/onboarding"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 text-[15px] font-semibold text-[#050507] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 text-[15px] font-semibold text-[#050507] shadow-lg shadow-white/10 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
                   >
                     Get started
                     <ArrowRight className="h-4 w-4" />
@@ -738,8 +750,8 @@ export default function LandingPage() {
                     style={{ transform: "rotateY(-6deg) rotateX(3deg)" }}
                   >
                     {/* Gradient border wrapper */}
-                    <div className="rounded-2xl bg-gradient-to-b from-white/[0.12] to-white/[0.03] p-px">
-                      <div className="overflow-hidden rounded-2xl bg-[#0a0a0f]/90 shadow-2xl shadow-black/50 backdrop-blur-xl">
+                    <div className="rounded-2xl bg-gradient-to-b from-white/[0.18] to-white/[0.04] p-px shadow-2xl shadow-[#a78bfa]/10">
+                      <div className="overflow-hidden rounded-2xl bg-[#0a0a0f]/80 shadow-2xl shadow-black/50 backdrop-blur-2xl">
                         {/* Top accent gradient */}
                         <div className="h-px bg-gradient-to-r from-transparent via-[#a78bfa]/50 to-transparent" />
                         {/* Window chrome */}
@@ -839,8 +851,8 @@ export default function LandingPage() {
                     className="absolute -left-6 top-12 z-20 w-[210px] md:-left-10"
                     style={{ transform: "rotateY(8deg) rotateX(2deg)" }}
                   >
-                    <div className="rounded-xl bg-gradient-to-b from-[#38bdf8]/[0.15] to-white/[0.03] p-px">
-                      <div className="overflow-hidden rounded-xl bg-[#0a0a0f]/85 shadow-xl shadow-black/30 backdrop-blur-xl">
+                    <div className="rounded-xl bg-gradient-to-b from-[#38bdf8]/[0.20] to-white/[0.04] p-px shadow-xl shadow-[#38bdf8]/10">
+                      <div className="overflow-hidden rounded-xl bg-[#0a0a0f]/75 shadow-xl shadow-black/30 backdrop-blur-2xl">
                         <div className="h-px bg-gradient-to-r from-transparent via-[#38bdf8]/40 to-transparent" />
                         <div className="p-4">
                           <div className="mb-3 flex items-center gap-2">
@@ -944,8 +956,8 @@ export default function LandingPage() {
                     className="absolute -right-4 top-6 z-10 w-[200px] md:-right-8"
                     style={{ transform: "rotateY(-10deg) rotateX(3deg)" }}
                   >
-                    <div className="rounded-xl bg-gradient-to-b from-emerald-400/[0.15] to-white/[0.03] p-px">
-                      <div className="overflow-hidden rounded-xl bg-[#0a0a0f]/85 shadow-xl shadow-black/30 backdrop-blur-xl">
+                    <div className="rounded-xl bg-gradient-to-b from-emerald-400/[0.20] to-white/[0.04] p-px shadow-xl shadow-emerald-500/10">
+                      <div className="overflow-hidden rounded-xl bg-[#0a0a0f]/75 shadow-xl shadow-black/30 backdrop-blur-2xl">
                         <div className="h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
                         <div className="p-4">
                           <div className="mb-3 flex items-center gap-2">
@@ -1035,8 +1047,8 @@ export default function LandingPage() {
                     }}
                     className="absolute -bottom-6 left-1/2 z-40 -translate-x-1/2"
                   >
-                    <div className="rounded-full bg-gradient-to-r from-white/[0.08] to-white/[0.04] p-px">
-                      <div className="flex items-center gap-3 rounded-full bg-[#0a0a0f]/90 px-5 py-2.5 shadow-xl shadow-black/40 backdrop-blur-xl">
+                    <div className="rounded-full bg-gradient-to-r from-white/[0.12] to-white/[0.05] p-px">
+                      <div className="flex items-center gap-3 rounded-full bg-[#0a0a0f]/75 px-5 py-2.5 shadow-xl shadow-black/40 backdrop-blur-2xl">
                         {[
                           { img: "/usdc.png", name: "USDC", color: "#2775CA" },
                           { img: "/usdt.png", name: "USDT", color: "#26A17B" },
@@ -1168,7 +1180,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════
           VALUE PROPS — Helio-style quick hits
          ═══════════════════════════════════════ */}
-      <section className="border-y border-white/[0.04] bg-gradient-to-b from-white/[0.015] to-transparent">
+      <section className="relative border-y border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent backdrop-blur-sm">
         <div className="mx-auto grid max-w-5xl grid-cols-2 md:grid-cols-4">
           {[
             {
@@ -1233,7 +1245,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════
           TRUSTED BY — Partner logo bar
          ═══════════════════════════════════════ */}
-      <section className="border-b border-white/[0.04] bg-white/[0.01]">
+      <section className="border-b border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-5xl px-6 py-12">
           <p className="mb-8 text-center text-xs font-medium uppercase tracking-widest text-white/25">
             Built on &amp; integrated with
@@ -1350,17 +1362,17 @@ export default function LandingPage() {
             },
           ].map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08}>
-              <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 text-center transition-all duration-500 hover:border-white/[0.14] hover:bg-white/[0.04]">
+              <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 text-center backdrop-blur-xl transition-all duration-500 hover:border-white/[0.16] hover:bg-white/[0.06] hover:shadow-lg hover:shadow-black/20">
                 {/* Gradient glow on hover */}
                 <div
                   className="absolute inset-0 -z-10 opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
                   style={{
-                    background: `radial-gradient(circle at 50% 0%, ${s.color}15 0%, transparent 70%)`,
+                    background: `radial-gradient(circle at 50% 0%, ${s.color}20 0%, transparent 70%)`,
                   }}
                 />
                 {/* Top accent line */}
                 <div
-                  className="absolute top-0 left-[15%] right-[15%] h-px opacity-50"
+                  className="absolute top-0 left-[10%] right-[10%] h-px opacity-60"
                   style={{
                     background: `linear-gradient(90deg, transparent, ${s.color}, transparent)`,
                   }}
@@ -1386,7 +1398,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════
           SUPPORTED STABLECOINS
          ═══════════════════════════════════════ */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <Reveal>
             <p className="text-center text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
@@ -1423,7 +1435,7 @@ export default function LandingPage() {
               },
             ].map((coin, i) => (
               <Reveal key={coin.name} delay={i * 0.08}>
-                <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 text-center transition-all duration-500 hover:border-white/[0.14] hover:bg-white/[0.04]">
+                <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 text-center backdrop-blur-xl transition-all duration-500 hover:border-white/[0.18] hover:bg-white/[0.06] hover:shadow-lg hover:shadow-black/20">
                   {/* Coin-colored glow */}
                   <div
                     className="absolute left-1/2 top-0 -z-10 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
@@ -1486,7 +1498,7 @@ export default function LandingPage() {
         <div className="mt-16 grid gap-4 md:grid-cols-3">
           {/* Hero card 1 — Instant Settlement (spans 2 cols) */}
           <Reveal delay={0.06}>
-            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#a78bfa]/[0.08] via-transparent to-transparent p-8 transition-all duration-300 hover:border-[#a78bfa]/20 md:col-span-2 md:p-10">
+            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#a78bfa]/[0.10] via-white/[0.02] to-transparent p-8 backdrop-blur-xl transition-all duration-300 hover:border-[#a78bfa]/25 hover:shadow-lg hover:shadow-[#a78bfa]/5 md:col-span-2 md:p-10">
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-[#a78bfa]/40 via-[#a78bfa]/10 to-transparent" />
               <div className="mb-5 inline-flex rounded-xl bg-[#a78bfa]/15 p-3 ring-1 ring-[#a78bfa]/20">
                 <Zap className="h-6 w-6 text-[#a78bfa]" />
@@ -1510,7 +1522,7 @@ export default function LandingPage() {
 
           {/* Hero card 2 — Non-custodial */}
           <Reveal delay={0.12}>
-            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#38bdf8]/[0.08] via-transparent to-transparent p-8 transition-all duration-300 hover:border-[#38bdf8]/20 md:p-10">
+            <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#38bdf8]/[0.10] via-white/[0.02] to-transparent p-8 backdrop-blur-xl transition-all duration-300 hover:border-[#38bdf8]/25 hover:shadow-lg hover:shadow-[#38bdf8]/5 md:p-10">
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-[#38bdf8]/40 via-[#38bdf8]/10 to-transparent" />
               <div className="mb-5 inline-flex rounded-xl bg-[#38bdf8]/15 p-3 ring-1 ring-[#38bdf8]/20">
                 <Shield className="h-6 w-6 text-[#38bdf8]" />
@@ -1551,7 +1563,7 @@ export default function LandingPage() {
             },
           ].map((f, i) => (
             <Reveal key={f.title} delay={0.18 + i * 0.06}>
-              <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.04]">
+              <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.14] hover:bg-white/[0.06] hover:shadow-lg hover:shadow-black/20">
                 <div
                   className="absolute left-0 top-0 bottom-0 w-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   style={{
@@ -1559,8 +1571,8 @@ export default function LandingPage() {
                   }}
                 />
                 <div
-                  className="mb-4 inline-flex rounded-xl p-2.5"
-                  style={{ background: `${f.accent}15` }}
+                  className="mb-4 inline-flex rounded-xl p-2.5 ring-1"
+                  style={{ background: `${f.accent}15`, ringColor: `${f.accent}25` }}
                 >
                   <f.icon className="h-5 w-5" style={{ color: f.accent }} />
                 </div>
@@ -1577,7 +1589,7 @@ export default function LandingPage() {
 
         {/* Full-width Developer card */}
         <Reveal delay={0.36}>
-          <div className="mt-4 group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-r from-white/[0.03] to-transparent p-8 transition-all duration-300 hover:border-white/[0.12] md:p-10">
+          <div className="mt-4 group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-r from-white/[0.04] to-white/[0.01] p-8 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.14] hover:shadow-lg hover:shadow-black/20 md:p-10">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent" />
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
@@ -1603,7 +1615,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════
           HOW IT WORKS
          ═══════════════════════════════════════ */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
@@ -1663,7 +1675,7 @@ export default function LandingPage() {
                     </div>
 
                     {/* Card */}
-                    <div className="w-full overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 transition-all duration-300 hover:border-white/[0.1] hover:bg-white/[0.04]">
+                    <div className="w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.14] hover:bg-white/[0.06] hover:shadow-lg hover:shadow-black/20">
                       <h3 className="text-lg font-semibold text-white">
                         {s.title}
                       </h3>
@@ -1742,7 +1754,7 @@ export default function LandingPage() {
 
           {/* Code block */}
           <Reveal delay={0.1}>
-            <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0c0c10]">
+            <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c10]/90 backdrop-blur-xl shadow-2xl shadow-black/30">
               {/* Tab bar */}
               <div className="flex items-center gap-3 border-b border-white/[0.06] px-5 py-3">
                 <div className="flex gap-1.5">
@@ -1815,7 +1827,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════
           COMPARISON
          ═══════════════════════════════════════ */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
@@ -1829,7 +1841,7 @@ export default function LandingPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="mt-12 overflow-hidden rounded-2xl border border-white/[0.06]">
+            <div className="mt-12 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.01] backdrop-blur-xl shadow-xl shadow-black/20">
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-white/[0.06] bg-white/[0.02]">
@@ -1903,7 +1915,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════
           USE CASES
          ═══════════════════════════════════════ */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
@@ -1938,7 +1950,7 @@ export default function LandingPage() {
               },
             ].map((c, i) => (
               <Reveal key={c.title} delay={i * 0.08}>
-                <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-[#050507] p-8 transition-all duration-300 hover:border-white/[0.12]">
+                <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#050507]/80 p-8 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.16] hover:bg-white/[0.03] hover:shadow-lg hover:shadow-black/20">
                   <div
                     className="absolute top-0 left-0 right-0 h-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                     style={{
@@ -2024,7 +2036,7 @@ export default function LandingPage() {
             },
           ].map((f, i) => (
             <Reveal key={f.title} delay={i * 0.06}>
-              <div className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.04]">
+              <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.16] hover:bg-white/[0.06] hover:shadow-lg hover:shadow-black/20">
                 <div
                   className="absolute left-0 top-0 bottom-0 w-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   style={{
@@ -2055,7 +2067,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════
           FAQ
          ═══════════════════════════════════════ */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-white/[0.06] bg-white/[0.015]">
         <div className="mx-auto max-w-3xl px-6 py-28">
           <Reveal>
             <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
@@ -2123,9 +2135,20 @@ export default function LandingPage() {
           FINAL CTA
          ═══════════════════════════════════════ */}
       <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#a78bfa]/[0.08] via-[#a78bfa]/[0.02] to-transparent" />
-        <div className="absolute left-1/2 bottom-0 -z-10 h-[500px] w-[600px] -translate-x-1/2 rounded-full bg-[#a78bfa]/[0.06] blur-[150px]" />
-        <div className="absolute left-1/3 top-1/3 -z-10 h-[300px] w-[300px] rounded-full bg-[#38bdf8]/[0.04] blur-[100px]" />
+        {/* Glass wave background for CTA */}
+        <div
+          className="absolute inset-0 -z-20"
+          style={{
+            backgroundImage: "url('/glass-wave-hero.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center bottom",
+            backgroundRepeat: "no-repeat",
+            transform: "rotate(180deg)",
+          }}
+        />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#050507]/50 via-[#050507]/70 to-[#050507]" />
+        <div className="absolute left-1/2 bottom-0 -z-10 h-[500px] w-[600px] -translate-x-1/2 rounded-full bg-[#a78bfa]/[0.08] blur-[150px]" />
+        <div className="absolute left-1/3 top-1/3 -z-10 h-[300px] w-[300px] rounded-full bg-[#38bdf8]/[0.06] blur-[100px]" />
 
         <div className="mx-auto max-w-3xl px-6 py-32 text-center">
           <Reveal>
@@ -2146,9 +2169,9 @@ export default function LandingPage() {
           <Reveal delay={0.1}>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
-                href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-[15px] font-semibold text-[#050507] transition-transform hover:scale-[1.02] active:scale-[0.98]"
-              >
+                    href="/onboarding"
+                    className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-[15px] font-semibold text-[#050507] shadow-lg shadow-white/10 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
+                  >
                 Get started free
                 <ArrowRight className="h-4 w-4" />
               </Link>

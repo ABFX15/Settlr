@@ -42,7 +42,7 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.06] bg-[#050507]">
+    <footer className="border-t border-white/[0.08] bg-[#050507]/90 backdrop-blur-xl">
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand Column */}
