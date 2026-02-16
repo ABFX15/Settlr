@@ -126,6 +126,137 @@ export default function LandingPage() {
       className="relative min-h-screen bg-[#050507] text-white antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
+      {/* ── JSON-LD Structured Data ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                name: "Settlr",
+                url: "https://settlr.dev",
+                logo: "https://settlr.dev/og-image.png",
+                sameAs: [
+                  "https://x.com/SettlrPay",
+                  "https://github.com/ABFX15/x402-hack-payment",
+                ],
+                description:
+                  "Non-custodial crypto payment infrastructure for AI and SaaS companies. Accept USDC with no wallets, zero gas fees, and instant settlement on Solana.",
+              },
+              {
+                "@type": "SoftwareApplication",
+                name: "Settlr",
+                applicationCategory: "FinanceApplication",
+                operatingSystem: "Web",
+                url: "https://settlr.dev",
+                offers: {
+                  "@type": "Offer",
+                  price: "0",
+                  priceCurrency: "USD",
+                  description:
+                    "1% flat fee per transaction. No setup fees, no monthly fees.",
+                },
+                description:
+                  "Crypto payment gateway SDK for developers. Accept USDC, USDT, and stablecoin payments with one React component. Non-custodial, gasless, instant settlement.",
+                featureList: [
+                  "Non-custodial payments",
+                  "Zero gas fees",
+                  "Instant settlement under 1 second",
+                  "Email-based embedded wallets",
+                  "Recurring billing and subscriptions",
+                  "Multi-chain support via Solana",
+                  "TypeScript SDK and React components",
+                  "1% flat transaction fee",
+                ],
+              },
+              {
+                "@type": "WebSite",
+                url: "https://settlr.dev",
+                name: "Settlr",
+                description:
+                  "Accept crypto payments without wallets. USDC payment gateway for AI and SaaS.",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: "https://settlr.dev/docs?q={search_term_string}",
+                  "query-input": "required name=search_term_string",
+                },
+              },
+              {
+                "@type": "FAQPage",
+                mainEntity: [
+                  {
+                    "@type": "Question",
+                    name: "What stablecoins does Settlr support?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Settlr currently supports USDC, USDT, and USDG on Solana. Cross-chain support for Ethereum, Base, Arbitrum, Polygon, and Optimism is available via Mayan Protocol — funds are automatically bridged to your Solana wallet.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Do my customers need a crypto wallet to pay?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "No. Settlr integrates Privy for embedded wallets — customers can sign up with just their email or social login. No crypto experience required. They can also use existing wallets like Phantom or Solflare.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Who pays the gas fees on Settlr?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Nobody. All transactions are gasless via Kora (backed by the Solana Foundation). Your customers don't need SOL for gas, and neither do you.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "What are Settlr's fees?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "1% flat per transaction. No setup fees, no monthly fees, no hidden charges. Compare that to Stripe's 2.9% + 30¢ — on $10,000/month you'd save over $190.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "How fast does Settlr settle payments?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Instantly. Payments settle to your wallet in under one second on Solana. No holds, no processing delays, no 2-7 day bank settlement windows.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Is Settlr custodial?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "No. Settlr is fully non-custodial. Payments flow directly from the customer's wallet to yours via on-chain smart contracts. Settlr never has access to your funds.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Can I accept subscriptions with Settlr?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Yes. Settlr has built-in recurring billing with automatic renewal, trial periods, and smart retry logic — all in stablecoins. No extra tooling needed.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "How do I integrate Settlr?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Install the TypeScript SDK (npm install @settlr/sdk), drop in the React checkout component, and you're live. Most teams integrate in under 30 minutes.",
+                    },
+                  },
+                ],
+              },
+            ],
+          }),
+        }}
+      />
+
       {/* ── Global noise texture ── */}
       <div
         className="pointer-events-none fixed inset-0 z-0 opacity-[0.03]"

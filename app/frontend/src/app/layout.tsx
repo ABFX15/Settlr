@@ -31,11 +31,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Settlr | The Payment Stack for AI and SaaS",
-    template: "%s | Settlr",
+    default:
+      "Accept Crypto Payments Without Wallets | Settlr — USDC Payments on Solana",
+    template: "%s | Settlr — Crypto Payment Infrastructure",
   },
   description:
-    "The payment stack for global-first AI and SaaS companies. Accept USDC with no wallets, zero gas fees, and private payments. One React component. Built on Solana.",
+    "Accept USDC and stablecoin payments with no wallets, zero gas fees, and 1% flat pricing. Non-custodial crypto payment gateway for AI, SaaS, and global teams. Integrate in 30 minutes.",
   keywords: [
     "crypto payment processor",
     "crypto payment gateway",
@@ -82,9 +83,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://settlr.dev",
     siteName: "Settlr",
-    title: "Settlr | Accept Crypto Without Wallets",
+    title: "Accept Crypto Payments Without Wallets | Settlr",
     description:
-      "Customers pay with email. You get USDC instantly. Zero gas fees. Private payments. One React component.",
+      "Non-custodial USDC payment gateway. 1% flat fees, zero gas, instant settlement. Built for AI and SaaS teams on Solana.",
     images: [
       {
         url: "/og-image.png",
@@ -96,9 +97,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr | Accept Crypto Without Wallets",
+    title: "Accept Crypto Payments Without Wallets | Settlr",
     description:
-      "Customers pay with email. You get USDC instantly. Zero gas fees. Private payments.",
+      "Non-custodial USDC payment gateway. 1% flat fees, zero gas, instant settlement on Solana. Integrate in 30 minutes.",
     images: ["/og-image.png"],
     creator: "@SettlrPay",
   },

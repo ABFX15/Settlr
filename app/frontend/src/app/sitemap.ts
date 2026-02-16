@@ -12,7 +12,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 1,
         },
         {
-            url: `${baseUrl}/about`,
+            url: `${baseUrl}/pricing`,
+            lastModified,
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
+            url: `${baseUrl}/docs`,
+            lastModified,
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
+            url: `${baseUrl}/demo`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/onboarding`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.8,
@@ -24,28 +42,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7,
         },
         {
-            url: `${baseUrl}/waitlist`,
-            lastModified,
-            changeFrequency: 'weekly',
-            priority: 0.9,
-        },
-        {
-            url: `${baseUrl}/demo`,
+            url: `${baseUrl}/industries/ai-saas`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.7,
         },
         {
-            url: `${baseUrl}/docs`,
-            lastModified,
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/contact`,
+            url: `${baseUrl}/checkout`,
             lastModified,
             changeFrequency: 'monthly',
-            priority: 0.7,
+            priority: 0.6,
+        },
+        {
+            url: `${baseUrl}/offramp`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.6,
         },
     ]
+}
 }
