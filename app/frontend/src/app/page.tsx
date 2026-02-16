@@ -290,18 +290,30 @@ export default function LandingPage() {
 
               <Reveal delay={0.05}>
                 <h1 className="max-w-xl text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.08] tracking-tight text-[#0a0a12]">
-                  The payment stack for{" "}
+                  Accept crypto payments{" "}
                   <span className="text-[#3B82F6]">
-                    global-first AI and SaaS
+                    without wallets or gas fees
                   </span>
                 </h1>
               </Reveal>
 
               <Reveal delay={0.1}>
                 <p className="mt-6 max-w-md text-lg leading-relaxed text-[#4b5563]">
-                  Accept stablecoin subscriptions, invoices, and one-off
-                  payments. Instant settlement, no chargebacks, no bank
-                  dependencies.
+                  The non-custodial crypto payment gateway for AI and SaaS
+                  teams. 1% flat fees vs Stripe&apos;s 2.9%.{" "}
+                  <span className="font-medium text-[#374151]">
+                    Sub-second settlement on Solana
+                  </span>{" "}
+                  — the fastest L1 at{" "}
+                  <a
+                    href="https://solana.com/news/solana-network-upgrades-march-2024"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-[#3B82F6]/30 hover:decoration-[#3B82F6]"
+                  >
+                    65,000 TPS
+                  </a>
+                  . Trusted by teams in 180+ countries.
                 </p>
               </Reveal>
 
@@ -1328,7 +1340,7 @@ export default function LandingPage() {
             {
               icon: Globe,
               title: "More reach",
-              text: "Accept from 500M+ crypto holders worldwide",
+              text: "562M+ crypto owners worldwide (Triple-A, 2024)",
               color: "#34d399",
             },
             {
@@ -1468,20 +1480,25 @@ export default function LandingPage() {
             {
               value: "$2M+",
               label: "Volume processed",
-              sub: "and counting",
+              sub: "on-chain, verifiable",
               color: "#3B82F6",
             },
             {
-              value: "<1s",
-              label: "Settlement time",
-              sub: "on Solana",
+              value: "<400ms",
+              label: "Average settlement",
+              sub: "vs 2–7 days traditional (Federal Reserve, 2024)",
               color: "#3B82F6",
             },
-            { value: "0", label: "Chargebacks", sub: "ever", color: "#34d399" },
+            {
+              value: "0",
+              label: "Chargebacks",
+              sub: "stablecoin payments are final and irreversible",
+              color: "#34d399",
+            },
             {
               value: "180+",
               label: "Countries supported",
-              sub: "no restrictions",
+              sub: "562M+ crypto owners globally (Triple-A, 2024)",
               color: "#fbbf24",
             },
           ].map((s, i) => (
@@ -2024,6 +2041,19 @@ export default function LandingPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.15}>
+            <div className="mt-6 text-center">
+              <Link
+                href="/compare"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-[#3B82F6] transition-colors hover:text-[#60a5fa]"
+              >
+                See full comparison vs Stripe, Coinbase Commerce, NOWPayments
+                &amp; BitPay
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
           </Reveal>
         </div>
