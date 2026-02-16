@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Silence workspace root warning
+  // Point turbopack to monorepo root for module resolution
   turbopack: {
-    root: ".",
+    root: "../..",
   },
   // Image optimization
   images: {
