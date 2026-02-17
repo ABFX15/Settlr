@@ -23,27 +23,27 @@ import { useState } from "react";
 
 const demoCards = [
   {
-    title: "Creator Platform Store",
+    title: "Payout Demo Store",
     description:
-      "Full checkout experience with fan subscriptions, creator tiers, and instant USDC payment.",
+      "Full payout experience with worker tiers, batch payouts, and instant USDC settlement.",
     href: "/demo/store",
     icon: Play,
     color: "#3B82F6",
     cta: "Try Demo",
   },
   {
-    title: "Quick Checkout",
+    title: "Quick Payout",
     description:
-      "Skip straight to the checkout flow. See a $9.99 USDC fan subscription payment in action.",
-    href: "/checkout?amount=9.99&merchant=FanVault&to=DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV&memo=Creator%20Subscription",
+      "Skip straight to the payout flow. See a $50 USDC payout settle in under a second.",
+    href: "/checkout?amount=50.00&merchant=Settlr&to=DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV&memo=Worker%20Payout",
     icon: Zap,
     color: "#3B82F6",
-    cta: "Try Checkout",
+    cta: "Try Payout",
   },
   {
     title: "Create Payment Link",
     description:
-      "Generate a shareable payment link for tips, purchases, or creator payouts.",
+      "Generate a shareable payment link for payouts, invoices, or one-off transfers.",
     href: "/create",
     icon: LinkIcon,
     color: "#3B82F6",
@@ -52,7 +52,7 @@ const demoCards = [
   {
     title: "SDK Documentation",
     description:
-      "Integrate checkout and payouts into your creator platform with our SDK.",
+      "Integrate payouts into your platform with our TypeScript SDK and React components.",
     href: "/docs",
     icon: Code2,
     color: "#3B82F6",
@@ -113,8 +113,8 @@ export default function DemoPage() {
               transition={{ delay: 0.2 }}
               className="mx-auto mb-8 max-w-2xl text-lg text-white/50"
             >
-              See how fans subscribe and pay creators with USDC — no wallet
-              needed, no gas fees, no card network restrictions.
+              See how platforms pay workers and contractors with USDC — no
+              wallet needed, no gas fees, instant settlement.
             </motion.p>
 
             {/* Feature pills */}

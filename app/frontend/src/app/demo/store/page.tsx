@@ -141,8 +141,8 @@ export default function DemoStorePage() {
     router.push(
       `/checkout?amount=${total.toFixed(
         2,
-      )}&merchant=FanVault&to=${demoWallet}&memo=${encodeURIComponent(
-        `Creator Sub: ${itemNames}`,
+      )}&merchant=Settlr&to=${demoWallet}&memo=${encodeURIComponent(
+        `Payout: ${itemNames}`,
       )}`,
     );
   };
@@ -163,10 +163,10 @@ export default function DemoStorePage() {
             <span className="text-3xl">🎤</span>
             <div>
               <h1 className="text-xl font-bold text-[var(--text-primary)]">
-                FanVault
+                Settlr Payouts
               </h1>
               <p className="text-xs text-[var(--text-muted)]">
-                Creator Platform • Pay with USDC
+                Payout Demo • Pay with USDC
               </p>
             </div>
           </div>
@@ -192,10 +192,10 @@ export default function DemoStorePage() {
       <section className="bg-gradient-to-b from-[var(--accent-muted)] to-transparent py-10 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
-            Support your favorite creator.
+            See payouts in action.
           </h2>
           <p className="text-[var(--text-secondary)] max-w-md mx-auto">
-            Subscribe for exclusive content and perks.
+            Try a demo payout — pick a tier and checkout.
             <span className="text-[var(--accent-primary)] font-medium">
               {" "}
               Pay with USDC — zero gas fees.

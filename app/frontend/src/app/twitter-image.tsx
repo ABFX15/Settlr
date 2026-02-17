@@ -2,8 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt =
-  "Settlr — Accept Crypto Payments Without Wallets or Gas Fees";
+export const alt = "Settlr — Pay Anyone, Anywhere, With Just Their Email";
 export const size = {
   width: 1200,
   height: 630,
@@ -80,7 +79,7 @@ export default async function Image() {
               maxWidth: 900,
             }}
           >
-            Accept Crypto Payments Without Wallets or Gas Fees
+            Pay Anyone, Anywhere, With Just Their Email
           </div>
 
           {/* Subtitle */}
@@ -93,7 +92,8 @@ export default async function Image() {
               lineHeight: 1.4,
             }}
           >
-            Non-custodial USDC on Solana · 1% flat fee · Instant settlement
+            Global payout infrastructure · 1% flat fee · Instant settlement ·
+            180+ countries
           </div>
 
           {/* Feature pills */}
@@ -104,10 +104,10 @@ export default async function Image() {
             }}
           >
             {[
-              { emoji: "⚡", label: "Zero Gas" },
-              { emoji: "🔒", label: "Private" },
-              { emoji: "💸", label: "Instant" },
-              { emoji: "📧", label: "No Wallets" },
+              { emoji: "⚡", label: "Instant" },
+              { emoji: "🌍", label: "180+ Countries" },
+              { emoji: "💸", label: "1% Flat" },
+              { emoji: "📧", label: "Email Only" },
             ].map((item) => (
               <div
                 key={item.label}

@@ -5,7 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SettlrLogo } from "@/components/settlr-logo";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Palette } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  Database,
+  Palette,
+  Briefcase,
+} from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
 
 const navLinks = [
@@ -19,10 +26,22 @@ const navLinks = [
 
 const industryLinks = [
   {
+    href: "/industries/data-labeling",
+    label: "AI Data Labeling",
+    icon: Database,
+    description: "Pay annotation workers globally by email",
+  },
+  {
     href: "/industries/creators",
     label: "Creator Platforms",
     icon: Palette,
-    description: "Checkout + payouts for creator platforms",
+    description: "Payouts for creators in 180+ countries",
+  },
+  {
+    href: "/industries/freelance",
+    label: "Freelance Marketplaces",
+    icon: Briefcase,
+    description: "Contractor payouts without wire fees",
   },
 ];
 
