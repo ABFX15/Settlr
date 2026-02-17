@@ -271,9 +271,15 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════
           HERO — split layout: copy left, visual right
          ═══════════════════════════════════════ */}
-      <section className="relative isolate overflow-x-clip overflow-y-visible pt-28 pb-20 md:pt-40 md:pb-28 bg-[#edf2f8]">
+      <section className="relative isolate overflow-x-clip overflow-y-visible pt-28 pb-20 md:pt-40 md:pb-28">
+        {/* Background image */}
+        <div className="absolute inset-0 -z-20">
+          <img src="/8917.jpg" alt="" className="h-full w-full object-cover" />
+        </div>
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 -z-10 bg-[#050507]/30" />
         {/* Subtle radial glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-[#3B82F6]/[0.06] blur-[120px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-[#3B82F6]/[0.08] blur-[120px]" />
         {/* Bottom fade into dark page background */}
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050507] via-[#050507]/90 to-transparent" />
 
@@ -282,14 +288,14 @@ export default function LandingPage() {
             {/* ─── Left: Copy ─── */}
             <div className="lg:col-span-5">
               <Reveal>
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/20 bg-[#3B82F6]/[0.08] px-4 py-1.5 text-[13px] text-[#3B82F6] font-medium">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/[0.1] px-4 py-1.5 text-[13px] text-[#3B82F6] font-medium backdrop-blur-sm">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]" />
                   Built for AI &amp; SaaS teams blocked by Stripe
                 </div>
               </Reveal>
 
               <Reveal delay={0.05}>
-                <h1 className="max-w-xl text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.08] tracking-tight text-[#0a0a12]">
+                <h1 className="max-w-xl text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.08] tracking-tight text-white">
                   Accept crypto payments{" "}
                   <span className="text-[#3B82F6]">
                     without wallets or gas fees
@@ -298,10 +304,10 @@ export default function LandingPage() {
               </Reveal>
 
               <Reveal delay={0.1}>
-                <p className="mt-6 max-w-md text-lg leading-relaxed text-[#4b5563]">
+                <p className="mt-6 max-w-md text-lg leading-relaxed text-white/60">
                   The non-custodial crypto payment gateway for AI and SaaS
                   teams. 1% flat fees vs Stripe&apos;s 2.9%.{" "}
-                  <span className="font-medium text-[#374151]">
+                  <span className="font-medium text-white/80">
                     Sub-second settlement on Solana
                   </span>{" "}
                   — the fastest L1 at{" "}
@@ -328,7 +334,7 @@ export default function LandingPage() {
                   </Link>
                   <Link
                     href="/docs"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#0a0a12]/15 px-7 py-3.5 text-[15px] font-medium text-[#0a0a12]/70 transition-colors hover:bg-[#0a0a12]/[0.04] hover:text-[#0a0a12]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-7 py-3.5 text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white"
                   >
                     Documentation
                   </Link>
@@ -339,7 +345,7 @@ export default function LandingPage() {
               <Reveal delay={0.2}>
                 <button
                   onClick={copyInstall}
-                  className="group mt-8 inline-flex items-center gap-3 rounded-lg border border-[#0a0a12]/10 bg-white/60 px-5 py-3 font-mono text-sm text-[#0a0a12]/50 transition-colors hover:border-[#0a0a12]/20 hover:text-[#0a0a12]/70"
+                  className="group mt-8 inline-flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.06] px-5 py-3 font-mono text-sm text-white/50 backdrop-blur-sm transition-colors hover:border-white/20 hover:text-white/70"
                 >
                   <span>
                     <span className="text-[#3B82F6]">npm</span> install
@@ -356,14 +362,14 @@ export default function LandingPage() {
               {/* Chain logos — Helio-style */}
               <Reveal delay={0.25}>
                 <div className="mt-8 flex items-center gap-5">
-                  <span className="text-[11px] font-medium uppercase tracking-wider text-[#0a0a12]/30">
+                  <span className="text-[11px] font-medium uppercase tracking-wider text-white/25">
                     Powered by
                   </span>
                   <div className="flex items-center gap-4">
                     {/* Solana */}
                     <svg
                       viewBox="0 0 397.7 311.7"
-                      className="h-3.5 w-auto fill-[#0a0a12]/30 transition-colors hover:fill-[#0a0a12]/60"
+                      className="h-3.5 w-auto fill-white/25 transition-colors hover:fill-white/50"
                     >
                       <path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z" />
                       <path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z" />
@@ -372,7 +378,7 @@ export default function LandingPage() {
                     {/* Ethereum */}
                     <svg
                       viewBox="0 0 256 417"
-                      className="h-4 w-auto fill-[#0a0a12]/30 transition-colors hover:fill-[#0a0a12]/60"
+                      className="h-4 w-auto fill-white/25 transition-colors hover:fill-white/50"
                     >
                       <path d="M127.961 0l-2.795 9.5v275.668l2.795 2.79 127.962-75.638z" />
                       <path d="M127.962 0L0 212.32l127.962 75.639V154.158z" />
@@ -382,20 +388,20 @@ export default function LandingPage() {
                     {/* Base */}
                     <svg
                       viewBox="0 0 111 111"
-                      className="h-4 w-auto fill-[#0a0a12]/30 transition-colors hover:fill-[#0a0a12]/60"
+                      className="h-4 w-auto fill-white/25 transition-colors hover:fill-white/50"
                     >
                       <circle cx="55.5" cy="55.5" r="55.5" />
                       <path
                         d="M55.2 23C37.5 23 23 37.3 23 55s14.5 32 32.2 32c15.4 0 28.3-10.9 31.4-25.4H62.5v-13.2h24.1C83.5 33.9 70.6 23 55.2 23z"
-                        fill="#edf2f8"
+                        fill="#050507"
                       />
                     </svg>
                     {/* Arbitrum */}
-                    <span className="text-[11px] font-semibold text-[#0a0a12]/25 transition-colors hover:text-[#0a0a12]/50">
+                    <span className="text-[11px] font-semibold text-white/20 transition-colors hover:text-white/40">
                       ARB
                     </span>
                     {/* Polygon */}
-                    <span className="text-[11px] font-semibold text-[#0a0a12]/25 transition-colors hover:text-[#0a0a12]/50">
+                    <span className="text-[11px] font-semibold text-white/20 transition-colors hover:text-white/40">
                       MATIC
                     </span>
                   </div>
