@@ -37,6 +37,12 @@ pub mod x402_hack_payment {
         instructions::transfer::handler(ctx)
     }
 
+    /// Process a payout from the platform treasury to a recipient wallet.
+    /// Called by the Payout API when a recipient claims their funds.
+    pub fn process_payout(ctx: Context<ProcessPayout>, amount: u64, payout_id: String) -> Result<()> {
+        instructions::payout::handler(ctx, amount, payout_id)
+    }
+
     /// Issue a private receipt for a payment using Inco Lightning
     /// The payment amount is encrypted - only merchant and customer can decrypt
     /// 

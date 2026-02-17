@@ -823,6 +823,148 @@ export default function LandingPage() {
       </section>
 
       {/* ============================
+          TWO PRODUCTS
+         ============================ */}
+      <section className="mx-auto max-w-6xl px-6 py-28">
+        <Reveal>
+          <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+            Two products, one SDK
+          </p>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight md:text-4xl">
+            Payouts out. Payments in.
+          </h2>
+          <p className="mt-4 max-w-xl text-white/45 leading-relaxed">
+            Most platforms need to both{" "}
+            <strong className="text-white/70">collect money</strong> from users
+            and <strong className="text-white/70">pay people</strong> globally.
+            Settlr handles both sides.
+          </p>
+        </Reveal>
+
+        <div className="mt-16 grid gap-6 md:grid-cols-2">
+          {/* Payout API — Primary */}
+          <Reveal delay={0.08}>
+            <div className="group relative flex h-full flex-col rounded-2xl border border-[#3B82F6]/20 bg-[#3B82F6]/[0.03] p-8">
+              <div className="mb-6 flex items-center justify-between">
+                <div className="inline-flex rounded-xl bg-[#3B82F6]/10 p-3">
+                  <ArrowRight className="h-5 w-5 text-[#3B82F6] rotate-[135deg]" />
+                </div>
+                <span className="rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/20 px-3 py-1 text-xs font-semibold text-[#3B82F6]">
+                  Core product
+                </span>
+              </div>
+
+              <h3 className="text-xl font-semibold text-white">Payout API</h3>
+              <p className="mt-2 text-sm text-white/45 leading-relaxed">
+                Send money to anyone by email. One API call, instant settlement,
+                180+ countries. No bank details needed.
+              </p>
+
+              <div className="mt-6 rounded-xl bg-[#08080d] border border-white/[0.06] p-5 font-mono text-[13px] leading-relaxed">
+                <span className="text-[#3B82F6]">await</span>{" "}
+                <span className="text-white">settlr.</span>
+                <span className="text-[#fbbf24]">payouts</span>
+                <span className="text-white">.</span>
+                <span className="text-[#fbbf24]">create</span>
+                <span className="text-white">{"({"}</span>
+                {"\n"}
+                <span className="text-white">{"  amount:    "}</span>
+                <span className="text-[#fbbf24]">50.00</span>
+                <span className="text-white">,</span>
+                {"\n"}
+                <span className="text-white">{"  currency:  "}</span>
+                <span className="text-emerald-400">&quot;USDC&quot;</span>
+                <span className="text-white">,</span>
+                {"\n"}
+                <span className="text-white">{"  recipient: "}</span>
+                <span className="text-emerald-400">
+                  &quot;maria@remotasks.ph&quot;
+                </span>
+                {"\n"}
+                <span className="text-white">{"});"}</span>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {[
+                  "Data labeling",
+                  "Freelance",
+                  "Creator payouts",
+                  "Contractor pay",
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-white/[0.04] px-3 py-1 text-xs text-white/40"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Checkout SDK — Secondary */}
+          <Reveal delay={0.14}>
+            <div className="group relative flex h-full flex-col rounded-2xl border border-[#34d399]/20 bg-[#34d399]/[0.03] p-8">
+              <div className="mb-6 flex items-center justify-between">
+                <div className="inline-flex rounded-xl bg-[#34d399]/10 p-3">
+                  <CreditCard className="h-5 w-5 text-[#34d399]" />
+                </div>
+                <span className="rounded-full bg-[#34d399]/10 border border-[#34d399]/20 px-3 py-1 text-xs font-semibold text-[#34d399]">
+                  Add-on
+                </span>
+              </div>
+
+              <h3 className="text-xl font-semibold text-white">Checkout SDK</h3>
+              <p className="mt-2 text-sm text-white/45 leading-relaxed">
+                Embeddable checkout for platforms that also collect payments
+                from end users. Fans pay creators, players deposit — same
+                infrastructure.
+              </p>
+
+              <div className="mt-6 rounded-xl bg-[#08080d] border border-white/[0.06] p-5 font-mono text-[13px] leading-relaxed">
+                <span className="text-[#3B82F6]">{"<"}</span>
+                <span className="text-[#fbbf24]">SettlrCheckout</span>
+                {"\n"}
+                <span className="text-white">{"  amount"}</span>
+                <span className="text-white/40">{"={"}</span>
+                <span className="text-[#fbbf24]">9.99</span>
+                <span className="text-white/40">{"}"}</span>
+                {"\n"}
+                <span className="text-white">{"  currency"}</span>
+                <span className="text-white/40">{"="}</span>
+                <span className="text-emerald-400">&quot;USDC&quot;</span>
+                {"\n"}
+                <span className="text-white">{"  onSuccess"}</span>
+                <span className="text-white/40">{"={"}</span>
+                <span className="text-white">handlePayment</span>
+                <span className="text-white/40">{"}"}</span>
+                {"\n"}
+                <span className="text-[#3B82F6]">{"/>"}</span>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {[
+                  "Creator platforms",
+                  "iGaming deposits",
+                  "Fan payments",
+                  "Subscriptions",
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-white/[0.04] px-3 py-1 text-xs text-white/40"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ============================
           3 VERTICALS
          ============================ */}
       <section className="mx-auto max-w-6xl px-6 py-28">
@@ -858,7 +1000,7 @@ export default function LandingPage() {
               subtitle: "Fourthwall, Ko-fi, Gumroad, Payhip, itch.io",
               pain: "Stripe Connect doesn't support half the countries creators are in. PayPal has been pulled from others. Creators lose 3-10% to fees and FX on every payout.",
               pitch:
-                "Pay creators in 180+ countries with just their email. No bank details, no Stripe Connect country restrictions.",
+                "Collect from fans via Checkout SDK. Pay creators in 180+ countries via Payout API. Both sides, one integration.",
               color: "#34d399",
             },
             {

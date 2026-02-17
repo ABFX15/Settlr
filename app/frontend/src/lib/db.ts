@@ -132,6 +132,41 @@ export interface Subscription {
     updatedAt: Date;
 }
 
+// Payout types
+export type PayoutStatus = "pending" | "funded" | "sent" | "claimed" | "expired" | "failed";
+
+export interface Payout {
+    id: string;
+    merchantId: string;
+    merchantWallet: string;
+    email: string;
+    amount: number;
+    currency: string;
+    memo?: string;
+    metadata?: Record<string, string>;
+    status: PayoutStatus;
+    claimToken: string;
+    claimUrl: string;
+    recipientWallet?: string;
+    txSignature?: string;
+    batchId?: string;
+    createdAt: Date;
+    fundedAt?: Date;
+    claimedAt?: Date;
+    expiredAt?: Date;
+    expiresAt: Date;
+}
+
+export interface PayoutBatch {
+    id: string;
+    merchantId: string;
+    totalAmount: number;
+    count: number;
+    status: "processing" | "completed" | "partial" | "failed";
+    createdAt: Date;
+    completedAt?: Date;
+}
+
 // In-memory fallback stores
 const memoryMerchants = new Map<string, Merchant>();
 const memorySessions = new Map<string, CheckoutSession>();
@@ -139,6 +174,8 @@ const memoryPayments = new Map<string, Payment>();
 const memoryApiKeys = new Map<string, ApiKey>();
 const memorySubscriptionPlans = new Map<string, SubscriptionPlan>();
 const memorySubscriptions = new Map<string, Subscription>();
+const memoryPayouts = new Map<string, Payout>();
+const memoryPayoutBatches = new Map<string, PayoutBatch>();
 const memoryRateLimits = new Map<string, { count: number; resetAt: number }>();
 
 // ID generators
@@ -1092,3 +1129,318 @@ export async function updateWaitlistStatus(
         return false;
     }
 }
+
+// ============================================
+// PAYOUTS
+// ============================================
+
+function generatePayoutId(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "po_";
+    for (let i = 0; i < 20; i++) {
+        id += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return id;
+}
+
+function generateClaimToken(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let token = "";
+    for (let i = 0; i < 48; i++) {
+        token += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return token;
+}
+
+function generateBatchId(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "batch_";
+    for (let i = 0; i < 16; i++) {
+        id += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return id;
+}
+
+const CLAIM_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+
+export async function createPayout(
+    data: {
+        merchantId: string;
+        merchantWallet: string;
+        email: string;
+        amount: number;
+        currency?: string;
+        memo?: string;
+        metadata?: Record<string, string>;
+        batchId?: string;
+    }
+): Promise<Payout> {
+    const id = generatePayoutId();
+    const claimToken = generateClaimToken();
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+    const payout: Payout = {
+        id,
+        merchantId: data.merchantId,
+        merchantWallet: data.merchantWallet,
+        email: data.email.toLowerCase().trim(),
+        amount: data.amount,
+        currency: data.currency || "USDC",
+        memo: data.memo,
+        metadata: data.metadata,
+        status: "sent",
+        claimToken,
+        claimUrl: `${CLAIM_BASE_URL}/claim/${claimToken}`,
+        batchId: data.batchId,
+        createdAt: now,
+        expiresAt,
+    };
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase.from("payouts").insert({
+            id: payout.id,
+            merchant_id: payout.merchantId,
+            merchant_wallet: payout.merchantWallet,
+            email: payout.email,
+            amount: payout.amount,
+            currency: payout.currency,
+            memo: payout.memo,
+            metadata: payout.metadata,
+            status: payout.status,
+            claim_token: payout.claimToken,
+            batch_id: payout.batchId,
+            expires_at: payout.expiresAt.toISOString(),
+        });
+
+        if (error) {
+            console.error("Error creating payout:", error);
+            throw new Error("Failed to create payout");
+        }
+    } else {
+        memoryPayouts.set(id, payout);
+    }
+
+    return payout;
+}
+
+export async function getPayoutById(id: string): Promise<Payout | null> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("payouts")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+        if (error || !data) return null;
+        return mapSupabasePayout(data);
+    } else {
+        return memoryPayouts.get(id) || null;
+    }
+}
+
+export async function getPayoutByClaimToken(claimToken: string): Promise<Payout | null> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("payouts")
+            .select("*")
+            .eq("claim_token", claimToken)
+            .single();
+
+        if (error || !data) return null;
+        return mapSupabasePayout(data);
+    } else {
+        for (const payout of memoryPayouts.values()) {
+            if (payout.claimToken === claimToken) return payout;
+        }
+        return null;
+    }
+}
+
+export async function getPayoutsByMerchant(
+    merchantId: string,
+    options?: { status?: PayoutStatus; limit?: number; offset?: number }
+): Promise<Payout[]> {
+    if (isSupabaseConfigured()) {
+        let query = supabase
+            .from("payouts")
+            .select("*")
+            .eq("merchant_id", merchantId)
+            .order("created_at", { ascending: false });
+
+        if (options?.status) query = query.eq("status", options.status);
+        if (options?.limit) query = query.limit(options.limit);
+        if (options?.offset) query = query.range(options.offset, options.offset + (options.limit || 20) - 1);
+
+        const { data, error } = await query;
+        if (error || !data) return [];
+        return data.map(mapSupabasePayout);
+    } else {
+        let payouts = Array.from(memoryPayouts.values())
+            .filter(p => p.merchantId === merchantId);
+
+        if (options?.status) payouts = payouts.filter(p => p.status === options.status);
+        payouts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        if (options?.offset) payouts = payouts.slice(options.offset);
+        if (options?.limit) payouts = payouts.slice(0, options.limit);
+
+        return payouts;
+    }
+}
+
+export async function claimPayout(
+    claimToken: string,
+    recipientWallet: string,
+    txSignature: string
+): Promise<Payout | null> {
+    const payout = await getPayoutByClaimToken(claimToken);
+    if (!payout) return null;
+    if (payout.status !== "sent") return null;
+    if (new Date() > payout.expiresAt) {
+        // Mark as expired
+        await updatePayoutStatus(payout.id, "expired");
+        return null;
+    }
+
+    const now = new Date();
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("payouts")
+            .update({
+                status: "claimed",
+                recipient_wallet: recipientWallet,
+                tx_signature: txSignature,
+                claimed_at: now.toISOString(),
+            })
+            .eq("claim_token", claimToken);
+
+        if (error) {
+            console.error("Error claiming payout:", error);
+            return null;
+        }
+    } else {
+        payout.status = "claimed";
+        payout.recipientWallet = recipientWallet;
+        payout.txSignature = txSignature;
+        payout.claimedAt = now;
+        memoryPayouts.set(payout.id, payout);
+    }
+
+    return { ...payout, status: "claimed", recipientWallet, txSignature, claimedAt: now };
+}
+
+export async function updatePayoutStatus(id: string, status: PayoutStatus): Promise<boolean> {
+    if (isSupabaseConfigured()) {
+        const updates: Record<string, unknown> = { status };
+        if (status === "expired") updates.expired_at = new Date().toISOString();
+        if (status === "funded") updates.funded_at = new Date().toISOString();
+
+        const { error } = await supabase
+            .from("payouts")
+            .update(updates)
+            .eq("id", id);
+
+        return !error;
+    } else {
+        const payout = memoryPayouts.get(id);
+        if (!payout) return false;
+        payout.status = status;
+        if (status === "expired") payout.expiredAt = new Date();
+        if (status === "funded") payout.fundedAt = new Date();
+        return true;
+    }
+}
+
+// Batch operations
+export async function createPayoutBatch(
+    merchantId: string,
+    payouts: Array<{
+        email: string;
+        amount: number;
+        memo?: string;
+        metadata?: Record<string, string>;
+    }>,
+    merchantWallet: string
+): Promise<{ batch: PayoutBatch; payouts: Payout[] }> {
+    const batchId = generateBatchId();
+    const totalAmount = payouts.reduce((sum, p) => sum + p.amount, 0);
+
+    const batch: PayoutBatch = {
+        id: batchId,
+        merchantId,
+        totalAmount,
+        count: payouts.length,
+        status: "processing",
+        createdAt: new Date(),
+    };
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase.from("payout_batches").insert({
+            id: batch.id,
+            merchant_id: batch.merchantId,
+            total_amount: batch.totalAmount,
+            count: batch.count,
+            status: batch.status,
+        });
+        if (error) {
+            console.error("Error creating payout batch:", error);
+            throw new Error("Failed to create batch");
+        }
+    } else {
+        memoryPayoutBatches.set(batchId, batch);
+    }
+
+    const createdPayouts: Payout[] = [];
+    for (const p of payouts) {
+        const created = await createPayout({
+            merchantId,
+            merchantWallet,
+            email: p.email,
+            amount: p.amount,
+            memo: p.memo,
+            metadata: p.metadata,
+            batchId,
+        });
+        createdPayouts.push(created);
+    }
+
+    // Mark batch as completed
+    if (isSupabaseConfigured()) {
+        await supabase.from("payout_batches").update({
+            status: "completed",
+            completed_at: new Date().toISOString(),
+        }).eq("id", batchId);
+    } else {
+        batch.status = "completed";
+        batch.completedAt = new Date();
+    }
+
+    return { batch: { ...batch, status: "completed", completedAt: new Date() }, payouts: createdPayouts };
+}
+
+// Helper to map Supabase snake_case to our camelCase interface
+function mapSupabasePayout(data: Record<string, unknown>): Payout {
+    return {
+        id: data.id as string,
+        merchantId: data.merchant_id as string,
+        merchantWallet: data.merchant_wallet as string,
+        email: data.email as string,
+        amount: Number(data.amount),
+        currency: (data.currency as string) || "USDC",
+        memo: data.memo as string | undefined,
+        metadata: data.metadata as Record<string, string> | undefined,
+        status: data.status as PayoutStatus,
+        claimToken: data.claim_token as string,
+        claimUrl: `${CLAIM_BASE_URL}/claim/${data.claim_token}`,
+        recipientWallet: data.recipient_wallet as string | undefined,
+        txSignature: data.tx_signature as string | undefined,
+        batchId: data.batch_id as string | undefined,
+        createdAt: new Date(data.created_at as string),
+        fundedAt: data.funded_at ? new Date(data.funded_at as string) : undefined,
+        claimedAt: data.claimed_at ? new Date(data.claimed_at as string) : undefined,
+        expiredAt: data.expired_at ? new Date(data.expired_at as string) : undefined,
+        expiresAt: new Date(data.expires_at as string),
+    };
+}
+

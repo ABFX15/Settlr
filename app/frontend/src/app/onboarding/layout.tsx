@@ -1,15 +1,27 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Get Started — Set Up Crypto Payments in 30 Minutes",
+  title: "Get Started — Send Global Payouts in 30 Minutes",
   description:
-    "Create your Settlr merchant account and start accepting USDC payments. Non-custodial, no bank account needed, deploy to production in under 30 minutes.",
+    "Set up your Settlr platform account and start sending USDC payouts globally. Non-custodial, email-only, deploy to production in under 30 minutes.",
+  keywords: [
+    "payout API setup",
+    "USDC payout onboarding",
+    "global payout integration",
+    "stablecoin payout quickstart",
+  ],
   alternates: { canonical: "/onboarding" },
   openGraph: {
-    title: "Get Started with Settlr — Crypto Payments in 30 Minutes",
+    title: "Get Started with Settlr — Global Payouts in 30 Minutes",
     description:
-      "Create your merchant account and accept USDC payments. Non-custodial, deploy in minutes.",
+      "Set up your platform and send USDC payouts to 180+ countries. Non-custodial, deploy in minutes.",
     url: "https://settlr.dev/onboarding",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Get Started with Settlr — Global Payouts in 30 Minutes",
+    description:
+      "Start sending USDC payouts to anyone, anywhere, with just their email.",
   },
 };
 

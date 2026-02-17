@@ -19,15 +19,17 @@ import {
 
 const docsTabs = [
   { id: "quickstart", label: "Quick Start", icon: Rocket },
+  { id: "payouts", label: "Payout API", icon: Book },
+  { id: "react", label: "Checkout SDK", icon: Code2 },
   { id: "playground", label: "Playground", icon: Play },
-  { id: "react", label: "React SDK", icon: Code2 },
-  { id: "api", label: "API Reference", icon: Book },
+  { id: "api", label: "REST API", icon: Book },
   { id: "webhooks", label: "Webhooks", icon: Webhook },
   { id: "troubleshooting", label: "Troubleshooting", icon: HelpCircle },
 ];
 
 type TabId =
   | "quickstart"
+  | "payouts"
   | "playground"
   | "react"
   | "api"
@@ -125,7 +127,8 @@ export default function DocsPage() {
               <div className="mb-10">
                 <h1 className="text-4xl font-bold mb-4">Documentation</h1>
                 <p className="text-xl text-white/60">
-                  Everything you need to accept USDC payments with Settlr.
+                  Send global payouts and embed checkout — one SDK, two
+                  products.
                 </p>
               </div>
 
@@ -149,6 +152,7 @@ export default function DocsPage() {
               {/* Content */}
               <div className="prose prose-invert max-w-none">
                 {activeTab === "quickstart" && <QuickStartContent />}
+                {activeTab === "payouts" && <PayoutsContent />}
                 {activeTab === "playground" && <PlaygroundContent />}
                 {activeTab === "react" && <ReactSDKContent />}
                 {activeTab === "api" && <APIContent />}
@@ -172,8 +176,42 @@ function QuickStartContent() {
       <section>
         <h2 className="text-2xl font-bold mb-4">Get Started in 5 Minutes</h2>
         <p className="text-white/50 mb-6">
-          Accept USDC payments on your website with just a few lines of code.
+          Settlr gives you two products in one SDK. Pick your path:
         </p>
+
+        {/* Two paths */}
+        <div className="grid md:grid-cols-2 gap-4 mb-12">
+          <div className="rounded-xl border border-[#3B82F6]/20 bg-[#3B82F6]/[0.05] p-5">
+            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-0.5 rounded-full mb-3">
+              Core product
+            </span>
+            <h3 className="text-lg font-semibold text-white mb-2">
+              Payout API
+            </h3>
+            <p className="text-sm text-white/50 mb-3">
+              Send money to anyone by email. One API call, 180+ countries, 1%
+              flat.
+            </p>
+            <span className="text-sm text-[#3B82F6] font-medium">
+              See Payout API tab →
+            </span>
+          </div>
+          <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/[0.05] p-5">
+            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-emerald-400/20 text-emerald-400 px-2 py-0.5 rounded-full mb-3">
+              Add-on
+            </span>
+            <h3 className="text-lg font-semibold text-white mb-2">
+              Checkout SDK
+            </h3>
+            <p className="text-sm text-white/50 mb-3">
+              Embeddable React checkout for platforms that also need to collect
+              payments.
+            </p>
+            <span className="text-sm text-emerald-400 font-medium">
+              See Checkout SDK tab →
+            </span>
+          </div>
+        </div>
 
         {/* Step 1 */}
         <div className="mb-8">
@@ -181,32 +219,17 @@ function QuickStartContent() {
             <div className="w-8 h-8 rounded-full bg-[#3B82F6]/20 text-[#3B82F6] flex items-center justify-center font-bold">
               1
             </div>
-            <h3 className="text-xl font-semibold">
-              Create Your Merchant Account
-            </h3>
+            <h3 className="text-xl font-semibold">Create Your Account</h3>
           </div>
           <p className="text-white/50 mb-4">
-            Sign up to get your API key. Quick setup with your wallet address.
+            Sign up to get your API key. Takes 30 seconds.
           </p>
           <a
             href="/onboarding"
             className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#050507] font-semibold rounded-lg hover:opacity-90 transition-opacity"
           >
-            Create Account →
+            Get API Key →
           </a>
-          <div className="mt-4 bg-gray-900 rounded-lg p-4">
-            <p className="text-white/30 text-sm mb-2">You&apos;ll receive:</p>
-            <ul className="text-white/50 text-sm space-y-1">
-              <li>
-                • <span className="text-[#3B82F6] font-mono">API Key</span> -
-                Your secret key for SDK initialization
-              </li>
-              <li>
-                • <span className="text-[#3B82F6] font-mono">Merchant ID</span>{" "}
-                - Your unique merchant identifier
-              </li>
-            </ul>
-          </div>
         </div>
 
         {/* Step 2 */}
@@ -220,89 +243,34 @@ function QuickStartContent() {
           <CodeBlock language="bash">{`npm install @settlr/sdk`}</CodeBlock>
         </div>
 
-        {/* Step 3 */}
+        {/* Step 3 - Payout Example */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 rounded-full bg-[#3B82F6]/20 text-[#3B82F6] flex items-center justify-center font-bold">
               3
             </div>
-            <h3 className="text-xl font-semibold">
-              Initialize with Your API Key
-            </h3>
+            <h3 className="text-xl font-semibold">Send Your First Payout</h3>
           </div>
-          <p className="text-white/50 mb-4">
-            Use the API key from onboarding to initialize the SDK.
-          </p>
           <CodeBlock language="tsx">
             {`import { Settlr } from '@settlr/sdk';
 
-// Initialize with your credentials
 const settlr = new Settlr({
-  apiKey: 'sk_test_demo_xxxxxxxxxxxx',  // Use sk_test_ for development
-  merchant: {
-    name: 'Your Store Name',
-  },
-});`}
-          </CodeBlock>
-        </div>
+  apiKey: 'sk_live_your_api_key',
+});
 
-        {/* Step 4 */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[#3B82F6]/20 text-[#3B82F6] flex items-center justify-center font-bold">
-              4
-            </div>
-            <h3 className="text-xl font-semibold">Add a Payment Button</h3>
-          </div>
-          <CodeBlock language="tsx">
-            {`import { BuyButton } from '@settlr/sdk';
+const payout = await settlr.payouts.create({
+  email: 'creator@example.com',
+  amount: 150.00,
+  currency: 'USDC',
+  memo: 'March earnings',
+});
 
-function CheckoutPage() {
-  return (
-    <BuyButton
-      amount={10.00}
-      memo="Order #123"
-      onSuccess={(result) => console.log('Paid!', result.signature)}
-      onError={(err) => console.error(err)}
-    >
-      Pay $10.00
-    </BuyButton>
-  );
-}`}
+console.log(payout.status); // "sent"`}
           </CodeBlock>
           <p className="text-white/30 text-sm mt-3">
-            💡 No need to specify recipient - payments go to the wallet you
-            registered during onboarding.
+            💡 The recipient gets an email with a claim link. No wallet or bank
+            details needed.
           </p>
-        </div>
-
-        {/* Step 5 */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[#3B82F6]/20 text-[#3B82F6] flex items-center justify-center font-bold">
-              5
-            </div>
-            <h3 className="text-xl font-semibold">That&apos;s It!</h3>
-          </div>
-          <p className="text-white/50">
-            Your users can now pay with their wallet or email. Payments settle
-            instantly to your registered wallet with a 1% fee.
-          </p>
-          <div className="mt-4 grid md:grid-cols-2 gap-4">
-            <div className="bg-gray-900 rounded-lg p-4">
-              <p className="text-[#3B82F6] font-medium mb-1">Solana Payments</p>
-              <p className="text-white/30 text-sm">
-                Instant, gasless transfers directly to your wallet
-              </p>
-            </div>
-            <div className="bg-gray-900 rounded-lg p-4">
-              <p className="text-emerald-400 font-medium mb-1">Cross-chain USDC</p>
-              <p className="text-white/30 text-sm">
-                Customers pay with USDC from ETH/Base/Arbitrum - you receive on
-                Solana
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Features */}
@@ -310,7 +278,7 @@ function CheckoutPage() {
           <FeatureCard
             icon="⚡"
             title="Instant Settlement"
-            description="Funds land in your wallet within seconds."
+            description="Payouts and payments settle in under 1 second."
           />
           <FeatureCard
             icon="🔒"
@@ -318,20 +286,236 @@ function CheckoutPage() {
             description="You control your funds. We never hold your money."
           />
           <FeatureCard
-            icon="💰"
-            title="Gasless Payments"
-            description="Users don't need SOL for gas. We cover it."
+            icon="🌍"
+            title="180+ Countries"
+            description="Pay anyone, anywhere. No bank details required."
           />
         </div>
 
         {/* Interactive Playground */}
         <div className="mt-16">
-          <h2 className="text-2xl font-bold mb-4">Try It Live</h2>
+          <h2 className="text-2xl font-bold mb-4">Try the Checkout SDK Live</h2>
           <p className="text-white/50 mb-6">
-            Edit the code below and click "Try It" to see how the checkout
-            works. No setup required.
+            Edit the code below and click &quot;Try It&quot; to see how the
+            embedded checkout works. No setup required.
           </p>
           <InteractivePlayground showExamples={true} />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function PayoutsContent() {
+  return (
+    <div className="space-y-8">
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Payout API</h2>
+        <p className="text-white/50 mb-6">
+          Send USDC to anyone in the world with just their email address. Your
+          core integration — one API call per payout.
+        </p>
+
+        <div className="bg-[#3B82F6]/10 border border-[#3B82F6]/30 rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-[#3B82F6] mb-2">
+            How it works
+          </h3>
+          <ol className="text-white/50 text-sm space-y-2">
+            <li>
+              1. You call{" "}
+              <code className="text-[#3B82F6] bg-[#3B82F6]/10 px-1 rounded">
+                settlr.payouts.create()
+              </code>{" "}
+              with an email &amp; amount
+            </li>
+            <li>2. Recipient gets an email with a claim link</li>
+            <li>
+              3. They click, connect (or create) a wallet, and funds are theirs
+            </li>
+          </ol>
+        </div>
+
+        {/* Single payout */}
+        <h3 className="text-xl font-semibold mb-4">Single Payout</h3>
+        <CodeBlock language="tsx">
+          {`import { Settlr } from '@settlr/sdk';
+
+const settlr = new Settlr({
+  apiKey: 'sk_live_your_api_key',
+});
+
+const payout = await settlr.payouts.create({
+  email: 'alice@example.com',
+  amount: 250.00,
+  currency: 'USDC',
+  memo: 'March data labeling — 500 tasks',
+  metadata: {
+    batchId: 'batch_001',
+    workerId: 'worker_alice',
+  },
+});
+
+// payout.id     → "po_abc123"
+// payout.status → "sent"
+// payout.claimUrl → "https://pay.settlr.io/claim/po_abc123"`}
+        </CodeBlock>
+
+        {/* Batch payouts */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">Batch Payouts</h3>
+        <p className="text-white/50 mb-4">
+          Pay hundreds of people at once. Each recipient gets their own email.
+        </p>
+        <CodeBlock language="tsx">
+          {`const batch = await settlr.payouts.createBatch([
+  { email: 'alice@example.com', amount: 250.00, memo: 'March earnings' },
+  { email: 'bob@example.com',   amount: 180.00, memo: 'March earnings' },
+  { email: 'carol@example.com', amount: 320.00, memo: 'March earnings' },
+]);
+
+console.log(batch.id);       // "batch_xyz"
+console.log(batch.total);    // 750.00
+console.log(batch.count);    // 3
+console.log(batch.status);   // "processing"`}
+        </CodeBlock>
+
+        {/* Check status */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">Check Payout Status</h3>
+        <CodeBlock language="tsx">
+          {`const payout = await settlr.payouts.get('po_abc123');
+
+// Statuses: "sent" → "claimed" → "settled"
+console.log(payout.status);    // "claimed"
+console.log(payout.claimedAt); // "2024-03-15T14:30:00Z"`}
+        </CodeBlock>
+
+        {/* List payouts */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">List Payouts</h3>
+        <CodeBlock language="tsx">
+          {`const payouts = await settlr.payouts.list({
+  status: 'claimed',
+  limit: 50,
+});
+
+payouts.data.forEach(p => {
+  console.log(p.email, p.amount, p.status);
+});`}
+        </CodeBlock>
+
+        {/* Webhooks */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">Payout Webhooks</h3>
+        <p className="text-white/50 mb-4">
+          Get notified when a recipient claims their payout.
+        </p>
+        <CodeBlock language="json">
+          {`{
+  "event": "payout.claimed",
+  "data": {
+    "id": "po_abc123",
+    "email": "alice@example.com",
+    "amount": 250.00,
+    "status": "claimed",
+    "claimedAt": "2024-03-15T14:30:00Z",
+    "wallet": "7xKj...abc"
+  }
+}`}
+        </CodeBlock>
+
+        {/* Payout props */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">Payout Parameters</h3>
+        <div className="bg-gray-900 rounded-lg overflow-hidden">
+          <table className="w-full text-left">
+            <thead className="bg-gray-800">
+              <tr>
+                <th className="px-4 py-3 font-medium">Parameter</th>
+                <th className="px-4 py-3 font-medium">Type</th>
+                <th className="px-4 py-3 font-medium">Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-800">
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">email</td>
+                <td className="px-4 py-3 text-white/50">string</td>
+                <td className="px-4 py-3 text-white/50">
+                  Recipient&apos;s email address
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">amount</td>
+                <td className="px-4 py-3 text-white/50">number</td>
+                <td className="px-4 py-3 text-white/50">
+                  Payout amount in USDC
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">memo</td>
+                <td className="px-4 py-3 text-white/50">string</td>
+                <td className="px-4 py-3 text-white/50">
+                  Description shown to recipient in the email
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">metadata</td>
+                <td className="px-4 py-3 text-white/50">object</td>
+                <td className="px-4 py-3 text-white/50">
+                  Custom key-value pairs for your records
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">currency</td>
+                <td className="px-4 py-3 text-white/50">&apos;USDC&apos;</td>
+                <td className="px-4 py-3 text-white/50">
+                  Currency (USDC only for now)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Event types */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">Payout Event Types</h3>
+        <div className="bg-gray-900 rounded-lg overflow-hidden">
+          <table className="w-full text-left">
+            <thead className="bg-gray-800">
+              <tr>
+                <th className="px-4 py-3 font-medium">Event</th>
+                <th className="px-4 py-3 font-medium">Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-800">
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  payout.sent
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Email sent to recipient with claim link
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  payout.claimed
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Recipient claimed the payout
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  payout.expired
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Payout expired before being claimed
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  batch.completed
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  All payouts in a batch have been sent
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
     </div>
@@ -440,9 +624,10 @@ function ReactSDKContent() {
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="text-2xl font-bold mb-4">React SDK</h2>
+        <h2 className="text-2xl font-bold mb-4">Checkout SDK</h2>
         <p className="text-white/50 mb-6">
-          Full control over the payment flow with React hooks and components.
+          Embeddable checkout for platforms that also collect payments. React
+          hooks and components for full control over the payment flow.
         </p>
 
         {/* Prerequisites */}
@@ -451,7 +636,7 @@ function ReactSDKContent() {
             Prerequisites
           </h3>
           <p className="text-white/50 text-sm mb-3">
-            Before using the SDK, you need to:
+            Before using the Checkout SDK, you need to:
           </p>
           <ol className="text-white/50 text-sm space-y-2">
             <li>
@@ -471,12 +656,16 @@ function ReactSDKContent() {
         </div>
 
         {/* Payment Modal - NEW */}
-        <div className="bg-[#3B82F6]/10 border border-[#3B82F6]/30 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-[#3B82F6] mb-2">
-            ✨ New: Embedded Payment Modal
+        <div className="bg-emerald-400/10 border border-emerald-400/30 rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-emerald-400 mb-2">
+            Add-on product
           </h3>
           <p className="text-white/50 text-sm">
-            Accept payments without redirecting users away from your site!
+            The Checkout SDK is for platforms that need to{" "}
+            <strong className="text-white/70">collect</strong> payments (creator
+            tips, iGaming deposits, subscriptions). For{" "}
+            <strong className="text-white/70">sending</strong> payouts, use the
+            Payout API tab.
           </p>
         </div>
 
@@ -746,9 +935,9 @@ function APIContent() {
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="text-2xl font-bold mb-4">API Reference</h2>
+        <h2 className="text-2xl font-bold mb-4">REST API Reference</h2>
         <p className="text-white/50 mb-6">
-          Use our REST API for server-side integrations.
+          Use our REST API for server-side payout and payment integrations.
         </p>
 
         {/* Base URL */}
@@ -775,6 +964,80 @@ function APIContent() {
   -H "Content-Type: application/json"`}
           </CodeBlock>
         </div>
+
+        {/* Create Payout */}
+        <div className="border border-white/10 rounded-lg overflow-hidden mb-6">
+          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-1 rounded text-sm font-mono">
+              POST
+            </span>
+            <code className="text-white">/payouts</code>
+            <span className="text-[10px] font-bold tracking-widest uppercase bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-0.5 rounded-full ml-auto">
+              Core
+            </span>
+          </div>
+          <div className="p-4">
+            <p className="text-white/50 mb-4">
+              Create a new payout. The recipient receives an email with a claim
+              link.
+            </p>
+            <h4 className="font-medium mb-2">Request Body</h4>
+            <CodeBlock language="json">
+              {`{
+  "email": "alice@example.com",
+  "amount": 250.00,
+  "currency": "USDC",
+  "memo": "March earnings",
+  "metadata": {
+    "workerId": "worker_alice"
+  }
+}`}
+            </CodeBlock>
+            <h4 className="font-medium mb-2 mt-4">Response</h4>
+            <CodeBlock language="json">
+              {`{
+  "id": "po_abc123",
+  "status": "sent",
+  "email": "alice@example.com",
+  "amount": 250.00,
+  "claimUrl": "https://pay.settlr.io/claim/po_abc123",
+  "createdAt": "2024-03-15T10:00:00Z"
+}`}
+            </CodeBlock>
+          </div>
+        </div>
+
+        {/* Create Batch Payout */}
+        <div className="border border-white/10 rounded-lg overflow-hidden mb-6">
+          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-1 rounded text-sm font-mono">
+              POST
+            </span>
+            <code className="text-white">/payouts/batch</code>
+            <span className="text-[10px] font-bold tracking-widest uppercase bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-0.5 rounded-full ml-auto">
+              Core
+            </span>
+          </div>
+          <div className="p-4">
+            <p className="text-white/50 mb-4">
+              Create multiple payouts at once. Each recipient gets their own
+              email.
+            </p>
+            <h4 className="font-medium mb-2">Request Body</h4>
+            <CodeBlock language="json">
+              {`{
+  "payouts": [
+    { "email": "alice@example.com", "amount": 250.00, "memo": "March" },
+    { "email": "bob@example.com", "amount": 180.00, "memo": "March" }
+  ]
+}`}
+            </CodeBlock>
+          </div>
+        </div>
+
+        <h3 className="text-lg font-semibold text-white/70 mt-10 mb-4">
+          Checkout Endpoints
+        </h3>
 
         {/* Create Payment */}
         <div className="border border-white/10 rounded-lg overflow-hidden mb-6">

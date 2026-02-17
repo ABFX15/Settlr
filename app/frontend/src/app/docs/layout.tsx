@@ -1,15 +1,29 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Documentation — Crypto Payment SDK & API Reference",
+  title: "Documentation — Payout SDK & API Reference",
   description:
-    "Integrate Settlr in under 30 minutes. TypeScript SDK, React checkout component, webhooks, and REST API docs for accepting USDC and stablecoin payments on Solana.",
+    "Integrate Settlr payouts in under 30 minutes. TypeScript SDK, React components, webhooks, and REST API docs for sending USDC payouts globally on Solana.",
+  keywords: [
+    "payout API documentation",
+    "USDC payout SDK",
+    "stablecoin payout API",
+    "Solana payout integration",
+    "TypeScript payout SDK",
+    "email payout API",
+  ],
   alternates: { canonical: "/docs" },
   openGraph: {
-    title: "Settlr Docs — Crypto Payment SDK & API Reference",
+    title: "Settlr Docs — Payout SDK & API Reference",
     description:
-      "TypeScript SDK, React components, webhooks, and API docs. Integrate in under 30 minutes.",
+      "TypeScript SDK, React components, webhooks, and API docs for global USDC payouts. Integrate in under 30 minutes.",
     url: "https://settlr.dev/docs",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Settlr Docs — Payout SDK & API Reference",
+    description:
+      "Integrate global USDC payouts in under 30 minutes. TypeScript SDK, webhooks, REST API.",
   },
 };
 

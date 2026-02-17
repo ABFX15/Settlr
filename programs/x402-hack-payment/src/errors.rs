@@ -34,4 +34,6 @@ pub enum PaymentError {
     RefundNotAuthorized,
     #[msg("Missing allowance accounts for Inco decryption access.")]
     MissingAllowanceAccounts,
+    #[msg("Insufficient treasury balance for payout.")]
+    InsufficientTreasuryBalance,
 }

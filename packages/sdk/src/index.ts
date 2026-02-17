@@ -22,6 +22,10 @@ export type {
     SubscriptionPlan,
     Subscription,
     CreateSubscriptionOptions,
+    // Payout types
+    PayoutStatus,
+    Payout,
+    PayoutBatch,
 } from './types';
 
 // Constants
@@ -114,3 +118,15 @@ export {
     type SubscriptionPayment,
     type SubscriptionDetail,
 } from './subscriptions';
+
+// Payouts
+export {
+    PayoutClient,
+    createPayoutClient,
+    type PayoutClientConfig,
+    type CreatePayoutOptions,
+    type PayoutRecord,
+    type PayoutBatchResult,
+    type ListPayoutsOptions,
+    type ListPayoutsResult,
+} from './payouts';

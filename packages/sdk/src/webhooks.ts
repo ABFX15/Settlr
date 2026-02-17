@@ -82,6 +82,11 @@ export interface WebhookHandlers {
     'subscription.renewed'?: WebhookHandler;
     'subscription.cancelled'?: WebhookHandler;
     'subscription.expired'?: WebhookHandler;
+    'payout.created'?: WebhookHandler;
+    'payout.sent'?: WebhookHandler;
+    'payout.claimed'?: WebhookHandler;
+    'payout.expired'?: WebhookHandler;
+    'payout.failed'?: WebhookHandler;
 }
 
 /**

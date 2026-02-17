@@ -22,15 +22,453 @@ export interface BlogPost {
  */
 
 export const posts: BlogPost[] = [
+    // ─── NEW: Payout infrastructure content ───────────────────
+    {
+        slug: "pay-remote-workers-internationally-without-wire-fees",
+        title: "How to Pay Remote Workers in 180+ Countries Without Wire Fees",
+        excerpt:
+            "Wire transfers cost $25–50 each, take 3–5 days, and fail in half the countries your workers live in. Here's how platforms are paying global workforces instantly for 1% flat — no bank details needed.",
+        date: "2026-02-17",
+        author: "Adam Bryant",
+        readTime: "7 min read",
+        tags: ["international payouts", "wire transfers", "remote workers", "cross-border payments"],
+        content: `
+      <p>If you run a platform that pays people globally — data annotators, freelancers, creators, gig workers — you already know the pain. Wire transfers cost <strong>$25–50 per transaction</strong>, take 3–5 business days, and don't even work in many of the countries where your workforce actually lives.</p>
+
+      <p>PayPal charges 5%+ on international transfers and freezes accounts without warning. Payoneer has complex onboarding. Wise is decent for one-off transfers but wasn't built for programmatic, API-driven payouts at scale.</p>
+
+      <p>There's a better way.</p>
+
+      <h2>The Problem With Traditional Payout Rails</h2>
+
+      <p>When you pay someone internationally through traditional banking, here's what actually happens:</p>
+
+      <ol>
+        <li>Your bank sends a SWIFT message to a correspondent bank</li>
+        <li>The correspondent bank routes it to the recipient's country</li>
+        <li>A local bank converts the currency and credits the account</li>
+        <li>Each intermediary takes a cut — and adds a day of delay</li>
+      </ol>
+
+      <p>The result: <strong>$25–50 in fees per wire</strong>, 3–5 business days for settlement, and a ~15% failure rate on wires to emerging markets (wrong IBAN formats, correspondent bank issues, compliance holds).</p>
+
+      <p>For a platform paying 500 workers $50 each, that's <strong>$12,500–$25,000 in wire fees alone</strong>. Per month.</p>
+
+      <h2>What Platforms Actually Need</h2>
+
+      <p>Modern platforms need payout infrastructure that is:</p>
+
+      <ul>
+        <li><strong>Programmatic</strong> — triggered by an API call, not a bank portal</li>
+        <li><strong>Global</strong> — works in the Philippines, Kenya, Brazil, and Pakistan equally well</li>
+        <li><strong>Instant</strong> — workers shouldn't wait days to get paid</li>
+        <li><strong>Cheap</strong> — fees should scale linearly, not eat margins on small payouts</li>
+        <li><strong>No bank details required</strong> — collecting IBANs from workers in 40 countries is a compliance nightmare</li>
+      </ul>
+
+      <h2>How Stablecoin Payouts Solve This</h2>
+
+      <p>USDC (a stablecoin pegged 1:1 to the US dollar) on Solana settles in under one second. There are no correspondent banks, no SWIFT messages, no intermediaries taking cuts.</p>
+
+      <p>With <a href="/">Settlr</a>, the payout flow is:</p>
+
+      <ol>
+        <li>You call one API endpoint with the amount and recipient's email</li>
+        <li>The recipient gets an email with a link to claim their funds</li>
+        <li>They click the link — an embedded wallet is created automatically</li>
+        <li>Funds arrive in under 1 second. 1% flat fee.</li>
+      </ol>
+
+      <p>No bank details. No wallet download. No crypto knowledge required from the recipient.</p>
+
+      <h2>The Cost Comparison</h2>
+
+      <p>Paying 500 workers $50 each per month:</p>
+
+      <ul>
+        <li><strong>Wire transfer:</strong> 500 × $25 = <strong>$12,500/month in fees</strong></li>
+        <li><strong>PayPal (5% intl):</strong> 500 × $2.50 = <strong>$1,250/month</strong> + frozen accounts</li>
+        <li><strong>Settlr (1% flat):</strong> 500 × $0.50 = <strong>$250/month</strong></li>
+      </ul>
+
+      <p>That's a savings of <strong>$12,250/month vs wire</strong> and <strong>$1,000/month vs PayPal</strong> — with instant settlement and zero failed transactions.</p>
+
+      <h2>How to Get Started</h2>
+
+      <p>The integration is a single API call:</p>
+
+      <pre><code>const payout = await settlr.payouts.create({
+  amount: 50.00,
+  currency: "USDC",
+  recipient: "worker@example.com",
+});
+// → { id: "pay_8xK2m", status: "settled" }</code></pre>
+
+      <p>No SWIFT codes. No IBANs. No intermediaries. Just an email address and an amount.</p>
+
+      <p><a href="/onboarding">Start sending payouts →</a></p>
+    `,
+    },
+    {
+        slug: "paypal-vs-wire-vs-usdc-international-payouts",
+        title: "PayPal vs Wire Transfer vs USDC: The Real Cost of Paying People Internationally",
+        excerpt:
+            "A detailed breakdown of what it actually costs to pay workers, creators, and contractors across borders — including the hidden fees nobody talks about.",
+        date: "2026-02-16",
+        author: "Adam Bryant",
+        readTime: "8 min read",
+        tags: ["comparison", "PayPal", "wire transfer", "USDC", "international payouts"],
+        content: `
+      <p>You need to pay someone in the Philippines $100. Simple, right? Not quite. Depending on the rail you choose, the recipient might get anywhere from $85 to $99. Here's the real math.</p>
+
+      <h2>Wire Transfer</h2>
+
+      <ul>
+        <li><strong>Your bank's outgoing wire fee:</strong> $25–45</li>
+        <li><strong>Correspondent bank fee:</strong> $15–25 (deducted from the transfer)</li>
+        <li><strong>Recipient's bank incoming fee:</strong> $5–15</li>
+        <li><strong>FX spread:</strong> 1–3% markup on the exchange rate</li>
+        <li><strong>Time:</strong> 2–5 business days</li>
+      </ul>
+
+      <p><strong>Total cost on a $100 payout: $45–85.</strong> The recipient gets $15–55.</p>
+
+      <p>That's not a typo. On small payouts, wire transfers can eat more than half the amount. And that's before you account for the 10–15% failure rate on wires to emerging market banks.</p>
+
+      <h2>PayPal</h2>
+
+      <ul>
+        <li><strong>Sending fee (international):</strong> 5% of the transaction</li>
+        <li><strong>FX conversion:</strong> 3–4% spread over mid-market rate</li>
+        <li><strong>Withdrawal to local bank:</strong> Additional 1–2% in some countries</li>
+        <li><strong>Time:</strong> 1–3 business days (or instant for a fee)</li>
+        <li><strong>Risk:</strong> Account freezes, holds, and rolling reserves</li>
+      </ul>
+
+      <p><strong>Total cost on a $100 payout: $8–11.</strong> The recipient gets $89–92.</p>
+
+      <p>Better than wire, but PayPal's real cost is the unpredictability. PayPal mass payouts accounts get frozen regularly — often with tens of thousands of dollars locked up for 180 days with no recourse.</p>
+
+      <h2>USDC on Solana (via Settlr)</h2>
+
+      <ul>
+        <li><strong>Payout fee:</strong> 1% flat ($1.00)</li>
+        <li><strong>FX conversion:</strong> None — USDC is dollar-denominated</li>
+        <li><strong>Gas fees:</strong> $0 (sponsored)</li>
+        <li><strong>Time:</strong> Under 1 second</li>
+        <li><strong>Risk:</strong> Non-custodial, on-chain, no account freezes</li>
+      </ul>
+
+      <p><strong>Total cost on a $100 payout: $1.00.</strong> The recipient gets $99.</p>
+
+      <h2>But How Does the Recipient Cash Out?</h2>
+
+      <p>This is the fair question. USDC isn't local currency. But the off-ramp ecosystem has matured dramatically:</p>
+
+      <ul>
+        <li><strong>Local exchanges</strong> in most countries (Coins.ph in Philippines, Luno in Africa, Mercado Bitcoin in Brazil)</li>
+        <li><strong>P2P marketplaces</strong> where USDC trades at near-parity</li>
+        <li><strong>Mobile money integrations</strong> — M-Pesa, GCash, etc.</li>
+        <li><strong>Direct bank withdrawal</strong> via off-ramp aggregators</li>
+      </ul>
+
+      <p>For many recipients in emerging markets, USDC is actually <em>preferred</em> over local currency — it's dollar-denominated, doesn't devalue, and is instantly transferable.</p>
+
+      <h2>The Bottom Line</h2>
+
+      <table>
+        <thead>
+          <tr><th></th><th>Wire</th><th>PayPal</th><th>Settlr (USDC)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Fee on $100</td><td>$45–85</td><td>$8–11</td><td><strong>$1.00</strong></td></tr>
+          <tr><td>Settlement</td><td>2–5 days</td><td>1–3 days</td><td><strong>&lt;1 second</strong></td></tr>
+          <tr><td>Countries</td><td>~100</td><td>~200</td><td><strong>180+</strong></td></tr>
+          <tr><td>Bank details needed</td><td>Yes</td><td>Yes</td><td><strong>No (email only)</strong></td></tr>
+          <tr><td>Account freeze risk</td><td>Low</td><td>High</td><td><strong>None</strong></td></tr>
+        </tbody>
+      </table>
+
+      <p>If you're paying more than 10 people internationally per month, the savings from switching to stablecoin payouts are significant. <a href="/pricing">See detailed pricing →</a></p>
+    `,
+    },
+    {
+        slug: "data-labeling-payouts-stablecoin",
+        title: "Why Data Labeling Platforms Are Switching to Stablecoin Payouts",
+        excerpt:
+            "Remotasks, Toloka, and Scale AI pay thousands of annotators in countries where PayPal doesn't work and wire fees eat the entire payout. Stablecoin rails are the fix.",
+        date: "2026-02-15",
+        author: "Adam Bryant",
+        readTime: "6 min read",
+        tags: ["data labeling", "AI", "annotators", "Remotasks", "payouts", "stablecoins"],
+        content: `
+      <p>The AI boom has created an enormous demand for human data labeling. Models need millions of labeled images, transcribed audio files, and categorized text samples. That work is done by <strong>hundreds of thousands of annotators</strong> — primarily in the Philippines, Kenya, India, Venezuela, Pakistan, and Nigeria.</p>
+
+      <p>And paying them is a nightmare.</p>
+
+      <h2>The Payout Problem in Data Labeling</h2>
+
+      <p>A typical data labeling platform pays annotators $3–15 per task. At these amounts:</p>
+
+      <ul>
+        <li><strong>Wire transfers are impossible</strong> — a $25 wire fee on a $10 payout makes no sense</li>
+        <li><strong>PayPal doesn't work</strong> — many annotators are in countries where PayPal has limited functionality or doesn't support withdrawals</li>
+        <li><strong>Local bank transfers are fragmented</strong> — you'd need to integrate with banking APIs in 40+ countries</li>
+        <li><strong>Gift cards and mobile top-ups</strong> — common workarounds, but they're not actual money and annotators increasingly reject them</li>
+      </ul>
+
+      <p>Platforms like Remotasks and Toloka have publicly struggled with this. Their community forums are full of complaints about delayed payouts, failed PayPal transfers, and unsupported withdrawal methods.</p>
+
+      <h2>Why Stablecoins Fit Perfectly</h2>
+
+      <p>Data labeling payouts have three unique characteristics that make stablecoins the ideal rail:</p>
+
+      <ol>
+        <li><strong>High volume, low value:</strong> Thousands of small payouts per day. You need a rail where the fee scales proportionally — 1% of $10 is $0.10, not $25.</li>
+        <li><strong>Global workforce:</strong> Annotators are in countries that traditional banking rails struggle with. USDC works anywhere there's internet.</li>
+        <li><strong>Speed matters:</strong> Annotators are often gig workers who need fast access to earnings. 3–5 day wire settlement is unacceptable when someone is relying on that $10 for today's meals.</li>
+      </ol>
+
+      <h2>How It Works With Settlr</h2>
+
+      <p>When a task is completed and approved:</p>
+
+      <pre><code>// When annotation task is approved
+const payout = await settlr.payouts.create({
+  amount: task.reward,
+  currency: "USDC",
+  recipient: annotator.email,
+  metadata: { taskId: task.id, projectId: project.id }
+});
+// Settled in &lt;1 second</code></pre>
+
+      <p>The annotator receives an email. They click a link. An embedded wallet is created automatically (no app download, no seed phrase). Funds are available immediately.</p>
+
+      <p>For returning annotators, the wallet already exists — they just see the funds arrive.</p>
+
+      <h2>What Annotators Actually Do With USDC</h2>
+
+      <p>In the Philippines (the largest data labeling workforce), annotators typically:</p>
+      <ul>
+        <li>Convert to PHP via <strong>Coins.ph</strong> or <strong>GCash</strong> — takes minutes</li>
+        <li>Hold in USDC as a dollar-denominated savings (many prefer this to peso)</li>
+        <li>Send to family via the same email-based system</li>
+      </ul>
+
+      <p>In Kenya, it's <strong>M-Pesa</strong>. In Nigeria, <strong>local P2P exchanges</strong>. In Venezuela, USDC <em>is</em> the preferred currency — the bolivar hyperinflation makes dollar stablecoins more stable than the local banking system.</p>
+
+      <h2>The Business Case</h2>
+
+      <p>A platform paying 2,000 annotators an average of $8 per task, 3 tasks per day:</p>
+
+      <ul>
+        <li><strong>Daily payout volume:</strong> $48,000</li>
+        <li><strong>PayPal fees (5%):</strong> $2,400/day → <strong>$72,000/month</strong></li>
+        <li><strong>Settlr fees (1%):</strong> $480/day → <strong>$14,400/month</strong></li>
+        <li><strong>Monthly savings: $57,600</strong></li>
+      </ul>
+
+      <p>Plus zero failed transactions, zero PayPal account freezes, and instant settlement instead of waiting 3 days.</p>
+
+      <p>If you're building or running a data labeling platform, <a href="/industries/data-labeling">see how Settlr works for annotation payouts →</a></p>
+    `,
+    },
+    {
+        slug: "api-first-global-payouts",
+        title: "The API-First Approach to Global Payouts: One Endpoint, 180 Countries",
+        excerpt:
+            "Most payout solutions require you to integrate with different providers for different regions. Here's how a single API endpoint can replace your entire payout stack.",
+        date: "2026-02-14",
+        author: "Adam Bryant",
+        readTime: "6 min read",
+        tags: ["API", "developer", "payouts", "integration", "infrastructure"],
+        content: `
+      <p>If you've built payout infrastructure for a global platform, you know the reality: it's not one integration — it's a dozen. PayPal for the US and Europe. Wise for individual transfers. Local bank APIs for specific markets. A wire transfer fallback for everywhere else. And a spreadsheet to track which method works in which country.</p>
+
+      <p>What if it was just one API call?</p>
+
+      <h2>The Current State of Payout Infrastructure</h2>
+
+      <p>A typical platform's payout stack looks like this:</p>
+
+      <pre><code>// The reality of most payout systems
+if (recipient.country === "US") {
+  await stripe.transfers.create({ ... });
+} else if (recipient.country === "EU") {
+  await wise.createTransfer({ ... });
+} else if (["PH", "KE", "NG"].includes(recipient.country)) {
+  await mobileMoney.send({ ... });
+} else {
+  await bank.wireTransfer({ ... }); // $25+ fee, 3-5 days
+  // Also: 15% of these will fail
+}</code></pre>
+
+      <p>Each provider has its own API, its own authentication, its own webhook format, its own error codes, and its own compliance requirements. You're not building a product — you're maintaining a patchwork of payment integrations.</p>
+
+      <h2>One Endpoint. Every Country.</h2>
+
+      <p>With Settlr, the entire payout flow is a single POST request:</p>
+
+      <pre><code>const payout = await settlr.payouts.create({
+  amount: 50.00,
+  currency: "USDC",
+  recipient: "maria@remotasks.ph",
+});
+
+// → { id: "pay_8xK2m", status: "settled", settledAt: "2026-02-14T10:23:01Z" }</code></pre>
+
+      <p>Same endpoint whether the recipient is in San Francisco, Manila, Nairobi, or São Paulo. Same fee (1% flat). Same settlement time (under 1 second). Same response format.</p>
+
+      <h2>What Happens Behind the Scenes</h2>
+
+      <ol>
+        <li><strong>You send the API call</strong> — amount + recipient email</li>
+        <li><strong>Settlr creates or retrieves an embedded wallet</strong> for the recipient (via Privy) — no action required from them</li>
+        <li><strong>USDC is transferred on Solana</strong> — gasless, sub-second finality</li>
+        <li><strong>Recipient gets an email</strong> with a link to access their funds</li>
+        <li><strong>Webhook fires</strong> to confirm settlement on your end</li>
+      </ol>
+
+      <p>The recipient never needs to know about Solana, USDC, or blockchain. They see: "You received $50.00 from [Your Platform]. Click to claim."</p>
+
+      <h2>Bulk Payouts</h2>
+
+      <p>For batch processing (payroll runs, weekly annotator payments, creator revenue shares):</p>
+
+      <pre><code>const batch = await settlr.payouts.createBatch([
+  { amount: 50.00, recipient: "maria@remotasks.ph" },
+  { amount: 120.00, recipient: "james@contractor.co.ke" },
+  { amount: 35.00, recipient: "ana@freelancer.com.br" },
+  // ... hundreds more
+]);
+
+// All settled in &lt;2 seconds</code></pre>
+
+      <p>No rate limits on batch size. No per-country routing logic. No failed wires to retry.</p>
+
+      <h2>Webhooks & Reconciliation</h2>
+
+      <pre><code>// Your webhook handler
+app.post("/webhooks/settlr", (req, res) =&gt; {
+  const event = verifyWebhook(req);
+
+  switch (event.type) {
+    case "payout.settled":
+      markPayoutComplete(event.data.id);
+      break;
+    case "payout.claimed":
+      // Recipient opened the email and accessed funds
+      logClaim(event.data.id, event.data.claimedAt);
+      break;
+  }
+});</code></pre>
+
+      <p>Every payout has an on-chain transaction hash for full auditability. No "pending" black holes — it either settled or it didn't.</p>
+
+      <h2>Why Engineers Prefer This</h2>
+
+      <ul>
+        <li><strong>One SDK</strong> instead of 4-5 payment provider integrations</li>
+        <li><strong>TypeScript-first</strong> — full type safety, no guessing at response shapes</li>
+        <li><strong>Deterministic</strong> — payouts either settle (in &lt;1s) or fail immediately. No 3-day "pending" states</li>
+        <li><strong>Testable</strong> — sandbox environment with instant test payouts</li>
+        <li><strong>No PII collection</strong> — you don't need to collect or store bank details, tax IDs, or government documents</li>
+      </ul>
+
+      <p>If you're an engineer tired of maintaining a patchwork of payout providers, <a href="/docs">check out the docs</a> or <a href="/onboarding">start integrating</a>. The whole setup takes about 15 minutes.</p>
+    `,
+    },
+    {
+        slug: "email-only-payouts-no-bank-details",
+        title: "Email-Only Payouts: How to Pay Anyone in the World Without Bank Details",
+        excerpt:
+            "Collecting IBANs, routing numbers, and bank account details from a global workforce is a compliance and ops nightmare. What if you only needed an email address?",
+        date: "2026-02-13",
+        author: "Adam Bryant",
+        readTime: "5 min read",
+        tags: ["email payouts", "no bank details", "global payouts", "compliance"],
+        content: `
+      <p>To pay someone internationally through traditional rails, you need: their full legal name, bank name, account number (or IBAN), routing number (or SWIFT/BIC code), bank address, and sometimes a tax ID or government document. For <em>every single recipient</em>.</p>
+
+      <p>Now multiply that by 500 contractors in 30 countries.</p>
+
+      <p>That's not a payment problem — it's a data collection, storage, and compliance nightmare. You're handling sensitive financial PII, navigating different banking formats per country, and dealing with a 10-15% error rate on bank detail submissions (wrong digit in an IBAN, outdated SWIFT code, etc.).</p>
+
+      <h2>What If You Only Needed an Email?</h2>
+
+      <p>That's the core idea behind Settlr. To pay someone, you need exactly one piece of information: their email address.</p>
+
+      <pre><code>await settlr.payouts.create({
+  amount: 75.00,
+  currency: "USDC",
+  recipient: "contractor@example.com",
+});</code></pre>
+
+      <p>No IBAN. No SWIFT code. No bank name. No tax documents. Just an email.</p>
+
+      <h2>How It Works for the Recipient</h2>
+
+      <ol>
+        <li><strong>They receive an email:</strong> "You received $75.00 from [Your Platform]"</li>
+        <li><strong>They click the link</strong> — no app download required</li>
+        <li><strong>An embedded wallet is created</strong> automatically using their email (via Privy). If they've received a payout before, their existing wallet is used.</li>
+        <li><strong>Funds are available immediately</strong> — USDC in their wallet, ready to hold, send, or convert to local currency</li>
+      </ol>
+
+      <p>The recipient doesn't need to understand crypto, own a wallet, or install anything. It works like receiving money on Venmo — but it works in every country.</p>
+
+      <h2>Why This Matters for Compliance</h2>
+
+      <p>By removing bank details from the equation, you eliminate:</p>
+
+      <ul>
+        <li><strong>PII storage liability</strong> — you're not holding bank account numbers, so there's nothing to breach</li>
+        <li><strong>Country-specific banking formats</strong> — no need to validate IBANs, routing numbers, CLABE codes, BSB numbers, etc.</li>
+        <li><strong>KYB on recipients</strong> — you're not opening bank accounts or acting as a financial intermediary</li>
+        <li><strong>Failed payment remediation</strong> — no wrong-digit IBANs, no returned wires, no "bank not found" errors</li>
+      </ul>
+
+      <p>Your compliance surface area shrinks dramatically. You're sending a stablecoin to an email-authenticated wallet — the recipient handles their own off-ramping.</p>
+
+      <h2>Off-Ramping: How Recipients Get Local Currency</h2>
+
+      <p>The most common question: "But they need real money, not USDC." Fair point. Here's how recipients convert:</p>
+
+      <ul>
+        <li><strong>Philippines:</strong> Coins.ph, GCash — convert USDC → PHP in minutes</li>
+        <li><strong>Kenya:</strong> Binance P2P → M-Pesa in under 10 minutes</li>
+        <li><strong>Nigeria:</strong> Local P2P exchanges, Luno — robust USDC/NGN markets</li>
+        <li><strong>Brazil:</strong> Mercado Bitcoin, Binance — convert to BRL and withdraw to Pix</li>
+        <li><strong>India:</strong> WazirX, CoinDCX — convert to INR</li>
+        <li><strong>Venezuela:</strong> USDC is often <em>preferred</em> over local currency due to hyperinflation</li>
+      </ul>
+
+      <p>In many emerging markets, the off-ramp ecosystem is more mature than the inbound wire infrastructure. Recipients often have an easier time converting USDC to local currency than they do receiving an international wire.</p>
+
+      <h2>Who's Using Email-Only Payouts</h2>
+
+      <ul>
+        <li><strong>Data labeling platforms</strong> paying thousands of annotators small amounts across dozens of countries</li>
+        <li><strong>Creator platforms</strong> distributing revenue shares to artists and sellers globally</li>
+        <li><strong>Freelance marketplaces</strong> paying contractors without the overhead of collecting banking details</li>
+        <li><strong>Research platforms</strong> compensating survey respondents and study participants</li>
+        <li><strong>Open source projects</strong> distributing bounties to contributors worldwide</li>
+      </ul>
+
+      <p>If your platform pays people and you're tired of collecting bank details, <a href="/onboarding">try email-only payouts with Settlr</a>. The integration takes 15 minutes and you'll never ask for an IBAN again.</p>
+    `,
+    },
+
+    // ─── EXISTING POSTS (still relevant for secondary SEO) ────
     {
         slug: "accept-crypto-payments-without-wallet",
         title: "How to Accept Crypto Payments Without Requiring a Wallet",
         excerpt:
             "Most crypto payment gateways force your customers to install a wallet, buy gas tokens, and figure out on-chain transactions. Here's how to remove that friction entirely with embedded wallets and gasless transactions.",
-        date: "2026-02-16",
+        date: "2026-02-10",
         author: "Adam Bryant",
         readTime: "6 min read",
-        tags: ["crypto payments", "embedded wallets", "UX", "Solana"],
+        tags: ["crypto payments", "embedded wallets", "UX", "Solana", "no wallet required"],
         content: `
       <p>The biggest barrier to crypto adoption in commerce isn't technology — it's UX. According to <a href="https://triple-a.io/cryptocurrency-ownership-data" target="_blank" rel="noopener noreferrer">Triple-A's 2024 data</a>, there are over 562 million crypto owners globally. But the vast majority of e-commerce checkouts still require customers to:</p>
 
@@ -97,10 +535,10 @@ export const posts: BlogPost[] = [
         title: "Settlr vs Stripe: Why Crypto-Native Teams Are Switching",
         excerpt:
             "Stripe charges 2.9% + 30¢ per transaction and settles in 2–7 days. Settlr charges 1% flat and settles instantly. Here's a detailed breakdown of when each makes sense.",
-        date: "2026-02-14",
+        date: "2026-02-09",
         author: "Adam Bryant",
         readTime: "7 min read",
-        tags: ["comparison", "Stripe", "fees", "settlement"],
+        tags: ["comparison", "Stripe", "fees", "settlement", "Stripe Connect alternative"],
         content: `
       <p>Stripe is the gold standard for fiat payment processing. It's reliable, well-documented, and handles the complexity of credit card networks, PCI compliance, and cross-border banking.</p>
 
@@ -146,11 +584,11 @@ export const posts: BlogPost[] = [
         slug: "solana-payment-integration-react",
         title: "How to Integrate Solana Payments in React (Step-by-Step Guide)",
         excerpt:
-            "A practical developer guide to accepting USDC payments on Solana in your React or Next.js app. From npm install to production checkout in under 30 minutes.",
-        date: "2026-02-10",
+            "A practical developer guide to integrating USDC payments and payouts on Solana in your React or Next.js app. From npm install to production in under 30 minutes.",
+        date: "2026-02-08",
         author: "Adam Bryant",
         readTime: "8 min read",
-        tags: ["developer guide", "React", "Solana", "USDC", "SDK"],
+        tags: ["developer guide", "React", "Solana", "USDC", "SDK", "payout integration"],
         content: `
       <p>This guide walks you through integrating Solana-based USDC payments into a React or Next.js application using the Settlr SDK. By the end, you'll have a working checkout that accepts stablecoin payments with zero gas fees and instant settlement.</p>
 
@@ -248,10 +686,10 @@ export async function POST(req: Request) {
         title: "Stripe Banned Your Business? Here's What to Do Next",
         excerpt:
             "Your Stripe account got suspended, your payments are frozen, and you're scrambling for answers. You're not alone — and there's a way forward that doesn't involve high-risk merchant accounts.",
-        date: "2026-02-15",
+        date: "2026-02-07",
         author: "Adam Bryant",
         readTime: "9 min read",
-        tags: ["Stripe", "high-risk", "payment processing", "crypto payments"],
+        tags: ["Stripe", "high-risk", "payment processing", "alternative payouts"],
         content: `
       <p>You woke up to the email nobody wants: <em>"Your Stripe account has been suspended."</em> Your payments are frozen, your customers can't check out, and you're scrambling for answers. Sound familiar? You're not alone — and there's a way forward.</p>
 
@@ -347,7 +785,7 @@ export async function POST(req: Request) {
             "How to Accept Crypto Payments on Your Website (Without Making Customers Download a Wallet)",
         excerpt:
             "Crypto payments promise lower fees, no chargebacks, and no payment processor gatekeeping. But most of your customers don't have a wallet. Here's how to offer crypto checkout without losing 95% of your buyers.",
-        date: "2026-02-13",
+        date: "2026-02-06",
         author: "Adam Bryant",
         readTime: "10 min read",
         tags: [
@@ -357,6 +795,7 @@ export async function POST(req: Request) {
             "UX",
             "Solana",
             "USDC",
+            "email payouts",
         ],
         content: `
       <p>Crypto payments promise lower fees, no chargebacks, and no payment processor gatekeeping. But there's a problem: most of your customers don't have a crypto wallet. Here's how to offer crypto checkout without losing 95% of your buyers at the payment screen.</p>

@@ -1,21 +1,27 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Help Center",
+  title: "Help Center — FAQs & Support",
   description:
-    "Get help with Settlr crypto payments. FAQs, documentation, and support for merchants accepting USDC payments.",
+    "Get help with Settlr payouts. FAQs, documentation, and support for platforms sending USDC payouts globally.",
   keywords: [
     "settlr help",
-    "crypto payment help",
-    "USDC payment support",
+    "payout help",
+    "USDC payout support",
     "settlr faq",
-    "crypto merchant support",
+    "global payout support",
+    "email payout help",
   ],
   openGraph: {
     title: "Settlr Help Center",
     description:
-      "Find answers to common questions about accepting crypto payments with Settlr.",
+      "Find answers to common questions about sending global payouts with Settlr.",
     url: "https://settlr.dev/help",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Settlr Help Center",
+    description: "FAQs and support for global USDC payouts with Settlr.",
   },
 };
 

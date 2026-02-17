@@ -158,10 +158,73 @@ export default function CreatorsPage() {
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-            Pay creators anywhere. No restrictions.
+            Collect from fans. Pay creators. One integration.
           </h2>
+          <p className="mt-4 max-w-2xl text-white/45 leading-relaxed">
+            Creator platforms have two money flows — fans paying in, and
+            creators getting paid out. Settlr handles both.
+          </p>
         </Reveal>
 
+        {/* Dual-flow diagram */}
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {/* Inbound: Checkout */}
+          <Reveal delay={0.08}>
+            <div className="rounded-2xl border border-[#34d399]/15 bg-[#34d399]/[0.03] p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="inline-flex rounded-xl bg-[#34d399]/10 p-2.5">
+                  <Users className="h-5 w-5 text-[#34d399]" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-[#34d399]">Inbound</p>
+                  <h3 className="text-[15px] font-semibold text-white">
+                    Checkout SDK
+                  </h3>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed text-white/40">
+                Embed a checkout component so fans can pay creators with USDC.
+                Email-based wallets, zero gas, no crypto knowledge needed from
+                buyers.
+              </p>
+              <div className="mt-4 rounded-lg bg-[#08080d] border border-white/[0.06] p-4 font-mono text-xs leading-relaxed">
+                <span className="text-[#3B82F6]">{"<"}</span>
+                <span className="text-[#fbbf24]">SettlrCheckout</span>
+                <span className="text-white">{" amount={9.99}"}</span>
+                <span className="text-[#3B82F6]">{" />"}</span>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Outbound: Payouts */}
+          <Reveal delay={0.12}>
+            <div className="rounded-2xl border border-[#3B82F6]/15 bg-[#3B82F6]/[0.03] p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="inline-flex rounded-xl bg-[#3B82F6]/10 p-2.5">
+                  <DollarSign className="h-5 w-5 text-[#3B82F6]" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-[#3B82F6]">Outbound</p>
+                  <h3 className="text-[15px] font-semibold text-white">
+                    Payout API
+                  </h3>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed text-white/40">
+                Pay creators their earnings in 180+ countries with just their
+                email. 1% flat, instant, no bank details, no Stripe Connect
+                restrictions.
+              </p>
+              <div className="mt-4 rounded-lg bg-[#08080d] border border-white/[0.06] p-4 font-mono text-xs leading-relaxed">
+                <span className="text-[#3B82F6]">await</span>{" "}
+                <span className="text-white">settlr.payouts.create</span>
+                <span className="text-white/40">{"({...})"}</span>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Feature grid below */}
         <div className="mt-16 grid gap-8 md:grid-cols-3">
           {[
             {

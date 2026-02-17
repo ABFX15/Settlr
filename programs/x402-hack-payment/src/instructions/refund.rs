@@ -19,7 +19,7 @@ pub struct RefundPayment<'info> {
         seeds = [Platform::SEED],
         bump = platform_config.bump,
     )]
-    pub platform_config: Account<'info, Platform>,
+    pub platform_config: Box<Account<'info, Platform>>,
     
     #[account(
         mut,
@@ -28,7 +28,7 @@ pub struct RefundPayment<'info> {
         constraint = payment_account.status == PaymentStatus::Completed @ PaymentError::PaymentAlreadyRefunded,
         constraint = payment_account.merchant == merchant_account.key() @ PaymentError::RefundNotAuthorized,
     )]
-    pub payment_account: Account<'info, Payment>,
+    pub payment_account: Box<Account<'info, Payment>>,
     
     #[account(
         mut,
@@ -36,7 +36,7 @@ pub struct RefundPayment<'info> {
         bump = merchant_account.bump,
         constraint = merchant_account.authority == merchant_authority.key() @ PaymentError::RefundNotAuthorized,
     )]
-    pub merchant_account: Account<'info, Merchant>,
+    pub merchant_account: Box<Account<'info, Merchant>>,
     
     /// CHECK: The original customer who made the payment
     #[account(

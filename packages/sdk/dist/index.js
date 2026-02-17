@@ -35,6 +35,7 @@ __export(index_exports, {
   INCO_LIGHTNING_PROGRAM_ID: () => INCO_LIGHTNING_PROGRAM_ID,
   OneClickClient: () => OneClickClient,
   PaymentModal: () => PaymentModal,
+  PayoutClient: () => PayoutClient,
   PrivacyFeatures: () => PrivacyFeatures,
   REACT_NATIVE_EXAMPLE: () => REACT_NATIVE_EXAMPLE,
   REST_API: () => REST_API,
@@ -44,6 +45,7 @@ __export(index_exports, {
   SUPPORTED_TOKENS: () => SUPPORTED_TOKENS,
   Settlr: () => Settlr,
   SettlrProvider: () => SettlrProvider,
+  SubscriptionClient: () => SubscriptionClient,
   UNITY_EXAMPLE: () => UNITY_EXAMPLE,
   USDC_MINT_DEVNET: () => USDC_MINT_DEVNET,
   USDC_MINT_MAINNET: () => USDC_MINT_MAINNET,
@@ -52,6 +54,8 @@ __export(index_exports, {
   buildAllowanceRemainingAccounts: () => buildAllowanceRemainingAccounts,
   buildPrivateReceiptAccounts: () => buildPrivateReceiptAccounts,
   createOneClickClient: () => createOneClickClient,
+  createPayoutClient: () => createPayoutClient,
+  createSubscriptionClient: () => createSubscriptionClient,
   createWebhookHandler: () => createWebhookHandler,
   encryptAmount: () => encryptAmount,
   findAllowancePda: () => findAllowancePda,
@@ -1650,6 +1654,340 @@ export function useSettlrPayment(onSuccess: (sig: string) => void) {
   return { startPayment };
 }
 `;
+
+// src/subscriptions.ts
+var SubscriptionClient = class {
+  constructor(config) {
+    if (!config.apiKey) {
+      throw new Error(
+        "API key is required. Get one at https://settlr.dev/dashboard"
+      );
+    }
+    this.apiKey = config.apiKey;
+    this.baseUrl = (config.baseUrl || "https://settlr.dev").replace(/\/$/, "");
+    this.merchantId = config.merchantId;
+    this.merchantWallet = config.merchantWallet;
+  }
+  async fetch(path, options = {}) {
+    const url = `${this.baseUrl}${path}`;
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": this.apiKey,
+        ...options.headers
+      }
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(
+        data.error || `API error: ${res.status}`
+      );
+    }
+    return data;
+  }
+  /**
+   * Resolve merchant ID from API key
+   */
+  async ensureMerchantId() {
+    if (this.merchantId) return this.merchantId;
+    const data = await this.fetch("/api/sdk/validate", {
+      method: "POST",
+      body: JSON.stringify({})
+    });
+    this.merchantId = data.merchantId;
+    if (data.merchantWallet && !this.merchantWallet) {
+      this.merchantWallet = data.merchantWallet;
+    }
+    return this.merchantId;
+  }
+  // ═══════════════════════════════════════
+  // PLANS
+  // ═══════════════════════════════════════
+  /**
+   * Create a subscription plan
+   */
+  async createPlan(options) {
+    const merchantId = await this.ensureMerchantId();
+    const data = await this.fetch(
+      "/api/subscriptions/plans",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          merchantId,
+          name: options.name,
+          description: options.description,
+          amount: options.amount,
+          interval: options.interval,
+          intervalCount: options.intervalCount || 1,
+          trialDays: options.trialDays || 0,
+          features: options.features || []
+        })
+      }
+    );
+    return data.plan;
+  }
+  /**
+   * List all plans for the merchant
+   */
+  async listPlans() {
+    const merchantId = await this.ensureMerchantId();
+    const data = await this.fetch(
+      `/api/subscriptions/plans?merchantId=${merchantId}`
+    );
+    return data.plans;
+  }
+  /**
+   * Update a plan
+   */
+  async updatePlan(planId, options) {
+    const data = await this.fetch(
+      `/api/subscriptions/plans/${planId}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(options)
+      }
+    );
+    return data.plan;
+  }
+  /**
+   * Deactivate a plan (stops new subscriptions)
+   */
+  async deactivatePlan(planId) {
+    await this.updatePlan(planId, { active: false });
+  }
+  // ═══════════════════════════════════════
+  // SUBSCRIPTIONS
+  // ═══════════════════════════════════════
+  /**
+   * Subscribe a customer to a plan
+   */
+  async subscribe(options) {
+    const data = await this.fetch("/api/subscriptions", {
+      method: "POST",
+      body: JSON.stringify({
+        action: "subscribe",
+        planId: options.planId,
+        customerWallet: options.customerWallet,
+        merchantWallet: options.merchantWallet || this.merchantWallet,
+        customerEmail: options.customerEmail,
+        metadata: options.metadata
+      })
+    });
+    return data;
+  }
+  /**
+   * List subscriptions
+   */
+  async listSubscriptions(options) {
+    const merchantId = await this.ensureMerchantId();
+    const params = new URLSearchParams({ merchantId });
+    if (options?.status) params.set("status", options.status);
+    if (options?.customerWallet)
+      params.set("customer", options.customerWallet);
+    if (options?.planId) params.set("planId", options.planId);
+    const data = await this.fetch(
+      `/api/subscriptions?${params.toString()}`
+    );
+    return data.subscriptions;
+  }
+  /**
+   * Get subscription details including payment history
+   */
+  async getSubscription(subscriptionId) {
+    const data = await this.fetch(`/api/subscriptions/${subscriptionId}`);
+    return {
+      ...data.subscription,
+      payments: data.payments
+    };
+  }
+  /**
+   * Cancel a subscription
+   * @param immediately - If true, cancels now. If false (default), cancels at end of billing period.
+   */
+  async cancel(subscriptionId, immediately = false) {
+    return this.fetch("/api/subscriptions", {
+      method: "POST",
+      body: JSON.stringify({
+        action: "cancel",
+        subscriptionId,
+        immediately
+      })
+    });
+  }
+  /**
+   * Pause a subscription (stops billing, preserves subscription)
+   */
+  async pause(subscriptionId) {
+    return this.fetch("/api/subscriptions", {
+      method: "POST",
+      body: JSON.stringify({
+        action: "pause",
+        subscriptionId
+      })
+    });
+  }
+  /**
+   * Resume a paused subscription
+   */
+  async resume(subscriptionId) {
+    return this.fetch("/api/subscriptions", {
+      method: "POST",
+      body: JSON.stringify({
+        action: "resume",
+        subscriptionId
+      })
+    });
+  }
+  /**
+   * Manually charge a subscription (useful for metered billing)
+   */
+  async charge(subscriptionId) {
+    return this.fetch("/api/subscriptions", {
+      method: "POST",
+      body: JSON.stringify({
+        action: "charge",
+        subscriptionId
+      })
+    });
+  }
+};
+function createSubscriptionClient(config) {
+  return new SubscriptionClient(config);
+}
+
+// src/payouts.ts
+var PayoutClient = class {
+  constructor(config) {
+    if (!config.apiKey) {
+      throw new Error(
+        "API key is required. Get one at https://settlr.dev/dashboard"
+      );
+    }
+    this.apiKey = config.apiKey;
+    this.baseUrl = (config.baseUrl || "https://settlr.dev").replace(/\/$/, "");
+  }
+  async fetch(path, options = {}) {
+    const url = `${this.baseUrl}${path}`;
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": this.apiKey,
+        ...options.headers
+      }
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(
+        data.error || `Payout API error: ${res.status}`
+      );
+    }
+    return data;
+  }
+  // -----------------------------------------------------------------------
+  // Create a single payout
+  // -----------------------------------------------------------------------
+  /**
+   * Send a payout to a recipient by email.
+   * They'll receive an email with a claim link — no wallet or bank details needed.
+   *
+   * @example
+   * ```typescript
+   * const payout = await payouts.create({
+   *   email: 'alice@example.com',
+   *   amount: 250.00,
+   *   memo: 'March data labeling — 500 tasks',
+   * });
+   * console.log(payout.id);        // "po_abc123"
+   * console.log(payout.status);    // "sent"
+   * console.log(payout.claimUrl);  // "https://settlr.dev/claim/..."
+   * ```
+   */
+  async create(options) {
+    if (!options.email || !options.email.includes("@")) {
+      throw new Error("Valid email address is required");
+    }
+    if (!options.amount || options.amount <= 0) {
+      throw new Error("Amount must be a positive number");
+    }
+    return this.fetch("/api/payouts", {
+      method: "POST",
+      body: JSON.stringify({
+        email: options.email,
+        amount: options.amount,
+        currency: options.currency || "USDC",
+        memo: options.memo,
+        metadata: options.metadata
+      })
+    });
+  }
+  // -----------------------------------------------------------------------
+  // Create batch payouts
+  // -----------------------------------------------------------------------
+  /**
+   * Send multiple payouts at once. Each recipient gets their own email.
+   *
+   * @example
+   * ```typescript
+   * const batch = await payouts.createBatch([
+   *   { email: 'alice@example.com', amount: 250.00, memo: 'March' },
+   *   { email: 'bob@example.com',   amount: 180.00, memo: 'March' },
+   * ]);
+   * console.log(batch.id);     // "batch_xyz"
+   * console.log(batch.total);  // 430.00
+   * ```
+   */
+  async createBatch(payoutsList) {
+    if (!Array.isArray(payoutsList) || payoutsList.length === 0) {
+      throw new Error("Payouts list must be a non-empty array");
+    }
+    return this.fetch("/api/payouts/batch", {
+      method: "POST",
+      body: JSON.stringify({ payouts: payoutsList })
+    });
+  }
+  // -----------------------------------------------------------------------
+  // Get a single payout
+  // -----------------------------------------------------------------------
+  /**
+   * Get a payout by ID.
+   *
+   * @example
+   * ```typescript
+   * const payout = await payouts.get('po_abc123');
+   * console.log(payout.status);     // "claimed"
+   * console.log(payout.claimedAt);  // "2024-03-15T14:30:00Z"
+   * ```
+   */
+  async get(id) {
+    if (!id) throw new Error("Payout ID is required");
+    return this.fetch(`/api/payouts/${encodeURIComponent(id)}`);
+  }
+  // -----------------------------------------------------------------------
+  // List payouts
+  // -----------------------------------------------------------------------
+  /**
+   * List payouts for the authenticated merchant.
+   *
+   * @example
+   * ```typescript
+   * const result = await payouts.list({ status: 'claimed', limit: 50 });
+   * result.data.forEach(p => console.log(p.email, p.amount, p.status));
+   * ```
+   */
+  async list(options) {
+    const params = new URLSearchParams();
+    if (options?.status) params.set("status", options.status);
+    if (options?.limit) params.set("limit", options.limit.toString());
+    if (options?.offset) params.set("offset", options.offset.toString());
+    const qs = params.toString();
+    return this.fetch(`/api/payouts${qs ? `?${qs}` : ""}`);
+  }
+};
+function createPayoutClient(config) {
+  return new PayoutClient(config);
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   BuyButton,
@@ -1657,6 +1995,7 @@ export function useSettlrPayment(onSuccess: (sig: string) => void) {
   INCO_LIGHTNING_PROGRAM_ID,
   OneClickClient,
   PaymentModal,
+  PayoutClient,
   PrivacyFeatures,
   REACT_NATIVE_EXAMPLE,
   REST_API,
@@ -1666,6 +2005,7 @@ export function useSettlrPayment(onSuccess: (sig: string) => void) {
   SUPPORTED_TOKENS,
   Settlr,
   SettlrProvider,
+  SubscriptionClient,
   UNITY_EXAMPLE,
   USDC_MINT_DEVNET,
   USDC_MINT_MAINNET,
@@ -1674,6 +2014,8 @@ export function useSettlrPayment(onSuccess: (sig: string) => void) {
   buildAllowanceRemainingAccounts,
   buildPrivateReceiptAccounts,
   createOneClickClient,
+  createPayoutClient,
+  createSubscriptionClient,
   createWebhookHandler,
   encryptAmount,
   findAllowancePda,

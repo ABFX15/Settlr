@@ -206,9 +206,50 @@ interface Subscription {
     createdAt: string;
 }
 /**
+ * Payout status
+ */
+type PayoutStatus$1 = 'pending' | 'funded' | 'sent' | 'claimed' | 'expired' | 'failed';
+/**
+ * Payout record
+ */
+interface Payout {
+    id: string;
+    email: string;
+    amount: number;
+    currency: string;
+    memo?: string;
+    metadata?: Record<string, string>;
+    status: PayoutStatus$1;
+    claimUrl: string;
+    recipientWallet?: string;
+    txSignature?: string;
+    batchId?: string;
+    createdAt: string;
+    fundedAt?: string;
+    claimedAt?: string;
+    expiresAt: string;
+}
+/**
+ * Payout batch
+ */
+interface PayoutBatch {
+    id: string;
+    status: string;
+    total: number;
+    count: number;
+    payouts: Array<{
+        id: string;
+        email: string;
+        amount: number;
+        status: PayoutStatus$1;
+        claimUrl: string;
+    }>;
+    createdAt: string;
+}
+/**
  * Webhook event types
  */
-type WebhookEventType = 'payment.created' | 'payment.completed' | 'payment.failed' | 'payment.expired' | 'payment.refunded' | 'subscription.created' | 'subscription.renewed' | 'subscription.cancelled' | 'subscription.expired';
+type WebhookEventType = 'payment.created' | 'payment.completed' | 'payment.failed' | 'payment.expired' | 'payment.refunded' | 'subscription.created' | 'subscription.renewed' | 'subscription.cancelled' | 'subscription.expired' | 'payout.created' | 'payout.sent' | 'payout.claimed' | 'payout.expired' | 'payout.failed';
 /**
  * Webhook payload
  */
@@ -829,6 +870,11 @@ interface WebhookHandlers {
     'subscription.renewed'?: WebhookHandler;
     'subscription.cancelled'?: WebhookHandler;
     'subscription.expired'?: WebhookHandler;
+    'payout.created'?: WebhookHandler;
+    'payout.sent'?: WebhookHandler;
+    'payout.claimed'?: WebhookHandler;
+    'payout.expired'?: WebhookHandler;
+    'payout.failed'?: WebhookHandler;
 }
 /**
  * Create a webhook handler middleware
@@ -1259,4 +1305,386 @@ declare const UNITY_EXAMPLE = "\n// SettlrPayment.cs - Drop into your Unity proj
  */
 declare const REACT_NATIVE_EXAMPLE = "\n// SettlrPayment.tsx - React Native component\n\nimport { Linking, Alert } from 'react-native';\nimport { useEffect } from 'react';\n\nconst SETTLR_URL = 'https://settlr.dev';\nconst APP_SCHEME = 'mygame';\n\nexport function useSettlrPayment(onSuccess: (sig: string) => void) {\n  useEffect(() => {\n    const handleDeepLink = ({ url }: { url: string }) => {\n      if (url.includes('payment-success')) {\n        const sig = new URL(url).searchParams.get('signature');\n        if (sig) onSuccess(sig);\n      }\n    };\n    \n    Linking.addEventListener('url', handleDeepLink);\n    return () => Linking.removeAllListeners('url');\n  }, [onSuccess]);\n  \n  const startPayment = async (amount: number, merchantWallet: string) => {\n    const orderId = `order_${Date.now()}`;\n    const url = `${SETTLR_URL}/checkout?amount=${amount}&merchant=${merchantWallet}` +\n      `&success_url=${APP_SCHEME}://payment-success?order=${orderId}` +\n      `&cancel_url=${APP_SCHEME}://payment-cancel?order=${orderId}`;\n    \n    await Linking.openURL(url);\n  };\n  \n  return { startPayment };\n}\n";
 
-export { type ApproveOneClickOptions, BuyButton, type BuyButtonProps, type ChargeOneClickOptions, CheckoutWidget, type CheckoutWidgetProps, type CreatePaymentOptions, type CreateSubscriptionOptions, INCO_LIGHTNING_PROGRAM_ID, type IssuePrivateReceiptResult, type MerchantConfig, type MobileCheckoutOptions, type MobileCheckoutResult, OneClickClient, type OneClickResult, type Payment, PaymentModal, type PaymentModalProps, type PaymentResult, type PaymentStatus, PrivacyFeatures, type PrivateReceiptConfig, REACT_NATIVE_EXAMPLE, REST_API, SETTLR_CHECKOUT_URL, SETTLR_PROGRAM_ID, SUPPORTED_NETWORKS, SUPPORTED_TOKENS, Settlr, type SettlrConfig, SettlrProvider, type SpendingApproval, type Subscription, type SubscriptionInterval, type SubscriptionPlan, type SubscriptionStatus, type SupportedToken, type TransactionOptions, UNITY_EXAMPLE, USDC_MINT_DEVNET, USDC_MINT_MAINNET, USDT_MINT_DEVNET, USDT_MINT_MAINNET, type WebhookEventType, type WebhookHandler, type WebhookHandlers, type WebhookPayload, buildAllowanceRemainingAccounts, buildPrivateReceiptAccounts, createOneClickClient, createWebhookHandler, encryptAmount, findAllowancePda, findPrivateReceiptPda, formatUSDC, generateCheckoutUrl, generateDeepLinkCheckout, getTokenDecimals, getTokenMint, parseCallbackUrl, parseUSDC, parseWebhookPayload, shortenAddress, simulateAndGetHandle, usePaymentLink, usePaymentModal, useSettlr, verifyWebhookSignature };
+/**
+ * @settlr/sdk — Subscription Client
+ *
+ * Manage recurring stablecoin payments for your SaaS or AI product.
+ *
+ * @example
+ * ```typescript
+ * import { SubscriptionClient } from '@settlr/sdk';
+ *
+ * const subs = new SubscriptionClient({
+ *   apiKey: 'sk_live_xxxxxxxxxxxx',
+ *   baseUrl: 'https://settlr.dev',
+ * });
+ *
+ * // Create a plan
+ * const plan = await subs.createPlan({
+ *   name: 'Pro',
+ *   amount: 29.99,
+ *   interval: 'monthly',
+ * });
+ *
+ * // Subscribe a customer
+ * const sub = await subs.subscribe({
+ *   planId: plan.id,
+ *   customerWallet: '7xKX...',
+ *   merchantWallet: 'DjLF...',
+ * });
+ *
+ * // Cancel at end of period
+ * await subs.cancel(sub.id);
+ * ```
+ */
+
+interface SubscriptionClientConfig {
+    /** Settlr API key */
+    apiKey: string;
+    /** Base URL of your Settlr instance (default: https://settlr.dev) */
+    baseUrl?: string;
+    /** Merchant ID (resolved from API key if not provided) */
+    merchantId?: string;
+    /** Merchant wallet address */
+    merchantWallet?: string;
+}
+interface CreatePlanOptions {
+    /** Plan display name */
+    name: string;
+    /** Optional description */
+    description?: string;
+    /** Amount in USDC per interval */
+    amount: number;
+    /** Billing interval */
+    interval: SubscriptionInterval;
+    /** Number of intervals between charges (default: 1) */
+    intervalCount?: number;
+    /** Free trial days (default: 0) */
+    trialDays?: number;
+    /** Feature list for display */
+    features?: string[];
+}
+interface UpdatePlanOptions {
+    name?: string;
+    description?: string;
+    amount?: number;
+    active?: boolean;
+    features?: string[];
+}
+interface SubscribeOptions {
+    /** Plan ID */
+    planId: string;
+    /** Customer wallet address */
+    customerWallet: string;
+    /** Merchant wallet address (uses default if not provided) */
+    merchantWallet?: string;
+    /** Customer email for notifications */
+    customerEmail?: string;
+    /** Custom metadata */
+    metadata?: Record<string, string>;
+}
+interface ListSubscriptionsOptions {
+    /** Filter by status */
+    status?: SubscriptionStatus;
+    /** Filter by customer wallet */
+    customerWallet?: string;
+    /** Filter by plan */
+    planId?: string;
+}
+interface SubscriptionPayment {
+    id: string;
+    amount: number;
+    platformFee: number;
+    status: "pending" | "completed" | "failed" | "refunded";
+    txSignature?: string;
+    periodStart: string;
+    periodEnd: string;
+    attemptCount: number;
+    failureReason?: string;
+    createdAt: string;
+}
+interface SubscriptionDetail extends Subscription {
+    plan: SubscriptionPlan;
+    payments?: SubscriptionPayment[];
+}
+declare class SubscriptionClient {
+    private apiKey;
+    private baseUrl;
+    private merchantId?;
+    private merchantWallet?;
+    constructor(config: SubscriptionClientConfig);
+    private fetch;
+    /**
+     * Resolve merchant ID from API key
+     */
+    private ensureMerchantId;
+    /**
+     * Create a subscription plan
+     */
+    createPlan(options: CreatePlanOptions): Promise<SubscriptionPlan>;
+    /**
+     * List all plans for the merchant
+     */
+    listPlans(): Promise<SubscriptionPlan[]>;
+    /**
+     * Update a plan
+     */
+    updatePlan(planId: string, options: UpdatePlanOptions): Promise<SubscriptionPlan>;
+    /**
+     * Deactivate a plan (stops new subscriptions)
+     */
+    deactivatePlan(planId: string): Promise<void>;
+    /**
+     * Subscribe a customer to a plan
+     */
+    subscribe(options: SubscribeOptions): Promise<{
+        subscription: Subscription;
+        payment?: {
+            id: string;
+            amount: number;
+            signature: string;
+        };
+        message: string;
+    }>;
+    /**
+     * List subscriptions
+     */
+    listSubscriptions(options?: ListSubscriptionsOptions): Promise<Subscription[]>;
+    /**
+     * Get subscription details including payment history
+     */
+    getSubscription(subscriptionId: string): Promise<SubscriptionDetail>;
+    /**
+     * Cancel a subscription
+     * @param immediately - If true, cancels now. If false (default), cancels at end of billing period.
+     */
+    cancel(subscriptionId: string, immediately?: boolean): Promise<{
+        success: boolean;
+        message: string;
+        cancelAt?: string;
+    }>;
+    /**
+     * Pause a subscription (stops billing, preserves subscription)
+     */
+    pause(subscriptionId: string): Promise<{
+        success: boolean;
+        message: string;
+    }>;
+    /**
+     * Resume a paused subscription
+     */
+    resume(subscriptionId: string): Promise<{
+        success: boolean;
+        message: string;
+        nextCharge?: string;
+    }>;
+    /**
+     * Manually charge a subscription (useful for metered billing)
+     */
+    charge(subscriptionId: string): Promise<{
+        success: boolean;
+        payment?: {
+            id: string;
+            amount: number;
+            signature: string;
+        };
+    }>;
+}
+/**
+ * Factory function to create a SubscriptionClient
+ */
+declare function createSubscriptionClient(config: SubscriptionClientConfig): SubscriptionClient;
+
+/**
+ * @settlr/sdk — Payout Client
+ *
+ * Send USDC to anyone in the world with just their email address.
+ *
+ * @example
+ * ```typescript
+ * import { PayoutClient } from '@settlr/sdk';
+ *
+ * const payouts = new PayoutClient({
+ *   apiKey: 'sk_live_xxxxxxxxxxxx',
+ * });
+ *
+ * // Send a payout
+ * const payout = await payouts.create({
+ *   email: 'creator@example.com',
+ *   amount: 150.00,
+ *   memo: 'March earnings',
+ * });
+ *
+ * // Check status
+ * const status = await payouts.get(payout.id);
+ * console.log(status.status); // "sent" | "claimed"
+ *
+ * // Send batch payouts
+ * const batch = await payouts.createBatch([
+ *   { email: 'alice@example.com', amount: 250.00, memo: 'March' },
+ *   { email: 'bob@example.com', amount: 180.00, memo: 'March' },
+ * ]);
+ * ```
+ */
+type PayoutStatus = "pending" | "funded" | "sent" | "claimed" | "expired" | "failed";
+interface CreatePayoutOptions {
+    /** Recipient email address */
+    email: string;
+    /** Amount in USDC */
+    amount: number;
+    /** Currency (default: "USDC") */
+    currency?: string;
+    /** Description shown in the claim email */
+    memo?: string;
+    /** Custom key-value metadata for your records */
+    metadata?: Record<string, string>;
+}
+interface PayoutRecord {
+    /** Unique payout ID (e.g. "po_abc123") */
+    id: string;
+    /** Recipient email */
+    email: string;
+    /** Amount in USDC */
+    amount: number;
+    /** Currency */
+    currency: string;
+    /** Memo / description */
+    memo?: string;
+    /** Custom metadata */
+    metadata?: Record<string, string>;
+    /** Current status */
+    status: PayoutStatus;
+    /** URL the recipient uses to claim the payout */
+    claimUrl: string;
+    /** Recipient wallet address (set after claim) */
+    recipientWallet?: string;
+    /** On-chain transaction signature (set after claim) */
+    txSignature?: string;
+    /** Batch ID if part of a batch */
+    batchId?: string;
+    /** ISO timestamp */
+    createdAt: string;
+    /** ISO timestamp — when funds were escrowed */
+    fundedAt?: string;
+    /** ISO timestamp — when recipient claimed */
+    claimedAt?: string;
+    /** ISO timestamp — when payout expires */
+    expiresAt: string;
+}
+interface PayoutBatchResult {
+    /** Batch ID */
+    id: string;
+    /** Batch status */
+    status: string;
+    /** Total USDC amount */
+    total: number;
+    /** Number of payouts */
+    count: number;
+    /** Individual payout records */
+    payouts: Array<{
+        id: string;
+        email: string;
+        amount: number;
+        status: PayoutStatus;
+        claimUrl: string;
+    }>;
+    /** ISO timestamp */
+    createdAt: string;
+}
+interface ListPayoutsOptions {
+    /** Filter by status */
+    status?: PayoutStatus;
+    /** Max results (default 20, max 100) */
+    limit?: number;
+    /** Offset for pagination */
+    offset?: number;
+}
+interface ListPayoutsResult {
+    data: PayoutRecord[];
+    count: number;
+    limit: number;
+    offset: number;
+}
+interface PayoutClientConfig {
+    /** Settlr API key */
+    apiKey: string;
+    /** Base URL of your Settlr instance (default: https://settlr.dev) */
+    baseUrl?: string;
+}
+declare class PayoutClient {
+    private apiKey;
+    private baseUrl;
+    constructor(config: PayoutClientConfig);
+    private fetch;
+    /**
+     * Send a payout to a recipient by email.
+     * They'll receive an email with a claim link — no wallet or bank details needed.
+     *
+     * @example
+     * ```typescript
+     * const payout = await payouts.create({
+     *   email: 'alice@example.com',
+     *   amount: 250.00,
+     *   memo: 'March data labeling — 500 tasks',
+     * });
+     * console.log(payout.id);        // "po_abc123"
+     * console.log(payout.status);    // "sent"
+     * console.log(payout.claimUrl);  // "https://settlr.dev/claim/..."
+     * ```
+     */
+    create(options: CreatePayoutOptions): Promise<PayoutRecord>;
+    /**
+     * Send multiple payouts at once. Each recipient gets their own email.
+     *
+     * @example
+     * ```typescript
+     * const batch = await payouts.createBatch([
+     *   { email: 'alice@example.com', amount: 250.00, memo: 'March' },
+     *   { email: 'bob@example.com',   amount: 180.00, memo: 'March' },
+     * ]);
+     * console.log(batch.id);     // "batch_xyz"
+     * console.log(batch.total);  // 430.00
+     * ```
+     */
+    createBatch(payoutsList: Array<{
+        email: string;
+        amount: number;
+        memo?: string;
+        metadata?: Record<string, string>;
+    }>): Promise<PayoutBatchResult>;
+    /**
+     * Get a payout by ID.
+     *
+     * @example
+     * ```typescript
+     * const payout = await payouts.get('po_abc123');
+     * console.log(payout.status);     // "claimed"
+     * console.log(payout.claimedAt);  // "2024-03-15T14:30:00Z"
+     * ```
+     */
+    get(id: string): Promise<PayoutRecord>;
+    /**
+     * List payouts for the authenticated merchant.
+     *
+     * @example
+     * ```typescript
+     * const result = await payouts.list({ status: 'claimed', limit: 50 });
+     * result.data.forEach(p => console.log(p.email, p.amount, p.status));
+     * ```
+     */
+    list(options?: ListPayoutsOptions): Promise<ListPayoutsResult>;
+}
+/**
+ * Create a standalone PayoutClient instance.
+ *
+ * @example
+ * ```typescript
+ * import { createPayoutClient } from '@settlr/sdk';
+ *
+ * const payouts = createPayoutClient({ apiKey: 'sk_live_xxx' });
+ * const payout = await payouts.create({ email: 'alice@test.com', amount: 50 });
+ * ```
+ */
+declare function createPayoutClient(config: PayoutClientConfig): PayoutClient;
+
+export { type ApproveOneClickOptions, BuyButton, type BuyButtonProps, type ChargeOneClickOptions, CheckoutWidget, type CheckoutWidgetProps, type CreatePaymentOptions, type CreatePayoutOptions, type CreatePlanOptions, type CreateSubscriptionOptions, INCO_LIGHTNING_PROGRAM_ID, type IssuePrivateReceiptResult, type ListPayoutsOptions, type ListPayoutsResult, type ListSubscriptionsOptions, type MerchantConfig, type MobileCheckoutOptions, type MobileCheckoutResult, OneClickClient, type OneClickResult, type Payment, PaymentModal, type PaymentModalProps, type PaymentResult, type PaymentStatus, type Payout, type PayoutBatch, type PayoutBatchResult, PayoutClient, type PayoutClientConfig, type PayoutRecord, type PayoutStatus$1 as PayoutStatus, PrivacyFeatures, type PrivateReceiptConfig, REACT_NATIVE_EXAMPLE, REST_API, SETTLR_CHECKOUT_URL, SETTLR_PROGRAM_ID, SUPPORTED_NETWORKS, SUPPORTED_TOKENS, Settlr, type SettlrConfig, SettlrProvider, type SpendingApproval, type SubscribeOptions, type Subscription, SubscriptionClient, type SubscriptionClientConfig, type SubscriptionDetail, type SubscriptionInterval, type SubscriptionPayment, type SubscriptionPlan, type SubscriptionStatus, type SupportedToken, type TransactionOptions, UNITY_EXAMPLE, USDC_MINT_DEVNET, USDC_MINT_MAINNET, USDT_MINT_DEVNET, USDT_MINT_MAINNET, type UpdatePlanOptions, type WebhookEventType, type WebhookHandler, type WebhookHandlers, type WebhookPayload, buildAllowanceRemainingAccounts, buildPrivateReceiptAccounts, createOneClickClient, createPayoutClient, createSubscriptionClient, createWebhookHandler, encryptAmount, findAllowancePda, findPrivateReceiptPda, formatUSDC, generateCheckoutUrl, generateDeepLinkCheckout, getTokenDecimals, getTokenMint, parseCallbackUrl, parseUSDC, parseWebhookPayload, shortenAddress, simulateAndGetHandle, usePaymentLink, usePaymentModal, useSettlr, verifyWebhookSignature };

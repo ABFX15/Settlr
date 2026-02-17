@@ -217,6 +217,54 @@ export interface Subscription {
     createdAt: string;
 }
 
+// -----------------------------------------------------------------------
+// Payout types
+// -----------------------------------------------------------------------
+
+/**
+ * Payout status
+ */
+export type PayoutStatus = 'pending' | 'funded' | 'sent' | 'claimed' | 'expired' | 'failed';
+
+/**
+ * Payout record
+ */
+export interface Payout {
+    id: string;
+    email: string;
+    amount: number;
+    currency: string;
+    memo?: string;
+    metadata?: Record<string, string>;
+    status: PayoutStatus;
+    claimUrl: string;
+    recipientWallet?: string;
+    txSignature?: string;
+    batchId?: string;
+    createdAt: string;
+    fundedAt?: string;
+    claimedAt?: string;
+    expiresAt: string;
+}
+
+/**
+ * Payout batch
+ */
+export interface PayoutBatch {
+    id: string;
+    status: string;
+    total: number;
+    count: number;
+    payouts: Array<{
+        id: string;
+        email: string;
+        amount: number;
+        status: PayoutStatus;
+        claimUrl: string;
+    }>;
+    createdAt: string;
+}
+
 /**
  * Webhook event types
  */
@@ -229,7 +277,12 @@ export type WebhookEventType =
     | 'subscription.created'
     | 'subscription.renewed'
     | 'subscription.cancelled'
-    | 'subscription.expired';
+    | 'subscription.expired'
+    | 'payout.created'
+    | 'payout.sent'
+    | 'payout.claimed'
+    | 'payout.expired'
+    | 'payout.failed';
 
 /**
  * Webhook payload

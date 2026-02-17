@@ -17,7 +17,7 @@ pub struct ProcessPayment<'info> {
         seeds = [Platform::SEED],
         bump = platform_config.bump,
     )]
-    pub platform_config: Account<'info, Platform>,
+    pub platform_config: Box<Account<'info, Platform>>,
     #[account(
         init,
         payer = payer,
@@ -25,7 +25,7 @@ pub struct ProcessPayment<'info> {
         seeds = [Payment::SEED, payment_id.as_bytes()],
         bump,
     )]
-    pub payment_account: Account<'info, Payment>,
+    pub payment_account: Box<Account<'info, Payment>>,
     #[account(
         init_if_needed,
         payer = payer,
@@ -33,13 +33,13 @@ pub struct ProcessPayment<'info> {
         seeds = [b"customer", payer.key().as_ref()],
         bump,
     )]
-    pub customer_account: Account<'info, Customer>,
+    pub customer_account: Box<Account<'info, Customer>>,
     #[account(
         mut,
         seeds = [b"merchant", merchant_account.merchant_id.as_bytes()],
         bump = merchant_account.bump,
     )]
-    pub merchant_account: Account<'info, Merchant>,
+    pub merchant_account: Box<Account<'info, Merchant>>,
     #[account(
         constraint = usdc_mint.key() == platform_config.usdc_mint @ PaymentError::InvalidTokenMint
     )]
