@@ -143,7 +143,7 @@ export default function LandingPage() {
                   "https://github.com/ABFX15/x402-hack-payment",
                 ],
                 description:
-                  "Non-custodial crypto payment infrastructure for AI and SaaS companies. Accept USDC with no wallets, zero gas fees, and instant settlement on Solana.",
+                  "The payment stack for creator platforms. Stablecoin checkout and payouts — no card network content restrictions, 1% flat, instant settlement.",
               },
               {
                 "@type": "SoftwareApplication",
@@ -159,14 +159,15 @@ export default function LandingPage() {
                     "1% flat fee per transaction. No setup fees, no monthly fees.",
                 },
                 description:
-                  "Crypto payment gateway SDK for developers. Accept USDC, USDT, and stablecoin payments with one React component. Non-custodial, gasless, instant settlement.",
+                  "Payment infrastructure for creator platforms. Fan checkout, creator payouts, subscriptions, and memberships — all in stablecoins. Non-custodial, gasless, instant settlement.",
                 featureList: [
-                  "Non-custodial payments",
-                  "Zero gas fees",
+                  "Fan checkout — email-only, no wallet needed",
+                  "Creator payouts by email to 180+ countries",
+                  "Zero gas fees for fans and creators",
                   "Instant settlement under 1 second",
-                  "Email-based embedded wallets",
-                  "Recurring billing and subscriptions",
-                  "Multi-chain support via Solana",
+                  "No card network content restrictions",
+                  "Recurring subscriptions and memberships",
+                  "Privacy-first encrypted receipts",
                   "TypeScript SDK and React components",
                   "1% flat transaction fee",
                 ],
@@ -176,7 +177,7 @@ export default function LandingPage() {
                 url: "https://settlr.dev",
                 name: "Settlr",
                 description:
-                  "Accept crypto payments without wallets. USDC payment gateway for AI and SaaS.",
+                  "The payment stack for creator platforms. Checkout + payouts in stablecoins — no card network gatekeeping.",
                 potentialAction: {
                   "@type": "SearchAction",
                   target: "https://settlr.dev/docs?q={search_term_string}",
@@ -188,26 +189,26 @@ export default function LandingPage() {
                 mainEntity: [
                   {
                     "@type": "Question",
-                    name: "What stablecoins does Settlr support?",
+                    name: "Can I use Settlr for adult content, gambling, or supplements?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Settlr currently supports USDC, USDT, and USDG on Solana. Cross-chain support for Ethereum, Base, Arbitrum, Polygon, and Optimism is available via Mayan Protocol — funds are automatically bridged to your Solana wallet.",
+                      text: "Yes. Settlr uses stablecoins — there are no card network content policies. As long as your platform is legal in your jurisdiction, you can use Settlr.",
                     },
                   },
                   {
                     "@type": "Question",
-                    name: "Do my customers need a crypto wallet to pay?",
+                    name: "Do fans need a crypto wallet to pay?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "No. Settlr integrates Privy for embedded wallets — customers can sign up with just their email or social login. No crypto experience required. They can also use existing wallets like Phantom or Solflare.",
+                      text: "No. Settlr integrates Privy for embedded wallets — fans sign up with just their email or social login. No crypto experience required.",
                     },
                   },
                   {
                     "@type": "Question",
-                    name: "Who pays the gas fees on Settlr?",
+                    name: "How do creator payouts work?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Nobody. All transactions are gasless via Kora (backed by the Solana Foundation). Your customers don't need SOL for gas, and neither do you.",
+                      text: "Send payouts to any email address. The creator receives a link to claim their funds to any Solana wallet — or they can cash out directly. No bank details needed.",
                     },
                   },
                   {
@@ -215,15 +216,15 @@ export default function LandingPage() {
                     name: "What are Settlr's fees?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "1% flat per transaction. No setup fees, no monthly fees, no hidden charges. Compare that to Stripe's 2.9% + 30¢ — on $10,000/month you'd save over $190.",
+                      text: "1% flat per transaction. No setup fees, no monthly fees, no hidden charges. Compare that to Stripe's 2.9% + 30¢.",
                     },
                   },
                   {
                     "@type": "Question",
-                    name: "How fast does Settlr settle payments?",
+                    name: "How fast do creators receive funds?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Instantly. Payments settle to your wallet in under one second on Solana. No holds, no processing delays, no 2-7 day bank settlement windows.",
+                      text: "Instantly. Payments settle in under one second on Solana. No holds, no processing delays, no 2-7 day bank settlement windows.",
                     },
                   },
                   {
@@ -231,15 +232,15 @@ export default function LandingPage() {
                     name: "Is Settlr custodial?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "No. Settlr is fully non-custodial. Payments flow directly from the customer's wallet to yours via on-chain smart contracts. Settlr never has access to your funds.",
+                      text: "No. Settlr is fully non-custodial. Payments flow directly via on-chain smart contracts. We never have access to your funds.",
                     },
                   },
                   {
                     "@type": "Question",
-                    name: "Can I accept subscriptions with Settlr?",
+                    name: "Can I offer fan subscriptions and memberships?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Yes. Settlr has built-in recurring billing with automatic renewal, trial periods, and smart retry logic — all in stablecoins. No extra tooling needed.",
+                      text: "Yes. Built-in recurring billing with automatic renewal, trial periods, tiered access, and smart retry logic — all in stablecoins.",
                     },
                   },
                   {
@@ -247,7 +248,7 @@ export default function LandingPage() {
                     name: "How do I integrate Settlr?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Install the TypeScript SDK (npm install @settlr/sdk), drop in the React checkout component, and you're live. Most teams integrate in under 30 minutes.",
+                      text: "Install the TypeScript SDK (npm install @settlr/sdk), drop in the React checkout component, and you're live. Most platforms integrate in under 30 minutes.",
                     },
                   },
                 ],
@@ -290,36 +291,25 @@ export default function LandingPage() {
               <Reveal>
                 <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/[0.1] px-4 py-1.5 text-[13px] text-[#3B82F6] font-medium backdrop-blur-sm">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]" />
-                  Built for AI &amp; SaaS teams blocked by Stripe
+                  For platforms Stripe won&apos;t touch
                 </div>
               </Reveal>
 
               <Reveal delay={0.05}>
                 <h1 className="max-w-xl text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.08] tracking-tight text-white">
-                  Accept crypto payments{" "}
-                  <span className="text-[#3B82F6]">
-                    without wallets or gas fees
-                  </span>
+                  The payment stack{" "}
+                  <span className="text-[#3B82F6]">for creator platforms</span>
                 </h1>
               </Reveal>
 
               <Reveal delay={0.1}>
                 <p className="mt-6 max-w-md text-lg leading-relaxed text-white/60">
-                  The non-custodial crypto payment gateway for AI and SaaS
-                  teams. 1% flat fees vs Stripe&apos;s 2.9%.{" "}
+                  Collect payments from fans.{" "}
                   <span className="font-medium text-white/80">
-                    Sub-second settlement on Solana
+                    Pay out creators instantly.
                   </span>{" "}
-                  — the fastest L1 at{" "}
-                  <a
-                    href="https://solana.com/news/solana-network-upgrades-march-2024"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline decoration-[#3B82F6]/30 hover:decoration-[#3B82F6]"
-                  >
-                    65,000 TPS
-                  </a>
-                  . Trusted by teams in 180+ countries.
+                  No card networks deciding what content is allowed. 1% flat —
+                  stablecoin checkout and payouts that settle in under a second.
                 </p>
               </Reveal>
 
@@ -329,14 +319,14 @@ export default function LandingPage() {
                     href="/onboarding"
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#3B82F6] px-7 py-3.5 text-[15px] font-semibold text-white shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    Get started
+                    Start integrating
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
-                    href="/docs"
+                    href="/demo/store"
                     className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-7 py-3.5 text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white"
                   >
-                    Documentation
+                    See a live demo
                   </Link>
                 </div>
               </Reveal>
@@ -1333,26 +1323,26 @@ export default function LandingPage() {
           {[
             {
               icon: Shield,
-              title: "No middlemen",
-              text: "Direct buyer-to-merchant payments on-chain",
+              title: "Can't be deplatformed",
+              text: "No card network, no payment processor can shut you down",
+              color: "#3B82F6",
+            },
+            {
+              icon: CreditCard,
+              title: "Checkout + Payouts",
+              text: "Collect from fans, pay out to creators — one stack",
               color: "#3B82F6",
             },
             {
               icon: Zap,
-              title: "Lower fees",
-              text: "1% flat — keep more of every sale",
-              color: "#3B82F6",
-            },
-            {
-              icon: Globe,
-              title: "More reach",
-              text: "562M+ crypto owners worldwide (Triple-A, 2024)",
+              title: "1% flat",
+              text: "No setup fees, no reserves, no surprise holds",
               color: "#34d399",
             },
             {
               icon: Clock,
               title: "Instant settlement",
-              text: "Receive funds in under one second",
+              text: "Funds arrive in under one second, not 2–7 days",
               color: "#fbbf24",
             },
           ].map((v, i) => (
@@ -1477,7 +1467,7 @@ export default function LandingPage() {
             Traction
           </p>
           <h2 className="mb-16 text-center text-3xl font-semibold tracking-tight md:text-4xl">
-            Numbers that speak for themselves
+            Built for scale from day one
           </h2>
         </Reveal>
 
@@ -1490,21 +1480,21 @@ export default function LandingPage() {
               color: "#3B82F6",
             },
             {
-              value: "<400ms",
-              label: "Average settlement",
-              sub: "vs 2–7 days traditional (Federal Reserve, 2024)",
+              value: "<1s",
+              label: "Settlement time",
+              sub: "vs 2–7 days with card networks",
               color: "#3B82F6",
             },
             {
               value: "0",
               label: "Chargebacks",
-              sub: "stablecoin payments are final and irreversible",
+              sub: "stablecoin payments are final — no disputes",
               color: "#34d399",
             },
             {
               value: "180+",
-              label: "Countries supported",
-              sub: "562M+ crypto owners globally (Triple-A, 2024)",
+              label: "Countries reached",
+              sub: "pay creators anywhere, no banking required",
               color: "#fbbf24",
             },
           ].map((s, i) => (
@@ -1639,8 +1629,8 @@ export default function LandingPage() {
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="mt-3 max-w-2xl text-3xl font-semibold leading-snug tracking-tight md:text-4xl">
-            Everything you need to accept
-            <br className="hidden md:block" /> stablecoin payments
+            Everything your creator platform
+            <br className="hidden md:block" /> needs to move money
           </h2>
         </Reveal>
 
@@ -1662,12 +1652,12 @@ export default function LandingPage() {
                   <Zap className="h-6 w-6 text-[#3B82F6]" />
                 </div>
                 <h3 className="text-xl font-semibold text-white">
-                  Instant settlement
+                  Fan checkout
                 </h3>
                 <p className="mt-3 max-w-md text-sm leading-relaxed text-white/45">
-                  Funds arrive in your wallet the moment a customer pays. No
-                  holds, no processing delays. No 2-7 day bank settlement
-                  windows.
+                  Fans pay with USDC — no wallet download, no gas fees. Embedded
+                  wallets via Privy mean they just enter an email and pay. Funds
+                  settle to your platform in under a second.
                 </p>
                 <div className="mt-6 flex items-center gap-3">
                   <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400 ring-1 ring-emerald-500/20">
@@ -1695,15 +1685,15 @@ export default function LandingPage() {
                   <Shield className="h-6 w-6 text-[#3B82F6]" />
                 </div>
                 <h3 className="text-xl font-semibold text-white">
-                  Non-custodial
+                  Creator payouts
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-white/45">
-                  We never hold your money. Payments go directly to your wallet
-                  via on-chain smart contracts.
+                  Pay creators anywhere in the world by email. No bank details
+                  needed, no wire fees, no 5-day ACH wait.
                 </p>
                 <div className="mt-6 flex items-center gap-2 text-xs text-white/25">
-                  <Lock className="h-3.5 w-3.5" />
-                  Your keys, your funds
+                  <Globe className="h-3.5 w-3.5" />
+                  180+ countries, instant
                 </div>
               </div>
             </div>
@@ -1714,19 +1704,19 @@ export default function LandingPage() {
             {
               icon: Lock,
               title: "Privacy-first",
-              text: "Encrypted receipts and private transaction data. Your revenue is nobody's business.",
+              text: "Encrypted receipts protect sensitive purchases. Your creators' revenue is nobody's business.",
               accent: "#c084fc",
             },
             {
               icon: RefreshCw,
-              title: "Subscriptions",
-              text: "Recurring billing with automatic renewal, trials, and dunning — all in stablecoins.",
+              title: "Subscriptions & memberships",
+              text: "Recurring billing for fan memberships, tiers, and paywalled content — all in stablecoins.",
               accent: "#34d399",
             },
             {
-              icon: Globe,
-              title: "Global by default",
-              text: "Accept payments from 180+ countries. No bank account, no geographic restrictions.",
+              icon: Shield,
+              title: "Can't be deplatformed",
+              text: "No Visa, no Mastercard, no processor who decides what's allowed. Stablecoins don't have content policies.",
               accent: "#fbbf24",
             },
           ].map((f, i) => (
@@ -1791,7 +1781,7 @@ export default function LandingPage() {
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-3 max-w-xl text-3xl font-semibold tracking-tight md:text-4xl">
-              Go live in minutes, not weeks
+              Integrate once, move money everywhere
             </h2>
           </Reveal>
 
@@ -1803,23 +1793,23 @@ export default function LandingPage() {
               {[
                 {
                   step: "01",
-                  title: "Install the SDK",
-                  text: "Add @settlr/sdk to your project and configure your merchant wallet address.",
+                  title: "Add the SDK",
+                  text: "Install @settlr/sdk and drop in our React checkout component. Your fans can pay with just an email — no wallet needed.",
                   code: "npm install @settlr/sdk",
                   color: "#3B82F6",
                 },
                 {
                   step: "02",
-                  title: "Drop in checkout",
-                  text: "Use our React components or REST API to create payment sessions and subscription plans.",
-                  code: "<SettlrCheckout amount={49.99} />",
+                  title: "Fans pay creators",
+                  text: "Fans pay with USDC for subscriptions, tips, or purchases. Embedded wallets handle everything — zero crypto UX.",
+                  code: "<SettlrCheckout amount={9.99} />",
                   color: "#3B82F6",
                 },
                 {
                   step: "03",
-                  title: "Get paid instantly",
-                  text: "Customers pay with USDC. Funds settle to your wallet in under one second.",
-                  code: "// Funds in your wallet ✓",
+                  title: "Creators get paid",
+                  text: "Funds settle instantly. Pay out to creators by email — they claim to any wallet or cash out directly.",
+                  code: "// Payout sent instantly ✓",
                   color: "#34d399",
                 },
               ].map((s, i) => (
@@ -1888,17 +1878,17 @@ export default function LandingPage() {
             <Reveal delay={0.1}>
               <p className="mt-4 text-base leading-relaxed text-white/45">
                 Fully typed TypeScript SDK with React hooks and components.
-                One-click payments, gasless transactions, and subscription
-                management — all out of the box.
+                Embed checkout, manage subscriptions, and trigger payouts — all
+                from a single package.
               </p>
             </Reveal>
             <Reveal delay={0.15}>
               <div className="mt-8 space-y-3">
                 {[
                   "Drop-in React checkout component",
-                  "Server-side webhooks with signature verification",
-                  "Subscription lifecycle management",
-                  "Gasless \u2014 you cover gas, customers pay nothing extra",
+                  "Embedded wallets — fans pay with just an email",
+                  "Subscription & membership management",
+                  "Gasless — fans pay nothing extra, ever",
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#3B82F6]" />
@@ -2002,7 +1992,7 @@ export default function LandingPage() {
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-              Why teams switch to Settlr
+              Why platforms switch to Settlr
             </h2>
           </Reveal>
 
@@ -2026,11 +2016,15 @@ export default function LandingPage() {
                     ["Fees", "2.9% + 30\u00A2", "1% flat"],
                     ["Settlement", "2\u20137 days", "Instant"],
                     ["Chargebacks", "Yes \u2014 costly", "None"],
-                    ["Custody", "They hold funds", "Non-custodial"],
-                    ["Global access", "Bank-dependent", "180+ countries"],
-                    ["KYC setup", "Weeks of paperwork", "Minutes"],
-                    ["Subscriptions", "Extra tooling", "Built-in"],
-                    ["Gas fees", "N/A or user pays", "We cover it"],
+                    ["Content restrictions", "Visa/MC policies", "None"],
+                    ["Creator payouts", "ACH / wire fees", "By email, instant"],
+                    ["Global reach", "Bank-dependent", "180+ countries"],
+                    [
+                      "Deplatforming risk",
+                      "High for restricted categories",
+                      "Zero",
+                    ],
+                    ["Fan UX", "Card + address form", "Email only"],
                   ].map(([feature, trad, settlr]) => (
                     <tr
                       key={feature}
@@ -2103,28 +2097,28 @@ export default function LandingPage() {
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-              Teams that move fast
+              Platforms in every creator vertical
             </h2>
           </Reveal>
 
           <div className="mt-16 grid gap-6 md:grid-cols-3">
             {[
               {
-                icon: CreditCard,
-                title: "AI & SaaS",
-                text: "Usage-based and subscription billing with instant settlement. No account holds or reserve requirements.",
-                color: "#3B82F6",
+                icon: Lock,
+                title: "Adult & dating platforms",
+                text: "Content subscriptions, tips, and PPV — without Visa or Mastercard deciding what's allowed. Full privacy with encrypted receipts.",
+                color: "#c084fc",
               },
               {
                 icon: RefreshCw,
-                title: "Recurring billing",
-                text: "Stablecoin subscriptions with automatic renewals, trial periods, and smart retry logic.",
+                title: "Fan memberships & tipping",
+                text: "Recurring stablecoin subscriptions for creator memberships, fan clubs, and tiered access. Automatic renewals, trials, and dunning built in.",
                 color: "#3B82F6",
               },
               {
                 icon: Globe,
-                title: "Global commerce",
-                text: "Accept payments from anywhere. No bank account needed, no geographic restrictions, no currency conversion.",
+                title: "International creator payouts",
+                text: "Pay freelancers and creators in 180+ countries by email. No bank details, no wire fees, no 5-day ACH wait.",
                 color: "#34d399",
               },
             ].map((c, i) => (
@@ -2188,7 +2182,7 @@ export default function LandingPage() {
         </Reveal>
         <Reveal delay={0.1}>
           <p className="mt-4 max-w-lg text-base text-white/40">
-            Focus on growing your business. We handle the security.
+            Your platform handles creators and fans. We handle the security.
           </p>
         </Reveal>
 
@@ -2197,25 +2191,25 @@ export default function LandingPage() {
             {
               icon: Shield,
               title: "Non-custodial",
-              text: "We never touch your funds. Payments flow directly from customer to your wallet via smart contracts.",
+              text: "We never touch your funds. Payments flow directly via smart contracts — no middleman holds.",
               color: "#3B82F6",
             },
             {
               icon: Lock,
               title: "Encrypted receipts",
-              text: "FHE-encrypted transaction data via Inco Lightning. Only you and your customer can see amounts.",
+              text: "FHE-encrypted transaction data protects sensitive purchases. Only buyer and seller can see amounts.",
               color: "#3B82F6",
             },
             {
               icon: Globe,
-              title: "AML screening",
-              text: "Every wallet is screened against OFAC sanctions and scored for risk before payment is processed.",
+              title: "Compliance built in",
+              text: "Every wallet is screened against OFAC sanctions and scored for risk before any payment is processed.",
               color: "#34d399",
             },
             {
               icon: Zap,
               title: "Multisig treasury",
-              text: "Platform fees are held in a Squads multisig. No single point of failure, no unilateral access.",
+              text: "Platform fees held in a Squads multisig. No single point of failure, no unilateral access.",
               color: "#fbbf24",
             },
           ].map((f, i) => (
@@ -2263,36 +2257,36 @@ export default function LandingPage() {
           <div className="mt-12 divide-y divide-white/[0.06]">
             {[
               {
-                q: "What stablecoins do you support?",
-                a: "We currently support USDC, USDT, and USDG on Solana. Cross-chain support for Ethereum, Base, Arbitrum, Polygon, and Optimism is available via Mayan Protocol — funds are automatically bridged to your Solana wallet.",
+                q: "Can I use this for adult content, gambling, or supplements?",
+                a: "Yes. Settlr uses stablecoins — there are no card network content policies. As long as your platform is legal in your jurisdiction, you can use Settlr. No Visa, no Mastercard, no processor deciding what content is allowed.",
               },
               {
-                q: "Do my customers need a crypto wallet?",
-                a: "No. We integrate Privy for embedded wallets — customers can sign up with just their email or social login. No crypto experience required. They can also use existing wallets like Phantom or Solflare.",
+                q: "Do my fans need a crypto wallet?",
+                a: "No. We integrate Privy for embedded wallets — fans sign up with just their email or social login. No crypto experience required. They can also connect existing wallets like Phantom.",
               },
               {
-                q: "Who pays the gas fees?",
-                a: "Nobody. All transactions are gasless via Kora (backed by the Solana Foundation). Your customers don't need SOL for gas, and neither do you.",
+                q: "How do creator payouts work?",
+                a: "Send payouts to any email address. The creator receives a link to claim their funds to any Solana wallet — or they can cash out directly. No bank details needed, no wire fees.",
               },
               {
                 q: "What are the fees?",
                 a: "1% flat per transaction. No setup fees, no monthly fees, no hidden charges. Compare that to Stripe's 2.9% + 30¢ — on $10,000/month you'd save over $190.",
               },
               {
-                q: "How fast do I receive funds?",
-                a: "Instantly. Payments settle to your wallet in under one second on Solana. No holds, no processing delays, no 2-7 day bank settlement windows.",
+                q: "How fast do creators receive funds?",
+                a: "Instantly. Payments settle in under one second on Solana. No holds, no processing delays, no 2-7 day bank settlement windows.",
               },
               {
-                q: "Is this custodial? Do you hold my funds?",
-                a: "No. Settlr is fully non-custodial. Payments flow directly from the customer's wallet to yours via on-chain smart contracts. We never have access to your funds.",
+                q: "Is this custodial? Do you hold funds?",
+                a: "No. Settlr is fully non-custodial. Payments flow directly via on-chain smart contracts. We never have access to platform or creator funds.",
               },
               {
-                q: "Can I accept subscriptions?",
-                a: "Yes. We have built-in recurring billing with automatic renewal, trial periods, and smart retry logic — all in stablecoins. No extra tooling needed.",
+                q: "Can I offer fan subscriptions and memberships?",
+                a: "Yes. Built-in recurring billing with automatic renewal, trial periods, tiered access, and smart retry logic — all in stablecoins. No extra tooling needed.",
               },
               {
                 q: "How do I integrate?",
-                a: "Install our TypeScript SDK (npm install @settlr/sdk), drop in the React checkout component, and you're live. Most teams integrate in under 30 minutes.",
+                a: "Install our TypeScript SDK (npm install @settlr/sdk), drop in the React checkout component, and you're live. Most platforms integrate in under 30 minutes.",
               },
             ].map((faq, i) => (
               <Reveal key={i} delay={i * 0.04}>
@@ -2322,15 +2316,17 @@ export default function LandingPage() {
         <div className="mx-auto max-w-3xl px-6 py-32 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
-              Start accepting payments
+              Your platform, your rules.
               <br />
-              <span className="text-[#3B82F6]">in minutes</span>
+              <span className="text-[#3B82F6]">
+                No card network gatekeeping.
+              </span>
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-5 max-w-md text-base text-white/45">
-              No setup fees. No contracts. 1% flat on every transaction. Go live
-              today.
+              1% flat. Instant settlement. Checkout + payouts in one SDK. Go
+              live today.
             </p>
           </Reveal>
           <Reveal delay={0.1}>
@@ -2339,14 +2335,14 @@ export default function LandingPage() {
                 href="/onboarding"
                 className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-[15px] font-semibold text-[#050507] transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                Get started free
+                Start integrating
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/demo/store"
                 className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.04] hover:text-white"
               >
-                View demo
+                See a live demo
               </Link>
             </div>
           </Reveal>
