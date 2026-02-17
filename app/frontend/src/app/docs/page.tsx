@@ -407,10 +407,10 @@ function PlaygroundContent() {
           </h3>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="rounded-lg border border-white/5 bg-white/5 p-4">
-              <span className="text-2xl">🤖</span>
-              <h4 className="font-medium text-white mt-2">AI &amp; SaaS</h4>
+              <span className="text-2xl">🎤</span>
+              <h4 className="font-medium text-white mt-2">Creator Platforms</h4>
               <p className="text-sm text-white/50 mt-1">
-                Subscriptions, API credits, usage-based billing
+                Fan subscriptions, tipping, content purchases
               </p>
             </div>
             <div className="rounded-lg border border-white/5 bg-white/5 p-4">
@@ -482,8 +482,8 @@ function ReactSDKContent() {
           1. Payment Modal (Recommended)
         </h3>
         <p className="text-white/50 mb-4">
-          Keep users on your site with an embedded payment modal. Perfect for AI
-          platforms, SaaS, and e-commerce.
+          Keep users on your site with an embedded payment modal. Perfect for
+          creator platforms, fan subscriptions, and e-commerce.
         </p>
         <CodeBlock language="tsx">
           {`import { usePaymentModal, Settlr } from '@settlr/sdk';
@@ -491,7 +491,7 @@ function ReactSDKContent() {
 // Initialize with your API key from onboarding
 const settlr = new Settlr({
   apiKey: 'sk_live_your_api_key',
-  merchant: { name: 'Acme AI' },
+  merchant: { name: 'FanVault' },
 });
 
 function SubscriptionPage() {

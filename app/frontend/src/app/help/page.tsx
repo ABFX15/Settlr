@@ -192,7 +192,7 @@ export default function HelpPage() {
 
       {/* ── Hero ── */}
       <section className="relative pt-32 pb-20 md:pt-44 md:pb-24">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-[#38bdf8]/[0.05] blur-[128px]" />
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-[#3B82F6]/[0.05] blur-[128px]" />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
           <Reveal>
@@ -203,10 +203,7 @@ export default function HelpPage() {
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="text-4xl font-semibold tracking-tight md:text-6xl">
-              Help &{" "}
-              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
-                support
-              </span>
+              Help & <span className="text-[#3B82F6]">support</span>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
@@ -256,7 +253,7 @@ export default function HelpPage() {
       <section className="border-y border-white/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-4xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
               FAQ
             </p>
           </Reveal>
@@ -311,15 +308,12 @@ export default function HelpPage() {
 
       {/* ── CTA ── */}
       <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#a78bfa]/[0.06] via-transparent to-transparent" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#3B82F6]/[0.06] via-transparent to-transparent" />
 
         <div className="mx-auto max-w-3xl px-6 py-32 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
-              Still have{" "}
-              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
-                questions?
-              </span>
+              Still have <span className="text-[#3B82F6]">questions?</span>
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
@@ -332,7 +326,7 @@ export default function HelpPage() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <a
                 href="mailto:support@settlr.dev"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#050507] px-8 py-4 text-[15px] font-semibold text-[#050507] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#3B82F6] px-8 py-4 text-[15px] font-semibold text-white shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 Contact support
                 <ArrowRight className="h-4 w-4" />

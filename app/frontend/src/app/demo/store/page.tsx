@@ -19,87 +19,87 @@ interface Plan {
 const plans: Plan[] = [
   {
     id: "1",
-    name: "Starter",
-    description: "For side projects and experimentation",
-    price: 9.0,
+    name: "Fan",
+    description: "Follow your favorite creators",
+    price: 4.99,
     billing: "/month",
-    icon: "🚀",
+    icon: "❤️",
     features: [
-      "1,000 API calls/month",
-      "1 team member",
-      "Community support",
-      "Basic analytics",
+      "Access free content",
+      "Comment & react",
+      "Community chat",
+      "Creator updates",
     ],
   },
   {
     id: "2",
-    name: "Pro",
-    description: "For growing AI-powered products",
-    price: 49.0,
+    name: "Supporter",
+    description: "Unlock exclusive creator content",
+    price: 9.99,
     billing: "/month",
-    icon: "⚡",
+    icon: "⭐",
     features: [
-      "50,000 API calls/month",
-      "5 team members",
-      "Priority support",
-      "Advanced analytics",
-      "Custom models",
+      "All Fan features",
+      "Exclusive posts & media",
+      "Behind-the-scenes content",
+      "Priority DMs",
+      "Supporter badge",
     ],
     badge: "Most Popular",
     popular: true,
   },
   {
     id: "3",
-    name: "Team",
-    description: "For scaling SaaS companies",
-    price: 149.0,
+    name: "VIP",
+    description: "Get the full creator experience",
+    price: 24.99,
     billing: "/month",
-    icon: "🏢",
+    icon: "💎",
     features: [
-      "500,000 API calls/month",
-      "Unlimited team members",
-      "24/7 support",
-      "Full analytics suite",
-      "Custom models",
-      "SSO & RBAC",
+      "All Supporter features",
+      "1-on-1 video calls",
+      "Custom content requests",
+      "Early access to drops",
+      "VIP badge & perks",
+      "Private group access",
     ],
   },
   {
     id: "4",
-    name: "Enterprise",
-    description: "Custom pricing for large-scale ops",
-    price: 499.0,
-    billing: "/month",
-    icon: "🌐",
+    name: "Lifetime",
+    description: "One-time purchase, forever access",
+    price: 199.0,
+    billing: "one-time",
+    icon: "🏆",
     features: [
-      "Unlimited API calls",
-      "Unlimited team members",
-      "Dedicated account manager",
-      "Custom SLA",
-      "On-prem deployment",
-      "Audit logs",
+      "All VIP features forever",
+      "Lifetime supporter badge",
+      "All future content included",
+      "Exclusive merch drops",
+      "Creator shout-out",
+      "Founding member perks",
     ],
-    badge: "Custom",
+    badge: "Best Value",
   },
 ];
 
 const addons: Plan[] = [
   {
     id: "a1",
-    name: "Extra API Credits",
-    description: "100,000 additional API calls",
-    price: 29.0,
+    name: "Tip Jar",
+    description: "Send a one-time $10 USDC tip to this creator",
+    price: 10.0,
     billing: "one-time",
-    icon: "📊",
+    icon: "💸",
     features: [],
   },
   {
     id: "a2",
-    name: "Premium Support",
-    description: "Dedicated Slack channel + SLA",
-    price: 99.0,
-    billing: "/month",
-    icon: "🛡️",
+    name: "Custom Content Request",
+    description: "Request a personalized video or photo set",
+    price: 49.0,
+    billing: "one-time",
+    icon: "🎨",
     features: [],
   },
 ];
@@ -122,14 +122,12 @@ export default function DemoStorePage() {
   };
 
   const removeItem = (planId: string) => {
-    setSelectedItems((prev) =>
-      prev.filter((item) => item.plan.id !== planId)
-    );
+    setSelectedItems((prev) => prev.filter((item) => item.plan.id !== planId));
   };
 
   const total = selectedItems.reduce(
     (sum, item) => sum + item.plan.price * item.quantity,
-    0
+    0,
   );
 
   const itemCount = selectedItems.length;
@@ -142,10 +140,10 @@ export default function DemoStorePage() {
 
     router.push(
       `/checkout?amount=${total.toFixed(
-        2
-      )}&merchant=Acme%20AI&to=${demoWallet}&memo=${encodeURIComponent(
-        `Subscription: ${itemNames}`
-      )}`
+        2,
+      )}&merchant=FanVault&to=${demoWallet}&memo=${encodeURIComponent(
+        `Creator Sub: ${itemNames}`,
+      )}`,
     );
   };
 
@@ -162,13 +160,13 @@ export default function DemoStorePage() {
             >
               <span className="text-xl">✕</span>
             </Link>
-            <span className="text-3xl">🤖</span>
+            <span className="text-3xl">🎤</span>
             <div>
               <h1 className="text-xl font-bold text-[var(--text-primary)]">
-                Acme AI
+                FanVault
               </h1>
               <p className="text-xs text-[var(--text-muted)]">
-                AI Platform • Pay with USDC
+                Creator Platform • Pay with USDC
               </p>
             </div>
           </div>
@@ -194,10 +192,10 @@ export default function DemoStorePage() {
       <section className="bg-gradient-to-b from-[var(--accent-muted)] to-transparent py-10 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
-            Ship AI products faster.
+            Support your favorite creator.
           </h2>
           <p className="text-[var(--text-secondary)] max-w-md mx-auto">
-            Subscribe to Acme AI and start building.
+            Subscribe for exclusive content and perks.
             <span className="text-[var(--accent-primary)] font-medium">
               {" "}
               Pay with USDC — zero gas fees.
@@ -209,13 +207,11 @@ export default function DemoStorePage() {
       {/* Pricing Plans */}
       <section className="max-w-6xl mx-auto px-4 py-8">
         <h3 className="text-sm font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-6">
-          Subscription Plans
+          Membership Tiers
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan) => {
-            const isSelected = selectedItems.some(
-              (e) => e.plan.id === plan.id
-            );
+            const isSelected = selectedItems.some((e) => e.plan.id === plan.id);
             return (
               <div
                 key={plan.id}
@@ -233,9 +229,7 @@ export default function DemoStorePage() {
                   </div>
                 )}
                 <div className="p-5">
-                  <span className="text-3xl mb-3 block">
-                    {plan.icon}
-                  </span>
+                  <span className="text-3xl mb-3 block">{plan.icon}</span>
                   <h3 className="font-semibold text-[var(--text-primary)] text-lg">
                     {plan.name}
                   </h3>
@@ -258,7 +252,9 @@ export default function DemoStorePage() {
                         key={f}
                         className="flex items-start gap-2 text-sm text-[var(--text-secondary)]"
                       >
-                        <span className="text-[var(--accent-primary)] mt-0.5">✓</span>
+                        <span className="text-[var(--accent-primary)] mt-0.5">
+                          ✓
+                        </span>
                         {f}
                       </li>
                     ))}
@@ -293,7 +289,7 @@ export default function DemoStorePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl">
           {addons.map((addon) => {
             const isSelected = selectedItems.some(
-              (e) => e.plan.id === addon.id
+              (e) => e.plan.id === addon.id,
             );
             return (
               <div
@@ -348,8 +344,8 @@ export default function DemoStorePage() {
                 Pay with USDC • Zero Gas Fees
               </h3>
               <p className="text-sm text-[var(--text-muted)]">
-                Subscribe and pay with USDC. No SOL required — Settlr covers
-                the gas.
+                Fans pay with USDC — no SOL required. Settlr covers the gas so
+                checkout is frictionless.
               </p>
             </div>
           </div>
@@ -379,9 +375,7 @@ export default function DemoStorePage() {
             {selectedItems.length === 0 ? (
               <div className="p-8 text-center">
                 <span className="text-6xl mb-4 block">🛒</span>
-                <p className="text-[var(--text-muted)]">
-                  No plans selected
-                </p>
+                <p className="text-[var(--text-muted)]">No plans selected</p>
                 <p className="text-sm text-[var(--text-muted)] mt-2">
                   Pick a subscription plan to get started.
                 </p>
@@ -419,9 +413,7 @@ export default function DemoStorePage() {
 
                 <div className="sticky bottom-0 bg-[var(--card-bg)] border-t border-[var(--border-color)] p-4 space-y-4">
                   <div className="flex items-center justify-between text-lg">
-                    <span className="text-[var(--text-secondary)]">
-                      Total
-                    </span>
+                    <span className="text-[var(--text-secondary)]">Total</span>
                     <div className="text-right">
                       <span className="font-bold text-[var(--text-primary)]">
                         ${total.toFixed(2)}

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Live Demo — Try Crypto Checkout in 30 Seconds",
+  title: "Live Demo — Creator Platform Checkout in 30 Seconds",
   description:
-    "Try Settlr's crypto payment checkout live. No signup required. See how USDC payments work with email-based wallets, zero gas fees, and instant settlement on Solana.",
+    "Try Settlr's creator platform checkout live. See how fans subscribe and pay creators with USDC — email-based wallets, zero gas fees, instant settlement, no content restrictions.",
   alternates: { canonical: "/demo" },
   openGraph: {
-    title: "Settlr Demo — Try Crypto Checkout in 30 Seconds",
+    title: "Settlr Demo — Creator Platform Checkout in 30 Seconds",
     description:
-      "Experience USDC checkout live. Email-based wallets, zero gas, instant settlement.",
+      "See how fans pay creators with USDC. Email-based wallets, zero gas, no content restrictions.",
     url: "https://settlr.dev/demo",
   },
 };

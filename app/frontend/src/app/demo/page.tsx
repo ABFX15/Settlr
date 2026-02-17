@@ -23,39 +23,39 @@ import { useState } from "react";
 
 const demoCards = [
   {
-    title: "AI SaaS Subscription Store",
+    title: "Creator Platform Store",
     description:
-      "Full checkout experience with subscription plans, add-ons, and instant USDC payment.",
+      "Full checkout experience with fan subscriptions, creator tiers, and instant USDC payment.",
     href: "/demo/store",
     icon: Play,
-    color: "#a78bfa",
+    color: "#3B82F6",
     cta: "Try Demo",
   },
   {
     title: "Quick Checkout",
     description:
-      "Skip straight to the checkout flow. See a $49 USDC subscription payment in action.",
-    href: "/checkout?amount=49.00&merchant=Acme%20AI&to=DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV&memo=Pro%20Plan%20Subscription",
+      "Skip straight to the checkout flow. See a $9.99 USDC fan subscription payment in action.",
+    href: "/checkout?amount=9.99&merchant=FanVault&to=DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV&memo=Creator%20Subscription",
     icon: Zap,
-    color: "#38bdf8",
+    color: "#3B82F6",
     cta: "Try Checkout",
   },
   {
     title: "Create Payment Link",
     description:
-      "Generate a shareable payment link with custom amount and description.",
+      "Generate a shareable payment link for tips, purchases, or creator payouts.",
     href: "/create",
     icon: LinkIcon,
-    color: "#a78bfa",
+    color: "#3B82F6",
     cta: "Create Link",
   },
   {
     title: "SDK Documentation",
     description:
-      "Integrate Settlr into your app with our React, Next.js, or Vue SDK.",
+      "Integrate checkout and payouts into your creator platform with our SDK.",
     href: "/docs",
     icon: Code2,
-    color: "#38bdf8",
+    color: "#3B82F6",
     cta: "View Docs",
   },
 ];
@@ -64,7 +64,7 @@ const features = [
   "No wallet required",
   "Zero gas fees",
   "Instant settlement",
-  "Privacy encryption",
+  "No content restrictions",
 ];
 
 export default function DemoPage() {
@@ -78,13 +78,13 @@ export default function DemoPage() {
         <section className="relative overflow-hidden px-4 pb-16 pt-32">
           {/* Background effects */}
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(167,139,250,0.2),transparent)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.15),transparent)]" />
             <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#050507] to-transparent" />
           </div>
 
           {/* Ambient glow */}
-          <div className="absolute right-[15%] top-[25%] h-64 w-64 rounded-full bg-[#a78bfa]/[0.07] blur-[100px]" />
-          <div className="absolute left-[10%] top-[35%] h-48 w-48 rounded-full bg-[#38bdf8]/[0.05] blur-[100px]" />
+          <div className="absolute right-[15%] top-[25%] h-64 w-64 rounded-full bg-[#3B82F6]/[0.07] blur-[100px]" />
+          <div className="absolute left-[10%] top-[35%] h-48 w-48 rounded-full bg-[#3B82F6]/[0.05] blur-[100px]" />
 
           <div className="relative mx-auto max-w-5xl text-center">
             <motion.div
@@ -92,7 +92,7 @@ export default function DemoPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2"
             >
-              <Sparkles className="h-4 w-4 text-[#a78bfa]" />
+              <Sparkles className="h-4 w-4 text-[#3B82F6]" />
               <span className="text-sm font-medium text-white/60">
                 Interactive Demo
               </span>
@@ -104,10 +104,7 @@ export default function DemoPage() {
               transition={{ delay: 0.1 }}
               className="mb-6 text-5xl font-bold leading-tight text-white md:text-7xl"
             >
-              Try Settlr{" "}
-              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
-                Live
-              </span>
+              Try Settlr <span className="text-[#3B82F6]">Live</span>
             </motion.h1>
 
             <motion.p
@@ -116,8 +113,8 @@ export default function DemoPage() {
               transition={{ delay: 0.2 }}
               className="mx-auto mb-8 max-w-2xl text-lg text-white/50"
             >
-              Experience gasless USDC payments in action. No wallet required, no
-              gas fees. See how easy it is for your customers.
+              See how fans subscribe and pay creators with USDC — no wallet
+              needed, no gas fees, no card network restrictions.
             </motion.p>
 
             {/* Feature pills */}
@@ -132,7 +129,7 @@ export default function DemoPage() {
                   key={feature}
                   className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm"
                 >
-                  <Check className="h-4 w-4 text-[#a78bfa]" />
+                  <Check className="h-4 w-4 text-[#3B82F6]" />
                   <span className="text-sm text-white">{feature}</span>
                 </div>
               ))}
@@ -221,7 +218,7 @@ export default function DemoPage() {
               className="mb-12 text-center"
             >
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2">
-                <Shield className="h-4 w-4 text-[#a78bfa]" />
+                <Shield className="h-4 w-4 text-[#3B82F6]" />
                 <span className="text-sm font-medium text-white/60">
                   Inco Lightning FHE Encryption
                 </span>
@@ -277,7 +274,7 @@ export default function DemoPage() {
                     onClick={() => setShowPrivateExplorer(true)}
                     className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                       showPrivateExplorer
-                        ? "bg-[#a78bfa]/20 text-[#a78bfa] ring-2 ring-[#a78bfa]"
+                        ? "bg-[#3B82F6]/20 text-[#3B82F6] ring-2 ring-[#3B82F6]"
                         : "bg-white/[0.04] text-white/40 hover:bg-white/[0.08]"
                     }`}
                   >
@@ -294,8 +291,8 @@ export default function DemoPage() {
               />
 
               {showPrivateExplorer && (
-                <div className="mt-6 rounded-xl bg-[#a78bfa]/10 p-4">
-                  <p className="text-sm text-[#a78bfa]">
+                <div className="mt-6 rounded-xl bg-[#3B82F6]/10 p-4">
+                  <p className="text-sm text-[#3B82F6]">
                     <strong>✓ Privacy protected:</strong> The actual amount is
                     encrypted using Inco Lightning&apos;s Fully Homomorphic
                     Encryption. Only the customer and merchant can decrypt it.
@@ -325,7 +322,7 @@ export default function DemoPage() {
               className="overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8"
             >
               <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#a78bfa]">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#3B82F6]">
                   <Zap className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex-1">
@@ -333,9 +330,9 @@ export default function DemoPage() {
                     Powered by Kora Gasless
                   </h3>
                   <p className="text-white/50">
-                    Your customers pay only USDC — no SOL needed for transaction
-                    fees. We cover the gas so checkout is seamless and
-                    friction-free.
+                    Fans pay only USDC — no SOL needed for transaction fees. We
+                    cover the gas so checkout is seamless and friction-free for
+                    every fan and creator.
                   </p>
                 </div>
                 <Link
@@ -352,7 +349,7 @@ export default function DemoPage() {
 
         {/* CTA Section */}
         <section className="relative overflow-hidden px-4 py-16">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#a78bfa]/[0.05] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#3B82F6]/[0.05] to-transparent" />
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -364,8 +361,8 @@ export default function DemoPage() {
               Ready to integrate?
             </h2>
             <p className="mb-8 text-white/50">
-              Start accepting gasless USDC payments in minutes with our simple
-              SDK.
+              Add checkout and payouts to your creator platform in minutes. One
+              SDK, no card network gatekeeping.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link

@@ -908,10 +908,10 @@ export default function LandingPage() {
                             </div>
                             <div>
                               <p className="text-xs font-semibold text-white">
-                                Acme AI Pro
+                                FanVault Pro
                               </p>
                               <p className="text-[10px] text-white/25">
-                                Monthly subscription
+                                Creator subscription
                               </p>
                             </div>
                           </div>

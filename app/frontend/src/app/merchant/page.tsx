@@ -342,7 +342,7 @@ export default function MerchantPage() {
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mx-auto mb-3">
-                  <Globe className="w-6 h-6 text-[#38bdf8]" />
+                  <Globe className="w-6 h-6 text-[#3B82F6]" />
                 </div>
                 <h3 className="text-white font-medium mb-1">
                   Instant & Global

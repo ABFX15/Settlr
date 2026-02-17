@@ -19,10 +19,10 @@ const navLinks = [
 
 const industryLinks = [
   {
-    href: "/industries/ai-saas",
-    label: "AI/SaaS (Stripe-blocked)",
+    href: "/industries/creators",
+    label: "Creator Platforms",
     icon: Palette,
-    description: "Launch payments when Stripe blocks you",
+    description: "Checkout + payouts for creator platforms",
   },
 ];
 
@@ -85,7 +85,7 @@ export function Navbar() {
             </Link>
           ))}
 
-          {/* AI/SaaS Dropdown */}
+          {/* Industries Dropdown */}
           <div ref={industriesRef} className="relative">
             <button
               onClick={() => setIndustriesOpen(!industriesOpen)}
@@ -95,7 +95,7 @@ export function Navbar() {
                   : "text-white/60 hover:text-white"
               }`}
             >
-              AI/SaaS
+              Industries
               <ChevronDown
                 className={`h-4 w-4 transition-transform ${
                   industriesOpen ? "rotate-180" : ""
@@ -220,10 +220,10 @@ export function Navbar() {
                 </Link>
               ))}
 
-              {/* Mobile AI/SaaS Section */}
+              {/* Mobile Industries Section */}
               <div className="mt-2 border-t border-white/10 pt-2">
                 <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white/40">
-                  AI/SaaS
+                  Industries
                 </div>
                 {industryLinks.map((link) => (
                   <Link

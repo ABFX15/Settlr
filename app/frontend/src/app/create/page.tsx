@@ -95,7 +95,7 @@ export default function CreatePaymentPage() {
     return (
       <main className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[#a78bfa] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-4 border-[#3B82F6] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-white/50">Loading...</p>
         </div>
       </main>
@@ -110,7 +110,7 @@ export default function CreatePaymentPage() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md text-center"
         >
-          <div className="w-20 h-20 mx-auto rounded-2xl bg-[#a78bfa] flex items-center justify-center mb-6">
+          <div className="w-20 h-20 mx-auto rounded-2xl bg-[#3B82F6] flex items-center justify-center mb-6">
             <Wallet className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-4">
@@ -200,7 +200,7 @@ export default function CreatePaymentPage() {
             </h1>
             <p className="text-[var(--text-muted)]">
               Payments go directly to:{" "}
-              <span className="font-mono text-[#a78bfa]">
+              <span className="font-mono text-[#3B82F6]">
                 {publicKey?.slice(0, 4)}...{publicKey?.slice(-4)}
               </span>
             </p>

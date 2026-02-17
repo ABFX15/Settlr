@@ -411,7 +411,7 @@ export default function OnboardingPage() {
                       ? "Your Solana wallet address"
                       : "Your Coinbase/Kraken USDC deposit address"
                   }
-                  className="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]/50 font-mono text-sm"
+                  className="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/50 font-mono text-sm"
                 />
                 {connected && state.payoutMethod === "wallet" && (
                   <button
@@ -468,8 +468,8 @@ export default function OnboardingPage() {
             className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-[#a78bfa]/10 flex items-center justify-center">
-                <Key className="w-5 h-5 text-[#a78bfa]" />
+              <div className="w-10 h-10 rounded-xl bg-[#3B82F6]/10 flex items-center justify-center">
+                <Key className="w-5 h-5 text-[#3B82F6]" />
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-white">
@@ -492,7 +492,7 @@ export default function OnboardingPage() {
                   setState((s) => ({ ...s, webhookUrl: e.target.value }))
                 }
                 placeholder="https://yoursite.com/api/webhooks/settlr"
-                className="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]/50"
+                className="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/50"
               />
               <p className="text-white/30 text-xs mt-2">
                 We&apos;ll POST payment events to this URL. You can configure

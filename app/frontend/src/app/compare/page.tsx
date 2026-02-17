@@ -489,13 +489,13 @@ export default function ComparePage() {
         <div className="mx-auto max-w-3xl px-6 py-24 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-              Ready to save 66% on payment fees?
+              Ready to ditch card network gatekeeping?
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-4 max-w-lg text-white/50">
-              Switch from Stripe or Coinbase Commerce to Settlr in under 30
-              minutes. Non-custodial, instant settlement, 1% flat.
+              Switch to Settlr in under 30 minutes. No content restrictions,
+              instant settlement, 1% flat. Built for creator platforms.
             </p>
           </Reveal>
           <Reveal delay={0.1}>
@@ -504,7 +504,7 @@ export default function ComparePage() {
                 href="/onboarding"
                 className="inline-flex items-center gap-2 rounded-xl bg-[#3B82F6] px-7 py-3.5 text-[15px] font-semibold text-white shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                Start accepting crypto
+                Start integrating
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link

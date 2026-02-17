@@ -50,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7,
         },
         {
-            url: `${baseUrl}/industries/ai-saas`,
+            url: `${baseUrl}/industries/creators`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.7,

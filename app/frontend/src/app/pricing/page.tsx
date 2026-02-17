@@ -114,21 +114,19 @@ export default function PricingPage() {
 
       {/* ── Hero ── */}
       <section className="relative pt-32 pb-20 md:pt-44 md:pb-24">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-[#a78bfa]/[0.06] blur-[128px]" />
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-[#3B82F6]/[0.06] blur-[128px]" />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
           <Reveal>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-1.5 text-[13px] text-white/60">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#a78bfa]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]" />
               No hidden fees
             </div>
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="text-4xl font-semibold tracking-tight md:text-6xl">
               Simple, transparent{" "}
-              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
-                pricing
-              </span>
+              <span className="text-[#3B82F6]">pricing</span>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
@@ -150,13 +148,13 @@ export default function PricingPage() {
                 <div
                   className={`relative flex h-full flex-col rounded-2xl border p-8 transition-colors ${
                     plan.popular
-                      ? "border-[#a78bfa]/30 bg-[#a78bfa]/[0.04]"
+                      ? "border-[#3B82F6]/30 bg-[#3B82F6]/[0.04]"
                       : "border-white/[0.06] bg-white/[0.02] hover:border-white/[0.1]"
                   }`}
                 >
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="rounded-full bg-[#a78bfa] px-4 py-1 text-xs font-semibold text-white">
+                      <span className="rounded-full bg-[#3B82F6] px-4 py-1 text-xs font-semibold text-white">
                         Most Popular
                       </span>
                     </div>
@@ -189,7 +187,7 @@ export default function PricingPage() {
                         key={feature}
                         className="flex items-center gap-3 text-sm text-white/50"
                       >
-                        <Check className="h-4 w-4 flex-shrink-0 text-[#a78bfa]" />
+                        <Check className="h-4 w-4 flex-shrink-0 text-[#3B82F6]" />
                         {feature}
                       </li>
                     ))}
@@ -217,7 +215,7 @@ export default function PricingPage() {
       <section className="border-y border-white/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-3xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#a78bfa]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
               FAQ
             </p>
           </Reveal>
@@ -246,16 +244,14 @@ export default function PricingPage() {
 
       {/* ── CTA ── */}
       <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#a78bfa]/[0.06] via-transparent to-transparent" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#3B82F6]/[0.06] via-transparent to-transparent" />
 
         <div className="mx-auto max-w-3xl px-6 py-32 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
               Ready to start accepting
               <br />
-              <span className="bg-gradient-to-r from-[#a78bfa] to-[#38bdf8] bg-clip-text text-transparent">
-                stablecoin payments?
-              </span>
+              <span className="text-[#3B82F6]">stablecoin payments?</span>
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
@@ -268,7 +264,7 @@ export default function PricingPage() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#050507] px-8 py-4 text-[15px] font-semibold text-[#050507] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#3B82F6] px-8 py-4 text-[15px] font-semibold text-white shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 Get started free
                 <ArrowRight className="h-4 w-4" />
