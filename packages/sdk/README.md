@@ -4,233 +4,109 @@
 [![npm downloads](https://img.shields.io/npm/dm/@settlr/sdk.svg)](https://www.npmjs.com/package/@settlr/sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-> **Accept crypto payments without wallets.** Customers pay with email. You get USDC instantly.
+> **Global payout infrastructure for platforms.** Pay anyone, anywhere, with just their email. One API call sends USDC — recipient claims it with any Solana wallet.
 
-🌐 **Website:** [settlr.dev](https://settlr.dev)  
-📖 **Docs:** [settlr.dev/docs](https://settlr.dev/docs)  
-🎮 **Demo:** [settlr.dev/demo](https://settlr.dev/demo)  
-💻 **GitHub:** [github.com/ABFX15/x402-hack-payment](https://github.com/ABFX15/x402-hack-payment)
+🌐 [settlr.dev](https://settlr.dev) · 📖 [Docs](https://settlr.dev/docs) · 💻 [GitHub](https://github.com/ABFX15/x402-hack-payment)
 
-## Why Settlr?
-
-- ✅ **No wallet required** - Customers pay with just an email
-- ✅ **Zero gas fees** - No SOL needed, ever (Kora gasless)
-- ✅ **Pay from any chain** - Accept USDC from Ethereum, Base, Arbitrum, Polygon, Optimism (Mayan)
-- ✅ **Instant settlement** - USDC direct to your Solana wallet
-- ✅ **One component** - Drop-in React `<BuyButton>`
-- ✅ **Privacy-preserving** - FHE-encrypted receipts via Inco Lightning
-- ✅ **One-click payments** - Returning customers pay instantly ⭐ NEW
-- ✅ **2% flat fee** - No hidden costs
-
-## ⚡ One-Click Payments (NEW)
-
-Enable frictionless repeat purchases for returning customers:
-
-```typescript
-import { createOneClickClient } from "@settlr/sdk";
-
-const oneClick = createOneClickClient("https://settlr.dev");
-
-// Step 1: Customer approves a spending limit (once)
-await oneClick.approve({
-  customerWallet: "Ac52MM...",
-  merchantWallet: "DjLFeM...",
-  spendingLimit: 100, // $100 max
-  expiresInDays: 30,
-});
-
-// Step 2: Merchant charges customer later (no popups!)
-const result = await oneClick.charge({
-  customerWallet: "Ac52MM...",
-  merchantWallet: "DjLFeM...",
-  amount: 25,
-  memo: "Premium content",
-});
-
-console.log(result.txSignature); // Payment completed instantly!
-console.log(result.remainingLimit); // $75 left
-```
-
-**Use cases:**
-
-- Gaming: Buy in-game items without interrupting gameplay
-- Subscriptions: Charge monthly without re-authentication
-- Microtransactions: Seamless small purchases
-
-## 🔒 Privacy Features (Inco Lightning)
-
-Settlr now supports **private payment receipts** using Inco Lightning's Fully Homomorphic Encryption:
-
-- **Private on-chain** - Payment amounts are encrypted, competitors can't see your revenue
-- **Compliant off-chain** - Merchants can still decrypt for accounting/tax (CSV export works!)
-- **Selective disclosure** - Only customer + merchant can view the actual amount
-- **Trustless decryption** - Inco covalidator network ensures no single point of trust
-
-```typescript
-import {
-  findPrivateReceiptPda,
-  buildPrivateReceiptAccounts,
-  encryptAmount,
-  PrivacyFeatures,
-} from "@settlr/sdk";
-
-// Check privacy capabilities
-console.log(PrivacyFeatures);
-// {
-//   ENCRYPTED_AMOUNTS: true,
-//   ACCESS_CONTROL: true,
-//   ACCOUNTING_COMPATIBLE: true,
-//   TRUSTLESS_DECRYPTION: true
-// }
-
-// Derive PDA for a private receipt
-const [receiptPda] = findPrivateReceiptPda("payment_123");
-
-// Build accounts for issuing private receipt
-const accounts = await buildPrivateReceiptAccounts({
-  paymentId: "payment_123",
-  amount: 99.99,
-  customer: customerWallet,
-  merchant: merchantWallet,
-});
-```
-
-> **Private on-chain. Compliant off-chain.** Your competitors can't see your revenue, but your accountant can.
-
-## 🛡️ Wallet Security (Range)
-
-Settlr integrates Range Security to screen wallets before processing payments:
-
-```typescript
-import { screenWallet, isWalletBlocked, RiskLevel } from "@settlr/sdk";
-
-// Screen a wallet for sanctions, fraud, mixers, etc.
-const result = await screenWallet("SomeWalletAddress...");
-
-if (result.riskLevel === RiskLevel.SEVERE || result.isSanctioned) {
-  console.log("Wallet is blocked:", result.categories);
-  // Don't process payment
-}
-
-// Quick check
-const blocked = await isWalletBlocked("SuspiciousWallet...");
-if (blocked) {
-  return { error: "Payment blocked for compliance" };
-}
-```
-
-**What Range screens for:**
-
-- 🚫 **Sanctions** - OFAC, EU sanctions lists
-- 🕵️ **Fraud** - Known scam wallets
-- 🌀 **Mixers** - Tornado Cash, etc.
-- 🌑 **Darknet** - Illicit marketplace activity
-- 💀 **Ransomware** - Known attack wallets
-- 🎰 **Gambling** - Unlicensed gambling (configurable)
-
-## 💸 Private Payouts (Privacy Cash)
-
-Enable ZK-shielded payments for privacy-conscious merchants:
-
-```typescript
-import {
-  createPrivacyCashClient,
-  shieldPayment,
-  privateTransfer,
-} from "@settlr/sdk";
-
-// Initialize Privacy Cash
-const privacy = createPrivacyCashClient({
-  connection,
-  wallet,
-  network: "mainnet-beta",
-});
-
-// Shield funds (move to private pool)
-const shieldTx = await shieldPayment(privacy, 100); // $100 USDC
-console.log("Shielded:", shieldTx);
-
-// Private transfer (ZK-shielded, amount hidden)
-const transferTx = await privateTransfer(privacy, "RecipientWallet...", 50);
-console.log("Private transfer:", transferTx);
-```
-
-**Privacy Cash features:**
-
-- 🔐 ZK-shielded transactions
-- 👁️ Amount hidden from on-chain observers
-- ⚡ Fast finality on Solana
-- 💰 Supports USDC and SOL
-
-## Installation
+## Install
 
 ```bash
 npm install @settlr/sdk
 ```
 
-## Quick Start
+## Payout API — Send Money by Email
 
-### 1. Get Your API Key
+The core product. Send USDC to anyone with just their email address. No bank details, no forms, no delays.
 
-Sign up at [settlr.dev/onboarding](https://settlr.dev/onboarding) to register your business and get an API key. Your wallet address is linked to your API key automatically.
-
-### 2. Create a Payment Link
+### Quick Start
 
 ```typescript
-import { Settlr } from "@settlr/sdk";
+import { PayoutClient } from "@settlr/sdk";
 
-const settlr = new Settlr({
-  apiKey: "sk_live_xxxxxxxxxxxx", // Your API key from dashboard
-  merchant: {
-    name: "My Store",
-    // walletAddress is optional - automatically fetched from your API key
-  },
+const payouts = new PayoutClient({ apiKey: "sk_live_xxxxxxxxxxxx" });
+
+// Send a payout — recipient gets an email with a claim link
+const payout = await payouts.create({
+  email: "alice@example.com",
+  amount: 250.0,
+  memo: "March data labeling — 500 tasks",
 });
 
-const payment = await settlr.createPayment({
-  amount: 29.99,
-  memo: "Premium subscription",
-});
-
-// Redirect customer to checkout
-window.location.href = payment.checkoutUrl;
+console.log(payout.id); // "po_abc123"
+console.log(payout.status); // "sent"
+console.log(payout.claimUrl); // "https://settlr.dev/claim/..."
 ```
 
-> **Note:** When you register at [settlr.dev/onboarding](https://settlr.dev/onboarding), your wallet address is linked to your API key. The SDK automatically fetches it - no need to include it in your code!
+### Batch Payouts
 
-### 3. Drop-in Buy Button ⭐ NEW
+Send up to 500 payouts in a single call:
 
-The easiest way to accept payments - just drop in a button:
+```typescript
+const batch = await payouts.createBatch([
+  { email: "alice@example.com", amount: 250.0, memo: "March" },
+  { email: "bob@example.com", amount: 180.0, memo: "March" },
+  { email: "carol@example.com", amount: 320.0, memo: "March" },
+]);
+
+console.log(batch.total); // 750.00
+console.log(batch.count); // 3
+```
+
+### Check Status
+
+```typescript
+const payout = await payouts.get("po_abc123");
+console.log(payout.status); // "claimed"
+console.log(payout.claimedAt); // "2026-02-15T14:30:00Z"
+console.log(payout.txSignature); // "5KtP..."
+```
+
+### List Payouts
+
+```typescript
+const result = await payouts.list({ status: "claimed", limit: 50 });
+result.data.forEach((p) => console.log(p.email, p.amount, p.status));
+```
+
+### How It Works
+
+```
+Platform calls POST /api/payouts
+        ↓
+Recipient gets email with claim link
+        ↓
+Recipient enters any Solana wallet address
+        ↓
+USDC transferred on-chain instantly
+        ↓
+Platform gets webhook with tx signature
+```
+
+---
+
+## Checkout SDK — Accept Inbound Payments
+
+Drop-in React components for accepting USDC payments. Customers pay with email — no wallet setup needed.
+
+### BuyButton
 
 ```tsx
 import { SettlrProvider, BuyButton } from "@settlr/sdk";
 
-function App() {
-  return (
-    <SettlrProvider
-      config={{
-        apiKey: "sk_live_xxxxxxxxxxxx",
-        merchant: { name: "GameStore" }, // Wallet fetched from API key
-      }}
-    >
-      <BuyButton
-        amount={49.99}
-        memo="Premium Game Bundle"
-        onSuccess={(result) => {
-          console.log("Payment successful!", result.signature);
-          unlockContent();
-        }}
-      >
-        Buy Now - $49.99
-      </BuyButton>
-    </SettlrProvider>
-  );
-}
+<SettlrProvider
+  config={{ apiKey: "sk_live_xxx", merchant: { name: "My Store" } }}
+>
+  <BuyButton
+    amount={49.99}
+    memo="Premium Game Bundle"
+    onSuccess={(result) => console.log("Paid!", result.signature)}
+  >
+    Buy Now — $49.99
+  </BuyButton>
+</SettlrProvider>;
 ```
 
-### 4. Checkout Widget ⭐ NEW
-
-Full embeddable checkout with product info:
+### CheckoutWidget
 
 ```tsx
 import { CheckoutWidget } from "@settlr/sdk";
@@ -239,402 +115,199 @@ import { CheckoutWidget } from "@settlr/sdk";
   amount={149.99}
   productName="Annual Subscription"
   productDescription="Full access to all premium features"
-  productImage="/subscription.png"
   onSuccess={(result) => router.push("/success")}
-  onError={(error) => console.error(error)}
+  theme="dark"
 />;
 ```
 
-### How It Works
+### Checkout Session (Server-Side)
 
-Settlr checkout handles authentication via Privy:
+```typescript
+import { Settlr } from "@settlr/sdk";
 
-- **Email login** → Creates embedded Solana wallet automatically
-- **Wallet login** → Connects Phantom, Solflare, or Backpack
+const settlr = new Settlr({
+  apiKey: "sk_live_xxxxxxxxxxxx",
+  merchant: { name: "My Store" },
+});
 
-No wallet-adapter setup needed. Just redirect to checkout.
+const payment = await settlr.createPayment({
+  amount: 29.99,
+  memo: "Premium subscription",
+  successUrl: "https://mystore.com/success",
+});
 
-### Multichain Payments
-
-Customers can pay with USDC from any supported chain. Settlr automatically bridges funds to your Solana wallet via Mayan:
-
-| Source Chain | Bridge Time | Gas Cost       |
-| ------------ | ----------- | -------------- |
-| Solana       | Instant     | Free (gasless) |
-| Base         | ~1-2 min    | ~$0.01         |
-| Arbitrum     | ~1-2 min    | ~$0.01         |
-| Optimism     | ~1-2 min    | ~$0.01         |
-| Polygon      | ~1-2 min    | ~$0.01         |
-| Ethereum     | ~1-3 min    | ~$1-5          |
-
-**You only need a Solana wallet** - cross-chain bridging is automatic.
+// Redirect to hosted checkout
+window.location.href = payment.checkoutUrl;
+```
 
 ### React Hook
 
 ```tsx
 import { SettlrProvider, useSettlr } from "@settlr/sdk";
 
-function App() {
-  return (
-    <SettlrProvider
-      config={{
-        apiKey: "sk_live_xxxxxxxxxxxx",
-        merchant: {
-          name: "My Game",
-          // walletAddress optional - linked to your API key
-        },
-      }}
-    >
-      <YourApp />
-    </SettlrProvider>
-  );
-}
-
-// In your component
 function CheckoutButton() {
   const { getCheckoutUrl } = useSettlr();
-
-  const handlePay = () => {
-    const url = getCheckoutUrl({ amount: 29.99, memo: "Premium Pack" });
-    window.location.href = url;
-  };
-
-  return <button onClick={handlePay}>Pay $29.99</button>;
+  const url = getCheckoutUrl({ amount: 29.99, memo: "Premium Pack" });
+  return <a href={url}>Pay $29.99</a>;
 }
 ```
 
-### Payment Link Generator Hook
+---
 
-Generate shareable payment links programmatically:
+## Webhooks
 
-```tsx
-import { useSettlr } from "@settlr/sdk";
-
-function InvoicePage() {
-  const { getCheckoutUrl } = useSettlr();
-
-  const link = getCheckoutUrl({
-    amount: 500,
-    memo: "Invoice #1234",
-    orderId: "inv_1234",
-  });
-  // → https://settlr.app/checkout?amount=500&merchant=My+Game&...
-}
-```
-
-## React Components
-
-### `<BuyButton>`
-
-Drop-in payment button component.
-
-```tsx
-<BuyButton
-  amount={49.99} // Required: amount in USDC
-  memo="Order description" // Optional
-  orderId="order_123" // Optional: your order ID
-  onSuccess={(result) => {}} // Called on successful payment
-  onError={(error) => {}} // Called on payment failure
-  onProcessing={() => {}} // Called when payment starts
-  useRedirect={false} // Use redirect flow instead of direct payment
-  successUrl="https://..." // Redirect URL (if useRedirect=true)
-  cancelUrl="https://..." // Cancel URL (if useRedirect=true)
-  variant="primary" // "primary" | "secondary" | "outline"
-  size="md" // "sm" | "md" | "lg"
-  disabled={false}
-  className=""
-  style={{}}
->
-  Buy Now - $49.99
-</BuyButton>
-```
-
-### `<CheckoutWidget>`
-
-Full checkout UI component with product info.
-
-```tsx
-<CheckoutWidget
-  amount={149.99} // Required
-  productName="Annual Subscription" // Required
-  productDescription="Description" // Optional
-  productImage="/image.png" // Optional
-  merchantName="My Store" // Optional (uses config)
-  memo="Transaction memo" // Optional
-  orderId="order_123" // Optional
-  onSuccess={(result) => {}} // Called on success
-  onError={(error) => {}} // Called on error
-  onCancel={() => {}} // Called on cancel
-  theme="dark" // "dark" | "light"
-  showBranding={true} // Show "Powered by Settlr"
-  className=""
-  style={{}}
-/>
-```
-
-## API Keys
-
-### Types of Keys
-
-| Key Type | Prefix     | Use Case                            |
-| -------- | ---------- | ----------------------------------- |
-| Live     | `sk_live_` | Production payments                 |
-| Test     | `sk_test_` | Development/testing (no validation) |
-
-### Rate Limits
-
-| Tier       | Requests/min | Platform Fee |
-| ---------- | ------------ | ------------ |
-| Free       | 60           | 2%           |
-| Pro        | 300          | 1.5%         |
-| Enterprise | 1000         | 1%           |
-
-### Get Your API Key
-
-1. Go to [settlr.app/dashboard](https://settlr.app/dashboard)
-2. Connect your wallet
-3. Click "Create API Key"
-4. Save the key securely (only shown once!)
-
-## API Reference
-
-### `Settlr`
-
-Main client class.
-
-#### Constructor Options
+Handle payout and payment events:
 
 ```typescript
-interface SettlrConfig {
-  apiKey: string; // Required: your API key from dashboard
-  merchant: {
-    name: string;
-    walletAddress?: string; // Optional: auto-fetched from API key
-    logoUrl?: string;
-    webhookUrl?: string;
-  };
-  network?: "devnet" | "mainnet-beta"; // default: 'devnet'
-  rpcEndpoint?: string;
-  testMode?: boolean;
-}
-```
-
-> **Tip:** When you register at [settlr.dev/onboarding](https://settlr.dev/onboarding), your wallet address is linked to your API key. You don't need to specify it in the config!
-
-#### Methods
-
-##### `createPayment(options)`
-
-Create a payment link.
-
-```typescript
-const payment = await settlr.createPayment({
-  amount: 29.99,           // Required: amount in USDC
-  memo: 'Order #123',      // Optional: description
-  orderId: 'order_123',    // Optional: your order ID
-  successUrl: 'https://...',  // Optional: redirect after success
-  cancelUrl: 'https://...',   // Optional: redirect on cancel
-  expiresIn: 3600,         // Optional: expiry in seconds (default: 1 hour)
-});
-
-// Returns
-{
-  id: 'pay_abc123',
-  amount: 29.99,
-  status: 'pending',
-  checkoutUrl: 'https://settlr.app/checkout?...',
-  qrCode: 'data:image/svg+xml,...',
-  createdAt: Date,
-  expiresAt: Date,
-}
-```
-
-##### `buildTransaction(options)`
-
-Build a transaction for signing.
-
-```typescript
-const tx = await settlr.buildTransaction({
-  payerPublicKey: wallet.publicKey,
-  amount: 29.99,
-  memo: "Order #123",
-});
-
-// Sign and send
-const signature = await wallet.sendTransaction(tx, connection);
-```
-
-##### `pay(options)`
-
-Execute a direct payment.
-
-```typescript
-const result = await settlr.pay({
-  wallet: {
-    publicKey: wallet.publicKey,
-    signTransaction: wallet.signTransaction,
-  },
-  amount: 29.99,
-  memo: 'Order #123',
-});
-
-// Returns
-{
-  success: true,
-  signature: '5KtP...',
-  amount: 29.99,
-  merchantAddress: '...',
-}
-```
-
-##### `getPaymentStatus(signature)`
-
-Check payment status.
-
-```typescript
-const status = await settlr.getPaymentStatus("5KtP...");
-// Returns: 'pending' | 'completed' | 'failed'
-```
-
-##### `createCheckoutSession(options)` ⭐ NEW
-
-Create a hosted checkout session (like Stripe Checkout).
-
-```typescript
-const session = await settlr.createCheckoutSession({
-  amount: 29.99,
-  description: 'Premium Plan',
-  successUrl: 'https://mystore.com/success?session_id={CHECKOUT_SESSION_ID}',
-  cancelUrl: 'https://mystore.com/cancel',
-  webhookUrl: 'https://mystore.com/api/webhooks/settlr', // Optional
-  metadata: { orderId: 'order_123' }, // Optional
-});
-
-// Redirect to hosted checkout
-window.location.href = session.url;
-
-// Returns
-{
-  id: 'cs_abc123...',
-  url: 'https://settlr.app/checkout/cs_abc123...',
-  expiresAt: 1702659600000, // 30 min expiry
-}
-```
-
-## Webhooks ⭐ UPDATED
-
-Get notified when payments complete to fulfill orders automatically.
-
-### Quick Setup (Next.js)
-
-```typescript
-// app/api/webhooks/settlr/route.ts
 import { createWebhookHandler } from "@settlr/sdk";
 
+// Next.js App Router
 export const POST = createWebhookHandler({
   secret: process.env.SETTLR_WEBHOOK_SECRET!,
   handlers: {
-    "payment.completed": async (event) => {
-      console.log("Payment completed!", event.payment.id);
-      await fulfillOrder(event.payment.orderId);
-      await sendConfirmationEmail(event.payment);
+    "payout.claimed": async (event) => {
+      console.log("Payout claimed:", event.payment.id);
+      await markPaid(event.payment.id);
     },
-    "payment.failed": async (event) => {
-      await notifyCustomer(event.payment.orderId);
+    "payout.expired": async (event) => {
+      await resendPayout(event.payment.id);
+    },
+    "payment.completed": async (event) => {
+      await fulfillOrder(event.payment.orderId);
     },
   },
 });
 ```
 
-### Express.js
+### Events
 
-```typescript
-import express from "express";
-import { createWebhookHandler } from "@settlr/sdk";
-
-const app = express();
-
-app.post(
-  "/webhooks/settlr",
-  express.raw({ type: "application/json" }),
-  createWebhookHandler({
-    secret: process.env.SETTLR_WEBHOOK_SECRET!,
-    handlers: {
-      "payment.completed": async (event) => {
-        await fulfillOrder(event.payment.orderId);
-      },
-    },
-  }),
-);
-```
+| Event                    | Description                                   |
+| ------------------------ | --------------------------------------------- |
+| `payout.created`         | Payout created, claim email sent              |
+| `payout.sent`            | Email delivered                               |
+| `payout.claimed`         | Recipient claimed — USDC transferred on-chain |
+| `payout.expired`         | Claim link expired (7 days)                   |
+| `payout.failed`          | On-chain transfer failed                      |
+| `payment.created`        | Checkout payment link created                 |
+| `payment.completed`      | Payment confirmed on-chain                    |
+| `payment.failed`         | Payment failed                                |
+| `payment.refunded`       | Payment refunded                              |
+| `subscription.created`   | Subscription started                          |
+| `subscription.renewed`   | Subscription charge succeeded                 |
+| `subscription.cancelled` | Subscription cancelled                        |
 
 ### Manual Verification
 
 ```typescript
-import { verifyWebhookSignature, parseWebhookPayload } from "@settlr/sdk";
+import { verifyWebhookSignature } from "@settlr/sdk";
 
-export async function POST(request: Request) {
-  const signature = request.headers.get("x-settlr-signature")!;
-  const body = await request.text();
-
-  // Verify signature
-  if (!verifyWebhookSignature(body, signature, process.env.WEBHOOK_SECRET!)) {
-    return new Response("Invalid signature", { status: 401 });
-  }
-
-  const event = JSON.parse(body);
-
-  if (event.type === "payment.completed") {
-    await fulfillOrder(event.payment.orderId);
-  }
-
-  return new Response("OK", { status: 200 });
-}
+const isValid = verifyWebhookSignature(body, signature, secret);
 ```
 
-### Webhook Events
+---
 
-| Event                    | Description                |
-| ------------------------ | -------------------------- |
-| `payment.created`        | Payment link was created   |
-| `payment.completed`      | Payment confirmed on-chain |
-| `payment.failed`         | Payment failed             |
-| `payment.expired`        | Payment link expired       |
-| `payment.refunded`       | Payment was refunded       |
-| `subscription.created`   | Subscription was created   |
-| `subscription.renewed`   | Subscription was renewed   |
-| `subscription.cancelled` | Subscription was cancelled |
-| `subscription.expired`   | Subscription expired       |
+## Subscriptions
 
-### Webhook Payload
-
-```json
-{
-  "id": "evt_abc123",
-  "type": "payment.completed",
-  "payment": {
-    "id": "pay_xyz789",
-    "amount": 29.99,
-    "status": "completed",
-    "orderId": "order_123",
-    "memo": "Premium subscription",
-    "txSignature": "5KtP...",
-    "payerAddress": "7xKX...3mPq",
-    "merchantAddress": "4dGo...7Ywd"
-  },
-  "timestamp": "2025-12-17T10:30:00.000Z",
-  "signature": "hmac_sha256_signature"
-}
-```
-
-##### `getMerchantBalance()`
-
-Get merchant's USDC balance.
+Recurring USDC payments:
 
 ```typescript
-const balance = await settlr.getMerchantBalance();
-console.log(`Balance: $${balance} USDC`);
+import { createSubscriptionClient } from "@settlr/sdk";
+
+const subs = createSubscriptionClient({ apiKey: "sk_live_xxx" });
+
+// Create a plan
+const plan = await subs.createPlan({
+  name: "Pro",
+  amount: 29.99,
+  interval: "monthly",
+});
+
+// Subscribe a customer
+const subscription = await subs.subscribe({
+  planId: plan.id,
+  customerWallet: "7xKX...",
+  customerEmail: "user@example.com",
+});
 ```
+
+---
+
+## One-Click Payments
+
+Pre-approved spending for returning customers:
+
+```typescript
+import { createOneClickClient } from "@settlr/sdk";
+
+const oneClick = createOneClickClient();
+
+// Customer approves once
+await oneClick.approve({
+  customerWallet: "...",
+  merchantWallet: "...",
+  spendingLimit: 100,
+});
+
+// Merchant charges later — no popups
+const result = await oneClick.charge({
+  customerWallet: "...",
+  merchantWallet: "...",
+  amount: 25,
+});
+```
+
+---
+
+## API Keys
+
+| Type | Prefix     | Use         |
+| ---- | ---------- | ----------- |
+| Live | `sk_live_` | Production  |
+| Test | `sk_test_` | Development |
+
+| Tier       | Rate Limit | Fee  |
+| ---------- | ---------- | ---- |
+| Free       | 60/min     | 2%   |
+| Pro        | 300/min    | 1.5% |
+| Enterprise | 1000/min   | 1%   |
+
+Get yours at [settlr.dev/onboarding](https://settlr.dev/onboarding).
+
+---
+
+## Multichain Support
+
+Checkout accepts USDC from any major EVM chain — automatically bridged to Solana via Mayan:
+
+| Chain    | Bridge Time | Gas Cost       |
+| -------- | ----------- | -------------- |
+| Solana   | Instant     | Free (gasless) |
+| Base     | ~1-2 min    | ~$0.01         |
+| Arbitrum | ~1-2 min    | ~$0.01         |
+| Ethereum | ~1-3 min    | ~$1-5          |
+
+---
+
+## Full API Reference
+
+### PayoutClient
+
+| Method                 | Description               |
+| ---------------------- | ------------------------- |
+| `create(options)`      | Send payout by email      |
+| `createBatch(payouts)` | Batch send (up to 500)    |
+| `get(id)`              | Get payout by ID          |
+| `list(options?)`       | List payouts with filters |
+
+### Settlr (Checkout)
+
+| Method                      | Description            |
+| --------------------------- | ---------------------- |
+| `createPayment(options)`    | Create payment link    |
+| `buildTransaction(options)` | Build tx for signing   |
+| `pay(options)`              | Execute direct payment |
+| `getPaymentStatus(sig)`     | Check payment status   |
+| `getMerchantBalance()`      | Get USDC balance       |
 
 ### Utilities
 
@@ -646,23 +319,7 @@ parseUSDC(29.99); // 29990000n
 shortenAddress("ABC...XYZ"); // "ABC...XYZ"
 ```
 
-## Networks
-
-| Network | USDC Mint                                      | USDT Mint                                      |
-| ------- | ---------------------------------------------- | ---------------------------------------------- |
-| Devnet  | `4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU` | `EJwZgeZrdC8TXTQbQBoL6bfuAnFUUy1PVCMB4DYPzVaS` |
-| Mainnet | `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v` | `Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB` |
-
-## Supported Tokens
-
-```typescript
-import { SUPPORTED_TOKENS, getTokenMint, getTokenDecimals } from "@settlr/sdk";
-
-// Get token info
-const usdcMint = getTokenMint("USDC", "mainnet-beta");
-const usdtMint = getTokenMint("USDT", "mainnet-beta");
-const decimals = getTokenDecimals("USDC"); // 6
-```
+---
 
 ## License
 
