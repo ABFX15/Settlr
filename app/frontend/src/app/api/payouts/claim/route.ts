@@ -7,7 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getPayoutByClaimToken, claimPayout, updatePayoutStatus } from "@/lib/db";
+import { getPayoutByClaimToken, claimPayout, updatePayoutStatus, getRecipientByEmail, registerRecipient, updateRecipientStats } from "@/lib/db";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -177,6 +177,19 @@ export async function POST(request: NextRequest) {
                 { error: "Failed to record claim" },
                 { status: 500, headers: corsHeaders }
             );
+        }
+
+        // ── Save email→wallet mapping for future auto-delivery ──
+        try {
+            const existingRecipient = await getRecipientByEmail(payout.email);
+            if (!existingRecipient) {
+                await registerRecipient({ email: payout.email, walletAddress: recipientWallet });
+                console.log(`[payouts/claim] Registered new recipient: ${payout.email} → ${recipientWallet}`);
+            }
+            await updateRecipientStats(payout.email, payout.amount);
+        } catch (regErr) {
+            // Non-blocking: don't fail the claim if recipient registration fails
+            console.error("[payouts/claim] Failed to register recipient:", regErr);
         }
 
         return NextResponse.json({

@@ -9,10 +9,63 @@ import { NextRequest, NextResponse } from "next/server";
 import {
     createPayout,
     getPayoutsByMerchant,
+    getRecipientByEmail,
+    claimPayout,
+    updateRecipientStats,
     validateApiKey,
     type PayoutStatus,
 } from "@/lib/db";
-import { sendPayoutClaimEmail } from "@/lib/email";
+import { sendPayoutClaimEmail, sendInstantPayoutEmail } from "@/lib/email";
+
+/**
+ * Execute an on-chain USDC transfer for auto-delivery.
+ * Extracted so both payout creation (auto) and claim (manual) can use it.
+ */
+async function executePayoutTransfer(params: {
+    recipientWallet: string;
+    amount: number;
+    payoutId: string;
+}): Promise<string> {
+    const { Connection, PublicKey, Keypair, Transaction } = await import("@solana/web3.js");
+    const {
+        getAssociatedTokenAddress,
+        createAssociatedTokenAccountInstruction,
+        createTransferInstruction,
+        getAccount,
+    } = await import("@solana/spl-token");
+
+    const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com";
+    const connection = new Connection(rpcUrl, "confirmed");
+
+    const feePayerSecret = process.env.FEE_PAYER_SECRET_KEY;
+    if (!feePayerSecret) throw new Error("FEE_PAYER_SECRET_KEY not configured");
+
+    const feePayerKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(feePayerSecret)));
+    const usdcMint = new PublicKey(process.env.USDC_MINT || "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
+    const recipientPubkey = new PublicKey(params.recipientWallet);
+
+    const sourceAta = await getAssociatedTokenAddress(usdcMint, feePayerKeypair.publicKey);
+    const recipientAta = await getAssociatedTokenAddress(usdcMint, recipientPubkey);
+
+    const tx = new Transaction();
+    try {
+        await getAccount(connection, recipientAta);
+    } catch {
+        tx.add(createAssociatedTokenAccountInstruction(feePayerKeypair.publicKey, recipientAta, recipientPubkey, usdcMint));
+    }
+
+    tx.add(createTransferInstruction(sourceAta, recipientAta, feePayerKeypair.publicKey, BigInt(Math.round(params.amount * 1_000_000))));
+
+    const { blockhash } = await connection.getLatestBlockhash();
+    tx.recentBlockhash = blockhash;
+    tx.feePayer = feePayerKeypair.publicKey;
+    tx.sign(feePayerKeypair);
+
+    const signature = await connection.sendRawTransaction(tx.serialize(), { skipPreflight: false });
+    await connection.confirmTransaction(signature, "confirmed");
+    console.log(`[payouts] Transfer for ${params.payoutId} executed: ${signature}`);
+    return signature;
+}
 
 export async function POST(request: NextRequest) {
     try {
@@ -55,7 +108,59 @@ export async function POST(request: NextRequest) {
             metadata,
         });
 
-        // Send claim email (non-blocking — don't fail the request if email fails)
+        // ── Auto-delivery: check if this recipient has a saved wallet ──
+        const recipient = await getRecipientByEmail(email);
+        if (recipient?.walletAddress && recipient.autoWithdraw) {
+            console.log(`[payouts] Auto-delivery: ${email} → ${recipient.walletAddress}`);
+
+            let txSignature = "";
+            try {
+                txSignature = await executePayoutTransfer({
+                    recipientWallet: recipient.walletAddress,
+                    amount: payout.amount,
+                    payoutId: payout.id,
+                });
+            } catch (err) {
+                console.error("[payouts] Auto-delivery transfer failed:", err);
+                // Fallback: dev/demo mode
+                if (process.env.NODE_ENV === "development" || !process.env.FEE_PAYER_SECRET_KEY) {
+                    txSignature = `demo_auto_${payout.id}_${Date.now()}`;
+                }
+            }
+
+            if (txSignature) {
+                // Mark claimed instantly
+                await claimPayout(payout.claimToken, recipient.walletAddress, txSignature);
+                await updateRecipientStats(email, payout.amount);
+
+                // Notify recipient
+                sendInstantPayoutEmail({
+                    to: email,
+                    amount: payout.amount,
+                    currency: payout.currency,
+                    memo: payout.memo,
+                    walletAddress: recipient.walletAddress,
+                    txSignature,
+                    merchantName: validation.merchantName,
+                }).catch((err) => console.error("[payouts] Failed to send instant payout email:", err));
+
+                return NextResponse.json({
+                    id: payout.id,
+                    email: payout.email,
+                    amount: payout.amount,
+                    currency: payout.currency,
+                    memo: payout.memo,
+                    status: "claimed",
+                    delivery: "instant",
+                    recipientWallet: recipient.walletAddress,
+                    txSignature,
+                    createdAt: payout.createdAt.toISOString(),
+                    claimedAt: new Date().toISOString(),
+                }, { status: 201 });
+            }
+        }
+
+        // ── Standard flow: send claim email ──
         sendPayoutClaimEmail({
             to: payout.email,
             amount: payout.amount,
@@ -75,6 +180,7 @@ export async function POST(request: NextRequest) {
             currency: payout.currency,
             memo: payout.memo,
             status: payout.status,
+            delivery: "claim_link",
             claimUrl: payout.claimUrl,
             createdAt: payout.createdAt.toISOString(),
             expiresAt: payout.expiresAt.toISOString(),

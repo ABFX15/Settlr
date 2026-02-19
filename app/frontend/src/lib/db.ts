@@ -167,6 +167,49 @@ export interface PayoutBatch {
     completedAt?: Date;
 }
 
+// ---------------------------------------------------------------------------
+// Recipient Network types
+// ---------------------------------------------------------------------------
+
+export interface Recipient {
+    id: string;
+    email: string;
+    walletAddress: string;
+    displayName?: string;
+    authToken?: string;
+    authTokenExpiresAt?: Date;
+    notificationsEnabled: boolean;
+    autoWithdraw: boolean;
+    totalReceived: number;
+    totalPayouts: number;
+    createdAt: Date;
+    updatedAt: Date;
+    lastPayoutAt?: Date;
+}
+
+export interface RecipientBalance {
+    id: string;
+    recipientId: string;
+    currency: string;
+    balance: number;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export type BalanceTransactionType = "credit" | "debit" | "withdrawal";
+
+export interface BalanceTransaction {
+    id: string;
+    recipientId: string;
+    type: BalanceTransactionType;
+    amount: number;
+    currency: string;
+    payoutId?: string;
+    txSignature?: string;
+    description?: string;
+    createdAt: Date;
+}
+
 // In-memory fallback stores
 const memoryMerchants = new Map<string, Merchant>();
 const memorySessions = new Map<string, CheckoutSession>();
@@ -176,6 +219,9 @@ const memorySubscriptionPlans = new Map<string, SubscriptionPlan>();
 const memorySubscriptions = new Map<string, Subscription>();
 const memoryPayouts = new Map<string, Payout>();
 const memoryPayoutBatches = new Map<string, PayoutBatch>();
+const memoryRecipients = new Map<string, Recipient>(); // keyed by email
+const memoryBalances = new Map<string, RecipientBalance>(); // keyed by recipientId:currency
+const memoryBalanceTxs: BalanceTransaction[] = [];
 const memoryRateLimits = new Map<string, { count: number; resetAt: number }>();
 
 // ID generators
@@ -1444,3 +1490,480 @@ function mapSupabasePayout(data: Record<string, unknown>): Payout {
     };
 }
 
+
+// =========================================================================
+// Recipient Network — auto-delivery, balances, dashboard
+// =========================================================================
+
+function generateRecipientId(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "rcp_";
+    for (let i = 0; i < 16; i++) {
+        id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+}
+
+function generateAuthToken(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let token = "";
+    for (let i = 0; i < 48; i++) {
+        token += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return token;
+}
+
+function generateBalanceTxId(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "btx_";
+    for (let i = 0; i < 16; i++) {
+        id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+}
+
+// ---------------------------------------------------------------------------
+// Recipient CRUD
+// ---------------------------------------------------------------------------
+
+/**
+ * Look up a known recipient by email.
+ * This is the core of auto-delivery: if a recipient exists, we can skip the claim flow.
+ */
+export async function getRecipientByEmail(email: string): Promise<Recipient | null> {
+    const normalized = email.toLowerCase().trim();
+
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("recipients")
+            .select("*")
+            .eq("email", normalized)
+            .single();
+        if (error || !data) return null;
+        return mapSupabaseRecipient(data);
+    } else {
+        return memoryRecipients.get(normalized) || null;
+    }
+}
+
+/**
+ * Register a new recipient (happens on first claim).
+ */
+export async function registerRecipient(data: {
+    email: string;
+    walletAddress: string;
+    displayName?: string;
+}): Promise<Recipient> {
+    const normalized = data.email.toLowerCase().trim();
+    const now = new Date();
+
+    const recipient: Recipient = {
+        id: generateRecipientId(),
+        email: normalized,
+        walletAddress: data.walletAddress,
+        displayName: data.displayName,
+        notificationsEnabled: true,
+        autoWithdraw: true,
+        totalReceived: 0,
+        totalPayouts: 0,
+        createdAt: now,
+        updatedAt: now,
+    };
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase.from("recipients").insert({
+            id: recipient.id,
+            email: recipient.email,
+            wallet_address: recipient.walletAddress,
+            display_name: recipient.displayName,
+            notifications_enabled: recipient.notificationsEnabled,
+            auto_withdraw: recipient.autoWithdraw,
+        });
+        if (error) {
+            console.error("Error registering recipient:", error);
+            throw new Error("Failed to register recipient");
+        }
+    } else {
+        memoryRecipients.set(normalized, recipient);
+    }
+
+    return recipient;
+}
+
+/**
+ * Update recipient wallet address or preferences.
+ */
+export async function updateRecipient(
+    email: string,
+    updates: {
+        walletAddress?: string;
+        displayName?: string;
+        notificationsEnabled?: boolean;
+        autoWithdraw?: boolean;
+    }
+): Promise<Recipient | null> {
+    const normalized = email.toLowerCase().trim();
+    const now = new Date();
+
+    if (isSupabaseConfigured()) {
+        const supaUpdates: Record<string, unknown> = { updated_at: now.toISOString() };
+        if (updates.walletAddress !== undefined) supaUpdates.wallet_address = updates.walletAddress;
+        if (updates.displayName !== undefined) supaUpdates.display_name = updates.displayName;
+        if (updates.notificationsEnabled !== undefined) supaUpdates.notifications_enabled = updates.notificationsEnabled;
+        if (updates.autoWithdraw !== undefined) supaUpdates.auto_withdraw = updates.autoWithdraw;
+
+        const { data, error } = await supabase
+            .from("recipients")
+            .update(supaUpdates)
+            .eq("email", normalized)
+            .select()
+            .single();
+
+        if (error || !data) return null;
+        return mapSupabaseRecipient(data);
+    } else {
+        const recipient = memoryRecipients.get(normalized);
+        if (!recipient) return null;
+        if (updates.walletAddress !== undefined) recipient.walletAddress = updates.walletAddress;
+        if (updates.displayName !== undefined) recipient.displayName = updates.displayName;
+        if (updates.notificationsEnabled !== undefined) recipient.notificationsEnabled = updates.notificationsEnabled;
+        if (updates.autoWithdraw !== undefined) recipient.autoWithdraw = updates.autoWithdraw;
+        recipient.updatedAt = now;
+        return recipient;
+    }
+}
+
+/**
+ * Increment recipient stats after a successful payout.
+ */
+export async function updateRecipientStats(email: string, amount: number): Promise<void> {
+    const normalized = email.toLowerCase().trim();
+    const now = new Date();
+
+    if (isSupabaseConfigured()) {
+        // Use RPC or manual increment
+        const { data } = await supabase
+            .from("recipients")
+            .select("total_received, total_payouts")
+            .eq("email", normalized)
+            .single();
+
+        if (data) {
+            await supabase.from("recipients").update({
+                total_received: Number(data.total_received) + amount,
+                total_payouts: Number(data.total_payouts) + 1,
+                last_payout_at: now.toISOString(),
+                updated_at: now.toISOString(),
+            }).eq("email", normalized);
+        }
+    } else {
+        const recipient = memoryRecipients.get(normalized);
+        if (recipient) {
+            recipient.totalReceived += amount;
+            recipient.totalPayouts += 1;
+            recipient.lastPayoutAt = now;
+            recipient.updatedAt = now;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Magic link auth for recipient dashboard
+// ---------------------------------------------------------------------------
+
+export async function createRecipientAuthToken(email: string): Promise<string | null> {
+    const normalized = email.toLowerCase().trim();
+    const token = generateAuthToken();
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("recipients")
+            .update({ auth_token: token, auth_token_expires_at: expiresAt.toISOString() })
+            .eq("email", normalized);
+        return error ? null : token;
+    } else {
+        const recipient = memoryRecipients.get(normalized);
+        if (!recipient) return null;
+        recipient.authToken = token;
+        recipient.authTokenExpiresAt = expiresAt;
+        return token;
+    }
+}
+
+export async function validateRecipientAuthToken(token: string): Promise<Recipient | null> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("recipients")
+            .select("*")
+            .eq("auth_token", token)
+            .single();
+
+        if (error || !data) return null;
+        if (new Date(data.auth_token_expires_at) < new Date()) return null;
+
+        // Clear the token after use
+        await supabase.from("recipients").update({
+            auth_token: null,
+            auth_token_expires_at: null,
+        }).eq("auth_token", token);
+
+        return mapSupabaseRecipient(data);
+    } else {
+        for (const recipient of memoryRecipients.values()) {
+            if (recipient.authToken === token) {
+                if (recipient.authTokenExpiresAt && recipient.authTokenExpiresAt < new Date()) return null;
+                recipient.authToken = undefined;
+                recipient.authTokenExpiresAt = undefined;
+                return recipient;
+            }
+        }
+        return null;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Get all payouts for a recipient email (across all platforms)
+// ---------------------------------------------------------------------------
+
+export async function getPayoutsByRecipientEmail(
+    email: string,
+    options?: { limit?: number; offset?: number }
+): Promise<Payout[]> {
+    const normalized = email.toLowerCase().trim();
+
+    if (isSupabaseConfigured()) {
+        let query = supabase
+            .from("payouts")
+            .select("*")
+            .eq("email", normalized)
+            .order("created_at", { ascending: false });
+
+        if (options?.offset) query = query.range(options.offset, options.offset + (options.limit || 20) - 1);
+        if (options?.limit) query = query.limit(options.limit);
+
+        const { data, error } = await query;
+        if (error || !data) return [];
+        return data.map((d: Record<string, unknown>) => mapSupabasePayout(d));
+    } else {
+        let payouts = Array.from(memoryPayouts.values())
+            .filter(p => p.email === normalized);
+
+        payouts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        if (options?.offset) payouts = payouts.slice(options.offset);
+        if (options?.limit) payouts = payouts.slice(0, options.limit);
+        return payouts;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Recipient Balances
+// ---------------------------------------------------------------------------
+
+/**
+ * Get or create a balance record for a recipient.
+ */
+export async function getOrCreateBalance(recipientId: string, currency: string = "USDC"): Promise<RecipientBalance> {
+    if (isSupabaseConfigured()) {
+        // Try to get existing
+        const { data } = await supabase
+            .from("recipient_balances")
+            .select("*")
+            .eq("recipient_id", recipientId)
+            .eq("currency", currency)
+            .single();
+
+        if (data) {
+            return {
+                id: data.id,
+                recipientId: data.recipient_id,
+                currency: data.currency,
+                balance: Number(data.balance),
+                createdAt: new Date(data.created_at),
+                updatedAt: new Date(data.updated_at),
+            };
+        }
+
+        // Create new
+        const { data: newData, error } = await supabase
+            .from("recipient_balances")
+            .insert({ recipient_id: recipientId, currency, balance: 0 })
+            .select()
+            .single();
+
+        if (error || !newData) throw new Error("Failed to create balance");
+        return {
+            id: newData.id,
+            recipientId: newData.recipient_id,
+            currency: newData.currency,
+            balance: 0,
+            createdAt: new Date(newData.created_at),
+            updatedAt: new Date(newData.updated_at),
+        };
+    } else {
+        const key = `${recipientId}:${currency}`;
+        let balance = memoryBalances.get(key);
+        if (!balance) {
+            balance = {
+                id: `bal_${recipientId}`,
+                recipientId,
+                currency,
+                balance: 0,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            };
+            memoryBalances.set(key, balance);
+        }
+        return balance;
+    }
+}
+
+/**
+ * Credit a recipient's balance (payout received, held instead of instant withdrawal).
+ */
+export async function creditBalance(
+    recipientId: string,
+    amount: number,
+    payoutId: string,
+    currency: string = "USDC"
+): Promise<RecipientBalance> {
+    const balance = await getOrCreateBalance(recipientId, currency);
+    const newBalance = balance.balance + amount;
+    const now = new Date();
+
+    if (isSupabaseConfigured()) {
+        await supabase.from("recipient_balances")
+            .update({ balance: newBalance, updated_at: now.toISOString() })
+            .eq("id", balance.id);
+
+        await supabase.from("balance_transactions").insert({
+            id: generateBalanceTxId(),
+            recipient_id: recipientId,
+            type: "credit",
+            amount,
+            currency,
+            payout_id: payoutId,
+            description: `Payout ${payoutId} received`,
+        });
+    } else {
+        balance.balance = newBalance;
+        balance.updatedAt = now;
+        memoryBalanceTxs.push({
+            id: generateBalanceTxId(),
+            recipientId,
+            type: "credit",
+            amount,
+            currency,
+            payoutId,
+            description: `Payout ${payoutId} received`,
+            createdAt: now,
+        });
+    }
+
+    return { ...balance, balance: newBalance, updatedAt: now };
+}
+
+/**
+ * Withdraw from balance (debit + on-chain transfer).
+ */
+export async function debitBalance(
+    recipientId: string,
+    amount: number,
+    txSignature: string,
+    currency: string = "USDC"
+): Promise<RecipientBalance> {
+    const balance = await getOrCreateBalance(recipientId, currency);
+    if (balance.balance < amount) throw new Error("Insufficient balance");
+
+    const newBalance = balance.balance - amount;
+    const now = new Date();
+
+    if (isSupabaseConfigured()) {
+        await supabase.from("recipient_balances")
+            .update({ balance: newBalance, updated_at: now.toISOString() })
+            .eq("id", balance.id);
+
+        await supabase.from("balance_transactions").insert({
+            id: generateBalanceTxId(),
+            recipient_id: recipientId,
+            type: "withdrawal",
+            amount,
+            currency,
+            tx_signature: txSignature,
+            description: `Withdrawal to wallet`,
+        });
+    } else {
+        balance.balance = newBalance;
+        balance.updatedAt = now;
+        memoryBalanceTxs.push({
+            id: generateBalanceTxId(),
+            recipientId,
+            type: "withdrawal",
+            amount,
+            currency,
+            txSignature,
+            description: `Withdrawal to wallet`,
+            createdAt: now,
+        });
+    }
+
+    return { ...balance, balance: newBalance, updatedAt: now };
+}
+
+/**
+ * Get balance transaction history for a recipient.
+ */
+export async function getBalanceTransactions(
+    recipientId: string,
+    options?: { limit?: number; offset?: number }
+): Promise<BalanceTransaction[]> {
+    if (isSupabaseConfigured()) {
+        let query = supabase
+            .from("balance_transactions")
+            .select("*")
+            .eq("recipient_id", recipientId)
+            .order("created_at", { ascending: false });
+
+        if (options?.limit) query = query.limit(options.limit);
+        if (options?.offset) query = query.range(options.offset, options.offset + (options.limit || 20) - 1);
+
+        const { data, error } = await query;
+        if (error || !data) return [];
+        return data.map((d: Record<string, unknown>) => ({
+            id: d.id as string,
+            recipientId: d.recipient_id as string,
+            type: d.type as BalanceTransactionType,
+            amount: Number(d.amount),
+            currency: (d.currency as string) || "USDC",
+            payoutId: d.payout_id as string | undefined,
+            txSignature: d.tx_signature as string | undefined,
+            description: d.description as string | undefined,
+            createdAt: new Date(d.created_at as string),
+        }));
+    } else {
+        let txs = memoryBalanceTxs.filter(t => t.recipientId === recipientId);
+        txs.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        if (options?.offset) txs = txs.slice(options.offset);
+        if (options?.limit) txs = txs.slice(0, options.limit);
+        return txs;
+    }
+}
+
+// Helper: map Supabase recipient row
+function mapSupabaseRecipient(data: Record<string, unknown>): Recipient {
+    return {
+        id: data.id as string,
+        email: data.email as string,
+        walletAddress: data.wallet_address as string,
+        displayName: data.display_name as string | undefined,
+        authToken: data.auth_token as string | undefined,
+        authTokenExpiresAt: data.auth_token_expires_at ? new Date(data.auth_token_expires_at as string) : undefined,
+        notificationsEnabled: data.notifications_enabled as boolean ?? true,
+        autoWithdraw: data.auto_withdraw as boolean ?? true,
+        totalReceived: Number(data.total_received || 0),
+        totalPayouts: Number(data.total_payouts || 0),
+        createdAt: new Date(data.created_at as string),
+        updatedAt: new Date(data.updated_at as string),
+        lastPayoutAt: data.last_payout_at ? new Date(data.last_payout_at as string) : undefined,
+    };
+}

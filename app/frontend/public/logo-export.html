@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Settlr Logo Export</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        gap: 80px;
+      }
+      .dark {
+        background: #0a0a0a;
+      }
+      .light {
+        background: #ffffff;
+      }
+      .label {
+        font-family: sans-serif;
+        color: #888;
+        font-size: 14px;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 60px;
+      }
+      .row {
+        display: flex;
+        gap: 80px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body class="dark">
+    <!-- ===== FULL WORDMARK (dark bg) ===== -->
+    <div class="container">
+      <div class="label" style="color: #666">
+        Wordmark — dark background (right-click → Save Image As)
+      </div>
+      <svg height="300" viewBox="0 0 840 360" role="img" aria-label="settlr">
+        <defs>
+          <linearGradient id="shine" x1="0" y1="0" x2="0.3" y2="1">
+            <stop offset="0%" stop-color="#ffffff" />
+            <stop offset="40%" stop-color="#f0f0f0" />
+            <stop offset="100%" stop-color="#d4d4d8" />
+          </linearGradient>
+          <radialGradient id="dot" cx="0.35" cy="0.35" r="0.65">
+            <stop offset="0%" stop-color="#c4b5fd" />
+            <stop offset="100%" stop-color="#a78bfa" />
+          </radialGradient>
+        </defs>
+        <!-- Shadow -->
+        <text
+          x="50%"
+          y="68%"
+          text-anchor="middle"
+          dominant-baseline="central"
+          font-family="'Fredoka', sans-serif"
+          font-weight="700"
+          font-size="216"
+          fill="rgba(0,0,0,0.5)"
+          stroke="rgba(0,0,0,0.5)"
+          stroke-width="10"
+          stroke-linejoin="round"
+          paint-order="stroke fill"
+          dx="5"
+          dy="5"
+        >
+          settlr
+        </text>
+        <!-- Outline -->
+        <text
+          x="50%"
+          y="68%"
+          text-anchor="middle"
+          dominant-baseline="central"
+          font-family="'Fredoka', sans-serif"
+          font-weight="700"
+          font-size="216"
+          fill="none"
+          stroke="#1a1a2e"
+          stroke-width="8"
+          stroke-linejoin="round"
+        >
+          settlr
+        </text>
+        <!-- Fill -->
+        <text
+          x="50%"
+          y="68%"
+          text-anchor="middle"
+          dominant-baseline="central"
+          font-family="'Fredoka', sans-serif"
+          font-weight="700"
+          font-size="216"
+          fill="url(#shine)"
+          stroke="#1a1a2e"
+          stroke-width="3"
+          stroke-linejoin="round"
+          paint-order="stroke fill"
+        >
+          settlr
+        </text>
+        <!-- Dot -->
+        <circle
+          cx="738"
+          cy="155"
+          r="20"
+          fill="url(#dot)"
+          stroke="#1a1a2e"
+          stroke-width="3"
+        />
+      </svg>
+    </div>
+
+    <!-- ===== ICON + WORDMARK (dark bg) ===== -->
+    <div class="container">
+      <div class="label" style="color: #666">
+        Icon + Wordmark — dark background
+      </div>
+      <div class="row">
+        <!-- S Icon -->
+        <svg
+          width="160"
+          height="160"
+          viewBox="0 0 40 40"
+          role="img"
+          aria-label="S"
+        >
+          <defs>
+            <radialGradient id="s-bg" cx="0.35" cy="0.3" r="0.7">
+              <stop offset="0%" stop-color="#c4b5fd" />
+              <stop offset="100%" stop-color="#a78bfa" />
+            </radialGradient>
+            <linearGradient id="s-letter" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="100%" stop-color="#e4e4e7" />
+            </linearGradient>
+          </defs>
+          <rect
+            x="2"
+            y="2"
+            width="36"
+            height="36"
+            rx="10"
+            fill="url(#s-bg)"
+            stroke="#7c3aed"
+            stroke-width="1.5"
+          />
+          <text
+            x="21"
+            y="23"
+            text-anchor="middle"
+            dominant-baseline="central"
+            font-family="'Fredoka', sans-serif"
+            font-weight="700"
+            font-size="24"
+            fill="rgba(0,0,0,0.3)"
+            stroke="rgba(0,0,0,0.3)"
+            stroke-width="3"
+            stroke-linejoin="round"
+            paint-order="stroke fill"
+          >
+            S
+          </text>
+          <text
+            x="20"
+            y="22"
+            text-anchor="middle"
+            dominant-baseline="central"
+            font-family="'Fredoka', sans-serif"
+            font-weight="700"
+            font-size="24"
+            fill="url(#s-letter)"
+            stroke="#7c3aed"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+            paint-order="stroke fill"
+          >
+            S
+          </text>
+        </svg>
+        <!-- Wordmark next to it -->
+        <svg height="140" viewBox="0 0 840 360" role="img">
+          <defs>
+            <linearGradient id="shine2" x1="0" y1="0" x2="0.3" y2="1">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="40%" stop-color="#f0f0f0" />
+              <stop offset="100%" stop-color="#d4d4d8" />
+            </linearGradient>
+            <radialGradient id="dot2" cx="0.35" cy="0.35" r="0.65">
+              <stop offset="0%" stop-color="#c4b5fd" />
+              <stop offset="100%" stop-color="#a78bfa" />
+            </radialGradient>
+          </defs>
+          <text
+            x="50%"
+            y="68%"
+            text-anchor="middle"
+            dominant-baseline="central"
+            font-family="'Fredoka', sans-serif"
+            font-weight="700"
+            font-size="216"
+            fill="rgba(0,0,0,0.5)"
+            stroke="rgba(0,0,0,0.5)"
+            stroke-width="10"
+            stroke-linejoin="round"
+            paint-order="stroke fill"
+            dx="5"
+            dy="5"
+          >
+            settlr
+          </text>
+          <text
+            x="50%"
+            y="68%"
+            text-anchor="middle"
+            dominant-baseline="central"
+            font-family="'Fredoka', sans-serif"
+            font-weight="700"
+            font-size="216"
+            fill="none"
+            stroke="#1a1a2e"
+            stroke-width="8"
+            stroke-linejoin="round"
+          >
+            settlr
+          </text>
+          <text
+            x="50%"
+            y="68%"
+            text-anchor="middle"
+            dominant-baseline="central"
+            font-family="'Fredoka', sans-serif"
+            font-weight="700"
+            font-size="216"
+            fill="url(#shine2)"
+            stroke="#1a1a2e"
+            stroke-width="3"
+            stroke-linejoin="round"
+            paint-order="stroke fill"
+          >
+            settlr
+          </text>
+          <circle
+            cx="738"
+            cy="155"
+            r="20"
+            fill="url(#dot2)"
+            stroke="#1a1a2e"
+            stroke-width="3"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <!-- ===== ICON ONLY (large, for app icon / avatar) ===== -->
+    <div class="container">
+      <div class="label" style="color: #666">
+        Icon only — 512×512 (avatar / app icon)
+      </div>
+      <svg
+        width="512"
+        height="512"
+        viewBox="0 0 40 40"
+        role="img"
+        aria-label="S"
+      >
+        <defs>
+          <radialGradient id="s-bg2" cx="0.35" cy="0.3" r="0.7">
+            <stop offset="0%" stop-color="#c4b5fd" />
+            <stop offset="100%" stop-color="#a78bfa" />
+          </radialGradient>
+          <linearGradient id="s-letter2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffffff" />
+            <stop offset="100%" stop-color="#e4e4e7" />
+          </linearGradient>
+        </defs>
+        <rect
+          x="2"
+          y="2"
+          width="36"
+          height="36"
+          rx="10"
+          fill="url(#s-bg2)"
+          stroke="#7c3aed"
+          stroke-width="1.5"
+        />
+        <text
+          x="21"
+          y="23"
+          text-anchor="middle"
+          dominant-baseline="central"
+          font-family="'Fredoka', sans-serif"
+          font-weight="700"
+          font-size="24"
+          fill="rgba(0,0,0,0.3)"
+          stroke="rgba(0,0,0,0.3)"
+          stroke-width="3"
+          stroke-linejoin="round"
+          paint-order="stroke fill"
+        >
+          S
+        </text>
+        <text
+          x="20"
+          y="22"
+          text-anchor="middle"
+          dominant-baseline="central"
+          font-family="'Fredoka', sans-serif"
+          font-weight="700"
+          font-size="24"
+          fill="url(#s-letter2)"
+          stroke="#7c3aed"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+          paint-order="stroke fill"
+        >
+          S
+        </text>
+      </svg>
+    </div>
+  </body>
+</html>

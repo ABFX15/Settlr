@@ -66,6 +66,99 @@ export async function sendEmail(options: SendEmailOptions): Promise<boolean> {
 /**
  * Send a payout claim email to a recipient.
  */
+/**
+ * Send a notification email when a payout was auto-delivered to a known wallet.
+ */
+export async function sendInstantPayoutEmail(params: {
+    to: string;
+    amount: number;
+    currency: string;
+    memo?: string;
+    walletAddress: string;
+    txSignature: string;
+    merchantName?: string;
+}): Promise<boolean> {
+    const { to, amount, currency, memo, walletAddress, txSignature, merchantName } = params;
+    const formattedAmount = `$${amount.toFixed(2)} ${currency}`;
+    const sender = merchantName || "A platform";
+    const shortWallet = `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`;
+    const explorerUrl = `https://explorer.solana.com/tx/${txSignature}?cluster=devnet`;
+
+    const subject = `${formattedAmount} sent to your wallet`;
+
+    const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+            <div style="background: #34d399; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 16px;">✓</div>
+            <h1 style="color: #111; font-size: 24px; margin: 0;">Instant payout received</h1>
+        </div>
+        <div style="background: #f0fdf4; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #bbf7d0;">
+            <p style="color: #666; font-size: 14px; margin: 0 0 8px;">Amount</p>
+            <p style="color: #111; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
+            ${memo ? `<p style="color: #888; font-size: 14px; margin: 8px 0 0;">${memo}</p>` : ""}
+        </div>
+        <p style="color: #444; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+            ${sender} sent you <strong>${formattedAmount}</strong> and it was <strong>delivered instantly</strong> to your saved wallet (<code>${shortWallet}</code>). No action needed.
+        </p>
+        <div style="text-align: center; margin-bottom: 24px;">
+            <a href="${explorerUrl}" style="display: inline-block; background: #3B82F6; color: #fff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 8px;">
+                View transaction ↗
+            </a>
+        </div>
+        <p style="color: #999; font-size: 12px; text-align: center;">
+            Want to change your wallet or turn off instant delivery? <a href="https://settlr.dev/me" style="color: #3B82F6; text-decoration: none;">Manage your preferences</a>
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
+        <p style="color: #bbb; font-size: 11px; text-align: center;">
+            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — global payout infrastructure
+        </p>
+    </div>`;
+
+    const text = `${sender} sent you ${formattedAmount}${memo ? ` — ${memo}` : ""}. Delivered instantly to ${shortWallet}. View: ${explorerUrl}`;
+
+    return sendEmail({ to, subject, html, text });
+}
+
+/**
+ * Send a magic link email for recipient dashboard access.
+ */
+export async function sendAuthLinkEmail(params: {
+    to: string;
+    authUrl: string;
+}): Promise<boolean> {
+    const { to, authUrl } = params;
+    const subject = "Sign in to Settlr";
+
+    const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+            <h1 style="color: #111; font-size: 24px; margin: 0;">Sign in to Settlr</h1>
+        </div>
+        <p style="color: #444; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+            Click the button below to access your recipient dashboard. This link expires in 15 minutes.
+        </p>
+        <div style="text-align: center; margin-bottom: 24px;">
+            <a href="${authUrl}" style="display: inline-block; background: #3B82F6; color: #fff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 8px;">
+                Sign in →
+            </a>
+        </div>
+        <p style="color: #999; font-size: 12px; text-align: center;">
+            If you didn't request this, you can safely ignore this email.
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
+        <p style="color: #bbb; font-size: 11px; text-align: center;">
+            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — global payout infrastructure
+        </p>
+    </div>`;
+
+    const text = `Sign in to Settlr: ${authUrl} — this link expires in 15 minutes.`;
+
+    return sendEmail({ to, subject, html, text });
+}
+
+/**
+ * Send a payout claim email to a recipient.
+ */
 export async function sendPayoutClaimEmail(params: {
     to: string;
     amount: number;
