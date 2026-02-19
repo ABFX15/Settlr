@@ -152,12 +152,46 @@ export default function LandingPage() {
                 name: "Settlr",
                 url: "https://settlr.dev",
                 logo: "https://settlr.dev/og-image.png",
+                description:
+                  "Global payout infrastructure for platforms. Pay anyone, anywhere, with just their email.",
+                foundingDate: "2025",
+                founder: {
+                  "@type": "Person",
+                  name: "Adam Bryant",
+                },
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  contactType: "customer support",
+                  url: "https://settlr.dev/support",
+                  email: "adam@settlr.dev",
+                },
+                areaServed: "Worldwide",
                 sameAs: [
                   "https://x.com/SettlrPay",
                   "https://github.com/ABFX15/x402-hack-payment",
                 ],
+              },
+              {
+                "@type": "Product",
+                name: "Settlr Payout API",
                 description:
-                  "Global payout infrastructure for platforms. Pay anyone, anywhere, with just their email. USDC payouts that settle in under a second.",
+                  "Global payout infrastructure for platforms. Pay anyone in 180+ countries with just their email. Instant USDC settlement, 1% flat fee, no bank details needed.",
+                brand: {
+                  "@type": "Brand",
+                  name: "Settlr",
+                },
+                url: "https://settlr.dev",
+                image: "https://settlr.dev/og-image.png",
+                category: "Payment Processing Software",
+                offers: {
+                  "@type": "Offer",
+                  price: "0",
+                  priceCurrency: "USD",
+                  description:
+                    "1% flat fee per payout. No setup fees. No monthly fees.",
+                  availability: "https://schema.org/InStock",
+                  url: "https://settlr.dev/pricing",
+                },
               },
               {
                 "@type": "SoftwareApplication",
@@ -185,6 +219,36 @@ export default function LandingPage() {
                   "TypeScript SDK and React components",
                   "Bulk payouts via CSV or API",
                 ],
+              },
+              {
+                "@type": "HowTo",
+                name: "How to pay anyone globally with just their email",
+                description:
+                  "Send instant payouts to workers, creators, and contractors in 180+ countries using Settlr's API. No bank details or crypto wallets needed.",
+                step: [
+                  {
+                    "@type": "HowToStep",
+                    position: 1,
+                    name: "Integrate the SDK",
+                    text: "Install @settlr/sdk. Call payout() with an email and amount. We handle wallets, gas, and delivery.",
+                    url: "https://settlr.dev/#how-it-works",
+                  },
+                  {
+                    "@type": "HowToStep",
+                    position: 2,
+                    name: "Recipient gets an email",
+                    text: "They click a link to claim their USDC. An embedded wallet is created automatically — no crypto knowledge needed.",
+                    url: "https://settlr.dev/#how-it-works",
+                  },
+                  {
+                    "@type": "HowToStep",
+                    position: 3,
+                    name: "They cash out locally",
+                    text: "Recipients hold USDC, offramp to local currency via integrated partners, or transfer to any wallet.",
+                    url: "https://settlr.dev/#how-it-works",
+                  },
+                ],
+                totalTime: "PT5M",
               },
               {
                 "@type": "WebSite",
