@@ -163,7 +163,7 @@ export default function ApiKeysPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050507] text-white p-8 pt-28">
+    <div>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <motion.div

@@ -214,8 +214,8 @@ export default function SubscribersPage() {
 
   if (!connected) {
     return (
-      <div className="min-h-screen bg-[#050507]">
-        <div className="max-w-4xl mx-auto px-6 py-20">
+      <div>
+        <div className="max-w-4xl mx-auto py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -242,8 +242,8 @@ export default function SubscribersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050507]">
-      <div className="max-w-6xl mx-auto px-6 py-12">
+    <div>
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">

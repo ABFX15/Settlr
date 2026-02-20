@@ -210,6 +210,47 @@ export interface BalanceTransaction {
     createdAt: Date;
 }
 
+// ---------------------------------------------------------------------------
+// Merchant Treasury types
+// ---------------------------------------------------------------------------
+
+export interface MerchantBalance {
+    id: string;
+    merchantId: string;
+    currency: string;
+    available: number;   // Funds ready to be used for payouts
+    pending: number;     // Deposits detected but not yet confirmed
+    reserved: number;    // Funds reserved for in-flight payouts
+    totalDeposited: number;
+    totalWithdrawn: number;
+    totalPayouts: number;
+    totalFees: number;
+    depositAddress?: string; // USDC deposit address for this merchant
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export type TreasuryTransactionType =
+    | "deposit"          // USDC deposited to fund payouts
+    | "payout_reserved"  // Funds reserved when payout is created
+    | "payout_released"  // Reserved funds released (payout completed)
+    | "payout_refund"    // Reserved funds returned (payout expired/failed)
+    | "fee_deducted"     // Platform fee deducted
+    | "withdrawal";      // Merchant withdrew excess funds
+
+export interface TreasuryTransaction {
+    id: string;
+    merchantId: string;
+    type: TreasuryTransactionType;
+    amount: number;
+    currency: string;
+    payoutId?: string;
+    txSignature?: string;
+    description?: string;
+    balanceAfter: number;
+    createdAt: Date;
+}
+
 // In-memory fallback stores
 const memoryMerchants = new Map<string, Merchant>();
 const memorySessions = new Map<string, CheckoutSession>();
@@ -222,6 +263,8 @@ const memoryPayoutBatches = new Map<string, PayoutBatch>();
 const memoryRecipients = new Map<string, Recipient>(); // keyed by email
 const memoryBalances = new Map<string, RecipientBalance>(); // keyed by recipientId:currency
 const memoryBalanceTxs: BalanceTransaction[] = [];
+const memoryMerchantBalances = new Map<string, MerchantBalance>(); // keyed by merchantId:currency
+const memoryTreasuryTxs: TreasuryTransaction[] = [];
 const memoryRateLimits = new Map<string, { count: number; resetAt: number }>();
 
 // ID generators
@@ -712,6 +755,22 @@ export async function getMerchantByWallet(walletAddress: string): Promise<Mercha
         }
         return null;
     }
+}
+
+/**
+ * Look up a merchant by wallet address, creating one if it doesn't exist.
+ * Used by dashboard routes that authenticate via wallet pubkey.
+ */
+export async function getOrCreateMerchantByWallet(walletAddress: string): Promise<Merchant> {
+    const existing = await getMerchantByWallet(walletAddress);
+    if (existing) return existing;
+
+    // Auto-create a merchant record for this wallet
+    return createMerchant({
+        name: `Merchant ${walletAddress.slice(0, 8)}`,
+        walletAddress,
+        webhookUrl: null,
+    });
 }
 
 export async function createMerchant(
@@ -1965,5 +2024,509 @@ function mapSupabaseRecipient(data: Record<string, unknown>): Recipient {
         createdAt: new Date(data.created_at as string),
         updatedAt: new Date(data.updated_at as string),
         lastPayoutAt: data.last_payout_at ? new Date(data.last_payout_at as string) : undefined,
+    };
+}
+
+// ============================================
+// MERCHANT TREASURY
+// ============================================
+
+function generateTreasuryTxId(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "ttx_";
+    for (let i = 0; i < 20; i++) {
+        id += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return id;
+}
+
+function generateMerchantBalanceId(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "mbal_";
+    for (let i = 0; i < 16; i++) {
+        id += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return id;
+}
+
+/**
+ * Get or create a merchant's balance for a given currency.
+ */
+export async function getOrCreateMerchantBalance(
+    merchantId: string,
+    currency: string = "USDC"
+): Promise<MerchantBalance> {
+    if (isSupabaseConfigured()) {
+        // Try to get existing
+        const { data, error } = await supabase
+            .from("merchant_balances")
+            .select("*")
+            .eq("merchant_id", merchantId)
+            .eq("currency", currency)
+            .single();
+
+        if (data && !error) {
+            return mapSupabaseMerchantBalance(data);
+        }
+
+        // Create new
+        const newBalance = {
+            id: generateMerchantBalanceId(),
+            merchant_id: merchantId,
+            currency,
+            available: 0,
+            pending: 0,
+            reserved: 0,
+            total_deposited: 0,
+            total_withdrawn: 0,
+            total_payouts: 0,
+            total_fees: 0,
+        };
+
+        const { data: inserted, error: insertError } = await supabase
+            .from("merchant_balances")
+            .insert(newBalance)
+            .select()
+            .single();
+
+        if (insertError || !inserted) {
+            // Race condition — another request created it, try to fetch again
+            const { data: refetch } = await supabase
+                .from("merchant_balances")
+                .select("*")
+                .eq("merchant_id", merchantId)
+                .eq("currency", currency)
+                .single();
+            if (refetch) return mapSupabaseMerchantBalance(refetch);
+            throw new Error("Failed to create merchant balance");
+        }
+
+        return mapSupabaseMerchantBalance(inserted);
+    } else {
+        const key = `${merchantId}:${currency}`;
+        let balance = memoryMerchantBalances.get(key);
+        if (!balance) {
+            const now = new Date();
+            balance = {
+                id: generateMerchantBalanceId(),
+                merchantId,
+                currency,
+                available: 0,
+                pending: 0,
+                reserved: 0,
+                totalDeposited: 0,
+                totalWithdrawn: 0,
+                totalPayouts: 0,
+                totalFees: 0,
+                createdAt: now,
+                updatedAt: now,
+            };
+            memoryMerchantBalances.set(key, balance);
+        }
+        return balance;
+    }
+}
+
+/**
+ * Get a merchant's current balance (read-only, no creation).
+ */
+export async function getMerchantBalance(
+    merchantId: string,
+    currency: string = "USDC"
+): Promise<MerchantBalance | null> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("merchant_balances")
+            .select("*")
+            .eq("merchant_id", merchantId)
+            .eq("currency", currency)
+            .single();
+
+        if (error || !data) return null;
+        return mapSupabaseMerchantBalance(data);
+    } else {
+        return memoryMerchantBalances.get(`${merchantId}:${currency}`) || null;
+    }
+}
+
+/**
+ * Credit merchant balance (deposit confirmed).
+ * Moves amount from pending → available (if pending was set) or directly adds to available.
+ */
+export async function creditMerchantBalance(
+    merchantId: string,
+    amount: number,
+    options: {
+        currency?: string;
+        txSignature?: string;
+        description?: string;
+        fromPending?: boolean;
+    } = {}
+): Promise<MerchantBalance> {
+    const currency = options.currency || "USDC";
+    const balance = await getOrCreateMerchantBalance(merchantId, currency);
+    const now = new Date();
+
+    let newAvailable = balance.available + amount;
+    let newPending = balance.pending;
+    let newTotalDeposited = balance.totalDeposited + amount;
+
+    if (options.fromPending) {
+        newPending = Math.max(0, balance.pending - amount);
+    }
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("merchant_balances")
+            .update({
+                available: newAvailable,
+                pending: newPending,
+                total_deposited: newTotalDeposited,
+                updated_at: now.toISOString(),
+            })
+            .eq("id", balance.id);
+
+        if (error) throw new Error("Failed to credit merchant balance");
+    } else {
+        balance.available = newAvailable;
+        balance.pending = newPending;
+        balance.totalDeposited = newTotalDeposited;
+        balance.updatedAt = now;
+    }
+
+    // Record transaction
+    const txId = generateTreasuryTxId();
+    const tx: TreasuryTransaction = {
+        id: txId,
+        merchantId,
+        type: "deposit",
+        amount,
+        currency,
+        txSignature: options.txSignature,
+        description: options.description || "USDC deposit",
+        balanceAfter: newAvailable,
+        createdAt: now,
+    };
+
+    if (isSupabaseConfigured()) {
+        await supabase.from("treasury_transactions").insert({
+            id: tx.id,
+            merchant_id: tx.merchantId,
+            type: tx.type,
+            amount: tx.amount,
+            currency: tx.currency,
+            tx_signature: tx.txSignature,
+            description: tx.description,
+            balance_after: tx.balanceAfter,
+        });
+    } else {
+        memoryTreasuryTxs.push(tx);
+    }
+
+    return { ...balance, available: newAvailable, pending: newPending, totalDeposited: newTotalDeposited, updatedAt: now };
+}
+
+/**
+ * Reserve funds for a payout. Moves amount from available → reserved.
+ * Returns false if insufficient balance.
+ */
+export async function reservePayoutFunds(
+    merchantId: string,
+    amount: number,
+    fee: number,
+    payoutId: string,
+    currency: string = "USDC"
+): Promise<{ success: boolean; balance?: MerchantBalance; error?: string }> {
+    const balance = await getOrCreateMerchantBalance(merchantId, currency);
+    const totalRequired = amount + fee;
+
+    if (balance.available < totalRequired) {
+        return {
+            success: false,
+            balance,
+            error: `Insufficient balance. Required: $${totalRequired.toFixed(2)} (payout: $${amount.toFixed(2)} + fee: $${fee.toFixed(2)}). Available: $${balance.available.toFixed(2)}`,
+        };
+    }
+
+    const now = new Date();
+    const newAvailable = balance.available - totalRequired;
+    const newReserved = balance.reserved + totalRequired;
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("merchant_balances")
+            .update({
+                available: newAvailable,
+                reserved: newReserved,
+                updated_at: now.toISOString(),
+            })
+            .eq("id", balance.id);
+
+        if (error) return { success: false, error: "Failed to reserve funds" };
+    } else {
+        balance.available = newAvailable;
+        balance.reserved = newReserved;
+        balance.updatedAt = now;
+    }
+
+    // Record reservation transaction
+    const txId = generateTreasuryTxId();
+    const tx: TreasuryTransaction = {
+        id: txId,
+        merchantId,
+        type: "payout_reserved",
+        amount: totalRequired,
+        currency,
+        payoutId,
+        description: `Reserved for payout ${payoutId} ($${amount.toFixed(2)} + $${fee.toFixed(2)} fee)`,
+        balanceAfter: newAvailable,
+        createdAt: now,
+    };
+
+    if (isSupabaseConfigured()) {
+        await supabase.from("treasury_transactions").insert({
+            id: tx.id,
+            merchant_id: tx.merchantId,
+            type: tx.type,
+            amount: tx.amount,
+            currency: tx.currency,
+            payout_id: tx.payoutId,
+            description: tx.description,
+            balance_after: tx.balanceAfter,
+        });
+    } else {
+        memoryTreasuryTxs.push(tx);
+    }
+
+    return {
+        success: true,
+        balance: { ...balance, available: newAvailable, reserved: newReserved, updatedAt: now },
+    };
+}
+
+/**
+ * Release reserved funds after payout is completed (claimed/delivered).
+ * Moves amount from reserved → totalPayouts, fee → totalFees.
+ */
+export async function releasePayoutFunds(
+    merchantId: string,
+    amount: number,
+    fee: number,
+    payoutId: string,
+    currency: string = "USDC"
+): Promise<MerchantBalance> {
+    const balance = await getOrCreateMerchantBalance(merchantId, currency);
+    const now = new Date();
+    const totalReleased = amount + fee;
+
+    const newReserved = Math.max(0, balance.reserved - totalReleased);
+    const newTotalPayouts = balance.totalPayouts + amount;
+    const newTotalFees = balance.totalFees + fee;
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("merchant_balances")
+            .update({
+                reserved: newReserved,
+                total_payouts: newTotalPayouts,
+                total_fees: newTotalFees,
+                updated_at: now.toISOString(),
+            })
+            .eq("id", balance.id);
+
+        if (error) throw new Error("Failed to release payout funds");
+    } else {
+        balance.reserved = newReserved;
+        balance.totalPayouts = newTotalPayouts;
+        balance.totalFees = newTotalFees;
+        balance.updatedAt = now;
+    }
+
+    // Record release + fee transactions
+    const releaseTx: TreasuryTransaction = {
+        id: generateTreasuryTxId(),
+        merchantId,
+        type: "payout_released",
+        amount,
+        currency,
+        payoutId,
+        description: `Payout ${payoutId} completed`,
+        balanceAfter: balance.available, // available unchanged
+        createdAt: now,
+    };
+
+    const feeTx: TreasuryTransaction = {
+        id: generateTreasuryTxId(),
+        merchantId,
+        type: "fee_deducted",
+        amount: fee,
+        currency,
+        payoutId,
+        description: `Platform fee for payout ${payoutId}`,
+        balanceAfter: balance.available,
+        createdAt: now,
+    };
+
+    if (isSupabaseConfigured()) {
+        await supabase.from("treasury_transactions").insert([
+            {
+                id: releaseTx.id,
+                merchant_id: releaseTx.merchantId,
+                type: releaseTx.type,
+                amount: releaseTx.amount,
+                currency: releaseTx.currency,
+                payout_id: releaseTx.payoutId,
+                description: releaseTx.description,
+                balance_after: releaseTx.balanceAfter,
+            },
+            {
+                id: feeTx.id,
+                merchant_id: feeTx.merchantId,
+                type: feeTx.type,
+                amount: feeTx.amount,
+                currency: feeTx.currency,
+                payout_id: feeTx.payoutId,
+                description: feeTx.description,
+                balance_after: feeTx.balanceAfter,
+            },
+        ]);
+    } else {
+        memoryTreasuryTxs.push(releaseTx, feeTx);
+    }
+
+    return { ...balance, reserved: newReserved, totalPayouts: newTotalPayouts, totalFees: newTotalFees, updatedAt: now };
+}
+
+/**
+ * Refund reserved funds back to available (payout expired/failed).
+ */
+export async function refundReservedFunds(
+    merchantId: string,
+    amount: number,
+    fee: number,
+    payoutId: string,
+    currency: string = "USDC"
+): Promise<MerchantBalance> {
+    const balance = await getOrCreateMerchantBalance(merchantId, currency);
+    const now = new Date();
+    const totalRefund = amount + fee;
+
+    const newAvailable = balance.available + totalRefund;
+    const newReserved = Math.max(0, balance.reserved - totalRefund);
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("merchant_balances")
+            .update({
+                available: newAvailable,
+                reserved: newReserved,
+                updated_at: now.toISOString(),
+            })
+            .eq("id", balance.id);
+
+        if (error) throw new Error("Failed to refund reserved funds");
+    } else {
+        balance.available = newAvailable;
+        balance.reserved = newReserved;
+        balance.updatedAt = now;
+    }
+
+    // Record refund transaction
+    const tx: TreasuryTransaction = {
+        id: generateTreasuryTxId(),
+        merchantId,
+        type: "payout_refund",
+        amount: totalRefund,
+        currency,
+        payoutId,
+        description: `Refund for expired/failed payout ${payoutId}`,
+        balanceAfter: newAvailable,
+        createdAt: now,
+    };
+
+    if (isSupabaseConfigured()) {
+        await supabase.from("treasury_transactions").insert({
+            id: tx.id,
+            merchant_id: tx.merchantId,
+            type: tx.type,
+            amount: tx.amount,
+            currency: tx.currency,
+            payout_id: tx.payoutId,
+            description: tx.description,
+            balance_after: tx.balanceAfter,
+        });
+    } else {
+        memoryTreasuryTxs.push(tx);
+    }
+
+    return { ...balance, available: newAvailable, reserved: newReserved, updatedAt: now };
+}
+
+/**
+ * Get treasury transaction history for a merchant.
+ */
+export async function getTreasuryTransactions(
+    merchantId: string,
+    options?: { type?: TreasuryTransactionType; limit?: number; offset?: number }
+): Promise<TreasuryTransaction[]> {
+    if (isSupabaseConfigured()) {
+        let query = supabase
+            .from("treasury_transactions")
+            .select("*")
+            .eq("merchant_id", merchantId)
+            .order("created_at", { ascending: false });
+
+        if (options?.type) query = query.eq("type", options.type);
+        if (options?.limit) query = query.limit(options.limit);
+        if (options?.offset) query = query.range(options.offset, options.offset + (options.limit || 20) - 1);
+
+        const { data, error } = await query;
+        if (error || !data) return [];
+        return data.map((d: Record<string, unknown>) => ({
+            id: d.id as string,
+            merchantId: d.merchant_id as string,
+            type: d.type as TreasuryTransactionType,
+            amount: Number(d.amount),
+            currency: (d.currency as string) || "USDC",
+            payoutId: d.payout_id as string | undefined,
+            txSignature: d.tx_signature as string | undefined,
+            description: d.description as string | undefined,
+            balanceAfter: Number(d.balance_after),
+            createdAt: new Date(d.created_at as string),
+        }));
+    } else {
+        let txs = memoryTreasuryTxs.filter(t => t.merchantId === merchantId);
+        if (options?.type) txs = txs.filter(t => t.type === options.type);
+        txs.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        if (options?.offset) txs = txs.slice(options.offset);
+        if (options?.limit) txs = txs.slice(0, options.limit);
+        return txs;
+    }
+}
+
+/**
+ * Calculate the fee for a payout amount.
+ * 1% with a $0.25 minimum.
+ */
+export function calculatePayoutFee(amount: number): number {
+    return Math.max(amount * 0.01, 0.25);
+}
+
+// Helper: map Supabase merchant_balance row
+function mapSupabaseMerchantBalance(data: Record<string, unknown>): MerchantBalance {
+    return {
+        id: data.id as string,
+        merchantId: data.merchant_id as string,
+        currency: (data.currency as string) || "USDC",
+        available: Number(data.available || 0),
+        pending: Number(data.pending || 0),
+        reserved: Number(data.reserved || 0),
+        totalDeposited: Number(data.total_deposited || 0),
+        totalWithdrawn: Number(data.total_withdrawn || 0),
+        totalPayouts: Number(data.total_payouts || 0),
+        totalFees: Number(data.total_fees || 0),
+        depositAddress: data.deposit_address as string | undefined,
+        createdAt: new Date(data.created_at as string),
+        updatedAt: new Date(data.updated_at as string),
     };
 }

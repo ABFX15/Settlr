@@ -7,7 +7,8 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getPayoutByClaimToken, claimPayout, updatePayoutStatus, getRecipientByEmail, registerRecipient, updateRecipientStats } from "@/lib/db";
+import { getPayoutByClaimToken, claimPayout, updatePayoutStatus, getRecipientByEmail, registerRecipient, updateRecipientStats, releasePayoutFunds, calculatePayoutFee } from "@/lib/db";
+import { dispatchWebhookEvent } from "@/lib/webhooks";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -47,6 +48,14 @@ export async function GET(request: NextRequest) {
         // Check if expired
         if (payout.status === "sent" && new Date() > payout.expiresAt) {
             await updatePayoutStatus(payout.id, "expired");
+            // Dispatch payout.expired webhook
+            dispatchWebhookEvent(payout.merchantId, "payout.expired", {
+                payoutId: payout.id,
+                email: payout.email,
+                amount: payout.amount,
+                currency: payout.currency,
+                expiredAt: new Date().toISOString(),
+            }).catch((err) => console.error("[webhooks] dispatch error:", err));
             return NextResponse.json(
                 { error: "This payout has expired" },
                 { status: 410, headers: corsHeaders }
@@ -179,6 +188,20 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // ── Release reserved funds from merchant treasury (payout completed) ──
+        try {
+            const fee = calculatePayoutFee(payout.amount);
+            await releasePayoutFunds(
+                payout.merchantId,
+                payout.amount,
+                fee,
+                payout.id,
+            );
+        } catch (treasuryErr) {
+            // Non-blocking: payout succeeded, treasury accounting is secondary
+            console.error("[payouts/claim] Treasury release failed:", treasuryErr);
+        }
+
         // ── Save email→wallet mapping for future auto-delivery ──
         try {
             const existingRecipient = await getRecipientByEmail(payout.email);
@@ -191,6 +214,17 @@ export async function POST(request: NextRequest) {
             // Non-blocking: don't fail the claim if recipient registration fails
             console.error("[payouts/claim] Failed to register recipient:", regErr);
         }
+
+        // Dispatch payout.claimed webhook
+        dispatchWebhookEvent(payout.merchantId, "payout.claimed", {
+            payoutId: payout.id,
+            email: payout.email,
+            amount: payout.amount,
+            currency: payout.currency,
+            recipientWallet,
+            txSignature,
+            claimedAt: claimed.claimedAt?.toISOString() || new Date().toISOString(),
+        }).catch((err) => console.error("[webhooks] dispatch error:", err));
 
         return NextResponse.json({
             success: true,

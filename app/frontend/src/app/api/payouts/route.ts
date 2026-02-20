@@ -13,9 +13,14 @@ import {
     claimPayout,
     updateRecipientStats,
     validateApiKey,
+    reservePayoutFunds,
+    releasePayoutFunds,
+    refundReservedFunds,
+    calculatePayoutFee,
     type PayoutStatus,
 } from "@/lib/db";
 import { sendPayoutClaimEmail, sendInstantPayoutEmail } from "@/lib/email";
+import { dispatchWebhookEvent } from "@/lib/webhooks";
 
 /**
  * Execute an on-chain USDC transfer for auto-delivery.
@@ -97,6 +102,31 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Maximum payout amount is $100,000" }, { status: 400 });
         }
 
+        // ── Pre-flight balance check: reserve funds from merchant treasury ──
+        const fee = calculatePayoutFee(amount);
+        const reservation = await reservePayoutFunds(
+            validation.merchantId,
+            amount,
+            fee,
+            `pre_${Date.now()}`, // temporary ID, updated after payout creation
+        );
+
+        if (!reservation.success) {
+            return NextResponse.json(
+                {
+                    error: "Insufficient balance",
+                    details: reservation.error,
+                    balance: reservation.balance ? {
+                        available: reservation.balance.available,
+                        required: amount + fee,
+                        fee,
+                    } : undefined,
+                    fundingUrl: "/api/treasury/deposit",
+                },
+                { status: 402 } // Payment Required
+            );
+        }
+
         // Create the payout record
         const payout = await createPayout({
             merchantId: validation.merchantId,
@@ -133,6 +163,14 @@ export async function POST(request: NextRequest) {
                 await claimPayout(payout.claimToken, recipient.walletAddress, txSignature);
                 await updateRecipientStats(email, payout.amount);
 
+                // Release reserved funds (payout completed)
+                await releasePayoutFunds(
+                    validation.merchantId,
+                    payout.amount,
+                    fee,
+                    payout.id,
+                );
+
                 // Notify recipient
                 sendInstantPayoutEmail({
                     to: email,
@@ -144,12 +182,25 @@ export async function POST(request: NextRequest) {
                     merchantName: validation.merchantName,
                 }).catch((err) => console.error("[payouts] Failed to send instant payout email:", err));
 
+                // Dispatch webhook: payout.claimed (auto-delivery)
+                dispatchWebhookEvent(validation.merchantId, "payout.claimed", {
+                    payoutId: payout.id,
+                    email: payout.email,
+                    amount: payout.amount,
+                    currency: payout.currency,
+                    recipientWallet: recipient.walletAddress,
+                    txSignature,
+                    delivery: "instant",
+                    claimedAt: new Date().toISOString(),
+                }).catch((err) => console.error("[webhooks] dispatch error:", err));
+
                 return NextResponse.json({
                     id: payout.id,
                     email: payout.email,
                     amount: payout.amount,
                     currency: payout.currency,
                     memo: payout.memo,
+                    fee,
                     status: "claimed",
                     delivery: "instant",
                     recipientWallet: recipient.walletAddress,
@@ -173,12 +224,28 @@ export async function POST(request: NextRequest) {
             console.error("[payouts] Failed to send claim email:", err);
         });
 
+        // Dispatch webhook: payout.created
+        dispatchWebhookEvent(validation.merchantId, "payout.created", {
+            payoutId: payout.id,
+            email: payout.email,
+            amount: payout.amount,
+            currency: payout.currency,
+            memo: payout.memo,
+            fee,
+            status: "sent",
+            delivery: "claim_link",
+            claimUrl: payout.claimUrl,
+            createdAt: payout.createdAt.toISOString(),
+            expiresAt: payout.expiresAt.toISOString(),
+        }).catch((err) => console.error("[webhooks] dispatch error:", err));
+
         return NextResponse.json({
             id: payout.id,
             email: payout.email,
             amount: payout.amount,
             currency: payout.currency,
             memo: payout.memo,
+            fee,
             status: payout.status,
             delivery: "claim_link",
             claimUrl: payout.claimUrl,

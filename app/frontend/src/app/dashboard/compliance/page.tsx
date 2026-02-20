@@ -119,7 +119,7 @@ export default function ComplianceSettingsPage() {
   // Not authenticated
   if (ready && !authenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#050507] p-4">
+      <div className="flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -148,14 +148,14 @@ export default function ComplianceSettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#050507]">
+      <div className="flex items-center justify-center py-20">
         <Loader2 className="h-8 w-8 animate-spin text-[#a78bfa]" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#050507] px-4 py-12 pt-32">
+    <div>
       <div className="mx-auto max-w-2xl">
         {/* Back Link */}
         <Link

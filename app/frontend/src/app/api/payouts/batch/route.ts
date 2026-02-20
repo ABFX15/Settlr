@@ -3,8 +3,9 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { createPayoutBatch, validateApiKey } from "@/lib/db";
+import { createPayoutBatch, validateApiKey, getOrCreateMerchantBalance, reservePayoutFunds, calculatePayoutFee } from "@/lib/db";
 import { sendPayoutClaimEmail } from "@/lib/email";
+import { dispatchWebhookEvent } from "@/lib/webhooks";
 
 export async function POST(request: NextRequest) {
     try {
@@ -40,6 +41,41 @@ export async function POST(request: NextRequest) {
             }
         }
 
+        // ── Pre-flight: check total balance for entire batch ──
+        const totalAmount = payouts.reduce((sum: number, p: { amount: number }) => sum + p.amount, 0);
+        const totalFees = payouts.reduce((sum: number, p: { amount: number }) => sum + calculatePayoutFee(p.amount), 0);
+        const totalRequired = totalAmount + totalFees;
+
+        const balance = await getOrCreateMerchantBalance(validation.merchantId);
+        if (balance.available < totalRequired) {
+            return NextResponse.json(
+                {
+                    error: "Insufficient balance for batch",
+                    details: `Required: $${totalRequired.toFixed(2)} (payouts: $${totalAmount.toFixed(2)} + fees: $${totalFees.toFixed(2)}). Available: $${balance.available.toFixed(2)}`,
+                    balance: { available: balance.available, required: totalRequired },
+                    fundingUrl: "/api/treasury/deposit",
+                },
+                { status: 402 }
+            );
+        }
+
+        // Reserve funds for each payout individually
+        for (const p of payouts) {
+            const fee = calculatePayoutFee(p.amount);
+            const reservation = await reservePayoutFunds(
+                validation.merchantId,
+                p.amount,
+                fee,
+                `batch_pre_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+            );
+            if (!reservation.success) {
+                return NextResponse.json(
+                    { error: "Insufficient balance during batch reservation", details: reservation.error },
+                    { status: 402 }
+                );
+            }
+        }
+
         const result = await createPayoutBatch(
             validation.merchantId,
             payouts,
@@ -60,6 +96,15 @@ export async function POST(request: NextRequest) {
                 console.error(`[payouts] Failed to send email for ${payout.id}:`, err);
             });
         }
+
+        // Dispatch batch.created webhook (non-blocking)
+        dispatchWebhookEvent(validation.merchantId, "batch.created", {
+            batchId: result.batch.id,
+            totalAmount: result.batch.totalAmount,
+            count: result.batch.count,
+            payoutIds: result.payouts.map((p: { id: string }) => p.id),
+            createdAt: result.batch.createdAt.toISOString(),
+        }).catch((err) => console.error("[webhooks] dispatch error:", err));
 
         return NextResponse.json({
             id: result.batch.id,

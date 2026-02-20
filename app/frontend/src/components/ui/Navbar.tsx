@@ -171,7 +171,7 @@ export function Navbar() {
           {ready && authenticated ? (
             <>
               <Link
-                href="/client-dashboard"
+                href="/dashboard"
                 className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-white/10"
               >
                 Dashboard
@@ -265,7 +265,7 @@ export function Navbar() {
                 {ready && authenticated ? (
                   <>
                     <Link
-                      href="/client-dashboard"
+                      href="/dashboard"
                       onClick={() => setMobileMenuOpen(false)}
                       className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-medium text-white"
                     >
