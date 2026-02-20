@@ -1128,44 +1128,44 @@ export default function LandingPage() {
           {[
             {
               icon: Database,
-              label: "Priority",
-              badge: "#1",
               title: "AI Data Labeling",
               subtitle: "Remotasks, Toloka, Appen, Clickworker, Scale AI",
-              pain: "Millions of annotators in Philippines, Kenya, India, Venezuela. PayPal takes 5-8%, doesn't work in some regions, and workers wait weeks. Public criticism of payment practices is growing.",
-              pitch:
-                "Pay your entire annotation workforce by email. 1% flat, instant, works in every country they're in.",
+              problem:
+                "Millions of annotators in Philippines, Kenya, India, Venezuela. PayPal takes 5-8%, doesn't work in some regions, and workers wait weeks.",
+              solution:
+                "Pay your entire annotation workforce by email. From 1% per transaction, instant settlement, works in every country they're in.",
               color: "#3B82F6",
+              href: "/industries/data-labeling",
             },
             {
               icon: Sparkles,
-              label: "Growth",
-              badge: "#2",
               title: "Creator Platforms",
               subtitle: "Fourthwall, Ko-fi, Gumroad, Payhip, itch.io",
-              pain: "Stripe Connect doesn't support half the countries creators are in. PayPal has been pulled from others. Creators lose 3-10% to fees and FX on every payout.",
-              pitch:
+              problem:
+                "Stripe Connect doesn't support half the countries creators are in. PayPal has been pulled from others. Creators lose 3-10% to fees and FX on every payout.",
+              solution:
                 "Collect from fans via Checkout SDK. Pay creators in 180+ countries via Payout API. Both sides, one integration.",
               color: "#34d399",
+              href: "/industries/creators",
             },
             {
               icon: Briefcase,
-              label: "Expansion",
-              badge: "#3",
               title: "Freelance Marketplaces",
               subtitle: "Contra, Braintrust, Hobo.Video, niche marketplaces",
-              pain: "International talent gets paid via wire ($25/transfer) or PayPal (5%+ fees). Slow settlement, high ops burden, failed transfers.",
-              pitch:
+              problem:
+                "International talent gets paid via wire ($25/transfer) or PayPal (5%+ fees). Slow settlement, high ops burden, failed transfers.",
+              solution:
                 "Contractor payouts that work everywhere. No bank details, no wire fees, settled in under a second.",
               color: "#fbbf24",
+              href: "/industries/freelance",
             },
           ].map((vertical, i) => {
             const Icon = vertical.icon;
             return (
               <Reveal key={vertical.title} delay={i * 0.1}>
                 <div className="group relative flex h-full flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 transition-all hover:border-white/[0.1] hover:bg-white/[0.04]">
-                  {/* Badge */}
-                  <div className="mb-6 flex items-center justify-between">
+                  {/* Icon */}
+                  <div className="mb-6">
                     <div
                       className="inline-flex rounded-xl p-3"
                       style={{ background: `${vertical.color}15` }}
@@ -1175,15 +1175,6 @@ export default function LandingPage() {
                         style={{ color: vertical.color }}
                       />
                     </div>
-                    <span
-                      className="rounded-full px-3 py-1 text-xs font-semibold"
-                      style={{
-                        background: `${vertical.color}15`,
-                        color: vertical.color,
-                      }}
-                    >
-                      {vertical.badge} {vertical.label}
-                    </span>
                   </div>
 
                   <h3 className="text-xl font-semibold text-white">
@@ -1193,23 +1184,41 @@ export default function LandingPage() {
                     {vertical.subtitle}
                   </p>
 
-                  <div className="mt-6 rounded-xl bg-red-500/[0.04] border border-red-500/10 p-4">
-                    <p className="text-xs font-medium text-red-400 mb-1">
-                      The pain
+                  <div className="mt-6 rounded-xl bg-white/[0.02] border border-white/[0.06] p-4">
+                    <p className="text-xs font-medium text-white/50 mb-1">
+                      The challenge
                     </p>
                     <p className="text-xs leading-relaxed text-white/40">
-                      {vertical.pain}
+                      {vertical.problem}
                     </p>
                   </div>
 
-                  <div className="mt-3 rounded-xl bg-emerald-500/[0.04] border border-emerald-500/10 p-4 flex-1">
-                    <p className="text-xs font-medium text-emerald-400 mb-1">
-                      Your pitch
+                  <div
+                    className="mt-3 rounded-xl border p-4 flex-1"
+                    style={{
+                      background: `${vertical.color}06`,
+                      borderColor: `${vertical.color}20`,
+                    }}
+                  >
+                    <p
+                      className="text-xs font-medium mb-1"
+                      style={{ color: vertical.color }}
+                    >
+                      How Settlr helps
                     </p>
                     <p className="text-xs leading-relaxed text-white/50">
-                      {vertical.pitch}
+                      {vertical.solution}
                     </p>
                   </div>
+
+                  <Link
+                    href={vertical.href}
+                    className="mt-5 inline-flex items-center gap-1 text-xs font-medium transition-colors hover:text-white"
+                    style={{ color: vertical.color }}
+                  >
+                    Learn more
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
                 </div>
               </Reveal>
             );
