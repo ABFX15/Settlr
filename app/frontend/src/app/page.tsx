@@ -175,7 +175,7 @@ export default function LandingPage() {
                 "@type": "Product",
                 name: "Settlr Payout API",
                 description:
-                  "Global payout infrastructure for platforms. Pay anyone in 180+ countries with just their email. Instant USDC settlement, 1% flat fee, no bank details needed.",
+                  "Global payout infrastructure for platforms. Pay anyone in 180+ countries with just their email. Instant USDC settlement, no bank details needed.",
                 brand: {
                   "@type": "Brand",
                   name: "Settlr",
@@ -183,12 +183,57 @@ export default function LandingPage() {
                 url: "https://settlr.dev",
                 image: "https://settlr.dev/og-image.png",
                 category: "Payment Processing Software",
+                offers: [
+                  {
+                    "@type": "Offer",
+                    name: "Starter",
+                    price: "0",
+                    priceCurrency: "USD",
+                    description:
+                      "2% per transaction. Up to 500 payouts/month. No setup fees.",
+                    availability: "https://schema.org/InStock",
+                    url: "https://settlr.dev/pricing",
+                  },
+                  {
+                    "@type": "Offer",
+                    name: "Growth",
+                    price: "0",
+                    priceCurrency: "USD",
+                    description:
+                      "1.5% per transaction. Unlimited payouts, batch payouts, recurring subscriptions.",
+                    availability: "https://schema.org/InStock",
+                    url: "https://settlr.dev/pricing",
+                  },
+                  {
+                    "@type": "Offer",
+                    name: "Enterprise",
+                    price: "0",
+                    priceCurrency: "USD",
+                    description:
+                      "1% per transaction. Dedicated treasury, multi-sig support, custom integrations.",
+                    availability: "https://schema.org/InStock",
+                    url: "https://settlr.dev/pricing",
+                  },
+                ],
+              },
+              {
+                "@type": "Product",
+                name: "Settlr Checkout SDK",
+                description:
+                  "Embeddable USDC checkout for platforms. Accept payments with a React component or payment link. Gasless, instant settlement, subscription billing built in.",
+                brand: {
+                  "@type": "Brand",
+                  name: "Settlr",
+                },
+                url: "https://settlr.dev/docs?tab=react",
+                image: "https://settlr.dev/og-image.png",
+                category: "Payment Processing Software",
                 offers: {
                   "@type": "Offer",
                   price: "0",
                   priceCurrency: "USD",
                   description:
-                    "1% flat fee per payout. No setup fees. No monthly fees.",
+                    "Transaction-based pricing starting at 2%. No setup fees.",
                   availability: "https://schema.org/InStock",
                   url: "https://settlr.dev/pricing",
                 },
@@ -204,20 +249,24 @@ export default function LandingPage() {
                   price: "0",
                   priceCurrency: "USD",
                   description:
-                    "1% flat fee per transaction. No setup fees, no monthly fees.",
+                    "Transaction-based pricing from 1-2%. No setup fees, no monthly fees.",
                 },
                 description:
                   "Payout infrastructure for platforms that pay people globally. Email-based USDC payouts, gasless transactions, instant settlement.",
                 featureList: [
                   "Pay anyone by email - no bank details needed",
                   "Instant settlement in under 1 second",
-                  "1% flat fee - no FX markup, no wire fees",
+                  "Transaction fees from 1-2% - no FX markup, no wire fees",
                   "Works in 180+ countries",
                   "Zero gas fees for recipients",
                   "Non-custodial - funds flow on-chain",
                   "Privacy-first encrypted receipts (FHE)",
                   "TypeScript SDK and React components",
                   "Bulk payouts via CSV or API",
+                  "Recurring subscription billing",
+                  "Embeddable checkout SDK",
+                  "Treasury management with multisig support",
+                  "Built on Solana - multi-chain coming soon",
                 ],
               },
               {
@@ -289,7 +338,7 @@ export default function LandingPage() {
                     name: "What are Settlr's fees?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "1% flat per transaction. No FX fees, no wire fees, no hidden charges. Compare that to PayPal's 5%+ for international transfers or $25+ per wire.",
+                      text: "Transaction-based pricing from 1-2% depending on tier. No FX fees, no wire fees, no hidden charges. Compare that to PayPal's 5%+ for international transfers or $25+ per wire.",
                     },
                   },
                   {
@@ -307,6 +356,57 @@ export default function LandingPage() {
                       "@type": "Answer",
                       text: "No. Settlr is fully non-custodial. Payouts flow directly via on-chain smart contracts. We never hold your funds.",
                     },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Can I send bulk payouts?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Yes. Upload a CSV with emails and amounts, or use the API to programmatically send hundreds of payouts in a single batch. All settled in seconds.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "How do recipients cash out to local currency?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Recipients can offramp USDC to their local currency via integrated partners like MoonPay or Coinbase. They can also send to any crypto exchange that supports their country.",
+                    },
+                  },
+                ],
+              },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: "https://settlr.dev/",
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: "Pricing",
+                    item: "https://settlr.dev/pricing",
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 3,
+                    name: "Documentation",
+                    item: "https://settlr.dev/docs",
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 4,
+                    name: "Demo",
+                    item: "https://settlr.dev/demo",
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 5,
+                    name: "Get Started",
+                    item: "https://settlr.dev/onboarding",
                   },
                 ],
               },
