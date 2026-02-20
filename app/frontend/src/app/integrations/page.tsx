@@ -132,6 +132,53 @@ export default function IntegrationsPage() {
               "Connect stablecoin payments to your existing tools. Zapier, WooCommerce, Shopify, Bubble.io, and Slack integrations.",
             url: "https://settlr.dev/integrations",
             isPartOf: { "@id": "https://settlr.dev/#organization" },
+            mainEntity: {
+              "@type": "ItemList",
+              name: "Settlr Integration Directory",
+              numberOfItems: 5,
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Zapier Integration",
+                  url: "https://settlr.dev/integrations/zapier",
+                  description:
+                    "Connect Settlr to 6,000+ apps. Trigger USDC payouts from CRM events, form submissions, and more.",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "WooCommerce Plugin",
+                  url: "https://settlr.dev/integrations/woocommerce",
+                  description:
+                    "Accept USDC at WooCommerce checkout. Instant settlement, automatic refunds, zero FX fees.",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: "Shopify Payments App",
+                  url: "https://settlr.dev/integrations/shopify",
+                  description:
+                    "Add USDC payments to Shopify stores via a Payments App Extension. Sub-second settlement.",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 4,
+                  name: "Slack Bot",
+                  url: "https://settlr.dev/integrations/slack",
+                  description:
+                    "Send USDC payments from Slack with slash commands. Approval workflows and threaded receipts.",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 5,
+                  name: "Bubble.io Plugin",
+                  url: "https://settlr.dev/integrations/bubble",
+                  description:
+                    "No-code stablecoin payments for Bubble apps. Visual payment elements and workflow actions.",
+                },
+              ],
+            },
           }),
         }}
       />

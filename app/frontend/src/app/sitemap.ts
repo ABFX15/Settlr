@@ -80,5 +80,41 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'monthly',
             priority: 0.8,
         },
+        {
+            url: `${baseUrl}/integrations`,
+            lastModified,
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/integrations/zapier`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/integrations/woocommerce`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/integrations/shopify`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/integrations/slack`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/integrations/bubble`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
     ]
 }

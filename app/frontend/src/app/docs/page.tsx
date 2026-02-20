@@ -17,6 +17,7 @@ import {
   Play,
   RefreshCw,
   Vault,
+  Plug,
 } from "lucide-react";
 
 const docsTabs = [
@@ -28,6 +29,7 @@ const docsTabs = [
   { id: "playground", label: "Playground", icon: Play },
   { id: "api", label: "REST API", icon: Book },
   { id: "webhooks", label: "Webhooks", icon: Webhook },
+  { id: "integrations", label: "Integrations", icon: Plug },
   { id: "troubleshooting", label: "Troubleshooting", icon: HelpCircle },
 ];
 
@@ -40,6 +42,7 @@ type TabId =
   | "treasury"
   | "api"
   | "webhooks"
+  | "integrations"
   | "troubleshooting";
 
 export default function DocsPage() {
@@ -165,6 +168,7 @@ export default function DocsPage() {
                 {activeTab === "treasury" && <TreasuryContent />}
                 {activeTab === "api" && <APIContent />}
                 {activeTab === "webhooks" && <WebhooksContent />}
+                {activeTab === "integrations" && <IntegrationsContent />}
                 {activeTab === "troubleshooting" && <TroubleshootingContent />}
               </div>
             </div>
@@ -1621,6 +1625,254 @@ console.log('Claimed! Tx:', sig);`}
             </a>{" "}
             to see a visual treasury dashboard with real-time on-chain data,
             claim button, and authority verification.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function IntegrationsContent() {
+  const integrations = [
+    {
+      name: "Zapier",
+      slug: "zapier",
+      emoji: "⚡",
+      desc: "Connect Settlr to 6,000+ apps. Trigger payouts from form submissions, CRM events, or any Zapier workflow.",
+      setup: [
+        "Install the Settlr app from the Zapier marketplace",
+        "Connect your account with your Settlr API key",
+        "Pick a trigger (e.g. new Typeform submission) and an action (Send Payout or Create Batch Payout)",
+        "Map fields — recipient email, amount, memo — and enable the Zap",
+      ],
+      endpoints: [
+        "POST /api/payouts — Send a single payout",
+        "POST /api/payouts/batch — Send batch payouts",
+        "GET /api/payments — Trigger on new payments received",
+        "GET /api/payouts?status=completed — Trigger on completed payouts",
+      ],
+      example: `// Zapier action: Send Payout
+// Maps form fields → Settlr payout
+{
+  "recipient": "{{email}}",
+  "amount": {{amount}},
+  "memo": "Payment from {{source}}"
+}`,
+    },
+    {
+      name: "WooCommerce",
+      slug: "woocommerce",
+      emoji: "🛒",
+      desc: "Accept USDC at checkout in any WooCommerce store. Customers pay stablecoins, you get instant settlement.",
+      setup: [
+        "Download the Settlr WooCommerce plugin (PHP)",
+        "Upload to wp-content/plugins/ and activate",
+        'Go to WooCommerce → Settings → Payments → "Settlr — Pay with USDC"',
+        "Enter your API key and optional webhook secret",
+        "Customers see a USDC payment option at checkout",
+      ],
+      endpoints: [
+        "POST /api/payments — Create a payment session",
+        "GET /api/payments/:id — Check payment status",
+        "POST /api/payouts — Process refunds via payout",
+        "Webhooks — payment.completed marks the order as paid",
+      ],
+      example: `// Customer selects "Pay with USDC" at checkout
+// → Plugin calls POST /api/payments
+{
+  "amount": 49.99,
+  "currency": "USDC",
+  "metadata": {
+    "orderId": "WC-1234",
+    "customer": "jane@example.com"
+  }
+}
+// → Customer scans QR or connects wallet
+// → Webhook fires → order marked "Processing"`,
+    },
+    {
+      name: "Shopify",
+      slug: "shopify",
+      emoji: "🏪",
+      desc: "Add USDC payments to your Shopify store via an Express-based Payments App Extension.",
+      setup: [
+        "Clone the Shopify plugin from the Settlr GitHub repo",
+        "Configure SETTLR_API_KEY and SHOPIFY_API_SECRET in .env",
+        "Deploy the Express server (Vercel, Railway, etc.)",
+        "Install the Payments App Extension in your Shopify admin",
+        "Customers see USDC as a payment method at checkout",
+      ],
+      endpoints: [
+        "POST /api/payments — Create payment session",
+        "POST /api/payments/:id/confirm — Confirm on-chain",
+        "POST /api/payouts — Handle refunds",
+        "Webhooks — payment.completed resolves the session",
+      ],
+      example: `// Shopify sends payment session request
+// → Plugin creates Settlr payment
+// → Returns redirect URL for customer
+{
+  "redirect_url": "https://pay.settlr.dev/session/abc123",
+  "payment_id": "pay_xyz"
+}`,
+    },
+    {
+      name: "Slack",
+      slug: "slack",
+      emoji: "💬",
+      desc: "Send USDC payments from Slack with slash commands. Built-in approval workflows and thread receipts.",
+      setup: [
+        "Create a Slack App at api.slack.com/apps",
+        "Add slash commands: /pay, /pay-batch, /pay-balance, /pay-history",
+        "Set SETTLR_API_KEY and SLACK_SIGNING_SECRET in .env",
+        "Deploy the bot (Node.js / @slack/bolt)",
+        "Install to your workspace — team can send payouts from any channel",
+      ],
+      endpoints: [
+        "POST /api/payouts — /pay command",
+        "POST /api/payouts/batch — /pay-batch command",
+        "GET /api/balance — /pay-balance command",
+        "GET /api/payouts — /pay-history command",
+      ],
+      example: `// Slash command in Slack:
+/pay jane@example.com 50 USDC for design work
+
+// Bot responds in thread:
+✅ Payout sent!
+Recipient: jane@example.com
+Amount: 50.00 USDC
+Status: completed
+Signature: 5xKj...abc`,
+    },
+    {
+      name: "Bubble.io",
+      slug: "bubble",
+      emoji: "🫧",
+      desc: "Add stablecoin payments to Bubble apps with a no-code plugin. Drop-in actions and visual elements.",
+      setup: [
+        'Install the "Settlr Payments" plugin from the Bubble marketplace',
+        "Enter your API key in the plugin settings",
+        "Use the Send Payout or Create Payment actions in workflows",
+        "Optionally add the Payout Status visual element to pages",
+      ],
+      endpoints: [
+        "POST /api/payouts — Send Payout action",
+        "POST /api/payouts/batch — Batch Payout action",
+        "POST /api/payments — Create Payment action",
+        "GET /api/payouts/:id — Payout Status element",
+      ],
+      example: `// Bubble workflow example:
+// Trigger: Button "Pay Freelancer" is clicked
+// Action: Settlr - Send Payout
+//   recipient = Input Freelancer Email's value
+//   amount = Input Amount's value
+//   memo = Input Memo's value
+// 
+// On success → show "Payment sent!" popup`,
+    },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Integrations</h2>
+        <p className="text-white/50 mb-6">
+          Connect Settlr to the tools you already use. Each integration is
+          open-source and uses the same REST API documented in the{" "}
+          <button
+            className="text-[#3B82F6] hover:underline"
+            onClick={() =>
+              window.dispatchEvent(
+                new CustomEvent("settlr:set-tab", { detail: "api" }),
+              )
+            }
+          >
+            API tab
+          </button>
+          .
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
+          {integrations.map((i) => (
+            <a
+              key={i.slug}
+              href={`/integrations/${i.slug}`}
+              className="block rounded-lg border border-white/10 bg-white/[0.02] p-5 hover:border-[#3B82F6]/40 hover:bg-white/[0.04] transition-all"
+            >
+              <div className="text-2xl mb-2">{i.emoji}</div>
+              <h3 className="font-semibold mb-1">{i.name}</h3>
+              <p className="text-sm text-white/50 line-clamp-2">{i.desc}</p>
+            </a>
+          ))}
+        </div>
+
+        {/* Detailed sections */}
+        {integrations.map((integration) => (
+          <div
+            key={integration.slug}
+            id={`integration-${integration.slug}`}
+            className="mb-12 scroll-mt-24"
+          >
+            <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
+              <span className="text-2xl">{integration.emoji}</span>
+              {integration.name}
+            </h3>
+            <p className="text-white/50 mb-4">{integration.desc}</p>
+
+            <h4 className="font-medium mb-2">Setup</h4>
+            <ol className="list-decimal list-inside space-y-1 text-white/60 mb-4 text-sm">
+              {integration.setup.map((step, idx) => (
+                <li key={idx}>{step}</li>
+              ))}
+            </ol>
+
+            <h4 className="font-medium mb-2">API Endpoints Used</h4>
+            <ul className="space-y-1 mb-4">
+              {integration.endpoints.map((ep, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-start gap-2 text-sm text-white/60"
+                >
+                  <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#3B82F6]" />
+                  <code className="text-white/70 text-xs">{ep}</code>
+                </li>
+              ))}
+            </ul>
+
+            <h4 className="font-medium mb-2">Example</h4>
+            <CodeBlock language="typescript">{integration.example}</CodeBlock>
+
+            <a
+              href={`https://github.com/ABFX15/Settlr/tree/master/plugins/${integration.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm text-[#3B82F6] hover:underline"
+            >
+              View source on GitHub
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+        ))}
+
+        {/* Auth section */}
+        <div className="rounded-lg border border-white/10 bg-white/[0.02] p-6 mt-8">
+          <h3 className="text-lg font-semibold mb-3">Authentication</h3>
+          <p className="text-white/50 text-sm mb-3">
+            All integrations authenticate with your Settlr API key. Pass it as a
+            Bearer token:
+          </p>
+          <CodeBlock language="bash">
+            {`curl -H "Authorization: Bearer sk_live_YOUR_KEY" \\
+  https://settlr.dev/api/payouts`}
+          </CodeBlock>
+          <p className="text-white/50 text-sm">
+            Use <code className="text-white/70">sk_test_</code> keys for
+            development and <code className="text-white/70">sk_live_</code> keys
+            for production. Manage keys in the{" "}
+            <a href="/dashboard" className="text-[#3B82F6] hover:underline">
+              dashboard
+            </a>
+            .
           </p>
         </div>
       </section>

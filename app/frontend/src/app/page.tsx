@@ -225,6 +225,43 @@ export default function LandingPage() {
                 },
               ],
             },
+            availableChannel: [
+              {
+                "@type": "ServiceChannel",
+                name: "Zapier Integration",
+                serviceUrl: "https://settlr.dev/integrations/zapier",
+                description:
+                  "Connect Settlr to 6,000+ apps via Zapier. Automate payouts from CRM events, form submissions, and workflows.",
+              },
+              {
+                "@type": "ServiceChannel",
+                name: "WooCommerce Plugin",
+                serviceUrl: "https://settlr.dev/integrations/woocommerce",
+                description:
+                  "Accept USDC payments at WooCommerce checkout. Instant settlement, automatic order fulfillment.",
+              },
+              {
+                "@type": "ServiceChannel",
+                name: "Shopify Payments App",
+                serviceUrl: "https://settlr.dev/integrations/shopify",
+                description:
+                  "Add USDC as a payment method in Shopify stores via a Payments App Extension.",
+              },
+              {
+                "@type": "ServiceChannel",
+                name: "Slack Bot",
+                serviceUrl: "https://settlr.dev/integrations/slack",
+                description:
+                  "Send USDC payments from Slack with slash commands. Approval workflows and thread receipts.",
+              },
+              {
+                "@type": "ServiceChannel",
+                name: "Bubble.io Plugin",
+                serviceUrl: "https://settlr.dev/integrations/bubble",
+                description:
+                  "No-code stablecoin payments for Bubble apps. Drop-in actions and visual elements.",
+              },
+            ],
             hasPart: [
               {
                 "@type": "HowTo",
@@ -310,6 +347,12 @@ export default function LandingPage() {
               {
                 "@type": "ListItem",
                 position: 5,
+                name: "Integrations",
+                item: "https://settlr.dev/integrations",
+              },
+              {
+                "@type": "ListItem",
+                position: 6,
                 name: "Get Started",
                 item: "https://settlr.dev/onboarding",
               },
