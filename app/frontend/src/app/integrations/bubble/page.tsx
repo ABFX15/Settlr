@@ -107,7 +107,7 @@ export default function BubblePage() {
           <Reveal delay={0.15}>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <a
-                href="https://github.com/settlr/settlr/tree/main/plugins/bubble"
+                href="https://github.com/ABFX15/Settlr/tree/master/plugins/bubble"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-white shadow-lg transition-transform hover:scale-[1.02]"
@@ -355,7 +355,7 @@ export default function BubblePage() {
           <Reveal delay={0.1}>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <a
-                href="https://github.com/settlr/settlr/tree/main/plugins/bubble"
+                href="https://github.com/ABFX15/Settlr/tree/master/plugins/bubble"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-[15px] font-semibold text-white hover:scale-[1.02]"
