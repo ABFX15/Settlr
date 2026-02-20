@@ -140,275 +140,255 @@ export default function LandingPage() {
       className="relative min-h-screen bg-[#050507] text-white antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
-      {/* JSON-LD Structured Data */}
+      {/* ── Organization ── */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@graph": [
-              {
-                "@type": "Organization",
-                name: "Settlr",
-                url: "https://settlr.dev",
-                logo: "https://settlr.dev/og-image.png",
-                description:
-                  "Global payout infrastructure for platforms. Pay anyone, anywhere, with just their email.",
-                foundingDate: "2025",
-                founder: {
-                  "@type": "Person",
-                  name: "Adam Bryant",
-                },
-                contactPoint: {
-                  "@type": "ContactPoint",
-                  contactType: "customer support",
-                  url: "https://settlr.dev/support",
-                  email: "adam@settlr.dev",
-                },
-                areaServed: "Worldwide",
-                sameAs: [
-                  "https://x.com/SettlrPay",
-                  "https://github.com/settlr",
-                ],
-              },
-              {
-                "@type": "Product",
-                name: "Settlr Payout API",
-                description:
-                  "Global payout infrastructure for platforms. Pay anyone in 180+ countries with just their email. Instant USDC settlement, no bank details needed.",
-                brand: {
-                  "@type": "Brand",
-                  name: "Settlr",
-                },
-                url: "https://settlr.dev",
-                image: "https://settlr.dev/og-image.png",
-                category: "Payment Processing Software",
-                offers: [
-                  {
-                    "@type": "Offer",
-                    name: "Starter",
-                    price: "0",
-                    priceCurrency: "USD",
-                    description:
-                      "2% per transaction. Up to 500 payouts/month. No setup fees.",
-                    availability: "https://schema.org/InStock",
-                    url: "https://settlr.dev/pricing",
-                  },
-                  {
-                    "@type": "Offer",
-                    name: "Growth",
-                    price: "0",
-                    priceCurrency: "USD",
-                    description:
-                      "1.5% per transaction. Unlimited payouts, batch payouts, recurring subscriptions.",
-                    availability: "https://schema.org/InStock",
-                    url: "https://settlr.dev/pricing",
-                  },
-                  {
-                    "@type": "Offer",
-                    name: "Enterprise",
-                    price: "0",
-                    priceCurrency: "USD",
-                    description:
-                      "1% per transaction. Dedicated treasury, multi-sig support, custom integrations.",
-                    availability: "https://schema.org/InStock",
-                    url: "https://settlr.dev/pricing",
-                  },
-                ],
-              },
-              {
-                "@type": "Product",
-                name: "Settlr Checkout SDK",
-                description:
-                  "Embeddable USDC checkout for platforms. Accept payments with a React component or payment link. Gasless, instant settlement, subscription billing built in.",
-                brand: {
-                  "@type": "Brand",
-                  name: "Settlr",
-                },
-                url: "https://settlr.dev/docs?tab=react",
-                image: "https://settlr.dev/og-image.png",
-                category: "Payment Processing Software",
-                offers: {
+            "@type": "Organization",
+            "@id": "https://settlr.dev/#organization",
+            name: "Settlr",
+            url: "https://settlr.dev",
+            logo: "https://settlr.dev/og-image.png",
+            description: "Stablecoin payment infrastructure for platforms.",
+            foundingDate: "2025",
+            founder: { "@type": "Person", name: "Adam Bryant" },
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "customer support",
+              url: "https://settlr.dev/support",
+              email: "adam@settlr.dev",
+            },
+            sameAs: ["https://x.com/SettlrPay", "https://github.com/settlr"],
+          }),
+        }}
+      />
+
+      {/* ── Service + System Flow (core entity) ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "@id": "https://settlr.dev/#service",
+            name: "Settlr Stablecoin Payment Infrastructure",
+            serviceType: "Stablecoin payment infrastructure",
+            provider: { "@id": "https://settlr.dev/#organization" },
+            url: "https://settlr.dev",
+            description:
+              "Send and receive USDC payments globally with just an email address. Instant settlement, non-custodial, from 1% per transaction.",
+            areaServed: "Worldwide",
+            audience: {
+              "@type": "BusinessAudience",
+              name: "Platforms, marketplaces, and gig economy companies that pay people globally",
+            },
+            about: {
+              "@type": "DefinedTerm",
+              "@id": "https://settlr.dev/#defined-term",
+              name: "Stablecoin Payment Infrastructure",
+              description:
+                "Infrastructure that enables platforms to send and receive stablecoin (USDC) payments globally via email, with instant settlement and no bank details required.",
+              url: "https://settlr.dev",
+            },
+            hasOfferCatalog: {
+              "@type": "OfferCatalog",
+              name: "Pricing Tiers",
+              itemListElement: [
+                {
                   "@type": "Offer",
+                  name: "Starter",
                   price: "0",
                   priceCurrency: "USD",
                   description:
-                    "Transaction-based pricing starting at 2%. No setup fees.",
-                  availability: "https://schema.org/InStock",
+                    "2% per transaction. Up to 500 payouts/month. No setup fees.",
                   url: "https://settlr.dev/pricing",
                 },
-              },
-              {
-                "@type": "SoftwareApplication",
-                name: "Settlr",
-                applicationCategory: "FinanceApplication",
-                operatingSystem: "Web",
-                url: "https://settlr.dev",
-                offers: {
+                {
                   "@type": "Offer",
+                  name: "Growth",
                   price: "0",
                   priceCurrency: "USD",
                   description:
-                    "Transaction-based pricing from 1-2%. No setup fees, no monthly fees.",
+                    "1.5% per transaction. Unlimited payouts, batch payouts, recurring subscriptions.",
+                  url: "https://settlr.dev/pricing",
                 },
-                description:
-                  "Payout infrastructure for platforms that pay people globally. Email-based USDC payouts, gasless transactions, instant settlement.",
-                featureList: [
-                  "Pay anyone by email - no bank details needed",
-                  "Instant settlement in under 1 second",
-                  "Transaction fees from 1-2% - no FX markup, no wire fees",
-                  "Works in 180+ countries",
-                  "Zero gas fees for recipients",
-                  "Non-custodial - funds flow on-chain",
-                  "Privacy-first encrypted receipts (FHE)",
-                  "TypeScript SDK and React components",
-                  "Bulk payouts via CSV or API",
-                  "Recurring subscription billing",
-                  "Embeddable checkout SDK",
-                  "Treasury management with multisig support",
-                  "Built on Solana - multi-chain coming soon",
-                ],
-              },
+                {
+                  "@type": "Offer",
+                  name: "Enterprise",
+                  price: "0",
+                  priceCurrency: "USD",
+                  description:
+                    "1% per transaction. Dedicated treasury, multi-sig support, custom integrations.",
+                  url: "https://settlr.dev/pricing",
+                },
+              ],
+            },
+            hasPart: [
               {
                 "@type": "HowTo",
-                name: "How to pay anyone globally with just their email",
+                name: "Stablecoin Payment System Flow",
                 description:
-                  "Send instant payouts to workers, creators, and contractors in 180+ countries using Settlr's API. No bank details or crypto wallets needed.",
+                  "How Settlr processes stablecoin payments — a repeatable five-step system from integration to offramp.",
                 step: [
                   {
                     "@type": "HowToStep",
                     position: 1,
-                    name: "Integrate the SDK",
-                    text: "Install @settlr/sdk. Call payout() with an email and amount. We handle wallets, gas, and delivery.",
-                    url: "https://settlr.dev/#how-it-works",
+                    name: "Integration",
+                    text: "Platform installs @settlr/sdk and connects via API. One SDK handles both payouts (sending USDC) and checkout (receiving USDC).",
+                    url: "https://settlr.dev/docs",
                   },
                   {
                     "@type": "HowToStep",
                     position: 2,
-                    name: "Recipient gets an email",
-                    text: "They click a link to claim their USDC. An embedded wallet is created automatically — no crypto knowledge needed.",
-                    url: "https://settlr.dev/#how-it-works",
+                    name: "Payment Routing",
+                    text: "Platform calls payout() with a recipient email and amount. Settlr routes the stablecoin payment on-chain via non-custodial smart contracts.",
+                    url: "https://settlr.dev/docs?tab=api",
                   },
                   {
                     "@type": "HowToStep",
                     position: 3,
-                    name: "They cash out locally",
-                    text: "Recipients hold USDC, offramp to local currency via integrated partners, or transfer to any wallet.",
+                    name: "Wallet Creation",
+                    text: "An embedded wallet is created automatically for first-time recipients. No crypto knowledge, seed phrases, or app downloads required.",
                     url: "https://settlr.dev/#how-it-works",
                   },
-                ],
-                totalTime: "PT5M",
-              },
-              {
-                "@type": "WebSite",
-                url: "https://settlr.dev",
-                name: "Settlr",
-                description:
-                  "Pay anyone, anywhere, with just their email. Global payout infrastructure for platforms.",
-              },
-              {
-                "@type": "FAQPage",
-                mainEntity: [
                   {
-                    "@type": "Question",
-                    name: "How do email payouts work?",
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: "Enter a recipient's email and amount. Settlr creates an embedded wallet for them via Privy. They receive a link to claim their USDC - no crypto knowledge needed.",
-                    },
-                  },
-                  {
-                    "@type": "Question",
-                    name: "What countries does Settlr support?",
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: "Settlr works in 180+ countries. Recipients only need an email address and internet connection - no bank account required.",
-                    },
-                  },
-                  {
-                    "@type": "Question",
-                    name: "Do recipients need a crypto wallet?",
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: "No. Settlr creates an embedded wallet automatically when someone receives their first payout. Recipients can hold USDC, offramp to local currency, or transfer to any wallet.",
-                    },
-                  },
-                  {
-                    "@type": "Question",
-                    name: "What are Settlr's fees?",
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: "Transaction-based pricing from 1-2% depending on tier. No FX fees, no wire fees, no hidden charges. Compare that to PayPal's 5%+ for international transfers or $25+ per wire.",
-                    },
-                  },
-                  {
-                    "@type": "Question",
-                    name: "How fast are payouts settled?",
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: "Instantly. Payments settle in under one second on Solana. No holds, no processing delays, no multi-day bank settlement windows.",
-                    },
-                  },
-                  {
-                    "@type": "Question",
-                    name: "Is Settlr custodial?",
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: "No. Settlr is fully non-custodial. Payouts flow directly via on-chain smart contracts. We never hold your funds.",
-                    },
-                  },
-                  {
-                    "@type": "Question",
-                    name: "Can I send bulk payouts?",
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: "Yes. Upload a CSV with emails and amounts, or use the API to programmatically send hundreds of payouts in a single batch. All settled in seconds.",
-                    },
-                  },
-                  {
-                    "@type": "Question",
-                    name: "How do recipients cash out to local currency?",
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: "Recipients can offramp USDC to their local currency via integrated partners like MoonPay or Coinbase. They can also send to any crypto exchange that supports their country.",
-                    },
-                  },
-                ],
-              },
-              {
-                "@type": "BreadcrumbList",
-                itemListElement: [
-                  {
-                    "@type": "ListItem",
-                    position: 1,
-                    name: "Home",
-                    item: "https://settlr.dev/",
-                  },
-                  {
-                    "@type": "ListItem",
-                    position: 2,
-                    name: "Pricing",
-                    item: "https://settlr.dev/pricing",
-                  },
-                  {
-                    "@type": "ListItem",
-                    position: 3,
-                    name: "Documentation",
-                    item: "https://settlr.dev/docs",
-                  },
-                  {
-                    "@type": "ListItem",
+                    "@type": "HowToStep",
                     position: 4,
-                    name: "Demo",
-                    item: "https://settlr.dev/demo",
+                    name: "Settlement",
+                    text: "USDC settles in under one second. Non-custodial, gasless for recipients, with FHE-encrypted receipts for privacy.",
+                    url: "https://settlr.dev/#how-it-works",
                   },
                   {
-                    "@type": "ListItem",
+                    "@type": "HowToStep",
                     position: 5,
-                    name: "Get Started",
-                    item: "https://settlr.dev/onboarding",
+                    name: "Offramp",
+                    text: "Recipients hold USDC, offramp to local currency via integrated partners (MoonPay, Coinbase), or transfer to any wallet. Works in 180+ countries.",
+                    url: "https://settlr.dev/#how-it-works",
                   },
                 ],
+                totalTime: "PT1M",
+              },
+            ],
+          }),
+        }}
+      />
+
+      {/* ── Breadcrumb ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://settlr.dev/",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Pricing",
+                item: "https://settlr.dev/pricing",
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: "Documentation",
+                item: "https://settlr.dev/docs",
+              },
+              {
+                "@type": "ListItem",
+                position: 4,
+                name: "Demo",
+                item: "https://settlr.dev/demo",
+              },
+              {
+                "@type": "ListItem",
+                position: 5,
+                name: "Get Started",
+                item: "https://settlr.dev/onboarding",
+              },
+            ],
+          }),
+        }}
+      />
+
+      {/* ── FAQ ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "How do stablecoin email payments work?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Enter a recipient's email and amount. Settlr creates an embedded wallet for them automatically. They receive a link to claim their USDC — no crypto knowledge needed.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "What countries does Settlr support?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Settlr works in 180+ countries. Recipients only need an email address and internet connection — no bank account required.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Do recipients need a crypto wallet?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "No. Settlr creates an embedded wallet automatically when someone receives their first stablecoin payment. Recipients can hold USDC, offramp to local currency, or transfer to any wallet.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "What are Settlr's fees?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Transaction-based pricing from 1–2% depending on tier. No FX fees, no wire fees, no hidden charges. Compare that to PayPal's 5%+ for international transfers or $25+ per wire.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How fast do stablecoin payments settle?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Instantly. Stablecoin payments settle in under one second. No holds, no processing delays, no multi-day bank settlement windows.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Is Settlr custodial?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "No. Settlr is fully non-custodial. Stablecoin payments flow directly via on-chain smart contracts. We never hold your funds.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can I send bulk stablecoin payments?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes. Upload a CSV with emails and amounts, or use the API to programmatically send hundreds of payments in a single batch. All settled in seconds.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How do recipients cash out to local currency?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Recipients can offramp USDC to their local currency via integrated partners like MoonPay or Coinbase. They can also send to any crypto exchange that supports their country.",
+                },
               },
             ],
           }),
@@ -444,26 +424,26 @@ export default function LandingPage() {
               <Reveal>
                 <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/[0.1] px-4 py-1.5 text-[13px] text-[#3B82F6] font-medium backdrop-blur-sm">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]" />
-                  Global payout infrastructure
+                  Stablecoin payment infrastructure
                 </div>
               </Reveal>
 
               <Reveal delay={0.05}>
                 <h1 className="max-w-xl text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.08] tracking-tight text-white">
-                  Pay anyone, anywhere,{" "}
-                  <span className="text-[#3B82F6]">with just their email</span>
+                  Stablecoin payments{" "}
+                  <span className="text-[#3B82F6]">for every platform</span>
                 </h1>
               </Reveal>
 
               <Reveal delay={0.1}>
                 <p className="mt-6 max-w-md text-lg leading-relaxed text-white/60">
-                  Your platform pays thousands of people globally.{" "}
+                  Settlr is stablecoin payment infrastructure that lets
+                  platforms{" "}
                   <span className="font-medium text-white/80">
-                    Wire fees, failed PayPal transfers, and unsupported
-                    countries shouldn&apos;t be your problem.
+                    send and receive USDC payments globally.
                   </span>{" "}
-                  Settlr is payout infrastructure that works everywhere — 1%
-                  flat, instant, email-only.
+                  Pay anyone with just their email — 180+ countries, 1% flat,
+                  settled in under a second.
                 </p>
               </Reveal>
 
@@ -742,8 +722,8 @@ export default function LandingPage() {
                   They claim instantly
                 </h3>
                 <p className="text-sm leading-relaxed text-white/40 max-w-[240px]">
-                  One click, funds arrive. USDC on Solana — settled in under a
-                  second, 1% flat fee.
+                  One click, funds arrive. Stablecoin payment settled in under a
+                  second, from 1% per transaction.
                 </p>
               </div>
             </Reveal>
@@ -1003,8 +983,8 @@ export default function LandingPage() {
             Most platforms need to both{" "}
             <strong className="text-white/70">collect money</strong> from users
             and <strong className="text-white/70">pay people</strong> globally.
-            Settlr handles both sides. Built on Solana today—multi-chain support
-            coming soon.
+            Settlr handles both sides with stablecoin payment rails — instant,
+            global, from 1% per transaction.
           </p>
         </Reveal>
 
@@ -1436,13 +1416,13 @@ export default function LandingPage() {
               {
                 icon: RefreshCw,
                 title: "Gasless transactions",
-                text: "Recipients never pay gas. Kora (Solana Foundation-backed) covers all transaction fees.",
+                text: "Recipients never pay gas. We cover all network fees so stablecoin payments are free to receive.",
                 color: "#3B82F6",
               },
               {
                 icon: Database,
                 title: "On-chain audit trail",
-                text: "Every payout is recorded on Solana. Immutable, auditable, verifiable by anyone.",
+                text: "Every stablecoin payment is recorded on-chain. Immutable, auditable, verifiable by anyone.",
                 color: "#34d399",
               },
             ].map((f, i) => (
@@ -1629,11 +1609,11 @@ export default function LandingPage() {
               },
               {
                 q: "What are the fees?",
-                a: "1% flat per transaction. No FX fees, no wire fees, no receiving fees, no hidden charges. On $25,000/month in payouts you'd save over $1,000 vs PayPal international transfers.",
+                a: "From 1-2% per transaction depending on your tier. No FX fees, no wire fees, no receiving fees, no hidden charges. On $25,000/month in payouts you'd save over $1,000 vs PayPal international transfers.",
               },
               {
                 q: "How fast are payouts?",
-                a: "Instant. Payouts settle in under one second on Solana. No holds, no processing delays, no multi-day bank settlement windows. Recipients can access funds immediately.",
+                a: "Instant. Stablecoin payments settle in under one second. No holds, no processing delays, no multi-day bank settlement windows. Recipients can access funds immediately.",
               },
               {
                 q: "Can I send bulk payouts?",
@@ -1645,7 +1625,7 @@ export default function LandingPage() {
               },
               {
                 q: "Is this custodial? Do you hold funds?",
-                a: "No. Settlr is fully non-custodial. Payouts flow directly via on-chain smart contracts on Solana. We never have access to your funds or your recipients' funds.",
+                a: "No. Settlr is fully non-custodial. Stablecoin payments flow directly via on-chain smart contracts. We never have access to your funds or your recipients' funds.",
               },
             ].map((faq, i) => (
               <Reveal key={i} delay={i * 0.04}>
@@ -1676,13 +1656,13 @@ export default function LandingPage() {
             <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
               Stop losing money on
               <br />
-              <span className="text-[#3B82F6]">broken global payouts</span>
+              <span className="text-[#3B82F6]">broken global payments</span>
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-5 max-w-md text-base text-white/45">
-              1% flat. Instant settlement. 180+ countries. Email-only. Go live
-              today.
+              Stablecoin payments from 1%. Instant settlement. 180+ countries.
+              Email-only. Go live today.
             </p>
           </Reveal>
           <Reveal delay={0.1}>
