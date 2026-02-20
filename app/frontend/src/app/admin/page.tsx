@@ -4,12 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePrivy } from "@privy-io/react-auth";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useConnection } from "@solana/wallet-adapter-react";
 import {
   Wallet,
   TrendingUp,
   DollarSign,
   Shield,
-  Users,
   Copy,
   Check,
   ExternalLink,
@@ -19,54 +19,73 @@ import {
   Loader2,
   X,
   ChevronRight,
-  Lock,
+  Download,
+  Activity,
+  BarChart3,
+  ArrowDownToLine,
 } from "lucide-react";
 import Link from "next/link";
-import { Connection, PublicKey } from "@solana/web3.js";
-import { getAssociatedTokenAddress } from "@solana/spl-token";
+import { Transaction } from "@solana/web3.js";
 
-// Constants
-const PROGRAM_ID = new PublicKey(
-  "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5",
-);
-const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
-const RPC_ENDPOINT = "https://api.devnet.solana.com";
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
 
-// Your Squads multisig vault address
-const SQUADS_VAULT = new PublicKey(
-  "DthkuDsPKR6MqqV28rVSBEqdgnuNtEU6QpLACZ7bCBpD",
-);
-
-// Authorized admin wallets (Squads members)
-// Set via NEXT_PUBLIC_ADMIN_WALLETS env var (comma-separated)
-// Example: NEXT_PUBLIC_ADMIN_WALLETS=wallet1,wallet2,wallet3
-const AUTHORIZED_ADMINS = (
-  process.env.NEXT_PUBLIC_ADMIN_WALLETS ||
-  "DthkuDsPKR6MqqV28rVSBEqdgnuNtEU6QpLACZ7bCBpD"
-)
-  .split(",")
-  .map((w) => w.trim())
-  .filter(Boolean);
-
-interface PlatformConfig {
-  authority: string;
-  treasury: string;
-  feeBps: number;
-  isActive: boolean;
+interface TreasuryData {
+  treasuryBalance: number;
+  treasuryBalanceRaw: string;
+  platformConfig: {
+    authority: string;
+    feeBps: number;
+    isActive: boolean;
+    totalVolume: string;
+    totalFees: string;
+    usdcMint: string;
+  } | null;
+  treasuryPDA: string;
+  configPDA: string;
+  programId: string;
+  cluster: string;
 }
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function formatUSD(amount: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+  }).format(amount);
+}
+
+function formatLamports(lamports: string): string {
+  const n = parseInt(lamports, 10);
+  if (isNaN(n)) return "$0.00";
+  return formatUSD(n / 1_000_000); // USDC has 6 decimals
+}
+
+function shortenAddress(addr: string): string {
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+}
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
 
 export default function AdminDashboardPage() {
   const { ready, authenticated, login } = usePrivy();
   const { solanaWallet, publicKey, connected } = useActiveWallet();
+  const { connection } = useConnection();
 
   const [loading, setLoading] = useState(true);
-  const [treasuryBalance, setTreasuryBalance] = useState<number>(0);
-  const [platformConfig, setPlatformConfig] = useState<PlatformConfig | null>(
-    null,
-  );
+  const [claiming, setClaiming] = useState(false);
+  const [data, setData] = useState<TreasuryData | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [claimTxSig, setClaimTxSig] = useState<string | null>(null);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -74,63 +93,103 @@ export default function AdminDashboardPage() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const shortenAddress = (address: string) => {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
-  };
-
-  const fetchPlatformData = useCallback(async () => {
+  // ── Fetch on-chain data ──────────────────────────────────────────────
+  const fetchTreasuryData = useCallback(async () => {
     setLoading(true);
     setError(null);
-
     try {
-      const connection = new Connection(RPC_ENDPOINT, "confirmed");
-
-      // Derive Platform Config PDA
-      const [platformConfigPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("platform_config")],
-        PROGRAM_ID,
-      );
-
-      // Get treasury ATA
-      const treasuryAta = await getAssociatedTokenAddress(
-        USDC_MINT,
-        platformConfigPDA,
-        true,
-      );
-
-      // Fetch treasury balance
-      try {
-        const balance = await connection.getTokenAccountBalance(treasuryAta);
-        setTreasuryBalance(parseFloat(balance.value.uiAmountString || "0"));
-      } catch {
-        setTreasuryBalance(0);
+      const res = await fetch("/api/admin/treasury");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `HTTP ${res.status}`);
       }
-
-      // Check if platform is initialized with Squads
-      const config: PlatformConfig = {
-        authority: SQUADS_VAULT.toBase58(),
-        treasury: treasuryAta.toBase58(),
-        feeBps: 100, // 1%
-        isActive: true,
-      };
-      setPlatformConfig(config);
-    } catch (err) {
-      console.error("Failed to fetch platform data:", err);
-      setError("Failed to load platform data");
+      const json: TreasuryData = await res.json();
+      setData(json);
+    } catch (err: any) {
+      console.error("Failed to fetch treasury data:", err);
+      setError(err.message || "Failed to load platform data");
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    if (connected) {
-      fetchPlatformData();
-    } else {
-      setLoading(false);
-    }
-  }, [connected, fetchPlatformData]);
+    fetchTreasuryData();
+  }, [fetchTreasuryData]);
 
-  // Not ready yet
+  // ── Claim fees ───────────────────────────────────────────────────────
+  const handleClaimFees = async () => {
+    if (!publicKey || !solanaWallet) {
+      setError("Connect your wallet first");
+      return;
+    }
+
+    setClaiming(true);
+    setError(null);
+    setSuccess(null);
+    setClaimTxSig(null);
+
+    try {
+      // 1. Ask server to build the unsigned transaction
+      const res = await fetch("/api/admin/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ authority: publicKey }),
+      });
+
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.error || "Failed to build claim tx");
+
+      // 2. Deserialize the transaction
+      const txBuffer = Buffer.from(body.transaction, "base64");
+      const tx = Transaction.from(txBuffer);
+
+      // 3. Sign with connected wallet via Privy
+      const signedTx = await (solanaWallet as any).signTransaction(tx);
+
+      // 4. Send the signed transaction
+      const sig = await connection.sendRawTransaction(signedTx.serialize(), {
+        skipPreflight: false,
+        preflightCommitment: "confirmed",
+      });
+
+      // 5. Confirm
+      await connection.confirmTransaction(sig, "confirmed");
+
+      setClaimTxSig(sig);
+      setSuccess(
+        `Claimed ${formatUSD(body.amount)} USDC! Funds sent to your wallet.`,
+      );
+
+      // Refresh data
+      fetchTreasuryData();
+    } catch (err: any) {
+      console.error("Claim error:", err);
+      if (err.message?.includes("User rejected")) {
+        setError("Transaction cancelled by user");
+      } else if (err.message?.includes("Unauthorized")) {
+        setError("Your wallet is not the platform authority");
+      } else {
+        setError(err.message || "Failed to claim fees");
+      }
+    } finally {
+      setClaiming(false);
+    }
+  };
+
+  const isAuthority =
+    publicKey && data?.platformConfig?.authority === publicKey;
+
+  const explorerBase =
+    data?.cluster === "mainnet-beta"
+      ? "https://explorer.solana.com"
+      : "https://explorer.solana.com";
+  const clusterParam =
+    data?.cluster === "mainnet-beta"
+      ? ""
+      : `?cluster=${data?.cluster || "devnet"}`;
+
+  // ── Loading / not ready ───────────────────────────────────────────────
   if (!ready) {
     return (
       <div className="min-h-screen bg-[#050507] flex items-center justify-center">
@@ -139,8 +198,8 @@ export default function AdminDashboardPage() {
     );
   }
 
-  // Not connected
-  if (!connected) {
+  // ── Not authenticated — show connect prompt ──────────────────────────
+  if (!authenticated) {
     return (
       <div className="min-h-screen bg-[#050507]">
         <div className="max-w-4xl mx-auto px-6 py-20">
@@ -153,14 +212,15 @@ export default function AdminDashboardPage() {
               <Key className="w-10 h-10 text-[#a78bfa]" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-4">
-              Platform Admin Dashboard
+              Platform Owner Dashboard
             </h1>
             <p className="text-white/50 mb-8 max-w-md mx-auto">
-              Connect an authorized wallet to access the admin dashboard.
+              Connect the platform authority wallet to view treasury balance and
+              claim accumulated fees.
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-[#050507] text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/90 transition-all "
+              className="inline-flex items-center gap-2 bg-[#a78bfa] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#9371e8] transition-all"
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -171,46 +231,19 @@ export default function AdminDashboardPage() {
     );
   }
 
-  // Check if wallet is authorized
-  const isAuthorized = publicKey
-    ? AUTHORIZED_ADMINS.includes(publicKey)
-    : false;
-
-  if (!isAuthorized || !publicKey) {
+  // ── Authenticated but wallet still loading ───────────────────────────
+  if (!publicKey) {
     return (
-      <div className="min-h-screen bg-[#050507]">
-        <div className="max-w-4xl mx-auto px-6 py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center"
-          >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-red-500/20 to-orange-500/20 flex items-center justify-center border border-red-500/30">
-              <Shield className="w-10 h-10 text-red-400" />
-            </div>
-            <h1 className="text-3xl font-bold text-white mb-4">
-              Access Denied
-            </h1>
-            <p className="text-white/50 mb-4 max-w-md mx-auto">
-              This wallet is not authorized to access the admin dashboard.
-            </p>
-            <p className="text-sm text-white/30 mb-8">
-              {publicKey
-                ? `Connected: ${publicKey.slice(0, 8)}...${publicKey.slice(-6)}`
-                : "No wallet connected"}
-            </p>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 bg-white/10 text-white px-6 py-3 rounded-xl font-medium hover:bg-white/20 transition-all"
-            >
-              Return Home
-            </Link>
-          </motion.div>
+      <div className="min-h-screen bg-[#050507] flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-[#a78bfa] mx-auto mb-4" />
+          <p className="text-white/50">Loading wallet...</p>
         </div>
       </div>
     );
   }
 
+  // ── Main dashboard ───────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-[#050507]">
       {/* Header */}
@@ -228,9 +261,10 @@ export default function AdminDashboardPage() {
           </div>
           <div className="flex items-center gap-4">
             <button
-              onClick={fetchPlatformData}
+              onClick={fetchTreasuryData}
               disabled={loading}
               className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all"
+              title="Refresh"
             >
               <RefreshCw
                 className={`w-5 h-5 text-white/50 ${
@@ -241,8 +275,13 @@ export default function AdminDashboardPage() {
             <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
               <Wallet className="w-4 h-4 text-[#a78bfa]" />
               <span className="text-sm text-white/70">
-                {shortenAddress(publicKey)}
+                {shortenAddress(publicKey!)}
               </span>
+              {isAuthority && (
+                <span className="ml-1 px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">
+                  Authority
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -258,8 +297,8 @@ export default function AdminDashboardPage() {
               exit={{ opacity: 0, y: -20 }}
               className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-3"
             >
-              <X className="w-5 h-5 text-red-400 flex-shrink-0" />
-              <span className="text-red-300">{error}</span>
+              <X className="w-5 h-5 text-red-400 shrink-0" />
+              <span className="text-red-300 flex-1">{error}</span>
               <button onClick={() => setError(null)} className="ml-auto">
                 <X className="w-4 h-4 text-red-400" />
               </button>
@@ -270,97 +309,125 @@ export default function AdminDashboardPage() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="mb-6 p-4 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center gap-3"
+              className="mb-6 p-4 rounded-xl bg-green-500/10 border border-green-500/20"
             >
-              <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
-              <span className="text-green-300">{success}</span>
-              <button onClick={() => setSuccess(null)} className="ml-auto">
-                <X className="w-4 h-4 text-green-400" />
-              </button>
+              <div className="flex items-center gap-3">
+                <Check className="w-5 h-5 text-green-400 shrink-0" />
+                <span className="text-green-300 flex-1">{success}</span>
+                <button onClick={() => setSuccess(null)} className="ml-auto">
+                  <X className="w-4 h-4 text-green-400" />
+                </button>
+              </div>
+              {claimTxSig && (
+                <a
+                  href={`${explorerBase}/tx/${claimTxSig}${clusterParam}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 mt-2 ml-8 text-sm text-green-400 hover:underline"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  View on Explorer
+                </a>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Squads Multisig Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/20"
-        >
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
-              <Users className="w-6 h-6 text-cyan-400" />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
-                Protected by Squads Multisig
-                <Lock className="w-4 h-4 text-cyan-400" />
-              </h2>
-              <p className="text-sm text-white/50 mb-3">
-                Platform authority is controlled by a Squads multisig. Fee
-                claims require multiple signatures.
-              </p>
-              <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href={`https://devnet.squads.so/squads/${SQUADS_VAULT.toBase58()}/home`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 transition-colors text-sm font-medium"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Open Squads Dashboard
-                </a>
-                <button
-                  onClick={() =>
-                    copyToClipboard(SQUADS_VAULT.toBase58(), "squads")
-                  }
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 text-white/70 hover:bg-white/10 transition-colors text-sm"
-                >
-                  {copied === "squads" ? (
-                    <Check className="w-4 h-4 text-green-400" />
-                  ) : (
-                    <Copy className="w-4 h-4" />
-                  )}
-                  {shortenAddress(SQUADS_VAULT.toBase58())}
-                </button>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {/* Treasury Balance */}
+        {/* Authority Warning */}
+        {data?.platformConfig && !isAuthority && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-2xl bg-[#a78bfa]/[0.06] border border-[#a78bfa]/20 p-6"
+            className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#a78bfa]/10 rounded-full blur-3xl" />
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0">
+                <Shield className="w-6 h-6 text-amber-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-white mb-1">
+                  Read-Only Mode
+                </h2>
+                <p className="text-sm text-white/50 mb-2">
+                  Your wallet is not the platform authority. You can view
+                  treasury data but cannot claim fees.
+                </p>
+                <p className="text-xs text-white/30">
+                  Authority:{" "}
+                  <code className="bg-white/10 px-1.5 py-0.5 rounded">
+                    {data.platformConfig.authority}
+                  </code>
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {/* Treasury Balance + Claim */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative overflow-hidden rounded-2xl bg-[#a78bfa]/[0.06] border border-[#a78bfa]/20 p-6 md:col-span-2"
+          >
+            <div className="absolute top-0 right-0 w-40 h-40 bg-[#a78bfa]/10 rounded-full blur-3xl" />
             <div className="relative">
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-1">
                 <div className="w-12 h-12 rounded-xl bg-[#a78bfa]/20 flex items-center justify-center">
                   <DollarSign className="w-6 h-6 text-[#a78bfa]" />
                 </div>
                 <div>
                   <p className="text-sm text-white/50">Treasury Balance</p>
-                  <p className="text-2xl font-bold text-white">
-                    ${treasuryBalance.toFixed(2)}
-                  </p>
+                  {loading ? (
+                    <div className="h-8 w-32 bg-white/10 rounded animate-pulse mt-1" />
+                  ) : (
+                    <p className="text-3xl font-bold text-white">
+                      {formatUSD(data?.treasuryBalance ?? 0)}
+                    </p>
+                  )}
                 </div>
               </div>
-              <a
-                href={`https://devnet.squads.so/squads/${SQUADS_VAULT.toBase58()}/transactions`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3 rounded-xl bg-[#050507] text-white font-semibold hover:bg-white/90 transition-all flex items-center justify-center gap-2"
-              >
-                <TrendingUp className="w-4 h-4" />
-                Claim via Squads
-              </a>
-              <p className="text-xs text-white/30 mt-2 text-center">
-                Requires multisig approval
+              <p className="text-xs text-white/30 mb-5 ml-15">
+                USDC accumulated from platform fees
               </p>
+
+              <button
+                onClick={handleClaimFees}
+                disabled={
+                  claiming ||
+                  loading ||
+                  !isAuthority ||
+                  (data?.treasuryBalance ?? 0) === 0
+                }
+                className={`w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${
+                  isAuthority && (data?.treasuryBalance ?? 0) > 0
+                    ? "bg-[#a78bfa] text-white hover:bg-[#9371e8] cursor-pointer"
+                    : "bg-white/5 text-white/30 cursor-not-allowed"
+                }`}
+              >
+                {claiming ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Claiming...
+                  </>
+                ) : (
+                  <>
+                    <ArrowDownToLine className="w-4 h-4" />
+                    {isAuthority
+                      ? `Claim ${formatUSD(
+                          data?.treasuryBalance ?? 0,
+                        )} to Wallet`
+                      : "Connect Authority Wallet to Claim"}
+                  </>
+                )}
+              </button>
+              {isAuthority && (data?.treasuryBalance ?? 0) > 0 && (
+                <p className="text-xs text-white/30 mt-2 text-center">
+                  Signs a transaction to transfer USDC from treasury PDA to your
+                  wallet
+                </p>
+              )}
             </div>
           </motion.div>
 
@@ -377,13 +444,19 @@ export default function AdminDashboardPage() {
               </div>
               <div>
                 <p className="text-sm text-white/50">Platform Fee</p>
-                <p className="text-2xl font-bold text-white">
-                  {platformConfig?.feeBps ? platformConfig.feeBps / 100 : 2}%
-                </p>
+                {loading ? (
+                  <div className="h-8 w-16 bg-white/10 rounded animate-pulse mt-1" />
+                ) : (
+                  <p className="text-2xl font-bold text-white">
+                    {data?.platformConfig
+                      ? `${(data.platformConfig.feeBps / 100).toFixed(1)}%`
+                      : "—"}
+                  </p>
+                )}
               </div>
             </div>
             <p className="text-sm text-white/30">
-              Fee taken from each payment processed through the platform
+              Fee collected from each payment
             </p>
           </motion.div>
 
@@ -397,30 +470,38 @@ export default function AdminDashboardPage() {
             <div className="flex items-center gap-3 mb-4">
               <div
                 className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                  platformConfig?.isActive ? "bg-green-500/20" : "bg-red-500/20"
+                  data?.platformConfig?.isActive
+                    ? "bg-green-500/20"
+                    : "bg-red-500/20"
                 }`}
               >
-                <Shield
+                <Activity
                   className={`w-6 h-6 ${
-                    platformConfig?.isActive ? "text-green-400" : "text-red-400"
+                    data?.platformConfig?.isActive
+                      ? "text-green-400"
+                      : "text-red-400"
                   }`}
                 />
               </div>
               <div>
-                <p className="text-sm text-white/50">Platform Status</p>
-                <p className="text-2xl font-bold text-white">
-                  {platformConfig?.isActive ? "Active" : "Inactive"}
-                </p>
+                <p className="text-sm text-white/50">Status</p>
+                {loading ? (
+                  <div className="h-8 w-20 bg-white/10 rounded animate-pulse mt-1" />
+                ) : (
+                  <p className="text-2xl font-bold text-white">
+                    {data?.platformConfig?.isActive ? "Active" : "Inactive"}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex items-center gap-2">
               <span
                 className={`w-2 h-2 rounded-full ${
-                  platformConfig?.isActive ? "bg-green-400" : "bg-red-400"
+                  data?.platformConfig?.isActive ? "bg-green-400" : "bg-red-400"
                 } animate-pulse`}
               />
               <span className="text-sm text-white/30">
-                {platformConfig?.isActive
+                {data?.platformConfig?.isActive
                   ? "Processing payments"
                   : "Payments paused"}
               </span>
@@ -428,7 +509,40 @@ export default function AdminDashboardPage() {
           </motion.div>
         </div>
 
-        {/* Treasury Details */}
+        {/* Lifetime Stats */}
+        {data?.platformConfig && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
+          >
+            <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <BarChart3 className="w-5 h-5 text-[#a78bfa]" />
+                <span className="text-sm text-white/50">
+                  Lifetime Volume (on-chain)
+                </span>
+              </div>
+              <p className="text-2xl font-bold text-white">
+                {formatLamports(data.platformConfig.totalVolume)}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <Download className="w-5 h-5 text-cyan-400" />
+                <span className="text-sm text-white/50">
+                  Lifetime Fees Collected (on-chain)
+                </span>
+              </div>
+              <p className="text-2xl font-bold text-white">
+                {formatLamports(data.platformConfig.totalFees)}
+              </p>
+            </div>
+          </motion.div>
+        )}
+
+        {/* On-Chain Details */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -441,153 +555,62 @@ export default function AdminDashboardPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-black/30 border border-white/5">
-              <span className="text-sm text-white/50 block mb-2">
-                Squads Vault (Authority)
-              </span>
-              <div className="flex items-center gap-2">
-                <code className="text-sm text-white font-mono flex-1 truncate">
-                  {SQUADS_VAULT.toBase58()}
-                </code>
-                <a
-                  href={`https://explorer.solana.com/address/${SQUADS_VAULT.toBase58()}?cluster=devnet`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4 text-white/50" />
-                </a>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-black/30 border border-white/5">
-              <span className="text-sm text-white/50 block mb-2">
-                Treasury Token Account
-              </span>
-              <div className="flex items-center gap-2">
-                <code className="text-sm text-white font-mono flex-1 truncate">
-                  {platformConfig?.treasury || "Loading..."}
-                </code>
-                <a
-                  href={`https://explorer.solana.com/address/${platformConfig?.treasury}?cluster=devnet`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4 text-white/50" />
-                </a>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-black/30 border border-white/5">
-              <span className="text-sm text-white/50 block mb-2">
-                USDC Mint
-              </span>
-              <div className="flex items-center gap-2">
-                <code className="text-sm text-white font-mono flex-1 truncate">
-                  {USDC_MINT.toBase58()}
-                </code>
-                <a
-                  href={`https://explorer.solana.com/address/${USDC_MINT.toBase58()}?cluster=devnet`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4 text-white/50" />
-                </a>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-black/30 border border-white/5">
-              <span className="text-sm text-white/50 block mb-2">
-                Program ID
-              </span>
-              <div className="flex items-center gap-2">
-                <code className="text-sm text-white font-mono flex-1 truncate">
-                  {PROGRAM_ID.toBase58()}
-                </code>
-                <a
-                  href={`https://explorer.solana.com/address/${PROGRAM_ID.toBase58()}?cluster=devnet`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4 text-white/50" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* How to Claim Fees */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="rounded-2xl bg-[#a78bfa]/[0.03] border border-white/10 p-6 mb-8"
-        >
-          <h2 className="text-xl font-bold text-white mb-4">
-            How to Claim Fees
-          </h2>
-          <div className="space-y-4">
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-[#a78bfa]/20 flex items-center justify-center flex-shrink-0 text-[#a78bfa] font-bold">
-                1
-              </div>
-              <div>
-                <p className="text-white font-medium">Open Squads Dashboard</p>
-                <p className="text-sm text-white/50">
-                  Go to{" "}
+            {[
+              {
+                label: "Platform Authority",
+                value: data?.platformConfig?.authority || "Loading...",
+                id: "authority",
+              },
+              {
+                label: "Treasury PDA",
+                value: data?.treasuryPDA || "Loading...",
+                id: "treasury",
+              },
+              {
+                label: "USDC Mint",
+                value: data?.platformConfig?.usdcMint || "Loading...",
+                id: "mint",
+              },
+              {
+                label: "Program ID",
+                value: data?.programId || "Loading...",
+                id: "program",
+              },
+            ].map((item) => (
+              <div
+                key={item.id}
+                className="p-4 rounded-xl bg-black/30 border border-white/5"
+              >
+                <span className="text-sm text-white/50 block mb-2">
+                  {item.label}
+                </span>
+                <div className="flex items-center gap-2">
+                  <code className="text-sm text-white font-mono flex-1 truncate">
+                    {item.value}
+                  </code>
+                  <button
+                    onClick={() => copyToClipboard(item.value, item.id)}
+                    className="p-2 rounded-lg hover:bg-white/10 transition-colors shrink-0"
+                    title="Copy"
+                  >
+                    {copied === item.id ? (
+                      <Check className="w-4 h-4 text-green-400" />
+                    ) : (
+                      <Copy className="w-4 h-4 text-white/50" />
+                    )}
+                  </button>
                   <a
-                    href={`https://devnet.squads.so/squads/${SQUADS_VAULT.toBase58()}/home`}
+                    href={`${explorerBase}/address/${item.value}${clusterParam}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#a78bfa] hover:underline"
+                    className="p-2 rounded-lg hover:bg-white/10 transition-colors shrink-0"
+                    title="View on Explorer"
                   >
-                    devnet.squads.so
-                  </a>{" "}
-                  and connect your wallet
-                </p>
+                    <ExternalLink className="w-4 h-4 text-white/50" />
+                  </a>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-[#a78bfa]/20 flex items-center justify-center flex-shrink-0 text-[#a78bfa] font-bold">
-                2
-              </div>
-              <div>
-                <p className="text-white font-medium">Create a Transaction</p>
-                <p className="text-sm text-white/50">
-                  Use &quot;Program Interaction&quot; to call{" "}
-                  <code className="text-xs bg-white/10 px-1 rounded">
-                    claim_platform_fees
-                  </code>{" "}
-                  on the Settlr program
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-[#a78bfa]/20 flex items-center justify-center flex-shrink-0 text-[#a78bfa] font-bold">
-                3
-              </div>
-              <div>
-                <p className="text-white font-medium">Get Signatures</p>
-                <p className="text-sm text-white/50">
-                  Other multisig members approve the transaction
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0 text-cyan-400 font-bold">
-                4
-              </div>
-              <div>
-                <p className="text-white font-medium">Execute</p>
-                <p className="text-sm text-white/50">
-                  Once threshold is met, execute the transaction to claim fees
-                  to the vault
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </motion.div>
 
@@ -595,7 +618,7 @@ export default function AdminDashboardPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.4 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-4"
         >
           <Link
@@ -619,14 +642,16 @@ export default function AdminDashboardPage() {
             <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 transition-transform" />
           </Link>
           <a
-            href={`https://devnet.squads.so/squads/${SQUADS_VAULT.toBase58()}/home`}
+            href={`${explorerBase}/address/${
+              data?.programId || ""
+            }${clusterParam}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
-              <Users className="w-5 h-5 text-white/50" />
-              <span className="text-white">Squads Multisig</span>
+              <ExternalLink className="w-5 h-5 text-white/50" />
+              <span className="text-white">Program on Explorer</span>
             </div>
             <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 transition-transform" />
           </a>

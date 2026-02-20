@@ -25,7 +25,7 @@ const demoCards = [
   {
     title: "Payout Demo Store",
     description:
-      "Full payout experience with worker tiers, batch payouts, and instant USDC settlement.",
+      "Full checkout experience with platform plans, add-ons, and instant USDC settlement.",
     href: "/demo/store",
     icon: Play,
     color: "#3B82F6",
@@ -64,7 +64,7 @@ const features = [
   "No wallet required",
   "Zero gas fees",
   "Instant settlement",
-  "No content restrictions",
+  "180+ countries",
 ];
 
 export default function DemoPage() {
@@ -330,9 +330,9 @@ export default function DemoPage() {
                     Powered by Kora Gasless
                   </h3>
                   <p className="text-white/50">
-                    Fans pay only USDC — no SOL needed for transaction fees. We
+                    Users pay only USDC — no SOL needed for transaction fees. We
                     cover the gas so checkout is seamless and friction-free for
-                    every fan and creator.
+                    every platform and user.
                   </p>
                 </div>
                 <Link
@@ -361,12 +361,12 @@ export default function DemoPage() {
               Ready to integrate?
             </h2>
             <p className="mb-8 text-white/50">
-              Add checkout and payouts to your creator platform in minutes. One
-              SDK, no card network gatekeeping.
+              Add payouts and checkout to your platform in minutes. One SDK, no
+              card network gatekeeping.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
-                href="/waitlist"
+                href="/onboarding"
                 className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-[#050507] transition-all hover:bg-white/90"
               >
                 Get Started

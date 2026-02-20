@@ -15,12 +15,16 @@ import {
   Rocket,
   ExternalLink,
   Play,
+  RefreshCw,
+  Vault,
 } from "lucide-react";
 
 const docsTabs = [
   { id: "quickstart", label: "Quick Start", icon: Rocket },
   { id: "payouts", label: "Payout API", icon: Book },
   { id: "react", label: "Checkout SDK", icon: Code2 },
+  { id: "subscriptions", label: "Subscriptions", icon: RefreshCw },
+  { id: "treasury", label: "Treasury", icon: Vault },
   { id: "playground", label: "Playground", icon: Play },
   { id: "api", label: "REST API", icon: Book },
   { id: "webhooks", label: "Webhooks", icon: Webhook },
@@ -32,6 +36,8 @@ type TabId =
   | "payouts"
   | "playground"
   | "react"
+  | "subscriptions"
+  | "treasury"
   | "api"
   | "webhooks"
   | "troubleshooting";
@@ -155,6 +161,8 @@ export default function DocsPage() {
                 {activeTab === "payouts" && <PayoutsContent />}
                 {activeTab === "playground" && <PlaygroundContent />}
                 {activeTab === "react" && <ReactSDKContent />}
+                {activeTab === "subscriptions" && <SubscriptionsContent />}
+                {activeTab === "treasury" && <TreasuryContent />}
                 {activeTab === "api" && <APIContent />}
                 {activeTab === "webhooks" && <WebhooksContent />}
                 {activeTab === "troubleshooting" && <TroubleshootingContent />}
@@ -357,7 +365,7 @@ const payout = await settlr.payouts.create({
 
 // payout.id     → "po_abc123"
 // payout.status → "sent"
-// payout.claimUrl → "https://pay.settlr.io/claim/po_abc123"`}
+// payout.claimUrl → "https://settlr.dev/claim/po_abc123"`}
         </CodeBlock>
 
         {/* Batch payouts */}
@@ -385,7 +393,7 @@ console.log(batch.status);   // "processing"`}
 
 // Statuses: "sent" → "claimed" → "settled"
 console.log(payout.status);    // "claimed"
-console.log(payout.claimedAt); // "2024-03-15T14:30:00Z"`}
+console.log(payout.claimedAt); // "2025-06-15T14:30:00Z"`}
         </CodeBlock>
 
         {/* List payouts */}
@@ -414,7 +422,7 @@ payouts.data.forEach(p => {
     "email": "alice@example.com",
     "amount": 250.00,
     "status": "claimed",
-    "claimedAt": "2024-03-15T14:30:00Z",
+    "claimedAt": "2025-06-15T14:30:00Z",
     "wallet": "7xKj...abc"
   }
 }`}
@@ -943,7 +951,7 @@ function APIContent() {
         {/* Base URL */}
         <div className="bg-gray-900 rounded-lg p-4 mb-6">
           <p className="text-white/30 text-sm mb-1">Base URL</p>
-          <code className="text-[#3B82F6]">https://api.settlr.io/v1</code>
+          <code className="text-[#3B82F6]">https://settlr.dev/api</code>
         </div>
 
         {/* Authentication */}
@@ -959,8 +967,8 @@ function APIContent() {
             .
           </p>
           <CodeBlock language="bash">
-            {`curl https://api.settlr.io/v1/payments \\
-  -H "Authorization: Bearer sk_test_demo_xxxxxxxxxxxx" \\
+            {`curl https://settlr.dev/api/payments \\
+  -H "X-API-Key: sk_test_demo_xxxxxxxxxxxx" \\
   -H "Content-Type: application/json"`}
           </CodeBlock>
         </div>
@@ -1000,8 +1008,8 @@ function APIContent() {
   "status": "sent",
   "email": "alice@example.com",
   "amount": 250.00,
-  "claimUrl": "https://pay.settlr.io/claim/po_abc123",
-  "createdAt": "2024-03-15T10:00:00Z"
+  "claimUrl": "https://settlr.dev/claim/po_abc123",
+  "createdAt": "2025-06-15T10:00:00Z"
 }`}
             </CodeBlock>
           </div>
@@ -1159,7 +1167,8 @@ function WebhooksContent() {
       <section>
         <h2 className="text-2xl font-bold mb-4">Webhooks</h2>
         <p className="text-white/50 mb-6">
-          Get notified when payments are completed.
+          Get notified in real-time when payments, payouts, and subscriptions
+          change state.
         </p>
 
         {/* Setup */}
@@ -1181,12 +1190,12 @@ function WebhooksContent() {
     "currency": "USDC",
     "recipient": "YOUR_WALLET_ADDRESS",
     "signature": "5xKj...abc",
-    "paidAt": "2024-01-15T11:30:00Z",
+    "paidAt": "2025-06-15T11:30:00Z",
     "metadata": {
       "orderId": "12345"
     }
   },
-  "timestamp": "2024-01-15T11:30:01Z"
+  "timestamp": "2025-06-15T11:30:01Z"
 }`}
         </CodeBlock>
 
@@ -1215,11 +1224,24 @@ export async function POST(req: NextRequest) {
   
   const event = JSON.parse(body);
   
-  if (event.event === 'payment.completed') {
-    const { id, amount, metadata } = event.data;
-    
-    // Fulfill the order
-    await fulfillOrder(metadata.orderId, id);
+  switch (event.event) {
+    case 'payment.completed':
+      await fulfillOrder(event.data.metadata.orderId, event.data.id);
+      break;
+    case 'payout.claimed':
+      await markPayoutClaimed(event.data.id, event.data.wallet);
+      break;
+    case 'payout.expired':
+      await handleExpiredPayout(event.data.id);
+      break;
+    case 'subscription.renewed':
+      await extendAccess(event.data.customerId, event.data.planId);
+      break;
+    case 'subscription.cancelled':
+      await revokeAccess(event.data.customerId);
+      break;
+    default:
+      console.log('Unhandled event:', event.event);
   }
   
   return NextResponse.json({ received: true });
@@ -1242,7 +1264,7 @@ export async function POST(req: NextRequest) {
                   payment.completed
                 </td>
                 <td className="px-4 py-3 text-white/50">
-                  Payment was successful and confirmed
+                  Payment was successful and confirmed on-chain
                 </td>
               </tr>
               <tr>
@@ -1261,6 +1283,70 @@ export async function POST(req: NextRequest) {
                   Payment failed due to an error
                 </td>
               </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  payment.refunded
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Payment was refunded to the customer
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  payout.created
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  New payout created and email sent to recipient
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  payout.claimed
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Recipient claimed the payout to their wallet
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  payout.expired
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Payout expired before being claimed (funds returned)
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  payout.failed
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Payout failed — email undeliverable or on-chain error
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  subscription.created
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  New subscription plan activated
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  subscription.renewed
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Recurring subscription payment processed
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  subscription.cancelled
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Subscription was cancelled by user or merchant
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -1271,6 +1357,270 @@ export async function POST(req: NextRequest) {
           <p className="text-white/50">
             Always verify the webhook signature before processing events. Never
             trust the payload without verification.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function SubscriptionsContent() {
+  return (
+    <div className="space-y-8">
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Subscriptions</h2>
+        <p className="text-white/50 mb-6">
+          Recurring USDC billing — create plans, manage subscribers, and handle
+          renewals automatically.
+        </p>
+
+        {/* Create a Plan */}
+        <h3 className="text-xl font-semibold mb-4">Create a Plan</h3>
+        <p className="text-white/50 mb-4">
+          Define a recurring plan that customers can subscribe to.
+        </p>
+        <CodeBlock language="tsx">
+          {`import { Settlr } from '@settlr/sdk';
+
+const settlr = new Settlr({ apiKey: 'sk_live_your_api_key' });
+
+const plan = await settlr.subscriptions.createPlan({
+  name: 'Pro Monthly',
+  amount: 29.00,
+  currency: 'USDC',
+  interval: 'month',       // 'week' | 'month' | 'year'
+  trialDays: 7,
+  metadata: { tier: 'pro' },
+});
+
+console.log(plan.id);   // "plan_abc123"
+console.log(plan.active); // true`}
+        </CodeBlock>
+
+        {/* Subscribe a Customer */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">
+          Subscribe a Customer
+        </h3>
+        <p className="text-white/50 mb-4">
+          Attach a customer to a plan. They&apos;ll be charged automatically
+          each billing cycle.
+        </p>
+        <CodeBlock language="tsx">
+          {`const subscription = await settlr.subscriptions.create({
+  planId: 'plan_abc123',
+  customerEmail: 'alice@example.com',
+  // Optional: pre-authorized wallet for auto-debit
+  customerWallet: '7xKj...abc',
+});
+
+// subscription.id         → "sub_xyz789"
+// subscription.status     → "active"
+// subscription.nextBillingAt → "2025-07-15T00:00:00Z"`}
+        </CodeBlock>
+
+        {/* List Subscriptions */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">List Subscriptions</h3>
+        <CodeBlock language="tsx">
+          {`const subs = await settlr.subscriptions.list({
+  status: 'active',
+  limit: 50,
+});
+
+subs.data.forEach(s => {
+  console.log(s.customerEmail, s.planId, s.status);
+});`}
+        </CodeBlock>
+
+        {/* Cancel */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">
+          Cancel a Subscription
+        </h3>
+        <CodeBlock language="tsx">
+          {`await settlr.subscriptions.cancel('sub_xyz789', {
+  // 'immediate' ends now, 'end_of_period' lets them use remaining time
+  cancelAt: 'end_of_period',
+});`}
+        </CodeBlock>
+
+        {/* Webhook events */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">
+          Subscription Webhooks
+        </h3>
+        <p className="text-white/50 mb-4">
+          Listen for subscription lifecycle events to keep your system in sync.
+        </p>
+        <div className="bg-gray-900 rounded-lg overflow-hidden">
+          <table className="w-full text-left">
+            <thead className="bg-gray-800">
+              <tr>
+                <th className="px-4 py-3 font-medium">Event</th>
+                <th className="px-4 py-3 font-medium">Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-800">
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  subscription.created
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  New subscription activated
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  subscription.renewed
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Recurring payment processed
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  subscription.cancelled
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Cancelled by user or merchant
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                  subscription.payment_failed
+                </td>
+                <td className="px-4 py-3 text-white/50">
+                  Renewal payment failed (will retry)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function TreasuryContent() {
+  return (
+    <div className="space-y-8">
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Treasury</h2>
+        <p className="text-white/50 mb-6">
+          Monitor your on-chain treasury, manage platform fees, and claim
+          accumulated revenue.
+        </p>
+
+        {/* Overview */}
+        <h3 className="text-xl font-semibold mb-4">How Treasury Works</h3>
+        <p className="text-white/50 mb-4">
+          Every payment processed through Settlr collects a configurable
+          platform fee (default 2%) into a program-owned treasury PDA.
+          Authorized signers can claim accumulated fees at any time.
+        </p>
+        <div className="bg-gray-900 rounded-lg p-6 border border-white/10 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div>
+              <p className="text-sm text-white/40 mb-1">Fee Collection</p>
+              <p className="text-lg font-semibold text-white">Automatic</p>
+              <p className="text-xs text-white/30">On every payment</p>
+            </div>
+            <div>
+              <p className="text-sm text-white/40 mb-1">Claim Method</p>
+              <p className="text-lg font-semibold text-white">
+                Multisig / Wallet
+              </p>
+              <p className="text-xs text-white/30">Authority-gated</p>
+            </div>
+            <div>
+              <p className="text-sm text-white/40 mb-1">Settlement</p>
+              <p className="text-lg font-semibold text-white">USDC</p>
+              <p className="text-xs text-white/30">Direct to your wallet</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Get Balance */}
+        <h3 className="text-xl font-semibold mb-4">Check Treasury Balance</h3>
+        <CodeBlock language="tsx">
+          {`const treasury = await settlr.treasury.getBalance();
+
+console.log(treasury.balance);       // 1250.50 (USDC)
+console.log(treasury.totalVolume);   // 62525.00
+console.log(treasury.totalFees);     // 1250.50
+console.log(treasury.feeBps);        // 200 (2.00%)
+console.log(treasury.isActive);      // true`}
+        </CodeBlock>
+
+        {/* Claim Fees */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">Claim Platform Fees</h3>
+        <p className="text-white/50 mb-4">
+          Only the on-chain authority (your wallet or Squads multisig) can claim
+          fees. The API returns an unsigned transaction for you to sign.
+        </p>
+        <CodeBlock language="tsx">
+          {`// 1. Request unsigned claim transaction
+const { transaction } = await settlr.treasury.claim({
+  authority: 'YOUR_AUTHORITY_PUBKEY',
+});
+
+// 2. Sign with your wallet
+const signed = await wallet.signTransaction(transaction);
+
+// 3. Send to network
+const sig = await connection.sendRawTransaction(signed.serialize());
+console.log('Claimed! Tx:', sig);`}
+        </CodeBlock>
+
+        {/* REST API */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">REST Endpoints</h3>
+        <div className="space-y-4">
+          <div className="border border-white/10 rounded-lg overflow-hidden">
+            <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
+              <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-sm font-mono">
+                GET
+              </span>
+              <code className="text-white">/api/admin/treasury</code>
+            </div>
+            <div className="p-4">
+              <p className="text-white/50 text-sm">
+                Returns treasury balance, platform config (fee BPS, authority,
+                total volume/fees), and PDA addresses.
+              </p>
+            </div>
+          </div>
+
+          <div className="border border-white/10 rounded-lg overflow-hidden">
+            <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
+              <span className="bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-1 rounded text-sm font-mono">
+                POST
+              </span>
+              <code className="text-white">/api/admin/claim</code>
+            </div>
+            <div className="p-4">
+              <p className="text-white/50 text-sm mb-2">
+                Builds an unsigned{" "}
+                <code className="text-[#3B82F6]">claim_platform_fees</code>{" "}
+                transaction.
+              </p>
+              <CodeBlock language="json">
+                {`{
+  "authority": "YOUR_AUTHORITY_PUBKEY"
+}`}
+              </CodeBlock>
+            </div>
+          </div>
+        </div>
+
+        {/* Admin Dashboard */}
+        <div className="bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#3B82F6] mb-2">
+            💡 Admin Dashboard
+          </h4>
+          <p className="text-white/50 text-sm">
+            Visit{" "}
+            <a href="/admin" className="text-[#3B82F6] hover:underline">
+              /admin
+            </a>{" "}
+            to see a visual treasury dashboard with real-time on-chain data,
+            claim button, and authority verification.
           </p>
         </div>
       </section>

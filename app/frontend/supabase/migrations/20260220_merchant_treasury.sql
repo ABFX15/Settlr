@@ -5,7 +5,7 @@
 -- Merchant balances (one per merchant per currency)
 CREATE TABLE IF NOT EXISTS merchant_balances (
     id TEXT PRIMARY KEY,
-    merchant_id TEXT NOT NULL REFERENCES merchants(id),
+    merchant_id TEXT NOT NULL,
     currency TEXT NOT NULL DEFAULT 'USDC',
     available NUMERIC NOT NULL DEFAULT 0,
     pending NUMERIC NOT NULL DEFAULT 0,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS merchant_balances (
 -- Treasury transaction ledger (immutable audit trail)
 CREATE TABLE IF NOT EXISTS treasury_transactions (
     id TEXT PRIMARY KEY,
-    merchant_id TEXT NOT NULL REFERENCES merchants(id),
+    merchant_id TEXT NOT NULL,
     type TEXT NOT NULL CHECK (type IN (
         'deposit',
         'payout_reserved',
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS treasury_transactions (
     )),
     amount NUMERIC NOT NULL,
     currency TEXT NOT NULL DEFAULT 'USDC',
-    payout_id TEXT REFERENCES payouts(id),
+    payout_id TEXT,
     tx_signature TEXT,
     description TEXT,
     balance_after NUMERIC NOT NULL,
@@ -52,11 +52,6 @@ CREATE INDEX IF NOT EXISTS idx_treasury_tx_created ON treasury_transactions(crea
 ALTER TABLE merchant_balances ENABLE ROW LEVEL SECURITY;
 ALTER TABLE treasury_transactions ENABLE ROW LEVEL SECURITY;
 
--- Service role full access
-CREATE POLICY "Service role full access on merchant_balances"
-    ON merchant_balances FOR ALL
-    USING (auth.role() = 'service_role');
-
-CREATE POLICY "Service role full access on treasury_transactions"
-    ON treasury_transactions FOR ALL
-    USING (auth.role() = 'service_role');
+-- Allow all operations (matches pattern used by merchants, checkout_sessions, payments, etc.)
+CREATE POLICY "Allow all for service role" ON merchant_balances FOR ALL USING (true);
+CREATE POLICY "Allow all for service role" ON treasury_transactions FOR ALL USING (true);

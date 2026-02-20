@@ -168,7 +168,7 @@ export default function LandingPage() {
                 areaServed: "Worldwide",
                 sameAs: [
                   "https://x.com/SettlrPay",
-                  "https://github.com/ABFX15/x402-hack-payment",
+                  "https://github.com/settlr",
                 ],
               },
               {
@@ -903,7 +903,8 @@ export default function LandingPage() {
             Most platforms need to both{" "}
             <strong className="text-white/70">collect money</strong> from users
             and <strong className="text-white/70">pay people</strong> globally.
-            Settlr handles both sides.
+            Settlr handles both sides. Built on Solana today—multi-chain support
+            coming soon.
           </p>
         </Reveal>
 
@@ -1275,6 +1276,19 @@ export default function LandingPage() {
             ))}
           </div>
         </Reveal>
+
+        {/* CTA after comparison */}
+        <Reveal delay={0.2}>
+          <div className="mt-10 text-center">
+            <Link
+              href="/onboarding"
+              className="group inline-flex items-center gap-2 rounded-xl bg-[#3B82F6] px-8 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#3B82F6]/90"
+            >
+              Start Saving Today
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </Reveal>
       </section>
 
       {/* ============================
@@ -1350,6 +1364,132 @@ export default function LandingPage() {
                   <p className="mt-2 text-sm leading-relaxed text-white/40">
                     {f.text}
                   </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================
+          Pricing
+         ============================ */}
+      <section className="border-b border-white/[0.04]">
+        <div className="mx-auto max-w-5xl px-6 py-28">
+          <Reveal>
+            <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+              Pricing
+            </p>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
+              Simple, transparent pricing
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="mt-4 max-w-xl text-white/45">
+              No monthly fees. No hidden costs. Pay only when you move money.
+            </p>
+          </Reveal>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                name: "Starter",
+                fee: "2%",
+                description: "For early-stage platforms",
+                features: [
+                  "Up to 500 payouts/month",
+                  "Email-based claiming",
+                  "Webhook notifications",
+                  "Devnet sandbox",
+                  "Community support",
+                ],
+                cta: "Get Started",
+                href: "/onboarding",
+                highlighted: false,
+              },
+              {
+                name: "Growth",
+                fee: "1.5%",
+                description: "For scaling platforms",
+                features: [
+                  "Unlimited payouts",
+                  "Batch payouts (CSV & API)",
+                  "Recurring subscriptions",
+                  "Priority support",
+                  "Custom branding",
+                  "Advanced analytics",
+                ],
+                cta: "Get Started",
+                href: "/onboarding",
+                highlighted: true,
+              },
+              {
+                name: "Enterprise",
+                fee: "1%",
+                description: "Custom terms & volume pricing",
+                features: [
+                  "Everything in Growth",
+                  "Dedicated treasury",
+                  "Multi-sig support",
+                  "SOC 2 report",
+                  "Custom integrations",
+                  "Dedicated account manager",
+                ],
+                cta: "Contact Us",
+                href: "mailto:team@settlr.dev",
+                highlighted: false,
+              },
+            ].map((tier, i) => (
+              <Reveal key={tier.name} delay={i * 0.08}>
+                <div
+                  className={`relative flex h-full flex-col rounded-2xl border p-8 ${
+                    tier.highlighted
+                      ? "border-[#3B82F6]/50 bg-[#3B82F6]/[0.04]"
+                      : "border-white/[0.06] bg-white/[0.02]"
+                  }`}
+                >
+                  {tier.highlighted && (
+                    <span className="absolute -top-3 left-6 rounded-full bg-[#3B82F6] px-3 py-1 text-xs font-semibold text-white">
+                      Most Popular
+                    </span>
+                  )}
+                  <h3 className="text-lg font-semibold text-white">
+                    {tier.name}
+                  </h3>
+                  <p className="mt-1 text-sm text-white/40">
+                    {tier.description}
+                  </p>
+                  <div className="mt-6 flex items-baseline gap-1">
+                    <span className="text-4xl font-bold text-white">
+                      {tier.fee}
+                    </span>
+                    <span className="text-sm text-white/40">
+                      per transaction
+                    </span>
+                  </div>
+                  <ul className="mt-8 flex-1 space-y-3">
+                    {tier.features.map((f) => (
+                      <li
+                        key={f}
+                        className="flex items-start gap-2 text-sm text-white/50"
+                      >
+                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#3B82F6]" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href={tier.href}
+                    className={`mt-8 block rounded-xl py-3 text-center text-sm font-semibold transition-colors ${
+                      tier.highlighted
+                        ? "bg-[#3B82F6] text-white hover:bg-[#3B82F6]/90"
+                        : "bg-white/[0.06] text-white hover:bg-white/[0.1]"
+                    }`}
+                  >
+                    {tier.cta}
+                  </Link>
                 </div>
               </Reveal>
             ))}

@@ -19,87 +19,87 @@ interface Plan {
 const plans: Plan[] = [
   {
     id: "1",
-    name: "Fan",
-    description: "Follow your favorite creators",
-    price: 4.99,
+    name: "Starter",
+    description: "For early-stage platforms",
+    price: 49.0,
     billing: "/month",
-    icon: "❤️",
+    icon: "🚀",
     features: [
-      "Access free content",
-      "Comment & react",
-      "Community chat",
-      "Creator updates",
+      "Up to 100 payouts/month",
+      "Email-based claiming",
+      "Webhook notifications",
+      "Devnet sandbox",
     ],
   },
   {
     id: "2",
-    name: "Supporter",
-    description: "Unlock exclusive creator content",
-    price: 9.99,
+    name: "Growth",
+    description: "For scaling platforms",
+    price: 149.0,
     billing: "/month",
-    icon: "⭐",
+    icon: "📈",
     features: [
-      "All Fan features",
-      "Exclusive posts & media",
-      "Behind-the-scenes content",
-      "Priority DMs",
-      "Supporter badge",
+      "Up to 1,000 payouts/month",
+      "Batch payouts (CSV & API)",
+      "Recurring subscriptions",
+      "Priority support",
+      "Custom branding",
     ],
     badge: "Most Popular",
     popular: true,
   },
   {
     id: "3",
-    name: "VIP",
-    description: "Get the full creator experience",
-    price: 24.99,
+    name: "Scale",
+    description: "For high-volume operations",
+    price: 499.0,
     billing: "/month",
-    icon: "💎",
+    icon: "⚡",
     features: [
-      "All Supporter features",
-      "1-on-1 video calls",
-      "Custom content requests",
-      "Early access to drops",
-      "VIP badge & perks",
-      "Private group access",
+      "Unlimited payouts",
+      "Dedicated treasury account",
+      "SOC 2 compliance report",
+      "Gasless transactions",
+      "Multi-sig support",
+      "99.99% uptime SLA",
     ],
   },
   {
     id: "4",
-    name: "Lifetime",
-    description: "One-time purchase, forever access",
-    price: 199.0,
-    billing: "one-time",
-    icon: "🏆",
+    name: "Enterprise",
+    description: "Custom deployment & support",
+    price: 999.0,
+    billing: "/month",
+    icon: "🏢",
     features: [
-      "All VIP features forever",
-      "Lifetime supporter badge",
-      "All future content included",
-      "Exclusive merch drops",
-      "Creator shout-out",
-      "Founding member perks",
+      "Everything in Scale",
+      "On-prem deployment option",
+      "Dedicated account manager",
+      "Custom integrations",
+      "Volume-based pricing",
+      "White-label checkout",
     ],
-    badge: "Best Value",
+    badge: "Custom",
   },
 ];
 
 const addons: Plan[] = [
   {
     id: "a1",
-    name: "Tip Jar",
-    description: "Send a one-time $10 USDC tip to this creator",
-    price: 10.0,
-    billing: "one-time",
-    icon: "💸",
+    name: "One-Click Checkout Widget",
+    description: "Embeddable payment button for any website or app",
+    price: 29.0,
+    billing: "/month",
+    icon: "🔗",
     features: [],
   },
   {
     id: "a2",
-    name: "Custom Content Request",
-    description: "Request a personalized video or photo set",
-    price: 49.0,
-    billing: "one-time",
-    icon: "🎨",
+    name: "Privacy Shield (FHE)",
+    description: "Fully homomorphic encryption for sensitive payout data",
+    price: 99.0,
+    billing: "/month",
+    icon: "🔒",
     features: [],
   },
 ];
@@ -142,7 +142,7 @@ export default function DemoStorePage() {
       `/checkout?amount=${total.toFixed(
         2,
       )}&merchant=Settlr&to=${demoWallet}&memo=${encodeURIComponent(
-        `Payout: ${itemNames}`,
+        `Checkout: ${itemNames}`,
       )}`,
     );
   };
@@ -154,19 +154,19 @@ export default function DemoStorePage() {
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
-              href="/"
+              href="/demo"
               className="p-2 -ml-2 rounded-lg hover:bg-[var(--accent-muted)] transition-colors"
-              title="Exit demo"
+              title="Back to demos"
             >
               <span className="text-xl">✕</span>
             </Link>
-            <span className="text-3xl">🎤</span>
+            <span className="text-3xl">💳</span>
             <div>
               <h1 className="text-xl font-bold text-[var(--text-primary)]">
-                Settlr Payouts
+                Settlr Platform Plans
               </h1>
               <p className="text-xs text-[var(--text-muted)]">
-                Payout Demo • Pay with USDC
+                Demo Store • Pay with USDC
               </p>
             </div>
           </div>
@@ -192,13 +192,13 @@ export default function DemoStorePage() {
       <section className="bg-gradient-to-b from-[var(--accent-muted)] to-transparent py-10 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
-            See payouts in action.
+            Pick a plan. Pay with USDC.
           </h2>
           <p className="text-[var(--text-secondary)] max-w-md mx-auto">
-            Try a demo payout — pick a tier and checkout.
+            Try the checkout flow — select a plan and complete payment.
             <span className="text-[var(--accent-primary)] font-medium">
               {" "}
-              Pay with USDC — zero gas fees.
+              Gasless • Instant settlement.
             </span>
           </p>
         </div>
@@ -207,7 +207,7 @@ export default function DemoStorePage() {
       {/* Pricing Plans */}
       <section className="max-w-6xl mx-auto px-4 py-8">
         <h3 className="text-sm font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-6">
-          Membership Tiers
+          Platform Plans
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan) => {
@@ -239,7 +239,7 @@ export default function DemoStorePage() {
 
                   <div className="flex items-baseline gap-1 mb-4">
                     <span className="text-3xl font-bold text-[var(--accent-primary)]">
-                      ${plan.price.toFixed(0)}
+                      ${plan.price.toFixed(2)}
                     </span>
                     <span className="text-sm text-[var(--text-muted)]">
                       USDC {plan.billing}
@@ -272,7 +272,7 @@ export default function DemoStorePage() {
                         : "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[var(--accent-primary)] hover:text-white"
                     }`}
                   >
-                    {isSelected ? "✓ Selected" : "Subscribe"}
+                    {isSelected ? "✓ Selected" : "Select Plan"}
                   </button>
                 </div>
               </div>
@@ -308,7 +308,7 @@ export default function DemoStorePage() {
                     </h4>
                   </div>
                   <span className="text-lg font-bold text-[var(--accent-primary)]">
-                    ${addon.price.toFixed(0)}
+                    ${addon.price.toFixed(2)}
                   </span>
                 </div>
                 <p className="text-sm text-[var(--text-muted)] mb-3">
@@ -344,8 +344,8 @@ export default function DemoStorePage() {
                 Pay with USDC • Zero Gas Fees
               </h3>
               <p className="text-sm text-[var(--text-muted)]">
-                Fans pay with USDC — no SOL required. Settlr covers the gas so
-                checkout is frictionless.
+                Pay with USDC — no SOL required. Settlr covers the gas so
+                checkout is seamless for every user.
               </p>
             </div>
           </div>
@@ -375,9 +375,9 @@ export default function DemoStorePage() {
             {selectedItems.length === 0 ? (
               <div className="p-8 text-center">
                 <span className="text-6xl mb-4 block">🛒</span>
-                <p className="text-[var(--text-muted)]">No plans selected</p>
+                <p className="text-[var(--text-muted)]">No items selected</p>
                 <p className="text-sm text-[var(--text-muted)] mt-2">
-                  Pick a subscription plan to get started.
+                  Pick a plan to get started.
                 </p>
               </div>
             ) : (
@@ -439,7 +439,7 @@ export default function DemoStorePage() {
                     onClick={handleCheckout}
                     className="w-full py-4 bg-[var(--accent-primary)] text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
                   >
-                    Subscribe & Pay
+                    Pay with USDC
                   </button>
 
                   <p className="text-xs text-center text-[var(--text-muted)]">

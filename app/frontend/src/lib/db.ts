@@ -766,11 +766,18 @@ export async function getOrCreateMerchantByWallet(walletAddress: string): Promis
     if (existing) return existing;
 
     // Auto-create a merchant record for this wallet
-    return createMerchant({
-        name: `Merchant ${walletAddress.slice(0, 8)}`,
-        walletAddress,
-        webhookUrl: null,
-    });
+    try {
+        return await createMerchant({
+            name: `Merchant ${walletAddress.slice(0, 8)}`,
+            walletAddress,
+            webhookUrl: null,
+        });
+    } catch {
+        // Race condition: another request already created this merchant
+        const retry = await getMerchantByWallet(walletAddress);
+        if (retry) return retry;
+        throw new Error("Failed to get or create merchant for wallet");
+    }
 }
 
 export async function createMerchant(
