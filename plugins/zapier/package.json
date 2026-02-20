@@ -1,0 +1,25 @@
+{
+  "name": "@settlr/zapier",
+  "version": "1.0.0",
+  "description": "Settlr Zapier integration — trigger payout actions from 8,000+ apps",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --passWithNoTests",
+    "validate": "zapier validate",
+    "push": "zapier push"
+  },
+  "dependencies": {
+    "zapier-platform-core": "^15.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "jest": "^29.7.0",
+    "typescript": "^5.3.3",
+    "zapier-platform-cli": "^15.5.0"
+  },
+  "zapier": {
+    "id": 0,
+    "key": "settlr"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "display_information": {
+    "name": "Settlr",
+    "description": "Send USDC payments from Slack",
+    "background_color": "#4A154B",
+    "long_description": "Settlr Slack bot lets your team send stablecoin payments directly from Slack. Use /pay to send USDC to anyone by email, /pay-batch for bulk payouts via CSV, and /pay-status to check transaction status. Supports approval workflows for payments above a configurable threshold."
+  },
+  "features": {
+    "bot_user": {
+      "display_name": "Settlr Payments",
+      "always_online": true
+    },
+    "slash_commands": [
+      {
+        "command": "/pay",
+        "url": "https://your-domain.com/slack/events",
+        "description": "Send USDC to an email address",
+        "usage_hint": "<email> <amount> [memo]",
+        "should_escape": false
+      },
+      {
+        "command": "/pay-batch",
+        "url": "https://your-domain.com/slack/events",
+        "description": "Send batch payouts from CSV",
+        "usage_hint": "email,amount,memo (one per line)",
+        "should_escape": false
+      },
+      {
+        "command": "/pay-status",
+        "url": "https://your-domain.com/slack/events",
+        "description": "Check payout status",
+        "usage_hint": "<payout_id>",
+        "should_escape": false
+      },
+      {
+        "command": "/pay-balance",
+        "url": "https://your-domain.com/slack/events",
+        "description": "Check wallet USDC balance",
+        "should_escape": false
+      }
+    ]
+  },
+  "oauth_config": {
+    "scopes": {
+      "bot": ["commands", "chat:write", "chat:write.public", "files:read"]
+    }
+  },
+  "settings": {
+    "interactivity": {
+      "is_enabled": true,
+      "request_url": "https://your-domain.com/slack/events"
+    },
+    "event_subscriptions": {
+      "request_url": "https://your-domain.com/slack/events"
+    },
+    "socket_mode_enabled": true
+  }
+}

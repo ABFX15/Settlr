@@ -1,0 +1,21 @@
+{
+  "name": "@settlr/slack-bot",
+  "version": "1.0.0",
+  "description": "Settlr Slack bot — send USDC payments with /pay slash commands",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "ts-node src/app.ts"
+  },
+  "dependencies": {
+    "@slack/bolt": "^3.17.0",
+    "csv-parse": "^5.5.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

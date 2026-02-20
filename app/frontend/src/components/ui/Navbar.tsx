@@ -14,6 +14,7 @@ import {
   Briefcase,
   ArrowUpRight,
   ArrowDownLeft,
+  Plug,
 } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
 
@@ -22,6 +23,7 @@ const navLinks = [
   { href: "/demo", label: "Demo" },
   { href: "/docs", label: "Docs" },
   { href: "/pricing", label: "Pricing" },
+  { href: "/integrations", label: "Integrations" },
   { href: "/blog", label: "Blog" },
   { href: "/help", label: "Support" },
 ];

@@ -1,0 +1,226 @@
+{
+  "name": "Settlr USDC Payments",
+  "description": "Accept and send USDC stablecoin payments. Drag-and-drop checkout, payout actions, and payment status triggers for Bubble workflows.",
+  "version": "1.0.0",
+  "author": "Settlr",
+  "website": "https://settlr.dev",
+  "category": "Payments",
+  "subcategory": "Crypto / Stablecoin",
+
+  "shared_headers": {
+    "X-API-Key": "<api_key>",
+    "Content-Type": "application/json"
+  },
+
+  "initialize": {
+    "api_key": {
+      "type": "text",
+      "label": "Settlr API Key",
+      "is_private": true,
+      "description": "Your API key from settlr.dev/dashboard/api-keys"
+    },
+    "base_url": {
+      "type": "text",
+      "label": "Base URL",
+      "default": "https://settlr.dev",
+      "description": "Leave default unless self-hosting."
+    }
+  },
+
+  "api_calls": {
+    "create_payment": {
+      "method": "POST",
+      "url": "<base_url>/api/payments",
+      "description": "Create a USDC payment link for checkout.",
+      "body": {
+        "amount": "<amount>",
+        "currency": "USDC",
+        "memo": "<memo>",
+        "redirectUrl": "<redirect_url>",
+        "metadata": {
+          "source": "bubble",
+          "bubble_user": "<bubble_user_id>"
+        }
+      },
+      "parameters": {
+        "amount": {
+          "type": "number",
+          "label": "Amount (USDC)",
+          "required": true
+        },
+        "memo": { "type": "text", "label": "Description", "required": false },
+        "redirect_url": {
+          "type": "text",
+          "label": "Success Redirect URL",
+          "required": false
+        },
+        "bubble_user_id": {
+          "type": "text",
+          "label": "Bubble User ID",
+          "required": false
+        }
+      },
+      "returns": {
+        "id": "text",
+        "amount": "number",
+        "status": "text",
+        "checkoutUrl": "text",
+        "createdAt": "text"
+      }
+    },
+
+    "send_payout": {
+      "method": "POST",
+      "url": "<base_url>/api/payouts",
+      "description": "Send USDC to a recipient by email.",
+      "body": {
+        "email": "<email>",
+        "amount": "<amount>",
+        "currency": "USDC",
+        "memo": "<memo>",
+        "metadata": {
+          "source": "bubble"
+        }
+      },
+      "parameters": {
+        "email": {
+          "type": "text",
+          "label": "Recipient Email",
+          "required": true
+        },
+        "amount": {
+          "type": "number",
+          "label": "Amount (USDC)",
+          "required": true
+        },
+        "memo": { "type": "text", "label": "Memo", "required": false }
+      },
+      "returns": {
+        "id": "text",
+        "email": "text",
+        "amount": "number",
+        "status": "text",
+        "claimUrl": "text",
+        "createdAt": "text"
+      }
+    },
+
+    "send_batch_payout": {
+      "method": "POST",
+      "url": "<base_url>/api/payouts/batch",
+      "description": "Send USDC to multiple recipients at once.",
+      "body": {
+        "payouts": "<payouts_json>"
+      },
+      "parameters": {
+        "payouts_json": {
+          "type": "text",
+          "label": "Payouts JSON",
+          "required": true,
+          "description": "JSON array: [{\"email\":\"...\",\"amount\":100,\"memo\":\"...\"}]"
+        }
+      },
+      "returns": {
+        "id": "text",
+        "status": "text",
+        "total": "number",
+        "count": "number"
+      }
+    },
+
+    "get_payout": {
+      "method": "GET",
+      "url": "<base_url>/api/payouts/<payout_id>",
+      "description": "Get a payout by ID.",
+      "parameters": {
+        "payout_id": { "type": "text", "label": "Payout ID", "required": true }
+      },
+      "returns": {
+        "id": "text",
+        "email": "text",
+        "amount": "number",
+        "status": "text",
+        "claimUrl": "text",
+        "recipientWallet": "text",
+        "txSignature": "text",
+        "createdAt": "text",
+        "claimedAt": "text"
+      }
+    },
+
+    "get_payment": {
+      "method": "GET",
+      "url": "<base_url>/api/payments/<payment_id>",
+      "description": "Get a payment by ID.",
+      "parameters": {
+        "payment_id": {
+          "type": "text",
+          "label": "Payment ID",
+          "required": true
+        }
+      },
+      "returns": {
+        "id": "text",
+        "amount": "number",
+        "status": "text",
+        "txSignature": "text",
+        "confirmedAt": "text"
+      }
+    },
+
+    "list_payouts": {
+      "method": "GET",
+      "url": "<base_url>/api/payouts",
+      "description": "List payouts for the authenticated merchant.",
+      "parameters": {
+        "status": {
+          "type": "text",
+          "label": "Filter by status",
+          "required": false
+        },
+        "limit": { "type": "number", "label": "Max results", "required": false }
+      },
+      "returns_list": true,
+      "returns": {
+        "id": "text",
+        "email": "text",
+        "amount": "number",
+        "status": "text",
+        "createdAt": "text"
+      }
+    }
+  },
+
+  "elements": {
+    "SettlrCheckout": {
+      "description": "Embeddable USDC checkout button. Drop onto any page to accept payments.",
+      "category": "visual elements",
+      "fields": {
+        "amount": { "type": "number", "label": "Amount (USDC)", "default": 0 },
+        "description": { "type": "text", "label": "Description" },
+        "button_text": {
+          "type": "text",
+          "label": "Button Text",
+          "default": "Pay with USDC"
+        },
+        "button_color": {
+          "type": "text",
+          "label": "Button Color",
+          "default": "#3B82F6"
+        },
+        "redirect_url": { "type": "text", "label": "Success URL" }
+      },
+      "events": {
+        "payment_created": "Triggered when a payment is created",
+        "payment_confirmed": "Triggered when payment is confirmed on-chain",
+        "payment_failed": "Triggered when payment fails"
+      },
+      "exposed_states": {
+        "payment_id": "text",
+        "checkout_url": "text",
+        "payment_status": "text",
+        "tx_signature": "text"
+      }
+    }
+  }
+}
