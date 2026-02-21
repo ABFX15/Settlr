@@ -31,18 +31,22 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Stablecoin Payment Infrastructure for Platforms | Settlr",
-    template: "%s | Settlr — Stablecoin Payment Infrastructure",
+    default: "Send USDC to Anyone by Email — Global Payout API | Settlr",
+    template: "%s | Settlr — Global Payout API",
   },
   description:
-    "Stablecoin payment infrastructure for platforms. Send and receive USDC payments globally — pay anyone in 180+ countries with just their email. Instant settlement, 1% flat, no bank details needed.",
+    "Pay contractors and freelancers in 180+ countries — no bank details, no wire fees, no frozen accounts. 1% flat, instant settlement. The Stripe alternative for global payouts.",
   keywords: [
-    "stablecoin payment infrastructure",
-    "USDC payments",
-    "stablecoin payouts",
-    "crypto payment API",
-    "email-based payments",
-    "non-custodial payments",
+    "international payout API",
+    "pay contractors internationally",
+    "global payroll alternative",
+    "cross-border payments",
+    "marketplace payout software",
+    "Stripe alternative payouts",
+    "pay freelancers globally",
+    "USDC payment API",
+    "crypto payout platform",
+    "send money without bank account",
   ],
   authors: [{ name: "Settlr" }],
   creator: "Settlr",
@@ -56,23 +60,23 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://settlr.dev",
     siteName: "Settlr",
-    title: "Stablecoin Payment Infrastructure for Platforms | Settlr",
+    title: "Send USDC to Anyone by Email — Global Payout API | Settlr",
     description:
-      "Stablecoin payment infrastructure for platforms. Send and receive USDC payments globally. Pay anyone in 180+ countries with just their email.",
+      "Tired of $25 wire fees, frozen PayPal accounts, and 5-day settlement? Pay anyone in 180+ countries with just an email. 1% flat, settles in seconds.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Settlr — Stablecoin Payment Infrastructure",
+        alt: "Settlr — Pay Anyone, Anywhere, With Just Their Email",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Stablecoin Payment Infrastructure for Platforms | Settlr",
+    title: "Send USDC to Anyone by Email — Global Payout API | Settlr",
     description:
-      "Stablecoin payment infrastructure for platforms. Send and receive USDC globally. 1% flat, instant settlement, 180+ countries.",
+      "Stop losing 5%+ to PayPal or $25/wire. Pay contractors in 180+ countries instantly. 1% flat. No bank details needed.",
     images: ["/og-image.png"],
     creator: "@SettlrPay",
   },

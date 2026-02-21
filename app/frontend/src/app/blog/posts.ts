@@ -901,4 +901,354 @@ export async function POST(req: Request) {
       <p>Building something in a high-risk vertical and not sure if Settlr is the right fit? Drop us a line at <a href="mailto:adam@settlr.dev">adam@settlr.dev</a> — we're happy to walk you through the integration and answer questions about your specific use case.</p>
     `,
     },
+
+    // ─── SEO pain-point content pages ───────────────────
+    {
+        slug: "best-way-to-pay-freelancers-globally",
+        title: "Best Way to Pay Freelancers Globally in 2026 (Without Wire Fees or PayPal Holds)",
+        excerpt:
+            "You've got freelancers in the Philippines, Kenya, Brazil, and Poland. PayPal takes 5%. Wires cost $25 each. Wise caps your volume. Here's what actually works at scale.",
+        date: "2026-02-20",
+        author: "Adam Bryant",
+        readTime: "8 min read",
+        tags: ["pay freelancers globally", "international payments", "freelancer payouts", "PayPal alternative"],
+        content: `
+      <p>If you're a founder, ops lead, or finance team paying freelancers in more than one country, you already know the pain. <strong>PayPal charges 5%+ on international transfers</strong> and randomly freezes accounts. Wires cost <strong>$25–50 per transaction</strong>. Payoneer has a complex onboarding process. Wise works for one-off transfers but breaks down at scale.</p>
+
+      <p>And none of them were built for platforms that need to pay 50, 500, or 5,000 freelancers programmatically every week.</p>
+
+      <h2>The Real Cost of Paying Freelancers Internationally</h2>
+
+      <p>Let's do the math for a platform paying 200 freelancers $75 each per month ($15,000 total volume):</p>
+
+      <table>
+        <tr><th>Method</th><th>Fee per payout</th><th>Monthly cost</th><th>% of volume</th></tr>
+        <tr><td>Wire transfer</td><td>$25–50</td><td>$5,000–10,000</td><td>33–66%</td></tr>
+        <tr><td>PayPal (international)</td><td>~5% + FX</td><td>$750+</td><td>5%+</td></tr>
+        <tr><td>Payoneer</td><td>2% + $1.50</td><td>$700</td><td>4.7%</td></tr>
+        <tr><td>Wise (batch)</td><td>~1.5% avg</td><td>$225</td><td>1.5%</td></tr>
+        <tr><td><strong>Settlr</strong></td><td><strong>1% flat</strong></td><td><strong>$150</strong></td><td><strong>1%</strong></td></tr>
+      </table>
+
+      <p>That's <strong>$4,850 in savings per month</strong> vs wire transfers, or <strong>$600/month vs PayPal</strong>. Over a year, you're looking at $7,200–58,000 saved — depending on which rail you're replacing.</p>
+
+      <h2>What Freelancers Actually Want</h2>
+
+      <p>We've talked to hundreds of freelancers in emerging markets. Their asks are surprisingly simple:</p>
+
+      <ul>
+        <li><strong>Get paid fast.</strong> Not "3–5 business days fast." Same-day fast. Ideally instant.</li>
+        <li><strong>No surprise fees.</strong> They don't want to receive $68 when they invoiced $75 because of hidden FX fees and intermediary bank charges.</li>
+        <li><strong>No complex onboarding.</strong> They don't want to submit passport scans, utility bills, and bank statements just to receive a $50 payment.</li>
+        <li><strong>Cash out on their terms.</strong> Local currency when they want it, hold in dollars when their local currency is volatile.</li>
+      </ul>
+
+      <h2>How Settlr Works for Freelancer Payouts</h2>
+
+      <p>The flow is dead simple — for both you and the freelancer:</p>
+
+      <ol>
+        <li><strong>You call one API endpoint</strong> (or use Zapier, or the Slack bot) with the freelancer's email and amount</li>
+        <li><strong>They get an email</strong> with a link to claim their funds</li>
+        <li><strong>They click the link.</strong> An embedded wallet is created automatically — no app downloads, no seed phrases, no crypto knowledge needed</li>
+        <li><strong>Funds arrive in under 1 second.</strong> They can hold in USDC (pegged 1:1 to USD) or offramp to local currency via MoonPay, Coinbase, or local exchanges</li>
+      </ol>
+
+      <p>For repeat freelancers, it's even faster. After their first claim, the wallet is saved. Future payouts are delivered <strong>instantly and automatically</strong> — no claim link needed.</p>
+
+      <h2>Why This Beats Wise, PayPal, and Payoneer</h2>
+
+      <ul>
+        <li><strong>vs PayPal:</strong> No 5% fees. No frozen accounts. No 21-day payment holds. No chargebacks.</li>
+        <li><strong>vs Wire:</strong> $0.75 instead of $25. Instant instead of 3–5 days. No SWIFT codes or IBANs to collect.</li>
+        <li><strong>vs Wise:</strong> API-first (not built for batch UI). 1% vs ~1.5%. No recipient onboarding friction.</li>
+        <li><strong>vs Payoneer:</strong> No marketplace lock-in. No minimum amounts. Works in countries Payoneer doesn't.</li>
+      </ul>
+
+      <h2>Batch Payouts for Agencies and Platforms</h2>
+
+      <p>If you're paying multiple freelancers at once, use the batch endpoint:</p>
+
+      <pre><code>POST /api/payouts/batch
+{
+  "payouts": [
+    { "email": "designer@gmail.com", "amount": 150, "memo": "Logo project" },
+    { "email": "dev@outlook.com", "amount": 500, "memo": "Feb sprint" },
+    { "email": "writer@yahoo.com", "amount": 75, "memo": "3 blog posts" }
+  ]
+}</code></pre>
+
+      <p>All three freelancers get claim emails simultaneously. One API call. Total fee: $7.25 (1% of $725). Compare that to $75–150 in wire fees.</p>
+
+      <h2>Getting Started</h2>
+
+      <p>You can start paying freelancers globally in under 5 minutes:</p>
+
+      <ol>
+        <li>Get an API key at <a href="/onboarding">settlr.dev/onboarding</a></li>
+        <li>Fund your treasury with USDC</li>
+        <li>Call the payout API with an email and amount</li>
+      </ol>
+
+      <p>No contracts. No setup fees. No minimum volume. Just cheaper, faster payouts to every country that has internet.</p>
+
+      <p>Questions? Email <a href="mailto:adam@settlr.dev">adam@settlr.dev</a> — we'll walk you through the integration for your specific workflow.</p>
+    `,
+    },
+    {
+        slug: "stripe-alternative-for-global-payouts",
+        title: "Stripe Alternative for Global Payouts: Why Platforms Are Switching in 2026",
+        excerpt:
+            "Stripe Connect charges $2+ per cross-border payout, requires full KYB for every recipient, and doesn't work in half the countries your contractors live in. There's a faster path.",
+        date: "2026-02-19",
+        author: "Adam Bryant",
+        readTime: "7 min read",
+        tags: ["Stripe alternative", "global payouts", "cross-border payments", "marketplace payouts", "payment API"],
+        content: `
+      <p>Stripe is great for collecting payments. But when it comes to <strong>sending money out</strong> — paying contractors, freelancers, creators, marketplace sellers — it falls apart fast for international use cases.</p>
+
+      <h2>Where Stripe Connect Breaks Down</h2>
+
+      <p>If you've tried to build global payouts on Stripe Connect, you've probably hit these walls:</p>
+
+      <ul>
+        <li><strong>$2 per cross-border payout</strong> (on top of the 0.25% + $0.25 base fee). A $50 payout to a contractor in the Philippines costs you $2.38 in fees — that's 4.7%.</li>
+        <li><strong>Full KYB for every recipient.</strong> Every person you pay needs to complete Stripe's identity verification. Most international contractors won't finish it.</li>
+        <li><strong>Country restrictions.</strong> Stripe Connect only supports payouts to ~40 countries. If your workers are in Bangladesh, Pakistan, Kenya, Nigeria, or Vietnam — Stripe literally can't pay them.</li>
+        <li><strong>3–7 day settlement.</strong> International payouts through Stripe's banking rails take days, not seconds.</li>
+        <li><strong>Currency conversion fees.</strong> On top of the payout fee, you're paying 1%+ for Stripe's FX conversion.</li>
+      </ul>
+
+      <h2>What a Real Global Payout API Looks Like</h2>
+
+      <p>Settlr was built specifically for the use case Stripe wasn't designed for: <strong>paying people globally with one API call</strong>.</p>
+
+      <table>
+        <tr><th></th><th>Stripe Connect</th><th>Settlr</th></tr>
+        <tr><td>Fee (intl payout)</td><td>$2+ per payout + 0.25% + FX</td><td>1% flat</td></tr>
+        <tr><td>Recipient onboarding</td><td>Full KYB (ID, bank, address)</td><td>Email address only</td></tr>
+        <tr><td>Countries</td><td>~40</td><td>180+</td></tr>
+        <tr><td>Settlement speed</td><td>3–7 business days</td><td>Under 1 second</td></tr>
+        <tr><td>Batch payouts</td><td>CSV + dashboard (no real-time API)</td><td>One API call, up to 500 payouts</td></tr>
+        <tr><td>Chargebacks</td><td>Yes ($15 per dispute)</td><td>Impossible (blockchain finality)</td></tr>
+        <tr><td>Account freezes</td><td>Common for "high-risk" verticals</td><td>Non-custodial — your funds, your control</td></tr>
+      </table>
+
+      <h2>Who's Switching</h2>
+
+      <p>We're seeing three types of platforms move off Stripe for payouts:</p>
+
+      <ol>
+        <li><strong>Data labeling / AI training platforms</strong> — paying thousands of annotators $5–50 each across 30+ countries. Stripe's per-payout fees and KYB requirements make it unworkable.</li>
+        <li><strong>Creator economy platforms</strong> — paying creators their earnings weekly. Stripe's 7-day settlement means creators are always waiting.</li>
+        <li><strong>Marketplace platforms</strong> — paying sellers internationally. Stripe Connect's country limitations block a huge chunk of their supply side.</li>
+      </ol>
+
+      <h2>The Migration Is Simple</h2>
+
+      <p>You don't need to rip out Stripe entirely. Most platforms keep Stripe for <em>collecting</em> payments (checkout, subscriptions) and use Settlr for <em>sending</em> payouts. The integration takes about 15 minutes:</p>
+
+      <pre><code>// Replace Stripe Connect payout with Settlr
+const payout = await fetch('https://settlr.dev/api/payouts', {
+  method: 'POST',
+  headers: {
+    'x-api-key': process.env.SETTLR_API_KEY,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    email: contractor.email,
+    amount: contractor.earnings,
+    memo: 'February payout',
+  }),
+});</code></pre>
+
+      <p>That's it. One endpoint. The contractor gets an email, clicks a link, and receives funds in under a second. No KYB forms, no bank details, no 7-day wait.</p>
+
+      <h2>When to Stay on Stripe</h2>
+
+      <p>To be fair — Stripe is still the right choice for:</p>
+
+      <ul>
+        <li>Collecting credit card payments in regulated markets</li>
+        <li>Subscription billing with dunning and retry logic</li>
+        <li>Payouts to US-only recipients where ACH works fine</li>
+      </ul>
+
+      <p>But for international payouts at scale? Stripe wasn't built for that. Settlr was.</p>
+
+      <p>Ready to switch your payout rail? <a href="/onboarding">Get started in 5 minutes</a> or email <a href="mailto:adam@settlr.dev">adam@settlr.dev</a> for a migration walkthrough.</p>
+    `,
+    },
+    {
+        slug: "how-to-avoid-chargebacks-digital-products",
+        title: "How to Avoid Chargebacks on Digital Products (The Definitive 2026 Guide)",
+        excerpt:
+            "Chargebacks cost merchants $125+ per dispute and digital products get hit hardest. Here's why they happen, how to fight them, and the nuclear option that makes them impossible.",
+        date: "2026-02-18",
+        author: "Adam Bryant",
+        readTime: "9 min read",
+        tags: ["chargebacks", "digital products", "payment fraud", "friendly fraud", "Stripe alternative"],
+        content: `
+      <p>If you sell digital products — courses, SaaS, downloads, templates, memberships — chargebacks are silently devouring your margins. The average chargeback costs the merchant <strong>$125 in total losses</strong> (the sale amount + fees + penalties). And digital goods have the <em>highest</em> chargeback rates of any category because there's "no proof of delivery."</p>
+
+      <h2>Why Digital Products Get Hit Hardest</h2>
+
+      <p>Credit card chargebacks were designed for physical goods — "I never received my package." The system was never built for instant digital delivery. Here's what happens:</p>
+
+      <ul>
+        <li><strong>Friendly fraud.</strong> Customer buys your course, downloads it, then files a chargeback claiming they "don't recognize the charge." They keep the course. You lose the money + a $15–25 fee.</li>
+        <li><strong>Family fraud.</strong> Kid buys a game/subscription on a parent's card. Parent disputes the charge.</li>
+        <li><strong>Buyer's remorse.</strong> Customer regrets the purchase but finds it easier to call their bank than request a refund.</li>
+        <li><strong>Actual fraud.</strong> Stolen cards used to purchase digital goods for resale. You're left holding the bill.</li>
+      </ul>
+
+      <p>Credit card companies resolve disputes in favor of the buyer <strong>~80% of the time</strong> for digital goods. Even with logs showing the customer accessed your product.</p>
+
+      <h2>Traditional Prevention Methods</h2>
+
+      <p>You can reduce chargebacks with these tactics:</p>
+
+      <ul>
+        <li><strong>Clear billing descriptors.</strong> Make sure your company name shows clearly on credit card statements, not "STRIPE* PAYMENT_12345"</li>
+        <li><strong>Aggressive fraud screening.</strong> Use Stripe Radar or similar. Block VPNs, mismatched geo-IP, and repeat offenders.</li>
+        <li><strong>Email confirmation + access logs.</strong> Record timestamps of when the customer accessed the product. You'll need this evidence when fighting disputes.</li>
+        <li><strong>Easy refund process.</strong> Make it easier to get a refund than to file a chargeback. Prominent refund button, fast response times.</li>
+        <li><strong>3D Secure.</strong> Enabling 3DS shifts liability to the bank for fraudulent transactions — but adds checkout friction and reduces conversion by 5–10%.</li>
+      </ul>
+
+      <p>These help. But they don't solve the fundamental problem: <strong>credit card payments are reversible, and the system favors buyers.</strong></p>
+
+      <h2>The Nuclear Option: Irreversible Payments</h2>
+
+      <p>There's one type of payment that <em>cannot</em> be charged back: <strong>blockchain-settled payments.</strong></p>
+
+      <p>When a customer pays with USDC (a dollar-pegged stablecoin), the transaction settles on-chain in under a second. There is no bank to call. No dispute form to fill. No 90-day chargeback window. The payment is final.</p>
+
+      <p>This isn't theoretical — <a href="/">Settlr</a> makes this work without your customers needing to know anything about crypto:</p>
+
+      <ol>
+        <li>Customer clicks "Pay with USDC" at checkout</li>
+        <li>They enter their email and confirm the dollar amount</li>
+        <li>Payment settles on-chain in &lt;1 second</li>
+        <li>You receive USDC in your treasury. Done. No chargebacks possible.</li>
+      </ol>
+
+      <p>The customer experience is comparable to credit card checkout. But the settlement layer makes chargebacks impossible at the protocol level.</p>
+
+      <h2>Who Should Consider This</h2>
+
+      <p>Chargeback-proof payments make the most sense for:</p>
+
+      <ul>
+        <li><strong>Online course creators</strong> — high ticket ($50–500), instant delivery, high friendly-fraud rate</li>
+        <li><strong>SaaS products</strong> — recurring billing + digital access = chargeback magnet</li>
+        <li><strong>Digital downloads</strong> — templates, presets, ebooks, software licenses</li>
+        <li><strong>iGaming / gambling</strong> — regulated but high-chargeback vertical. Some processors won't even work with you</li>
+        <li><strong>"High-risk" products</strong> — CBD, supplements, adult content. If Stripe already treats you like a liability, switching to a chargeback-proof rail is a no-brainer</li>
+      </ul>
+
+      <h2>The Math on Chargebacks</h2>
+
+      <p>If you're processing $50,000/month in digital product sales with a 1.5% chargeback rate (common for digital goods):</p>
+
+      <ul>
+        <li>750 in disputed transactions per month</li>
+        <li>~$600 lost (80% of disputes resolved for buyer)</li>
+        <li>$150 in chargeback fees (15× $25 penalty per dispute, based on ~10 formal disputes)</li>
+        <li><strong>$750+/month in chargeback losses</strong></li>
+        <li>Plus: risk of Stripe/processor flagging your account and freezing your funds</li>
+      </ul>
+
+      <p>Compare that to Settlr: <strong>$500/month in fees (1%), $0 in chargebacks, $0 in penalties, zero risk of account freeze.</strong></p>
+
+      <h2>Getting Started</h2>
+
+      <p>You can add chargeback-proof checkout to your site in under 10 minutes using the <a href="/docs?tab=react">Settlr React SDK</a>. Drop in a BuyButton component, and your customers pay in dollars — settled in USDC on the backend.</p>
+
+      <p>Head to <a href="/onboarding">settlr.dev/onboarding</a> to get your API key, or read the <a href="/docs">integration docs</a> to see how it works.</p>
+    `,
+    },
+    {
+        slug: "pay-international-contractors-without-bank-account",
+        title: "How to Pay International Contractors Without a Bank Account in 2026",
+        excerpt:
+            "1.4 billion adults worldwide don't have a bank account. If your contractors are in Southeast Asia, Africa, or Latin America, traditional payout rails won't reach them. Here's what will.",
+        date: "2026-02-17",
+        author: "Adam Bryant",
+        readTime: "7 min read",
+        tags: ["pay contractors", "international payments", "no bank account", "unbanked", "global payouts"],
+        content: `
+      <p>You've hired a talented designer in Nigeria, a QA tester in the Philippines, and a data annotator in Bangladesh. They did great work. Now you need to pay them.</p>
+
+      <p>Problem: <strong>you need their bank details.</strong> IBAN, SWIFT code, bank name, branch code, intermediary bank. Half of them don't have a bank account. The other half have bank details that don't match the format your payment processor expects.</p>
+
+      <p>This is the dirty secret of international contractor payments: <strong>the infrastructure assumes everyone has a Western-style bank account.</strong> 1.4 billion adults worldwide don't.</p>
+
+      <h2>Why Traditional Rails Fail</h2>
+
+      <ul>
+        <li><strong>Wire transfers:</strong> Require IBAN/SWIFT codes. Many countries use different formats. Intermediary banks reject unknown routing numbers. 15% failure rate on wires to emerging markets.</li>
+        <li><strong>PayPal:</strong> Not available in ~30 countries. Requires bank account or card to withdraw. Freezes accounts in "high-risk" regions.</li>
+        <li><strong>Stripe Connect:</strong> Only supports payouts to ~40 countries. Requires full KYB verification for each recipient.</li>
+        <li><strong>ACH:</strong> US only.</li>
+        <li><strong>SEPA:</strong> Europe only.</li>
+      </ul>
+
+      <p>If you're a platform with global contractors, you end up cobbling together 3–4 different payout rails, each with different APIs, fee structures, and failure modes. It's a mess.</p>
+
+      <h2>What If You Only Needed an Email?</h2>
+
+      <p>With <a href="/">Settlr</a>, paying an international contractor requires exactly one thing: <strong>their email address.</strong></p>
+
+      <p>No bank details. No IBAN. No SWIFT code. No identity verification forms for the contractor to fill out.</p>
+
+      <p>Here's the flow:</p>
+
+      <ol>
+        <li>You call the API (or use Slack, Zapier, or the dashboard) with the contractor's email and amount</li>
+        <li>The contractor gets an email: "You've been paid $75 by [Your Company]"</li>
+        <li>They click the link. An embedded wallet is created automatically in seconds</li>
+        <li>Funds arrive as USDC (dollar-pegged stablecoin) — instantly</li>
+        <li>They can hold in dollars, or cash out to local currency via MoonPay, Coinbase, or local exchanges</li>
+      </ol>
+
+      <p>The contractor doesn't need a bank account, a crypto wallet, or any prior setup. Just an email and internet access.</p>
+
+      <h2>Why This Works in Countries Banks Don't Reach</h2>
+
+      <p>Internet penetration is 70%+ in the Philippines, Kenya, Nigeria, and Bangladesh. Smartphone ownership is even higher. But banking penetration in these countries ranges from 15% to 50%.</p>
+
+      <p>USDC on Solana works everywhere the internet works. There's no intermediary bank, no correspondent bank, no SWIFT network involved. The funds move directly from your treasury to the recipient's wallet. It's peer-to-peer.</p>
+
+      <p>And unlike crypto payments of the past, <strong>the recipient never needs to know it's crypto.</strong> They see "You received $75." They click "Cash out." They get local currency in their mobile money account.</p>
+
+      <h2>The Offramp Problem (Solved)</h2>
+
+      <p>The biggest objection to stablecoin payouts has always been: "How does the recipient actually use the money?"</p>
+
+      <p>In 2026, the offramp landscape is mature:</p>
+
+      <ul>
+        <li><strong>MoonPay:</strong> Supports offramp to 100+ countries, directly to bank accounts or mobile money</li>
+        <li><strong>Coinbase:</strong> Available in 100+ countries with local withdrawal options</li>
+        <li><strong>Local exchanges:</strong> P2P platforms like Paxful, Binance P2P, and local exchanges exist in virtually every market</li>
+        <li><strong>Direct spending:</strong> USDC is increasingly accepted by merchants, especially via prepaid card programs</li>
+      </ul>
+
+      <h2>One API, Every Country</h2>
+
+      <p>Instead of managing Stripe for the US, SEPA for Europe, M-Pesa integrations for Kenya, and wire transfers for everyone else — you get one API endpoint that works globally:</p>
+
+      <pre><code>POST /api/payouts
+{
+  "email": "contractor@gmail.com",
+  "amount": 75,
+  "memo": "February design work"
+}</code></pre>
+
+      <p>That works for a contractor in the US, the UK, the Philippines, Nigeria, Brazil, Pakistan, or any of the other 180+ countries where internet exists.</p>
+
+      <p>Ready to stop wrestling with international banking rails? <a href="/onboarding">Get your API key</a> and start paying contractors in under 5 minutes.</p>
+    `,
+    },
 ];

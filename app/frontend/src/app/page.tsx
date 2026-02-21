@@ -151,7 +151,8 @@ export default function LandingPage() {
             name: "Settlr",
             url: "https://settlr.dev",
             logo: "https://settlr.dev/og-image.png",
-            description: "Stablecoin payment infrastructure for platforms.",
+            description:
+              "Global payout API for platforms. Pay contractors and freelancers in 180+ countries with just an email — no wire fees, no frozen accounts.",
             foundingDate: "2025",
             founder: { "@type": "Person", name: "Adam Bryant" },
             contactPoint: {
@@ -160,7 +161,7 @@ export default function LandingPage() {
               url: "https://settlr.dev/support",
               email: "adam@settlr.dev",
             },
-            sameAs: ["https://x.com/SettlrPay", "https://github.com/settlr"],
+            sameAs: ["https://x.com/SettlrPay", "https://github.com/ABFX15"],
           }),
         }}
       />
@@ -173,12 +174,17 @@ export default function LandingPage() {
             "@context": "https://schema.org",
             "@type": "Service",
             "@id": "https://settlr.dev/#service",
-            name: "Settlr Stablecoin Payment Infrastructure",
-            serviceType: "Stablecoin payment infrastructure",
+            name: "Settlr Global Payout API",
+            serviceType: [
+              "Payment API",
+              "International Payouts",
+              "Cross-border Payments",
+              "Marketplace Payout Software",
+            ],
             provider: { "@id": "https://settlr.dev/#organization" },
             url: "https://settlr.dev",
             description:
-              "Send and receive USDC payments globally with just an email address. Instant settlement, non-custodial, from 1% per transaction.",
+              "Pay anyone in 180+ countries with just an email. Instant settlement, 1% flat — no wire fees, no frozen accounts, no bank details needed. The payout API that replaces Stripe, PayPal, and wire transfers for global platforms.",
             areaServed: "Worldwide",
             audience: {
               "@type": "BusinessAudience",
@@ -187,9 +193,9 @@ export default function LandingPage() {
             about: {
               "@type": "DefinedTerm",
               "@id": "https://settlr.dev/#defined-term",
-              name: "Stablecoin Payment Infrastructure",
+              name: "Global Payout API",
               description:
-                "Infrastructure that enables platforms to send and receive stablecoin (USDC) payments globally via email, with instant settlement and no bank details required.",
+                "API infrastructure for cross-border payouts. Enables platforms to pay contractors, freelancers, and gig workers globally via email with instant settlement and no bank details required. Alternative to wire transfers, PayPal, and traditional payment processors.",
               url: "https://settlr.dev",
             },
             hasOfferCatalog: {
@@ -431,6 +437,38 @@ export default function LandingPage() {
                 acceptedAnswer: {
                   "@type": "Answer",
                   text: "Recipients can offramp USDC to their local currency via integrated partners like MoonPay or Coinbase. They can also send to any crypto exchange that supports their country.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Why is Settlr better than PayPal for international payouts?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "PayPal charges 5%+ on international transfers, holds funds for weeks, and freezes accounts without warning. Settlr charges 1% flat, settles instantly, and is non-custodial — we never hold your funds. No chargebacks, no freezes, no hidden FX fees.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How much do wire transfers cost vs Settlr?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Wire transfers cost $25–50 per transaction, take 3–5 days, and have a ~15% failure rate to emerging markets. Settlr costs 1% per transaction (e.g. $0.50 on a $50 payout), settles in under 1 second, and works in 180+ countries with zero failures.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can I use Settlr as a Stripe alternative for payouts?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes. Stripe Connect charges 0.25% + $0.25 per payout plus a $2 cross-border fee, requires full KYB for each recipient, and doesn't work in many countries. Settlr is 1% flat with no recipient onboarding — just an email address. It's built specifically for platforms paying people globally.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How do I pay international contractors without a bank account?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "With Settlr, you only need the contractor's email. They receive a claim link, an embedded wallet is created automatically, and they receive USDC instantly. No bank account, no IBAN, no SWIFT code needed. They can offramp to local currency whenever they want.",
                 },
               },
             ],
