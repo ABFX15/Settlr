@@ -1262,7 +1262,7 @@ const payout = await fetch('https://settlr.dev/api/payouts', {
     author: "Adam Bryant",
     readTime: "9 min read",
     tags: ["cannabis payments", "debanking", "B2B payments", "USDC", "compliance", "cannabis banking"],
-    content: \`
+    content: `
       <p>You did everything right. State license — check. Seed-to-sale tracking — check. Monthly compliance reports — check. And then the letter arrives: <em>"We regret to inform you that we will be closing your account effective in 30 days."</em></p>
 
       <p>No reason given. No appeal process. Just a polite form letter from a bank that held your money for the last eight months.</p>
@@ -1383,6 +1383,6 @@ const payout = await fetch('https://settlr.dev/api/payouts', {
       <p>Set up takes under 5 minutes. No bank account needed. No application to fill out. No compliance officer to convince.</p>
 
       <p><a href="/industries/cannabis">Learn more about cannabis B2B payments</a> or <a href="/waitlist">join the waitlist</a> to get early access.</p>
-    \`,
+    `,
     },
 ];
