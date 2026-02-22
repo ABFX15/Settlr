@@ -1,13 +1,13 @@
 export interface BlogPost {
-    slug: string;
-    title: string;
-    excerpt: string;
-    date: string; // YYYY-MM-DD
-    author: string;
-    readTime: string; // e.g. "5 min read"
-    tags: string[];
-    /** The full post body — supports basic HTML if you want formatting */
-    content: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string; // YYYY-MM-DD
+  author: string;
+  readTime: string; // e.g. "5 min read"
+  tags: string[];
+  /** The full post body — supports basic HTML if you want formatting */
+  content: string;
 }
 
 /*
@@ -22,17 +22,17 @@ export interface BlogPost {
  */
 
 export const posts: BlogPost[] = [
-    // ─── NEW: Payout infrastructure content ───────────────────
-    {
-        slug: "pay-remote-workers-internationally-without-wire-fees",
-        title: "How to Pay Remote Workers in 180+ Countries Without Wire Fees",
-        excerpt:
-            "Wire transfers cost $25–50 each, take 3–5 days, and fail in half the countries your workers live in. Here's how platforms are paying global workforces instantly for 1% flat — no bank details needed.",
-        date: "2026-02-17",
-        author: "Adam Bryant",
-        readTime: "7 min read",
-        tags: ["international payouts", "wire transfers", "remote workers", "cross-border payments"],
-        content: `
+  // ─── NEW: Payout infrastructure content ───────────────────
+  {
+    slug: "pay-remote-workers-internationally-without-wire-fees",
+    title: "How to Pay Remote Workers in 180+ Countries Without Wire Fees",
+    excerpt:
+      "Wire transfers cost $25–50 each, take 3–5 days, and fail in half the countries your workers live in. Here's how platforms are paying global workforces instantly for 1% flat — no bank details needed.",
+    date: "2026-02-17",
+    author: "Adam Bryant",
+    readTime: "7 min read",
+    tags: ["international payouts", "wire transfers", "remote workers", "cross-border payments"],
+    content: `
       <p>If you run a platform that pays people globally — data annotators, freelancers, creators, gig workers — you already know the pain. Wire transfers cost <strong>$25–50 per transaction</strong>, take 3–5 business days, and don't even work in many of the countries where your workforce actually lives.</p>
 
       <p>PayPal charges 5%+ on international transfers and freezes accounts without warning. Payoneer has complex onboarding. Wise is decent for one-off transfers but wasn't built for programmatic, API-driven payouts at scale.</p>
@@ -108,17 +108,17 @@ export const posts: BlogPost[] = [
 
       <p><a href="/onboarding">Start sending payouts →</a></p>
     `,
-    },
-    {
-        slug: "paypal-vs-wire-vs-usdc-international-payouts",
-        title: "PayPal vs Wire Transfer vs USDC: The Real Cost of Paying People Internationally",
-        excerpt:
-            "A detailed breakdown of what it actually costs to pay workers, creators, and contractors across borders — including the hidden fees nobody talks about.",
-        date: "2026-02-16",
-        author: "Adam Bryant",
-        readTime: "8 min read",
-        tags: ["comparison", "PayPal", "wire transfer", "USDC", "international payouts"],
-        content: `
+  },
+  {
+    slug: "paypal-vs-wire-vs-usdc-international-payouts",
+    title: "PayPal vs Wire Transfer vs USDC: The Real Cost of Paying People Internationally",
+    excerpt:
+      "A detailed breakdown of what it actually costs to pay workers, creators, and contractors across borders — including the hidden fees nobody talks about.",
+    date: "2026-02-16",
+    author: "Adam Bryant",
+    readTime: "8 min read",
+    tags: ["comparison", "PayPal", "wire transfer", "USDC", "international payouts"],
+    content: `
       <p>You need to pay someone in the Philippines $100. Simple, right? Not quite. Depending on the rail you choose, the recipient might get anywhere from $85 to $99. Here's the real math.</p>
 
       <h2>Wire Transfer</h2>
@@ -191,17 +191,17 @@ export const posts: BlogPost[] = [
 
       <p>If you're paying more than 10 people internationally per month, the savings from switching to stablecoin payouts are significant. <a href="/pricing">See detailed pricing →</a></p>
     `,
-    },
-    {
-        slug: "data-labeling-payouts-stablecoin",
-        title: "Why Data Labeling Platforms Are Switching to Stablecoin Payouts",
-        excerpt:
-            "Remotasks, Toloka, and Scale AI pay thousands of annotators in countries where PayPal doesn't work and wire fees eat the entire payout. Stablecoin rails are the fix.",
-        date: "2026-02-15",
-        author: "Adam Bryant",
-        readTime: "6 min read",
-        tags: ["data labeling", "AI", "annotators", "Remotasks", "payouts", "stablecoins"],
-        content: `
+  },
+  {
+    slug: "data-labeling-payouts-stablecoin",
+    title: "Why Data Labeling Platforms Are Switching to Stablecoin Payouts",
+    excerpt:
+      "Remotasks, Toloka, and Scale AI pay thousands of annotators in countries where PayPal doesn't work and wire fees eat the entire payout. Stablecoin rails are the fix.",
+    date: "2026-02-15",
+    author: "Adam Bryant",
+    readTime: "6 min read",
+    tags: ["data labeling", "AI", "annotators", "Remotasks", "payouts", "stablecoins"],
+    content: `
       <p>The AI boom has created an enormous demand for human data labeling. Models need millions of labeled images, transcribed audio files, and categorized text samples. That work is done by <strong>hundreds of thousands of annotators</strong> — primarily in the Philippines, Kenya, India, Venezuela, Pakistan, and Nigeria.</p>
 
       <p>And paying them is a nightmare.</p>
@@ -272,17 +272,17 @@ const payout = await settlr.payouts.create({
 
       <p>If you're building or running a data labeling platform, <a href="/industries/data-labeling">see how Settlr works for annotation payouts →</a></p>
     `,
-    },
-    {
-        slug: "api-first-global-payouts",
-        title: "The API-First Approach to Global Payouts: One Endpoint, 180 Countries",
-        excerpt:
-            "Most payout solutions require you to integrate with different providers for different regions. Here's how a single API endpoint can replace your entire payout stack.",
-        date: "2026-02-14",
-        author: "Adam Bryant",
-        readTime: "6 min read",
-        tags: ["API", "developer", "payouts", "integration", "infrastructure"],
-        content: `
+  },
+  {
+    slug: "api-first-global-payouts",
+    title: "The API-First Approach to Global Payouts: One Endpoint, 180 Countries",
+    excerpt:
+      "Most payout solutions require you to integrate with different providers for different regions. Here's how a single API endpoint can replace your entire payout stack.",
+    date: "2026-02-14",
+    author: "Adam Bryant",
+    readTime: "6 min read",
+    tags: ["API", "developer", "payouts", "integration", "infrastructure"],
+    content: `
       <p>If you've built payout infrastructure for a global platform, you know the reality: it's not one integration — it's a dozen. PayPal for the US and Europe. Wise for individual transfers. Local bank APIs for specific markets. A wire transfer fallback for everywhere else. And a spreadsheet to track which method works in which country.</p>
 
       <p>What if it was just one API call?</p>
@@ -377,17 +377,17 @@ app.post("/webhooks/settlr", (req, res) =&gt; {
 
       <p>If you're an engineer tired of maintaining a patchwork of payout providers, <a href="/docs">check out the docs</a> or <a href="/onboarding">start integrating</a>. The whole setup takes about 15 minutes.</p>
     `,
-    },
-    {
-        slug: "email-only-payouts-no-bank-details",
-        title: "Email-Only Payouts: How to Pay Anyone in the World Without Bank Details",
-        excerpt:
-            "Collecting IBANs, routing numbers, and bank account details from a global workforce is a compliance and ops nightmare. What if you only needed an email address?",
-        date: "2026-02-13",
-        author: "Adam Bryant",
-        readTime: "5 min read",
-        tags: ["email payouts", "no bank details", "global payouts", "compliance"],
-        content: `
+  },
+  {
+    slug: "email-only-payouts-no-bank-details",
+    title: "Email-Only Payouts: How to Pay Anyone in the World Without Bank Details",
+    excerpt:
+      "Collecting IBANs, routing numbers, and bank account details from a global workforce is a compliance and ops nightmare. What if you only needed an email address?",
+    date: "2026-02-13",
+    author: "Adam Bryant",
+    readTime: "5 min read",
+    tags: ["email payouts", "no bank details", "global payouts", "compliance"],
+    content: `
       <p>To pay someone internationally through traditional rails, you need: their full legal name, bank name, account number (or IBAN), routing number (or SWIFT/BIC code), bank address, and sometimes a tax ID or government document. For <em>every single recipient</em>.</p>
 
       <p>Now multiply that by 500 contractors in 30 countries.</p>
@@ -457,19 +457,19 @@ app.post("/webhooks/settlr", (req, res) =&gt; {
 
       <p>If your platform pays people and you're tired of collecting bank details, <a href="/onboarding">try email-only payouts with Settlr</a>. The integration takes 15 minutes and you'll never ask for an IBAN again.</p>
     `,
-    },
+  },
 
-    // ─── EXISTING POSTS (still relevant for secondary SEO) ────
-    {
-        slug: "accept-crypto-payments-without-wallet",
-        title: "How to Accept Crypto Payments Without Requiring a Wallet",
-        excerpt:
-            "Most crypto payment gateways force your customers to install a wallet, buy gas tokens, and figure out on-chain transactions. Here's how to remove that friction entirely with embedded wallets and gasless transactions.",
-        date: "2026-02-10",
-        author: "Adam Bryant",
-        readTime: "6 min read",
-        tags: ["crypto payments", "embedded wallets", "UX", "Solana", "no wallet required"],
-        content: `
+  // ─── EXISTING POSTS (still relevant for secondary SEO) ────
+  {
+    slug: "accept-crypto-payments-without-wallet",
+    title: "How to Accept Crypto Payments Without Requiring a Wallet",
+    excerpt:
+      "Most crypto payment gateways force your customers to install a wallet, buy gas tokens, and figure out on-chain transactions. Here's how to remove that friction entirely with embedded wallets and gasless transactions.",
+    date: "2026-02-10",
+    author: "Adam Bryant",
+    readTime: "6 min read",
+    tags: ["crypto payments", "embedded wallets", "UX", "Solana", "no wallet required"],
+    content: `
       <p>The biggest barrier to crypto adoption in commerce isn't technology — it's UX. According to <a href="https://triple-a.io/cryptocurrency-ownership-data" target="_blank" rel="noopener noreferrer">Triple-A's 2024 data</a>, there are over 562 million crypto owners globally. But the vast majority of e-commerce checkouts still require customers to:</p>
 
       <ul>
@@ -529,17 +529,17 @@ app.post("/webhooks/settlr", (req, res) =&gt; {
 
       <p>If you're building an AI tool, SaaS product, or any global-first business and want to accept payments without the friction of traditional crypto checkout, <a href="/onboarding">get started with Settlr</a> — it takes less than 30 minutes.</p>
     `,
-    },
-    {
-        slug: "settlr-vs-stripe-crypto-payments",
-        title: "Settlr vs Stripe: Why Crypto-Native Teams Are Switching",
-        excerpt:
-            "Stripe charges 2.9% + 30¢ per transaction and settles in 2–7 days. Settlr charges 1% flat and settles instantly. Here's a detailed breakdown of when each makes sense.",
-        date: "2026-02-09",
-        author: "Adam Bryant",
-        readTime: "7 min read",
-        tags: ["comparison", "Stripe", "fees", "settlement", "Stripe Connect alternative"],
-        content: `
+  },
+  {
+    slug: "settlr-vs-stripe-crypto-payments",
+    title: "Settlr vs Stripe: Why Crypto-Native Teams Are Switching",
+    excerpt:
+      "Stripe charges 2.9% + 30¢ per transaction and settles in 2–7 days. Settlr charges 1% flat and settles instantly. Here's a detailed breakdown of when each makes sense.",
+    date: "2026-02-09",
+    author: "Adam Bryant",
+    readTime: "7 min read",
+    tags: ["comparison", "Stripe", "fees", "settlement", "Stripe Connect alternative"],
+    content: `
       <p>Stripe is the gold standard for fiat payment processing. It's reliable, well-documented, and handles the complexity of credit card networks, PCI compliance, and cross-border banking.</p>
 
       <p>But if your business primarily deals in digital goods, SaaS subscriptions, or serves a global audience — especially in regions where Stripe doesn't support payouts — the calculus changes dramatically.</p>
@@ -579,17 +579,17 @@ app.post("/webhooks/settlr", (req, res) =&gt; {
 
       <p>For everything else — especially digital products, AI tools, SaaS, and creator/freelancer payments — Settlr offers dramatically better economics and speed. <a href="/compare">See the full comparison →</a></p>
     `,
-    },
-    {
-        slug: "solana-payment-integration-react",
-        title: "How to Integrate Solana Payments in React (Step-by-Step Guide)",
-        excerpt:
-            "A practical developer guide to integrating USDC payments and payouts on Solana in your React or Next.js app. From npm install to production in under 30 minutes.",
-        date: "2026-02-08",
-        author: "Adam Bryant",
-        readTime: "8 min read",
-        tags: ["developer guide", "React", "Solana", "USDC", "SDK", "payout integration"],
-        content: `
+  },
+  {
+    slug: "solana-payment-integration-react",
+    title: "How to Integrate Solana Payments in React (Step-by-Step Guide)",
+    excerpt:
+      "A practical developer guide to integrating USDC payments and payouts on Solana in your React or Next.js app. From npm install to production in under 30 minutes.",
+    date: "2026-02-08",
+    author: "Adam Bryant",
+    readTime: "8 min read",
+    tags: ["developer guide", "React", "Solana", "USDC", "SDK", "payout integration"],
+    content: `
       <p>This guide walks you through integrating Solana-based USDC payments into a React or Next.js application using the Settlr SDK. By the end, you'll have a working checkout that accepts stablecoin payments with zero gas fees and instant settlement.</p>
 
       <h2>Prerequisites</h2>
@@ -680,17 +680,17 @@ export async function POST(req: Request) {
 
       <p>For the full API reference, see our <a href="/docs">documentation</a>. For questions, reach out via our <a href="/help">support page</a>.</p>
     `,
-    },
-    {
-        slug: "stripe-banned-your-business",
-        title: "Stripe Banned Your Business? Here's What to Do Next",
-        excerpt:
-            "Your Stripe account got suspended, your payments are frozen, and you're scrambling for answers. You're not alone — and there's a way forward that doesn't involve high-risk merchant accounts.",
-        date: "2026-02-07",
-        author: "Adam Bryant",
-        readTime: "9 min read",
-        tags: ["Stripe", "high-risk", "payment processing", "alternative payouts"],
-        content: `
+  },
+  {
+    slug: "stripe-banned-your-business",
+    title: "Stripe Banned Your Business? Here's What to Do Next",
+    excerpt:
+      "Your Stripe account got suspended, your payments are frozen, and you're scrambling for answers. You're not alone — and there's a way forward that doesn't involve high-risk merchant accounts.",
+    date: "2026-02-07",
+    author: "Adam Bryant",
+    readTime: "9 min read",
+    tags: ["Stripe", "high-risk", "payment processing", "alternative payouts"],
+    content: `
       <p>You woke up to the email nobody wants: <em>"Your Stripe account has been suspended."</em> Your payments are frozen, your customers can't check out, and you're scrambling for answers. Sound familiar? You're not alone — and there's a way forward.</p>
 
       <h2>Why Stripe Shuts Down "High-Risk" Businesses</h2>
@@ -778,26 +778,26 @@ export async function POST(req: Request) {
 
       <p>Have questions about switching? Reach out at <a href="mailto:adam@settlr.dev">adam@settlr.dev</a> — we've helped dozens of businesses that were dropped by traditional processors get back to accepting payments within hours, not weeks.</p>
     `,
-    },
-    {
-        slug: "accept-crypto-payments-no-wallet-required",
-        title:
-            "How to Accept Crypto Payments on Your Website (Without Making Customers Download a Wallet)",
-        excerpt:
-            "Crypto payments promise lower fees, no chargebacks, and no payment processor gatekeeping. But most of your customers don't have a wallet. Here's how to offer crypto checkout without losing 95% of your buyers.",
-        date: "2026-02-06",
-        author: "Adam Bryant",
-        readTime: "10 min read",
-        tags: [
-            "crypto payments",
-            "ecommerce",
-            "wallets",
-            "UX",
-            "Solana",
-            "USDC",
-            "email payouts",
-        ],
-        content: `
+  },
+  {
+    slug: "accept-crypto-payments-no-wallet-required",
+    title:
+      "How to Accept Crypto Payments on Your Website (Without Making Customers Download a Wallet)",
+    excerpt:
+      "Crypto payments promise lower fees, no chargebacks, and no payment processor gatekeeping. But most of your customers don't have a wallet. Here's how to offer crypto checkout without losing 95% of your buyers.",
+    date: "2026-02-06",
+    author: "Adam Bryant",
+    readTime: "10 min read",
+    tags: [
+      "crypto payments",
+      "ecommerce",
+      "wallets",
+      "UX",
+      "Solana",
+      "USDC",
+      "email payouts",
+    ],
+    content: `
       <p>Crypto payments promise lower fees, no chargebacks, and no payment processor gatekeeping. But there's a problem: most of your customers don't have a crypto wallet. Here's how to offer crypto checkout without losing 95% of your buyers at the payment screen.</p>
 
       <h2>The Crypto Payment Problem Nobody Talks About</h2>
@@ -900,19 +900,19 @@ export async function POST(req: Request) {
 
       <p>Building something in a high-risk vertical and not sure if Settlr is the right fit? Drop us a line at <a href="mailto:adam@settlr.dev">adam@settlr.dev</a> — we're happy to walk you through the integration and answer questions about your specific use case.</p>
     `,
-    },
+  },
 
-    // ─── SEO pain-point content pages ───────────────────
-    {
-        slug: "best-way-to-pay-freelancers-globally",
-        title: "Best Way to Pay Freelancers Globally in 2026 (Without Wire Fees or PayPal Holds)",
-        excerpt:
-            "You've got freelancers in the Philippines, Kenya, Brazil, and Poland. PayPal takes 5%. Wires cost $25 each. Wise caps your volume. Here's what actually works at scale.",
-        date: "2026-02-20",
-        author: "Adam Bryant",
-        readTime: "8 min read",
-        tags: ["pay freelancers globally", "international payments", "freelancer payouts", "PayPal alternative"],
-        content: `
+  // ─── SEO pain-point content pages ───────────────────
+  {
+    slug: "best-way-to-pay-freelancers-globally",
+    title: "Best Way to Pay Freelancers Globally in 2026 (Without Wire Fees or PayPal Holds)",
+    excerpt:
+      "You've got freelancers in the Philippines, Kenya, Brazil, and Poland. PayPal takes 5%. Wires cost $25 each. Wise caps your volume. Here's what actually works at scale.",
+    date: "2026-02-20",
+    author: "Adam Bryant",
+    readTime: "8 min read",
+    tags: ["pay freelancers globally", "international payments", "freelancer payouts", "PayPal alternative"],
+    content: `
       <p>If you're a founder, ops lead, or finance team paying freelancers in more than one country, you already know the pain. <strong>PayPal charges 5%+ on international transfers</strong> and randomly freezes accounts. Wires cost <strong>$25–50 per transaction</strong>. Payoneer has a complex onboarding process. Wise works for one-off transfers but breaks down at scale.</p>
 
       <p>And none of them were built for platforms that need to pay 50, 500, or 5,000 freelancers programmatically every week.</p>
@@ -994,17 +994,17 @@ export async function POST(req: Request) {
 
       <p>Questions? Email <a href="mailto:adam@settlr.dev">adam@settlr.dev</a> — we'll walk you through the integration for your specific workflow.</p>
     `,
-    },
-    {
-        slug: "stripe-alternative-for-global-payouts",
-        title: "Stripe Alternative for Global Payouts: Why Platforms Are Switching in 2026",
-        excerpt:
-            "Stripe Connect charges $2+ per cross-border payout, requires full KYB for every recipient, and doesn't work in half the countries your contractors live in. There's a faster path.",
-        date: "2026-02-19",
-        author: "Adam Bryant",
-        readTime: "7 min read",
-        tags: ["Stripe alternative", "global payouts", "cross-border payments", "marketplace payouts", "payment API"],
-        content: `
+  },
+  {
+    slug: "stripe-alternative-for-global-payouts",
+    title: "Stripe Alternative for Global Payouts: Why Platforms Are Switching in 2026",
+    excerpt:
+      "Stripe Connect charges $2+ per cross-border payout, requires full KYB for every recipient, and doesn't work in half the countries your contractors live in. There's a faster path.",
+    date: "2026-02-19",
+    author: "Adam Bryant",
+    readTime: "7 min read",
+    tags: ["Stripe alternative", "global payouts", "cross-border payments", "marketplace payouts", "payment API"],
+    content: `
       <p>Stripe is great for collecting payments. But when it comes to <strong>sending money out</strong> — paying contractors, freelancers, creators, marketplace sellers — it falls apart fast for international use cases.</p>
 
       <h2>Where Stripe Connect Breaks Down</h2>
@@ -1078,17 +1078,17 @@ const payout = await fetch('https://settlr.dev/api/payouts', {
 
       <p>Ready to switch your payout rail? <a href="/onboarding">Get started in 5 minutes</a> or email <a href="mailto:adam@settlr.dev">adam@settlr.dev</a> for a migration walkthrough.</p>
     `,
-    },
-    {
-        slug: "how-to-avoid-chargebacks-digital-products",
-        title: "How to Avoid Chargebacks on Digital Products (The Definitive 2026 Guide)",
-        excerpt:
-            "Chargebacks cost merchants $125+ per dispute and digital products get hit hardest. Here's why they happen, how to fight them, and the nuclear option that makes them impossible.",
-        date: "2026-02-18",
-        author: "Adam Bryant",
-        readTime: "9 min read",
-        tags: ["chargebacks", "digital products", "payment fraud", "friendly fraud", "Stripe alternative"],
-        content: `
+  },
+  {
+    slug: "how-to-avoid-chargebacks-digital-products",
+    title: "How to Avoid Chargebacks on Digital Products (The Definitive 2026 Guide)",
+    excerpt:
+      "Chargebacks cost merchants $125+ per dispute and digital products get hit hardest. Here's why they happen, how to fight them, and the nuclear option that makes them impossible.",
+    date: "2026-02-18",
+    author: "Adam Bryant",
+    readTime: "9 min read",
+    tags: ["chargebacks", "digital products", "payment fraud", "friendly fraud", "Stripe alternative"],
+    content: `
       <p>If you sell digital products — courses, SaaS, downloads, templates, memberships — chargebacks are silently devouring your margins. The average chargeback costs the merchant <strong>$125 in total losses</strong> (the sale amount + fees + penalties). And digital goods have the <em>highest</em> chargeback rates of any category because there's "no proof of delivery."</p>
 
       <h2>Why Digital Products Get Hit Hardest</h2>
@@ -1167,17 +1167,17 @@ const payout = await fetch('https://settlr.dev/api/payouts', {
 
       <p>Head to <a href="/onboarding">settlr.dev/onboarding</a> to get your API key, or read the <a href="/docs">integration docs</a> to see how it works.</p>
     `,
-    },
-    {
-        slug: "pay-international-contractors-without-bank-account",
-        title: "How to Pay International Contractors Without a Bank Account in 2026",
-        excerpt:
-            "1.4 billion adults worldwide don't have a bank account. If your contractors are in Southeast Asia, Africa, or Latin America, traditional payout rails won't reach them. Here's what will.",
-        date: "2026-02-17",
-        author: "Adam Bryant",
-        readTime: "7 min read",
-        tags: ["pay contractors", "international payments", "no bank account", "unbanked", "global payouts"],
-        content: `
+  },
+  {
+    slug: "pay-international-contractors-without-bank-account",
+    title: "How to Pay International Contractors Without a Bank Account in 2026",
+    excerpt:
+      "1.4 billion adults worldwide don't have a bank account. If your contractors are in Southeast Asia, Africa, or Latin America, traditional payout rails won't reach them. Here's what will.",
+    date: "2026-02-17",
+    author: "Adam Bryant",
+    readTime: "7 min read",
+    tags: ["pay contractors", "international payments", "no bank account", "unbanked", "global payouts"],
+    content: `
       <p>You've hired a talented designer in Nigeria, a QA tester in the Philippines, and a data annotator in Bangladesh. They did great work. Now you need to pay them.</p>
 
       <p>Problem: <strong>you need their bank details.</strong> IBAN, SWIFT code, bank name, branch code, intermediary bank. Half of them don't have a bank account. The other half have bank details that don't match the format your payment processor expects.</p>
@@ -1250,5 +1250,139 @@ const payout = await fetch('https://settlr.dev/api/payouts', {
 
       <p>Ready to stop wrestling with international banking rails? <a href="/onboarding">Get your API key</a> and start paying contractors in under 5 minutes.</p>
     `,
+  },
+
+  // ─── Cannabis debanking ─────────────────────────────────
+  {
+    slug: "cannabis-debanked-how-to-pay-suppliers",
+    title: "Your Cannabis Business Got Debanked — Now What? How to Pay Suppliers Without a Bank",
+    excerpt:
+      "70% of US cannabis businesses have lost banking access at least once. Here's why banks keep closing accounts, what it costs you, and how B2B stablecoin payments eliminate the problem entirely.",
+    date: "2026-02-22",
+    author: "Adam Bryant",
+    readTime: "9 min read",
+    tags: ["cannabis payments", "debanking", "B2B payments", "USDC", "compliance", "cannabis banking"],
+    content: \`
+      <p>You did everything right. State license — check. Seed-to-sale tracking — check. Monthly compliance reports — check. And then the letter arrives: <em>"We regret to inform you that we will be closing your account effective in 30 days."</em></p>
+
+      <p>No reason given. No appeal process. Just a polite form letter from a bank that held your money for the last eight months.</p>
+
+      <p>If this sounds familiar, you're not alone. According to industry data, <strong>over 70% of US cannabis businesses have been debanked at least once</strong>. Many have been through it three or four times. It's the single biggest operational headache in legal cannabis — and it has nothing to do with how well you run your business.</p>
+
+      <h2>Why Banks Keep Closing Cannabis Accounts</h2>
+
+      <p>Cannabis is legal in 38 states. It's a $30+ billion industry. So why do banks keep running?</p>
+
+      <p>The answer is simple: <strong>cannabis is still federally illegal</strong>. Banks are federally regulated. Even if your state has a thriving legal market, your bank's compliance department sees a Schedule I substance — and a mountain of regulatory risk they'd rather not touch.</p>
+
+      <p>The 2014 FinCEN guidance technically allows banks to serve cannabis businesses, but it requires enhanced due diligence, suspicious activity reports (SARs) on every transaction, and ongoing monitoring. Most banks look at the cost of compliance and decide it's not worth it.</p>
+
+      <p>The few banks that <em>do</em> serve cannabis charge eye-watering fees for the privilege:</p>
+
+      <ul>
+        <li><strong>Monthly account maintenance:</strong> $1,000–$5,000/month (vs. $0–$30 for a normal business)</li>
+        <li><strong>Processing fees:</strong> 5–8% per transaction (vs. 2.9% for standard merchant processing)</li>
+        <li><strong>Cash deposit fees:</strong> 1–3% on every cash deposit</li>
+        <li><strong>Reserve requirements:</strong> Some require $50K–$100K minimum balances</li>
+      </ul>
+
+      <p>And even after paying all that, you can still get dropped without warning.</p>
+
+      <h2>The Real Cost of Operating in Cash</h2>
+
+      <p>When the bank account closes, most operators fall back to cash. It works — technically — but the hidden costs are brutal:</p>
+
+      <ul>
+        <li><strong>Armored transport:</strong> $500–$2,000/month for regular cash pickups and deliveries</li>
+        <li><strong>Vault/safe costs:</strong> Commercial safes, counting machines, secure storage</li>
+        <li><strong>Cash counting labor:</strong> Staff hours spent counting, reconciling, and documenting every dollar</li>
+        <li><strong>Shrinkage and theft:</strong> Cash businesses lose 2–5% to theft, loss, and counting errors</li>
+        <li><strong>Compliance burden:</strong> Manually documenting every cash transaction for regulators and 280E tax filings</li>
+        <li><strong>Supplier friction:</strong> Your suppliers don't want to receive $250K in cash any more than you want to deliver it</li>
+      </ul>
+
+      <p>All-in, operating as a cash business costs most cannabis operators <strong>$2,000–$10,000 per month</strong> in direct costs, plus the unquantifiable stress of handling six figures in cash.</p>
+
+      <h2>The SAFE Banking Act — Don't Hold Your Breath</h2>
+
+      <p>The <strong>SAFE Banking Act</strong> has been passed by the House seven times. Seven. And every time, it dies in the Senate. It was supposed to fix everything — grant safe harbor to banks that serve state-legal cannabis businesses.</p>
+
+      <p>Maybe it passes in 2026. Maybe 2027. Maybe it gets bundled into a broader reform bill. But <strong>you can't run a business on "maybe."</strong> You need to pay suppliers today, not when Congress gets around to it.</p>
+
+      <h2>A Different Approach: USDC Stablecoin Payments</h2>
+
+      <p>Here's the thing about being debanked: <strong>you lost access to a bank, not to money.</strong> The US dollar didn't disappear. Your suppliers still want to get paid. The only thing that broke was the rails — the pipes that move money from point A to point B.</p>
+
+      <p>USDC is a <strong>stablecoin pegged 1:1 to the US dollar</strong>, issued by Circle (a regulated financial institution). 1 USDC always equals $1. It's not volatile like Bitcoin. It's just a digital dollar that moves on blockchain rails instead of banking rails.</p>
+
+      <p>The critical difference: <strong>no bank can close your USDC wallet.</strong> It's non-custodial — you hold it, not a bank. There's no account to freeze, no compliance officer to spook, no letter arriving in 30 days.</p>
+
+      <h2>How Cannabis B2B Payments Work on Settlr</h2>
+
+      <p>Let's say GreenLeaf Farms needs to pay $85,000 to their packaging supplier, PackRight Co. Here's the flow:</p>
+
+      <ol>
+        <li><strong>GreenLeaf creates a payment link</strong> — enters $85,000, adds PackRight's name and invoice number</li>
+        <li><strong>Sends the link</strong> — via email, text, or whatever they use to communicate</li>
+        <li><strong>PackRight opens the link</strong> — connects or creates a wallet (takes under 2 minutes, no crypto knowledge needed)</li>
+        <li><strong>Both wallets are screened</strong> — Range Security checks both parties against OFAC sanctions lists automatically</li>
+        <li><strong>Payment settles</strong> — under 1 second on Solana. Both parties see confirmation immediately.</li>
+        <li><strong>Audit trail</strong> — every transaction is recorded on-chain with timestamps. Exportable for compliance, taxes, and regulators.</li>
+      </ol>
+
+      <p>Total cost: <strong>1% flat.</strong> No monthly minimums. No rolling reserves. No surprise fees.</p>
+
+      <h2>What About Privacy?</h2>
+
+      <p>One legitimate concern with blockchain payments: competitors can see your transactions. If GreenLeaf is paying PackRight $85K/quarter for packaging, that's valuable competitive intel sitting on a public ledger.</p>
+
+      <p>Settlr solves this with <strong>MagicBlock Private Ephemeral Rollups</strong>. When privacy mode is enabled, your payment is processed inside a Trusted Execution Environment (TEE) — the transaction details are hidden from on-chain observers while being processed, then settled back to the base layer. Your supplier relationships and pricing stay confidential.</p>
+
+      <h2>What About 280E Taxes?</h2>
+
+      <p>Section 280E of the Internal Revenue Code prohibits cannabis businesses from deducting normal business expenses. This makes meticulous record-keeping critical — you need to document every transaction to maximize your Cost of Goods Sold (COGS) deduction, which is one of the only deductions 280E allows.</p>
+
+      <p>Cash is terrible for this. Paper receipts get lost. Manual logs have errors. Disputes with suppliers over payment amounts are common.</p>
+
+      <p>With Settlr, every payment is <strong>timestamped and recorded on an immutable ledger</strong>. You can export your complete transaction history for your accountant. Every payment is independently verifiable — not by your word, but by the blockchain itself. That's better documentation than any bank statement.</p>
+
+      <h2>But Is It Legal?</h2>
+
+      <p>Yes. Here's why:</p>
+
+      <ul>
+        <li><strong>USDC is legal</strong> — it's a regulated digital dollar issued by Circle, a licensed money transmitter</li>
+        <li><strong>Settlr is non-custodial</strong> — we never hold or touch your funds, so we're a software tool, not a money services business</li>
+        <li><strong>Your state license still applies</strong> — Settlr doesn't change your regulatory obligations; it just gives you a way to pay suppliers</li>
+        <li><strong>OFAC compliance</strong> — every wallet is screened against sanctions lists before transactions process</li>
+        <li><strong>Full audit trail</strong> — regulators can independently verify every transaction on-chain</li>
+      </ul>
+
+      <p>The legality question isn't "can cannabis businesses use USDC?" — that's clearly yes. The question is whether you have proper documentation and compliance, which Settlr makes <em>easier</em> than cash or traditional banking.</p>
+
+      <h2>What Happens When Banks Open Up?</h2>
+
+      <p>If and when the SAFE Banking Act passes, you'll have options. Banks will start competing for your business. And you should absolutely explore those options.</p>
+
+      <p>But here's what our early users are finding: <strong>Settlr is better than banking even without the debanking problem.</strong></p>
+
+      <ul>
+        <li>1% fees vs. 5-8% from cannabis-friendly processors</li>
+        <li>Sub-second settlement vs. 3-5 day ACH</li>
+        <li>24/7/365 processing vs. banker's hours</li>
+        <li>No account closure risk — ever</li>
+        <li>Better audit trail than any bank statement</li>
+      </ul>
+
+      <p>Banks opening up to cannabis is great news. It just might not change the payment rails you choose to use.</p>
+
+      <h2>Getting Started</h2>
+
+      <p>If you're running a cannabis business — cultivator, processor, distributor, or dispensary — and you're tired of the banking merry-go-round, Settlr is built for you.</p>
+
+      <p>Set up takes under 5 minutes. No bank account needed. No application to fill out. No compliance officer to convince.</p>
+
+      <p><a href="/industries/cannabis">Learn more about cannabis B2B payments</a> or <a href="/waitlist">join the waitlist</a> to get early access.</p>
+    \`,
     },
 ];

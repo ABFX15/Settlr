@@ -16,17 +16,37 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   Plug,
+  Play,
+  BookOpen,
 } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/demo", label: "Demo" },
-  { href: "/docs", label: "Docs" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/integrations", label: "Integrations" },
   { href: "/blog", label: "Blog" },
   { href: "/help", label: "Support" },
+];
+
+const resourceLinks = [
+  {
+    href: "/demo",
+    label: "Demo",
+    icon: Play,
+    description: "Try a live payment flow",
+  },
+  {
+    href: "/docs",
+    label: "Documentation",
+    icon: BookOpen,
+    description: "SDK guides and API reference",
+  },
+  {
+    href: "/integrations",
+    label: "Integrations",
+    icon: Plug,
+    description: "Shopify, Zapier, WooCommerce & more",
+  },
 ];
 
 const productLinks = [
@@ -76,8 +96,10 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [industriesOpen, setIndustriesOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
   const productsRef = useRef<HTMLDivElement>(null);
   const industriesRef = useRef<HTMLDivElement>(null);
+  const resourcesRef = useRef<HTMLDivElement>(null);
   const { ready, authenticated, login, logout } = usePrivy();
 
   const isActive = (href: string) => {
@@ -88,6 +110,10 @@ export function Navbar() {
   const isProductsActive =
     pathname === "/send-payments" || pathname === "/accept-payments";
   const isIndustriesActive = pathname.startsWith("/industries");
+  const isResourcesActive =
+    pathname === "/demo" ||
+    pathname === "/docs" ||
+    pathname.startsWith("/integrations");
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -103,6 +129,12 @@ export function Navbar() {
         !industriesRef.current.contains(event.target as Node)
       ) {
         setIndustriesOpen(false);
+      }
+      if (
+        resourcesRef.current &&
+        !resourcesRef.current.contains(event.target as Node)
+      ) {
+        setResourcesOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -181,6 +213,68 @@ export function Navbar() {
                       onClick={() => setProductsOpen(false)}
                       className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-colors ${
                         pathname === link.href
+                          ? "bg-white/[0.08] text-white"
+                          : "text-white/70 hover:bg-white/5 hover:text-white"
+                      }`}
+                    >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#3B82F6]/15">
+                        <link.icon className="h-4 w-4 text-[#3B82F6]" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium">{link.label}</div>
+                        <div className="text-xs text-white/40">
+                          {link.description}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Resources Dropdown */}
+          <div ref={resourcesRef} className="relative">
+            <button
+              onClick={() => setResourcesOpen(!resourcesOpen)}
+              className={`relative flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors ${
+                isResourcesActive
+                  ? "text-white"
+                  : "text-white/60 hover:text-white"
+              }`}
+            >
+              Resources
+              <ChevronDown
+                className={`h-4 w-4 transition-transform ${
+                  resourcesOpen ? "rotate-180" : ""
+                }`}
+              />
+              {isResourcesActive && (
+                <motion.div
+                  layoutId="navbar-indicator"
+                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#3B82F6]"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+            </button>
+
+            <AnimatePresence>
+              {resourcesOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 top-full mt-2 w-64 rounded-xl border border-white/[0.08] bg-[#050507]/95 p-2 shadow-xl backdrop-blur-xl"
+                >
+                  {resourceLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setResourcesOpen(false)}
+                      className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-colors ${
+                        pathname === link.href ||
+                        pathname.startsWith(link.href + "/")
                           ? "bg-white/[0.08] text-white"
                           : "text-white/70 hover:bg-white/5 hover:text-white"
                       }`}
@@ -342,6 +436,28 @@ export function Navbar() {
                   Products
                 </div>
                 {productLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                      pathname === link.href
+                        ? "bg-white/5 text-white"
+                        : "text-white/60 hover:bg-white/5 hover:text-white"
+                    }`}
+                  >
+                    <link.icon className="h-4 w-4 text-blue-400" />
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Mobile Resources Section */}
+              <div className="mt-2 border-t border-white/10 pt-2">
+                <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white/40">
+                  Resources
+                </div>
+                {resourceLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
