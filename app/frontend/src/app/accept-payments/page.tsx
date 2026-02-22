@@ -310,8 +310,8 @@ export default function AcceptPaymentsPage() {
               },
               {
                 icon: Lock,
-                title: "Encrypted receipts",
-                text: "Payment amounts encrypted on-chain with FHE. Only you and your customer can see transaction details.",
+                title: "Private receipts",
+                text: "Payment amounts hidden during processing with TEE privacy. Only you and your customer can see transaction details.",
               },
               {
                 icon: ShoppingCart,

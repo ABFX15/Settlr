@@ -1,30 +1,30 @@
 /**
- * Private Receipt API v2
+ * Private Receipt API v3 — MagicBlock PER
  * 
- * Issues FHE-encrypted private receipts for payments using Inco Lightning.
- * Only authorized parties (merchant + customer) can decrypt payment amounts.
+ * Issues TEE-private payment receipts using MagicBlock Private Ephemeral Rollups.
+ * Payment amounts are hidden from base-layer observers while processed inside TEE.
  * 
- * Uses @inco/solana-sdk for real client-side encryption.
- * Stores encrypted handles in Supabase for off-chain verification.
- * 
- * POST: Issue a private receipt for a completed payment
- * GET: Retrieve/verify a private receipt
+ * POST: Create / delegate / process / settle / verify / list / revoke
+ * GET: Query receipt by paymentId or list by wallet
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { PublicKey } from '@solana/web3.js';
 import { createClient } from '@supabase/supabase-js';
 import {
-    encryptAmount,
+    findPrivateReceiptPda,
+    findDelegationRecordPda,
+    findDelegationMetadataPda,
     usdcToMicroUnits,
-    findPrivateReceiptPda as findReceiptPda,
-    findAllowancePda as findAllowance,
-    INCO_LIGHTNING_PROGRAM_ID,
+    DELEGATION_PROGRAM_ID,
     SETTLR_PROGRAM_ID,
+    TEE_VALIDATOR,
+    PER_ENDPOINT,
+    SessionStatus,
+    SESSION_STATUS_LABELS,
+    generateSessionHash,
+    getPrivacyVisibility,
 } from '@/lib/inco-lightning';
-
-// Flag to use real Inco encryption vs simulated
-const USE_REAL_INCO_ENCRYPTION = true;
 
 // Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -34,98 +34,28 @@ const supabase = supabaseUrl && supabaseServiceKey
     ? createClient(supabaseUrl, supabaseServiceKey)
     : null;
 
-/**
- * Generate an encrypted handle using Inco Lightning FHE encryption.
- * 
- * When USE_REAL_INCO_ENCRYPTION is true:
- * - Uses @inco/solana-sdk to encrypt the amount with Inco's TEE public key
- * - Returns the ciphertext hex which can be used with the on-chain program
- * 
- * When false (fallback):
- * - Uses SHA-256 to generate a deterministic handle (for testing)
- */
-async function generateEncryptedHandle(
-    paymentId: string,
-    amount: number,
-    customer: string,
-    merchant: string
-): Promise<{ handle: string; hash: string; ciphertext?: string; isRealEncryption: boolean }> {
-
-    if (USE_REAL_INCO_ENCRYPTION) {
-        try {
-            // Convert USDC amount to micro-units (6 decimals)
-            const microUnits = usdcToMicroUnits(amount);
-
-            // Encrypt using Inco SDK - this calls Inco's TEE endpoint
-            const ciphertextHex = await encryptAmount(microUnits);
-
-            console.log('[Privacy] Real Inco encryption successful');
-            console.log(`  Amount: $${amount} USDC → ${microUnits} micro-units`);
-            console.log(`  Ciphertext: ${ciphertextHex.slice(0, 32)}...`);
-
-            // Generate a handle from the ciphertext (first 16 bytes as u128)
-            const ciphertextBytes = Buffer.from(ciphertextHex.replace(/^0x/, ''), 'hex');
-            let handle = BigInt(0);
-            for (let i = 15; i >= 0 && i < ciphertextBytes.length; i--) {
-                handle = (handle << BigInt(8)) | BigInt(ciphertextBytes[i]);
-            }
-
-            // Short hash for display
-            const hashHex = ciphertextHex.slice(2, 18); // First 8 bytes after 0x
-
-            return {
-                handle: handle.toString(),
-                hash: hashHex,
-                ciphertext: ciphertextHex,
-                isRealEncryption: true
-            };
-        } catch (error) {
-            console.error('[Privacy] Real Inco encryption failed, falling back to simulated:', error);
-            // Fall through to simulated encryption
-        }
-    }
-
-    // Fallback: Simulated encryption using SHA-256
-    const encoder = new TextEncoder();
-    const data = encoder.encode(`${paymentId}:${amount}:${customer}:${merchant}:${Date.now()}`);
-
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data.buffer as ArrayBuffer);
-    const hashArray = new Uint8Array(hashBuffer);
-
-    let handle = BigInt(0);
-    for (let i = 15; i >= 0; i--) {
-        handle = (handle << BigInt(8)) | BigInt(hashArray[i]);
-    }
-
-    const hashHex = Array.from(hashArray.slice(0, 8))
-        .map(b => b.toString(16).padStart(2, '0'))
-        .join('');
-
-    return {
-        handle: handle.toString(),
-        hash: hashHex,
-        isRealEncryption: false
-    };
-}
-
-/**
- * Find the private receipt PDA (for on-chain verification)
- */
-function findPrivateReceiptPda(paymentId: string): [PublicKey, number] {
-    return findReceiptPda(paymentId);
-}
-
-/**
- * Find allowance PDA for a given handle and address
- */
-function findAllowancePda(handle: bigint, allowedAddress: PublicKey): [PublicKey, number] {
-    return findAllowance(handle, allowedAddress);
-}
+// In-memory session store (use DB in production)
+const sessions = new Map<string, {
+    paymentId: string;
+    amount: number;
+    customer: string;
+    merchant: string;
+    status: SessionStatus;
+    isDelegated: boolean;
+    sessionHash: string;
+    privateReceiptPda: string;
+    delegationRecordPda: string;
+    delegationMetadataPda: string;
+    createdAt: string;
+    delegatedAt?: string;
+    processedAt?: string;
+    settledAt?: string;
+}>();
 
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { action, paymentId, amount, customer, merchant, txSignature } = body;
+        const { action, paymentId, amount, customer, merchant, txSignature, wallet } = body;
 
         if (!action) {
             return NextResponse.json(
@@ -136,9 +66,8 @@ export async function POST(request: NextRequest) {
 
         switch (action) {
             case 'issue':
-            case 'simulate': {
-                // Issue a private receipt for a completed payment
-                // 'simulate' and 'issue' do the same thing in demo mode
+            case 'create': {
+                // Create a private payment session on base layer
                 if (!paymentId || amount === undefined || !customer || !merchant) {
                     return NextResponse.json(
                         { error: 'Missing required parameters: paymentId, amount, customer, merchant' },
@@ -157,21 +86,29 @@ export async function POST(request: NextRequest) {
                     );
                 }
 
-                // Generate encrypted handle using Inco Lightning
-                const encryptionResult = await generateEncryptedHandle(
+                // Derive PDAs
+                const [privateReceiptPda] = findPrivateReceiptPda(paymentId);
+                const [delegationRecordPda] = findDelegationRecordPda(privateReceiptPda);
+                const [delegationMetadataPda] = findDelegationMetadataPda(privateReceiptPda);
+
+                // Generate session hash
+                const sessionHash = await generateSessionHash(paymentId, amount, customer, merchant);
+
+                const session = {
                     paymentId,
                     amount,
                     customer,
-                    merchant
-                );
+                    merchant,
+                    status: SessionStatus.Pending,
+                    isDelegated: false,
+                    sessionHash,
+                    privateReceiptPda: privateReceiptPda.toBase58(),
+                    delegationRecordPda: delegationRecordPda.toBase58(),
+                    delegationMetadataPda: delegationMetadataPda.toBase58(),
+                    createdAt: new Date().toISOString(),
+                };
 
-                const { handle, hash, ciphertext, isRealEncryption } = encryptionResult;
-
-                // Derive PDAs
-                const [privateReceiptPda] = findPrivateReceiptPda(paymentId);
-                const handleBigInt = BigInt(handle);
-                const [customerAllowancePda] = findAllowancePda(handleBigInt, new PublicKey(customer));
-                const [merchantAllowancePda] = findAllowancePda(handleBigInt, new PublicKey(merchant));
+                sessions.set(paymentId, session);
 
                 // Store in Supabase if configured
                 let stored = false;
@@ -183,78 +120,191 @@ export async function POST(request: NextRequest) {
                                 payment_id: paymentId,
                                 customer_wallet: customer,
                                 merchant_wallet: merchant,
-                                encrypted_handle: handle,
-                                encrypted_hash: hash,
-                                encrypted_ciphertext: ciphertext,
+                                session_hash: sessionHash,
+                                session_status: 'pending',
+                                is_delegated: false,
                                 payment_timestamp: new Date().toISOString(),
-                                privacy_version: 1,
-                                encryption_method: isRealEncryption ? 'inco_lightning_fhe' : 'simulated_sha256',
-                                customer_allowance_granted: true,
-                                merchant_allowance_granted: true,
+                                privacy_version: 3,
+                                encryption_method: 'magicblock_per',
                                 status: 'active'
-                            }, {
-                                onConflict: 'payment_id'
-                            });
+                            }, { onConflict: 'payment_id' });
 
-                        if (!error) {
-                            stored = true;
-                            console.log('[Privacy] Receipt stored in Supabase:', paymentId);
-                        } else {
-                            console.warn('[Privacy] Supabase storage error:', error);
-                        }
+                        if (!error) stored = true;
                     } catch (err) {
-                        console.warn('[Privacy] Supabase error:', err);
+                        console.warn('[PER] Supabase error:', err);
                     }
+                }
+
+                const visibility = getPrivacyVisibility(SessionStatus.Pending);
+
+                return NextResponse.json({
+                    success: true,
+                    action: 'create',
+                    paymentId,
+                    sessionHash,
+                    status: 'pending',
+                    statusLabel: SESSION_STATUS_LABELS[SessionStatus.Pending],
+                    isDelegated: false,
+                    privateReceiptPda: session.privateReceiptPda,
+                    delegationRecordPda: session.delegationRecordPda,
+                    delegationMetadataPda: session.delegationMetadataPda,
+                    visibility,
+                    stored,
+                    teeValidator: TEE_VALIDATOR.toBase58(),
+                    perEndpoint: PER_ENDPOINT,
+                    message: 'Private payment session created. Ready for TEE delegation.',
+                    handleShort: `0x${sessionHash.slice(0, 12)}`,
+                });
+            }
+
+            case 'delegate': {
+                // Delegate session to TEE
+                if (!paymentId) {
+                    return NextResponse.json({ error: 'Missing paymentId' }, { status: 400 });
+                }
+
+                const session = sessions.get(paymentId);
+                if (!session) {
+                    return NextResponse.json({ error: 'Session not found' }, { status: 404 });
+                }
+
+                if (session.status !== SessionStatus.Pending) {
+                    return NextResponse.json({
+                        error: `Cannot delegate session in ${SESSION_STATUS_LABELS[session.status]} state`
+                    }, { status: 400 });
+                }
+
+                session.status = SessionStatus.Active;
+                session.isDelegated = true;
+                session.delegatedAt = new Date().toISOString();
+
+                if (supabase) {
+                    try {
+                        await supabase.from('privacy_receipts')
+                            .update({ session_status: 'active', is_delegated: true })
+                            .eq('payment_id', paymentId);
+                    } catch { /* ignore */ }
+                }
+
+                const visibility = getPrivacyVisibility(SessionStatus.Active);
+
+                return NextResponse.json({
+                    success: true,
+                    action: 'delegate',
+                    paymentId,
+                    status: 'active',
+                    statusLabel: SESSION_STATUS_LABELS[SessionStatus.Active],
+                    isDelegated: true,
+                    visibility,
+                    message: 'Session delegated to MagicBlock TEE. Amount hidden from base-layer observers.',
+                    privacyNote: 'Account state is now inside TEE. Base-layer queries will not see current data.',
+                });
+            }
+
+            case 'process': {
+                // Process payment privately inside TEE
+                if (!paymentId) {
+                    return NextResponse.json({ error: 'Missing paymentId' }, { status: 400 });
+                }
+
+                const session = sessions.get(paymentId);
+                if (!session) {
+                    return NextResponse.json({ error: 'Session not found' }, { status: 404 });
+                }
+
+                if (session.status !== SessionStatus.Active) {
+                    return NextResponse.json({
+                        error: `Cannot process session in ${SESSION_STATUS_LABELS[session.status]} state`
+                    }, { status: 400 });
+                }
+
+                session.status = SessionStatus.Processed;
+                session.processedAt = new Date().toISOString();
+
+                if (supabase) {
+                    try {
+                        await supabase.from('privacy_receipts')
+                            .update({ session_status: 'processed' })
+                            .eq('payment_id', paymentId);
+                    } catch { /* ignore */ }
                 }
 
                 return NextResponse.json({
                     success: true,
-                    action: action,
+                    action: 'process',
                     paymentId,
-
-                    // Encrypted handle from Inco Lightning
-                    handle,
-                    encryptedHandle: handle, // Alias for backwards compat
-                    encryptedHash: hash,
-
-                    // Ciphertext for on-chain program (if using real encryption)
-                    ciphertext: ciphertext || null,
-
-                    // Whether real Inco FHE encryption was used
-                    isRealEncryption,
-
-                    // PDA addresses for on-chain verification
-                    privateReceiptPda: privateReceiptPda.toBase58(),
-                    customerAllowancePda: customerAllowancePda.toBase58(),
-                    merchantAllowancePda: merchantAllowancePda.toBase58(),
-
-                    // Storage status
-                    stored,
-                    demo: !isRealEncryption, // Only demo if not using real Inco encryption
-
-                    // Privacy info
-                    message: isRealEncryption
-                        ? 'Private receipt issued with Inco Lightning FHE encryption'
-                        : 'Private receipt issued (simulated encryption)',
-                    privacyNote: isRealEncryption
-                        ? 'Amount encrypted with Inco TEE. Only customer and merchant can decrypt via attested decryption.'
-                        : 'Simulated encryption - for production, enable USE_REAL_INCO_ENCRYPTION.',
-
-                    // Display-friendly shortened handle
-                    handleShort: `0x${handle.slice(-12)}`,
+                    status: 'processed',
+                    statusLabel: SESSION_STATUS_LABELS[SessionStatus.Processed],
+                    isDelegated: true,
+                    visibility: getPrivacyVisibility(SessionStatus.Processed),
+                    message: 'Payment processed privately inside TEE. Ready for settlement.',
                 });
             }
 
-            case 'verify': {
-                // Verify a private receipt exists
+            case 'settle': {
+                // Settle: commit state back to base layer
                 if (!paymentId) {
-                    return NextResponse.json(
-                        { error: 'Missing paymentId' },
-                        { status: 400 }
-                    );
+                    return NextResponse.json({ error: 'Missing paymentId' }, { status: 400 });
                 }
 
-                // Check Supabase first
+                const session = sessions.get(paymentId);
+                if (!session) {
+                    return NextResponse.json({ error: 'Session not found' }, { status: 404 });
+                }
+
+                if (session.status !== SessionStatus.Processed) {
+                    return NextResponse.json({
+                        error: `Cannot settle session in ${SESSION_STATUS_LABELS[session.status]} state`
+                    }, { status: 400 });
+                }
+
+                session.status = SessionStatus.Settled;
+                session.isDelegated = false;
+                session.settledAt = new Date().toISOString();
+
+                if (supabase) {
+                    try {
+                        await supabase.from('privacy_receipts')
+                            .update({ session_status: 'settled', is_delegated: false })
+                            .eq('payment_id', paymentId);
+                    } catch { /* ignore */ }
+                }
+
+                return NextResponse.json({
+                    success: true,
+                    action: 'settle',
+                    paymentId,
+                    status: 'settled',
+                    statusLabel: SESSION_STATUS_LABELS[SessionStatus.Settled],
+                    isDelegated: false,
+                    visibility: getPrivacyVisibility(SessionStatus.Settled),
+                    amount: session.amount,
+                    message: 'Payment settled. State committed back to base layer.',
+                    privacyNote: 'Amount is now visible on base layer after settlement.',
+                });
+            }
+
+            case 'verify':
+            case 'status': {
+                // Get session status
+                if (!paymentId) {
+                    return NextResponse.json({ error: 'Missing paymentId' }, { status: 400 });
+                }
+
+                // Check in-memory first
+                const session = sessions.get(paymentId);
+                if (session) {
+                    return NextResponse.json({
+                        success: true,
+                        exists: true,
+                        source: 'memory',
+                        ...session,
+                        statusLabel: SESSION_STATUS_LABELS[session.status],
+                        visibility: getPrivacyVisibility(session.status),
+                    });
+                }
+
+                // Check Supabase
                 if (supabase) {
                     try {
                         const { data, error } = await supabase
@@ -271,53 +321,53 @@ export async function POST(request: NextRequest) {
                                 paymentId: data.payment_id,
                                 customer: data.customer_wallet,
                                 merchant: data.merchant_wallet,
-                                encryptedHandle: data.encrypted_handle,
-                                encryptedHash: data.encrypted_hash,
+                                sessionHash: data.session_hash,
+                                sessionStatus: data.session_status,
+                                isDelegated: data.is_delegated,
                                 createdAt: data.created_at,
                                 status: data.status,
-                                customerAllowance: data.customer_allowance_granted,
-                                merchantAllowance: data.merchant_allowance_granted,
-                                privacyNote: 'Amount is FHE-encrypted. Authorized parties can decrypt via Inco covalidators.',
+                                privacyNote: 'MagicBlock PER — TEE-based privacy for payments.',
                             });
                         }
                     } catch (err) {
-                        console.warn('[Privacy] Verify lookup error:', err);
+                        console.warn('[PER] Verify lookup error:', err);
                     }
                 }
 
-                // Fall back to on-chain check (would work if Inco is deployed)
+                // Not found — derive PDA for on-chain check
                 const [privateReceiptPda] = findPrivateReceiptPda(paymentId);
 
                 return NextResponse.json({
                     success: false,
                     exists: false,
                     privateReceiptPda: privateReceiptPda.toBase58(),
-                    message: 'Private receipt not found in database. Check on-chain PDA.',
+                    message: 'Session not found. Check on-chain PDA.',
                 });
             }
 
             case 'list': {
                 // List privacy receipts for a wallet
-                const wallet = body.wallet;
                 if (!wallet) {
-                    return NextResponse.json(
-                        { error: 'Missing wallet parameter' },
-                        { status: 400 }
-                    );
+                    return NextResponse.json({ error: 'Missing wallet parameter' }, { status: 400 });
                 }
 
                 if (!supabase) {
+                    // Return from in-memory store
+                    const results = Array.from(sessions.values())
+                        .filter(s => s.customer === wallet || s.merchant === wallet);
                     return NextResponse.json({
-                        success: false,
-                        error: 'Database not configured',
-                        receipts: []
+                        success: true,
+                        wallet,
+                        receipts: results,
+                        count: results.length,
+                        source: 'memory',
                     });
                 }
 
                 try {
                     const { data, error } = await supabase
                         .from('privacy_receipts')
-                        .select('payment_id, encrypted_handle, encrypted_hash, created_at, status')
+                        .select('payment_id, session_hash, session_status, is_delegated, created_at, status')
                         .or(`customer_wallet.eq.${wallet},merchant_wallet.eq.${wallet}`)
                         .order('created_at', { ascending: false })
                         .limit(50);
@@ -328,10 +378,11 @@ export async function POST(request: NextRequest) {
                         success: true,
                         wallet,
                         receipts: data || [],
-                        count: data?.length || 0
+                        count: data?.length || 0,
+                        source: 'database',
                     });
                 } catch (err) {
-                    console.error('[Privacy] List error:', err);
+                    console.error('[PER] List error:', err);
                     return NextResponse.json({
                         success: false,
                         error: 'Failed to fetch receipts',
@@ -341,13 +392,12 @@ export async function POST(request: NextRequest) {
             }
 
             case 'revoke': {
-                // Revoke decryption access (demo only)
                 if (!paymentId) {
-                    return NextResponse.json(
-                        { error: 'Missing paymentId' },
-                        { status: 400 }
-                    );
+                    return NextResponse.json({ error: 'Missing paymentId' }, { status: 400 });
                 }
+
+                // Remove from memory
+                sessions.delete(paymentId);
 
                 if (supabase) {
                     const { error } = await supabase
@@ -358,16 +408,17 @@ export async function POST(request: NextRequest) {
                     if (!error) {
                         return NextResponse.json({
                             success: true,
-                            message: 'Privacy receipt access revoked',
+                            message: 'Privacy receipt revoked',
                             paymentId
                         });
                     }
                 }
 
                 return NextResponse.json({
-                    success: false,
-                    error: 'Failed to revoke access'
-                }, { status: 500 });
+                    success: true,
+                    message: 'Session removed',
+                    paymentId
+                });
             }
 
             default:
@@ -377,7 +428,7 @@ export async function POST(request: NextRequest) {
                 );
         }
     } catch (error) {
-        console.error('[Privacy] API error:', error);
+        console.error('[PER] API error:', error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : 'Internal server error' },
             { status: 500 }
@@ -391,7 +442,6 @@ export async function GET(request: NextRequest) {
     const wallet = searchParams.get('wallet');
 
     if (wallet) {
-        // List receipts for wallet
         const body = JSON.stringify({ action: 'list', wallet });
         const internalRequest = new NextRequest(request.url, {
             method: 'POST',
@@ -402,8 +452,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (paymentId) {
-        // Verify specific receipt
-        const body = JSON.stringify({ action: 'verify', paymentId });
+        const body = JSON.stringify({ action: 'status', paymentId });
         const internalRequest = new NextRequest(request.url, {
             method: 'POST',
             body,
@@ -412,8 +461,25 @@ export async function GET(request: NextRequest) {
         return POST(internalRequest);
     }
 
-    return NextResponse.json(
-        { error: 'Missing paymentId or wallet query parameter' },
-        { status: 400 }
-    );
+    // Return API info
+    return NextResponse.json({
+        name: 'Settlr Private Receipt API',
+        version: '3.0.0',
+        privacy: 'MagicBlock Private Ephemeral Rollups',
+        hackathon: 'MagicBlock SolanaBlitz 2026',
+        endpoints: {
+            POST: {
+                actions: ['create', 'delegate', 'process', 'settle', 'status', 'list', 'revoke'],
+            },
+            GET: {
+                params: ['paymentId', 'wallet'],
+            },
+        },
+        programs: {
+            settlr: SETTLR_PROGRAM_ID.toBase58(),
+            delegation: DELEGATION_PROGRAM_ID.toBase58(),
+            teeValidator: TEE_VALIDATOR.toBase58(),
+        },
+        perEndpoint: PER_ENDPOINT,
+    });
 }

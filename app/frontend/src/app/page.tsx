@@ -300,7 +300,7 @@ export default function LandingPage() {
                     "@type": "HowToStep",
                     position: 4,
                     name: "Settlement",
-                    text: "USDC settles in under one second. Non-custodial, gasless for recipients, with FHE-encrypted receipts for privacy.",
+                    text: "USDC settles in under one second. Non-custodial, gasless for recipients, with TEE-private receipts for privacy.",
                     url: "https://settlr.dev/#how-it-works",
                   },
                   {
@@ -1023,8 +1023,8 @@ export default function LandingPage() {
             },
             {
               icon: Lock,
-              title: "Privacy (FHE)",
-              text: "Encrypted receipts. Amounts hidden on-chain.",
+              title: "Privacy (PER)",
+              text: "Private receipts. Amounts hidden via TEE.",
             },
           ].map((item, i) => {
             const Icon = item.icon;
@@ -1424,7 +1424,7 @@ export default function LandingPage() {
                 values: ["Manual", "Manual", "CSV or API"],
               },
               { label: "Custodial?", values: ["Yes", "Yes", "No"] },
-              { label: "Privacy", values: ["None", "None", "FHE encrypted"] },
+              { label: "Privacy", values: ["None", "None", "TEE private"] },
             ].map((row, ri) => (
               <div
                 key={row.label}
@@ -1487,8 +1487,8 @@ export default function LandingPage() {
               },
               {
                 icon: Lock,
-                title: "FHE-encrypted receipts",
-                text: "Transaction amounts hidden on-chain using Fully Homomorphic Encryption. Only sender and recipient can see.",
+                title: "TEE-private receipts",
+                text: "Transaction amounts hidden during processing using MagicBlock Private Ephemeral Rollups. Only sender and recipient can see.",
                 color: "#3B82F6",
               },
               {

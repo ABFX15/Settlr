@@ -221,7 +221,7 @@ export default function CheckoutSessionPage() {
             confirmed.
             {session?.private && (
               <span className="block text-[#a78bfa]/70 text-xs mt-1">
-                Amount encrypted on-chain with FHE
+                Amount private via TEE
               </span>
             )}
           </p>

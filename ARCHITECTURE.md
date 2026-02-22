@@ -23,7 +23,7 @@ Settlr is a USDC checkout solution built on Solana. It provides merchants with a
 │  • React component or hosted page                               │
 │  • Privy embedded wallets                                       │
 │  • Gasless transactions                                         │
-│  • Privacy mode (ZK-shielded payments)                          │
+│  • Privacy mode (MagicBlock PER private payments)                │
 │  • One-click payments                                           │
 └─────────────────────────────────────────────────────────────────┘
                               │
@@ -45,7 +45,7 @@ Settlr is a USDC checkout solution built on Solana. It provides merchants with a
 │  • On-chain payment processing                                  │
 │  • Platform fee collection                                      │
 │  • Merchant management                                          │
-│  • Inco Lightning private receipts                              │
+│  • MagicBlock PER private payments (TEE-secured)                │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -53,19 +53,19 @@ Settlr is a USDC checkout solution built on Solana. It provides merchants with a
 
 ## Stack Summary
 
-| Layer       | Technology                         | Status                            |
-| ----------- | ---------------------------------- | --------------------------------- |
-| Frontend    | Next.js 16 (App Router)            | ✅ Implemented                    |
-| SDK         | @settlr/sdk (npm)                  | ✅ v0.6.0 published               |
-| Auth        | Privy (embedded wallets)           | ✅ Implemented                    |
-| Gasless     | Kora + Privy fee payer             | ✅ Implemented                    |
-| Privacy     | Inco Lightning + Privacy Cash      | ✅ Implemented                    |
-| Security    | Range (wallet risk screening)      | ✅ Implemented                    |
-| One-Click   | Saved payment methods              | ✅ Implemented                    |
-| Database    | Supabase (with in-memory fallback) | ✅ Implemented                    |
-| KYC         | Sumsub                             | ⚠️ Scaffolded, not enforced       |
-| Cross-chain | Mayan                              | ❌ Documented but NOT implemented |
-| On-chain    | Anchor (Solana)                    | ✅ Deployed to devnet             |
+| Layer       | Technology                           | Status                            |
+| ----------- | ------------------------------------ | --------------------------------- |
+| Frontend    | Next.js 16 (App Router)              | ✅ Implemented                    |
+| SDK         | @settlr/sdk (npm)                    | ✅ v0.6.0 published               |
+| Auth        | Privy (embedded wallets)             | ✅ Implemented                    |
+| Gasless     | Kora + Privy fee payer               | ✅ Implemented                    |
+| Privacy     | MagicBlock Private Ephemeral Rollups | ✅ Implemented                    |
+| Security    | Range (wallet risk screening)        | ✅ Implemented                    |
+| One-Click   | Saved payment methods                | ✅ Implemented                    |
+| Database    | Supabase (with in-memory fallback)   | ✅ Implemented                    |
+| KYC         | Sumsub                               | ⚠️ Scaffolded, not enforced       |
+| Cross-chain | Mayan                                | ❌ Documented but NOT implemented |
+| On-chain    | Anchor (Solana)                      | ✅ Deployed to devnet             |
 
 ---
 
@@ -327,12 +327,9 @@ pub struct Payment {
 
 ### Privacy
 
-| Endpoint               | Method | Description                   |
-| ---------------------- | ------ | ----------------------------- |
-| `/api/privacy/payment` | POST   | Execute ZK-shielded payment   |
-| `/api/privacy/receipt` | POST   | Issue Inco FHE encrypted rcpt |
-| `/api/privacy/payout`  | POST   | B2B private settlement        |
-| `/api/privacy/gaming`  | POST   | MagicBlock PER gaming session |
+| Endpoint              | Method | Description                                                      |
+| --------------------- | ------ | ---------------------------------------------------------------- |
+| `/api/privacy/gaming` | POST   | MagicBlock PER private payments (create/delegate/process/settle) |
 
 ### Security
 
@@ -472,31 +469,38 @@ POST /api/risk-check (full payment risk assessment)
 
 ---
 
-### Privacy (Inco Lightning + Privacy Cash)
+### Privacy (MagicBlock Private Ephemeral Rollups)
 
-**Purpose:** Private payments where amount and sender-recipient link are hidden
+**Purpose:** Private payments where amount and sender-recipient data are hidden inside TEE during processing
 
 **Locations:**
 
-- `app/frontend/src/lib/privacy-cash.ts` - Privacy Cash SDK wrapper
-- `app/frontend/src/app/api/privacy/payment/route.ts` - Private payment API
-- `app/frontend/src/app/api/privacy/receipt/route.ts` - Inco FHE receipts
-- `programs/x402-hack-payment/src/instructions/private_receipt.rs` - On-chain
+- `packages/sdk/src/privacy.ts` - PER SDK helpers (PDAs, connections, permissions)
+- `app/frontend/src/app/api/privacy/gaming/route.ts` - Private payments API
+- `app/frontend/src/app/privacy/page.tsx` - Interactive demo UI
+- `programs/x402-hack-payment/src/instructions/private_receipt.rs` - On-chain (4 instructions)
 
-**Privacy Layers:**
+**Privacy Architecture:**
 
-1. **Privacy Cash (ZK Shielding)** - Hides amount on-chain via shield/unshield
-2. **Inco Lightning (FHE)** - Encrypts receipt amount, only authorized parties decrypt
+1. **Create** - Payment session created on Solana base layer
+2. **Delegate** - Account delegated to PER (data moves into Intel TDX TEE)
+3. **Process** - Payment executed inside TEE (hidden from all observers)
+4. **Settle** - Final state committed back to Solana base layer
+
+**Key Programs:**
+
+- Delegation: `DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh`
+- Permission: `ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1`
+- PER Endpoint: `https://tee.magicblock.app`
 
 **Key Endpoints:**
 
 ```typescript
-POST / api / privacy / payment; // Execute ZK-shielded payment
-POST / api / privacy / receipt; // Issue FHE-encrypted receipt
-POST / api / privacy / payout; // B2B private settlements
+POST / api / privacy / gaming; // action: create | delegate | process | settle | status
+GET / api / privacy / gaming; // API info and endpoint details
 ```
 
-**Status:** ✅ Implemented (demo mode - simulates Privacy Cash for devnet)
+**Status:** ✅ Implemented (SolanaBlitz Hackathon — MagicBlock Weekend)
 
 ---
 
@@ -625,8 +629,8 @@ KORA_FEE_PAYER_KEYPAIR=
 # Range Security (wallet risk screening)
 RANGE_API_KEY=
 
-# Inco Lightning (FHE encryption for private receipts)
-INCO_GATEWAY_URL=
+# MagicBlock PER (TEE-based private payments)
+# PER_ENDPOINT=https://tee.magicblock.app
 ```
 
 ---

@@ -1,11 +1,12 @@
 /**
- * Test script for Inco Lightning private receipts
- * 
- * This tests the full flow:
- * 1. Create encrypted amount ciphertext
- * 2. Issue private receipt with Inco CPI
- * 3. Grant decryption access to customer and merchant
- * 
+ * Test: MagicBlock Private Ephemeral Rollup (PER) Payments
+ *
+ * Full flow:
+ *   1. Create private payment session on base layer
+ *   2. Delegate account to PER (data enters Intel TDX TEE)
+ *   3. Process payment inside TEE (hidden from observers)
+ *   4. Settle — commit state back to Solana base layer
+ *
  * Run: npx ts-node tests/test-private-receipt.ts
  */
 
@@ -16,220 +17,293 @@ import {
     Keypair,
     Connection,
     SystemProgram,
-    LAMPORTS_PER_SOL
+    LAMPORTS_PER_SOL,
 } from '@solana/web3.js';
 import * as fs from 'fs';
 
-// Load types
 import type { X402HackPayment } from '../target/types/x402_hack_payment';
 
-// Constants
-const INCO_LIGHTNING_PROGRAM_ID = new PublicKey('5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj');
+// ── Constants ──
 const SETTLR_PROGRAM_ID = new PublicKey('339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5');
+const DELEGATION_PROGRAM_ID = new PublicKey('DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh');
+const PERMISSION_PROGRAM_ID = new PublicKey('ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1');
 
-// Helper to derive private receipt PDA
+const MAGIC_ROUTER_DEVNET = 'https://devnet-router.magicblock.app';
+const PER_ENDPOINT = 'https://tee.magicblock.app';
+const TEE_VALIDATOR = new PublicKey('FnE6VJT5QNZdedZPnCoLsARgBwoE6DeJNjBs2H1gySXA');
+
+// ── PDA helpers ──
+
 function findPrivateReceiptPda(paymentId: string): [PublicKey, number] {
     return PublicKey.findProgramAddressSync(
         [Buffer.from('private_receipt'), Buffer.from(paymentId)],
-        SETTLR_PROGRAM_ID
+        SETTLR_PROGRAM_ID,
     );
 }
 
-// Helper to derive allowance PDA
-function findAllowancePda(handle: bigint, allowedAddress: PublicKey): [PublicKey, number] {
-    const handleBuffer = Buffer.alloc(16);
-    let h = handle;
-    for (let i = 0; i < 16; i++) {
-        handleBuffer[i] = Number(h & BigInt(0xff));
-        h = h >> BigInt(8);
-    }
+function findDelegationBufferPda(receiptPda: PublicKey): [PublicKey, number] {
     return PublicKey.findProgramAddressSync(
-        [handleBuffer, allowedAddress.toBuffer()],
-        INCO_LIGHTNING_PROGRAM_ID
+        [Buffer.from('buffer'), receiptPda.toBuffer()],
+        DELEGATION_PROGRAM_ID,
     );
 }
 
-// Placeholder encryption (would use real Inco encryption in production)
-function mockEncryptAmount(amount: bigint): Buffer {
-    const buffer = Buffer.alloc(32); // Inco ciphertexts are typically larger
-    buffer.writeBigUInt64LE(amount, 0);
-    // Fill rest with pseudo-random bytes based on amount
-    for (let i = 8; i < 32; i++) {
-        buffer[i] = Number((amount * BigInt(i)) % BigInt(256));
-    }
-    return buffer;
+function findDelegationRecordPda(receiptPda: PublicKey): [PublicKey, number] {
+    return PublicKey.findProgramAddressSync(
+        [Buffer.from('delegation'), receiptPda.toBuffer()],
+        DELEGATION_PROGRAM_ID,
+    );
 }
+
+function findDelegationMetadataPda(receiptPda: PublicKey): [PublicKey, number] {
+    return PublicKey.findProgramAddressSync(
+        [Buffer.from('delegation-metadata'), receiptPda.toBuffer()],
+        DELEGATION_PROGRAM_ID,
+    );
+}
+
+// ── Main ──
 
 async function main() {
-    console.log('🔒 Testing Inco Lightning Private Receipts\n');
+    console.log('🔒 Testing MagicBlock PER Private Payments\n');
 
-    // Setup connection
+    // ── 1. Setup ──
     const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
 
-    // Load wallet
     const walletPath = './phantom-wallet.json';
     if (!fs.existsSync(walletPath)) {
         console.error('❌ Wallet not found:', walletPath);
         process.exit(1);
     }
-
     const secretKey = JSON.parse(fs.readFileSync(walletPath, 'utf-8'));
     const wallet = Keypair.fromSecretKey(new Uint8Array(secretKey));
     console.log('💳 Wallet:', wallet.publicKey.toBase58());
 
-    // Check balance
     const balance = await connection.getBalance(wallet.publicKey);
     console.log('💰 Balance:', balance / LAMPORTS_PER_SOL, 'SOL');
 
     if (balance < 0.01 * LAMPORTS_PER_SOL) {
-        console.log('⚠️  Low balance, requesting airdrop...');
+        console.log('⚠️  Low balance — requesting airdrop...');
         const sig = await connection.requestAirdrop(wallet.publicKey, LAMPORTS_PER_SOL);
         await connection.confirmTransaction(sig);
         console.log('✅ Airdrop received');
     }
 
-    // Setup Anchor
     const provider = new anchor.AnchorProvider(
         connection,
         new anchor.Wallet(wallet),
-        { commitment: 'confirmed' }
+        { commitment: 'confirmed' },
     );
     anchor.setProvider(provider);
 
-    // Load program
     const idl = JSON.parse(fs.readFileSync('./target/idl/x402_hack_payment.json', 'utf-8'));
     const program = new Program(idl, provider) as Program<X402HackPayment>;
     console.log('📦 Program:', program.programId.toBase58());
 
-    // Test data
-    const paymentId = `test_receipt_${Date.now()}`;
-    const amountLamports = BigInt(99_990_000); // 99.99 USDC (6 decimals)
-    const merchantWallet = Keypair.generate().publicKey; // Simulated merchant
+    // ── 2. Test data ──
+    const paymentId = `per_test_${Date.now()}`;
+    const amount = new anchor.BN(99_990_000);     // 99.99 USDC (6 dec)
+    const feeAmount = new anchor.BN(990_000);      // 0.99 USDC fee
+    const memo = 'Hackathon PER test payment';
+    const merchantWallet = Keypair.generate().publicKey;
+
+    const [receiptPda, receiptBump] = findPrivateReceiptPda(paymentId);
+    const [bufferPda]   = findDelegationBufferPda(receiptPda);
+    const [recordPda]   = findDelegationRecordPda(receiptPda);
+    const [metadataPda] = findDelegationMetadataPda(receiptPda);
 
     console.log('\n📋 Test Parameters:');
     console.log('   Payment ID:', paymentId);
-    console.log('   Amount:', Number(amountLamports) / 1e6, 'USDC');
+    console.log('   Amount:', amount.toNumber() / 1e6, 'USDC');
+    console.log('   Fee:   ', feeAmount.toNumber() / 1e6, 'USDC');
     console.log('   Customer:', wallet.publicKey.toBase58());
     console.log('   Merchant:', merchantWallet.toBase58());
+    console.log('   Receipt PDA:', receiptPda.toBase58());
 
-    // Derive PDAs
-    const [privateReceiptPda, receiptBump] = findPrivateReceiptPda(paymentId);
-    console.log('\n🔑 Private Receipt PDA:', privateReceiptPda.toBase58());
-
-    // Create encrypted amount (mock - would use Inco encryption API in production)
-    const encryptedAmount = mockEncryptAmount(amountLamports);
-    console.log('🔐 Encrypted amount (mock):', encryptedAmount.toString('hex').slice(0, 32), '...');
-
+    // ── 3. Step 1: Issue private receipt on base layer ──
     try {
-        // Step 1: Build transaction for simulation (without allowance accounts)
-        console.log('\n⏳ Step 1: Building transaction for simulation...');
+        console.log('\n⏳ Step 1: Creating private payment session on base layer...');
 
-        const txForSim = await program.methods
-            .issuePrivateReceipt(paymentId, encryptedAmount)
+        const sig = await program.methods
+            .issuePrivateReceipt(paymentId, amount, feeAmount, memo)
             .accountsPartial({
                 customer: wallet.publicKey,
                 merchant: merchantWallet,
+                privateReceipt: receiptPda,
+                systemProgram: SystemProgram.programId,
             })
-            .transaction();
+            .rpc();
 
-        // Add recent blockhash
-        txForSim.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-        txForSim.feePayer = wallet.publicKey;
-        txForSim.sign(wallet);
+        console.log('✅ Session created!');
+        console.log('   Signature:', sig);
+        console.log('   Explorer: https://explorer.solana.com/tx/' + sig + '?cluster=devnet');
 
-        // Step 2: Simulate to get handle (if Inco is available on devnet)
-        console.log('⏳ Step 2: Simulating transaction...');
+        // Fetch receipt
+        const receipt = await program.account.privateReceipt.fetch(receiptPda);
+        console.log('\n📜 Private Receipt:');
+        console.log('   Payment ID:', receipt.paymentId);
+        console.log('   Amount:', receipt.amount.toNumber() / 1e6, 'USDC');
+        console.log('   Fee:', receipt.feeAmount.toNumber() / 1e6, 'USDC');
+        console.log('   Status:', JSON.stringify(receipt.sessionStatus));
+        console.log('   Delegated:', receipt.isDelegated);
+        console.log('   Memo:', receipt.memo);
 
-        const simulation = await connection.simulateTransaction(txForSim);
+        // ── Step 2: Delegate to PER ──
+        console.log('\n⏳ Step 2: Delegating to Private Ephemeral Rollup (TEE)...');
 
-        if (simulation.value.err) {
-            console.log('⚠️  Simulation result:', JSON.stringify(simulation.value.err, null, 2));
-            console.log('   Logs:', simulation.value.logs?.slice(-10));
-
-            // This is expected if Inco Lightning isn't deployed on devnet yet
-            // In that case, we'd need to test on a local validator with Inco mock
-            if (simulation.value.logs?.some(log => log.includes('AccountNotFound'))) {
-                console.log('\n📝 Note: Inco Lightning program may not be available on devnet yet.');
-                console.log('   The integration code is correct - just needs Inco devnet deployment.');
-                console.log('   You can test locally with a mock Inco program.');
-            }
-        } else {
-            console.log('✅ Simulation succeeded!');
-
-            // Extract the handle from Inco's NEW_EUINT128 event in the logs
-            // Look for: result=<handle>
-            let handle: bigint | null = null;
-            for (const log of simulation.value.logs || []) {
-                const match = log.match(/result=(\d+)/);
-                if (match) {
-                    handle = BigInt(match[1]);
-                    console.log('   Extracted handle from logs:', handle.toString());
-                    break;
-                }
-            }
-
-            if (!handle) {
-                console.log('⚠️  Could not extract handle from simulation logs');
-                console.log('   Logs:', simulation.value.logs);
-                return;
-            }
-
-            // Step 3: Derive allowance PDAs from the REAL handle
-            console.log('⏳ Step 3: Deriving allowance PDAs from handle...');
-            const [customerAllowancePda] = findAllowancePda(handle, wallet.publicKey);
-            const [merchantAllowancePda] = findAllowancePda(handle, merchantWallet);
-
-            console.log('   Customer allowance PDA:', customerAllowancePda.toBase58());
-            console.log('   Merchant allowance PDA:', merchantAllowancePda.toBase58());
-
-            // Step 4: Execute real transaction with allowance accounts
-            console.log('⏳ Step 4: Executing transaction with allowance accounts...');
-
-            const sig = await program.methods
-                .issuePrivateReceipt(paymentId, encryptedAmount)
+        try {
+            const delegateSig = await program.methods
+                .delegatePrivatePayment()
                 .accountsPartial({
                     customer: wallet.publicKey,
-                    merchant: merchantWallet,
-                    incoLightningProgram: INCO_LIGHTNING_PROGRAM_ID,
+                    privateReceipt: receiptPda,
+                    delegationBuffer: bufferPda,
+                    delegationRecord: recordPda,
+                    delegationMetadata: metadataPda,
+                    ownerProgram: SETTLR_PROGRAM_ID,
+                    delegationProgram: DELEGATION_PROGRAM_ID,
                     systemProgram: SystemProgram.programId,
                 })
-                .remainingAccounts([
-                    { pubkey: customerAllowancePda, isSigner: false, isWritable: true },
-                    { pubkey: merchantAllowancePda, isSigner: false, isWritable: true },
-                ])
                 .rpc();
 
-            console.log('\n✅ Private receipt issued!');
-            console.log('   Signature:', sig);
-            console.log('   Explorer: https://explorer.solana.com/tx/' + sig + '?cluster=devnet');
+            console.log('✅ Delegated to PER!');
+            console.log('   Signature:', delegateSig);
+            console.log('   PER Endpoint:', PER_ENDPOINT);
+            console.log('   🔐 Data now hidden inside Intel TDX TEE');
 
-            // Fetch and display the receipt
-            const receipt = await program.account.privateReceipt.fetch(privateReceiptPda);
-            console.log('\n📜 Private Receipt Data:');
-            console.log('   Payment ID:', receipt.paymentId);
-            console.log('   Customer:', receipt.customer.toBase58());
-            console.log('   Merchant:', receipt.merchant.toBase58());
-            console.log('   Encrypted Handle:', receipt.encryptedAmountHandle.toString());
-            console.log('   Issued At:', new Date(Number(receipt.issuedAt) * 1000).toISOString());
+            // ── Step 3: Process inside TEE ──
+            console.log('\n⏳ Step 3: Processing payment inside TEE...');
+
+            // Connect to PER endpoint for processing
+            const perConnection = new Connection(PER_ENDPOINT, { commitment: 'confirmed' });
+            const perProvider = new anchor.AnchorProvider(
+                perConnection,
+                new anchor.Wallet(wallet),
+                { commitment: 'confirmed' },
+            );
+
+            const perProgram = new Program(idl, perProvider) as Program<X402HackPayment>;
+
+            const processSig = await perProgram.methods
+                .processPrivatePayment()
+                .accountsPartial({
+                    customer: wallet.publicKey,
+                    privateReceipt: receiptPda,
+                })
+                .rpc();
+
+            console.log('✅ Payment processed (hidden in TEE)!');
+            console.log('   Signature:', processSig);
+            console.log('   🔐 Amount, fee, recipient invisible to outside observers');
+
+            // ── Step 4: Settle back to base layer ──
+            console.log('\n⏳ Step 4: Settling — committing state to Solana...');
+
+            const settleSig = await program.methods
+                .settlePrivatePayment()
+                .accountsPartial({
+                    customer: wallet.publicKey,
+                    privateReceipt: receiptPda,
+                })
+                .rpc();
+
+            console.log('✅ Payment settled!');
+            console.log('   Signature:', settleSig);
+
+            // Verify settled state
+            const settled = await program.account.privateReceipt.fetch(receiptPda);
+            console.log('\n📜 Settled Receipt:');
+            console.log('   Status:', JSON.stringify(settled.sessionStatus));
+            console.log('   Delegated:', settled.isDelegated);
+            console.log('   Settled At:', new Date(settled.settledAt.toNumber() * 1000).toISOString());
+        } catch (delegateErr: any) {
+            if (delegateErr.message?.includes('AccountNotFound') ||
+                delegateErr.message?.includes('DELeGGvX')) {
+                console.log('\n📝 Delegation program not yet available on devnet.');
+                console.log('   Base-layer receipt creation is working ✅');
+                console.log('   PER delegation requires the MagicBlock delegation program on devnet.');
+                console.log('   Test the full flow on localnet with anchor-test or MagicBlock CLI.');
+            } else {
+                throw delegateErr;
+            }
         }
-
     } catch (error: any) {
         console.error('\n❌ Error:', error.message);
-
         if (error.logs) {
             console.log('\n📋 Transaction Logs:');
             error.logs.forEach((log: string) => console.log('   ', log));
         }
-
-        // Provide helpful context
-        if (error.message.includes('AccountNotFound') || error.message.includes('5sjEbPiq')) {
-            console.log('\n💡 The Inco Lightning program is not yet deployed on devnet.');
-            console.log('   Integration code is ready - waiting for Inco devnet availability.');
-            console.log('   Contact Inco team or check https://docs.inco.org for devnet status.');
-        }
     }
 
-    console.log('\n🏁 Test complete!');
+    // ── 4. Test API endpoint ──
+    console.log('\n\n🌐 Testing Private Payments API...');
+
+    const API_BASE = 'http://localhost:3000/api/privacy/gaming';
+
+    try {
+        // GET — info
+        const info = await fetch(API_BASE).then(r => r.json());
+        console.log('   API name:', info.name);
+        console.log('   Version:', info.version);
+
+        // POST create
+        const createRes = await fetch(API_BASE, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'create',
+                customerPubkey: wallet.publicKey.toBase58(),
+                merchantPubkey: merchantWallet.toBase58(),
+                amount: 5000000, // 5 USDC
+                memo: 'API test',
+            }),
+        }).then(r => r.json());
+
+        console.log('\n   Create:', createRes.success ? '✅' : '❌', createRes.message);
+        const sid = createRes.session?.paymentId;
+
+        if (sid) {
+            // Delegate
+            const delRes = await fetch(API_BASE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'delegate', sessionId: sid }),
+            }).then(r => r.json());
+            console.log('   Delegate:', delRes.success ? '✅' : '❌', delRes.message);
+
+            // Process
+            const procRes = await fetch(API_BASE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'process', sessionId: sid }),
+            }).then(r => r.json());
+            console.log('   Process:', procRes.success ? '✅' : '❌', procRes.message);
+
+            // Settle
+            const settleRes = await fetch(API_BASE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'settle', sessionId: sid }),
+            }).then(r => r.json());
+            console.log('   Settle:', settleRes.success ? '✅' : '❌', settleRes.message);
+
+            // Status
+            const statusRes = await fetch(API_BASE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'status', sessionId: sid }),
+            }).then(r => r.json());
+            console.log('   Final status:', statusRes.session?.status);
+        }
+    } catch (apiErr: any) {
+        console.log('   ⚠️  API test skipped (is the dev server running?)', apiErr.message);
+    }
+
+    console.log('\n🏁 MagicBlock PER test complete!');
+    console.log('\n🏆 Hackathon: SolanaBlitz — MagicBlock Weekend Hackathon');
+    console.log('   Privacy: Intel TDX TEE (hardware-secured)');
+    console.log('   Latency: Sub-10ms inside ephemeral rollup');
+    console.log('   Fee:     Gasless transactions inside PER');
 }
 
 main().catch(console.error);

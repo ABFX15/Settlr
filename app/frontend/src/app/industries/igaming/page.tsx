@@ -65,8 +65,8 @@ const features = [
     icon: Lock,
     title: "Player Privacy",
     description: "Encrypted receipts protect player transaction details.",
-    stat: "FHE",
-    statLabel: "encryption",
+    stat: "PER",
+    statLabel: "privacy",
   },
 ];
 

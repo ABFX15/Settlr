@@ -49,7 +49,7 @@ export function PrivacyBadge({
     if (!canDecrypt || revealed) return;
 
     setIsDecrypting(true);
-    // Simulate Inco covalidator decryption call
+    // Simulate PER TEE decryption (permissioned access)
     await new Promise((resolve) => setTimeout(resolve, 1500));
     setRevealed(true);
     setIsDecrypting(false);
@@ -75,7 +75,7 @@ export function PrivacyBadge({
         whileTap={{ scale: 0.98 }}
       >
         <ShieldCheck size={iconSizes[size]} className="text-[#a78bfa]" />
-        <span>FHE Encrypted</span>
+        <span>PER Private</span>
         {showTooltip && (
           <Info size={iconSizes[size] - 2} className="opacity-50" />
         )}
@@ -91,7 +91,7 @@ export function PrivacyBadge({
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-[#a78bfa] font-medium">
               <Shield size={16} />
-              Inco Lightning FHE Privacy
+              MagicBlock PER Privacy
             </div>
 
             <p className="text-xs text-white/50">
@@ -144,7 +144,7 @@ export function PrivacyBadge({
                         >
                           <Unlock size={12} />
                         </motion.div>
-                        Decrypting via Inco...
+                        Decrypting via PER...
                       </>
                     ) : (
                       <>
@@ -165,12 +165,12 @@ export function PrivacyBadge({
             )}
 
             <a
-              href="https://docs.inco.org/getting-started/current-fhe-limitations-and-improvements"
+              href="https://docs.magicblock.gg/pages/private-ephemeral-rollups-pers/introduction/onchain-privacy"
               target="_blank"
               rel="noopener noreferrer"
               className="block text-xs text-[#a78bfa] hover:text-[#a78bfa]/80"
             >
-              Learn about FHE encryption →
+              Learn about PER privacy →
             </a>
           </div>
         </motion.div>
@@ -220,7 +220,7 @@ export function PrivacyComparison({
       <div className="p-4 rounded-lg bg-[#a78bfa]/[0.06] border border-[#a78bfa]/20">
         <div className="flex items-center gap-2 mb-3 text-[#a78bfa] font-medium">
           <ShieldCheck size={16} />
-          Private Receipt (FHE)
+          Private Receipt (PER)
         </div>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between items-start">

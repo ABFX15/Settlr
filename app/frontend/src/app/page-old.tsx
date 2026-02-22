@@ -1017,7 +1017,7 @@ export default function LandingPage() {
                           </div>
                           <div className="mt-2.5 flex items-center gap-1.5 text-[9px] text-white/15">
                             <Lock className="h-3 w-3" />
-                            Encrypted receipt · FHE
+                            Private receipt · PER
                           </div>
                         </div>
                       </div>
@@ -2007,7 +2007,7 @@ export default function LandingPage() {
             {
               icon: Lock,
               title: "Encrypted receipts",
-              text: "FHE-encrypted transaction data via Inco Lightning. Only you and your customer can see amounts.",
+              text: "TEE-private payment data via MagicBlock PER. Amounts hidden from observers during processing.",
               color: "#38bdf8",
             },
             {

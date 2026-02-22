@@ -271,20 +271,30 @@ describe('Settlr SDK Utils', () => {
 // Import privacy module for testing
 import {
     findPrivateReceiptPda,
-    findAllowancePda,
-    encryptAmount,
-    INCO_LIGHTNING_PROGRAM_ID,
-    SETTLR_PROGRAM_ID
+    findDelegationBufferPda,
+    findDelegationRecordPda,
+    findDelegationMetadataPda,
+    DELEGATION_PROGRAM_ID,
+    PERMISSION_PROGRAM_ID,
+    SETTLR_PROGRAM_ID,
+    SessionStatus,
+    buildPaymentPermissions,
 } from '../privacy';
 import { PublicKey } from '@solana/web3.js';
 
-describe('Settlr SDK Privacy Module', () => {
+describe('Settlr SDK Privacy Module (MagicBlock PER)', () => {
     const TEST_WALLET = new PublicKey('9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM');
+    const TEST_MERCHANT = new PublicKey('So11111111111111111111111111111111111111112');
 
     describe('Program IDs', () => {
-        it('should have valid Inco Lightning program ID', () => {
-            expect(INCO_LIGHTNING_PROGRAM_ID).to.be.instanceOf(PublicKey);
-            expect(INCO_LIGHTNING_PROGRAM_ID.toBase58()).to.equal('5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj');
+        it('should have valid Delegation program ID', () => {
+            expect(DELEGATION_PROGRAM_ID).to.be.instanceOf(PublicKey);
+            expect(DELEGATION_PROGRAM_ID.toBase58()).to.equal('DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh');
+        });
+
+        it('should have valid Permission program ID', () => {
+            expect(PERMISSION_PROGRAM_ID).to.be.instanceOf(PublicKey);
+            expect(PERMISSION_PROGRAM_ID.toBase58()).to.equal('ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1');
         });
 
         it('should have valid Settlr program ID', () => {
@@ -331,71 +341,67 @@ describe('Settlr SDK Privacy Module', () => {
         });
     });
 
-    describe('findAllowancePda', () => {
-        it('should derive valid allowance PDA', () => {
-            const handle = BigInt('12345678901234567890');
-            const [pda, bump] = findAllowancePda(handle, TEST_WALLET);
-            expect(pda).to.be.instanceOf(PublicKey);
+    describe('Delegation PDAs', () => {
+        it('should derive valid delegation buffer PDA', () => {
+            const [receiptPda] = findPrivateReceiptPda('pay_buffer_test');
+            const [bufferPda, bump] = findDelegationBufferPda(receiptPda);
+            expect(bufferPda).to.be.instanceOf(PublicKey);
             expect(bump).to.be.a('number');
         });
 
-        it('should return same PDA for same handle and address (deterministic)', () => {
-            const handle = BigInt('9876543210');
-            const [pda1] = findAllowancePda(handle, TEST_WALLET);
-            const [pda2] = findAllowancePda(handle, TEST_WALLET);
-            expect(pda1.toBase58()).to.equal(pda2.toBase58());
+        it('should derive valid delegation record PDA', () => {
+            const [receiptPda] = findPrivateReceiptPda('pay_record_test');
+            const [recordPda, bump] = findDelegationRecordPda(receiptPda);
+            expect(recordPda).to.be.instanceOf(PublicKey);
+            expect(bump).to.be.a('number');
         });
 
-        it('should return different PDAs for different handles', () => {
-            const handle1 = BigInt('1111111111');
-            const handle2 = BigInt('2222222222');
-            const [pda1] = findAllowancePda(handle1, TEST_WALLET);
-            const [pda2] = findAllowancePda(handle2, TEST_WALLET);
-            expect(pda1.toBase58()).to.not.equal(pda2.toBase58());
+        it('should derive valid delegation metadata PDA', () => {
+            const [receiptPda] = findPrivateReceiptPda('pay_meta_test');
+            const [metaPda, bump] = findDelegationMetadataPda(receiptPda);
+            expect(metaPda).to.be.instanceOf(PublicKey);
+            expect(bump).to.be.a('number');
         });
 
-        it('should return different PDAs for different addresses', () => {
-            const handle = BigInt('5555555555');
-            const wallet2 = new PublicKey('So11111111111111111111111111111111111111112');
-            const [pda1] = findAllowancePda(handle, TEST_WALLET);
-            const [pda2] = findAllowancePda(handle, wallet2);
-            expect(pda1.toBase58()).to.not.equal(pda2.toBase58());
+        it('should produce different PDAs for different receipt accounts', () => {
+            const [receipt1] = findPrivateReceiptPda('pay_1');
+            const [receipt2] = findPrivateReceiptPda('pay_2');
+            const [buf1] = findDelegationBufferPda(receipt1);
+            const [buf2] = findDelegationBufferPda(receipt2);
+            expect(buf1.toBase58()).to.not.equal(buf2.toBase58());
         });
 
-        it('should handle max u128 handle value', () => {
-            const maxU128 = BigInt('340282366920938463463374607431768211455');
-            const [pda] = findAllowancePda(maxU128, TEST_WALLET);
-            expect(pda).to.be.instanceOf(PublicKey);
-        });
-
-        it('should handle zero handle', () => {
-            const [pda] = findAllowancePda(BigInt(0), TEST_WALLET);
-            expect(pda).to.be.instanceOf(PublicKey);
+        it('should be deterministic', () => {
+            const [receiptPda] = findPrivateReceiptPda('pay_det');
+            const [buf1] = findDelegationBufferPda(receiptPda);
+            const [buf2] = findDelegationBufferPda(receiptPda);
+            expect(buf1.toBase58()).to.equal(buf2.toBase58());
         });
     });
 
-    describe('encryptAmount', () => {
-        it('should return Uint8Array for amount', async () => {
-            const encrypted = await encryptAmount(BigInt(1000000));
-            expect(encrypted).to.be.instanceOf(Uint8Array);
+    describe('SessionStatus', () => {
+        it('should have all status values', () => {
+            expect(SessionStatus.Pending).to.equal('pending');
+            expect(SessionStatus.Active).to.equal('active');
+            expect(SessionStatus.Processed).to.equal('processed');
+            expect(SessionStatus.Settled).to.equal('settled');
+        });
+    });
+
+    describe('buildPaymentPermissions', () => {
+        it('should return permission list for customer and merchant', () => {
+            const perms = buildPaymentPermissions(TEST_WALLET, TEST_MERCHANT);
+            expect(perms).to.be.an('array');
+            expect(perms.length).to.equal(2);
+            expect(perms[0].pubkey.toBase58()).to.equal(TEST_WALLET.toBase58());
+            expect(perms[1].pubkey.toBase58()).to.equal(TEST_MERCHANT.toBase58());
         });
 
-        it('should return consistent length output', async () => {
-            const enc1 = await encryptAmount(BigInt(1));
-            const enc2 = await encryptAmount(BigInt(1000000000));
-            expect(enc1.length).to.equal(enc2.length);
-        });
-
-        it('should handle zero amount', async () => {
-            const encrypted = await encryptAmount(BigInt(0));
-            expect(encrypted).to.be.instanceOf(Uint8Array);
-            expect(encrypted.length).to.be.greaterThan(0);
-        });
-
-        it('should handle large amounts', async () => {
-            const largeAmount = BigInt('1000000000000000'); // 1 billion USDC
-            const encrypted = await encryptAmount(largeAmount);
-            expect(encrypted).to.be.instanceOf(Uint8Array);
+        it('should assign permission flags', () => {
+            const perms = buildPaymentPermissions(TEST_WALLET, TEST_MERCHANT);
+            expect(perms[0].permissions).to.be.a('number');
+            expect(perms[1].permissions).to.be.a('number');
+            expect(perms[0].permissions).to.be.greaterThan(0);
         });
     });
 });

@@ -220,7 +220,7 @@ export default function DemoPage() {
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2">
                 <Shield className="h-4 w-4 text-[#3B82F6]" />
                 <span className="text-sm font-medium text-white/60">
-                  Inco Lightning FHE Encryption
+                  MagicBlock PER Privacy
                 </span>
               </div>
               <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
@@ -228,8 +228,8 @@ export default function DemoPage() {
               </h2>
               <p className="mx-auto max-w-xl text-white/50">
                 Compare how a regular payment vs. a private receipt appears on
-                Solana Explorer. With FHE encryption, the amount is never
-                visible on-chain.
+                Solana Explorer. With PER privacy, the amount is hidden while
+                inside the TEE.
               </p>
             </motion.div>
 
@@ -279,7 +279,7 @@ export default function DemoPage() {
                     }`}
                   >
                     <Shield className="h-4 w-4" />
-                    Private (FHE)
+                    Private (PER)
                   </button>
                 </div>
               </div>
@@ -294,8 +294,9 @@ export default function DemoPage() {
                 <div className="mt-6 rounded-xl bg-[#3B82F6]/10 p-4">
                   <p className="text-sm text-[#3B82F6]">
                     <strong>✓ Privacy protected:</strong> The actual amount is
-                    encrypted using Inco Lightning&apos;s Fully Homomorphic
-                    Encryption. Only the customer and merchant can decrypt it.
+                    hidden using MagicBlock&apos;s Private Ephemeral Rollups.
+                    Only authorized parties can view the details after
+                    settlement.
                   </p>
                 </div>
               )}

@@ -191,7 +191,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const [checkingOneClick, setCheckingOneClick] = useState(false);
   const [processingOneClick, setProcessingOneClick] = useState(false);
 
-  // Privacy state (Inco Lightning FHE)
+  // Privacy state (MagicBlock PER)
   // If URL has private=true, force privacy on and don't allow toggling
   const [privacyEnabled, setPrivacyEnabled] = useState(true); // Enable by default
   const isPrivacyForced = isPrivatePayment; // Can't toggle off if merchant requested private
@@ -509,7 +509,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
   }, [activeWallet?.address]);
 
-  // Issue a private receipt for the payment (Inco Lightning FHE encryption)
+  // Issue a private receipt for the payment (MagicBlock PER)
   const issuePrivateReceipt = useCallback(
     async (
       paymentId: string,
@@ -530,7 +530,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            action: "issue", // Issue private receipt with FHE encryption
+            action: "issue", // Issue private receipt with PER privacy
             paymentId,
             amount: paymentAmount,
             customer: customerAddress,
@@ -767,7 +767,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         }
       }
 
-      // Issue private receipt for the payment (Inco Lightning FHE)
+      // Issue private receipt for the payment (MagicBlock PER)
       const paymentId = transactionHash || `payment_${Date.now()}`;
       issuePrivateReceipt(
         paymentId,
@@ -1103,7 +1103,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         }
       }
 
-      // Issue private receipt for the payment (Inco Lightning FHE)
+      // Issue private receipt for the payment (MagicBlock PER)
       const paymentId = signature || `payment_${Date.now()}`;
       issuePrivateReceipt(
         paymentId,
@@ -1494,9 +1494,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
   };
 
-  // Process PRIVATE payment - real USDC transfer + FHE-encrypted receipt
+  // Process PRIVATE payment - real USDC transfer + PER-private receipt
   // For hackathon demo: The USDC transfer is visible on Solscan,
-  // but we issue a private receipt with FHE-encrypted amount via Inco Lightning.
+  // but we issue a private receipt via MagicBlock PER (TEE-based privacy).
   // This demonstrates the privacy layer Settlr adds on top of standard transfers.
   const processPrivatePayment = async () => {
     if (!activeWallet?.address || !merchantWallet) {
@@ -1544,9 +1544,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         setPrivateReceiptHandle(`0x${privacyData.privateHandle.slice(-12)}`);
       }
 
-      // Also issue Inco FHE receipt for additional encryption layer
+      // Also issue PER receipt for additional privacy layer
       console.log(
-        "[Private Payment] Issuing FHE-encrypted receipt via Inco...",
+        "[Private Payment] Issuing private receipt via MagicBlock PER...",
       );
       const receiptResponse = await fetch("/api/privacy/receipt", {
         method: "POST",
@@ -1563,7 +1563,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       if (receiptResponse.ok) {
         const receiptData = await receiptResponse.json();
-        console.log("[Private Payment] Inco receipt issued:", receiptData);
+        console.log("[Private Payment] PER receipt issued:", receiptData);
         if (receiptData.handleShort) {
           setPrivateReceiptHandle(receiptData.handleShort);
         }
@@ -2589,7 +2589,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                         )}
                       </p>
                       <p className="text-white/50 text-xs">
-                        Receipt encrypted via Inco Lightning FHE
+                        Receipt private via MagicBlock PER
                       </p>
                     </div>
                   </div>
@@ -2930,7 +2930,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </span>
               </div>
               <p className="text-xs text-[#a78bfa]/80 mb-2">
-                Payment receipt is FHE-encrypted via Inco Lightning
+                Payment receipt is private via MagicBlock PER
               </p>
               <p className="text-xs text-white/40">
                 Only you and {merchantName} can decrypt the payment details

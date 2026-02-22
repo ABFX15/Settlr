@@ -288,8 +288,8 @@ export default function SendPaymentsPage() {
               },
               {
                 icon: Lock,
-                title: "FHE-encrypted receipts",
-                text: "Transaction amounts are encrypted on-chain using Fully Homomorphic Encryption. Only sender and recipient can see.",
+                title: "TEE-private receipts",
+                text: "Transaction amounts are hidden during processing using MagicBlock PER. Only sender and recipient can view details.",
               },
               {
                 icon: Database,

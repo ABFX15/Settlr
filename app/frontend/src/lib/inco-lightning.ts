@@ -1,97 +1,55 @@
 /**
- * Inco Lightning SDK Integration
+ * MagicBlock Private Ephemeral Rollups (PER) Integration
  * 
- * Provides FHE (Fully Homomorphic Encryption) for private receipts on Solana.
- * Uses the official @inco/solana-sdk for client-side encryption and TEE-based decryption.
+ * Provides TEE-based private payments on Solana using MagicBlock's
+ * Private Ephemeral Rollups. Payment amounts are hidden from base-layer
+ * observers while being processed inside a Trusted Execution Environment.
  * 
  * Flow:
- * 1. Client encrypts amount using encryptValue() - produces ciphertext
- * 2. Ciphertext sent to on-chain program via issuePrivateReceipt
- * 3. Program calls Inco Lightning CPI to create encrypted handle
- * 4. Only authorized parties (merchant + customer) can decrypt via attested-decrypt
+ * 1. Client creates a private payment session on base layer
+ * 2. Session account is delegated to MagicBlock's TEE validator
+ * 3. Payment is processed privately inside the TEE (hidden from observers)
+ * 4. State is committed back to base layer after settlement
  * 
- * @see https://docs.inco.org/getting-started/solana-quickstart
+ * @see https://docs.magicblock.gg/Forever/Ephemeral/private-ephemeral-rollup
  */
 
-import { PublicKey, TransactionInstruction, Connection } from '@solana/web3.js';
-import { encryptValue, EncryptionError } from '@inco/solana-sdk/encryption';
-import { decrypt as attestedDecrypt, type AttestedDecryptResult } from '@inco/solana-sdk/attested-decrypt';
+import { PublicKey, Connection } from '@solana/web3.js';
 
-// Inco Lightning program ID on Solana
-export const INCO_LIGHTNING_PROGRAM_ID = new PublicKey('5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj');
+// MagicBlock Delegation Program
+export const DELEGATION_PROGRAM_ID = new PublicKey('DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh');
+
+// MagicBlock Permission Program  
+export const PERMISSION_PROGRAM_ID = new PublicKey('ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1');
 
 // Settlr program ID
 export const SETTLR_PROGRAM_ID = new PublicKey('339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5');
 
-// Private receipt PDA seed
+// MagicBlock TEE Validator
+export const TEE_VALIDATOR = new PublicKey('FnE6VJT5QNZdedZPnCoLsARgBwoE6DeJNjBs2H1gySXA');
+
+// PER endpoints
+export const PER_ENDPOINT = 'https://tee.magicblock.app';
+export const PER_WS_ENDPOINT = 'wss://tee.magicblock.app';
+export const MAGIC_ROUTER_DEVNET = 'https://devnet-router.magicblock.app';
+
+// PDA seeds
 const PRIVATE_RECEIPT_SEED = Buffer.from('private_receipt');
 
-/**
- * Encrypt a payment amount for on-chain storage
- * 
- * @param amount - Amount in smallest units (e.g., 50000 for $0.05 USDC with 6 decimals)
- * @returns Hex-encoded ciphertext for the on-chain program
- * 
- * @example
- * ```typescript
- * // Encrypt $10.00 USDC (6 decimals)
- * const ciphertext = await encryptAmount(10_000_000n);
- * ```
- */
-export async function encryptAmount(amount: bigint | number): Promise<string> {
-    const amountBigInt = typeof amount === 'number' ? BigInt(Math.floor(amount)) : amount;
-
-    try {
-        const encryptedHex = await encryptValue(amountBigInt);
-        console.log('[Inco] Amount encrypted successfully');
-        return encryptedHex;
-    } catch (error) {
-        if (error instanceof EncryptionError) {
-            console.error('[Inco] Encryption failed:', error.message, error.cause);
-        }
-        throw error;
-    }
+/** Session status enum matching on-chain state */
+export enum SessionStatus {
+    Pending = 0,
+    Active = 1,
+    Processed = 2,
+    Settled = 3,
 }
 
-/**
- * Encrypt a memo/message for private receipts
- * 
- * @param memo - The memo text to encrypt
- * @returns Hex-encoded ciphertext
- */
-export async function encryptMemo(memo: string): Promise<string> {
-    // Convert memo to a numeric representation (first 16 bytes as u128)
-    const encoder = new TextEncoder();
-    const bytes = encoder.encode(memo.slice(0, 16)); // Max 16 chars for u128
-
-    let value = BigInt(0);
-    for (let i = 0; i < Math.min(bytes.length, 16); i++) {
-        value = value | (BigInt(bytes[i]) << BigInt(i * 8));
-    }
-
-    return encryptValue(value);
-}
-
-/**
- * Decrypt payment amounts using attested decryption
- * Requires wallet signature for TEE access verification
- * 
- * @param handles - Array of encrypted handles to decrypt
- * @param wallet - Wallet with signMessage capability
- * @returns Decryption result with plaintexts and Ed25519 instructions
- */
-export async function decryptAmounts(
-    handles: string[],
-    wallet: {
-        publicKey: PublicKey;
-        signMessage: (message: Uint8Array) => Promise<Uint8Array>;
-    }
-): Promise<AttestedDecryptResult> {
-    return attestedDecrypt(handles, {
-        address: wallet.publicKey,
-        signMessage: wallet.signMessage,
-    });
-}
+export const SESSION_STATUS_LABELS: Record<SessionStatus, string> = {
+    [SessionStatus.Pending]: 'Pending',
+    [SessionStatus.Active]: 'Delegated to TEE',
+    [SessionStatus.Processed]: 'Processed in TEE',
+    [SessionStatus.Settled]: 'Settled on Base Layer',
+};
 
 /**
  * Find the Private Receipt PDA for a payment
@@ -100,7 +58,6 @@ export async function decryptAmounts(
  * @returns [PDA address, bump seed]
  */
 export function findPrivateReceiptPda(paymentId: string): [PublicKey, number] {
-    // PDA seeds have max 32 bytes - truncate long payment IDs
     let paymentIdSeed: Buffer;
     if (paymentId.length > 32) {
         paymentIdSeed = Buffer.from(paymentId.slice(0, 32));
@@ -115,29 +72,58 @@ export function findPrivateReceiptPda(paymentId: string): [PublicKey, number] {
 }
 
 /**
- * Find the Allowance PDA for decryption access
+ * Find the Delegation Record PDA for a delegated account
  * 
- * @param handle - The encrypted handle (as bigint)
- * @param allowedAddress - The address being granted access
+ * @param delegatedAccount - The account that has been delegated to TEE
  * @returns [PDA address, bump seed]
  */
-export function findAllowancePda(handle: bigint, allowedAddress: PublicKey): [PublicKey, number] {
-    // Convert handle to 16-byte little-endian buffer
-    const handleBuffer = Buffer.alloc(16);
-    let h = handle;
-    for (let i = 0; i < 16; i++) {
-        handleBuffer[i] = Number(h & BigInt(0xff));
-        h = h >> BigInt(8);
-    }
-
+export function findDelegationRecordPda(delegatedAccount: PublicKey): [PublicKey, number] {
     return PublicKey.findProgramAddressSync(
-        [handleBuffer, allowedAddress.toBuffer()],
-        INCO_LIGHTNING_PROGRAM_ID
+        [Buffer.from('delegation'), delegatedAccount.toBuffer()],
+        DELEGATION_PROGRAM_ID
     );
 }
 
 /**
- * Convert USDC amount to micro-units for encryption
+ * Find the Delegation Metadata PDA
+ * 
+ * @param delegatedAccount - The delegated account
+ * @returns [PDA address, bump seed]
+ */
+export function findDelegationMetadataPda(delegatedAccount: PublicKey): [PublicKey, number] {
+    return PublicKey.findProgramAddressSync(
+        [Buffer.from('delegation_metadata'), delegatedAccount.toBuffer()],
+        DELEGATION_PROGRAM_ID
+    );
+}
+
+/**
+ * Check if an account is currently delegated to the TEE
+ * 
+ * @param connection - Solana connection
+ * @param account - Account to check
+ * @returns true if delegated
+ */
+export async function isDelegatedToTee(
+    connection: Connection,
+    account: PublicKey
+): Promise<boolean> {
+    const [delegationRecord] = findDelegationRecordPda(account);
+    const info = await connection.getAccountInfo(delegationRecord);
+    return info !== null;
+}
+
+/**
+ * Create a connection to the MagicBlock TEE validator
+ * 
+ * @returns Connection to PER endpoint
+ */
+export function createTeeConnection(): Connection {
+    return new Connection(PER_ENDPOINT, 'confirmed');
+}
+
+/**
+ * Convert USDC amount to micro-units
  * 
  * @param usdcAmount - Amount in USDC (e.g., 10.50)
  * @returns BigInt in micro-USDC (e.g., 10500000n)
@@ -157,15 +143,57 @@ export function microUnitsToUsdc(microUnits: bigint): number {
 }
 
 /**
- * Build issuePrivateReceipt instruction data
- * This is the ciphertext that gets passed to the on-chain program
+ * Generate a session hash for display purposes
+ * Uses SHA-256 to create a deterministic identifier
  */
-export function buildReceiptCiphertext(encryptedHex: string): Buffer {
-    // Remove '0x' prefix if present
-    const hex = encryptedHex.startsWith('0x') ? encryptedHex.slice(2) : encryptedHex;
-    return Buffer.from(hex, 'hex');
+export async function generateSessionHash(
+    paymentId: string,
+    amount: number,
+    customer: string,
+    merchant: string
+): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(`${paymentId}:${amount}:${customer}:${merchant}:${Date.now()}`);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data.buffer as ArrayBuffer);
+    const hashArray = new Uint8Array(hashBuffer);
+    return Array.from(hashArray.slice(0, 16))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
 }
 
-// Re-export for convenience
-export { EncryptionError } from '@inco/solana-sdk/encryption';
-export type { AttestedDecryptResult } from '@inco/solana-sdk/attested-decrypt';
+/**
+ * Determine privacy visibility based on session status
+ * In PER, data is hidden while inside the TEE and revealed on settlement
+ */
+export function getPrivacyVisibility(status: SessionStatus): {
+    amountVisible: boolean;
+    label: string;
+    description: string;
+} {
+    switch (status) {
+        case SessionStatus.Pending:
+            return {
+                amountVisible: false,
+                label: 'Pending',
+                description: 'Session created. Amount visible until delegation.',
+            };
+        case SessionStatus.Active:
+            return {
+                amountVisible: false,
+                label: 'Private (TEE)',
+                description: 'Account delegated to TEE. Amount hidden from base-layer observers.',
+            };
+        case SessionStatus.Processed:
+            return {
+                amountVisible: false,
+                label: 'Processed (TEE)',
+                description: 'Payment processed inside TEE. Amount still hidden.',
+            };
+        case SessionStatus.Settled:
+            return {
+                amountVisible: true,
+                label: 'Settled',
+                description: 'State committed back to base layer. Amount now visible.',
+            };
+    }
+}

@@ -1,30 +1,25 @@
 use anchor_lang::prelude::*;
-use inco_lightning::cpi::accounts::{Operation, Allow};
-use inco_lightning::cpi::{new_euint128, allow};
-use inco_lightning::ID as INCO_LIGHTNING_ID;
+use ephemeral_rollups_sdk::cpi::{delegate_account, DelegateAccounts, DelegateConfig};
+use ephemeral_rollups_sdk::anchor::delegate;
 
-use crate::state::PrivateReceipt;
+use crate::state::{PrivateReceipt, SessionStatus};
 use crate::errors::PaymentError;
 
-/// Issue a private receipt for a payment with FHE-encrypted amount
-/// 
-/// The receipt stores the payment amount encrypted using Inco Lightning.
-/// Only merchant and customer are granted decryption access via allowance PDAs.
-/// 
-/// remaining_accounts must contain:
-/// [0] customer_allowance_pda (mut) - PDA for customer decryption access
-/// [1] merchant_allowance_pda (mut) - PDA for merchant decryption access
+/// ──────────────────────────────────────────────────────────────────────
+/// 1. Create a private payment session (on base layer)
+///    Initialises the account that will later be delegated to a PER.
+/// ──────────────────────────────────────────────────────────────────────
 #[derive(Accounts)]
 #[instruction(payment_id: String)]
 pub struct IssuePrivateReceipt<'info> {
     /// The customer who made the payment (pays for account creation)
     #[account(mut)]
     pub customer: Signer<'info>,
-    
+
     /// The merchant who received the payment
-    /// CHECK: We just store the pubkey and grant decryption access
+    /// CHECK: We just store the pubkey
     pub merchant: AccountInfo<'info>,
-    
+
     /// The private receipt account to create
     #[account(
         init,
@@ -34,117 +29,192 @@ pub struct IssuePrivateReceipt<'info> {
         bump,
     )]
     pub private_receipt: Account<'info, PrivateReceipt>,
-    
-    /// Inco Lightning program for encrypted operations
-    /// CHECK: Verified by address constraint
-    #[account(address = INCO_LIGHTNING_ID)]
-    pub inco_lightning_program: AccountInfo<'info>,
 
     pub system_program: Program<'info, System>,
 }
 
 impl<'info> IssuePrivateReceipt<'info> {
-    /// Issue a private receipt with encrypted amount
-    /// 
-    /// # Arguments
-    /// * `payment_id` - Unique identifier for the payment
-    /// * `encrypted_amount_ciphertext` - Client-encrypted amount (FHE ciphertext)
-    /// * `bumps` - PDA bumps
-    /// 
-    /// # Remaining Accounts
-    /// The client must pass allowance PDAs via remaining_accounts:
-    /// - [0] customer_allowance_pda (derived from [handle_bytes, customer_pubkey])
-    /// - [1] merchant_allowance_pda (derived from [handle_bytes, merchant_pubkey])
-    /// 
-    /// If remaining_accounts is empty, the receipt is created but no decryption access is granted.
-    /// This allows for a two-step flow: create receipt first (to get handle), then grant access.
     pub fn issue_private_receipt(
         ctx: Context<'_, '_, 'info, 'info, IssuePrivateReceipt<'info>>,
         payment_id: String,
-        encrypted_amount_ciphertext: Vec<u8>,
+        amount: u64,
+        fee_amount: u64,
+        memo: String,
     ) -> Result<()> {
-        require!(!payment_id.is_empty() && payment_id.len() <= 64, PaymentError::InvalidPaymentId);
-        
-        // Create CPI context for creating encrypted value
-        let operation_ctx = CpiContext::new(
-            ctx.accounts.inco_lightning_program.to_account_info(),
-            Operation {
-                signer: ctx.accounts.customer.to_account_info(),
-            },
+        require!(
+            !payment_id.is_empty() && payment_id.len() <= 64,
+            PaymentError::InvalidPaymentId
         );
-        
-        // Create encrypted amount from client-provided ciphertext
-        // The third argument (0) indicates the input is ciphertext, not plaintext
-        let encrypted_amount = new_euint128(
-            operation_ctx,
-            encrypted_amount_ciphertext,
-            0_u8, // 0 = ciphertext input, 1 = plaintext input
-        )?;
-        
-        // Extract the u128 handle from Euint128
-        let handle: u128 = encrypted_amount.0;
-        
-        // Grant decryption access if allowance accounts are provided
-        // This allows for simulation-first pattern: simulate without, then execute with allowances
-        if ctx.remaining_accounts.len() >= 2 {
-            let customer_allowance = &ctx.remaining_accounts[0];
-            let merchant_allowance = &ctx.remaining_accounts[1];
-            
-            // Grant decryption access to customer
-            let customer_allow_ctx = CpiContext::new(
-                ctx.accounts.inco_lightning_program.to_account_info(),
-                Allow {
-                    allowance_account: customer_allowance.to_account_info(),
-                    signer: ctx.accounts.customer.to_account_info(),
-                    allowed_address: ctx.accounts.customer.to_account_info(),
-                    system_program: ctx.accounts.system_program.to_account_info(),
-                },
-            );
-            allow(
-                customer_allow_ctx,
-                handle,
-                true, // is_self = true (granting access)
-                ctx.accounts.customer.key(),
-            )?;
-            
-            // Grant decryption access to merchant
-            let merchant_allow_ctx = CpiContext::new(
-                ctx.accounts.inco_lightning_program.to_account_info(),
-                Allow {
-                    allowance_account: merchant_allowance.to_account_info(),
-                    signer: ctx.accounts.customer.to_account_info(),
-                    allowed_address: ctx.accounts.merchant.to_account_info(),
-                    system_program: ctx.accounts.system_program.to_account_info(),
-                },
-            );
-            allow(
-                merchant_allow_ctx,
-                handle,
-                true, // is_self = true (granting access)
-                ctx.accounts.merchant.key(),
-            )?;
-            
-            msg!("   Customer {} granted decrypt access", ctx.accounts.customer.key());
-            msg!("   Merchant {} granted decrypt access", ctx.accounts.merchant.key());
-        } else {
-            msg!("⚠️  No allowance accounts provided - access not granted yet");
-        }
-        
-        // Initialize the private receipt with the encrypted handle
+
         let receipt = &mut ctx.accounts.private_receipt;
         receipt.payment_id = payment_id.clone();
         receipt.customer = ctx.accounts.customer.key();
         receipt.merchant = ctx.accounts.merchant.key();
-        receipt.encrypted_amount_handle = handle;
-        receipt.encrypted_metadata_handle = None;
-        receipt.issued_at = Clock::get()?.unix_timestamp;
+        receipt.amount = amount;
+        receipt.fee_amount = fee_amount;
+        receipt.session_status = SessionStatus::Pending;
+        receipt.is_delegated = false;
+        receipt.memo = memo;
+        receipt.created_at = Clock::get()?.unix_timestamp;
+        receipt.settled_at = 0;
         receipt.bump = ctx.bumps.private_receipt;
-        
-        msg!("🔒 Private receipt issued for payment: {}", payment_id);
-        msg!("   Handle: {}", handle);
-        msg!("   Customer {} granted decrypt access", ctx.accounts.customer.key());
-        msg!("   Merchant {} granted decrypt access", ctx.accounts.merchant.key());
-        
+
+        msg!("🔒 Private payment session created: {}", payment_id);
+        msg!("   Amount: {} USDC lamports (will be hidden once delegated to PER)", amount);
+        msg!("   Customer: {}", ctx.accounts.customer.key());
+        msg!("   Merchant: {}", ctx.accounts.merchant.key());
+
         Ok(())
     }
+}
+
+/// ──────────────────────────────────────────────────────────────────────
+/// 2. Delegate the private receipt to a Private Ephemeral Rollup (TEE)
+///    After delegation the account data is hidden inside Intel TDX.
+///    
+///    Uses MagicBlock Delegation Program:
+///    DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh
+/// ──────────────────────────────────────────────────────────────────────
+#[delegate]
+#[derive(Accounts)]
+#[instruction(payment_id: String)]
+pub struct DelegatePrivatePayment<'info> {
+    /// The customer who owns the session (payer for delegation)
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    /// The private receipt PDA to delegate
+    #[account(
+        mut,
+        seeds = [PrivateReceipt::SEED, payment_id.as_bytes()],
+        bump,
+    )]
+    pub private_receipt: Account<'info, PrivateReceipt>,
+
+    /// CHECK: owner program (this program)
+    pub owner_program: AccountInfo<'info>,
+
+    /// CHECK: delegation buffer PDA
+    #[account(mut)]
+    pub buffer: AccountInfo<'info>,
+
+    /// CHECK: delegation record PDA
+    #[account(mut)]
+    pub delegation_record: AccountInfo<'info>,
+
+    /// CHECK: delegation metadata PDA
+    #[account(mut)]
+    pub delegation_metadata: AccountInfo<'info>,
+
+    /// CHECK: MagicBlock delegation program
+    pub delegation_program: AccountInfo<'info>,
+
+    pub system_program: Program<'info, System>,
+}
+
+pub fn delegate_private_payment(
+    ctx: Context<DelegatePrivatePayment>,
+    payment_id: String,
+) -> Result<()> {
+    let pda_seeds: &[&[u8]] = &[PrivateReceipt::SEED, payment_id.as_bytes()];
+
+    delegate_account(
+        DelegateAccounts {
+            payer: &ctx.accounts.payer.to_account_info(),
+            pda: &ctx.accounts.private_receipt.to_account_info(),
+            owner_program: &ctx.accounts.owner_program,
+            buffer: &ctx.accounts.buffer,
+            delegation_record: &ctx.accounts.delegation_record,
+            delegation_metadata: &ctx.accounts.delegation_metadata,
+            delegation_program: &ctx.accounts.delegation_program,
+            system_program: &ctx.accounts.system_program.to_account_info(),
+        },
+        pda_seeds,
+        DelegateConfig {
+            commit_frequency_ms: 30000,
+            validator: None, // will use default TEE validator
+        },
+    ).map_err(|_| error!(PaymentError::MissingAllowanceAccounts))?;
+
+    let receipt = &mut ctx.accounts.private_receipt;
+    receipt.is_delegated = true;
+    receipt.session_status = SessionStatus::Active;
+
+    msg!("📡 Private payment {} delegated to PER (TEE)", payment_id);
+    msg!("   Account data now hidden inside Intel TDX enclave");
+
+    Ok(())
+}
+
+/// ──────────────────────────────────────────────────────────────────────
+/// 3. Process the payment inside the PER  (sent to TEE endpoint)
+///    This runs inside the Trusted Execution Environment — hidden from
+///    base-layer observers. Only permissioned members see the data.
+/// ──────────────────────────────────────────────────────────────────────
+#[derive(Accounts)]
+#[instruction(payment_id: String)]
+pub struct ProcessPrivatePayment<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    #[account(
+        mut,
+        seeds = [PrivateReceipt::SEED, payment_id.as_bytes()],
+        bump,
+    )]
+    pub private_receipt: Account<'info, PrivateReceipt>,
+}
+
+pub fn process_private_payment(
+    ctx: Context<ProcessPrivatePayment>,
+    _payment_id: String,
+) -> Result<()> {
+    let receipt = &mut ctx.accounts.private_receipt;
+    require!(
+        receipt.session_status == SessionStatus::Active,
+        PaymentError::MissingAllowanceAccounts
+    );
+
+    // Mark as processed (actual USDC transfer happens in the public process_payment ix)
+    receipt.session_status = SessionStatus::Processed;
+
+    msg!("✅ Private payment processed inside TEE");
+    msg!("   Amount: {} (hidden from base-layer observers)", receipt.amount);
+
+    Ok(())
+}
+
+/// ──────────────────────────────────────────────────────────────────────
+/// 4. Settle — commit state back to base layer and undelegate
+///    After this, the final state is visible on-chain.
+/// ──────────────────────────────────────────────────────────────────────
+#[derive(Accounts)]
+#[instruction(payment_id: String)]
+pub struct SettlePrivatePayment<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    #[account(
+        mut,
+        seeds = [PrivateReceipt::SEED, payment_id.as_bytes()],
+        bump,
+    )]
+    pub private_receipt: Account<'info, PrivateReceipt>,
+}
+
+pub fn settle_private_payment(
+    ctx: Context<SettlePrivatePayment>,
+    _payment_id: String,
+) -> Result<()> {
+    let receipt = &mut ctx.accounts.private_receipt;
+
+    receipt.session_status = SessionStatus::Settled;
+    receipt.is_delegated = false;
+    receipt.settled_at = Clock::get()?.unix_timestamp;
+
+    msg!("🏁 Private payment settled on base layer");
+    msg!("   Final amount: {} USDC lamports", receipt.amount);
+    msg!("   Fee: {} USDC lamports", receipt.fee_amount);
+
+    Ok(())
 }

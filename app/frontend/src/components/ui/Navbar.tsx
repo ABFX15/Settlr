@@ -12,6 +12,7 @@ import {
   Database,
   Palette,
   Briefcase,
+  Leaf,
   ArrowUpRight,
   ArrowDownLeft,
   Plug,
@@ -61,6 +62,12 @@ const industryLinks = [
     label: "Freelance Marketplaces",
     icon: Briefcase,
     description: "Contractor payouts without wire fees",
+  },
+  {
+    href: "/industries/cannabis",
+    label: "Cannabis & Hemp",
+    icon: Leaf,
+    description: "B2B payments that can't be debanked",
   },
 ];
 

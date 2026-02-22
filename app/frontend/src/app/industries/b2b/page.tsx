@@ -68,8 +68,8 @@ const features = [
     icon: Lock,
     title: "Private Invoices",
     description: "Encrypt invoice amounts for client confidentiality.",
-    stat: "FHE",
-    statLabel: "encryption",
+    stat: "PER",
+    statLabel: "privacy",
   },
 ];
 

@@ -928,165 +928,170 @@ declare function createWebhookHandler(options: {
 }): (req: any, res: any) => Promise<void>;
 
 /**
- * Inco Lightning Privacy Module
+ * MagicBlock Private Ephemeral Rollup (PER) Privacy Module
  *
- * Helpers for issuing private receipts with FHE-encrypted payment amounts.
- * Only authorized parties (merchant + customer) can decrypt via Inco covalidators.
+ * Private payments powered by MagicBlock's TEE (Intel TDX) infrastructure.
+ * Payment data is hidden inside a Private Ephemeral Rollup — only permissioned
+ * members (merchant + customer) can observe state. Observers on the base layer
+ * see nothing until settlement.
+ *
+ * Flow:
+ *   1. Create private payment session (on base layer)
+ *   2. Delegate the account to a PER (data moves into TEE)
+ *   3. Process payment inside the TEE (hidden from observers)
+ *   4. Settle — commit final state back to Solana
  */
 
-/**
- * Inco Lightning Program ID (devnet)
- */
-declare const INCO_LIGHTNING_PROGRAM_ID: PublicKey;
-/**
- * Settlr Program ID
- */
+/** Settlr program */
 declare const SETTLR_PROGRAM_ID: PublicKey;
-/**
- * Derive the allowance PDA for a given handle and allowed address
- * This PDA stores the decryption permission for a specific address
- *
- * @param handle - The u128 handle to the encrypted value (as bigint)
- * @param allowedAddress - The address being granted decryption access
- * @returns The allowance PDA and bump
- */
-declare function findAllowancePda(handle: bigint, allowedAddress: PublicKey): [PublicKey, number];
+/** MagicBlock Delegation Program */
+declare const DELEGATION_PROGRAM_ID: PublicKey;
+/** MagicBlock Permission Program */
+declare const PERMISSION_PROGRAM_ID: PublicKey;
+/** Devnet TEE endpoint — Private Ephemeral Rollup */
+declare const PER_ENDPOINT = "https://tee.magicblock.app";
+declare const PER_WS_ENDPOINT = "wss://tee.magicblock.app";
+/** Devnet ER endpoint (non-private) */
+declare const ER_ENDPOINTS: {
+    readonly asia: "https://devnet-as.magicblock.app";
+    readonly eu: "https://devnet-eu.magicblock.app";
+    readonly us: "https://devnet-us.magicblock.app";
+};
+/** Magic Router (devnet) — routes to nearest ER */
+declare const MAGIC_ROUTER_DEVNET = "https://devnet-router.magicblock.app";
+/** TEE Validator pubkey */
+declare const TEE_VALIDATOR: PublicKey;
 /**
  * Derive the private receipt PDA for a given payment ID
- *
- * @param paymentId - The payment ID string
- * @returns The private receipt PDA and bump
  */
 declare function findPrivateReceiptPda(paymentId: string): [PublicKey, number];
 /**
- * Encrypt an amount for Inco Lightning
- *
- * In production, this would use the Inco encryption API to create
- * a proper FHE ciphertext. For now, this is a placeholder that
- * would be replaced with the actual Inco client library.
- *
- * @param amount - The amount in USDC lamports (6 decimals)
- * @returns Encrypted ciphertext as Uint8Array
+ * Derive the delegation buffer PDA for a given account
  */
-declare function encryptAmount(amount: bigint): Promise<Uint8Array>;
+declare function findDelegationBufferPda(accountPda: PublicKey): [PublicKey, number];
 /**
- * Configuration for issuing a private receipt
+ * Derive the delegation record PDA
  */
-interface PrivateReceiptConfig {
+declare function findDelegationRecordPda(accountPda: PublicKey): [PublicKey, number];
+/**
+ * Derive the delegation metadata PDA
+ */
+declare function findDelegationMetadataPda(accountPda: PublicKey): [PublicKey, number];
+/** Session status enum (mirrors on-chain SessionStatus) */
+declare enum SessionStatus {
+    Pending = 0,
+    Active = 1,
+    Processed = 2,
+    Settled = 3
+}
+/**
+ * Configuration for creating a private payment session
+ */
+interface PrivatePaymentConfig {
     /** Payment ID (must be unique) */
     paymentId: string;
     /** Amount in USDC (will be converted to lamports) */
     amount: number;
-    /** Customer wallet address (payer and signer) */
+    /** Fee amount in USDC */
+    feeAmount?: number;
+    /** Customer wallet (payer + signer) */
     customer: PublicKey;
-    /** Merchant wallet address (receives decryption access) */
+    /** Merchant wallet */
     merchant: PublicKey;
-    /** Pre-computed encrypted amount ciphertext (optional, will encrypt if not provided) */
-    encryptedAmount?: Uint8Array;
+    /** Optional memo / order reference */
+    memo?: string;
 }
 /**
- * Build accounts needed for issuing a private receipt
- *
- * Note: This returns the accounts structure but the actual transaction
- * must be built using the Anchor program client with `remainingAccounts`
- * for the allowance PDAs.
- *
- * @param config - Private receipt configuration
- * @returns Object with all required account addresses
+ * Build accounts for creating a private payment session
  */
-declare function buildPrivateReceiptAccounts(config: PrivateReceiptConfig): Promise<{
+declare function buildPrivatePaymentAccounts(config: PrivatePaymentConfig): Promise<{
     customer: PublicKey;
     merchant: PublicKey;
     privateReceipt: PublicKey;
-    incoLightningProgram: PublicKey;
     systemProgram: PublicKey;
-    bump: number;
 }>;
 /**
- * Simulate a transaction to get the resulting encrypted handle
- *
- * This is needed because we need the handle to derive allowance PDAs,
- * but the handle is only known after the encryption CPI call.
- *
- * Pattern:
- * 1. Build tx without allowance accounts
- * 2. Simulate to get the handle from account state
- * 3. Derive allowance PDAs from handle
- * 4. Execute real tx with allowance accounts in remainingAccounts
- *
- * @param connection - Solana connection
- * @param transaction - Built transaction without allowance accounts
- * @param privateReceiptPda - The PDA where encrypted handle will be stored
- * @returns The encrypted handle as bigint, or null if simulation failed
+ * Build accounts for delegating a private payment to PER
  */
-declare function simulateAndGetHandle(connection: any, // Connection type
-transaction: any, // Transaction type  
-privateReceiptPda: PublicKey): Promise<bigint | null>;
-/**
- * Build remaining accounts array for allowance PDAs
- *
- * These must be passed to the instruction after deriving from the handle.
- * Since we don't know the handle until after simulation, this is called
- * after simulateAndGetHandle.
- *
- * @param handle - The encrypted handle from simulation
- * @param customer - Customer address (granted access)
- * @param merchant - Merchant address (granted access)
- * @returns Array of remaining accounts for the instruction
- */
-declare function buildAllowanceRemainingAccounts(handle: bigint, customer: PublicKey, merchant: PublicKey): Array<{
-    pubkey: PublicKey;
-    isSigner: boolean;
-    isWritable: boolean;
+declare function buildDelegateAccounts(paymentId: string, payer: PublicKey): Promise<{
+    payer: PublicKey;
+    privateReceipt: PublicKey;
+    ownerProgram: PublicKey;
+    buffer: PublicKey;
+    delegationRecord: PublicKey;
+    delegationMetadata: PublicKey;
+    delegationProgram: PublicKey;
+    systemProgram: PublicKey;
 }>;
 /**
- * Full flow example for issuing a private receipt
+ * Create a connection to the Private Ephemeral Rollup (TEE)
  *
- * @example
- * ```typescript
- * import { issuePrivateReceiptFlow } from '@settlr/sdk/privacy';
- *
- * const result = await issuePrivateReceiptFlow({
- *   connection,
- *   program, // Anchor program instance
- *   paymentId: 'payment_123',
- *   amount: 99.99,
- *   customer: customerWallet.publicKey,
- *   merchant: merchantPubkey,
- *   signTransaction: customerWallet.signTransaction,
- * });
- *
- * console.log('Private receipt:', result.signature);
- * console.log('Handle:', result.handle.toString());
- * ```
+ * Transactions sent through this connection execute inside Intel TDX.
+ * State is hidden from base-layer observers.
  */
-interface IssuePrivateReceiptResult {
-    /** Transaction signature */
-    signature: string;
-    /** Encrypted amount handle (u128 as bigint) */
-    handle: bigint;
-    /** Private receipt PDA address */
-    privateReceiptPda: PublicKey;
-}
+declare function createPERConnection(): Connection;
 /**
- * Privacy-preserving receipt features
- *
- * Key benefits:
- * - Payment amounts hidden on-chain (only u128 handle visible)
- * - Merchant can still decrypt for accounting/tax compliance
- * - Customer can verify their payment privately
- * - Competitors can't see your revenue on-chain
+ * Create a connection to the base-layer Solana devnet
+ */
+declare function createBaseConnection(): Connection;
+/**
+ * Privacy-preserving payment features powered by MagicBlock PER
  */
 declare const PrivacyFeatures: {
-    /** Amount is FHE-encrypted, only handle stored on-chain */
-    readonly ENCRYPTED_AMOUNTS: true;
-    /** Selective disclosure - only merchant + customer can decrypt */
-    readonly ACCESS_CONTROL: true;
-    /** CSV export still works (decrypts server-side for authorized merchant) */
-    readonly ACCOUNTING_COMPATIBLE: true;
-    /** Inco covalidators ensure trustless decryption */
-    readonly TRUSTLESS_DECRYPTION: true;
+    /** Payment data hidden inside TEE during processing */
+    readonly TEE_ENCRYPTED_STATE: true;
+    /** Permission-based access: only merchant + customer can observe */
+    readonly PERMISSION_ACCESS_CONTROL: true;
+    /** Sub-10ms latency inside PER, gasless transactions */
+    readonly REALTIME_EXECUTION: true;
+    /** Final state committed back to base layer for accounting */
+    readonly SETTLEMENT_VISIBILITY: true;
+    /** Intel TDX hardware enclave — hardware root of trust */
+    readonly HARDWARE_SECURITY: true;
 };
+/**
+ * Member permission configuration
+ */
+interface MemberPermission {
+    pubkey: PublicKey;
+    flags: number;
+}
+/**
+ * Build permission member list for a private payment
+ * The customer gets full visibility; merchants get balance + log view.
+ */
+declare function buildPaymentPermissions(customer: PublicKey, merchant: PublicKey): MemberPermission[];
+/**
+ * Full private payment flow result
+ */
+interface PrivatePaymentResult {
+    sessionId: string;
+    privateReceiptPda: PublicKey;
+    status: SessionStatus;
+    createSignature?: string;
+    delegateSignature?: string;
+    processSignature?: string;
+    settleSignature?: string;
+}
+/**
+ * Privacy mode options for merchant dashboard
+ */
+interface PrivacyModeConfig {
+    /** When true, individual transaction amounts are hidden */
+    hideIndividualAmounts: boolean;
+    /** When true, only show aggregate totals */
+    aggregatesOnly: boolean;
+    /** Allow on-demand access for specific transactions */
+    allowSelectiveAccess: boolean;
+}
+/**
+ * Generate a unique payment session ID
+ */
+declare function generateSessionId(): string;
+/**
+ * Generate a unique payout ID
+ */
+declare function generatePayoutId(): string;
 
 /**
  * One-Click Payments Module
@@ -1687,4 +1692,4 @@ declare class PayoutClient {
  */
 declare function createPayoutClient(config: PayoutClientConfig): PayoutClient;
 
-export { type ApproveOneClickOptions, BuyButton, type BuyButtonProps, type ChargeOneClickOptions, CheckoutWidget, type CheckoutWidgetProps, type CreatePaymentOptions, type CreatePayoutOptions, type CreatePlanOptions, type CreateSubscriptionOptions, INCO_LIGHTNING_PROGRAM_ID, type IssuePrivateReceiptResult, type ListPayoutsOptions, type ListPayoutsResult, type ListSubscriptionsOptions, type MerchantConfig, type MobileCheckoutOptions, type MobileCheckoutResult, OneClickClient, type OneClickResult, type Payment, PaymentModal, type PaymentModalProps, type PaymentResult, type PaymentStatus, type Payout, type PayoutBatch, type PayoutBatchResult, PayoutClient, type PayoutClientConfig, type PayoutRecord, type PayoutStatus$1 as PayoutStatus, PrivacyFeatures, type PrivateReceiptConfig, REACT_NATIVE_EXAMPLE, REST_API, SETTLR_CHECKOUT_URL, SETTLR_PROGRAM_ID, SUPPORTED_NETWORKS, SUPPORTED_TOKENS, Settlr, type SettlrConfig, SettlrProvider, type SpendingApproval, type SubscribeOptions, type Subscription, SubscriptionClient, type SubscriptionClientConfig, type SubscriptionDetail, type SubscriptionInterval, type SubscriptionPayment, type SubscriptionPlan, type SubscriptionStatus, type SupportedToken, type TransactionOptions, UNITY_EXAMPLE, USDC_MINT_DEVNET, USDC_MINT_MAINNET, USDT_MINT_DEVNET, USDT_MINT_MAINNET, type UpdatePlanOptions, type WebhookEventType, type WebhookHandler, type WebhookHandlers, type WebhookPayload, buildAllowanceRemainingAccounts, buildPrivateReceiptAccounts, createOneClickClient, createPayoutClient, createSubscriptionClient, createWebhookHandler, encryptAmount, findAllowancePda, findPrivateReceiptPda, formatUSDC, generateCheckoutUrl, generateDeepLinkCheckout, getTokenDecimals, getTokenMint, parseCallbackUrl, parseUSDC, parseWebhookPayload, shortenAddress, simulateAndGetHandle, usePaymentLink, usePaymentModal, useSettlr, verifyWebhookSignature };
+export { type ApproveOneClickOptions, BuyButton, type BuyButtonProps, type ChargeOneClickOptions, CheckoutWidget, type CheckoutWidgetProps, type CreatePaymentOptions, type CreatePayoutOptions, type CreatePlanOptions, type CreateSubscriptionOptions, DELEGATION_PROGRAM_ID, ER_ENDPOINTS, type ListPayoutsOptions, type ListPayoutsResult, type ListSubscriptionsOptions, MAGIC_ROUTER_DEVNET, type MemberPermission, type MerchantConfig, type MobileCheckoutOptions, type MobileCheckoutResult, OneClickClient, type OneClickResult, PERMISSION_PROGRAM_ID, PER_ENDPOINT, PER_WS_ENDPOINT, type Payment, PaymentModal, type PaymentModalProps, type PaymentResult, type PaymentStatus, type Payout, type PayoutBatch, type PayoutBatchResult, PayoutClient, type PayoutClientConfig, type PayoutRecord, type PayoutStatus$1 as PayoutStatus, PrivacyFeatures, type PrivacyModeConfig, type PrivatePaymentConfig, type PrivatePaymentResult, REACT_NATIVE_EXAMPLE, REST_API, SETTLR_CHECKOUT_URL, SETTLR_PROGRAM_ID, SUPPORTED_NETWORKS, SUPPORTED_TOKENS, SessionStatus, Settlr, type SettlrConfig, SettlrProvider, type SpendingApproval, type SubscribeOptions, type Subscription, SubscriptionClient, type SubscriptionClientConfig, type SubscriptionDetail, type SubscriptionInterval, type SubscriptionPayment, type SubscriptionPlan, type SubscriptionStatus, type SupportedToken, TEE_VALIDATOR, type TransactionOptions, UNITY_EXAMPLE, USDC_MINT_DEVNET, USDC_MINT_MAINNET, USDT_MINT_DEVNET, USDT_MINT_MAINNET, type UpdatePlanOptions, type WebhookEventType, type WebhookHandler, type WebhookHandlers, type WebhookPayload, buildDelegateAccounts, buildPaymentPermissions, buildPrivatePaymentAccounts, createBaseConnection, createOneClickClient, createPERConnection, createPayoutClient, createSubscriptionClient, createWebhookHandler, findDelegationBufferPda, findDelegationMetadataPda, findDelegationRecordPda, findPrivateReceiptPda, formatUSDC, generateCheckoutUrl, generateDeepLinkCheckout, generatePayoutId, generateSessionId, getTokenDecimals, getTokenMint, parseCallbackUrl, parseUSDC, parseWebhookPayload, shortenAddress, usePaymentLink, usePaymentModal, useSettlr, verifyWebhookSignature };

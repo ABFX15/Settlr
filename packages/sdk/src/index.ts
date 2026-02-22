@@ -69,19 +69,33 @@ export {
     type WebhookHandlers,
 } from './webhooks';
 
-// Privacy (Inco Lightning FHE encryption)
+// Privacy (MagicBlock Private Ephemeral Rollups)
 export {
-    INCO_LIGHTNING_PROGRAM_ID,
     SETTLR_PROGRAM_ID,
-    findAllowancePda,
+    DELEGATION_PROGRAM_ID,
+    PERMISSION_PROGRAM_ID,
+    PER_ENDPOINT,
+    PER_WS_ENDPOINT,
+    ER_ENDPOINTS,
+    MAGIC_ROUTER_DEVNET,
+    TEE_VALIDATOR,
     findPrivateReceiptPda,
-    encryptAmount,
-    buildPrivateReceiptAccounts,
-    simulateAndGetHandle,
-    buildAllowanceRemainingAccounts,
+    findDelegationBufferPda,
+    findDelegationRecordPda,
+    findDelegationMetadataPda,
+    buildPrivatePaymentAccounts,
+    buildDelegateAccounts,
+    createPERConnection,
+    createBaseConnection,
+    buildPaymentPermissions,
     PrivacyFeatures,
-    type PrivateReceiptConfig,
-    type IssuePrivateReceiptResult,
+    SessionStatus,
+    generateSessionId,
+    generatePayoutId,
+    type PrivatePaymentConfig,
+    type PrivatePaymentResult,
+    type PrivacyModeConfig,
+    type MemberPermission,
 } from './privacy';
 
 // One-Click Payments

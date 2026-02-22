@@ -69,8 +69,8 @@ const features = [
     title: "Privacy Option",
     description:
       "Customers can checkout privately. Great for sensitive product categories.",
-    stat: "FHE",
-    statLabel: "encryption",
+    stat: "PER",
+    statLabel: "privacy",
   },
 ];
 

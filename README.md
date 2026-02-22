@@ -269,7 +269,7 @@ x402-hack-payment/
 │       ├── one-click.ts           # OneClickClient
 │       ├── components.tsx         # BuyButton, CheckoutWidget, PaymentModal
 │       ├── webhooks.ts            # Webhook handler + verification
-│       └── privacy.ts             # Inco Lightning FHE encryption
+│       └── privacy.ts             # MagicBlock PER private payments
 ├── app/frontend/                  # Next.js app (settlr.dev)
 │   └── src/
 │       ├── app/api/payouts/       # Payout API (create, batch, claim, get)

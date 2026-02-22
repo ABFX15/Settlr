@@ -37,7 +37,7 @@ const features = [
     icon: Lock,
     title: "Private Purchases",
     description:
-      "FHE-encrypted receipts protect sensitive purchases. Your creators' revenue is nobody's business.",
+      "TEE-private receipts protect sensitive purchases. Your creators' revenue is nobody's business.",
     stat: "100%",
     statLabel: "private",
   },
@@ -154,15 +154,13 @@ export default function AiSaasPage() {
                 <br />
                 your rules.
                 <br />
-                <span className="text-[#3B82F6]">
-                  No gatekeeping.
-                </span>
+                <span className="text-[#3B82F6]">No gatekeeping.</span>
               </h1>
 
               <p className="mb-8 max-w-lg text-lg text-white/50">
-                Collect payments from fans and pay out creators instantly —
-                with no card network deciding what content is allowed.
-                One SDK, 1% flat, instant settlement.
+                Collect payments from fans and pay out creators instantly — with
+                no card network deciding what content is allowed. One SDK, 1%
+                flat, instant settlement.
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -303,7 +301,8 @@ export default function AiSaasPage() {
             </h2>
             <p className="mx-auto max-w-2xl text-white/40">
               Visa and Mastercard content policies shut down entire categories.
-              Processors freeze funds, hold reserves, and charge back legitimate sales.
+              Processors freeze funds, hold reserves, and charge back legitimate
+              sales.
             </p>
           </motion.div>
 
@@ -390,9 +389,7 @@ export default function AiSaasPage() {
             <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
               Built for platforms that
               <br />
-              <span className="text-[#3B82F6]">
-                refuse to be silenced
-              </span>
+              <span className="text-[#3B82F6]">refuse to be silenced</span>
             </h2>
           </motion.div>
 
@@ -445,7 +442,8 @@ export default function AiSaasPage() {
             className="mb-12 text-center"
           >
             <h2 className="mb-4 text-4xl font-bold text-white">
-              Traditional Fees vs. <span className="text-[#3B82F6]">Settlr</span>
+              Traditional Fees vs.{" "}
+              <span className="text-[#3B82F6]">Settlr</span>
             </h2>
           </motion.div>
 
@@ -468,10 +466,26 @@ export default function AiSaasPage() {
             </div>
 
             {[
-              { platform: "Stripe", fee: "2.9%+", restriction: "Yes — bans adult, gambling, supplements" },
-              { platform: "PayPal", fee: "3.5%+", restriction: "Yes — aggressive content policing" },
-              { platform: "CCBill", fee: "10–15%", restriction: "Adult-only, high fees" },
-              { platform: "Wise / PayPal Payouts", fee: "2–5%+ FX", restriction: "Limited categories, slow" },
+              {
+                platform: "Stripe",
+                fee: "2.9%+",
+                restriction: "Yes — bans adult, gambling, supplements",
+              },
+              {
+                platform: "PayPal",
+                fee: "3.5%+",
+                restriction: "Yes — aggressive content policing",
+              },
+              {
+                platform: "CCBill",
+                fee: "10–15%",
+                restriction: "Adult-only, high fees",
+              },
+              {
+                platform: "Wise / PayPal Payouts",
+                fee: "2–5%+ FX",
+                restriction: "Limited categories, slow",
+              },
             ].map((row) => (
               <div
                 key={row.platform}
@@ -479,7 +493,9 @@ export default function AiSaasPage() {
               >
                 <div className="p-4 text-white">{row.platform}</div>
                 <div className="p-4 text-center text-red-400">{row.fee}</div>
-                <div className="p-4 text-center text-sm text-white/40">{row.restriction}</div>
+                <div className="p-4 text-center text-sm text-white/40">
+                  {row.restriction}
+                </div>
               </div>
             ))}
             <div className="grid grid-cols-3 bg-[#3B82F6]/10">
@@ -515,14 +531,12 @@ export default function AiSaasPage() {
           <h2 className="mb-6 text-4xl font-bold text-white md:text-5xl">
             Your platform. Your creators.
             <br />
-            <span className="text-[#3B82F6]">
-              No card network gatekeeping.
-            </span>
+            <span className="text-[#3B82F6]">No card network gatekeeping.</span>
           </h2>
 
           <p className="mb-8 text-lg text-white/50">
-            Join platforms that own their payment stack. Checkout + payouts
-            in one SDK. No one can shut you down.
+            Join platforms that own their payment stack. Checkout + payouts in
+            one SDK. No one can shut you down.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">

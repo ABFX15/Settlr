@@ -1241,106 +1241,141 @@ function createWebhookHandler(options) {
 }
 
 // src/privacy.ts
-import { PublicKey as PublicKey3, SystemProgram } from "@solana/web3.js";
-var INCO_LIGHTNING_PROGRAM_ID = new PublicKey3(
-  "5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj"
-);
+import { PublicKey as PublicKey3, SystemProgram, Connection as Connection2 } from "@solana/web3.js";
 var SETTLR_PROGRAM_ID = new PublicKey3(
   "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5"
 );
-function findAllowancePda(handle, allowedAddress) {
-  const handleBuffer = Buffer.alloc(16);
-  let h = handle;
-  for (let i = 0; i < 16; i++) {
-    handleBuffer[i] = Number(h & BigInt(255));
-    h = h >> BigInt(8);
-  }
-  return PublicKey3.findProgramAddressSync(
-    [handleBuffer, allowedAddress.toBuffer()],
-    INCO_LIGHTNING_PROGRAM_ID
-  );
-}
+var DELEGATION_PROGRAM_ID = new PublicKey3(
+  "DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh"
+);
+var PERMISSION_PROGRAM_ID = new PublicKey3(
+  "ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1"
+);
+var PER_ENDPOINT = "https://tee.magicblock.app";
+var PER_WS_ENDPOINT = "wss://tee.magicblock.app";
+var ER_ENDPOINTS = {
+  asia: "https://devnet-as.magicblock.app",
+  eu: "https://devnet-eu.magicblock.app",
+  us: "https://devnet-us.magicblock.app"
+};
+var MAGIC_ROUTER_DEVNET = "https://devnet-router.magicblock.app";
+var TEE_VALIDATOR = new PublicKey3(
+  "FnE6VJT5QNZdedZPnCoLsARgBwoE6DeJNjBs2H1gySXA"
+);
 function findPrivateReceiptPda(paymentId) {
   return PublicKey3.findProgramAddressSync(
     [Buffer.from("private_receipt"), Buffer.from(paymentId)],
     SETTLR_PROGRAM_ID
   );
 }
-async function encryptAmount(amount) {
-  const buffer = Buffer.alloc(16);
-  let a = amount;
-  for (let i = 0; i < 16; i++) {
-    buffer[i] = Number(a & BigInt(255));
-    a = a >> BigInt(8);
-  }
-  return new Uint8Array(buffer);
+function findDelegationBufferPda(accountPda) {
+  return PublicKey3.findProgramAddressSync(
+    [Buffer.from("buffer"), accountPda.toBuffer()],
+    SETTLR_PROGRAM_ID
+  );
 }
-async function buildPrivateReceiptAccounts(config) {
-  const [privateReceiptPda, privateReceiptBump] = findPrivateReceiptPda(config.paymentId);
+function findDelegationRecordPda(accountPda) {
+  return PublicKey3.findProgramAddressSync(
+    [Buffer.from("delegation_record"), accountPda.toBuffer()],
+    DELEGATION_PROGRAM_ID
+  );
+}
+function findDelegationMetadataPda(accountPda) {
+  return PublicKey3.findProgramAddressSync(
+    [Buffer.from("delegation_metadata"), accountPda.toBuffer()],
+    DELEGATION_PROGRAM_ID
+  );
+}
+var SessionStatus = /* @__PURE__ */ ((SessionStatus2) => {
+  SessionStatus2[SessionStatus2["Pending"] = 0] = "Pending";
+  SessionStatus2[SessionStatus2["Active"] = 1] = "Active";
+  SessionStatus2[SessionStatus2["Processed"] = 2] = "Processed";
+  SessionStatus2[SessionStatus2["Settled"] = 3] = "Settled";
+  return SessionStatus2;
+})(SessionStatus || {});
+async function buildPrivatePaymentAccounts(config) {
+  const [privateReceiptPda] = findPrivateReceiptPda(config.paymentId);
   return {
     customer: config.customer,
     merchant: config.merchant,
     privateReceipt: privateReceiptPda,
-    incoLightningProgram: INCO_LIGHTNING_PROGRAM_ID,
-    systemProgram: SystemProgram.programId,
-    bump: privateReceiptBump
+    systemProgram: SystemProgram.programId
   };
 }
-async function simulateAndGetHandle(connection, transaction, privateReceiptPda) {
-  try {
-    const simulation = await connection.simulateTransaction(
-      transaction,
-      void 0,
-      [privateReceiptPda]
-    );
-    if (simulation.value.err) {
-      console.error("Simulation failed:", simulation.value.err);
-      return null;
-    }
-    if (simulation.value.accounts?.[0]?.data) {
-      const data = Buffer.from(simulation.value.accounts[0].data[0], "base64");
-      const paymentIdLen = data.readUInt32LE(8);
-      const handleOffset = 8 + 4 + paymentIdLen + 32 + 32;
-      let handle = BigInt(0);
-      for (let i = 15; i >= 0; i--) {
-        handle = handle * BigInt(256) + BigInt(data[handleOffset + i]);
-      }
-      return handle;
-    }
-    return null;
-  } catch (error) {
-    console.error("Simulation error:", error);
-    return null;
-  }
+async function buildDelegateAccounts(paymentId, payer) {
+  const [privateReceiptPda] = findPrivateReceiptPda(paymentId);
+  const [buffer] = findDelegationBufferPda(privateReceiptPda);
+  const [delegationRecord] = findDelegationRecordPda(privateReceiptPda);
+  const [delegationMetadata] = findDelegationMetadataPda(privateReceiptPda);
+  return {
+    payer,
+    privateReceipt: privateReceiptPda,
+    ownerProgram: SETTLR_PROGRAM_ID,
+    buffer,
+    delegationRecord,
+    delegationMetadata,
+    delegationProgram: DELEGATION_PROGRAM_ID,
+    systemProgram: SystemProgram.programId
+  };
 }
-function buildAllowanceRemainingAccounts(handle, customer, merchant) {
-  const [customerAllowancePda] = findAllowancePda(handle, customer);
-  const [merchantAllowancePda] = findAllowancePda(handle, merchant);
-  return [
-    { pubkey: customerAllowancePda, isSigner: false, isWritable: true },
-    { pubkey: merchantAllowancePda, isSigner: false, isWritable: true }
-  ];
+function createPERConnection() {
+  return new Connection2(PER_ENDPOINT, {
+    commitment: "confirmed",
+    wsEndpoint: PER_WS_ENDPOINT
+  });
+}
+function createBaseConnection() {
+  return new Connection2("https://api.devnet.solana.com", "confirmed");
 }
 var PrivacyFeatures = {
-  /** Amount is FHE-encrypted, only handle stored on-chain */
-  ENCRYPTED_AMOUNTS: true,
-  /** Selective disclosure - only merchant + customer can decrypt */
-  ACCESS_CONTROL: true,
-  /** CSV export still works (decrypts server-side for authorized merchant) */
-  ACCOUNTING_COMPATIBLE: true,
-  /** Inco covalidators ensure trustless decryption */
-  TRUSTLESS_DECRYPTION: true
+  /** Payment data hidden inside TEE during processing */
+  TEE_ENCRYPTED_STATE: true,
+  /** Permission-based access: only merchant + customer can observe */
+  PERMISSION_ACCESS_CONTROL: true,
+  /** Sub-10ms latency inside PER, gasless transactions */
+  REALTIME_EXECUTION: true,
+  /** Final state committed back to base layer for accounting */
+  SETTLEMENT_VISIBILITY: true,
+  /** Intel TDX hardware enclave — hardware root of trust */
+  HARDWARE_SECURITY: true
 };
+var AUTHORITY_FLAG = 1;
+var TX_LOGS_FLAG = 2;
+var TX_BALANCES_FLAG = 4;
+var TX_MESSAGE_FLAG = 8;
+function buildPaymentPermissions(customer, merchant) {
+  return [
+    {
+      pubkey: customer,
+      flags: AUTHORITY_FLAG | TX_LOGS_FLAG | TX_BALANCES_FLAG | TX_MESSAGE_FLAG
+    },
+    {
+      pubkey: merchant,
+      flags: TX_LOGS_FLAG | TX_BALANCES_FLAG
+    }
+  ];
+}
+function generateSessionId() {
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  let id = "priv_";
+  for (let i = 0; i < 16; i++) {
+    id += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return id;
+}
+function generatePayoutId() {
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  let id = "payout_";
+  for (let i = 0; i < 12; i++) {
+    id += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return id;
+}
 var BillingCycles = {
-  /** Weekly (7 days) */
   WEEKLY: 7 * 24 * 60 * 60,
-  /** Bi-weekly (14 days) */
   BIWEEKLY: 14 * 24 * 60 * 60,
-  /** Monthly (30 days) */
   MONTHLY: 30 * 24 * 60 * 60,
-  /** Quarterly (90 days) */
   QUARTERLY: 90 * 24 * 60 * 60,
-  /** Yearly (365 days) */
   YEARLY: 365 * 24 * 60 * 60
 };
 
@@ -1933,8 +1968,13 @@ function createPayoutClient(config) {
 export {
   BuyButton,
   CheckoutWidget,
-  INCO_LIGHTNING_PROGRAM_ID,
+  DELEGATION_PROGRAM_ID,
+  ER_ENDPOINTS,
+  MAGIC_ROUTER_DEVNET,
   OneClickClient,
+  PERMISSION_PROGRAM_ID,
+  PER_ENDPOINT,
+  PER_WS_ENDPOINT,
   PaymentModal,
   PayoutClient,
   PrivacyFeatures,
@@ -1944,33 +1984,40 @@ export {
   SETTLR_PROGRAM_ID,
   SUPPORTED_NETWORKS,
   SUPPORTED_TOKENS,
+  SessionStatus,
   Settlr,
   SettlrProvider,
   SubscriptionClient,
+  TEE_VALIDATOR,
   UNITY_EXAMPLE,
   USDC_MINT_DEVNET,
   USDC_MINT_MAINNET,
   USDT_MINT_DEVNET,
   USDT_MINT_MAINNET,
-  buildAllowanceRemainingAccounts,
-  buildPrivateReceiptAccounts,
+  buildDelegateAccounts,
+  buildPaymentPermissions,
+  buildPrivatePaymentAccounts,
+  createBaseConnection,
   createOneClickClient,
+  createPERConnection,
   createPayoutClient,
   createSubscriptionClient,
   createWebhookHandler,
-  encryptAmount,
-  findAllowancePda,
+  findDelegationBufferPda,
+  findDelegationMetadataPda,
+  findDelegationRecordPda,
   findPrivateReceiptPda,
   formatUSDC,
   generateCheckoutUrl,
   generateDeepLinkCheckout,
+  generatePayoutId,
+  generateSessionId,
   getTokenDecimals,
   getTokenMint,
   parseCallbackUrl,
   parseUSDC,
   parseWebhookPayload,
   shortenAddress,
-  simulateAndGetHandle,
   usePaymentLink,
   usePaymentModal,
   useSettlr,

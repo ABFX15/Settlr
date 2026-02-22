@@ -32,7 +32,7 @@ pub enum PaymentError {
     PaymentAlreadyRefunded,
     #[msg("Refund not authorized.")]
     RefundNotAuthorized,
-    #[msg("Missing allowance accounts for Inco decryption access.")]
+    #[msg("Missing permission accounts for PER access control.")]
     MissingAllowanceAccounts,
     #[msg("Insufficient treasury balance for payout.")]
     InsufficientTreasuryBalance,

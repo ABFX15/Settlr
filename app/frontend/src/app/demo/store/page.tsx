@@ -95,8 +95,8 @@ const addons: Plan[] = [
   },
   {
     id: "a2",
-    name: "Privacy Shield (FHE)",
-    description: "Fully homomorphic encryption for sensitive payout data",
+    name: "Privacy Shield (PER)",
+    description: "TEE-based privacy for sensitive payout data",
     price: 99.0,
     billing: "/month",
     icon: "🔒",

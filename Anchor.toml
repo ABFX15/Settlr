@@ -10,7 +10,8 @@ x402_hack_payment = "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5"
 
 [programs.devnet]
 x402_hack_payment = "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5"
-inco_lightning = "5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj"
+delegation_program = "DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh"
+permission_program = "ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1"
 
 [registry]
 url = "https://api.apr.dev"

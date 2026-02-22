@@ -50,10 +50,10 @@ export interface CheckoutSession {
     createdAt: number;
     expiresAt: number;
     completedAt?: number;
-    // Privacy fields (Inco Lightning FHE encryption)
+    // Privacy fields (MagicBlock PER)
     private?: boolean;              // Is this a private payment?
-    encryptedAmount?: string;       // FHE-encrypted amount (base64)
-    encryptedHandle?: string;       // Inco handle for decryption (u128 as string)
+    sessionStatus?: string;         // PER session status (pending/active/processed/settled)
+    isDelegated?: boolean;          // Is account delegated to PER?
     privateReceiptPda?: string;     // PDA of private receipt on-chain
 }
 
@@ -320,8 +320,8 @@ export async function createCheckoutSession(
             status: session.status,
             expires_at: new Date(session.expiresAt).toISOString(),
             is_private: session.private || false,
-            encrypted_amount: session.encryptedAmount || null,
-            encrypted_handle: session.encryptedHandle || null,
+            session_status: session.sessionStatus || null,
+            is_delegated: session.isDelegated || false,
         });
 
         if (error) {
@@ -372,8 +372,8 @@ export async function getCheckoutSession(id: string): Promise<CheckoutSession | 
             expiresAt: new Date(data.expires_at).getTime(),
             // Privacy fields
             private: data.is_private || false,
-            encryptedAmount: data.encrypted_amount || undefined,
-            encryptedHandle: data.encrypted_handle || undefined,
+            sessionStatus: data.session_status || undefined,
+            isDelegated: data.is_delegated || undefined,
             privateReceiptPda: data.private_receipt_pda || undefined,
         };
     } else {
