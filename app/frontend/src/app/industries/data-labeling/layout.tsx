@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Data Labeling Payouts — Pay Annotators by Email",
   description:
-    "Pay thousands of data labeling annotators in 180+ countries with just their email. 1% flat, instant USDC settlement, no wire fees. Built for Remotasks, Toloka, Scale AI, and annotation platforms.",
+    "Pay thousands of data labeling annotators in 180+ countries with just their email. 1% flat, instant USDC, no wire fees.",
   keywords: [
     "data labeling payouts",
     "pay annotators globally",
@@ -20,16 +20,28 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/industries/data-labeling" },
   openGraph: {
-    title: "Data Labeling Payouts — Pay Annotators by Email | Settlr",
+    type: "website",
+    locale: "en_US",
+    siteName: "Settlr",
+    title: "Data Labeling Payouts — Pay Annotators by Email",
     description:
-      "Pay annotators in 180+ countries with just their email. 1% flat, instant settlement, no wire fees or PayPal hassles.",
+      "Pay annotators in 180+ countries with just their email. 1% flat, instant settlement, no wire fees.",
     url: "https://settlr.dev/industries/data-labeling",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Settlr Data Labeling Payouts",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Data Labeling Payouts | Settlr",
+    title: "Data Labeling Payouts",
     description:
       "Pay thousands of annotators globally. 1% flat, instant USDC, email-only. Built for annotation platforms.",
+    images: ["/twitter-image"],
   },
 };
 

@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
 
     return [
+        // ── Core pages ──
         {
             url: baseUrl,
             lastModified,
@@ -32,7 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9,
         },
         {
-            url: `${baseUrl}/demo`,
+            url: `${baseUrl}/compare`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.8,
@@ -44,10 +45,57 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
         {
+            url: `${baseUrl}/demo`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
             url: `${baseUrl}/help`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/send-payments`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/accept-payments`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/privacy`,
+            lastModified,
+            changeFrequency: 'yearly',
+            priority: 0.3,
+        },
+        {
+            url: `${baseUrl}/waitlist`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.6,
+        },
+
+        // ── Blog ──
+        {
+            url: `${baseUrl}/blog`,
+            lastModified,
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        },
+        ...blogEntries,
+
+        // ── Industries ──
+        {
+            url: `${baseUrl}/industries/cannabis`,
+            lastModified,
+            changeFrequency: 'weekly',
+            priority: 0.8,
         },
         {
             url: `${baseUrl}/industries/creators`,
@@ -56,36 +104,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7,
         },
         {
-            url: `${baseUrl}/industries/cannabis`,
-            lastModified,
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/blog`,
-            lastModified,
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
-        ...blogEntries,
-        {
-            url: `${baseUrl}/checkout`,
+            url: `${baseUrl}/industries/freelance`,
             lastModified,
             changeFrequency: 'monthly',
-            priority: 0.6,
+            priority: 0.7,
         },
         {
-            url: `${baseUrl}/offramp`,
+            url: `${baseUrl}/industries/data-labeling`,
             lastModified,
             changeFrequency: 'monthly',
-            priority: 0.6,
+            priority: 0.7,
         },
         {
-            url: `${baseUrl}/compare`,
+            url: `${baseUrl}/industries/ecommerce`,
             lastModified,
             changeFrequency: 'monthly',
-            priority: 0.8,
+            priority: 0.7,
         },
+        {
+            url: `${baseUrl}/industries/igaming`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/industries/ai-saas`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/industries/b2b`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
+
+        // ── Integrations ──
         {
             url: `${baseUrl}/integrations`,
             lastModified,
@@ -93,7 +148,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
         {
-            url: `${baseUrl}/integrations/zapier`,
+            url: `${baseUrl}/integrations/shopify`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.7,
@@ -105,7 +160,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7,
         },
         {
-            url: `${baseUrl}/integrations/shopify`,
+            url: `${baseUrl}/integrations/zapier`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.7,

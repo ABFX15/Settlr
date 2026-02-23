@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Creator Platform Payouts — Pay Creators in 180+ Countries",
+  title: "Creator Payouts — Pay Creators in 180+ Countries",
   description:
-    "Payout infrastructure for creator platforms. Pay creators, artists, and digital product sellers globally with just their email. 1% flat, instant USDC settlement, no country restrictions.",
+    "Payout infrastructure for creator platforms. Pay creators globally with just their email. 1% flat, instant USDC settlement, 180+ countries.",
   keywords: [
     "creator payouts",
     "pay creators globally",
@@ -19,16 +19,28 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/industries/creators" },
   openGraph: {
-    title: "Creator Platform Payouts — Pay Creators in 180+ Countries | Settlr",
+    type: "website",
+    locale: "en_US",
+    siteName: "Settlr",
+    title: "Creator Payouts — Pay Creators in 180+ Countries",
     description:
-      "Payout infrastructure for creator platforms. Pay anyone by email, 1% flat, instant settlement, 180+ countries.",
+      "Pay creators globally by email. 1% flat, instant settlement, 180+ countries.",
     url: "https://settlr.dev/industries/creators",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Settlr Creator Payouts",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Creator Platform Payouts | Settlr",
+    title: "Creator Payouts",
     description:
       "Pay creators globally with just their email. 1% flat, instant USDC, no country restrictions.",
+    images: ["/twitter-image"],
   },
 };
 

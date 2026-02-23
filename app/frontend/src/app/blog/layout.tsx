@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog — Global Payouts, Stablecoins & Infrastructure Guides",
+  title: "Blog — Payouts, Stablecoins & Guides",
   description:
-    "Guides, comparisons, and insights on global payout infrastructure, USDC settlements, cross-border payments, and building payout systems with stablecoins on Solana.",
+    "Guides and insights on global payouts, stablecoin settlements, cross-border payments, and building payout systems.",
   keywords: [
     "global payout guides",
     "stablecoin payout blog",
@@ -13,16 +13,23 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/blog" },
   openGraph: {
-    title: "Settlr Blog — Global Payout Guides & Insights",
+    type: "website",
+    locale: "en_US",
+    siteName: "Settlr",
+    title: "Settlr Blog — Payout Guides & Insights",
     description:
       "Guides on global payout infrastructure, stablecoin settlements, and cross-border payments.",
     url: "https://settlr.dev/blog",
+    images: [
+      { url: "/opengraph-image", width: 1200, height: 630, alt: "Settlr Blog" },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr Blog — Global Payout Guides & Insights",
+    title: "Settlr Blog — Payout Guides & Insights",
     description:
       "Insights on stablecoin payouts, cross-border payments, and payout infrastructure.",
+    images: ["/twitter-image"],
   },
 };
 

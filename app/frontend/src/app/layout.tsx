@@ -31,8 +31,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Send USDC to Anyone by Email — Global Payout API | Settlr",
-    template: "%s | Settlr — Global Payout API",
+    default: "Settlr — Send USDC to Anyone by Email | Global Payout API",
+    template: "%s | Settlr",
   },
   description:
     "Pay contractors and freelancers in 180+ countries — no bank details, no wire fees, no frozen accounts. 1% flat, instant settlement. The Stripe alternative for global payouts.",
@@ -52,17 +52,14 @@ export const metadata: Metadata = {
   creator: "Settlr",
   publisher: "Settlr",
   metadataBase: new URL("https://settlr.dev"),
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://settlr.dev",
     siteName: "Settlr",
-    title: "Send USDC to Anyone by Email — Global Payout API | Settlr",
+    title: "Settlr — Send USDC to Anyone by Email | Global Payout API",
     description:
-      "Tired of $25 wire fees, frozen PayPal accounts, and 5-day settlement? Pay anyone in 180+ countries with just an email. 1% flat, settles in seconds.",
+      "Pay anyone in 180+ countries with just an email. 1% flat fee, settles in seconds. No wire fees, no frozen accounts.",
     images: [
       {
         url: "/og-image.png",
@@ -74,9 +71,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Send USDC to Anyone by Email — Global Payout API | Settlr",
+    title: "Settlr — Send USDC to Anyone by Email | Global Payout API",
     description:
-      "Stop losing 5%+ to PayPal or $25/wire. Pay contractors in 180+ countries instantly. 1% flat. No bank details needed.",
+      "Pay contractors in 180+ countries instantly. 1% flat, no bank details needed. The Stripe alternative for payouts.",
     images: ["/og-image.png"],
     creator: "@SettlrPay",
   },

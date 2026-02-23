@@ -4,14 +4,21 @@ import { SettlrLogo } from "@/components/settlr-logo";
 
 const footerLinks = {
   product: [
-    { href: "/demo", label: "Demo" },
-    { href: "/docs", label: "Documentation" },
+    { href: "/send-payments", label: "Send Payments" },
+    { href: "/accept-payments", label: "Accept Payments" },
     { href: "/pricing", label: "Pricing" },
-    { href: "/onboarding", label: "Get Started" },
+    { href: "/compare", label: "Compare" },
+    { href: "/demo", label: "Demo" },
   ],
   developers: [
-    { href: "/docs", label: "Quick Start" },
+    { href: "/docs", label: "Documentation" },
     { href: "/docs?tab=api", label: "API Reference" },
+    { href: "/integrations", label: "Integrations" },
+    { href: "/integrations/shopify", label: "Shopify" },
+    { href: "/integrations/woocommerce", label: "WooCommerce" },
+    { href: "/integrations/zapier", label: "Zapier" },
+    { href: "/integrations/slack", label: "Slack" },
+    { href: "/integrations/bubble", label: "Bubble" },
     {
       href: "https://www.npmjs.com/package/@settlr/sdk",
       label: "npm Package",
@@ -25,6 +32,9 @@ const footerLinks = {
   ],
   company: [
     { href: "/help", label: "Support" },
+    { href: "/blog", label: "Blog" },
+    { href: "/waitlist", label: "Contact Sales" },
+    { href: "/onboarding", label: "Get Started" },
     { href: "/privacy", label: "Privacy Policy" },
     { href: "mailto:adam@settlr.dev", label: "Contact Us" },
   ],

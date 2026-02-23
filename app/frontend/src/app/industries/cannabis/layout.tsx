@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cannabis B2B Payments — Stop Getting Debanked | Settlr",
+  title: "Cannabis B2B Payments — Stop Getting Debanked",
   description:
-    "Pay cannabis cultivators, processors, and distributors instantly in USDC. No bank account needed. No account to freeze. 1% flat fee vs 5-8% from cannabis-friendly processors. Full OFAC-compliant audit trail.",
+    "Pay cannabis cultivators and distributors instantly in USDC. No bank account needed, no debanking risk. 1% flat fee, OFAC-compliant.",
   keywords: [
     "cannabis B2B payments",
     "marijuana payment processing",
@@ -28,16 +28,28 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/industries/cannabis" },
   openGraph: {
-    title: "Cannabis B2B Payments — Stop Getting Debanked | Settlr",
+    type: "website",
+    locale: "en_US",
+    siteName: "Settlr",
+    title: "Cannabis B2B Payments — Stop Getting Debanked",
     description:
-      "Pay cannabis cultivators, processors & distributors instantly in USDC. No bank account, no debanking risk. 1% flat fee with full compliance audit trail.",
+      "Pay cannabis suppliers instantly in USDC. No bank account, no debanking risk. 1% flat fee with full compliance.",
     url: "https://settlr.dev/industries/cannabis",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Settlr Cannabis Payments",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cannabis B2B Payments | Settlr",
+    title: "Cannabis B2B Payments",
     description:
-      "Stop getting debanked. Pay cannabis suppliers instantly in USDC. 1% flat, full audit trail, no bank needed.",
+      "Stop getting debanked. Pay cannabis suppliers instantly in USDC. 1% flat, full audit trail.",
+    images: ["/twitter-image"],
   },
 };
 
