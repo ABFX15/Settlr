@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cannabis B2B Payments — Stop Getting Debanked",
+  title: "Cannabis & Marijuana B2B Payments — Stop Getting Debanked",
   description:
-    "Pay cannabis cultivators and distributors instantly in USDC. No bank account needed, no debanking risk. 1% flat fee, OFAC-compliant.",
+    "Pay cannabis and marijuana cultivators and distributors instantly in USDC. No bank account needed, no debanking risk. 1% flat fee, OFAC-compliant.",
   keywords: [
     "cannabis B2B payments",
     "marijuana payment processing",
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Settlr",
-    title: "Cannabis B2B Payments — Stop Getting Debanked",
+    title: "Cannabis & Marijuana B2B Payments — Stop Getting Debanked",
     description:
-      "Pay cannabis suppliers instantly in USDC. No bank account, no debanking risk. 1% flat fee with full compliance.",
+      "Pay cannabis and marijuana suppliers instantly in USDC. No bank account, no debanking risk. 1% flat fee with full compliance.",
     url: "https://settlr.dev/industries/cannabis",
     images: [
       {

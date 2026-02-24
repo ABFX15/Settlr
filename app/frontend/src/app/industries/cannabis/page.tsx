@@ -225,6 +225,45 @@ export default function CannabisPage() {
 
   return (
     <main className="min-h-screen bg-[#050507]" ref={containerRef}>
+      {/* FAQ Schema for rich snippets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqItems.map((item) => ({
+              "@type": "Question",
+              name: item.q,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.a,
+              },
+            })),
+          }),
+        }}
+      />
+      {/* Organization + Service Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            name: "Settlr Cannabis B2B Payments",
+            description:
+              "Non-custodial USDC payment infrastructure for cannabis and marijuana businesses. Pay cultivators, processors, and distributors instantly without bank accounts.",
+            provider: {
+              "@type": "Organization",
+              name: "Settlr",
+              url: "https://settlr.dev",
+            },
+            serviceType: "Cannabis Payment Processing",
+            areaServed: "US",
+            url: "https://settlr.dev/industries/cannabis",
+          }),
+        }}
+      />
       <Navbar />
 
       {/* ───── Hero ───── */}
@@ -258,7 +297,7 @@ export default function CannabisPage() {
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#22c55e]/30 bg-[#22c55e]/10 px-4 py-2">
                 <Leaf className="h-4 w-4 text-[#22c55e]" />
                 <span className="text-sm font-medium text-[#22c55e]">
-                  Cannabis B2B Payments
+                  Cannabis & Marijuana B2B Payments
                 </span>
               </div>
 
@@ -451,7 +490,7 @@ export default function CannabisPage() {
             className="mb-16 text-center"
           >
             <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
-              The cannabis banking
+              The cannabis & marijuana banking
               <span className="text-red-500"> crisis is real</span>
             </h2>
             <p className="mx-auto max-w-2xl text-white/40">
@@ -504,7 +543,7 @@ export default function CannabisPage() {
               </span>
             </div>
             <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
-              How cannabis B2B payments work
+              How cannabis & marijuana B2B payments work
             </h2>
             <p className="mx-auto max-w-2xl text-white/40">
               No bank relationship needed. No merchant account application. No
@@ -819,6 +858,35 @@ export default function CannabisPage() {
             needed
           </p>
         </motion.div>
+      </section>
+
+      {/* ───── Related Reading ───── */}
+      <section className="relative px-4 py-16">
+        <div className="mx-auto max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="rounded-2xl border border-[#22c55e]/20 bg-[#22c55e]/5 p-8"
+          >
+            <h3 className="mb-3 text-xl font-semibold text-white">
+              📖 Related: Your Cannabis Business Got Debanked — Now What?
+            </h3>
+            <p className="mb-4 text-white/50">
+              70% of US cannabis and marijuana businesses have lost banking
+              access at least once. Read our deep-dive on why banks keep closing
+              accounts, what it costs you, and how B2B stablecoin payments
+              eliminate the problem entirely.
+            </p>
+            <Link
+              href="/blog/cannabis-debanked-how-to-pay-suppliers"
+              className="inline-flex items-center gap-2 font-medium text-[#22c55e] transition-colors hover:text-[#16a34a]"
+            >
+              Read the full guide
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </motion.div>
+        </div>
       </section>
 
       <Footer />

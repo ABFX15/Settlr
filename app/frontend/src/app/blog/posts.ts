@@ -27,7 +27,7 @@ export const posts: BlogPost[] = [
     slug: "pay-remote-workers-internationally-without-wire-fees",
     title: "How to Pay Remote Workers in 180+ Countries Without Wire Fees",
     excerpt:
-      "Wire transfers cost $25–50 each, take 3–5 days, and fail in half the countries your workers live in. Here's how platforms are paying global workforces instantly for 1% flat — no bank details needed.",
+      "Wire transfers cost $25–50 each and take 3–5 days. Here\u2019s how platforms pay global workforces instantly for 1% flat — no bank details needed.",
     date: "2026-02-17",
     author: "Adam Bryant",
     readTime: "7 min read",
@@ -196,7 +196,7 @@ export const posts: BlogPost[] = [
     slug: "data-labeling-payouts-stablecoin",
     title: "Why Data Labeling Platforms Are Switching to Stablecoin Payouts",
     excerpt:
-      "Remotasks, Toloka, and Scale AI pay thousands of annotators in countries where PayPal doesn't work and wire fees eat the entire payout. Stablecoin rails are the fix.",
+      "Remotasks, Toloka, and Scale AI pay annotators where PayPal doesn\u2019t work and wire fees eat entire payouts. Stablecoin rails fix this.",
     date: "2026-02-15",
     author: "Adam Bryant",
     readTime: "6 min read",
@@ -277,7 +277,7 @@ const payout = await settlr.payouts.create({
     slug: "api-first-global-payouts",
     title: "The API-First Approach to Global Payouts: One Endpoint, 180 Countries",
     excerpt:
-      "Most payout solutions require you to integrate with different providers for different regions. Here's how a single API endpoint can replace your entire payout stack.",
+      "Most payout solutions need different providers per region. Here\u2019s how one API endpoint replaces your entire global payout stack.",
     date: "2026-02-14",
     author: "Adam Bryant",
     readTime: "6 min read",
@@ -464,7 +464,7 @@ app.post("/webhooks/settlr", (req, res) =&gt; {
     slug: "accept-crypto-payments-without-wallet",
     title: "How to Accept Crypto Payments Without Requiring a Wallet",
     excerpt:
-      "Most crypto payment gateways force your customers to install a wallet, buy gas tokens, and figure out on-chain transactions. Here's how to remove that friction entirely with embedded wallets and gasless transactions.",
+      "Most crypto gateways force customers to install wallets and buy gas tokens. Remove all friction with embedded wallets and gasless transactions.",
     date: "2026-02-10",
     author: "Adam Bryant",
     readTime: "6 min read",
@@ -534,7 +534,7 @@ app.post("/webhooks/settlr", (req, res) =&gt; {
     slug: "settlr-vs-stripe-crypto-payments",
     title: "Settlr vs Stripe: Why Crypto-Native Teams Are Switching",
     excerpt:
-      "Stripe charges 2.9% + 30¢ per transaction and settles in 2–7 days. Settlr charges 1% flat and settles instantly. Here's a detailed breakdown of when each makes sense.",
+      "Stripe charges 2.9% + 30¢ and settles in 2–7 days. Settlr charges 1% flat and settles instantly. A breakdown of when each makes sense.",
     date: "2026-02-09",
     author: "Adam Bryant",
     readTime: "7 min read",
@@ -685,7 +685,7 @@ export async function POST(req: Request) {
     slug: "stripe-banned-your-business",
     title: "Stripe Banned Your Business? Here's What to Do Next",
     excerpt:
-      "Your Stripe account got suspended, your payments are frozen, and you're scrambling for answers. You're not alone — and there's a way forward that doesn't involve high-risk merchant accounts.",
+      "Your Stripe account got suspended and payments are frozen. You\u2019re not alone — here\u2019s a way forward without high-risk merchant accounts.",
     date: "2026-02-07",
     author: "Adam Bryant",
     readTime: "9 min read",
@@ -784,7 +784,7 @@ export async function POST(req: Request) {
     title:
       "How to Accept Crypto Payments on Your Website (Without Making Customers Download a Wallet)",
     excerpt:
-      "Crypto payments promise lower fees, no chargebacks, and no payment processor gatekeeping. But most of your customers don't have a wallet. Here's how to offer crypto checkout without losing 95% of your buyers.",
+      "Crypto payments offer lower fees, no chargebacks, and no gatekeeping. But most customers lack wallets. Offer crypto checkout without losing buyers.",
     date: "2026-02-06",
     author: "Adam Bryant",
     readTime: "10 min read",
@@ -907,7 +907,7 @@ export async function POST(req: Request) {
     slug: "best-way-to-pay-freelancers-globally",
     title: "Best Way to Pay Freelancers Globally in 2026 (Without Wire Fees or PayPal Holds)",
     excerpt:
-      "You've got freelancers in the Philippines, Kenya, Brazil, and Poland. PayPal takes 5%. Wires cost $25 each. Wise caps your volume. Here's what actually works at scale.",
+      "Freelancers in the Philippines, Kenya, Brazil, Poland. PayPal takes 5%, wires cost $25, Wise caps volume. What actually works at scale.",
     date: "2026-02-20",
     author: "Adam Bryant",
     readTime: "8 min read",
@@ -999,7 +999,7 @@ export async function POST(req: Request) {
     slug: "stripe-alternative-for-global-payouts",
     title: "Stripe Alternative for Global Payouts: Why Platforms Are Switching in 2026",
     excerpt:
-      "Stripe Connect charges $2+ per cross-border payout, requires full KYB for every recipient, and doesn't work in half the countries your contractors live in. There's a faster path.",
+      "Stripe Connect charges $2+ per payout, requires KYB for every recipient, and fails in half the world. There\u2019s a faster path.",
     date: "2026-02-19",
     author: "Adam Bryant",
     readTime: "7 min read",
@@ -1083,7 +1083,7 @@ const payout = await fetch('https://settlr.dev/api/payouts', {
     slug: "how-to-avoid-chargebacks-digital-products",
     title: "How to Avoid Chargebacks on Digital Products (The Definitive 2026 Guide)",
     excerpt:
-      "Chargebacks cost merchants $125+ per dispute and digital products get hit hardest. Here's why they happen, how to fight them, and the nuclear option that makes them impossible.",
+      "Chargebacks cost $125+ per dispute and digital products get hit hardest. Why they happen, how to fight them, and how to eliminate them.",
     date: "2026-02-18",
     author: "Adam Bryant",
     readTime: "9 min read",
@@ -1172,7 +1172,7 @@ const payout = await fetch('https://settlr.dev/api/payouts', {
     slug: "pay-international-contractors-without-bank-account",
     title: "How to Pay International Contractors Without a Bank Account in 2026",
     excerpt:
-      "1.4 billion adults worldwide don't have a bank account. If your contractors are in Southeast Asia, Africa, or Latin America, traditional payout rails won't reach them. Here's what will.",
+      "1.4 billion adults lack bank accounts. If your contractors are in Southeast Asia, Africa, or Latin America, traditional payouts won\u2019t reach them.",
     date: "2026-02-17",
     author: "Adam Bryant",
     readTime: "7 min read",
@@ -1257,7 +1257,7 @@ const payout = await fetch('https://settlr.dev/api/payouts', {
     slug: "cannabis-debanked-how-to-pay-suppliers",
     title: "Your Cannabis Business Got Debanked — Now What? How to Pay Suppliers Without a Bank",
     excerpt:
-      "70% of US cannabis businesses have lost banking access at least once. Here's why banks keep closing accounts, what it costs you, and how B2B stablecoin payments eliminate the problem entirely.",
+      "70% of US cannabis businesses have lost banking access. Why banks keep closing accounts, what it costs, and how B2B stablecoin payments fix it.",
     date: "2026-02-22",
     author: "Adam Bryant",
     readTime: "9 min read",
@@ -1384,5 +1384,5 @@ const payout = await fetch('https://settlr.dev/api/payouts', {
 
       <p><a href="/industries/cannabis">Learn more about cannabis B2B payments</a> or <a href="/waitlist">join the waitlist</a> to get early access.</p>
     `,
-    },
+  },
 ];

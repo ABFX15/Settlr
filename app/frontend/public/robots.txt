@@ -1,5 +1,15 @@
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /client-dashboard
+Disallow: /admin
+Disallow: /merchant
+Disallow: /checkout
+Disallow: /me
+Disallow: /create
+Disallow: /test-sdk
+Disallow: /offramp
+Disallow: /claim
 
 # Explicitly allow AI search engine bots
 User-agent: GPTBot

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Settlr privacy policy. How we collect, use, and protect your data.",
+    "Read the Settlr privacy policy. How we collect, use, store, and protect your data when you use our payout platform.",
   alternates: { canonical: "/privacy" },
   openGraph: {
     type: "website",
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     siteName: "Settlr",
     title: "Privacy Policy",
     description:
-      "Settlr privacy policy. How we collect, use, and protect your data.",
+      "Read the Settlr privacy policy. How we collect, use, store, and protect your data when you use our payout platform.",
     images: [
       {
         url: "/opengraph-image",
@@ -21,6 +21,13 @@ export const metadata: Metadata = {
         alt: "Settlr — Privacy Policy",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Settlr Privacy Policy",
+    description:
+      "How Settlr collects, uses, and protects your data when using our payout infrastructure.",
+    images: ["/twitter-image"],
   },
 };
 

@@ -35,7 +35,8 @@ export const metadata: Metadata = {
     template: "%s | Settlr",
   },
   description:
-    "Pay contractors and freelancers in 180+ countries — no bank details, no wire fees, no frozen accounts. 1% flat, instant settlement. The Stripe alternative for global payouts.",
+    "Pay contractors and freelancers in 180+ countries — no bank details, no wire fees, no frozen accounts. 1% flat, instant settlement on Solana.",
+  alternates: { canonical: "/" },
   keywords: [
     "international payout API",
     "pay contractors internationally",
@@ -62,7 +63,7 @@ export const metadata: Metadata = {
       "Pay anyone in 180+ countries with just an email. 1% flat fee, settles in seconds. No wire fees, no frozen accounts.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Settlr — Pay Anyone, Anywhere, With Just Their Email",
@@ -74,7 +75,7 @@ export const metadata: Metadata = {
     title: "Settlr — Send USDC to Anyone by Email | Global Payout API",
     description:
       "Pay contractors in 180+ countries instantly. 1% flat, no bank details needed. The Stripe alternative for payouts.",
-    images: ["/og-image.png"],
+    images: ["/twitter-image"],
     creator: "@SettlrPay",
   },
   robots: {

@@ -1,22 +1,15 @@
-"use client";
+import type { Metadata } from "next";
+import { DashboardShell } from "./dashboard-shell";
 
-import {
-  DashboardSidebar,
-  DashboardTopBar,
-} from "@/components/ui/DashboardSidebar";
+export const metadata: Metadata = {
+  title: "Dashboard",
+  robots: { index: false, follow: false },
+};
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="flex min-h-screen bg-[#050507] text-white">
-      <DashboardSidebar />
-      <main className="flex-1 pt-14 lg:pt-0">
-        <DashboardTopBar />
-        <div className="p-4 md:p-8">{children}</div>
-      </main>
-    </div>
-  );
+  return <DashboardShell>{children}</DashboardShell>;
 }
