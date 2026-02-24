@@ -9,7 +9,6 @@ import {
   Menu,
   X,
   ChevronDown,
-  Database,
   Palette,
   Briefcase,
   Leaf,
@@ -18,10 +17,6 @@ import {
   Plug,
   Play,
   BookOpen,
-  Globe,
-  Zap,
-  Code2,
-  Building2,
 } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
 
@@ -70,10 +65,10 @@ const productLinks = [
 
 const industryLinks = [
   {
-    href: "/industries/data-labeling",
-    label: "AI Data Labeling",
-    icon: Database,
-    description: "Pay annotation workers globally by email",
+    href: "/industries/cannabis",
+    label: "Cannabis & Hemp",
+    icon: Leaf,
+    description: "B2B payments that can't be debanked",
   },
   {
     href: "/industries/creators",
@@ -86,36 +81,6 @@ const industryLinks = [
     label: "Freelance Marketplaces",
     icon: Briefcase,
     description: "Contractor payouts without wire fees",
-  },
-  {
-    href: "/industries/cannabis",
-    label: "Cannabis & Hemp",
-    icon: Leaf,
-    description: "B2B payments that can't be debanked",
-  },
-  {
-    href: "/industries/ecommerce",
-    label: "E-Commerce",
-    icon: Globe,
-    description: "Pay marketplace sellers worldwide",
-  },
-  {
-    href: "/industries/igaming",
-    label: "iGaming",
-    icon: Zap,
-    description: "Instant deposits & withdrawals",
-  },
-  {
-    href: "/industries/ai-saas",
-    label: "AI & SaaS",
-    icon: Code2,
-    description: "Pay global contributors & affiliates",
-  },
-  {
-    href: "/industries/b2b",
-    label: "B2B Payments",
-    icon: Building2,
-    description: "Pay vendors and suppliers globally",
   },
 ];
 

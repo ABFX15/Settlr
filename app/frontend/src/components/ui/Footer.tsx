@@ -34,11 +34,6 @@ const footerLinks = {
     { href: "/industries/cannabis", label: "Cannabis Payments" },
     { href: "/industries/creators", label: "Creator Payouts" },
     { href: "/industries/freelance", label: "Freelance" },
-    { href: "/industries/igaming", label: "iGaming" },
-    { href: "/industries/ecommerce", label: "E-Commerce" },
-    { href: "/industries/ai-saas", label: "AI & SaaS" },
-    { href: "/industries/data-labeling", label: "Data Labeling" },
-    { href: "/industries/b2b", label: "B2B Payments" },
   ],
   company: [
     { href: "/help", label: "Support" },
