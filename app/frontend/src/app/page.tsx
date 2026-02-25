@@ -51,6 +51,43 @@ const palette = {
   cardBorder: "#E2DFD5",
 };
 
+/* --- Glass card styles --- */
+const glass = {
+  card: {
+    background: "rgba(255, 255, 255, 0.65)",
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+    border: "1px solid rgba(255, 255, 255, 0.5)",
+    boxShadow:
+      "0 8px 32px rgba(12, 24, 41, 0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
+  },
+  cardHover: {
+    boxShadow:
+      "0 12px 40px rgba(12, 24, 41, 0.1), inset 0 1px 0 rgba(255,255,255,0.9)",
+    border: "1px solid rgba(27, 107, 74, 0.2)",
+  },
+  strong: {
+    background: "rgba(255, 255, 255, 0.8)",
+    backdropFilter: "blur(24px)",
+    WebkitBackdropFilter: "blur(24px)",
+    border: "1px solid rgba(255, 255, 255, 0.6)",
+    boxShadow:
+      "0 12px 48px rgba(12, 24, 41, 0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+  },
+} as const;
+
+/* --- Gradient button styles --- */
+const greenGradient = {
+  background: "linear-gradient(180deg, #2A9D6A 0%, #1B6B4A 100%)",
+  boxShadow:
+    "0 2px 12px rgba(27, 107, 74, 0.35), inset 0 1px 0 rgba(255,255,255,0.15)",
+};
+const greenGradientHover = {
+  boxShadow:
+    "0 4px 20px rgba(27, 107, 74, 0.45), inset 0 1px 0 rgba(255,255,255,0.2)",
+  transform: "translateY(-1px)",
+};
+
 /* --- Reveal on scroll --- */
 function Reveal({
   children,
@@ -63,10 +100,10 @@ function Reveal({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.55, delay, ease: "easeOut" }}
+      initial={{ opacity: 0, y: 32, filter: "blur(4px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -130,10 +167,11 @@ function LivePulse() {
 
   return (
     <div
-      className="inline-flex items-center gap-3 rounded-full border px-5 py-2.5"
+      className="inline-flex items-center gap-3 rounded-full px-5 py-2.5"
       style={{
-        borderColor: palette.topo,
-        background: palette.white,
+        ...glass.strong,
+        boxShadow:
+          "0 4px 16px rgba(12, 24, 41, 0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
       }}
     >
       <span className="relative flex h-2.5 w-2.5">
@@ -174,10 +212,9 @@ function SavingsCalculator() {
 
   return (
     <div
-      className="rounded-2xl border p-8"
+      className="rounded-2xl p-8"
       style={{
-        background: palette.white,
-        borderColor: palette.cardBorder,
+        ...glass.strong,
       }}
     >
       <label
@@ -448,102 +485,119 @@ await settlr.payout.create({
 
       {/* Phone mockup side */}
       <div className="flex justify-center">
-        <div
-          className="w-[300px] rounded-[2rem] border-[6px] overflow-hidden shadow-2xl"
-          style={{
-            borderColor: palette.navy,
-            background: "#FDFBF7",
-          }}
-        >
-          {/* Phone status bar */}
+        <div className="relative">
+          {/* Green glow behind phone */}
           <div
-            className="flex items-center justify-between px-5 py-2"
-            style={{ background: palette.white }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[500px] pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(27,107,74,0.1) 0%, rgba(27,107,74,0.03) 50%, transparent 80%)",
+              filter: "blur(30px)",
+            }}
+          />
+          <div
+            className="relative w-[300px] rounded-[2rem] border-[6px] overflow-hidden"
+            style={{
+              borderColor: palette.navy,
+              background: "#FDFBF7",
+              boxShadow:
+                "0 25px 60px -12px rgba(12,24,41,0.2), 0 8px 24px -8px rgba(12,24,41,0.12)",
+            }}
           >
-            <span
-              className="text-[11px] font-semibold"
-              style={{ color: palette.navy }}
-            >
-              9:41
-            </span>
-            <div className="flex gap-1">
-              <div
-                className="w-4 h-2.5 rounded-sm border"
-                style={{ borderColor: palette.navy }}
-              >
-                <div
-                  className="w-3 h-1.5 rounded-[1px] m-[1px]"
-                  style={{ background: palette.green }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Claim card */}
-          <div className="px-5 py-6 space-y-4">
-            <div className="text-center">
-              <div
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white text-sm font-bold mb-2"
-                style={{ background: palette.green }}
-              >
-                S
-              </div>
-              <p className="text-[11px]" style={{ color: palette.muted }}>
-                Settlr Payout
-              </p>
-            </div>
-
+            {/* Phone status bar */}
             <div
-              className="rounded-xl p-4 text-center"
-              style={{ background: "#F3F2ED" }}
+              className="flex items-center justify-between px-5 py-2"
+              style={{ background: palette.white }}
             >
-              <p className="text-xs mb-1" style={{ color: palette.muted }}>
-                Payment for you
-              </p>
-              <p
-                className="text-3xl font-bold"
+              <span
+                className="text-[11px] font-semibold"
+                style={{ color: palette.navy }}
+              >
+                9:41
+              </span>
+              <div className="flex gap-1">
+                <div
+                  className="w-4 h-2.5 rounded-sm border"
+                  style={{ borderColor: palette.navy }}
+                >
+                  <div
+                    className="w-3 h-1.5 rounded-[1px] m-[1px]"
+                    style={{ background: palette.green }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Claim card */}
+            <div className="px-5 py-6 space-y-4">
+              <div className="text-center">
+                <div
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white text-sm font-bold mb-2"
+                  style={{ background: palette.green }}
+                >
+                  S
+                </div>
+                <p className="text-[11px]" style={{ color: palette.muted }}>
+                  Settlr Payout
+                </p>
+              </div>
+
+              <div
+                className="rounded-xl p-4 text-center"
                 style={{
-                  fontFamily: "var(--font-jetbrains), monospace",
+                  background: "rgba(243, 242, 237, 0.7)",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255,255,255,0.5)",
+                }}
+              >
+                <p className="text-xs mb-1" style={{ color: palette.muted }}>
+                  Payment for you
+                </p>
+                <p
+                  className="text-3xl font-bold"
+                  style={{
+                    fontFamily: "var(--font-jetbrains), monospace",
+                    color: palette.navy,
+                  }}
+                >
+                  ${amount.toFixed(2)}
+                </p>
+                <p className="text-xs mt-1" style={{ color: palette.muted }}>
+                  USDC — {recipient}
+                </p>
+                {memo && (
+                  <p
+                    className="text-xs mt-2 italic"
+                    style={{ color: palette.slate }}
+                  >
+                    &ldquo;{memo}&rdquo;
+                  </p>
+                )}
+              </div>
+
+              <button
+                className="w-full rounded-xl py-3 text-sm font-semibold text-white transition-all duration-300"
+                style={{ ...greenGradient }}
+              >
+                Cash Out to Bank
+              </button>
+              <button
+                className="w-full rounded-xl border py-3 text-sm font-semibold transition-colors"
+                style={{
+                  borderColor: palette.cardBorder,
                   color: palette.navy,
                 }}
               >
-                ${amount.toFixed(2)}
+                Keep in USD Balance
+              </button>
+
+              <p
+                className="text-center text-[10px]"
+                style={{ color: palette.muted }}
+              >
+                Powered by Settlr · Non-custodial
               </p>
-              <p className="text-xs mt-1" style={{ color: palette.muted }}>
-                USDC — {recipient}
-              </p>
-              {memo && (
-                <p
-                  className="text-xs mt-2 italic"
-                  style={{ color: palette.slate }}
-                >
-                  &ldquo;{memo}&rdquo;
-                </p>
-              )}
             </div>
-
-            <button
-              className="w-full rounded-xl py-3 text-sm font-semibold text-white transition-colors"
-              style={{ background: palette.green }}
-            >
-              Cash Out to Bank
-            </button>
-            <button
-              className="w-full rounded-xl border py-3 text-sm font-semibold transition-colors"
-              style={{
-                borderColor: palette.cardBorder,
-                color: palette.navy,
-              }}
-            >
-              Keep in USD Balance
-            </button>
-
-            <p
-              className="text-center text-[10px]"
-              style={{ color: palette.muted }}
-            >
-              Powered by Settlr · Non-custodial
-            </p>
           </div>
         </div>
       </div>
@@ -682,7 +736,7 @@ export default function HomePage() {
         {/* ═══════════════════════════════════════════════════════════════
             SECTION 1 — HERO  (Layered Depth: topo → grain → content → floating UI)
            ═══════════════════════════════════════════════════════════════ */}
-        <section className="relative pt-32 pb-24 sm:pt-40 sm:pb-32 overflow-hidden">
+        <section className="relative pt-36 pb-28 sm:pt-44 sm:pb-36 overflow-hidden">
           {/* Layer 1 — Topographic contour lines (subtle global-logistics feel) */}
           <div
             className="absolute inset-0 pointer-events-none"
@@ -757,18 +811,25 @@ export default function HomePage() {
                 <Reveal className="flex flex-col sm:flex-row items-center lg:items-start gap-4 mb-12">
                   <Link
                     href="/docs"
-                    className="inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#1B6B4A]/20"
-                    style={{ background: palette.green }}
+                    className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+                    style={{ ...greenGradient }}
+                    onMouseEnter={(e) =>
+                      Object.assign(e.currentTarget.style, greenGradientHover)
+                    }
+                    onMouseLeave={(e) =>
+                      Object.assign(e.currentTarget.style, greenGradient)
+                    }
                   >
                     View Integration Docs
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
                     href="/demo"
-                    className="inline-flex items-center gap-2 rounded-lg border px-7 py-3.5 text-sm font-semibold transition-all hover:bg-[#F3F2ED]"
+                    className="inline-flex items-center gap-2 rounded-xl border px-8 py-4 text-sm font-semibold transition-all duration-300 hover:bg-[#F3F2ED] hover:-translate-y-0.5"
                     style={{
                       borderColor: palette.cardBorder,
                       color: palette.navy,
+                      boxShadow: "0 2px 8px rgba(12, 24, 41, 0.06)",
                     }}
                   >
                     Try Live Demo
@@ -812,15 +873,24 @@ export default function HomePage() {
 
               {/* Right column — Floating product mockups (2 cols) */}
               <div className="lg:col-span-2 relative hidden lg:flex items-center justify-center min-h-[520px]">
+                {/* Green glow behind cards */}
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(27,107,74,0.12) 0%, rgba(27,107,74,0.04) 40%, transparent 70%)",
+                    filter: "blur(40px)",
+                  }}
+                />
+
                 {/* Floating Claim Card — the "hero image" IS the product */}
                 <Reveal delay={0.2} className="absolute top-4 right-0 z-20">
                   <div
-                    className="w-[280px] rounded-2xl border overflow-hidden"
+                    className="w-[280px] rounded-2xl overflow-hidden transition-all duration-500"
                     style={{
-                      background: palette.white,
-                      borderColor: palette.cardBorder,
+                      ...glass.strong,
                       boxShadow:
-                        "0 25px 60px -12px rgba(12,24,41,0.12), 0 8px 24px -8px rgba(12,24,41,0.08)",
+                        "0 25px 60px -12px rgba(12,24,41,0.15), 0 8px 24px -8px rgba(12,24,41,0.1), inset 0 1px 0 rgba(255,255,255,0.9)",
                       transform: "rotate(2deg)",
                     }}
                   >
@@ -875,7 +945,7 @@ export default function HomePage() {
                     <div className="px-5 pb-5 space-y-2">
                       <div
                         className="rounded-xl py-3 text-center text-sm font-semibold text-white"
-                        style={{ background: palette.green }}
+                        style={{ ...greenGradient }}
                       >
                         Cash Out to Bank
                       </div>
@@ -958,9 +1028,9 @@ export default function HomePage() {
                   <div
                     className="flex items-center gap-2 rounded-full px-4 py-2"
                     style={{
-                      background: palette.white,
-                      border: `1px solid ${palette.cardBorder}`,
-                      boxShadow: "0 8px 30px -8px rgba(12,24,41,0.12)",
+                      ...glass.strong,
+                      boxShadow:
+                        "0 8px 30px -8px rgba(12,24,41,0.12), inset 0 1px 0 rgba(255,255,255,0.9)",
                     }}
                   >
                     <div
@@ -1019,7 +1089,20 @@ export default function HomePage() {
               {/* Vertical line */}
               <div
                 className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
-                style={{ background: palette.topo }}
+                style={{
+                  background: `linear-gradient(180deg, ${palette.topo} 0%, ${palette.green}40 50%, ${palette.topo} 100%)`,
+                }}
+              />
+
+              {/* Animated pulse traveling down the line */}
+              <motion.div
+                className="absolute left-8 md:left-1/2 -translate-x-1/2 w-3 h-3 rounded-full z-20"
+                style={{
+                  background: palette.green,
+                  boxShadow: `0 0 16px 4px ${palette.green}50, 0 0 32px 8px ${palette.green}20`,
+                }}
+                animate={{ top: ["0%", "100%"] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
               />
 
               {[
@@ -1067,12 +1150,12 @@ export default function HomePage() {
                     {/* Content */}
                     <div className="flex-1 ml-16 md:ml-0">
                       <div
-                        className={`rounded-2xl border p-6 sm:p-8 ${
+                        className={`rounded-2xl p-7 sm:p-9 transition-all duration-300 ${
                           i % 2 === 0 ? "md:mr-12" : "md:ml-12"
                         }`}
                         style={{
-                          background: palette.cream,
-                          borderColor: palette.cardBorder,
+                          ...glass.card,
+                          borderColor: undefined,
                         }}
                       >
                         <span
@@ -1113,8 +1196,12 @@ export default function HomePage() {
 
                     {/* Timeline node */}
                     <div
-                      className="absolute left-8 md:left-1/2 -translate-x-1/2 flex items-center justify-center w-10 h-10 rounded-full border-2 bg-white z-10"
-                      style={{ borderColor: palette.green }}
+                      className="absolute left-8 md:left-1/2 -translate-x-1/2 flex items-center justify-center w-11 h-11 rounded-full border-2 z-10"
+                      style={{
+                        borderColor: palette.green,
+                        background: palette.white,
+                        boxShadow: `0 0 20px 4px ${palette.green}20, 0 0 8px 2px ${palette.green}10`,
+                      }}
                     >
                       <span style={{ color: palette.green }}>{item.icon}</span>
                     </div>
@@ -1132,11 +1219,11 @@ export default function HomePage() {
             SECTION 3 — INTERACTIVE PLAYGROUND
            ═══════════════════════════════════════════════════════════════ */}
         <section
-          className="py-24 sm:py-32"
+          className="py-28 sm:py-36"
           style={{ background: palette.cream }}
         >
           <div className="container mx-auto max-w-6xl px-6">
-            <Reveal className="text-center mb-14">
+            <Reveal className="text-center mb-16">
               <p
                 className="text-sm font-semibold uppercase tracking-widest mb-3"
                 style={{ color: palette.green }}
@@ -1171,11 +1258,11 @@ export default function HomePage() {
             SECTION 4 — WHY SETTLR (feature pillars)
            ═══════════════════════════════════════════════════════════════ */}
         <section
-          className="py-24 sm:py-32"
+          className="py-28 sm:py-36"
           style={{ background: palette.white }}
         >
           <div className="container mx-auto max-w-6xl px-6">
-            <Reveal className="text-center mb-16">
+            <Reveal className="text-center mb-20">
               <p
                 className="text-sm font-semibold uppercase tracking-widest mb-3"
                 style={{ color: palette.green }}
@@ -1193,7 +1280,7 @@ export default function HomePage() {
               </h2>
             </Reveal>
 
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-7">
               {[
                 {
                   icon: <Globe className="h-6 w-6" />,
@@ -1228,10 +1315,18 @@ export default function HomePage() {
               ].map((f, i) => (
                 <Reveal key={f.title} delay={i * 0.08}>
                   <div
-                    className="rounded-2xl border p-7 h-full transition-colors hover:border-[#1B6B4A]/30"
+                    className="rounded-2xl p-8 h-full transition-all duration-300 hover:-translate-y-1 group"
                     style={{
-                      background: palette.cream,
-                      borderColor: palette.cardBorder,
+                      ...glass.card,
+                    }}
+                    onMouseEnter={(e) => {
+                      Object.assign(e.currentTarget.style, glass.cardHover);
+                    }}
+                    onMouseLeave={(e) => {
+                      Object.assign(e.currentTarget.style, {
+                        boxShadow: glass.card.boxShadow,
+                        border: glass.card.border,
+                      });
                     }}
                   >
                     <div
@@ -1269,11 +1364,11 @@ export default function HomePage() {
             SECTION 5 — SAVINGS CALCULATOR
            ═══════════════════════════════════════════════════════════════ */}
         <section
-          className="py-24 sm:py-32"
+          className="py-28 sm:py-36"
           style={{ background: palette.cream }}
         >
           <div className="container mx-auto max-w-3xl px-6">
-            <Reveal className="text-center mb-12">
+            <Reveal className="text-center mb-14">
               <p
                 className="text-sm font-semibold uppercase tracking-widest mb-3"
                 style={{ color: palette.green }}
@@ -1301,11 +1396,11 @@ export default function HomePage() {
             SECTION 6 — COMPLIANCE & TRUST
            ═══════════════════════════════════════════════════════════════ */}
         <section
-          className="py-24 sm:py-32"
+          className="py-28 sm:py-36"
           style={{ background: palette.white }}
         >
           <div className="container mx-auto max-w-5xl px-6">
-            <Reveal className="text-center mb-16">
+            <Reveal className="text-center mb-20">
               <p
                 className="text-sm font-semibold uppercase tracking-widest mb-3"
                 style={{ color: palette.green }}
@@ -1323,7 +1418,7 @@ export default function HomePage() {
               </h2>
             </Reveal>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 {
                   label: "OFAC Screening",
@@ -1348,10 +1443,9 @@ export default function HomePage() {
               ].map((item, i) => (
                 <Reveal key={item.label} delay={i * 0.08}>
                   <div
-                    className="rounded-2xl border p-6 h-full"
+                    className="rounded-2xl p-7 h-full transition-all duration-300 hover:-translate-y-1"
                     style={{
-                      background: palette.cream,
-                      borderColor: palette.cardBorder,
+                      ...glass.card,
                     }}
                   >
                     <div
@@ -1386,11 +1480,11 @@ export default function HomePage() {
             SECTION 7 — PRICING SNAPSHOT
            ═══════════════════════════════════════════════════════════════ */}
         <section
-          className="py-24 sm:py-32"
+          className="py-28 sm:py-36"
           style={{ background: palette.cream }}
         >
           <div className="container mx-auto max-w-5xl px-6">
-            <Reveal className="text-center mb-14">
+            <Reveal className="text-center mb-16">
               <p
                 className="text-sm font-semibold uppercase tracking-widest mb-3"
                 style={{ color: palette.green }}
@@ -1458,15 +1552,16 @@ export default function HomePage() {
               ].map((plan, i) => (
                 <Reveal key={plan.name} delay={i * 0.1}>
                   <div
-                    className={`rounded-2xl border p-7 h-full flex flex-col ${
-                      plan.highlighted ? "ring-2" : ""
+                    className={`rounded-2xl p-8 h-full flex flex-col transition-all duration-300 hover:-translate-y-1 ${
+                      plan.highlighted ? "ring-2 ring-[#1B6B4A]" : ""
                     }`}
                     style={{
-                      background: palette.white,
-                      borderColor: plan.highlighted
-                        ? palette.green
-                        : palette.cardBorder,
-                      ...(plan.highlighted ? { ringColor: palette.green } : {}),
+                      ...(plan.highlighted ? glass.strong : glass.card),
+                      ...(plan.highlighted
+                        ? {
+                            boxShadow: `0 12px 48px rgba(12,24,41,0.08), 0 0 0 1px ${palette.green}30, 0 0 40px ${palette.green}10, inset 0 1px 0 rgba(255,255,255,0.9)`,
+                          }
+                        : {}),
                     }}
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -1535,19 +1630,20 @@ export default function HomePage() {
 
                     <Link
                       href={plan.href}
-                      className={`block text-center rounded-lg py-3 text-sm font-semibold transition-all ${
+                      className={`block text-center rounded-xl py-3.5 text-sm font-semibold transition-all duration-300 ${
                         plan.highlighted
-                          ? "text-white hover:shadow-lg"
+                          ? "text-white hover:-translate-y-0.5"
                           : "hover:bg-[#F3F2ED]"
                       }`}
                       style={{
-                        background: plan.highlighted
-                          ? palette.green
-                          : "transparent",
-                        border: plan.highlighted
-                          ? "none"
-                          : `1px solid ${palette.cardBorder}`,
-                        color: plan.highlighted ? palette.white : palette.navy,
+                        ...(plan.highlighted
+                          ? greenGradient
+                          : {
+                              background: "transparent",
+                              border: `1px solid ${palette.cardBorder}`,
+                              color: palette.navy,
+                            }),
+                        ...(plan.highlighted ? {} : { color: palette.navy }),
                       }}
                     >
                       {plan.cta}
@@ -1563,11 +1659,11 @@ export default function HomePage() {
             SECTION 8 — FAQ
            ═══════════════════════════════════════════════════════════════ */}
         <section
-          className="py-24 sm:py-32"
+          className="py-28 sm:py-36"
           style={{ background: palette.white }}
         >
           <div className="container mx-auto max-w-3xl px-6">
-            <Reveal className="text-center mb-14">
+            <Reveal className="text-center mb-16">
               <p
                 className="text-sm font-semibold uppercase tracking-widest mb-3"
                 style={{ color: palette.green }}
@@ -1624,7 +1720,7 @@ export default function HomePage() {
             SECTION 9 — CTA
            ═══════════════════════════════════════════════════════════════ */}
         <section
-          className="py-24 sm:py-32"
+          className="py-28 sm:py-36"
           style={{ background: palette.cream }}
         >
           <div className="container mx-auto max-w-3xl px-6 text-center">
@@ -1650,18 +1746,25 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
                   href="/onboarding"
-                  className="inline-flex items-center gap-2 rounded-lg px-8 py-4 text-sm font-semibold text-white transition-all hover:shadow-lg"
-                  style={{ background: palette.green }}
+                  className="inline-flex items-center gap-2 rounded-xl px-9 py-4.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+                  style={{ ...greenGradient }}
+                  onMouseEnter={(e) =>
+                    Object.assign(e.currentTarget.style, greenGradientHover)
+                  }
+                  onMouseLeave={(e) =>
+                    Object.assign(e.currentTarget.style, greenGradient)
+                  }
                 >
                   Start Integrating
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/compare"
-                  className="inline-flex items-center gap-2 rounded-lg border px-8 py-4 text-sm font-semibold transition-all hover:bg-[#F3F2ED]"
+                  className="inline-flex items-center gap-2 rounded-xl border px-9 py-4.5 text-sm font-semibold transition-all duration-300 hover:bg-[#F3F2ED] hover:-translate-y-0.5"
                   style={{
                     borderColor: palette.cardBorder,
                     color: palette.navy,
+                    boxShadow: "0 2px 8px rgba(12, 24, 41, 0.06)",
                   }}
                 >
                   Compare to Alternatives
@@ -1684,10 +1787,14 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
   return (
     <div
-      className="rounded-xl border overflow-hidden transition-colors"
+      className="rounded-xl overflow-hidden transition-all duration-300"
       style={{
-        borderColor: open ? palette.green + "40" : palette.cardBorder,
-        background: palette.cream,
+        ...glass.card,
+        ...(open
+          ? {
+              boxShadow: `0 8px 32px rgba(12, 24, 41, 0.08), 0 0 0 1px ${palette.green}30, inset 0 1px 0 rgba(255,255,255,0.8)`,
+            }
+          : {}),
       }}
     >
       <button
