@@ -54,12 +54,9 @@ export async function POST(request: NextRequest) {
         if (!txSignature) {
             const balance = await getOrCreateMerchantBalance(merchantId!);
 
-            // The deposit address is the platform's fee payer USDC ATA
-            // In production, each merchant would have their own deposit address (PDA or ATA)
-            const depositAddress =
-                process.env.PLATFORM_DEPOSIT_ADDRESS ||
-                process.env.NEXT_PUBLIC_FEE_PAYER_ADDRESS ||
-                "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV";
+            // The deposit address is the merchant's own wallet address.
+            // Users fund their treasury by sending USDC to their connected wallet.
+            const depositAddress = body.wallet || "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV";
 
             const usdcMint =
                 process.env.USDC_MINT ||

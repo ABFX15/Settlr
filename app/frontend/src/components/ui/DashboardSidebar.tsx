@@ -26,6 +26,8 @@ import {
   X,
   Bell,
   Plus,
+  FileText,
+  ArrowDownToLine,
 } from "lucide-react";
 
 const navSections = [
@@ -50,6 +52,8 @@ const navSections = [
     label: "Money",
     items: [
       { href: "/dashboard/treasury", icon: Wallet, label: "Treasury" },
+      { href: "/dashboard/invoices", icon: FileText, label: "Invoices" },
+      { href: "/dashboard/offramp", icon: ArrowDownToLine, label: "Off-Ramp" },
       {
         href: "/dashboard/subscriptions",
         icon: RefreshCw,

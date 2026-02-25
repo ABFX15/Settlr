@@ -18,17 +18,27 @@ import {
   Eye,
   Sparkles,
   Check,
+  Users,
 } from "lucide-react";
 import { useState } from "react";
 
 const demoCards = [
+  {
+    title: "Batch Payouts",
+    description:
+      "Upload a CSV and pay hundreds of people at once. See the full flow — upload, preview, send, and claim.",
+    href: "/demo/batch",
+    icon: Users,
+    color: "#1B6B4A",
+    cta: "Try Batch Demo",
+  },
   {
     title: "Payout Demo Store",
     description:
       "Full checkout experience with platform plans, add-ons, and instant USDC settlement.",
     href: "/demo/store",
     icon: Play,
-    color: "#3B82F6",
+    color: "#1B6B4A",
     cta: "Try Demo",
   },
   {
@@ -37,7 +47,7 @@ const demoCards = [
       "Skip straight to the payout flow. See a $50 USDC payout settle in under a second.",
     href: "/checkout?amount=50.00&merchant=Settlr&to=DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV&memo=Worker%20Payout",
     icon: Zap,
-    color: "#3B82F6",
+    color: "#1B6B4A",
     cta: "Try Payout",
   },
   {
@@ -46,7 +56,7 @@ const demoCards = [
       "Generate a shareable payment link for payouts, invoices, or one-off transfers.",
     href: "/create",
     icon: LinkIcon,
-    color: "#3B82F6",
+    color: "#1B6B4A",
     cta: "Create Link",
   },
   {
@@ -55,7 +65,7 @@ const demoCards = [
       "Integrate payouts into your platform with our TypeScript SDK and React components.",
     href: "/docs",
     icon: Code2,
-    color: "#3B82F6",
+    color: "#1B6B4A",
     cta: "View Docs",
   },
 ];
@@ -78,7 +88,7 @@ export default function DemoPage() {
         <section className="relative overflow-hidden px-4 pb-16 pt-32">
           {/* Background effects */}
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.15),transparent)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(27,107,74,0.12),transparent)]" />
             <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FDFBF7] to-transparent" />
           </div>
 
@@ -190,7 +200,9 @@ export default function DemoPage() {
                         <h2 className="mb-3 text-xl font-semibold text-[#0C1829] transition-colors group-hover:text-[#0C1829]">
                           {card.title}
                         </h2>
-                        <p className="mb-6 text-[#7C8A9E]">{card.description}</p>
+                        <p className="mb-6 text-[#7C8A9E]">
+                          {card.description}
+                        </p>
 
                         <div
                           className="inline-flex items-center gap-2 font-medium transition-colors"
@@ -350,7 +362,7 @@ export default function DemoPage() {
 
         {/* CTA Section */}
         <section className="relative overflow-hidden px-4 py-16">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#3B82F6]/[0.05] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1B6B4A]/[0.05] to-transparent" />
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -211,3 +211,62 @@ export async function sendPayoutClaimEmail(params: {
 
     return sendEmail({ to, subject, html, text });
 }
+
+/**
+ * Send an invoice email to a buyer.
+ */
+export async function sendInvoiceEmail(params: {
+    to: string;
+    invoiceNumber: string;
+    amount: number;
+    currency: string;
+    buyerName: string;
+    merchantName: string;
+    dueDate: Date;
+    invoiceUrl: string;
+    memo?: string;
+}): Promise<boolean> {
+    const { to, invoiceNumber, amount, currency, buyerName, merchantName, dueDate, invoiceUrl, memo } = params;
+    const formattedAmount = `$${amount.toFixed(2)} ${currency}`;
+    const dueFormatted = dueDate.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+    });
+
+    const subject = `Invoice ${invoiceNumber} from ${merchantName} — ${formattedAmount}`;
+
+    const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 520px; margin: 0 auto; padding: 40px 20px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+            <h1 style="color: #0C1829; font-size: 24px; margin: 0 0 8px;">Invoice from ${merchantName}</h1>
+            <p style="color: #7C8A9E; font-size: 14px; margin: 0;">${invoiceNumber}</p>
+        </div>
+        <div style="background: #F8F7F3; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #E2DFD5;">
+            <p style="color: #7C8A9E; font-size: 14px; margin: 0 0 8px;">Amount Due</p>
+            <p style="color: #0C1829; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
+            <p style="color: #7C8A9E; font-size: 14px; margin: 8px 0 0;">Due by ${dueFormatted}</p>
+        </div>
+        <p style="color: #3B4963; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+            Hi ${buyerName},<br><br>
+            ${merchantName} has sent you an invoice for <strong>${formattedAmount}</strong>.
+            ${memo ? `<br><em style="color: #7C8A9E;">${memo}</em>` : ""}
+        </p>
+        <div style="text-align: center; margin-bottom: 24px;">
+            <a href="${invoiceUrl}" style="display: inline-block; background: #1B6B4A; color: #fff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 8px;">
+                View & Pay Invoice →
+            </a>
+        </div>
+        <p style="color: #7C8A9E; font-size: 12px; text-align: center;">
+            Pay with USDC — no bank account needed. Funds settle instantly on Solana.
+        </p>
+        <hr style="border: none; border-top: 1px solid #E2DFD5; margin: 32px 0;" />
+        <p style="color: #7C8A9E; font-size: 11px; text-align: center;">
+            Powered by <a href="https://settlr.dev" style="color: #1B6B4A; text-decoration: none;">Settlr</a> — stablecoin payment infrastructure
+        </p>
+    </div>`;
+
+    const text = `Invoice ${invoiceNumber} from ${merchantName} for ${formattedAmount}. Due ${dueFormatted}. View and pay: ${invoiceUrl}`;
+
+    return sendEmail({ to, subject, html, text });
+}

@@ -168,6 +168,54 @@ export interface PayoutBatch {
 }
 
 // ---------------------------------------------------------------------------
+// Invoice types
+// ---------------------------------------------------------------------------
+
+export type InvoiceStatus = "draft" | "sent" | "viewed" | "paid" | "overdue" | "cancelled";
+
+export interface InvoiceLineItem {
+    description: string;
+    quantity: number;
+    unitPrice: number;
+    amount: number;
+}
+
+export interface Invoice {
+    id: string;
+    merchantId: string;
+    merchantName: string;
+    merchantWallet: string;
+    invoiceNumber: string;
+    // Buyer info
+    buyerName: string;
+    buyerEmail: string;
+    buyerCompany?: string;
+    // Amounts
+    lineItems: InvoiceLineItem[];
+    subtotal: number;
+    taxRate?: number;
+    taxAmount: number;
+    total: number;
+    currency: string;
+    // Terms
+    memo?: string;
+    terms?: string; // e.g. "Net 30", "Due on receipt"
+    dueDate: Date;
+    // Payment
+    status: InvoiceStatus;
+    paymentSignature?: string;
+    payerWallet?: string;
+    paidAt?: Date;
+    // Tracking
+    viewToken: string;
+    viewCount: number;
+    lastViewedAt?: Date;
+    sentAt?: Date;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+// ---------------------------------------------------------------------------
 // Recipient Network types
 // ---------------------------------------------------------------------------
 
@@ -265,6 +313,7 @@ const memoryBalances = new Map<string, RecipientBalance>(); // keyed by recipien
 const memoryBalanceTxs: BalanceTransaction[] = [];
 const memoryMerchantBalances = new Map<string, MerchantBalance>(); // keyed by merchantId:currency
 const memoryTreasuryTxs: TreasuryTransaction[] = [];
+const memoryInvoices = new Map<string, Invoice>();
 const memoryRateLimits = new Map<string, { count: number; resetAt: number }>();
 
 // ID generators
@@ -2517,6 +2566,284 @@ export async function getTreasuryTransactions(
  */
 export function calculatePayoutFee(amount: number): number {
     return Math.max(amount * 0.01, 0.25);
+}
+
+// ============================================
+// INVOICES
+// ============================================
+
+function generateInvoiceId(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "inv_";
+    for (let i = 0; i < 16; i++) {
+        id += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return id;
+}
+
+function generateInvoiceNumber(): string {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const seq = Math.floor(Math.random() * 9000) + 1000;
+    return `INV-${y}${m}-${seq}`;
+}
+
+function generateViewToken(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let token = "";
+    for (let i = 0; i < 32; i++) {
+        token += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return token;
+}
+
+export async function createInvoice(data: {
+    merchantId: string;
+    merchantName: string;
+    merchantWallet: string;
+    invoiceNumber?: string;
+    buyerName: string;
+    buyerEmail: string;
+    buyerCompany?: string;
+    lineItems: InvoiceLineItem[];
+    taxRate?: number;
+    memo?: string;
+    terms?: string;
+    dueDate: Date;
+    currency?: string;
+}): Promise<Invoice> {
+    const subtotal = data.lineItems.reduce((sum, li) => sum + li.amount, 0);
+    const taxAmount = data.taxRate ? subtotal * (data.taxRate / 100) : 0;
+    const total = subtotal + taxAmount;
+    const now = new Date();
+
+    const invoice: Invoice = {
+        id: generateInvoiceId(),
+        merchantId: data.merchantId,
+        merchantName: data.merchantName,
+        merchantWallet: data.merchantWallet,
+        invoiceNumber: data.invoiceNumber || generateInvoiceNumber(),
+        buyerName: data.buyerName,
+        buyerEmail: data.buyerEmail,
+        buyerCompany: data.buyerCompany,
+        lineItems: data.lineItems,
+        subtotal,
+        taxRate: data.taxRate,
+        taxAmount,
+        total,
+        currency: data.currency || "USDC",
+        memo: data.memo,
+        terms: data.terms,
+        dueDate: data.dueDate,
+        status: "draft",
+        viewToken: generateViewToken(),
+        viewCount: 0,
+        createdAt: now,
+        updatedAt: now,
+    };
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase.from("invoices").insert({
+            id: invoice.id,
+            merchant_id: invoice.merchantId,
+            merchant_name: invoice.merchantName,
+            merchant_wallet: invoice.merchantWallet,
+            invoice_number: invoice.invoiceNumber,
+            buyer_name: invoice.buyerName,
+            buyer_email: invoice.buyerEmail,
+            buyer_company: invoice.buyerCompany,
+            line_items: invoice.lineItems,
+            subtotal: invoice.subtotal,
+            tax_rate: invoice.taxRate,
+            tax_amount: invoice.taxAmount,
+            total: invoice.total,
+            currency: invoice.currency,
+            memo: invoice.memo,
+            terms: invoice.terms,
+            due_date: invoice.dueDate.toISOString(),
+            status: invoice.status,
+            view_token: invoice.viewToken,
+            view_count: 0,
+            created_at: invoice.createdAt.toISOString(),
+            updated_at: invoice.updatedAt.toISOString(),
+        });
+        if (error) {
+            console.error("[db] Error creating invoice:", error);
+            throw new Error("Failed to create invoice");
+        }
+    } else {
+        memoryInvoices.set(invoice.id, invoice);
+    }
+
+    return invoice;
+}
+
+export async function getInvoice(id: string): Promise<Invoice | null> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("invoices")
+            .select("*")
+            .eq("id", id)
+            .single();
+        if (error || !data) return null;
+        return mapSupabaseInvoice(data);
+    }
+    return memoryInvoices.get(id) || null;
+}
+
+export async function getInvoiceByViewToken(token: string): Promise<Invoice | null> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("invoices")
+            .select("*")
+            .eq("view_token", token)
+            .single();
+        if (error || !data) return null;
+        // Increment view count
+        await supabase.from("invoices").update({
+            view_count: (data.view_count || 0) + 1,
+            last_viewed_at: new Date().toISOString(),
+            status: data.status === "sent" ? "viewed" : data.status,
+            updated_at: new Date().toISOString(),
+        }).eq("id", data.id);
+        return mapSupabaseInvoice(data);
+    }
+    for (const inv of memoryInvoices.values()) {
+        if (inv.viewToken === token) {
+            inv.viewCount++;
+            inv.lastViewedAt = new Date();
+            if (inv.status === "sent") inv.status = "viewed";
+            inv.updatedAt = new Date();
+            return inv;
+        }
+    }
+    return null;
+}
+
+export async function getInvoicesByMerchant(
+    merchantId: string,
+    options?: { status?: InvoiceStatus; limit?: number; offset?: number }
+): Promise<Invoice[]> {
+    if (isSupabaseConfigured()) {
+        let query = supabase
+            .from("invoices")
+            .select("*")
+            .eq("merchant_id", merchantId)
+            .order("created_at", { ascending: false });
+        if (options?.status) query = query.eq("status", options.status);
+        if (options?.limit) query = query.limit(options.limit);
+        if (options?.offset) query = query.range(options.offset, options.offset + (options.limit || 50) - 1);
+        const { data, error } = await query;
+        if (error || !data) return [];
+        return data.map(mapSupabaseInvoice);
+    }
+    let invoices = Array.from(memoryInvoices.values()).filter(
+        (i) => i.merchantId === merchantId
+    );
+    if (options?.status) invoices = invoices.filter((i) => i.status === options.status);
+    invoices.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    if (options?.offset) invoices = invoices.slice(options.offset);
+    if (options?.limit) invoices = invoices.slice(0, options.limit);
+    return invoices;
+}
+
+export async function updateInvoiceStatus(
+    id: string,
+    status: InvoiceStatus,
+    extra?: {
+        paymentSignature?: string;
+        payerWallet?: string;
+        paidAt?: Date;
+        sentAt?: Date;
+    }
+): Promise<Invoice | null> {
+    if (isSupabaseConfigured()) {
+        const updateData: Record<string, unknown> = {
+            status,
+            updated_at: new Date().toISOString(),
+        };
+        if (extra?.paymentSignature) updateData.payment_signature = extra.paymentSignature;
+        if (extra?.payerWallet) updateData.payer_wallet = extra.payerWallet;
+        if (extra?.paidAt) updateData.paid_at = extra.paidAt.toISOString();
+        if (extra?.sentAt) updateData.sent_at = extra.sentAt.toISOString();
+
+        const { data, error } = await supabase
+            .from("invoices")
+            .update(updateData)
+            .eq("id", id)
+            .select()
+            .single();
+        if (error || !data) return null;
+        return mapSupabaseInvoice(data);
+    }
+    const inv = memoryInvoices.get(id);
+    if (!inv) return null;
+    inv.status = status;
+    inv.updatedAt = new Date();
+    if (extra?.paymentSignature) inv.paymentSignature = extra.paymentSignature;
+    if (extra?.payerWallet) inv.payerWallet = extra.payerWallet;
+    if (extra?.paidAt) inv.paidAt = extra.paidAt;
+    if (extra?.sentAt) inv.sentAt = extra.sentAt;
+    return inv;
+}
+
+export async function getInvoiceStats(merchantId: string): Promise<{
+    total: number;
+    paid: number;
+    outstanding: number;
+    overdue: number;
+    totalRevenue: number;
+    outstandingAmount: number;
+}> {
+    const all = await getInvoicesByMerchant(merchantId, { limit: 10000 });
+    const now = new Date();
+    let paid = 0, outstanding = 0, overdue = 0, totalRevenue = 0, outstandingAmount = 0;
+    for (const inv of all) {
+        if (inv.status === "paid") {
+            paid++;
+            totalRevenue += inv.total;
+        } else if (inv.status === "cancelled" || inv.status === "draft") {
+            // skip
+        } else {
+            outstanding++;
+            outstandingAmount += inv.total;
+            if (inv.dueDate < now) overdue++;
+        }
+    }
+    return { total: all.length, paid, outstanding, overdue, totalRevenue, outstandingAmount };
+}
+
+function mapSupabaseInvoice(data: Record<string, unknown>): Invoice {
+    return {
+        id: data.id as string,
+        merchantId: data.merchant_id as string,
+        merchantName: data.merchant_name as string,
+        merchantWallet: data.merchant_wallet as string,
+        invoiceNumber: data.invoice_number as string,
+        buyerName: data.buyer_name as string,
+        buyerEmail: data.buyer_email as string,
+        buyerCompany: data.buyer_company as string | undefined,
+        lineItems: (data.line_items as InvoiceLineItem[]) || [],
+        subtotal: Number(data.subtotal),
+        taxRate: data.tax_rate ? Number(data.tax_rate) : undefined,
+        taxAmount: Number(data.tax_amount || 0),
+        total: Number(data.total),
+        currency: (data.currency as string) || "USDC",
+        memo: data.memo as string | undefined,
+        terms: data.terms as string | undefined,
+        dueDate: new Date(data.due_date as string),
+        status: data.status as InvoiceStatus,
+        paymentSignature: data.payment_signature as string | undefined,
+        payerWallet: data.payer_wallet as string | undefined,
+        paidAt: data.paid_at ? new Date(data.paid_at as string) : undefined,
+        viewToken: data.view_token as string,
+        viewCount: Number(data.view_count || 0),
+        lastViewedAt: data.last_viewed_at ? new Date(data.last_viewed_at as string) : undefined,
+        sentAt: data.sent_at ? new Date(data.sent_at as string) : undefined,
+        createdAt: new Date(data.created_at as string),
+        updatedAt: new Date(data.updated_at as string),
+    };
 }
 
 // Helper: map Supabase merchant_balance row
