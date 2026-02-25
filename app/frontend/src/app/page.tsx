@@ -733,6 +733,20 @@ export default function HomePage() {
       >
         <Navbar />
 
+        {/* ── Global transparent world map background ── */}
+        <div
+          className="fixed inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden"
+          style={{ opacity: 0.06 }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/sl_070722_51460_23.jpg"
+            alt=""
+            className="w-full h-full object-cover mix-blend-multiply"
+            style={{ filter: "grayscale(1) contrast(1.1)" }}
+          />
+        </div>
+
         {/* ═══════════════════════════════════════════════════════════════
             SECTION 1 — HERO  (Layered Depth: topo → grain → content → floating UI)
            ═══════════════════════════════════════════════════════════════ */}
