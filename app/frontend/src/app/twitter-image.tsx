@@ -10,9 +10,8 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image() {
-  // Fetch the hero background image (bundled at build time)
-  const bgData = await fetch(
-    new URL("../../public/8917.jpg", import.meta.url),
+  const logoData = await fetch(
+    new URL("../../public/settlr-logo-nobg.png", import.meta.url),
   ).then((res) => res.arrayBuffer());
 
   return new ImageResponse(
@@ -24,27 +23,10 @@ export default async function Image() {
           display: "flex",
           position: "relative",
           overflow: "hidden",
-          backgroundColor: "#050507",
+          backgroundColor: "#FDFBF7",
         }}
       >
-        {/* Background photo — same as landing page hero */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          // @ts-expect-error Satori accepts ArrayBuffer for img src
-          src={bgData}
-          width="1200"
-          height="630"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
-        />
-
-        {/* Dark overlay — matches hero's overlay style */}
+        {/* Subtle topo-style background pattern */}
         <div
           style={{
             position: "absolute",
@@ -52,47 +34,20 @@ export default async function Image() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: "rgba(5, 5, 7, 0.65)",
+            backgroundImage:
+              "radial-gradient(circle at 20% 50%, rgba(27,107,74,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 30%, rgba(27,107,74,0.04) 0%, transparent 50%)",
           }}
         />
 
-        {/* Blue glow — matches hero's blur glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: -100,
-            left: "50%",
-            width: 800,
-            height: 500,
-            borderRadius: "50%",
-            background: "rgba(59, 130, 246, 0.12)",
-            filter: "blur(80px)",
-            transform: "translateX(-50%)",
-          }}
-        />
-
-        {/* Bottom fade — matches hero's gradient-to-dark */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 200,
-            background:
-              "linear-gradient(to top, rgba(5,5,7,0.95), rgba(5,5,7,0.5), transparent)",
-          }}
-        />
-
-        {/* Top accent bar */}
+        {/* Top accent bar — green */}
         <div
           style={{
             position: "absolute",
             top: 0,
             left: 0,
             right: 0,
-            height: 4,
-            background: "#3B82F6",
+            height: 5,
+            background: "linear-gradient(90deg, #1B6B4A, #2A9D6A)",
           }}
         />
 
@@ -115,23 +70,35 @@ export default async function Image() {
               display: "flex",
               flexDirection: "column",
               flex: 1,
-              maxWidth: 720,
+              maxWidth: 700,
             }}
           >
-            {/* Pill badge — same as hero */}
+            {/* Logo */}
+            <div style={{ display: "flex", marginBottom: 32 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                // @ts-expect-error Satori accepts ArrayBuffer for img src
+                src={logoData}
+                width="80"
+                height="80"
+                style={{ objectFit: "contain" }}
+              />
+            </div>
+
+            {/* Pill badge */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: 8,
                 borderRadius: 40,
-                border: "1px solid rgba(59, 130, 246, 0.3)",
-                background: "rgba(59, 130, 246, 0.1)",
+                border: "1px solid rgba(27,107,74,0.3)",
+                background: "rgba(27,107,74,0.08)",
                 padding: "8px 18px",
                 fontSize: 15,
-                color: "#3B82F6",
+                color: "#1B6B4A",
                 fontWeight: 500,
-                marginBottom: 32,
+                marginBottom: 28,
               }}
             >
               <div
@@ -139,40 +106,41 @@ export default async function Image() {
                   width: 6,
                   height: 6,
                   borderRadius: "50%",
-                  backgroundColor: "#3B82F6",
+                  backgroundColor: "#1B6B4A",
                 }}
               />
-              Stablecoin payment infrastructure
+              Stablecoin payout infrastructure
             </div>
 
-            {/* Headline — matches hero */}
+            {/* Headline */}
             <div
               style={{
-                fontSize: 58,
+                fontSize: 54,
                 fontWeight: 700,
-                lineHeight: 1.08,
+                lineHeight: 1.1,
                 letterSpacing: "-0.025em",
                 marginBottom: 24,
                 display: "flex",
                 flexDirection: "column",
+                fontFamily: "serif",
               }}
             >
-              <span style={{ color: "white" }}>Stablecoin payments</span>
-              <span style={{ color: "#3B82F6" }}>for every platform</span>
+              <span style={{ color: "#0C1829" }}>Pay anyone, anywhere,</span>
+              <span style={{ color: "#1B6B4A" }}>with just their email</span>
             </div>
 
             {/* Subtitle */}
             <div
               style={{
-                fontSize: 22,
-                color: "rgba(255,255,255,0.55)",
+                fontSize: 21,
+                color: "#3B4963",
                 lineHeight: 1.5,
-                marginBottom: 44,
-                maxWidth: 500,
+                marginBottom: 40,
+                maxWidth: 480,
               }}
             >
-              Pay anyone with just their email — 180+ countries, 1% flat,
-              settled in under a second.
+              Send stablecoins to 180+ countries. 1% flat fee, settled in under
+              a second. No bank details needed.
             </div>
 
             {/* Stats row */}
@@ -190,15 +158,13 @@ export default async function Image() {
                     style={{
                       fontSize: 34,
                       fontWeight: 700,
-                      color: "#3B82F6",
+                      color: "#1B6B4A",
                       letterSpacing: "-0.02em",
                     }}
                   >
                     {stat.value}
                   </span>
-                  <span
-                    style={{ fontSize: 15, color: "rgba(255,255,255,0.35)" }}
-                  >
+                  <span style={{ fontSize: 14, color: "#7C8A9E" }}>
                     {stat.label}
                   </span>
                 </div>
@@ -206,17 +172,17 @@ export default async function Image() {
             </div>
           </div>
 
-          {/* Right side — code snippet placeholder */}
+          {/* Right side — code snippet card */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               width: 340,
               borderRadius: 16,
-              border: "1px solid rgba(255,255,255,0.08)",
-              background: "rgba(12, 12, 20, 0.85)",
+              border: "1px solid #E2DFD5",
+              background: "#0C1829",
               padding: "24px 28px",
-              boxShadow: "0 24px 48px rgba(0,0,0,0.4)",
+              boxShadow: "0 24px 48px rgba(12,24,41,0.15)",
             }}
           >
             {/* Editor dots */}
@@ -248,7 +214,7 @@ export default async function Image() {
             </div>
             {/* Code lines */}
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <span style={{ fontSize: 14, color: "#3B82F6" }}>
+              <span style={{ fontSize: 14, color: "#2A9D6A" }}>
                 npm install @settlr/sdk
               </span>
               <div style={{ height: 8 }} />
@@ -265,11 +231,11 @@ export default async function Image() {
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
                 {'  email: "user@co.com",'}
               </span>
-              <span style={{ fontSize: 13, color: "#3B82F6" }}>
+              <span style={{ fontSize: 13, color: "#2A9D6A" }}>
                 {"  amount: 250_000,"}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-                {'  currency: "USDC"'}{" "}
+                {'  currency: "USDC"'}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
                 {"})"}
@@ -285,9 +251,8 @@ export default async function Image() {
             bottom: 0,
             left: 0,
             right: 0,
-            height: 52,
-            background: "rgba(0,0,0,0.5)",
-            borderTop: "1px solid rgba(255,255,255,0.06)",
+            height: 48,
+            background: "#0C1829",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -297,7 +262,7 @@ export default async function Image() {
           <span
             style={{
               fontSize: 16,
-              color: "rgba(255,255,255,0.35)",
+              color: "rgba(255,255,255,0.5)",
               fontWeight: 600,
             }}
           >
@@ -309,7 +274,7 @@ export default async function Image() {
                 key={tag}
                 style={{
                   fontSize: 13,
-                  color: "rgba(255,255,255,0.25)",
+                  color: "rgba(255,255,255,0.3)",
                   letterSpacing: "0.03em",
                 }}
               >

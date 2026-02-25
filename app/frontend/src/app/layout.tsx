@@ -56,19 +56,15 @@ export const metadata: Metadata = {
   description:
     "Pay contractors and freelancers in 180+ countries — no bank details, no wire fees, no frozen accounts. 1% flat, instant settlement on Solana.",
   alternates: { canonical: "/" },
-  keywords: [
-    "international payout API",
-    "pay contractors internationally",
-    "global payroll alternative",
-    "cross-border payments",
-    "marketplace payout software",
-    "Stripe alternative payouts",
-    "pay freelancers globally",
-    "USDC payment API",
-    "crypto payout platform",
-    "send money without bank account",
-  ],
   authors: [{ name: "Settlr" }],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/manifest.webmanifest",
   creator: "Settlr",
   publisher: "Settlr",
   metadataBase: new URL("https://settlr.dev"),
@@ -132,6 +128,12 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
+
+        {/* Favicons & app icons */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.webmanifest" />
 
         {/* Mobile viewport with safe area support */}
         <meta

@@ -1,0 +1,17 @@
+{
+  "name": "Settlr",
+  "short_name": "Settlr",
+  "description": "Send USDC to anyone by email — global payout infrastructure for platforms.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#1B6B4A",
+  "icons": [
+    {
+      "src": "/settlr-logo-nobg.png",
+      "sizes": "500x500",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

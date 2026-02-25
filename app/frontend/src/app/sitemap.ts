@@ -177,5 +177,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'monthly',
             priority: 0.7,
         },
+
+        // ── Comparison pages (high-intent SEO) ──
+        {
+            url: `${baseUrl}/vs/stripe-connect`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.9,
+        },
     ]
 }
