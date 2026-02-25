@@ -43,7 +43,7 @@ export default function BubblePage() {
 
   return (
     <main
-      className="relative min-h-screen bg-[#050507] text-white antialiased"
+      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <script
@@ -96,7 +96,7 @@ export default function BubblePage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
               3M+ apps run on Bubble.io. Zero of them have native stablecoin
               payment infrastructure. The Settlr plugin gives every no-code
               builder drag-and-drop USDC checkout and payouts — no blockchain
@@ -110,7 +110,7 @@ export default function BubblePage() {
                 href="https://github.com/ABFX15/Settlr/tree/master/plugins/bubble"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-white shadow-lg transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-[#0C1829] shadow-lg transition-transform hover:scale-[1.02]"
                 style={{
                   background: color,
                   boxShadow: `0 10px 25px ${color}40`,
@@ -121,7 +121,7 @@ export default function BubblePage() {
               </a>
               <Link
                 href="/docs"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-7 py-3.5 text-[15px] font-medium text-white/70 hover:bg-white/[0.06]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Setup docs
               </Link>
@@ -131,7 +131,7 @@ export default function BubblePage() {
       </section>
 
       {/* Why no-code + stablecoins */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
             <p
@@ -145,7 +145,7 @@ export default function BubblePage() {
             <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
               The no-code market has no stablecoin solution
             </h2>
-            <p className="mt-4 max-w-xl text-white/45 leading-relaxed">
+            <p className="mt-4 max-w-xl text-[#7C8A9E] leading-relaxed">
               Bubble builders accept Stripe. That&apos;s it. No stablecoin
               checkout, no USDC payouts, no crypto payment rails. Settlr is the
               first plugin to bring programmable stablecoin infrastructure to
@@ -188,10 +188,10 @@ export default function BubblePage() {
                   >
                     <item.icon className="h-5 w-5" style={{ color }} />
                   </div>
-                  <h3 className="text-[15px] font-semibold text-white">
+                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/40">
+                  <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
                     {item.text}
                   </p>
                 </div>
@@ -233,11 +233,11 @@ export default function BubblePage() {
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.08}>
-              <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
-                <h3 className="text-[15px] font-semibold text-white">
+              <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+                <h3 className="text-[15px] font-semibold text-[#0C1829]">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/40">
+                <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
                   {item.text}
                 </p>
               </div>
@@ -247,7 +247,7 @@ export default function BubblePage() {
       </section>
 
       {/* How it works */}
-      <section className="border-y border-white/[0.04]">
+      <section className="border-y border-[#E2DFD5]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <p
@@ -282,17 +282,17 @@ export default function BubblePage() {
               },
             ].map((item, i) => (
               <Reveal key={item.step} delay={i * 0.08}>
-                <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+                <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
                   <span
                     className="mb-4 block text-xs font-bold"
                     style={{ color: `${color}90` }}
                   >
                     STEP {item.step}
                   </span>
-                  <h3 className="text-[15px] font-semibold text-white">
+                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/40">
+                  <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
                     {item.text}
                   </p>
                 </div>
@@ -322,9 +322,9 @@ export default function BubblePage() {
             "Zero blockchain knowledge required",
           ].map((feature, i) => (
             <Reveal key={feature} delay={i * 0.04}>
-              <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+              <div className="flex items-center gap-3 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4">
                 <Check className="h-4 w-4 flex-shrink-0" style={{ color }} />
-                <span className="text-sm text-white/70">{feature}</span>
+                <span className="text-sm text-[#3B4963]">{feature}</span>
               </div>
             </Reveal>
           ))}
@@ -347,7 +347,7 @@ export default function BubblePage() {
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-white/45">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
               Drag-and-drop USDC checkout for the 3M+ apps on Bubble.io. No
               code, no blockchain knowledge, no competition.
             </p>
@@ -358,7 +358,7 @@ export default function BubblePage() {
                 href="https://github.com/ABFX15/Settlr/tree/master/plugins/bubble"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-[15px] font-semibold text-white hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-[15px] font-semibold text-[#0C1829] hover:scale-[1.02]"
                 style={{
                   background: color,
                   boxShadow: `0 10px 25px ${color}40`,
@@ -369,7 +369,7 @@ export default function BubblePage() {
               </a>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 hover:bg-white/[0.04]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Get API key
               </Link>

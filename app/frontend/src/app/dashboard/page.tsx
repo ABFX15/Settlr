@@ -82,16 +82,16 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <Wallet className="mx-auto h-12 w-12 text-white/20 mb-4" />
-          <h2 className="text-xl font-semibold text-white mb-2">
+          <Wallet className="mx-auto h-12 w-12 text-[#7C8A9E]/60 mb-4" />
+          <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
             Welcome to Settlr
           </h2>
-          <p className="text-white/50 mb-6 max-w-sm">
+          <p className="text-[#7C8A9E] mb-6 max-w-sm">
             Connect your wallet to access your merchant dashboard.
           </p>
           <button
             onClick={login}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#a78bfa] px-6 py-3 text-sm font-semibold text-white hover:bg-[#a78bfa]/90 transition-colors"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-6 py-3 text-sm font-semibold text-[#0C1829] hover:bg-[#2A9D6A]/90 transition-colors"
           >
             <LogIn className="h-4 w-4" />
             Connect Wallet
@@ -106,8 +106,8 @@ export default function DashboardPage() {
       {/* Welcome + Actions */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-sm text-white/50 mt-1">
+          <h1 className="text-2xl font-bold text-[#0C1829]">Dashboard</h1>
+          <p className="text-sm text-[#7C8A9E] mt-1">
             Welcome back
             {publicKey
               ? `, ${publicKey.slice(0, 6)}...${publicKey.slice(-4)}`
@@ -117,7 +117,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/treasury"
-            className="inline-flex items-center gap-2 rounded-xl bg-[#a78bfa] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#a78bfa]/90 transition-colors"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-4 py-2.5 text-sm font-medium text-[#0C1829] hover:bg-[#2A9D6A]/90 transition-colors"
           >
             <Wallet className="h-4 w-4" />
             Fund Treasury
@@ -130,16 +130,16 @@ export default function DashboardPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5"
+          className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5"
         >
-          <div className="flex items-center gap-2 text-sm text-white/50 mb-1">
+          <div className="flex items-center gap-2 text-sm text-[#7C8A9E] mb-1">
             <DollarSign className="h-4 w-4" />
             Total Volume
           </div>
-          <div className="text-2xl font-bold text-white">
+          <div className="text-2xl font-bold text-[#0C1829]">
             {formatUSD(totalVolume)}
           </div>
-          <div className="text-xs text-emerald-400 mt-1 flex items-center gap-1">
+          <div className="text-xs text-[#1B6B4A] mt-1 flex items-center gap-1">
             <TrendingUp className="h-3 w-3" />
             {payments.length} payments
           </div>
@@ -149,46 +149,46 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5"
+          className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5"
         >
-          <div className="flex items-center gap-2 text-sm text-white/50 mb-1">
+          <div className="flex items-center gap-2 text-sm text-[#7C8A9E] mb-1">
             <Receipt className="h-4 w-4" />
             Transactions
           </div>
-          <div className="text-2xl font-bold text-white">{payments.length}</div>
-          <div className="text-xs text-white/30 mt-1">All time</div>
+          <div className="text-2xl font-bold text-[#0C1829]">{payments.length}</div>
+          <div className="text-xs text-[#7C8A9E] mt-1">All time</div>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5"
+          className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5"
         >
-          <div className="flex items-center gap-2 text-sm text-white/50 mb-1">
+          <div className="flex items-center gap-2 text-sm text-[#7C8A9E] mb-1">
             <ArrowLeftRight className="h-4 w-4" />
             Average Payment
           </div>
-          <div className="text-2xl font-bold text-white">
+          <div className="text-2xl font-bold text-[#0C1829]">
             {formatUSD(avgPayment)}
           </div>
-          <div className="text-xs text-white/30 mt-1">Per transaction</div>
+          <div className="text-xs text-[#7C8A9E] mt-1">Per transaction</div>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5"
+          className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5"
         >
-          <div className="flex items-center gap-2 text-sm text-white/50 mb-1">
+          <div className="flex items-center gap-2 text-sm text-[#7C8A9E] mb-1">
             <Clock className="h-4 w-4" />
             Today
           </div>
-          <div className="text-2xl font-bold text-white">
+          <div className="text-2xl font-bold text-[#0C1829]">
             {formatUSD(todayVolume)}
           </div>
-          <div className="text-xs text-white/30 mt-1">
+          <div className="text-xs text-[#7C8A9E] mt-1">
             {todayPayments.length} payments today
           </div>
         </motion.div>
@@ -201,15 +201,15 @@ export default function DashboardPage() {
             label: "Treasury",
             href: "/dashboard/treasury",
             icon: Wallet,
-            color: "text-emerald-400",
+            color: "text-[#1B6B4A]",
             bg: "bg-emerald-500/10",
           },
           {
             label: "Subscriptions",
             href: "/dashboard/subscriptions",
             icon: RefreshCw,
-            color: "text-[#a78bfa]",
-            bg: "bg-[#a78bfa]/10",
+            color: "text-[#1B6B4A]",
+            bg: "bg-[#1B6B4A]/10",
           },
           {
             label: "API Keys",
@@ -229,15 +229,15 @@ export default function DashboardPage() {
           <Link
             key={action.label}
             href={action.href}
-            className="group rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 hover:bg-white/[0.04] transition-colors"
+            className="group rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4 hover:bg-[#F3F2ED] transition-colors"
           >
             <div className={`p-2.5 rounded-lg ${action.bg} w-fit mb-3`}>
               <action.icon className={`h-5 w-5 ${action.color}`} />
             </div>
-            <div className="text-sm font-medium text-white group-hover:text-white/90">
+            <div className="text-sm font-medium text-[#0C1829] group-hover:text-[#0C1829]">
               {action.label}
             </div>
-            <div className="text-xs text-white/30 mt-0.5">Manage &rarr;</div>
+            <div className="text-xs text-[#7C8A9E] mt-0.5">Manage &rarr;</div>
           </Link>
         ))}
       </div>
@@ -247,13 +247,13 @@ export default function DashboardPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="rounded-xl border border-white/[0.06] bg-white/[0.02]"
+        className="rounded-xl border border-[#E2DFD5] bg-white/[0.02]"
       >
-        <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
-          <h3 className="text-sm font-medium text-white/80">Recent Activity</h3>
+        <div className="flex items-center justify-between border-b border-[#E2DFD5] px-6 py-4">
+          <h3 className="text-sm font-medium text-[#0C1829]">Recent Activity</h3>
           <Link
             href="/dashboard/transactions"
-            className="text-xs text-[#a78bfa] hover:text-[#c4b5fd] flex items-center gap-1"
+            className="text-xs text-[#1B6B4A] hover:text-[#c4b5fd] flex items-center gap-1"
           >
             View all <ChevronRight className="h-3 w-3" />
           </Link>
@@ -261,13 +261,13 @@ export default function DashboardPage() {
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <RefreshCw className="h-6 w-6 animate-spin text-white/20" />
+            <RefreshCw className="h-6 w-6 animate-spin text-[#7C8A9E]/60" />
           </div>
         ) : payments.length === 0 ? (
           <div className="px-6 py-12 text-center">
-            <Receipt className="mx-auto h-8 w-8 text-white/20 mb-3" />
-            <p className="text-sm text-white/40">No payments yet</p>
-            <p className="text-xs text-white/25 mt-1">
+            <Receipt className="mx-auto h-8 w-8 text-[#7C8A9E]/60 mb-3" />
+            <p className="text-sm text-[#7C8A9E]">No payments yet</p>
+            <p className="text-xs text-[#7C8A9E]/70 mt-1">
               Payments will appear here once customers start paying
             </p>
           </div>
@@ -279,18 +279,18 @@ export default function DashboardPage() {
                 className="flex items-center gap-4 px-6 py-3.5 hover:bg-white/[0.02] transition-colors"
               >
                 <div className="rounded-lg bg-emerald-500/10 p-2">
-                  <ArrowDownRight className="h-4 w-4 text-emerald-400" />
+                  <ArrowDownRight className="h-4 w-4 text-[#1B6B4A]" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-white">
+                    <span className="text-sm font-medium text-[#0C1829]">
                       {formatUSD(payment.amount)}
                     </span>
-                    <span className="text-xs text-white/25 truncate">
+                    <span className="text-xs text-[#7C8A9E]/70 truncate">
                       {payment.description || "Payment"}
                     </span>
                   </div>
-                  <div className="text-xs text-white/30 mt-0.5 truncate">
+                  <div className="text-xs text-[#7C8A9E] mt-0.5 truncate">
                     {payment.customerWallet
                       ? `${payment.customerWallet.slice(
                           0,
@@ -300,10 +300,10 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-xs text-emerald-400 font-medium">
+                  <div className="text-xs text-[#1B6B4A] font-medium">
                     {payment.status || "completed"}
                   </div>
-                  <div className="text-xs text-white/25">
+                  <div className="text-xs text-[#7C8A9E]/70">
                     {payment.completedAt
                       ? new Date(payment.completedAt).toLocaleDateString()
                       : ""}
@@ -314,7 +314,7 @@ export default function DashboardPage() {
                     href={`https://explorer.solana.com/tx/${payment.txSignature}?cluster=devnet`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/20 hover:text-white/50 transition-colors"
+                    className="text-[#7C8A9E]/60 hover:text-[#7C8A9E] transition-colors"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
                   </a>

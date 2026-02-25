@@ -134,25 +134,25 @@ export default function OnboardingPage() {
   // Not authenticated
   if (ready && !authenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-[#050507]">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-[#FDFBF7]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 text-center max-w-md"
+          className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8 text-center max-w-md"
         >
           <div className="w-16 h-16 rounded-full bg-[#a855f7]/10 flex items-center justify-center mx-auto mb-6">
-            <Store className="w-8 h-8 text-[#a855f7]" />
+            <Store className="w-8 h-8 text-[#1B6B4A]" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <h2 className="text-2xl font-bold text-[#0C1829] mb-4">
             Become a Merchant
           </h2>
-          <p className="text-white/50 mb-6">
+          <p className="text-[#7C8A9E] mb-6">
             Sign in to set up non-custodial payments. Full control of your funds
             — no middlemen.
           </p>
           <button
             onClick={login}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#050507] text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#FDFBF7] text-[#0C1829] font-semibold rounded-xl hover:opacity-90 transition-opacity"
           >
             <LogIn className="w-4 h-4" />
             Sign In to Continue
@@ -165,14 +165,14 @@ export default function OnboardingPage() {
   // Loading
   if (!ready) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050507]">
-        <Loader2 className="w-8 h-8 text-[#a855f7] animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[#FDFBF7]">
+        <Loader2 className="w-8 h-8 text-[#1B6B4A] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen py-12 px-4 pt-32 bg-[#050507]">
+    <div className="min-h-screen py-12 px-4 pt-32 bg-[#FDFBF7]">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <motion.div
@@ -181,12 +181,12 @@ export default function OnboardingPage() {
           className="text-center mb-12"
         >
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#a855f7] to-[#22d3ee] flex items-center justify-center mx-auto mb-6">
-            <Store className="w-8 h-8 text-white" />
+            <Store className="w-8 h-8 text-[#0C1829]" />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-bold text-[#0C1829] mb-4">
             Merchant Onboarding
           </h1>
-          <p className="text-white/50 text-lg max-w-xl mx-auto">
+          <p className="text-[#7C8A9E] text-lg max-w-xl mx-auto">
             Set up non-custodial payments. Funds settle directly to your wallet
             — instant and secure.
           </p>
@@ -199,8 +199,8 @@ export default function OnboardingPage() {
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
                   state.step >= step
-                    ? "bg-white text-white"
-                    : "bg-white/[0.06] text-white/30"
+                    ? "bg-white text-[#0C1829]"
+                    : "bg-[#F3F2ED] text-[#7C8A9E]"
                 }`}
               >
                 {state.step > step ? <Check className="w-5 h-5" /> : step}
@@ -208,7 +208,7 @@ export default function OnboardingPage() {
               {i < 3 && (
                 <div
                   className={`w-16 h-1 mx-2 rounded ${
-                    state.step > step ? "bg-[#22d3ee]" : "bg-white/[0.06]"
+                    state.step > step ? "bg-[#22d3ee]" : "bg-[#F3F2ED]"
                   }`}
                 />
               )}
@@ -233,17 +233,17 @@ export default function OnboardingPage() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8"
+            className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-[#a855f7]/10 flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-[#a855f7]" />
+                <Building2 className="w-5 h-5 text-[#1B6B4A]" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className="text-xl font-semibold text-[#0C1829]">
                   Business Information
                 </h2>
-                <p className="text-white/30 text-sm">
+                <p className="text-[#7C8A9E] text-sm">
                   Tell us about your business
                 </p>
               </div>
@@ -251,7 +251,7 @@ export default function OnboardingPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">
+                <label className="block text-sm font-medium text-[#3B4963] mb-2">
                   Business Name *
                 </label>
                 <input
@@ -261,11 +261,11 @@ export default function OnboardingPage() {
                     setState((s) => ({ ...s, businessName: e.target.value }))
                   }
                   placeholder="Your Company Name"
-                  className="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#a855f7]/50"
+                  className="w-full px-4 py-3 bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl text-[#0C1829] placeholder-[#7C8A9E] focus:outline-none focus:ring-2 focus:ring-[#a855f7]/50"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">
+                <label className="block text-sm font-medium text-[#3B4963] mb-2">
                   Website URL
                 </label>
                 <input
@@ -275,9 +275,9 @@ export default function OnboardingPage() {
                     setState((s) => ({ ...s, websiteUrl: e.target.value }))
                   }
                   placeholder="https://yourwebsite.com"
-                  className="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#a855f7]/50"
+                  className="w-full px-4 py-3 bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl text-[#0C1829] placeholder-[#7C8A9E] focus:outline-none focus:ring-2 focus:ring-[#a855f7]/50"
                 />
-                <p className="text-xs text-white/30 mt-1">
+                <p className="text-xs text-[#7C8A9E] mt-1">
                   Optional — helps us verify your business
                 </p>
               </div>
@@ -289,7 +289,7 @@ export default function OnboardingPage() {
                   validateStep(1) && setState((s) => ({ ...s, step: 2 }))
                 }
                 disabled={!validateStep(1)}
-                className="flex items-center gap-2 px-6 py-3 bg-[#050507] text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+                className="flex items-center gap-2 px-6 py-3 bg-[#FDFBF7] text-[#0C1829] font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
               >
                 Continue
                 <ArrowRight className="w-4 h-4" />
@@ -303,17 +303,17 @@ export default function OnboardingPage() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8"
+            className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-[#22d3ee]/10 flex items-center justify-center">
                 <Wallet className="w-5 h-5 text-[#22d3ee]" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className="text-xl font-semibold text-[#0C1829]">
                   Payout Settings
                 </h2>
-                <p className="text-white/30 text-sm">
+                <p className="text-[#7C8A9E] text-sm">
                   Where should we send your payments?
                 </p>
               </div>
@@ -332,26 +332,26 @@ export default function OnboardingPage() {
                 className={`p-4 rounded-xl border-2 transition-all ${
                   state.payoutMethod === "wallet"
                     ? "border-[#a855f7] bg-[#a855f7]/10"
-                    : "border-white/[0.08] hover:border-white/[0.15]"
+                    : "border-[#E2DFD5] hover:border-[#E2DFD5]/[0.15]"
                 }`}
               >
                 <Wallet
                   className={`w-6 h-6 mx-auto mb-2 ${
                     state.payoutMethod === "wallet"
-                      ? "text-[#a855f7]"
-                      : "text-white/50"
+                      ? "text-[#1B6B4A]"
+                      : "text-[#7C8A9E]"
                   }`}
                 />
                 <p
                   className={`font-medium ${
                     state.payoutMethod === "wallet"
-                      ? "text-white"
-                      : "text-white/50"
+                      ? "text-[#0C1829]"
+                      : "text-[#7C8A9E]"
                   }`}
                 >
                   Solana Wallet
                 </p>
-                <p className="text-xs text-white/30 mt-1">
+                <p className="text-xs text-[#7C8A9E] mt-1">
                   Receive USDC directly
                 </p>
               </button>
@@ -367,26 +367,26 @@ export default function OnboardingPage() {
                 className={`p-4 rounded-xl border-2 transition-all ${
                   state.payoutMethod === "exchange"
                     ? "border-[#22d3ee] bg-[#22d3ee]/10"
-                    : "border-white/[0.08] hover:border-white/[0.15]"
+                    : "border-[#E2DFD5] hover:border-[#E2DFD5]/[0.15]"
                 }`}
               >
                 <Building2
                   className={`w-6 h-6 mx-auto mb-2 ${
                     state.payoutMethod === "exchange"
                       ? "text-[#22d3ee]"
-                      : "text-white/50"
+                      : "text-[#7C8A9E]"
                   }`}
                 />
                 <p
                   className={`font-medium ${
                     state.payoutMethod === "exchange"
-                      ? "text-white"
-                      : "text-white/50"
+                      ? "text-[#0C1829]"
+                      : "text-[#7C8A9E]"
                   }`}
                 >
                   Exchange Address
                 </p>
-                <p className="text-xs text-white/30 mt-1">
+                <p className="text-xs text-[#7C8A9E] mt-1">
                   Coinbase, Kraken, etc.
                 </p>
               </button>
@@ -394,7 +394,7 @@ export default function OnboardingPage() {
 
             {/* Address Input */}
             <div>
-              <label className="block text-sm font-medium text-white/70 mb-2">
+              <label className="block text-sm font-medium text-[#3B4963] mb-2">
                 {state.payoutMethod === "wallet"
                   ? "Wallet Address *"
                   : "Exchange Deposit Address *"}
@@ -411,7 +411,7 @@ export default function OnboardingPage() {
                       ? "Your Solana wallet address"
                       : "Your Coinbase/Kraken USDC deposit address"
                   }
-                  className="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/50 font-mono text-sm"
+                  className="w-full px-4 py-3 bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl text-[#0C1829] placeholder-[#7C8A9E] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/50 font-mono text-sm"
                 />
                 {connected && state.payoutMethod === "wallet" && (
                   <button
@@ -419,7 +419,7 @@ export default function OnboardingPage() {
                       publicKey &&
                       setState((s) => ({ ...s, payoutAddress: publicKey }))
                     }
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#22d3ee] hover:text-white transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#22d3ee] hover:text-[#0C1829] transition-colors"
                   >
                     Use connected wallet
                   </button>
@@ -432,7 +432,7 @@ export default function OnboardingPage() {
                   </p>
                 )}
               {state.payoutMethod === "exchange" && (
-                <p className="text-white/30 text-xs mt-2">
+                <p className="text-[#7C8A9E] text-xs mt-2">
                   💡 Tip: Use your exchange&apos;s Solana USDC deposit address.
                   Funds will auto-convert if your exchange supports it.
                 </p>
@@ -442,7 +442,7 @@ export default function OnboardingPage() {
             <div className="mt-8 flex justify-between">
               <button
                 onClick={() => setState((s) => ({ ...s, step: 1 }))}
-                className="px-6 py-3 text-white/50 hover:text-white transition-colors"
+                className="px-6 py-3 text-[#7C8A9E] hover:text-[#0C1829] transition-colors"
               >
                 Back
               </button>
@@ -451,7 +451,7 @@ export default function OnboardingPage() {
                   validateStep(2) && setState((s) => ({ ...s, step: 3 }))
                 }
                 disabled={!validateStep(2)}
-                className="flex items-center gap-2 px-6 py-3 bg-[#050507] text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+                className="flex items-center gap-2 px-6 py-3 bg-[#FDFBF7] text-[#0C1829] font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
               >
                 Continue
                 <ArrowRight className="w-4 h-4" />
@@ -465,24 +465,24 @@ export default function OnboardingPage() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8"
+            className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-[#3B82F6]/10 flex items-center justify-center">
-                <Key className="w-5 h-5 text-[#3B82F6]" />
+              <div className="w-10 h-10 rounded-xl bg-[#1B6B4A]/10 flex items-center justify-center">
+                <Key className="w-5 h-5 text-[#1B6B4A]" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className="text-xl font-semibold text-[#0C1829]">
                   Webhook URL
                 </h2>
-                <p className="text-white/30 text-sm">
+                <p className="text-[#7C8A9E] text-sm">
                   Optional: Get notified of payments
                 </p>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white/70 mb-2">
+              <label className="block text-sm font-medium text-[#3B4963] mb-2">
                 Webhook Endpoint (Optional)
               </label>
               <input
@@ -492,9 +492,9 @@ export default function OnboardingPage() {
                   setState((s) => ({ ...s, webhookUrl: e.target.value }))
                 }
                 placeholder="https://yoursite.com/api/webhooks/settlr"
-                className="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/50"
+                className="w-full px-4 py-3 bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl text-[#0C1829] placeholder-[#7C8A9E] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/50"
               />
-              <p className="text-white/30 text-xs mt-2">
+              <p className="text-[#7C8A9E] text-xs mt-2">
                 We&apos;ll POST payment events to this URL. You can configure
                 this later in your dashboard.
               </p>
@@ -503,14 +503,14 @@ export default function OnboardingPage() {
             <div className="mt-8 flex justify-between">
               <button
                 onClick={() => setState((s) => ({ ...s, step: 2 }))}
-                className="px-6 py-3 text-white/50 hover:text-white transition-colors"
+                className="px-6 py-3 text-[#7C8A9E] hover:text-[#0C1829] transition-colors"
               >
                 Back
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="flex items-center gap-2 px-6 py-3 bg-[#050507] text-white font-semibold rounded-xl disabled:opacity-50 hover:opacity-90 transition-opacity"
+                className="flex items-center gap-2 px-6 py-3 bg-[#FDFBF7] text-[#0C1829] font-semibold rounded-xl disabled:opacity-50 hover:opacity-90 transition-opacity"
               >
                 {loading ? (
                   <>
@@ -533,24 +533,24 @@ export default function OnboardingPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8"
+            className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8"
           >
             <div className="text-center mb-8">
-              <div className="w-20 h-20 rounded-full bg-[#050507] flex items-center justify-center mx-auto mb-6">
-                <Check className="w-10 h-10 text-white" />
+              <div className="w-20 h-20 rounded-full bg-[#FDFBF7] flex items-center justify-center mx-auto mb-6">
+                <Check className="w-10 h-10 text-[#0C1829]" />
               </div>
-              <h2 className="text-2xl font-bold text-white mb-2">
+              <h2 className="text-2xl font-bold text-[#0C1829] mb-2">
                 You&apos;re All Set! 🎉
               </h2>
-              <p className="text-white/50">
+              <p className="text-[#7C8A9E]">
                 Your merchant account has been created. Save your API key below.
               </p>
             </div>
 
             {/* API Key */}
-            <div className="bg-white/[0.06] rounded-xl p-6 mb-6">
+            <div className="bg-[#F3F2ED] rounded-xl p-6 mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-white/70">
+                <span className="text-sm font-medium text-[#3B4963]">
                   Your API Key
                 </span>
                 <span className="text-xs text-amber-400 bg-amber-400/10 px-2 py-1 rounded">
@@ -558,31 +558,31 @@ export default function OnboardingPage() {
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <code className="flex-1 p-3 bg-white/[0.03] rounded-lg text-[#22d3ee] font-mono text-sm break-all">
+                <code className="flex-1 p-3 bg-[#F3F2ED] rounded-lg text-[#22d3ee] font-mono text-sm break-all">
                   {state.apiKey}
                 </code>
                 <button
                   onClick={() =>
                     state.apiKey && copyToClipboard(state.apiKey, "apiKey")
                   }
-                  className="p-3 bg-white/[0.08] rounded-lg hover:bg-white/[0.12] transition-colors"
+                  className="p-3 bg-[#F3F2ED] rounded-lg hover:bg-white/[0.12] transition-colors"
                 >
                   {copied === "apiKey" ? (
-                    <Check className="w-5 h-5 text-emerald-400" />
+                    <Check className="w-5 h-5 text-[#1B6B4A]" />
                   ) : (
-                    <Copy className="w-5 h-5 text-white/70" />
+                    <Copy className="w-5 h-5 text-[#3B4963]" />
                   )}
                 </button>
               </div>
             </div>
 
             {/* Quick Start Code */}
-            <div className="bg-white/[0.06] rounded-xl p-6 mb-6">
-              <h3 className="text-sm font-medium text-white/70 mb-3">
+            <div className="bg-[#F3F2ED] rounded-xl p-6 mb-6">
+              <h3 className="text-sm font-medium text-[#3B4963] mb-3">
                 Quick Start
               </h3>
-              <pre className="bg-white/[0.03] rounded-lg p-4 text-sm overflow-x-auto">
-                <code className="text-white/70">
+              <pre className="bg-[#F3F2ED] rounded-lg p-4 text-sm overflow-x-auto">
+                <code className="text-[#3B4963]">
                   {`npm install @settlr/sdk
 
 import { Settlr } from '@settlr/sdk';
@@ -610,17 +610,17 @@ window.location.href = payment.checkoutUrl;`}
             <div className="grid grid-cols-2 gap-4">
               <Link
                 href="/dashboard"
-                className="flex items-center justify-center gap-2 p-4 bg-white/[0.06] rounded-xl hover:bg-white/[0.08] transition-colors"
+                className="flex items-center justify-center gap-2 p-4 bg-[#F3F2ED] rounded-xl hover:bg-[#F3F2ED] transition-colors"
               >
-                <Store className="w-5 h-5 text-[#a855f7]" />
-                <span className="text-white font-medium">Go to Dashboard</span>
+                <Store className="w-5 h-5 text-[#1B6B4A]" />
+                <span className="text-[#0C1829] font-medium">Go to Dashboard</span>
               </Link>
               <Link
                 href="/docs"
-                className="flex items-center justify-center gap-2 p-4 bg-white/[0.06] rounded-xl hover:bg-white/[0.08] transition-colors"
+                className="flex items-center justify-center gap-2 p-4 bg-[#F3F2ED] rounded-xl hover:bg-[#F3F2ED] transition-colors"
               >
                 <ExternalLink className="w-5 h-5 text-[#22d3ee]" />
-                <span className="text-white font-medium">View Docs</span>
+                <span className="text-[#0C1829] font-medium">View Docs</span>
               </Link>
             </div>
           </motion.div>

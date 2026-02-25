@@ -1,54 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  /* Core colors - dark theme matching homepage */
-  --background: #0a0a0f;
-  --foreground: #fafafa;
-  --card: #12121a;
-  --card-hover: #1a1a24;
-  --border: rgba(255, 255, 255, 0.1);
-  --border-hover: rgba(255, 255, 255, 0.2);
+  /* Infrastructure Authority — Light theme */
+  --background: #fdfbf7;
+  --foreground: #0c1829;
+  --card: #ffffff;
+  --card-hover: #f7f6f1;
+  --border: #e2dfd5;
+  --border-hover: #c9c5ba;
 
-  /* NEW: Pop card style - cream cards with dark borders (Mission Control style) */
+  /* Pop card style */
   --card-pop: #fffef5;
   --card-pop-header: #f5f4eb;
-  --card-pop-border: #1a1a1a;
-  --card-pop-text: #1a1a1a;
-  --card-pop-text-secondary: #52525b;
+  --card-pop-border: #e2dfd5;
+  --card-pop-text: #0c1829;
+  --card-pop-text-secondary: #3b4963;
   --card-pop-accent-red: #ff5252;
-  --card-pop-accent-green: #4caf50;
+  --card-pop-accent-green: #1b6b4a;
   --card-pop-accent-blue: #2196f3;
-  --card-pop-accent-orange: #ff9800;
+  --card-pop-accent-orange: #b8860b;
 
-  /* Brand - electric blue theme */
-  --primary: rgb(59, 130, 246);
-  --primary-hover: rgb(59, 130, 246);
-  --primary-glow: rgba(59, 130, 246, 0.4);
-  --secondary: rgb(59, 130, 246);
-  --secondary-hover: rgb(59, 130, 246);
+  /* Brand - money green */
+  --primary: #1b6b4a;
+  --primary-hover: #155939;
+  --primary-glow: rgba(27, 107, 74, 0.2);
+  --secondary: #1b6b4a;
+  --secondary-hover: #155939;
 
   /* Accent colors for components */
-  --accent-primary: rgb(59, 130, 246);
-  --accent-muted: rgba(59, 130, 246, 0.1);
+  --accent-primary: #1b6b4a;
+  --accent-muted: rgba(27, 107, 74, 0.1);
 
   /* Card backgrounds */
-  --card-bg: #12121a;
-  --border-color: rgba(59, 130, 246, 0.2);
+  --card-bg: #ffffff;
+  --border-color: #e2dfd5;
 
   /* Status colors */
-  --success: #22c55e;
-  --success-glow: rgba(34, 197, 94, 0.3);
-  --error: #ef4444;
-  --warning: #f59e0b;
+  --success: #1b6b4a;
+  --success-glow: rgba(27, 107, 74, 0.15);
+  --error: #dc2626;
+  --warning: #b8860b;
 
   /* Text hierarchy */
-  --text-primary: #ffffff;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
+  --text-primary: #0c1829;
+  --text-secondary: #3b4963;
+  --text-muted: #7c8a9e;
 
-  /* Glassmorphism */
-  --glass: rgba(18, 18, 26, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  /* Glass (light version) */
+  --glass: rgba(253, 251, 247, 0.85);
+  --glass-border: rgba(226, 223, 213, 0.6);
 }
 
 @theme inline {
@@ -63,15 +63,43 @@
 }
 
 html {
-  background: #09090b;
+  background: #fdfbf7;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-inter), var(--font-sans), system-ui, -apple-system,
+    sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+/* Infrastructure Authority typography — serif headings, mono data */
+h1,
+h2,
+h3 {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  color: #0c1829;
+}
+
+code,
+pre,
+.font-mono,
+[data-mono] {
+  font-family: var(--font-jetbrains), var(--font-mono), ui-monospace, monospace;
+}
+
+/* Premium grain texture overlay — apply to any section */
+.grain-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' /%3E%3C/svg%3E");
+  background-size: 200px 200px;
 }
 
 /* Animated gradient background */

@@ -46,7 +46,7 @@ function Reveal({
 export default function AcceptPaymentsPage() {
   return (
     <main
-      className="relative min-h-screen bg-[#050507] text-white antialiased"
+      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       {/* JSON-LD */}
@@ -76,7 +76,7 @@ export default function AcceptPaymentsPage() {
 
         <div className="relative z-10 mx-auto max-w-5xl px-6">
           <Reveal>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/[0.1] px-4 py-1.5 text-[13px] text-emerald-400 font-medium">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/[0.1] px-4 py-1.5 text-[13px] text-[#1B6B4A] font-medium">
               <ArrowDownLeft className="h-3.5 w-3.5" />
               Checkout SDK
             </div>
@@ -85,12 +85,12 @@ export default function AcceptPaymentsPage() {
           <Reveal delay={0.05}>
             <h1 className="max-w-3xl text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.1] tracking-tight">
               Accept stablecoin payments{" "}
-              <span className="text-emerald-400">from your customers</span>
+              <span className="text-[#1B6B4A]">from your customers</span>
             </h1>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
               Drop a React component into your app or share a payment link.
               Customers pay in USDC — gasless, settled instantly, with
               subscription billing built in. No crypto UX, no wallet popups.
@@ -108,7 +108,7 @@ export default function AcceptPaymentsPage() {
               </Link>
               <Link
                 href="/docs?tab=react"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-7 py-3.5 text-[15px] font-medium text-white/70 hover:bg-white/[0.06]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Read the docs
               </Link>
@@ -118,10 +118,10 @@ export default function AcceptPaymentsPage() {
       </section>
 
       {/* ─── Two ways to accept ─── */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-emerald-400">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
               Integration options
             </p>
           </Reveal>
@@ -137,23 +137,23 @@ export default function AcceptPaymentsPage() {
               <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.03] p-8">
                 <div className="mb-6 flex items-center gap-3">
                   <div className="inline-flex rounded-xl bg-emerald-500/10 p-3">
-                    <Code2 className="h-5 w-5 text-emerald-400" />
+                    <Code2 className="h-5 w-5 text-[#1B6B4A]" />
                   </div>
-                  <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-400">
+                  <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 text-xs font-semibold text-[#1B6B4A]">
                     React
                   </span>
                 </div>
 
-                <h3 className="text-xl font-semibold text-white">
+                <h3 className="text-xl font-semibold text-[#0C1829]">
                   Checkout Component
                 </h3>
-                <p className="mt-2 text-sm text-white/45 leading-relaxed">
+                <p className="mt-2 text-sm text-[#7C8A9E] leading-relaxed">
                   Drop a {`<SettlrCheckout />`} component into your React app.
                   Handles wallet connection, payment confirmation, and receipt —
                   all in your UI.
                 </p>
 
-                <pre className="mt-6 overflow-x-auto rounded-xl bg-[#08080d] border border-white/[0.06] p-5 font-mono text-[12px] leading-relaxed text-white/50">
+                <pre className="mt-6 overflow-x-auto rounded-xl bg-[#08080d] border border-[#E2DFD5] p-5 font-mono text-[12px] leading-relaxed text-[#7C8A9E]">
                   {`import { SettlrCheckout } from "@settlr/sdk";
 
 <SettlrCheckout
@@ -168,34 +168,34 @@ export default function AcceptPaymentsPage() {
 
             {/* Payment link */}
             <Reveal delay={0.12}>
-              <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8">
+              <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-8">
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="inline-flex rounded-xl bg-[#3B82F6]/10 p-3">
-                    <Link2 className="h-5 w-5 text-[#3B82F6]" />
+                  <div className="inline-flex rounded-xl bg-[#1B6B4A]/10 p-3">
+                    <Link2 className="h-5 w-5 text-[#1B6B4A]" />
                   </div>
-                  <span className="rounded-full bg-white/[0.06] border border-white/10 px-3 py-1 text-xs font-semibold text-white/50">
+                  <span className="rounded-full bg-[#F3F2ED] border border-[#E2DFD5] px-3 py-1 text-xs font-semibold text-[#7C8A9E]">
                     No-code
                   </span>
                 </div>
 
-                <h3 className="text-xl font-semibold text-white">
+                <h3 className="text-xl font-semibold text-[#0C1829]">
                   Payment Links
                 </h3>
-                <p className="mt-2 text-sm text-white/45 leading-relaxed">
+                <p className="mt-2 text-sm text-[#7C8A9E] leading-relaxed">
                   Generate a shareable link from the dashboard. Send it to
                   customers via email, embed it on your site, or share on
                   social. No code required.
                 </p>
 
-                <div className="mt-6 rounded-xl bg-[#08080d] border border-white/[0.06] p-5">
-                  <p className="text-xs text-white/30 mb-2">
+                <div className="mt-6 rounded-xl bg-[#08080d] border border-[#E2DFD5] p-5">
+                  <p className="text-xs text-[#7C8A9E] mb-2">
                     Your payment link
                   </p>
-                  <div className="flex items-center gap-2 rounded-lg bg-white/[0.04] px-4 py-3 font-mono text-[13px] text-white/60">
-                    <Globe className="h-4 w-4 flex-shrink-0 text-white/30" />
+                  <div className="flex items-center gap-2 rounded-lg bg-[#F3F2ED] px-4 py-3 font-mono text-[13px] text-[#3B4963]">
+                    <Globe className="h-4 w-4 flex-shrink-0 text-[#7C8A9E]" />
                     pay.settlr.dev/your-store/plan-pro
                   </div>
-                  <p className="mt-3 text-xs text-white/30">
+                  <p className="mt-3 text-xs text-[#7C8A9E]">
                     Customers click → pay USDC → you get funds instantly
                   </p>
                 </div>
@@ -208,7 +208,7 @@ export default function AcceptPaymentsPage() {
       {/* ─── Why accept stablecoin payments ─── */}
       <section className="mx-auto max-w-5xl px-6 py-28">
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-widest text-emerald-400">
+          <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
             Why stablecoin checkout
           </p>
         </Reveal>
@@ -216,7 +216,7 @@ export default function AcceptPaymentsPage() {
           <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight md:text-4xl">
             Better than Stripe for stablecoin payments
           </h2>
-          <p className="mt-4 max-w-xl text-white/45 leading-relaxed">
+          <p className="mt-4 max-w-xl text-[#7C8A9E] leading-relaxed">
             Traditional payment processors take 2.9% + $0.30 per transaction,
             hold funds for days, and charge extra for international cards.
             Stablecoin checkout removes all of that.
@@ -265,10 +265,10 @@ export default function AcceptPaymentsPage() {
                     style={{ color: item.color }}
                   />
                 </div>
-                <h3 className="text-[15px] font-semibold text-white">
+                <h3 className="text-[15px] font-semibold text-[#0C1829]">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/40">
+                <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
                   {item.text}
                 </p>
               </div>
@@ -278,10 +278,10 @@ export default function AcceptPaymentsPage() {
       </section>
 
       {/* ─── Features ─── */}
-      <section className="border-y border-white/[0.04]">
+      <section className="border-y border-[#E2DFD5]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-emerald-400">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
               Features
             </p>
           </Reveal>
@@ -325,14 +325,14 @@ export default function AcceptPaymentsPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.06}>
-                <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+                <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
                   <div className="mb-4 inline-flex rounded-xl bg-emerald-500/10 p-2.5">
-                    <item.icon className="h-5 w-5 text-emerald-400" />
+                    <item.icon className="h-5 w-5 text-[#1B6B4A]" />
                   </div>
-                  <h3 className="text-[15px] font-semibold text-white">
+                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/40">
+                  <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
                     {item.text}
                   </p>
                 </div>
@@ -348,7 +348,7 @@ export default function AcceptPaymentsPage() {
           <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
             Who accepts payments with Settlr
           </h2>
-          <p className="mt-4 text-center text-white/40">
+          <p className="mt-4 text-center text-[#7C8A9E]">
             Any platform that charges customers or sells subscriptions.
           </p>
         </Reveal>
@@ -363,9 +363,9 @@ export default function AcceptPaymentsPage() {
             "API usage billing",
           ].map((label, i) => (
             <Reveal key={label} delay={i * 0.04}>
-              <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-                <Check className="h-4 w-4 flex-shrink-0 text-emerald-400" />
-                <span className="text-sm text-white/70">{label}</span>
+              <div className="flex items-center gap-3 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4">
+                <Check className="h-4 w-4 flex-shrink-0 text-[#1B6B4A]" />
+                <span className="text-sm text-[#3B4963]">{label}</span>
               </div>
             </Reveal>
           ))}
@@ -373,19 +373,19 @@ export default function AcceptPaymentsPage() {
       </section>
 
       {/* ─── CTA ─── */}
-      <section className="relative isolate overflow-hidden border-t border-white/[0.04]">
+      <section className="relative isolate overflow-hidden border-t border-[#E2DFD5]/[0.04]">
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-emerald-500/[0.06] via-transparent to-transparent" />
 
         <div className="mx-auto max-w-3xl px-6 py-28 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
               Start accepting{" "}
-              <span className="text-emerald-400">stablecoin payments</span>{" "}
+              <span className="text-[#1B6B4A]">stablecoin payments</span>{" "}
               today
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-white/45">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
               One React component or a payment link. Instant USDC checkout with
               subscription billing. Go live in under 30 minutes.
             </p>
@@ -401,7 +401,7 @@ export default function AcceptPaymentsPage() {
               </Link>
               <Link
                 href="/send-payments"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 hover:bg-white/[0.04]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Send payments instead →
               </Link>

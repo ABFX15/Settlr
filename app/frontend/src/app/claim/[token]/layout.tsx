@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Claim Your Payout",
+  title: "Claim Your Payment",
   description:
-    "Claim your USDC payout — enter your Solana wallet address to receive funds.",
+    "You've received a payment. Claim it and cash out to your bank, e-wallet, or keep it in USD.",
   robots: { index: false, follow: false },
 };
 

@@ -70,7 +70,7 @@ const STATUS_CONFIG: Record<
   { color: string; bg: string; label: string; icon: React.ElementType }
 > = {
   active: {
-    color: "text-emerald-400",
+    color: "text-[#1B6B4A]",
     bg: "bg-emerald-500/10",
     label: "Active",
     icon: CheckCircle,
@@ -88,8 +88,8 @@ const STATUS_CONFIG: Record<
     icon: AlertTriangle,
   },
   paused: {
-    color: "text-white/50",
-    bg: "bg-white/[0.06]",
+    color: "text-[#7C8A9E]",
+    bg: "bg-[#F3F2ED]",
     label: "Paused",
     icon: Pause,
   },
@@ -221,16 +221,16 @@ export default function SubscribersPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#a78bfa]/10 flex items-center justify-center border border-[#a78bfa]/20">
-              <Users className="w-10 h-10 text-[#a78bfa]" />
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#1B6B4A]/10 flex items-center justify-center border border-[#a78bfa]/20">
+              <Users className="w-10 h-10 text-[#1B6B4A]" />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-4">Subscribers</h1>
-            <p className="text-white/50 mb-8 max-w-md mx-auto">
+            <h1 className="text-3xl font-bold text-[#0C1829] mb-4">Subscribers</h1>
+            <p className="text-[#7C8A9E] mb-8 max-w-md mx-auto">
               Connect your wallet to manage your subscribers and billing.
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-8 py-4 rounded-xl font-semibold hover:bg-white/90 transition-all "
+              className="inline-flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#F3F2ED] transition-all "
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -249,20 +249,20 @@ export default function SubscribersPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/dashboard"
-              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+              className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-[#F3F2ED] transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-white/50" />
+              <ArrowLeft className="w-5 h-5 text-[#7C8A9E]" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-white">Subscribers</h1>
-              <p className="text-white/50 text-sm">
+              <h1 className="text-2xl font-bold text-[#0C1829]">Subscribers</h1>
+              <p className="text-[#7C8A9E] text-sm">
                 Manage active subscriptions and billing
               </p>
             </div>
           </div>
           <Link
             href="/dashboard/subscriptions"
-            className="flex items-center gap-2 bg-white/5 border border-white/10 text-white px-4 py-2 rounded-xl font-medium hover:bg-white/10 transition-all text-sm"
+            className="flex items-center gap-2 bg-[#F3F2ED] border border-[#E2DFD5] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F2ED] transition-all text-sm"
           >
             <RefreshCw className="w-4 h-4" />
             Manage Plans
@@ -274,60 +274,60 @@ export default function SubscribersPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-emerald-500/10">
-                <Users className="w-5 h-5 text-emerald-400" />
+                <Users className="w-5 h-5 text-[#1B6B4A]" />
               </div>
-              <span className="text-white/50 text-sm">Active</span>
+              <span className="text-[#7C8A9E] text-sm">Active</span>
             </div>
-            <p className="text-2xl font-bold text-white">{activeSubs.length}</p>
+            <p className="text-2xl font-bold text-[#0C1829]">{activeSubs.length}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg bg-[#a78bfa]/10">
-                <DollarSign className="w-5 h-5 text-[#a78bfa]" />
+              <div className="p-2 rounded-lg bg-[#1B6B4A]/10">
+                <DollarSign className="w-5 h-5 text-[#1B6B4A]" />
               </div>
-              <span className="text-white/50 text-sm">MRR</span>
+              <span className="text-[#7C8A9E] text-sm">MRR</span>
             </div>
-            <p className="text-2xl font-bold text-white">${mrr.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-[#0C1829]">${mrr.toFixed(2)}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-amber-500/10">
                 <AlertTriangle className="w-5 h-5 text-amber-400" />
               </div>
-              <span className="text-white/50 text-sm">Past Due</span>
+              <span className="text-[#7C8A9E] text-sm">Past Due</span>
             </div>
-            <p className="text-2xl font-bold text-white">{pastDueCount}</p>
+            <p className="text-2xl font-bold text-[#0C1829]">{pastDueCount}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-cyan-500/10">
                 <Calendar className="w-5 h-5 text-cyan-400" />
               </div>
-              <span className="text-white/50 text-sm">Total</span>
+              <span className="text-[#7C8A9E] text-sm">Total</span>
             </div>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-2xl font-bold text-[#0C1829]">
               {subscriptions.length}
             </p>
           </motion.div>
@@ -345,8 +345,8 @@ export default function SubscribersPage() {
                 }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === filter
-                    ? "bg-white text-[#050507]"
-                    : "bg-white/[0.06] text-white/50 hover:text-white hover:bg-white/[0.08]"
+                    ? "bg-white text-[#0C1829]"
+                    : "bg-[#F3F2ED] text-[#7C8A9E] hover:text-[#0C1829] hover:bg-[#F3F2ED]"
                 }`}
               >
                 {filter === "all"
@@ -362,26 +362,26 @@ export default function SubscribersPage() {
         {/* Subscriptions List */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-[#a78bfa]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#1B6B4A]" />
           </div>
         ) : subscriptions.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center"
+            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-12 text-center"
           >
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white/[0.06] flex items-center justify-center">
-              <Users className="w-8 h-8 text-white/30" />
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#F3F2ED] flex items-center justify-center">
+              <Users className="w-8 h-8 text-[#7C8A9E]" />
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">
+            <h3 className="text-xl font-semibold text-[#0C1829] mb-2">
               No subscribers yet
             </h3>
-            <p className="text-white/50 mb-6">
+            <p className="text-[#7C8A9E] mb-6">
               Share your plan checkout links to start getting subscribers.
             </p>
             <Link
               href="/dashboard/subscriptions"
-              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-6 py-3 rounded-xl font-medium hover:bg-white/90 transition-colors"
+              className="inline-flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-6 py-3 rounded-xl font-medium hover:bg-[#F3F2ED] transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
               View Plans
@@ -401,7 +401,7 @@ export default function SubscribersPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden"
+                  className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl overflow-hidden"
                 >
                   {/* Main Row */}
                   <div
@@ -414,7 +414,7 @@ export default function SubscribersPage() {
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-3">
-                          <h3 className="text-white font-semibold truncate">
+                          <h3 className="text-[#0C1829] font-semibold truncate">
                             {sub.plan?.name || sub.planId}
                           </h3>
                           <span
@@ -428,11 +428,11 @@ export default function SubscribersPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-white/50 text-sm truncate mt-1">
+                        <p className="text-[#7C8A9E] text-sm truncate mt-1">
                           {sub.customerWallet.slice(0, 8)}...
                           {sub.customerWallet.slice(-4)}
                           {sub.customerEmail && (
-                            <span className="ml-2 text-white/30">
+                            <span className="ml-2 text-[#7C8A9E]">
                               ({sub.customerEmail})
                             </span>
                           )}
@@ -442,17 +442,17 @@ export default function SubscribersPage() {
 
                     <div className="flex items-center gap-6">
                       <div className="text-right hidden sm:block">
-                        <p className="text-white font-semibold">
+                        <p className="text-[#0C1829] font-semibold">
                           ${sub.amount} {sub.currency}
                         </p>
-                        <p className="text-white/50 text-xs">
+                        <p className="text-[#7C8A9E] text-xs">
                           per {sub.interval}
                         </p>
                       </div>
 
                       <div className="text-right hidden md:block">
-                        <p className="text-white/70 text-sm">Next charge</p>
-                        <p className="text-white/50 text-xs">
+                        <p className="text-[#3B4963] text-sm">Next charge</p>
+                        <p className="text-[#7C8A9E] text-xs">
                           {new Date(sub.currentPeriodEnd).toLocaleDateString()}
                         </p>
                       </div>
@@ -468,10 +468,10 @@ export default function SubscribersPage() {
                                 handleAction(sub.id, "pause");
                               }}
                               disabled={actionLoading === sub.id}
-                              className="p-2 rounded-lg bg-white/[0.06] hover:bg-white/[0.08] transition-colors"
+                              className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-[#F3F2ED] transition-colors"
                               title="Pause subscription"
                             >
-                              <Pause className="w-4 h-4 text-white/50" />
+                              <Pause className="w-4 h-4 text-[#7C8A9E]" />
                             </button>
                             <button
                               onClick={(e) => {
@@ -479,10 +479,10 @@ export default function SubscribersPage() {
                                 handleAction(sub.id, "cancel");
                               }}
                               disabled={actionLoading === sub.id}
-                              className="p-2 rounded-lg bg-white/[0.06] hover:bg-red-500/20 transition-colors"
+                              className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-red-500/20 transition-colors"
                               title="Cancel at period end"
                             >
-                              <XCircle className="w-4 h-4 text-white/50 hover:text-red-400" />
+                              <XCircle className="w-4 h-4 text-[#7C8A9E] hover:text-red-400" />
                             </button>
                           </>
                         )}
@@ -496,7 +496,7 @@ export default function SubscribersPage() {
                             className="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors"
                             title="Resume subscription"
                           >
-                            <Play className="w-4 h-4 text-emerald-400" />
+                            <Play className="w-4 h-4 text-[#1B6B4A]" />
                           </button>
                         )}
                         {sub.status === "past_due" && (
@@ -513,9 +513,9 @@ export default function SubscribersPage() {
                           </button>
                         )}
                         {isExpanded ? (
-                          <ChevronUp className="w-4 h-4 text-white/30" />
+                          <ChevronUp className="w-4 h-4 text-[#7C8A9E]" />
                         ) : (
-                          <ChevronDown className="w-4 h-4 text-white/30" />
+                          <ChevronDown className="w-4 h-4 text-[#7C8A9E]" />
                         )}
                       </div>
                     </div>
@@ -527,18 +527,18 @@ export default function SubscribersPage() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       transition={{ duration: 0.2 }}
-                      className="border-t border-white/[0.06]"
+                      className="border-t border-[#E2DFD5]"
                     >
-                      <div className="p-6 bg-[#050507]/50">
+                      <div className="p-6 bg-[#FDFBF7]/50">
                         <div className="flex items-center gap-2 mb-4">
-                          <Receipt className="w-4 h-4 text-white/50" />
-                          <h4 className="text-sm font-medium text-white/70">
+                          <Receipt className="w-4 h-4 text-[#7C8A9E]" />
+                          <h4 className="text-sm font-medium text-[#3B4963]">
                             Payment History
                           </h4>
                         </div>
 
                         {subPayments.length === 0 ? (
-                          <p className="text-white/30 text-sm">
+                          <p className="text-[#7C8A9E] text-sm">
                             No payments yet.
                           </p>
                         ) : (
@@ -552,17 +552,17 @@ export default function SubscribersPage() {
                                   <div
                                     className={`w-2 h-2 rounded-full ${
                                       payment.status === "completed"
-                                        ? "bg-emerald-400"
+                                        ? "bg-[#1B6B4A]"
                                         : payment.status === "failed"
                                         ? "bg-red-400"
                                         : "bg-amber-400"
                                     }`}
                                   />
                                   <div>
-                                    <span className="text-white text-sm font-medium">
+                                    <span className="text-[#0C1829] text-sm font-medium">
                                       ${payment.amount.toFixed(2)} USDC
                                     </span>
-                                    <span className="text-white/30 text-xs ml-2">
+                                    <span className="text-[#7C8A9E] text-xs ml-2">
                                       {new Date(
                                         payment.createdAt,
                                       ).toLocaleDateString()}
@@ -573,7 +573,7 @@ export default function SubscribersPage() {
                                   <span
                                     className={`text-xs font-medium ${
                                       payment.status === "completed"
-                                        ? "text-emerald-400"
+                                        ? "text-[#1B6B4A]"
                                         : payment.status === "failed"
                                         ? "text-red-400"
                                         : "text-amber-400"
@@ -586,7 +586,7 @@ export default function SubscribersPage() {
                                       href={`https://explorer.solana.com/tx/${payment.txSignature}?cluster=devnet`}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="text-[#a78bfa] hover:text-[#c4b5fd]"
+                                      className="text-[#1B6B4A] hover:text-[#c4b5fd]"
                                     >
                                       <ExternalLink className="w-3.5 h-3.5" />
                                     </a>
@@ -598,34 +598,34 @@ export default function SubscribersPage() {
                         )}
 
                         {/* Subscription metadata */}
-                        <div className="mt-4 pt-4 border-t border-white/[0.06] grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                        <div className="mt-4 pt-4 border-t border-[#E2DFD5] grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
                           <div>
-                            <span className="text-white/30">Created</span>
-                            <p className="text-white/70">
+                            <span className="text-[#7C8A9E]">Created</span>
+                            <p className="text-[#3B4963]">
                               {new Date(sub.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
-                            <span className="text-white/30">Period Start</span>
-                            <p className="text-white/70">
+                            <span className="text-[#7C8A9E]">Period Start</span>
+                            <p className="text-[#3B4963]">
                               {new Date(
                                 sub.currentPeriodStart,
                               ).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
-                            <span className="text-white/30">Period End</span>
-                            <p className="text-white/70">
+                            <span className="text-[#7C8A9E]">Period End</span>
+                            <p className="text-[#3B4963]">
                               {new Date(
                                 sub.currentPeriodEnd,
                               ).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
-                            <span className="text-white/30">
+                            <span className="text-[#7C8A9E]">
                               Subscription ID
                             </span>
-                            <p className="text-white/70 font-mono truncate">
+                            <p className="text-[#3B4963] font-mono truncate">
                               {sub.id}
                             </p>
                           </div>

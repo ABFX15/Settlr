@@ -151,16 +151,16 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] transition-colors hover:border-white/[0.1]">
+    <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] transition-colors hover:border-[#E2DFD5]">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex w-full items-center justify-between p-6 text-left"
       >
-        <span className="pr-4 text-[15px] font-semibold text-white">
+        <span className="pr-4 text-[15px] font-semibold text-[#0C1829]">
           {question}
         </span>
         <ChevronDown
-          className={`h-4 w-4 flex-shrink-0 text-white/30 transition-transform ${
+          className={`h-4 w-4 flex-shrink-0 text-[#7C8A9E] transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -173,7 +173,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="px-6 pb-6 text-sm leading-relaxed text-white/40">
+            <div className="px-6 pb-6 text-sm leading-relaxed text-[#7C8A9E]">
               {answer}
             </div>
           </motion.div>
@@ -187,27 +187,27 @@ export default function HelpPage() {
   const [activeCategory, setActiveCategory] = useState("getting-started");
 
   return (
-    <main className="relative min-h-screen bg-[#050507] text-white antialiased">
+    <main className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased">
       <Navbar />
 
       {/* ── Hero ── */}
       <section className="relative pt-32 pb-20 md:pt-44 md:pb-24">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-[#3B82F6]/[0.05] blur-[128px]" />
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-[#1B6B4A]/[0.05] blur-[128px]" />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
           <Reveal>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-1.5 text-[13px] text-white/60">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-1.5 text-[13px] text-[#3B4963]">
               <MessageCircle className="h-3.5 w-3.5" />
               We&apos;re here to help
             </div>
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="text-4xl font-semibold tracking-tight md:text-6xl">
-              Help & <span className="text-[#3B82F6]">support</span>
+              Help & <span className="text-[#1B6B4A]">support</span>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mx-auto mt-5 max-w-xl text-lg text-white/50">
+            <p className="mx-auto mt-5 max-w-xl text-lg text-[#7C8A9E]">
               Find answers to common questions or reach out to our team.
             </p>
           </Reveal>
@@ -228,18 +228,18 @@ export default function HelpPage() {
                 <Tag
                   href={link.href}
                   {...(extraProps as any)}
-                  className="group flex h-full flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 transition-colors hover:border-white/[0.1] hover:bg-white/[0.03]"
+                  className="group flex h-full flex-col rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-7 transition-colors hover:border-[#E2DFD5] hover:bg-[#F3F2ED]"
                 >
                   <div className="mb-4 inline-flex rounded-xl bg-white/[0.05] p-2.5 self-start">
-                    <Icon className="h-5 w-5 text-white/60" />
+                    <Icon className="h-5 w-5 text-[#3B4963]" />
                   </div>
-                  <h3 className="flex items-center gap-2 text-[15px] font-semibold text-white">
+                  <h3 className="flex items-center gap-2 text-[15px] font-semibold text-[#0C1829]">
                     {link.title}
                     {link.external && (
-                      <ExternalLink className="h-3.5 w-3.5 text-white/30" />
+                      <ExternalLink className="h-3.5 w-3.5 text-[#7C8A9E]" />
                     )}
                   </h3>
-                  <p className="mt-2 text-sm text-white/40">
+                  <p className="mt-2 text-sm text-[#7C8A9E]">
                     {link.description}
                   </p>
                 </Tag>
@@ -250,10 +250,10 @@ export default function HelpPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-4xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#3B82F6]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
               FAQ
             </p>
           </Reveal>
@@ -263,7 +263,7 @@ export default function HelpPage() {
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
-            <p className="mt-3 text-base text-white/40">
+            <p className="mt-3 text-base text-[#7C8A9E]">
               Browse by category to find what you need
             </p>
           </Reveal>
@@ -278,8 +278,8 @@ export default function HelpPage() {
                   onClick={() => setActiveCategory(cat.id)}
                   className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                     activeCategory === cat.id
-                      ? "bg-white text-[#050507]"
-                      : "bg-white/[0.04] text-white/50 hover:bg-white/[0.08] hover:text-white"
+                      ? "bg-white text-[#0C1829]"
+                      : "bg-[#F3F2ED] text-[#7C8A9E] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
                   }`}
                 >
                   <Icon className="h-3.5 w-3.5" />
@@ -313,11 +313,11 @@ export default function HelpPage() {
         <div className="mx-auto max-w-3xl px-6 py-32 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
-              Still have <span className="text-[#3B82F6]">questions?</span>
+              Still have <span className="text-[#1B6B4A]">questions?</span>
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-white/45">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
               Our team is here to help. Reach out and we&apos;ll get back to you
               within 24 hours.
             </p>
@@ -326,14 +326,14 @@ export default function HelpPage() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <a
                 href="mailto:support@settlr.dev"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#3B82F6] px-8 py-4 text-[15px] font-semibold text-white shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-8 py-4 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 Contact support
                 <ArrowRight className="h-4 w-4" />
               </a>
               <Link
                 href="/demo"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.04] hover:text-white"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829]"
               >
                 Try demo
               </Link>

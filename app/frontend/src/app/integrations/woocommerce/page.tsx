@@ -43,7 +43,7 @@ export default function WooCommercePage() {
 
   return (
     <main
-      className="relative min-h-screen bg-[#050507] text-white antialiased"
+      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <script
@@ -96,7 +96,7 @@ export default function WooCommercePage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
               Add USDC checkout to any WooCommerce store with a single plugin
               install. Customers pay with stablecoins, you receive instant
               settlement. No chargebacks, no 2.9% card processing fees, no
@@ -110,7 +110,7 @@ export default function WooCommercePage() {
                 href="https://github.com/ABFX15/Settlr/tree/master/plugins/woocommerce"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-white shadow-lg transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-[#0C1829] shadow-lg transition-transform hover:scale-[1.02]"
                 style={{
                   background: color,
                   boxShadow: `0 10px 25px ${color}40`,
@@ -121,7 +121,7 @@ export default function WooCommercePage() {
               </a>
               <Link
                 href="/docs"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-7 py-3.5 text-[15px] font-medium text-white/70 hover:bg-white/[0.06]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Setup docs
               </Link>
@@ -131,7 +131,7 @@ export default function WooCommercePage() {
       </section>
 
       {/* Why WooCommerce + stablecoins */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
             <p
@@ -145,7 +145,7 @@ export default function WooCommercePage() {
             <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
               No native stablecoin checkout exists for WooCommerce
             </h2>
-            <p className="mt-4 max-w-xl text-white/45 leading-relaxed">
+            <p className="mt-4 max-w-xl text-[#7C8A9E] leading-relaxed">
               WooCommerce powers 36% of all online stores. Not a single plugin
               in the WordPress directory offers proper stablecoin checkout with
               gasless UX and instant settlement. Until now.
@@ -187,10 +187,10 @@ export default function WooCommercePage() {
                   >
                     <item.icon className="h-5 w-5" style={{ color }} />
                   </div>
-                  <h3 className="text-[15px] font-semibold text-white">
+                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/40">
+                  <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
                     {item.text}
                   </p>
                 </div>
@@ -235,17 +235,17 @@ export default function WooCommercePage() {
             },
           ].map((item, i) => (
             <Reveal key={item.step} delay={i * 0.08}>
-              <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+              <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
                 <span
                   className="mb-4 block text-xs font-bold"
                   style={{ color: `${color}90` }}
                 >
                   STEP {item.step}
                 </span>
-                <h3 className="text-[15px] font-semibold text-white">
+                <h3 className="text-[15px] font-semibold text-[#0C1829]">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/40">
+                <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
                   {item.text}
                 </p>
               </div>
@@ -255,7 +255,7 @@ export default function WooCommercePage() {
       </section>
 
       {/* Features */}
-      <section className="border-y border-white/[0.04]">
+      <section className="border-y border-[#E2DFD5]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
@@ -275,9 +275,9 @@ export default function WooCommercePage() {
               "Full transaction history in WooCommerce dashboard",
             ].map((feature, i) => (
               <Reveal key={feature} delay={i * 0.04}>
-                <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+                <div className="flex items-center gap-3 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4">
                   <Check className="h-4 w-4 flex-shrink-0" style={{ color }} />
-                  <span className="text-sm text-white/70">{feature}</span>
+                  <span className="text-sm text-[#3B4963]">{feature}</span>
                 </div>
               </Reveal>
             ))}
@@ -301,7 +301,7 @@ export default function WooCommercePage() {
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-white/45">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
               One plugin install. USDC payments on any WooCommerce store. Live
               in 10 minutes.
             </p>
@@ -312,7 +312,7 @@ export default function WooCommercePage() {
                 href="https://github.com/ABFX15/Settlr/tree/master/plugins/woocommerce"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-[15px] font-semibold text-white hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-[15px] font-semibold text-[#0C1829] hover:scale-[1.02]"
                 style={{
                   background: color,
                   boxShadow: `0 10px 25px ${color}40`,
@@ -323,7 +323,7 @@ export default function WooCommercePage() {
               </a>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 hover:bg-white/[0.04]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Get API key
               </Link>

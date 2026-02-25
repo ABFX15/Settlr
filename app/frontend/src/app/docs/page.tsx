@@ -61,20 +61,20 @@ export default function DocsPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-[#050507] text-white pt-16">
+      <div className="min-h-screen bg-[#FDFBF7] text-[#0C1829] pt-16">
         <div className="flex">
           {/* Sidebar */}
-          <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 border-r border-white/5 bg-[#0d0d14] overflow-y-auto">
+          <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 border-r border-[#E2DFD5] bg-[#0d0d14] overflow-y-auto">
             <div className="p-4">
               {/* Search */}
               <div className="relative mb-6">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7C8A9E]" />
                 <input
                   type="text"
                   placeholder="Search docs..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:border-[#3B82F6]/50 focus:outline-none"
+                  className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] py-2 pl-10 pr-4 text-sm text-[#0C1829] placeholder:text-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none"
                 />
               </div>
 
@@ -89,8 +89,8 @@ export default function DocsPage() {
                       onClick={() => setActiveTab(tab.id as typeof activeTab)}
                       className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                         isActive
-                          ? "bg-[#3B82F6]/10 text-[#3B82F6]"
-                          : "text-white/60 hover:bg-white/5 hover:text-white"
+                          ? "bg-[#1B6B4A]/10 text-[#1B6B4A]"
+                          : "text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
                       }`}
                     >
                       <Icon className="h-4 w-4" />
@@ -101,8 +101,8 @@ export default function DocsPage() {
               </nav>
 
               {/* External Links */}
-              <div className="mt-8 border-t border-white/5 pt-6">
-                <p className="mb-3 text-xs font-semibold uppercase text-white/40">
+              <div className="mt-8 border-t border-[#E2DFD5] pt-6">
+                <p className="mb-3 text-xs font-semibold uppercase text-[#7C8A9E]">
                   Resources
                 </p>
                 <div className="space-y-1">
@@ -110,7 +110,7 @@ export default function DocsPage() {
                     href="https://www.npmjs.com/package/@settlr/sdk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/60 hover:bg-white/5 hover:text-white"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
                   >
                     npm Package
                     <ExternalLink className="h-3 w-3" />
@@ -119,7 +119,7 @@ export default function DocsPage() {
                     href="https://github.com/ABFX15/x402-hack-payment"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/60 hover:bg-white/5 hover:text-white"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
                   >
                     GitHub
                     <ExternalLink className="h-3 w-3" />
@@ -135,22 +135,22 @@ export default function DocsPage() {
               {/* Hero */}
               <div className="mb-10">
                 <h1 className="text-4xl font-bold mb-4">Documentation</h1>
-                <p className="text-xl text-white/60">
+                <p className="text-xl text-[#3B4963]">
                   Send global payouts and embed checkout — one SDK, two
                   products.
                 </p>
               </div>
 
               {/* Mobile Navigation Tabs */}
-              <div className="flex gap-1 mb-8 border-b border-white/10 overflow-x-auto lg:hidden">
+              <div className="flex gap-1 mb-8 border-b border-[#E2DFD5] overflow-x-auto lg:hidden">
                 {docsTabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as typeof activeTab)}
                     className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
                       activeTab === tab.id
-                        ? "text-[#3B82F6] border-b-2 border-blue-500"
-                        : "text-white/50 hover:text-white/80"
+                        ? "text-[#1B6B4A] border-b-2 border-blue-500"
+                        : "text-[#7C8A9E] hover:text-[#0C1829]"
                     }`}
                   >
                     {tab.label}
@@ -187,39 +187,39 @@ function QuickStartContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Get Started in 5 Minutes</h2>
-        <p className="text-white/50 mb-6">
+        <p className="text-[#7C8A9E] mb-6">
           Settlr gives you two products in one SDK. Pick your path:
         </p>
 
         {/* Two paths */}
         <div className="grid md:grid-cols-2 gap-4 mb-12">
-          <div className="rounded-xl border border-[#3B82F6]/20 bg-[#3B82F6]/[0.05] p-5">
-            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-0.5 rounded-full mb-3">
+          <div className="rounded-xl border border-[#3B82F6]/20 bg-[#1B6B4A]/[0.05] p-5">
+            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-0.5 rounded-full mb-3">
               Core product
             </span>
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
               Payout API
             </h3>
-            <p className="text-sm text-white/50 mb-3">
+            <p className="text-sm text-[#7C8A9E] mb-3">
               Send money to anyone by email. One API call, 180+ countries, 1%
               flat.
             </p>
-            <span className="text-sm text-[#3B82F6] font-medium">
+            <span className="text-sm text-[#1B6B4A] font-medium">
               See Payout API tab →
             </span>
           </div>
-          <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/[0.05] p-5">
-            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-emerald-400/20 text-emerald-400 px-2 py-0.5 rounded-full mb-3">
+          <div className="rounded-xl border border-emerald-400/20 bg-[#1B6B4A]/[0.05] p-5">
+            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/20 text-[#1B6B4A] px-2 py-0.5 rounded-full mb-3">
               Add-on
             </span>
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
               Checkout SDK
             </h3>
-            <p className="text-sm text-white/50 mb-3">
+            <p className="text-sm text-[#7C8A9E] mb-3">
               Embeddable React checkout for platforms that also need to collect
               payments.
             </p>
-            <span className="text-sm text-emerald-400 font-medium">
+            <span className="text-sm text-[#1B6B4A] font-medium">
               See Checkout SDK tab →
             </span>
           </div>
@@ -228,17 +228,17 @@ function QuickStartContent() {
         {/* Step 1 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[#3B82F6]/20 text-[#3B82F6] flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] flex items-center justify-center font-bold">
               1
             </div>
             <h3 className="text-xl font-semibold">Create Your Account</h3>
           </div>
-          <p className="text-white/50 mb-4">
+          <p className="text-[#7C8A9E] mb-4">
             Sign up to get your API key. Takes 30 seconds.
           </p>
           <a
             href="/onboarding"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#050507] font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0C1829] font-semibold rounded-lg hover:opacity-90 transition-opacity"
           >
             Get API Key →
           </a>
@@ -247,7 +247,7 @@ function QuickStartContent() {
         {/* Step 2 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[#3B82F6]/20 text-[#3B82F6] flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] flex items-center justify-center font-bold">
               2
             </div>
             <h3 className="text-xl font-semibold">Install the SDK</h3>
@@ -258,7 +258,7 @@ function QuickStartContent() {
         {/* Step 3 - Payout Example */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[#3B82F6]/20 text-[#3B82F6] flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] flex items-center justify-center font-bold">
               3
             </div>
             <h3 className="text-xl font-semibold">Send Your First Payout</h3>
@@ -279,7 +279,7 @@ const payout = await settlr.payouts.create({
 
 console.log(payout.status); // "sent"`}
           </CodeBlock>
-          <p className="text-white/30 text-sm mt-3">
+          <p className="text-[#7C8A9E] text-sm mt-3">
             💡 The recipient gets an email with a claim link. No wallet or bank
             details needed.
           </p>
@@ -307,7 +307,7 @@ console.log(payout.status); // "sent"`}
         {/* Interactive Playground */}
         <div className="mt-16">
           <h2 className="text-2xl font-bold mb-4">Try the Checkout SDK Live</h2>
-          <p className="text-white/50 mb-6">
+          <p className="text-[#7C8A9E] mb-6">
             Edit the code below and click &quot;Try It&quot; to see how the
             embedded checkout works. No setup required.
           </p>
@@ -323,19 +323,19 @@ function PayoutsContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Payout API</h2>
-        <p className="text-white/50 mb-6">
+        <p className="text-[#7C8A9E] mb-6">
           Send USDC to anyone in the world with just their email address. Your
           core integration — one API call per payout.
         </p>
 
-        <div className="bg-[#3B82F6]/10 border border-[#3B82F6]/30 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-[#3B82F6] mb-2">
+        <div className="bg-[#1B6B4A]/10 border border-[#3B82F6]/30 rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-[#1B6B4A] mb-2">
             How it works
           </h3>
-          <ol className="text-white/50 text-sm space-y-2">
+          <ol className="text-[#7C8A9E] text-sm space-y-2">
             <li>
               1. You call{" "}
-              <code className="text-[#3B82F6] bg-[#3B82F6]/10 px-1 rounded">
+              <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
                 settlr.payouts.create()
               </code>{" "}
               with an email &amp; amount
@@ -374,7 +374,7 @@ const payout = await settlr.payouts.create({
 
         {/* Batch payouts */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Batch Payouts</h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Pay hundreds of people at once. Each recipient gets their own email.
         </p>
         <CodeBlock language="tsx">
@@ -415,7 +415,7 @@ payouts.data.forEach(p => {
 
         {/* Webhooks */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Payout Webhooks</h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Get notified when a recipient claims their payout.
         </p>
         <CodeBlock language="json">
@@ -434,9 +434,9 @@ payouts.data.forEach(p => {
 
         {/* Payout props */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Payout Parameters</h3>
-        <div className="bg-gray-900 rounded-lg overflow-hidden">
+        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-800">
+            <thead className="bg-white">
               <tr>
                 <th className="px-4 py-3 font-medium">Parameter</th>
                 <th className="px-4 py-3 font-medium">Type</th>
@@ -445,37 +445,37 @@ payouts.data.forEach(p => {
             </thead>
             <tbody className="divide-y divide-gray-800">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">email</td>
-                <td className="px-4 py-3 text-white/50">string</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">email</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Recipient&apos;s email address
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">amount</td>
-                <td className="px-4 py-3 text-white/50">number</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">amount</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">number</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Payout amount in USDC
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">memo</td>
-                <td className="px-4 py-3 text-white/50">string</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">memo</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Description shown to recipient in the email
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">metadata</td>
-                <td className="px-4 py-3 text-white/50">object</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">metadata</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">object</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Custom key-value pairs for your records
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">currency</td>
-                <td className="px-4 py-3 text-white/50">&apos;USDC&apos;</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">currency</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">&apos;USDC&apos;</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Currency (USDC only for now)
                 </td>
               </tr>
@@ -485,9 +485,9 @@ payouts.data.forEach(p => {
 
         {/* Event types */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Payout Event Types</h3>
-        <div className="bg-gray-900 rounded-lg overflow-hidden">
+        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-800">
+            <thead className="bg-white">
               <tr>
                 <th className="px-4 py-3 font-medium">Event</th>
                 <th className="px-4 py-3 font-medium">Description</th>
@@ -495,34 +495,34 @@ payouts.data.forEach(p => {
             </thead>
             <tbody className="divide-y divide-gray-800">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payout.sent
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Email sent to recipient with claim link
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payout.claimed
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Recipient claimed the payout
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payout.expired
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Payout expired before being claimed
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   batch.completed
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   All payouts in a batch have been sent
                 </td>
               </tr>
@@ -539,7 +539,7 @@ function PlaygroundContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Interactive Playground</h2>
-        <p className="text-white/50 mb-6">
+        <p className="text-[#7C8A9E] mb-6">
           Experiment with the Settlr SDK in real-time. Edit the code, try
           different configurations, and see the checkout flow in action — no
           setup required.
@@ -550,28 +550,28 @@ function PlaygroundContent() {
 
         {/* Tips Section */}
         <div className="mt-12 grid md:grid-cols-2 gap-6">
-          <div className="rounded-xl border border-white/10 bg-[#12121a] p-6">
-            <h3 className="text-lg font-semibold text-white mb-3">
+          <div className="rounded-xl border border-[#E2DFD5] bg-[#12121a] p-6">
+            <h3 className="text-lg font-semibold text-[#0C1829] mb-3">
               💡 Pro Tips
             </h3>
-            <ul className="text-sm text-white/60 space-y-2">
+            <ul className="text-sm text-[#3B4963] space-y-2">
               <li>
                 • Change the{" "}
-                <code className="text-[#3B82F6] bg-[#3B82F6]/10 px-1 rounded">
+                <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
                   amount
                 </code>{" "}
                 prop to test different prices
               </li>
               <li>
                 • Add a{" "}
-                <code className="text-[#3B82F6] bg-[#3B82F6]/10 px-1 rounded">
+                <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
                   memo
                 </code>{" "}
                 for order descriptions
               </li>
               <li>
                 • Use{" "}
-                <code className="text-[#3B82F6] bg-[#3B82F6]/10 px-1 rounded">
+                <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
                   onSuccess
                 </code>{" "}
                 to handle completed payments
@@ -579,17 +579,17 @@ function PlaygroundContent() {
               <li>• Try the dropdown to load different examples</li>
             </ul>
           </div>
-          <div className="rounded-xl border border-white/10 bg-[#12121a] p-6">
-            <h3 className="text-lg font-semibold text-white mb-3">
+          <div className="rounded-xl border border-[#E2DFD5] bg-[#12121a] p-6">
+            <h3 className="text-lg font-semibold text-[#0C1829] mb-3">
               🚀 Ready to Integrate?
             </h3>
-            <p className="text-sm text-white/60 mb-4">
+            <p className="text-sm text-[#3B4963] mb-4">
               When you're ready to accept real payments, create an account to
               get your API key.
             </p>
             <a
               href="/onboarding"
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#050507]"
+              className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#0C1829]"
             >
               Get API Key →
             </a>
@@ -598,30 +598,30 @@ function PlaygroundContent() {
 
         {/* Example Use Cases */}
         <div className="mt-12">
-          <h3 className="text-xl font-semibold text-white mb-6">
+          <h3 className="text-xl font-semibold text-[#0C1829] mb-6">
             Example Use Cases
           </h3>
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="rounded-lg border border-white/5 bg-white/5 p-4">
+            <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] p-4">
               <span className="text-2xl">�️</span>
-              <h4 className="font-medium text-white mt-2">AI Data Labeling</h4>
-              <p className="text-sm text-white/50 mt-1">
+              <h4 className="font-medium text-[#0C1829] mt-2">AI Data Labeling</h4>
+              <p className="text-sm text-[#7C8A9E] mt-1">
                 Annotator payouts, batch payments, global workforce
               </p>
             </div>
-            <div className="rounded-lg border border-white/5 bg-white/5 p-4">
+            <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] p-4">
               <span className="text-2xl">🎨</span>
-              <h4 className="font-medium text-white mt-2">Creator Platforms</h4>
-              <p className="text-sm text-white/50 mt-1">
+              <h4 className="font-medium text-[#0C1829] mt-2">Creator Platforms</h4>
+              <p className="text-sm text-[#7C8A9E] mt-1">
                 Creator payouts, royalties, international settlements
               </p>
             </div>
-            <div className="rounded-lg border border-white/5 bg-white/5 p-4">
+            <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] p-4">
               <span className="text-2xl">💼</span>
-              <h4 className="font-medium text-white mt-2">
+              <h4 className="font-medium text-[#0C1829] mt-2">
                 Freelance Marketplaces
               </h4>
-              <p className="text-sm text-white/50 mt-1">
+              <p className="text-sm text-[#7C8A9E] mt-1">
                 Contractor payouts, invoice settlements, global hiring
               </p>
             </div>
@@ -637,30 +637,30 @@ function ReactSDKContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Checkout SDK</h2>
-        <p className="text-white/50 mb-6">
+        <p className="text-[#7C8A9E] mb-6">
           Embeddable checkout for platforms that also collect payments. React
           hooks and components for full control over the payment flow.
         </p>
 
         {/* Prerequisites */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-white mb-2">
+        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
             Prerequisites
           </h3>
-          <p className="text-white/50 text-sm mb-3">
+          <p className="text-[#7C8A9E] text-sm mb-3">
             Before using the Checkout SDK, you need to:
           </p>
-          <ol className="text-white/50 text-sm space-y-2">
+          <ol className="text-[#7C8A9E] text-sm space-y-2">
             <li>
               1.{" "}
-              <a href="/onboarding" className="text-[#3B82F6] hover:underline">
+              <a href="/onboarding" className="text-[#1B6B4A] hover:underline">
                 Create a merchant account
               </a>{" "}
               to get your API key
             </li>
             <li>
               2. Install the SDK:{" "}
-              <code className="text-emerald-400 bg-gray-800 px-2 py-0.5 rounded">
+              <code className="text-[#1B6B4A] bg-white px-2 py-0.5 rounded">
                 npm install @settlr/sdk
               </code>
             </li>
@@ -668,15 +668,15 @@ function ReactSDKContent() {
         </div>
 
         {/* Payment Modal - NEW */}
-        <div className="bg-emerald-400/10 border border-emerald-400/30 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-emerald-400 mb-2">
+        <div className="bg-[#1B6B4A]/10 border border-emerald-400/30 rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-[#1B6B4A] mb-2">
             Add-on product
           </h3>
-          <p className="text-white/50 text-sm">
+          <p className="text-[#7C8A9E] text-sm">
             The Checkout SDK is for platforms that need to{" "}
-            <strong className="text-white/70">collect</strong> payments (creator
+            <strong className="text-[#3B4963]">collect</strong> payments (creator
             tips, iGaming deposits, subscriptions). For{" "}
-            <strong className="text-white/70">sending</strong> payouts, use the
+            <strong className="text-[#3B4963]">sending</strong> payouts, use the
             Payout API tab.
           </p>
         </div>
@@ -684,7 +684,7 @@ function ReactSDKContent() {
         <h3 className="text-xl font-semibold mb-4">
           1. Payment Modal (Recommended)
         </h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Keep users on your site with an embedded payment modal. Perfect for
           platforms, payouts, and global payments.
         </p>
@@ -726,7 +726,7 @@ function SubscriptionPage() {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           2. Direct Modal Component
         </h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           For more control, use the PaymentModal component directly.
         </p>
         <CodeBlock language="tsx">
@@ -765,7 +765,7 @@ function ProductPage() {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           3. Redirect Flow (Alternative)
         </h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           For simpler integrations, redirect users to Settlr checkout.
         </p>
         <CodeBlock language="tsx">
@@ -791,7 +791,7 @@ window.location.href = url;`}
 
         {/* Pay Button */}
         <h3 className="text-xl font-semibold mb-4 mt-8">2. Add a Pay Button</h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           The simplest way to accept payments.
         </p>
         <CodeBlock language="tsx">
@@ -825,7 +825,7 @@ function ProductPage({ product }) {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           3. Custom UI with useSettlr Hook
         </h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Build your own payment UI with full control.
         </p>
         <CodeBlock language="tsx">
@@ -865,9 +865,9 @@ function CustomCheckout() {
 
         {/* Props Reference */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Props Reference</h3>
-        <div className="bg-gray-900 rounded-lg overflow-hidden">
+        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-800">
+            <thead className="bg-white">
               <tr>
                 <th className="px-4 py-3 font-medium">Prop</th>
                 <th className="px-4 py-3 font-medium">Type</th>
@@ -876,62 +876,62 @@ function CustomCheckout() {
             </thead>
             <tbody className="divide-y divide-gray-800">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   recipient
                 </td>
-                <td className="px-4 py-3 text-white/50">string</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Wallet address to receive payment
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">amount</td>
-                <td className="px-4 py-3 text-white/50">number</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">amount</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">number</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Payment amount in the specified currency
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">currency</td>
-                <td className="px-4 py-3 text-white/50">'USDC' | 'SOL'</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">currency</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">'USDC' | 'SOL'</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Token to accept (default: USDC)
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   onSuccess
                 </td>
-                <td className="px-4 py-3 text-white/50">(tx) =&gt; void</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">(tx) =&gt; void</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Called when payment succeeds
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">onError</td>
-                <td className="px-4 py-3 text-white/50">(err) =&gt; void</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">onError</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">(err) =&gt; void</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Called when payment fails
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">label</td>
-                <td className="px-4 py-3 text-white/50">string</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">label</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Button text (default: "Pay with USDC")
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">memo</td>
-                <td className="px-4 py-3 text-white/50">string</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">memo</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Optional memo attached to transaction
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">gasless</td>
-                <td className="px-4 py-3 text-white/50">boolean</td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">gasless</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">boolean</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Enable gasless transactions (default: true)
                 </td>
               </tr>
@@ -948,24 +948,24 @@ function APIContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">REST API Reference</h2>
-        <p className="text-white/50 mb-6">
+        <p className="text-[#7C8A9E] mb-6">
           Use our REST API for server-side payout and payment integrations.
         </p>
 
         {/* Base URL */}
-        <div className="bg-gray-900 rounded-lg p-4 mb-6">
-          <p className="text-white/30 text-sm mb-1">Base URL</p>
-          <code className="text-[#3B82F6]">https://settlr.dev/api</code>
+        <div className="bg-[#F3F2ED] rounded-lg p-4 mb-6">
+          <p className="text-[#7C8A9E] text-sm mb-1">Base URL</p>
+          <code className="text-[#1B6B4A]">https://settlr.dev/api</code>
         </div>
 
         {/* Authentication */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-white mb-2">
+        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
             🔐 Authentication
           </h3>
-          <p className="text-white/50 text-sm mb-3">
+          <p className="text-[#7C8A9E] text-sm mb-3">
             All API requests require your API key from{" "}
-            <a href="/onboarding" className="text-[#3B82F6] hover:underline">
+            <a href="/onboarding" className="text-[#1B6B4A] hover:underline">
               merchant onboarding
             </a>
             .
@@ -978,18 +978,18 @@ function APIContent() {
         </div>
 
         {/* Create Payout */}
-        <div className="border border-white/10 rounded-lg overflow-hidden mb-6">
-          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
-            <code className="text-white">/payouts</code>
-            <span className="text-[10px] font-bold tracking-widest uppercase bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-0.5 rounded-full ml-auto">
+            <code className="text-[#0C1829]">/payouts</code>
+            <span className="text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-0.5 rounded-full ml-auto">
               Core
             </span>
           </div>
           <div className="p-4">
-            <p className="text-white/50 mb-4">
+            <p className="text-[#7C8A9E] mb-4">
               Create a new payout. The recipient receives an email with a claim
               link.
             </p>
@@ -1020,18 +1020,18 @@ function APIContent() {
         </div>
 
         {/* Create Batch Payout */}
-        <div className="border border-white/10 rounded-lg overflow-hidden mb-6">
-          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
-            <code className="text-white">/payouts/batch</code>
-            <span className="text-[10px] font-bold tracking-widest uppercase bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-0.5 rounded-full ml-auto">
+            <code className="text-[#0C1829]">/payouts/batch</code>
+            <span className="text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-0.5 rounded-full ml-auto">
               Core
             </span>
           </div>
           <div className="p-4">
-            <p className="text-white/50 mb-4">
+            <p className="text-[#7C8A9E] mb-4">
               Create multiple payouts at once. Each recipient gets their own
               email.
             </p>
@@ -1047,20 +1047,20 @@ function APIContent() {
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold text-white/70 mt-10 mb-4">
+        <h3 className="text-lg font-semibold text-[#3B4963] mt-10 mb-4">
           Checkout Endpoints
         </h3>
 
         {/* Create Payment */}
-        <div className="border border-white/10 rounded-lg overflow-hidden mb-6">
-          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
-            <code className="text-white">/payments</code>
+            <code className="text-[#0C1829]">/payments</code>
           </div>
           <div className="p-4">
-            <p className="text-white/50 mb-4">
+            <p className="text-[#7C8A9E] mb-4">
               Create a new payment request. The recipient is automatically set
               to your registered payout wallet.
             </p>
@@ -1091,15 +1091,15 @@ function APIContent() {
         </div>
 
         {/* Get Payment */}
-        <div className="border border-white/10 rounded-lg overflow-hidden mb-6">
-          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
-            <span className="bg-blue-500/20 text-[#38bdf8] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
-            <code className="text-white">/payments/:id</code>
+            <code className="text-[#0C1829]">/payments/:id</code>
           </div>
           <div className="p-4">
-            <p className="text-white/50 mb-4">Retrieve a payment by ID.</p>
+            <p className="text-[#7C8A9E] mb-4">Retrieve a payment by ID.</p>
             <h4 className="font-medium mb-2">Response</h4>
             <CodeBlock language="json">
               {`{
@@ -1116,42 +1116,42 @@ function APIContent() {
         </div>
 
         {/* List Payments */}
-        <div className="border border-white/10 rounded-lg overflow-hidden">
-          <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
-            <span className="bg-blue-500/20 text-[#38bdf8] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
-            <code className="text-white">/payments</code>
+            <code className="text-[#0C1829]">/payments</code>
           </div>
           <div className="p-4">
-            <p className="text-white/50 mb-4">
+            <p className="text-[#7C8A9E] mb-4">
               List all payments with optional filters.
             </p>
             <h4 className="font-medium mb-2">Query Parameters</h4>
-            <div className="bg-gray-900 rounded-lg overflow-hidden mb-4">
+            <div className="bg-[#F3F2ED] rounded-lg overflow-hidden mb-4">
               <table className="w-full text-left">
                 <tbody className="divide-y divide-gray-800">
                   <tr>
-                    <td className="px-4 py-2 font-mono text-[#3B82F6]">
+                    <td className="px-4 py-2 font-mono text-[#1B6B4A]">
                       status
                     </td>
-                    <td className="px-4 py-2 text-white/50">
+                    <td className="px-4 py-2 text-[#7C8A9E]">
                       pending | completed | expired
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-2 font-mono text-[#3B82F6]">
+                    <td className="px-4 py-2 font-mono text-[#1B6B4A]">
                       limit
                     </td>
-                    <td className="px-4 py-2 text-white/50">
+                    <td className="px-4 py-2 text-[#7C8A9E]">
                       Number of results (default: 20, max: 100)
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-2 font-mono text-[#3B82F6]">
+                    <td className="px-4 py-2 font-mono text-[#1B6B4A]">
                       cursor
                     </td>
-                    <td className="px-4 py-2 text-white/50">
+                    <td className="px-4 py-2 text-[#7C8A9E]">
                       Pagination cursor
                     </td>
                   </tr>
@@ -1170,14 +1170,14 @@ function WebhooksContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Webhooks</h2>
-        <p className="text-white/50 mb-6">
+        <p className="text-[#7C8A9E] mb-6">
           Get notified in real-time when payments, payouts, and subscriptions
           change state.
         </p>
 
         {/* Setup */}
         <h3 className="text-xl font-semibold mb-4">Setting Up Webhooks</h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Configure your webhook endpoint in the Settlr dashboard. We'll send a
           POST request whenever a payment is completed.
         </p>
@@ -1254,9 +1254,9 @@ export async function POST(req: NextRequest) {
 
         {/* Events */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Event Types</h3>
-        <div className="bg-gray-900 rounded-lg overflow-hidden">
+        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-800">
+            <thead className="bg-white">
               <tr>
                 <th className="px-4 py-3 font-medium">Event</th>
                 <th className="px-4 py-3 font-medium">Description</th>
@@ -1264,90 +1264,90 @@ export async function POST(req: NextRequest) {
             </thead>
             <tbody className="divide-y divide-gray-800">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payment.completed
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Payment was successful and confirmed on-chain
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payment.expired
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Payment link expired before completion
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payment.failed
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Payment failed due to an error
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payment.refunded
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Payment was refunded to the customer
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payout.created
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   New payout created and email sent to recipient
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payout.claimed
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Recipient claimed the payout to their wallet
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payout.expired
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Payout expired before being claimed (funds returned)
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payout.failed
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Payout failed — email undeliverable or on-chain error
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   subscription.created
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   New subscription plan activated
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   subscription.renewed
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Recurring subscription payment processed
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   subscription.cancelled
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Subscription was cancelled by user or merchant
                 </td>
               </tr>
@@ -1358,7 +1358,7 @@ export async function POST(req: NextRequest) {
         {/* Security */}
         <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 mt-8">
           <h4 className="font-medium text-yellow-400 mb-2">⚠️ Security Note</h4>
-          <p className="text-white/50">
+          <p className="text-[#7C8A9E]">
             Always verify the webhook signature before processing events. Never
             trust the payload without verification.
           </p>
@@ -1373,14 +1373,14 @@ function SubscriptionsContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Subscriptions</h2>
-        <p className="text-white/50 mb-6">
+        <p className="text-[#7C8A9E] mb-6">
           Recurring USDC billing — create plans, manage subscribers, and handle
           renewals automatically.
         </p>
 
         {/* Create a Plan */}
         <h3 className="text-xl font-semibold mb-4">Create a Plan</h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Define a recurring plan that customers can subscribe to.
         </p>
         <CodeBlock language="tsx">
@@ -1405,7 +1405,7 @@ console.log(plan.active); // true`}
         <h3 className="text-xl font-semibold mb-4 mt-8">
           Subscribe a Customer
         </h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Attach a customer to a plan. They&apos;ll be charged automatically
           each billing cycle.
         </p>
@@ -1450,12 +1450,12 @@ subs.data.forEach(s => {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           Subscription Webhooks
         </h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Listen for subscription lifecycle events to keep your system in sync.
         </p>
-        <div className="bg-gray-900 rounded-lg overflow-hidden">
+        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-gray-800">
+            <thead className="bg-white">
               <tr>
                 <th className="px-4 py-3 font-medium">Event</th>
                 <th className="px-4 py-3 font-medium">Description</th>
@@ -1463,34 +1463,34 @@ subs.data.forEach(s => {
             </thead>
             <tbody className="divide-y divide-gray-800">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   subscription.created
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   New subscription activated
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   subscription.renewed
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Recurring payment processed
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   subscription.cancelled
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Cancelled by user or merchant
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#3B82F6]">
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   subscription.payment_failed
                 </td>
-                <td className="px-4 py-3 text-white/50">
+                <td className="px-4 py-3 text-[#7C8A9E]">
                   Renewal payment failed (will retry)
                 </td>
               </tr>
@@ -1507,36 +1507,36 @@ function TreasuryContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Treasury</h2>
-        <p className="text-white/50 mb-6">
+        <p className="text-[#7C8A9E] mb-6">
           Monitor your on-chain treasury, manage platform fees, and claim
           accumulated revenue.
         </p>
 
         {/* Overview */}
         <h3 className="text-xl font-semibold mb-4">How Treasury Works</h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Every payment processed through Settlr collects a configurable
           platform fee (default 2%) into a program-owned treasury PDA.
           Authorized signers can claim accumulated fees at any time.
         </p>
-        <div className="bg-gray-900 rounded-lg p-6 border border-white/10 mb-6">
+        <div className="bg-[#F3F2ED] rounded-lg p-6 border border-[#E2DFD5] mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <div>
-              <p className="text-sm text-white/40 mb-1">Fee Collection</p>
-              <p className="text-lg font-semibold text-white">Automatic</p>
-              <p className="text-xs text-white/30">On every payment</p>
+              <p className="text-sm text-[#7C8A9E] mb-1">Fee Collection</p>
+              <p className="text-lg font-semibold text-[#0C1829]">Automatic</p>
+              <p className="text-xs text-[#7C8A9E]">On every payment</p>
             </div>
             <div>
-              <p className="text-sm text-white/40 mb-1">Claim Method</p>
-              <p className="text-lg font-semibold text-white">
+              <p className="text-sm text-[#7C8A9E] mb-1">Claim Method</p>
+              <p className="text-lg font-semibold text-[#0C1829]">
                 Multisig / Wallet
               </p>
-              <p className="text-xs text-white/30">Authority-gated</p>
+              <p className="text-xs text-[#7C8A9E]">Authority-gated</p>
             </div>
             <div>
-              <p className="text-sm text-white/40 mb-1">Settlement</p>
-              <p className="text-lg font-semibold text-white">USDC</p>
-              <p className="text-xs text-white/30">Direct to your wallet</p>
+              <p className="text-sm text-[#7C8A9E] mb-1">Settlement</p>
+              <p className="text-lg font-semibold text-[#0C1829]">USDC</p>
+              <p className="text-xs text-[#7C8A9E]">Direct to your wallet</p>
             </div>
           </div>
         </div>
@@ -1555,7 +1555,7 @@ console.log(treasury.isActive);      // true`}
 
         {/* Claim Fees */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Claim Platform Fees</h3>
-        <p className="text-white/50 mb-4">
+        <p className="text-[#7C8A9E] mb-4">
           Only the on-chain authority (your wallet or Squads multisig) can claim
           fees. The API returns an unsigned transaction for you to sign.
         </p>
@@ -1576,32 +1576,32 @@ console.log('Claimed! Tx:', sig);`}
         {/* REST API */}
         <h3 className="text-xl font-semibold mb-4 mt-8">REST Endpoints</h3>
         <div className="space-y-4">
-          <div className="border border-white/10 rounded-lg overflow-hidden">
-            <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
-              <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-sm font-mono">
+          <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
+            <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+              <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
                 GET
               </span>
-              <code className="text-white">/api/admin/treasury</code>
+              <code className="text-[#0C1829]">/api/admin/treasury</code>
             </div>
             <div className="p-4">
-              <p className="text-white/50 text-sm">
+              <p className="text-[#7C8A9E] text-sm">
                 Returns treasury balance, platform config (fee BPS, authority,
                 total volume/fees), and PDA addresses.
               </p>
             </div>
           </div>
 
-          <div className="border border-white/10 rounded-lg overflow-hidden">
-            <div className="bg-gray-900 px-4 py-3 flex items-center gap-3">
-              <span className="bg-[#3B82F6]/20 text-[#3B82F6] px-2 py-1 rounded text-sm font-mono">
+          <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
+            <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+              <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
                 POST
               </span>
-              <code className="text-white">/api/admin/claim</code>
+              <code className="text-[#0C1829]">/api/admin/claim</code>
             </div>
             <div className="p-4">
-              <p className="text-white/50 text-sm mb-2">
+              <p className="text-[#7C8A9E] text-sm mb-2">
                 Builds an unsigned{" "}
-                <code className="text-[#3B82F6]">claim_platform_fees</code>{" "}
+                <code className="text-[#1B6B4A]">claim_platform_fees</code>{" "}
                 transaction.
               </p>
               <CodeBlock language="json">
@@ -1614,13 +1614,13 @@ console.log('Claimed! Tx:', sig);`}
         </div>
 
         {/* Admin Dashboard */}
-        <div className="bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-lg p-4 mt-8">
-          <h4 className="font-medium text-[#3B82F6] mb-2">
+        <div className="bg-[#1B6B4A]/10 border border-[#3B82F6]/20 rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#1B6B4A] mb-2">
             💡 Admin Dashboard
           </h4>
-          <p className="text-white/50 text-sm">
+          <p className="text-[#7C8A9E] text-sm">
             Visit{" "}
-            <a href="/admin" className="text-[#3B82F6] hover:underline">
+            <a href="/admin" className="text-[#1B6B4A] hover:underline">
               /admin
             </a>{" "}
             to see a visual treasury dashboard with real-time on-chain data,
@@ -1776,11 +1776,11 @@ Signature: 5xKj...abc`,
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Integrations</h2>
-        <p className="text-white/50 mb-6">
+        <p className="text-[#7C8A9E] mb-6">
           Connect Settlr to the tools you already use. Each integration is
           open-source and uses the same REST API documented in the{" "}
           <button
-            className="text-[#3B82F6] hover:underline"
+            className="text-[#1B6B4A] hover:underline"
             onClick={() =>
               window.dispatchEvent(
                 new CustomEvent("settlr:set-tab", { detail: "api" }),
@@ -1797,11 +1797,11 @@ Signature: 5xKj...abc`,
             <a
               key={i.slug}
               href={`/integrations/${i.slug}`}
-              className="block rounded-lg border border-white/10 bg-white/[0.02] p-5 hover:border-[#3B82F6]/40 hover:bg-white/[0.04] transition-all"
+              className="block rounded-lg border border-[#E2DFD5] bg-white/[0.02] p-5 hover:border-[#3B82F6]/40 hover:bg-[#F3F2ED] transition-all"
             >
               <div className="text-2xl mb-2">{i.emoji}</div>
               <h3 className="font-semibold mb-1">{i.name}</h3>
-              <p className="text-sm text-white/50 line-clamp-2">{i.desc}</p>
+              <p className="text-sm text-[#7C8A9E] line-clamp-2">{i.desc}</p>
             </a>
           ))}
         </div>
@@ -1817,10 +1817,10 @@ Signature: 5xKj...abc`,
               <span className="text-2xl">{integration.emoji}</span>
               {integration.name}
             </h3>
-            <p className="text-white/50 mb-4">{integration.desc}</p>
+            <p className="text-[#7C8A9E] mb-4">{integration.desc}</p>
 
             <h4 className="font-medium mb-2">Setup</h4>
-            <ol className="list-decimal list-inside space-y-1 text-white/60 mb-4 text-sm">
+            <ol className="list-decimal list-inside space-y-1 text-[#3B4963] mb-4 text-sm">
               {integration.setup.map((step, idx) => (
                 <li key={idx}>{step}</li>
               ))}
@@ -1831,10 +1831,10 @@ Signature: 5xKj...abc`,
               {integration.endpoints.map((ep, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-2 text-sm text-white/60"
+                  className="flex items-start gap-2 text-sm text-[#3B4963]"
                 >
-                  <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#3B82F6]" />
-                  <code className="text-white/70 text-xs">{ep}</code>
+                  <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#1B6B4A]" />
+                  <code className="text-[#3B4963] text-xs">{ep}</code>
                 </li>
               ))}
             </ul>
@@ -1846,7 +1846,7 @@ Signature: 5xKj...abc`,
               href={`https://github.com/ABFX15/Settlr/tree/master/plugins/${integration.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-[#3B82F6] hover:underline"
+              className="inline-flex items-center gap-1.5 text-sm text-[#1B6B4A] hover:underline"
             >
               View source on GitHub
               <ExternalLink className="h-3 w-3" />
@@ -1855,9 +1855,9 @@ Signature: 5xKj...abc`,
         ))}
 
         {/* Auth section */}
-        <div className="rounded-lg border border-white/10 bg-white/[0.02] p-6 mt-8">
+        <div className="rounded-lg border border-[#E2DFD5] bg-white/[0.02] p-6 mt-8">
           <h3 className="text-lg font-semibold mb-3">Authentication</h3>
-          <p className="text-white/50 text-sm mb-3">
+          <p className="text-[#7C8A9E] text-sm mb-3">
             All integrations authenticate with your Settlr API key. Pass it as a
             Bearer token:
           </p>
@@ -1865,11 +1865,11 @@ Signature: 5xKj...abc`,
             {`curl -H "Authorization: Bearer sk_live_YOUR_KEY" \\
   https://settlr.dev/api/payouts`}
           </CodeBlock>
-          <p className="text-white/50 text-sm">
-            Use <code className="text-white/70">sk_test_</code> keys for
-            development and <code className="text-white/70">sk_live_</code> keys
+          <p className="text-[#7C8A9E] text-sm">
+            Use <code className="text-[#3B4963]">sk_test_</code> keys for
+            development and <code className="text-[#3B4963]">sk_live_</code> keys
             for production. Manage keys in the{" "}
-            <a href="/dashboard" className="text-[#3B82F6] hover:underline">
+            <a href="/dashboard" className="text-[#1B6B4A] hover:underline">
               dashboard
             </a>
             .
@@ -1885,7 +1885,7 @@ function TroubleshootingContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Troubleshooting</h2>
-        <p className="text-white/50 mb-6">Common issues and how to fix them.</p>
+        <p className="text-[#7C8A9E] mb-6">Common issues and how to fix them.</p>
 
         {/* FAQ Items */}
         <div className="space-y-4">
@@ -1975,14 +1975,14 @@ function TroubleshootingItem({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-white/10 rounded-lg overflow-hidden">
+    <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-white/5 transition-colors"
+        className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-[#F3F2ED] transition-colors"
       >
         <span className="font-medium">{question}</span>
         <span
-          className={`text-[#3B82F6] transition-transform ${
+          className={`text-[#1B6B4A] transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         >
@@ -1991,7 +1991,7 @@ function TroubleshootingItem({
       </button>
       {isOpen && (
         <div className="px-4 pb-4">
-          <p className="text-white/50 whitespace-pre-line">{answer}</p>
+          <p className="text-[#7C8A9E] whitespace-pre-line">{answer}</p>
         </div>
       )}
     </div>
@@ -2019,11 +2019,11 @@ function CodeBlock({
       return code.split("\n").map((line, i) => (
         <div key={i}>
           {line.startsWith("#") ? (
-            <span className="text-white/30">{line}</span>
+            <span className="text-[#7C8A9E]">{line}</span>
           ) : (
             <>
-              <span className="text-white/30">$ </span>
-              <span className="text-[#3B82F6]">{line}</span>
+              <span className="text-[#7C8A9E]">$ </span>
+              <span className="text-[#1B6B4A]">{line}</span>
             </>
           )}
         </div>
@@ -2034,12 +2034,12 @@ function CodeBlock({
       return code.split("\n").map((line, i) => {
         // Highlight JSON
         const highlighted = line
-          .replace(/"([^"]+)":/g, '<span class="text-[#3B82F6]">"$1"</span>:')
-          .replace(/: "([^"]+)"/g, ': <span class="text-[#3B82F6]">"$1"</span>')
+          .replace(/"([^"]+)":/g, '<span class="text-[#1B6B4A]">"$1"</span>:')
+          .replace(/: "([^"]+)"/g, ': <span class="text-[#1B6B4A]">"$1"</span>')
           .replace(/: (\d+)/g, ': <span class="text-orange-400">$1</span>')
           .replace(
             /: (true|false|null)/g,
-            ': <span class="text-[#38bdf8]">$1</span>',
+            ': <span class="text-[#1B6B4A]">$1</span>',
           );
         return (
           <div key={i} dangerouslySetInnerHTML={{ __html: highlighted }} />
@@ -2103,7 +2103,7 @@ function CodeBlock({
       // Handle comments
       if (line.trim().startsWith("//")) {
         return (
-          <div key={lineIndex} className="text-white/30">
+          <div key={lineIndex} className="text-[#7C8A9E]">
             {line}
           </div>
         );
@@ -2207,13 +2207,13 @@ function CodeBlock({
                 );
               case "string":
                 return (
-                  <span key={tokenIndex} className="text-[#3B82F6]">
+                  <span key={tokenIndex} className="text-[#1B6B4A]">
                     {token.value}
                   </span>
                 );
               case "comment":
                 return (
-                  <span key={tokenIndex} className="text-white/30">
+                  <span key={tokenIndex} className="text-[#7C8A9E]">
                     {token.value}
                   </span>
                 );
@@ -2225,13 +2225,13 @@ function CodeBlock({
                 );
               case "builtin":
                 return (
-                  <span key={tokenIndex} className="text-emerald-400">
+                  <span key={tokenIndex} className="text-[#1B6B4A]">
                     {token.value}
                   </span>
                 );
               case "react":
                 return (
-                  <span key={tokenIndex} className="text-[#3B82F6]">
+                  <span key={tokenIndex} className="text-[#1B6B4A]">
                     {token.value}
                   </span>
                 );
@@ -2243,13 +2243,13 @@ function CodeBlock({
                 );
               case "tag":
                 return (
-                  <span key={tokenIndex} className="text-[#38bdf8]">
+                  <span key={tokenIndex} className="text-[#1B6B4A]">
                     {token.value}
                   </span>
                 );
               default:
                 return (
-                  <span key={tokenIndex} className="text-white/70">
+                  <span key={tokenIndex} className="text-[#3B4963]">
                     {token.value}
                   </span>
                 );
@@ -2261,14 +2261,14 @@ function CodeBlock({
   };
 
   return (
-    <div className="relative bg-gray-900 rounded-lg overflow-hidden mb-4 border border-white/10">
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800/70 border-b border-gray-700">
-        <span className="text-xs text-white/50 uppercase font-medium">
+    <div className="relative bg-[#F3F2ED] rounded-lg overflow-hidden mb-4 border border-[#E2DFD5]">
+      <div className="flex items-center justify-between px-4 py-2 bg-white/70 border-b border-[#E2DFD5]">
+        <span className="text-xs text-[#7C8A9E] uppercase font-medium">
           {language}
         </span>
         <button
           onClick={handleCopy}
-          className="text-xs text-white/50 hover:text-white transition-colors px-2 py-1 rounded hover:bg-gray-700"
+          className="text-xs text-[#7C8A9E] hover:text-[#0C1829] transition-colors px-2 py-1 rounded hover:bg-[#E8E4DA]"
         >
           {copied ? "✓ Copied" : "Copy"}
         </button>
@@ -2290,10 +2290,10 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="bg-gray-900 border border-white/10 rounded-lg p-6">
+    <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-6">
       <div className="text-3xl mb-3">{icon}</div>
       <h3 className="font-semibold mb-2">{title}</h3>
-      <p className="text-white/50 text-sm">{description}</p>
+      <p className="text-[#7C8A9E] text-sm">{description}</p>
     </div>
   );
 }

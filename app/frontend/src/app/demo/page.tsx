@@ -73,27 +73,27 @@ export default function DemoPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#050507]">
+      <main className="min-h-screen bg-[#FDFBF7]">
         {/* Hero Section */}
         <section className="relative overflow-hidden px-4 pb-16 pt-32">
           {/* Background effects */}
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.15),transparent)]" />
-            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#050507] to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FDFBF7] to-transparent" />
           </div>
 
           {/* Ambient glow */}
-          <div className="absolute right-[15%] top-[25%] h-64 w-64 rounded-full bg-[#3B82F6]/[0.07] blur-[100px]" />
-          <div className="absolute left-[10%] top-[35%] h-48 w-48 rounded-full bg-[#3B82F6]/[0.05] blur-[100px]" />
+          <div className="absolute right-[15%] top-[25%] h-64 w-64 rounded-full bg-[#1B6B4A]/[0.07] blur-[100px]" />
+          <div className="absolute left-[10%] top-[35%] h-48 w-48 rounded-full bg-[#1B6B4A]/[0.05] blur-[100px]" />
 
           <div className="relative mx-auto max-w-5xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-2"
             >
-              <Sparkles className="h-4 w-4 text-[#3B82F6]" />
-              <span className="text-sm font-medium text-white/60">
+              <Sparkles className="h-4 w-4 text-[#1B6B4A]" />
+              <span className="text-sm font-medium text-[#3B4963]">
                 Interactive Demo
               </span>
             </motion.div>
@@ -102,16 +102,16 @@ export default function DemoPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mb-6 text-5xl font-bold leading-tight text-white md:text-7xl"
+              className="mb-6 text-5xl font-bold leading-tight text-[#0C1829] md:text-7xl"
             >
-              Try Settlr <span className="text-[#3B82F6]">Live</span>
+              Try Settlr <span className="text-[#1B6B4A]">Live</span>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mx-auto mb-8 max-w-2xl text-lg text-white/50"
+              className="mx-auto mb-8 max-w-2xl text-lg text-[#7C8A9E]"
             >
               See how platforms pay workers and contractors with USDC — no
               wallet needed, no gas fees, instant settlement.
@@ -127,10 +127,10 @@ export default function DemoPage() {
               {features.map((feature) => (
                 <div
                   key={feature}
-                  className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm"
+                  className="flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-2 backdrop-blur-sm"
                 >
-                  <Check className="h-4 w-4 text-[#3B82F6]" />
-                  <span className="text-sm text-white">{feature}</span>
+                  <Check className="h-4 w-4 text-[#1B6B4A]" />
+                  <span className="text-sm text-[#0C1829]">{feature}</span>
                 </div>
               ))}
             </motion.div>
@@ -152,7 +152,7 @@ export default function DemoPage() {
                   >
                     <Link
                       href={card.href}
-                      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-8 transition-all hover:border-white/20 hover:bg-white/[0.04]"
+                      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-8 transition-all hover:border-[#E2DFD5] hover:bg-[#F3F2ED]"
                       style={{
                         boxShadow: `0 0 0 0 ${card.color}00`,
                       }}
@@ -187,10 +187,10 @@ export default function DemoPage() {
                           />
                         </div>
 
-                        <h2 className="mb-3 text-xl font-semibold text-white transition-colors group-hover:text-white">
+                        <h2 className="mb-3 text-xl font-semibold text-[#0C1829] transition-colors group-hover:text-[#0C1829]">
                           {card.title}
                         </h2>
-                        <p className="mb-6 text-white/50">{card.description}</p>
+                        <p className="mb-6 text-[#7C8A9E]">{card.description}</p>
 
                         <div
                           className="inline-flex items-center gap-2 font-medium transition-colors"
@@ -217,16 +217,16 @@ export default function DemoPage() {
               viewport={{ once: true }}
               className="mb-12 text-center"
             >
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2">
-                <Shield className="h-4 w-4 text-[#3B82F6]" />
-                <span className="text-sm font-medium text-white/60">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-2">
+                <Shield className="h-4 w-4 text-[#1B6B4A]" />
+                <span className="text-sm font-medium text-[#3B4963]">
                   MagicBlock PER Privacy
                 </span>
               </div>
-              <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
+              <h2 className="mb-4 text-4xl font-bold text-[#0C1829] md:text-5xl">
                 See the Privacy Difference
               </h2>
-              <p className="mx-auto max-w-xl text-white/50">
+              <p className="mx-auto max-w-xl text-[#7C8A9E]">
                 Compare how a regular payment vs. a private receipt appears on
                 Solana Explorer. With PER privacy, the amount is hidden while
                 inside the TEE.
@@ -238,7 +238,7 @@ export default function DemoPage() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8"
+              className="overflow-hidden rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-8"
             >
               <PrivacyComparison
                 publicAmount="5,000,000 (5.00 USDC)"
@@ -252,10 +252,10 @@ export default function DemoPage() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mt-8 overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8"
+              className="mt-8 overflow-hidden rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-8"
             >
               <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                <h3 className="text-xl font-semibold text-white">
+                <h3 className="text-xl font-semibold text-[#0C1829]">
                   What you&apos;ll see on Solscan
                 </h3>
                 <div className="flex gap-2">
@@ -264,7 +264,7 @@ export default function DemoPage() {
                     className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                       !showPrivateExplorer
                         ? "bg-amber-100 text-amber-700 ring-2 ring-amber-500"
-                        : "bg-white/[0.04] text-white/40 hover:bg-white/[0.08]"
+                        : "bg-[#F3F2ED] text-[#7C8A9E] hover:bg-[#F3F2ED]"
                     }`}
                   >
                     <Eye className="h-4 w-4" />
@@ -274,8 +274,8 @@ export default function DemoPage() {
                     onClick={() => setShowPrivateExplorer(true)}
                     className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                       showPrivateExplorer
-                        ? "bg-[#3B82F6]/20 text-[#3B82F6] ring-2 ring-[#3B82F6]"
-                        : "bg-white/[0.04] text-white/40 hover:bg-white/[0.08]"
+                        ? "bg-[#1B6B4A]/15 text-[#1B6B4A] ring-2 ring-[#1B6B4A]"
+                        : "bg-[#F3F2ED] text-[#7C8A9E] hover:bg-[#F3F2ED]"
                     }`}
                   >
                     <Shield className="h-4 w-4" />
@@ -291,8 +291,8 @@ export default function DemoPage() {
               />
 
               {showPrivateExplorer && (
-                <div className="mt-6 rounded-xl bg-[#3B82F6]/10 p-4">
-                  <p className="text-sm text-[#3B82F6]">
+                <div className="mt-6 rounded-xl bg-[#1B6B4A]/10 p-4">
+                  <p className="text-sm text-[#1B6B4A]">
                     <strong>✓ Privacy protected:</strong> The actual amount is
                     hidden using MagicBlock&apos;s Private Ephemeral Rollups.
                     Only authorized parties can view the details after
@@ -320,17 +320,17 @@ export default function DemoPage() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8"
+              className="overflow-hidden rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-8"
             >
               <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#3B82F6]">
-                  <Zap className="h-8 w-8 text-white" />
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#1B6B4A]">
+                  <Zap className="h-8 w-8 text-[#0C1829]" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="mb-2 text-2xl font-semibold text-white">
+                  <h3 className="mb-2 text-2xl font-semibold text-[#0C1829]">
                     Powered by Kora Gasless
                   </h3>
-                  <p className="text-white/50">
+                  <p className="text-[#7C8A9E]">
                     Users pay only USDC — no SOL needed for transaction fees. We
                     cover the gas so checkout is seamless and friction-free for
                     every platform and user.
@@ -338,7 +338,7 @@ export default function DemoPage() {
                 </div>
                 <Link
                   href="/docs?tab=quickstart"
-                  className="group inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-[#050507] transition-all hover:bg-white/90"
+                  className="group inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-[#0C1829] transition-all hover:bg-[#F3F2ED]"
                 >
                   Learn More
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -358,24 +358,24 @@ export default function DemoPage() {
             viewport={{ once: true }}
             className="relative mx-auto max-w-3xl text-center"
           >
-            <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">
+            <h2 className="mb-6 text-3xl font-bold text-[#0C1829] md:text-4xl">
               Ready to integrate?
             </h2>
-            <p className="mb-8 text-white/50">
+            <p className="mb-8 text-[#7C8A9E]">
               Add payouts and checkout to your platform in minutes. One SDK, no
               card network gatekeeping.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/onboarding"
-                className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-[#050507] transition-all hover:bg-white/90"
+                className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-[#0C1829] transition-all hover:bg-[#F3F2ED]"
               >
                 Get Started
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 href="/docs"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-8 py-4 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] bg-[#F3F2ED] px-8 py-4 font-semibold text-[#0C1829] backdrop-blur-sm transition-all hover:bg-[#F3F2ED]"
               >
                 View Documentation
               </Link>

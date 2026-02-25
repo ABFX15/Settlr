@@ -201,13 +201,13 @@ export default function RecipientDashboard() {
   // ---------------------------------------------------------------------------
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white flex items-start justify-center pt-12 px-4 pb-20">
+    <main className="min-h-screen bg-[#FDFBF7] text-[#0C1829] flex items-start justify-center pt-12 px-4 pb-20">
       <div className="w-full max-w-2xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-              <span className="text-blue-400 font-bold text-sm">S</span>
+            <div className="w-8 h-8 rounded-lg bg-[#1B6B4A]/15 flex items-center justify-center">
+              <span className="text-[#1B6B4A] font-bold text-sm">S</span>
             </div>
             <h1 className="text-xl font-semibold">Settlr</h1>
           </div>
@@ -242,12 +242,12 @@ export default function RecipientDashboard() {
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && requestMagicLink()}
                   placeholder="you@example.com"
-                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50"
+                  className="flex-1 bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg px-4 py-3 text-[#0C1829] placeholder:text-gray-500 focus:outline-none focus:border-[#1B6B4A]/50"
                 />
                 <button
                   onClick={requestMagicLink}
                   disabled={!email.includes("@")}
-                  className="bg-blue-500 hover:bg-blue-600 disabled:opacity-40 text-white font-medium px-6 py-3 rounded-lg transition"
+                  className="bg-[#1B6B4A] hover:bg-[#1B6B4A] disabled:opacity-40 text-white font-medium px-6 py-3 rounded-lg transition"
                 >
                   Sign in
                 </button>
@@ -264,13 +264,13 @@ export default function RecipientDashboard() {
               exit={{ opacity: 0, y: -20 }}
               className="text-center"
             >
-              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 bg-[#1B6B4A]/15 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl">✉️</span>
               </div>
               <h2 className="text-2xl font-bold mb-2">Check your email</h2>
               <p className="text-gray-400 mb-4">
                 We sent a sign-in link to{" "}
-                <strong className="text-white">{email}</strong>
+                <strong className="text-[#0C1829]">{email}</strong>
               </p>
               <p className="text-gray-500 text-sm">
                 The link expires in 15 minutes. Check your spam folder if you
@@ -278,7 +278,7 @@ export default function RecipientDashboard() {
               </p>
               <button
                 onClick={() => setStep("email")}
-                className="mt-6 text-sm text-blue-400 hover:text-blue-300 transition"
+                className="mt-6 text-sm text-[#1B6B4A] hover:text-blue-300 transition"
               >
                 ← Use a different email
               </button>
@@ -315,7 +315,7 @@ export default function RecipientDashboard() {
               <p className="text-gray-400 mb-6">{errorMessage}</p>
               <button
                 onClick={() => setStep("email")}
-                className="text-blue-400 hover:text-blue-300 transition text-sm"
+                className="text-[#1B6B4A] hover:text-blue-300 transition text-sm"
               >
                 ← Try again
               </button>
@@ -333,7 +333,7 @@ export default function RecipientDashboard() {
             >
               {/* Stats row */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-4">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
                     Total received
                   </p>
@@ -341,13 +341,13 @@ export default function RecipientDashboard() {
                     ${profile.totalReceived.toFixed(2)}
                   </p>
                 </div>
-                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-4">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
                     Payouts
                   </p>
                   <p className="text-2xl font-bold">{profile.totalPayouts}</p>
                 </div>
-                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-4">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
                     Balance
                   </p>
@@ -359,7 +359,7 @@ export default function RecipientDashboard() {
 
               {/* Balance card + withdraw */}
               {balance && balance.amount > 0 && (
-                <div className="bg-gradient-to-r from-blue-500/10 to-emerald-500/10 border border-blue-500/20 rounded-xl p-5">
+                <div className="bg-gradient-to-r from-blue-500/10 to-emerald-500/10 border border-[#1B6B4A]/20 rounded-xl p-5">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-400 text-sm">Available balance</p>
@@ -382,7 +382,7 @@ export default function RecipientDashboard() {
               )}
 
               {/* Settings card */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4">
+              <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-5 space-y-4">
                 <h3 className="font-semibold text-lg">Settings</h3>
 
                 {/* Wallet */}
@@ -396,14 +396,14 @@ export default function RecipientDashboard() {
                         value={newWallet}
                         onChange={(e) => setNewWallet(e.target.value)}
                         placeholder="Solana wallet address"
-                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50"
+                        className="flex-1 bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg px-3 py-2 text-sm text-[#0C1829] placeholder:text-gray-600 focus:outline-none focus:border-[#1B6B4A]/50"
                       />
                       <button
                         onClick={() =>
                           updatePreferences({ walletAddress: newWallet })
                         }
                         disabled={saving || newWallet.length < 32}
-                        className="bg-blue-500 hover:bg-blue-600 disabled:opacity-40 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+                        className="bg-[#1B6B4A] hover:bg-[#1B6B4A] disabled:opacity-40 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
                       >
                         {saving ? "…" : "Save"}
                       </button>
@@ -416,7 +416,7 @@ export default function RecipientDashboard() {
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <code className="text-sm text-gray-300 bg-white/5 px-3 py-1.5 rounded-lg">
+                      <code className="text-sm text-gray-300 bg-[#F3F2ED] px-3 py-1.5 rounded-lg">
                         {profile.walletAddress
                           ? `${profile.walletAddress.slice(
                               0,
@@ -429,7 +429,7 @@ export default function RecipientDashboard() {
                           setNewWallet(profile.walletAddress || "");
                           setEditingWallet(true);
                         }}
-                        className="text-blue-400 hover:text-blue-300 text-sm transition"
+                        className="text-[#1B6B4A] hover:text-blue-300 text-sm transition"
                       >
                         Edit
                       </button>
@@ -450,7 +450,7 @@ export default function RecipientDashboard() {
                       updatePreferences({ autoWithdraw: !profile.autoWithdraw })
                     }
                     className={`w-11 h-6 rounded-full transition ${
-                      profile.autoWithdraw ? "bg-blue-500" : "bg-white/10"
+                      profile.autoWithdraw ? "bg-[#1B6B4A]" : "bg-white/10"
                     } relative`}
                   >
                     <span
@@ -476,7 +476,7 @@ export default function RecipientDashboard() {
                     }
                     className={`w-11 h-6 rounded-full transition ${
                       profile.notificationsEnabled
-                        ? "bg-blue-500"
+                        ? "bg-[#1B6B4A]"
                         : "bg-white/10"
                     } relative`}
                   >
@@ -490,7 +490,7 @@ export default function RecipientDashboard() {
               </div>
 
               {/* Payout history */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+              <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-5">
                 <h3 className="font-semibold text-lg mb-4">Payout History</h3>
                 {payouts.length === 0 ? (
                   <p className="text-gray-500 text-sm text-center py-6">
@@ -501,7 +501,7 @@ export default function RecipientDashboard() {
                     {payouts.map((p) => (
                       <div
                         key={p.id}
-                        className="flex items-center justify-between py-2 border-b border-white/5 last:border-0"
+                        className="flex items-center justify-between py-2 border-b border-[#E2DFD5] last:border-0"
                       >
                         <div>
                           <p className="font-medium">
@@ -525,7 +525,7 @@ export default function RecipientDashboard() {
                           <span
                             className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
                               p.status === "claimed"
-                                ? "bg-emerald-500/20 text-emerald-400"
+                                ? "bg-emerald-500/20 text-[#1B6B4A]"
                                 : p.status === "sent"
                                 ? "bg-amber-500/20 text-amber-400"
                                 : p.status === "expired"
@@ -541,7 +541,7 @@ export default function RecipientDashboard() {
                                 href={`https://explorer.solana.com/tx/${p.txSignature}?cluster=devnet`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block text-xs text-blue-400 hover:text-blue-300 mt-1"
+                                className="block text-xs text-[#1B6B4A] hover:text-blue-300 mt-1"
                               >
                                 View tx ↗
                               </a>
@@ -558,7 +558,7 @@ export default function RecipientDashboard() {
                 Powered by{" "}
                 <a
                   href="https://settlr.dev"
-                  className="text-blue-400 hover:text-blue-300 transition"
+                  className="text-[#1B6B4A] hover:text-blue-300 transition"
                 >
                   Settlr
                 </a>{" "}

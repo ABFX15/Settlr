@@ -42,7 +42,7 @@ function OfframpContent() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-start p-4 md:p-8 pt-24 md:pt-28 bg-[#050507]">
+    <main className="min-h-screen flex flex-col items-center justify-start p-4 md:p-8 pt-24 md:pt-28 bg-[#FDFBF7]">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

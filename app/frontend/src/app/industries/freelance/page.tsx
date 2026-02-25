@@ -43,7 +43,7 @@ function Reveal({
 export default function FreelancePage() {
   return (
     <main
-      className="relative min-h-screen bg-[#050507] text-white antialiased"
+      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <Navbar />
@@ -68,7 +68,7 @@ export default function FreelancePage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
               Your freelancers are global. Wire transfers cost $25 each. PayPal
               takes 5%. Stripe Connect only works in 47 countries. Settlr pays
               contractors by email — 1% flat, instant settlement, 180+
@@ -80,14 +80,14 @@ export default function FreelancePage() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#fbbf24] px-7 py-3.5 text-[15px] font-semibold text-[#050507] shadow-lg shadow-[#fbbf24]/25 transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#fbbf24] px-7 py-3.5 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#fbbf24]/25 transition-transform hover:scale-[1.02]"
               >
                 Start integrating
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/demo/store"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-7 py-3.5 text-[15px] font-medium text-white/70 hover:bg-white/[0.06]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 See live demo
               </Link>
@@ -97,7 +97,7 @@ export default function FreelancePage() {
       </section>
 
       {/* The Problem */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
             <p className="text-sm font-medium uppercase tracking-widest text-red-400">
@@ -136,10 +136,10 @@ export default function FreelancePage() {
               <Reveal key={item.title} delay={i * 0.08}>
                 <div className="rounded-xl border border-red-500/10 bg-red-500/[0.03] p-5">
                   <item.icon className="mb-3 h-5 w-5 text-red-400" />
-                  <h3 className="text-sm font-semibold text-white">
+                  <h3 className="text-sm font-semibold text-[#0C1829]">
                     {item.title}
                   </h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-white/40">
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#7C8A9E]">
                     {item.text}
                   </p>
                 </div>
@@ -196,14 +196,14 @@ export default function FreelancePage() {
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.06}>
-              <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+              <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
                 <div className="mb-4 inline-flex rounded-xl bg-[#fbbf24]/10 p-2.5">
                   <item.icon className="h-5 w-5 text-[#fbbf24]" />
                 </div>
-                <h3 className="text-[15px] font-semibold text-white">
+                <h3 className="text-[15px] font-semibold text-[#0C1829]">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/40">
+                <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
                   {item.text}
                 </p>
               </div>
@@ -213,13 +213,13 @@ export default function FreelancePage() {
       </section>
 
       {/* Relevant companies */}
-      <section className="border-y border-white/[0.04]">
+      <section className="border-y border-[#E2DFD5]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
               Built for platforms like yours
             </h2>
-            <p className="mt-4 text-center text-white/40">
+            <p className="mt-4 text-center text-[#7C8A9E]">
               Any marketplace paying international contractors can integrate in
               under 30 minutes.
             </p>
@@ -238,9 +238,9 @@ export default function FreelancePage() {
               "Your marketplace",
             ].map((name, i) => (
               <Reveal key={name} delay={i * 0.04}>
-                <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+                <div className="flex items-center gap-3 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4">
                   <Check className="h-4 w-4 flex-shrink-0 text-[#fbbf24]" />
-                  <span className="text-sm text-white/70">{name}</span>
+                  <span className="text-sm text-[#3B4963]">{name}</span>
                 </div>
               </Reveal>
             ))}
@@ -260,7 +260,7 @@ export default function FreelancePage() {
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-white/45">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
               1% flat fee. Instant settlement. 180+ countries. No bank details
               needed. Go live today.
             </p>
@@ -269,14 +269,14 @@ export default function FreelancePage() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#fbbf24] px-8 py-4 text-[15px] font-semibold text-[#050507] shadow-lg shadow-[#fbbf24]/25 hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#fbbf24] px-8 py-4 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#fbbf24]/25 hover:scale-[1.02]"
               >
                 Start integrating
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 hover:bg-white/[0.04]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Back to overview
               </Link>

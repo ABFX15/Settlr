@@ -97,15 +97,15 @@ export function DashboardSidebar() {
   const sidebarContent = (
     <>
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between border-b border-white/[0.06] px-4">
+      <div className="flex h-16 items-center justify-between border-b border-[#E2DFD5] px-4">
         {!collapsed && (
           <Link href="/" className="flex items-center gap-2">
-            <SettlrLogoWithIcon size="sm" variant="light" />
+            <SettlrLogoWithIcon size="sm" variant="dark" />
           </Link>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hidden rounded-lg p-2 text-white/40 transition-colors hover:bg-white/5 hover:text-white lg:block"
+          className="hidden rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829] lg:block"
         >
           {collapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -115,7 +115,7 @@ export function DashboardSidebar() {
         </button>
         <button
           onClick={() => setMobileOpen(false)}
-          className="rounded-lg p-2 text-white/40 transition-colors hover:bg-white/5 hover:text-white lg:hidden"
+          className="rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829] lg:hidden"
         >
           <X className="h-4 w-4" />
         </button>
@@ -126,7 +126,7 @@ export function DashboardSidebar() {
         {navSections.map((section) => (
           <div key={section.label} className="mb-5">
             {!collapsed && (
-              <div className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-white/25">
+              <div className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-[#7C8A9E]/70">
                 {section.label}
               </div>
             )}
@@ -143,18 +143,18 @@ export function DashboardSidebar() {
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                       active
-                        ? "bg-[#a78bfa]/15 text-[#a78bfa]"
-                        : "text-white/50 hover:bg-white/[0.04] hover:text-white"
+                        ? "bg-[#1B6B4A]/15 text-[#1B6B4A]"
+                        : "text-[#7C8A9E] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
                     } ${collapsed ? "justify-center" : ""}`}
                   >
                     <item.icon
                       className={`h-[18px] w-[18px] flex-shrink-0 ${
-                        active ? "text-[#a78bfa]" : ""
+                        active ? "text-[#1B6B4A]" : ""
                       }`}
                     />
                     {!collapsed && <span>{item.label}</span>}
                     {active && !collapsed && (
-                      <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[#a78bfa]" />
+                      <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[#1B6B4A]" />
                     )}
                   </Link>
                 );
@@ -165,25 +165,25 @@ export function DashboardSidebar() {
       </nav>
 
       {/* Wallet + Logout */}
-      <div className="border-t border-white/[0.06] p-3">
+      <div className="border-t border-[#E2DFD5] p-3">
         {authenticated && connected && publicKey ? (
           <div className="space-y-2">
             {!collapsed && (
-              <div className="flex items-center gap-2 rounded-xl bg-white/[0.04] px-3 py-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#a78bfa]/20">
-                  <Wallet className="h-3.5 w-3.5 text-[#a78bfa]" />
+              <div className="flex items-center gap-2 rounded-xl bg-[#F3F2ED] px-3 py-2.5">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1B6B4A]/15">
+                  <Wallet className="h-3.5 w-3.5 text-[#1B6B4A]" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-medium text-white/70">
+                  <p className="truncate text-xs font-medium text-[#3B4963]">
                     {publicKey.slice(0, 4)}...{publicKey.slice(-4)}
                   </p>
                 </div>
                 <button
                   onClick={copyWallet}
-                  className="text-white/30 transition-colors hover:text-white/70"
+                  className="text-[#7C8A9E] transition-colors hover:text-[#3B4963]"
                 >
                   {copied ? (
-                    <Check className="h-3.5 w-3.5 text-green-400" />
+                    <Check className="h-3.5 w-3.5 text-[#1B6B4A]" />
                   ) : (
                     <Copy className="h-3.5 w-3.5" />
                   )}
@@ -192,7 +192,7 @@ export function DashboardSidebar() {
             )}
             <button
               onClick={logout}
-              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/40 transition-colors hover:bg-red-500/10 hover:text-red-400 ${
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#7C8A9E] transition-colors hover:bg-red-500/10 hover:text-red-400 ${
                 collapsed ? "justify-center" : ""
               }`}
             >
@@ -203,7 +203,7 @@ export function DashboardSidebar() {
         ) : (
           <button
             onClick={login}
-            className={`flex w-full items-center gap-3 rounded-xl bg-[#a78bfa] px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a78bfa]/80 ${
+            className={`flex w-full items-center gap-3 rounded-xl bg-[#1B6B4A] px-3 py-2.5 text-sm font-semibold text-[#0C1829] transition-colors hover:bg-[#2A9D6A]/80 ${
               collapsed ? "justify-center" : ""
             }`}
           >
@@ -218,17 +218,17 @@ export function DashboardSidebar() {
   return (
     <>
       {/* Mobile menu trigger — placed top-left on mobile */}
-      <div className="fixed left-0 right-0 top-0 z-40 flex h-14 items-center justify-between border-b border-white/[0.06] bg-[#050507]/95 px-4 backdrop-blur-xl lg:hidden">
+      <div className="fixed left-0 right-0 top-0 z-40 flex h-14 items-center justify-between border-b border-[#E2DFD5] bg-[#FDFBF7]/95 px-4 backdrop-blur-xl lg:hidden">
         <button
           onClick={() => setMobileOpen(true)}
-          className="rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5"
+          className="rounded-lg p-2 text-[#3B4963] transition-colors hover:bg-[#F3F2ED]"
         >
           <Menu className="h-5 w-5" />
         </button>
-        <SettlrLogoWithIcon size="sm" variant="light" />
+        <SettlrLogoWithIcon size="sm" variant="dark" />
         <Link
           href="/create"
-          className="flex items-center gap-1.5 rounded-lg bg-[#a78bfa] px-3 py-1.5 text-xs font-semibold text-white"
+          className="flex items-center gap-1.5 rounded-lg bg-[#1B6B4A] px-3 py-1.5 text-xs font-semibold text-[#0C1829]"
         >
           <Plus className="h-3.5 w-3.5" />
           New
@@ -238,11 +238,11 @@ export function DashboardSidebar() {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-50 bg-[#FDFBF7]/60 backdrop-blur-sm lg:hidden"
           onClick={() => setMobileOpen(false)}
         >
           <div
-            className="absolute left-0 top-0 h-full w-64 border-r border-white/[0.06] bg-[#0a0a12] flex flex-col"
+            className="absolute left-0 top-0 h-full w-64 border-r border-[#E2DFD5] bg-[#0a0a12] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {sidebarContent}
@@ -252,7 +252,7 @@ export function DashboardSidebar() {
 
       {/* Desktop sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-30 hidden h-full flex-col border-r border-white/[0.06] bg-[#0a0a12] transition-all duration-300 lg:flex ${
+        className={`fixed left-0 top-0 z-30 hidden h-full flex-col border-r border-[#E2DFD5] bg-[#0a0a12] transition-all duration-300 lg:flex ${
           collapsed ? "w-[72px]" : "w-[240px]"
         }`}
       >
@@ -273,16 +273,16 @@ export function DashboardTopBar() {
   const { publicKey } = useActiveWallet();
 
   return (
-    <div className="hidden h-14 items-center justify-between border-b border-white/[0.06] px-8 lg:flex">
+    <div className="hidden h-14 items-center justify-between border-b border-[#E2DFD5] px-8 lg:flex">
       <div />
       <div className="flex items-center gap-3">
-        <button className="relative rounded-lg p-2 text-white/40 transition-colors hover:bg-white/5 hover:text-white">
+        <button className="relative rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829]">
           <Bell className="h-4 w-4" />
-          <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#a78bfa]" />
+          <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#1B6B4A]" />
         </button>
         <Link
           href="/create"
-          className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#050507] shadow-lg shadow-white/5 transition-all hover:shadow-white/10"
+          className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#0C1829] shadow-lg shadow-white/5 transition-all hover:shadow-[#0C1829]/5"
         >
           <Plus className="h-4 w-4" />
           New Payment

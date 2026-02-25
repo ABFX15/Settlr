@@ -43,7 +43,7 @@ function Reveal({
 export default function CreatorsPage() {
   return (
     <main
-      className="relative min-h-screen bg-[#050507] text-white antialiased"
+      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <Navbar />
@@ -68,7 +68,7 @@ export default function CreatorsPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
               Stripe Connect doesn&apos;t support half the countries your
               creators are in. PayPal has been pulled from others. Settlr lets
               you pay every creator by email — 1% flat, instant, no geographic
@@ -80,14 +80,14 @@ export default function CreatorsPage() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#34d399] px-7 py-3.5 text-[15px] font-semibold text-[#050507] shadow-lg shadow-[#34d399]/25 transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#34d399] px-7 py-3.5 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#34d399]/25 transition-transform hover:scale-[1.02]"
               >
                 Start integrating
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/demo/store"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-7 py-3.5 text-[15px] font-medium text-white/70 hover:bg-white/[0.06]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 See live demo
               </Link>
@@ -97,7 +97,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* The Problem */}
-      <section className="border-y border-white/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
             <p className="text-sm font-medium uppercase tracking-widest text-red-400">
@@ -136,10 +136,10 @@ export default function CreatorsPage() {
               <Reveal key={item.title} delay={i * 0.08}>
                 <div className="rounded-xl border border-red-500/10 bg-red-500/[0.03] p-5">
                   <item.icon className="mb-3 h-5 w-5 text-red-400" />
-                  <h3 className="text-sm font-semibold text-white">
+                  <h3 className="text-sm font-semibold text-[#0C1829]">
                     {item.title}
                   </h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-white/40">
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#7C8A9E]">
                     {item.text}
                   </p>
                 </div>
@@ -160,7 +160,7 @@ export default function CreatorsPage() {
           <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
             Collect from fans. Pay creators. One integration.
           </h2>
-          <p className="mt-4 max-w-2xl text-white/45 leading-relaxed">
+          <p className="mt-4 max-w-2xl text-[#7C8A9E] leading-relaxed">
             Creator platforms have two money flows — fans paying in, and
             creators getting paid out. Settlr handles both.
           </p>
@@ -177,48 +177,48 @@ export default function CreatorsPage() {
                 </div>
                 <div>
                   <p className="text-xs font-medium text-[#34d399]">Inbound</p>
-                  <h3 className="text-[15px] font-semibold text-white">
+                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
                     Checkout SDK
                   </h3>
                 </div>
               </div>
-              <p className="text-sm leading-relaxed text-white/40">
+              <p className="text-sm leading-relaxed text-[#7C8A9E]">
                 Embed a checkout component so fans can pay creators with USDC.
                 Email-based wallets, zero gas, no crypto knowledge needed from
                 buyers.
               </p>
-              <div className="mt-4 rounded-lg bg-[#08080d] border border-white/[0.06] p-4 font-mono text-xs leading-relaxed">
-                <span className="text-[#3B82F6]">{"<"}</span>
+              <div className="mt-4 rounded-lg bg-[#08080d] border border-[#E2DFD5] p-4 font-mono text-xs leading-relaxed">
+                <span className="text-[#1B6B4A]">{"<"}</span>
                 <span className="text-[#fbbf24]">SettlrCheckout</span>
-                <span className="text-white">{" amount={9.99}"}</span>
-                <span className="text-[#3B82F6]">{" />"}</span>
+                <span className="text-[#0C1829]">{" amount={9.99}"}</span>
+                <span className="text-[#1B6B4A]">{" />"}</span>
               </div>
             </div>
           </Reveal>
 
           {/* Outbound: Payouts */}
           <Reveal delay={0.12}>
-            <div className="rounded-2xl border border-[#3B82F6]/15 bg-[#3B82F6]/[0.03] p-6">
+            <div className="rounded-2xl border border-[#3B82F6]/15 bg-[#1B6B4A]/[0.03] p-6">
               <div className="mb-4 flex items-center gap-3">
-                <div className="inline-flex rounded-xl bg-[#3B82F6]/10 p-2.5">
-                  <DollarSign className="h-5 w-5 text-[#3B82F6]" />
+                <div className="inline-flex rounded-xl bg-[#1B6B4A]/10 p-2.5">
+                  <DollarSign className="h-5 w-5 text-[#1B6B4A]" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-[#3B82F6]">Outbound</p>
-                  <h3 className="text-[15px] font-semibold text-white">
+                  <p className="text-xs font-medium text-[#1B6B4A]">Outbound</p>
+                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
                     Payout API
                   </h3>
                 </div>
               </div>
-              <p className="text-sm leading-relaxed text-white/40">
+              <p className="text-sm leading-relaxed text-[#7C8A9E]">
                 Pay creators their earnings in 180+ countries with just their
                 email. 1% flat, instant, no bank details, no Stripe Connect
                 restrictions.
               </p>
-              <div className="mt-4 rounded-lg bg-[#08080d] border border-white/[0.06] p-4 font-mono text-xs leading-relaxed">
-                <span className="text-[#3B82F6]">await</span>{" "}
-                <span className="text-white">settlr.payouts.create</span>
-                <span className="text-white/40">{"({...})"}</span>
+              <div className="mt-4 rounded-lg bg-[#08080d] border border-[#E2DFD5] p-4 font-mono text-xs leading-relaxed">
+                <span className="text-[#1B6B4A]">await</span>{" "}
+                <span className="text-[#0C1829]">settlr.payouts.create</span>
+                <span className="text-[#7C8A9E]">{"({...})"}</span>
               </div>
             </div>
           </Reveal>
@@ -259,14 +259,14 @@ export default function CreatorsPage() {
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.06}>
-              <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+              <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
                 <div className="mb-4 inline-flex rounded-xl bg-[#34d399]/10 p-2.5">
                   <item.icon className="h-5 w-5 text-[#34d399]" />
                 </div>
-                <h3 className="text-[15px] font-semibold text-white">
+                <h3 className="text-[15px] font-semibold text-[#0C1829]">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/40">
+                <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
                   {item.text}
                 </p>
               </div>
@@ -276,13 +276,13 @@ export default function CreatorsPage() {
       </section>
 
       {/* Relevant companies */}
-      <section className="border-y border-white/[0.04]">
+      <section className="border-y border-[#E2DFD5]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
               Built for platforms like yours
             </h2>
-            <p className="mt-4 text-center text-white/40">
+            <p className="mt-4 text-center text-[#7C8A9E]">
               Any platform paying creators globally can integrate in under 30
               minutes.
             </p>
@@ -301,9 +301,9 @@ export default function CreatorsPage() {
               "Your platform",
             ].map((name, i) => (
               <Reveal key={name} delay={i * 0.04}>
-                <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+                <div className="flex items-center gap-3 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4">
                   <Check className="h-4 w-4 flex-shrink-0 text-[#34d399]" />
-                  <span className="text-sm text-white/70">{name}</span>
+                  <span className="text-sm text-[#3B4963]">{name}</span>
                 </div>
               </Reveal>
             ))}
@@ -323,7 +323,7 @@ export default function CreatorsPage() {
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-white/45">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
               1% flat fee. Instant settlement. 180+ countries. No content
               restrictions. Go live today.
             </p>
@@ -332,14 +332,14 @@ export default function CreatorsPage() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#34d399] px-8 py-4 text-[15px] font-semibold text-[#050507] shadow-lg shadow-[#34d399]/25 hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#34d399] px-8 py-4 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#34d399]/25 hover:scale-[1.02]"
               >
                 Start integrating
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 hover:bg-white/[0.04]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Back to overview
               </Link>

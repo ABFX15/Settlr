@@ -118,7 +118,7 @@ const integrations = [
 export default function IntegrationsPage() {
   return (
     <main
-      className="relative min-h-screen bg-[#050507] text-white antialiased"
+      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <script
@@ -187,11 +187,11 @@ export default function IntegrationsPage() {
 
       {/* Hero */}
       <section className="relative isolate pt-28 pb-20 md:pt-40 md:pb-28">
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-[#3B82F6]/[0.06] blur-[120px]" />
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-[#1B6B4A]/[0.06] blur-[120px]" />
 
         <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
           <Reveal>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/[0.1] px-4 py-1.5 text-[13px] text-[#3B82F6] font-medium">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#1B6B4A]/[0.1] px-4 py-1.5 text-[13px] text-[#1B6B4A] font-medium">
               <Globe className="h-3.5 w-3.5" />
               Integrations
             </div>
@@ -200,12 +200,12 @@ export default function IntegrationsPage() {
           <Reveal delay={0.05}>
             <h1 className="mx-auto max-w-3xl text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.1] tracking-tight">
               Stablecoin payments,{" "}
-              <span className="text-[#3B82F6]">everywhere you work</span>
+              <span className="text-[#1B6B4A]">everywhere you work</span>
             </h1>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
               Connect Settlr to your existing stack. Send and receive USDC from
               the tools you already use — no custom code required for most
               integrations.
@@ -223,7 +223,7 @@ export default function IntegrationsPage() {
               <Reveal key={integration.slug} delay={i * 0.06}>
                 <Link
                   href={`/integrations/${integration.slug}`}
-                  className="group relative flex h-full flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 transition-all hover:border-white/[0.12] hover:bg-white/[0.04]"
+                  className="group relative flex h-full flex-col rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-8 transition-all hover:border-[#E2DFD5]/[0.12] hover:bg-[#F3F2ED]"
                 >
                   <div className="mb-6 flex items-center gap-4">
                     <div
@@ -237,7 +237,7 @@ export default function IntegrationsPage() {
                     </div>
                   </div>
 
-                  <h2 className="text-xl font-semibold text-white">
+                  <h2 className="text-xl font-semibold text-[#0C1829]">
                     {integration.name}
                   </h2>
                   <p
@@ -247,7 +247,7 @@ export default function IntegrationsPage() {
                     {integration.tagline}
                   </p>
 
-                  <p className="mt-4 text-sm leading-relaxed text-white/40 flex-1">
+                  <p className="mt-4 text-sm leading-relaxed text-[#7C8A9E] flex-1">
                     {integration.description}
                   </p>
 
@@ -255,7 +255,7 @@ export default function IntegrationsPage() {
                     {integration.highlights.map((h) => (
                       <li
                         key={h}
-                        className="flex items-start gap-2 text-xs text-white/50"
+                        className="flex items-start gap-2 text-xs text-[#7C8A9E]"
                       >
                         <Check
                           className="mt-0.5 h-3.5 w-3.5 flex-shrink-0"
@@ -267,7 +267,7 @@ export default function IntegrationsPage() {
                   </ul>
 
                   <div
-                    className="mt-6 inline-flex items-center gap-1 text-sm font-medium transition-colors group-hover:text-white"
+                    className="mt-6 inline-flex items-center gap-1 text-sm font-medium transition-colors group-hover:text-[#0C1829]"
                     style={{ color: integration.color }}
                   >
                     Learn more
@@ -281,7 +281,7 @@ export default function IntegrationsPage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-white/[0.04]">
+      <section className="border-t border-[#E2DFD5]/[0.04]">
         <div className="mx-auto max-w-3xl px-6 py-28 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
@@ -289,7 +289,7 @@ export default function IntegrationsPage() {
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-white/45">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
               Settlr&apos;s TypeScript SDK and REST API work with any stack.
               Build a custom integration in under 30 minutes.
             </p>
@@ -298,14 +298,14 @@ export default function IntegrationsPage() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                 href="/docs"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#3B82F6] px-8 py-4 text-[15px] font-semibold text-white shadow-lg shadow-[#3B82F6]/25 hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-8 py-4 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#3B82F6]/25 hover:scale-[1.02]"
               >
                 View the API docs
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-8 py-4 text-[15px] font-medium text-white/70 hover:bg-white/[0.04]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Get started
               </Link>

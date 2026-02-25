@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fredoka, Inter } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Fredoka,
+  Inter,
+  Fraunces,
+  JetBrains_Mono,
+} from "next/font/google";
 import Script from "next/script";
 import ClientLayout from "@/components/ClientLayout";
 import "./globals.css";
@@ -25,6 +32,18 @@ const fredoka = Fredoka({
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains",
   subsets: ["latin"],
   display: "swap",
 });
@@ -103,7 +122,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{ background: "#050507" }}>
+    <html lang="en" style={{ background: "#FDFBF7" }}>
       <head>
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -119,12 +138,9 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
-        <meta name="theme-color" content="#050507" />
+        <meta name="theme-color" content="#FDFBF7" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
-        />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
         {/* Google Ads Tag (gtag.js) */}
         <Script
@@ -141,8 +157,8 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} ${inter.variable} antialiased`}
-        style={{ background: "#050507" }}
+        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} antialiased`}
+        style={{ background: "#FDFBF7" }}
       >
         <ClientLayout>{children}</ClientLayout>
       </body>

@@ -205,18 +205,18 @@ export default function SubscriptionsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#a78bfa]/10 flex items-center justify-center border border-[#a78bfa]/20">
-              <RefreshCw className="w-10 h-10 text-[#a78bfa]" />
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#1B6B4A]/10 flex items-center justify-center border border-[#a78bfa]/20">
+              <RefreshCw className="w-10 h-10 text-[#1B6B4A]" />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-4">
+            <h1 className="text-3xl font-bold text-[#0C1829] mb-4">
               Subscription Plans
             </h1>
-            <p className="text-white/50 mb-8 max-w-md mx-auto">
+            <p className="text-[#7C8A9E] mb-8 max-w-md mx-auto">
               Connect your wallet to create and manage recurring payment plans.
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-8 py-4 rounded-xl font-semibold hover:bg-white/90 transition-all "
+              className="inline-flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#F3F2ED] transition-all "
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -235,15 +235,15 @@ export default function SubscriptionsPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/dashboard"
-              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+              className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-[#F3F2ED] transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-white/50" />
+              <ArrowLeft className="w-5 h-5 text-[#7C8A9E]" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-[#0C1829]">
                 Subscription Plans
               </h1>
-              <p className="text-white/50 text-sm">
+              <p className="text-[#7C8A9E] text-sm">
                 Create recurring payment plans for your customers
               </p>
             </div>
@@ -251,14 +251,14 @@ export default function SubscriptionsPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard/subscriptions/subscribers"
-              className="flex items-center gap-2 bg-white/5 border border-white/10 text-white px-4 py-2 rounded-xl font-medium hover:bg-white/10 transition-all text-sm"
+              className="flex items-center gap-2 bg-[#F3F2ED] border border-[#E2DFD5] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F2ED] transition-all text-sm"
             >
               <Users className="w-4 h-4" />
               View Subscribers
             </Link>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 bg-[#050507] text-[#050507] px-4 py-2 rounded-xl font-medium hover:bg-white/90 transition-all"
+              className="flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F2ED] transition-all"
             >
               <Plus className="w-4 h-4" />
               Create Plan
@@ -271,15 +271,15 @@ export default function SubscriptionsPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg bg-[#a78bfa]/10">
-                <RefreshCw className="w-5 h-5 text-[#a78bfa]" />
+              <div className="p-2 rounded-lg bg-[#1B6B4A]/10">
+                <RefreshCw className="w-5 h-5 text-[#1B6B4A]" />
               </div>
-              <span className="text-white/50 text-sm">Active Plans</span>
+              <span className="text-[#7C8A9E] text-sm">Active Plans</span>
             </div>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-2xl font-bold text-[#0C1829]">
               {plans.filter((p) => p.active).length}
             </p>
           </motion.div>
@@ -288,15 +288,15 @@ export default function SubscriptionsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-cyan-500/10">
                 <Users className="w-5 h-5 text-cyan-400" />
               </div>
-              <span className="text-white/50 text-sm">Total Subscribers</span>
+              <span className="text-[#7C8A9E] text-sm">Total Subscribers</span>
             </div>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-2xl font-bold text-[#0C1829]">
               {plans.reduce((sum, p) => sum + (p.subscriberCount || 0), 0)}
             </p>
           </motion.div>
@@ -305,42 +305,42 @@ export default function SubscriptionsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg bg-[#a78bfa]/10">
-                <DollarSign className="w-5 h-5 text-[#a78bfa]" />
+              <div className="p-2 rounded-lg bg-[#1B6B4A]/10">
+                <DollarSign className="w-5 h-5 text-[#1B6B4A]" />
               </div>
-              <span className="text-white/50 text-sm">Monthly Revenue</span>
+              <span className="text-[#7C8A9E] text-sm">Monthly Revenue</span>
             </div>
-            <p className="text-2xl font-bold text-white">$0.00</p>
+            <p className="text-2xl font-bold text-[#0C1829]">$0.00</p>
           </motion.div>
         </div>
 
         {/* Plans List */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-[#a78bfa]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#1B6B4A]" />
           </div>
         ) : plans.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center"
+            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-12 text-center"
           >
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white/[0.06] flex items-center justify-center">
-              <RefreshCw className="w-8 h-8 text-white/30" />
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#F3F2ED] flex items-center justify-center">
+              <RefreshCw className="w-8 h-8 text-[#7C8A9E]" />
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">
+            <h3 className="text-xl font-semibold text-[#0C1829] mb-2">
               No subscription plans yet
             </h3>
-            <p className="text-white/50 mb-6">
+            <p className="text-[#7C8A9E] mb-6">
               Create your first subscription plan to start accepting recurring
               payments.
             </p>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-2 bg-[#050507] text-[#050507] px-6 py-3 rounded-xl font-medium hover:bg-white/90 transition-colors"
+              className="inline-flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-6 py-3 rounded-xl font-medium hover:bg-[#F3F2ED] transition-colors"
             >
               <Plus className="w-4 h-4" />
               Create Your First Plan
@@ -356,24 +356,24 @@ export default function SubscriptionsPage() {
                 transition={{ delay: index * 0.1 }}
                 className={`bg-white/[0.02] border rounded-2xl p-6 ${
                   plan.active
-                    ? "border-white/[0.06]"
-                    : "border-white/[0.04] opacity-60"
+                    ? "border-[#E2DFD5]"
+                    : "border-[#E2DFD5]/[0.04] opacity-60"
                 }`}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-white">
+                    <h3 className="text-lg font-semibold text-[#0C1829]">
                       {plan.name}
                     </h3>
                     {plan.description && (
-                      <p className="text-sm text-white/50 mt-1">
+                      <p className="text-sm text-[#7C8A9E] mt-1">
                         {plan.description}
                       </p>
                     )}
                   </div>
                   <button
                     onClick={() => togglePlanActive(plan.id, plan.active)}
-                    className="text-white/50 hover:text-white transition-colors"
+                    className="text-[#7C8A9E] hover:text-[#0C1829] transition-colors"
                   >
                     {plan.active ? (
                       <ToggleRight className="w-6 h-6 text-cyan-400" />
@@ -384,10 +384,10 @@ export default function SubscriptionsPage() {
                 </div>
 
                 <div className="mb-4">
-                  <span className="text-3xl font-bold text-white">
+                  <span className="text-3xl font-bold text-[#0C1829]">
                     ${plan.amount}
                   </span>
-                  <span className="text-white/50 ml-1">
+                  <span className="text-[#7C8A9E] ml-1">
                     /{plan.intervalCount > 1 ? `${plan.intervalCount} ` : ""}
                     {INTERVAL_LABELS[plan.interval]}
                     {plan.intervalCount > 1 ? "s" : ""}
@@ -395,7 +395,7 @@ export default function SubscriptionsPage() {
                 </div>
 
                 {plan.trialDays && plan.trialDays > 0 && (
-                  <div className="flex items-center gap-2 text-sm text-[#a78bfa] mb-4">
+                  <div className="flex items-center gap-2 text-sm text-[#1B6B4A] mb-4">
                     <Clock className="w-4 h-4" />
                     {plan.trialDays} day free trial
                   </div>
@@ -406,21 +406,21 @@ export default function SubscriptionsPage() {
                     {plan.features.slice(0, 3).map((feature, i) => (
                       <li
                         key={i}
-                        className="flex items-center gap-2 text-sm text-white/70"
+                        className="flex items-center gap-2 text-sm text-[#3B4963]"
                       >
-                        <Star className="w-3 h-3 text-[#a78bfa]" />
+                        <Star className="w-3 h-3 text-[#1B6B4A]" />
                         {feature}
                       </li>
                     ))}
                     {plan.features.length > 3 && (
-                      <li className="text-xs text-white/30">
+                      <li className="text-xs text-[#7C8A9E]">
                         +{plan.features.length - 3} more features
                       </li>
                     )}
                   </ul>
                 )}
 
-                <div className="flex items-center gap-2 text-xs text-white/30 mb-4">
+                <div className="flex items-center gap-2 text-xs text-[#7C8A9E] mb-4">
                   <Users className="w-3 h-3" />
                   {plan.subscriberCount || 0} subscribers
                 </div>
@@ -430,7 +430,7 @@ export default function SubscriptionsPage() {
                     onClick={() =>
                       copyToClipboard(getCheckoutLink(plan), plan.id)
                     }
-                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white/[0.06] hover:bg-white/[0.08] rounded-lg text-sm text-white/70 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#F3F2ED] hover:bg-[#F3F2ED] rounded-lg text-sm text-[#3B4963] transition-colors"
                   >
                     {copied === plan.id ? (
                       <>
@@ -446,10 +446,10 @@ export default function SubscriptionsPage() {
                   </button>
                   <button
                     onClick={() => deletePlan(plan.id)}
-                    className="p-2 rounded-lg bg-white/[0.06] hover:bg-red-500/20 transition-colors"
+                    className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-red-500/20 transition-colors"
                     title="Delete plan"
                   >
-                    <Trash2 className="w-4 h-4 text-white/50 hover:text-red-400" />
+                    <Trash2 className="w-4 h-4 text-[#7C8A9E] hover:text-red-400" />
                   </button>
                 </div>
               </motion.div>
@@ -459,20 +459,20 @@ export default function SubscriptionsPage() {
 
         {/* Create Modal */}
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-[#FDFBF7]/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+              className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
             >
-              <h2 className="text-xl font-semibold text-white mb-6">
+              <h2 className="text-xl font-semibold text-[#0C1829] mb-6">
                 Create Subscription Plan
               </h2>
 
               <div className="space-y-5">
                 {/* Name */}
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">
+                  <label className="block text-sm font-medium text-[#7C8A9E] mb-2">
                     Plan Name
                   </label>
                   <input
@@ -482,13 +482,13 @@ export default function SubscriptionsPage() {
                       setNewPlan({ ...newPlan, name: e.target.value })
                     }
                     placeholder="e.g., Pro Monthly"
-                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                    className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                   />
                 </div>
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">
+                  <label className="block text-sm font-medium text-[#7C8A9E] mb-2">
                     Description (optional)
                   </label>
                   <textarea
@@ -498,14 +498,14 @@ export default function SubscriptionsPage() {
                     }
                     placeholder="Describe what's included..."
                     rows={2}
-                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa] resize-none"
+                    className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa] resize-none"
                   />
                 </div>
 
                 {/* Price & Interval */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">
+                    <label className="block text-sm font-medium text-[#7C8A9E] mb-2">
                       Price (USDC)
                     </label>
                     <input
@@ -516,11 +516,11 @@ export default function SubscriptionsPage() {
                         setNewPlan({ ...newPlan, amount: e.target.value })
                       }
                       placeholder="9.99"
-                      className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                      className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">
+                    <label className="block text-sm font-medium text-[#7C8A9E] mb-2">
                       Billing Interval
                     </label>
                     <select
@@ -531,7 +531,7 @@ export default function SubscriptionsPage() {
                           interval: e.target.value as typeof newPlan.interval,
                         })
                       }
-                      className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                      className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                     >
                       <option value="daily">Daily</option>
                       <option value="weekly">Weekly</option>
@@ -543,7 +543,7 @@ export default function SubscriptionsPage() {
 
                 {/* Trial Days */}
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">
+                  <label className="block text-sm font-medium text-[#7C8A9E] mb-2">
                     Free Trial (days)
                   </label>
                   <input
@@ -556,13 +556,13 @@ export default function SubscriptionsPage() {
                       })
                     }
                     placeholder="0"
-                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                    className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                   />
                 </div>
 
                 {/* Features */}
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">
+                  <label className="block text-sm font-medium text-[#7C8A9E] mb-2">
                     Features
                   </label>
                   <div className="space-y-2">
@@ -573,12 +573,12 @@ export default function SubscriptionsPage() {
                           value={feature}
                           onChange={(e) => updateFeature(index, e.target.value)}
                           placeholder="e.g., Unlimited access"
-                          className="flex-1 bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                          className="flex-1 bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-2 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                         />
                         {newPlan.features.length > 1 && (
                           <button
                             onClick={() => removeFeature(index)}
-                            className="p-2 text-white/50 hover:text-red-400"
+                            className="p-2 text-[#7C8A9E] hover:text-red-400"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -588,7 +588,7 @@ export default function SubscriptionsPage() {
                   </div>
                   <button
                     onClick={addFeature}
-                    className="mt-2 text-sm text-[#a78bfa] hover:text-[#c4b5fd]"
+                    className="mt-2 text-sm text-[#1B6B4A] hover:text-[#c4b5fd]"
                   >
                     + Add feature
                   </button>
@@ -598,14 +598,14 @@ export default function SubscriptionsPage() {
               <div className="flex gap-3 mt-8">
                 <button
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-3 rounded-xl bg-white/[0.06] text-white/70 hover:bg-white/[0.08] transition-colors"
+                  className="flex-1 px-4 py-3 rounded-xl bg-[#F3F2ED] text-[#3B4963] hover:bg-[#F3F2ED] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={createPlan}
                   disabled={creating || !newPlan.name || !newPlan.amount}
-                  className="flex-1 px-4 py-3 rounded-xl bg-[#050507] text-[#050507] font-medium hover:bg-white/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 rounded-xl bg-[#FDFBF7] text-[#0C1829] font-medium hover:bg-[#F3F2ED] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {creating ? (
                     <>

@@ -77,25 +77,25 @@ export default function MerchantPage() {
 
   if (!connected) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-[#050507]">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-[#FDFBF7]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 text-center max-w-md"
+          className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8 text-center max-w-md"
         >
           <div className="w-16 h-16 rounded-full bg-[#a855f7]/10 flex items-center justify-center mx-auto mb-6">
-            <Wallet className="w-8 h-8 text-[#a855f7]" />
+            <Wallet className="w-8 h-8 text-[#1B6B4A]" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <h2 className="text-2xl font-bold text-[#0C1829] mb-4">
             Become a Merchant
           </h2>
-          <p className="text-white/50 mb-6">
+          <p className="text-[#7C8A9E] mb-6">
             Sign in to get your non-custodial merchant wallet. Funds go directly
             to you — no middlemen.
           </p>
           <button
             onClick={login}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#050507] text-white font-semibold rounded-xl"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#FDFBF7] text-[#0C1829] font-semibold rounded-xl"
           >
             <LogIn className="w-4 h-4" />
             Sign In
@@ -108,47 +108,47 @@ export default function MerchantPage() {
   return (
     <>
       {/* Fixed Header */}
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#050507]/80 px-4 py-4 backdrop-blur-xl md:px-8">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#E2DFD5] bg-[#FDFBF7]/80 px-4 py-4 backdrop-blur-xl md:px-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <SettlrLogoWithIcon size="sm" variant="light" />
+            <SettlrLogoWithIcon size="sm" variant="dark" />
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             <Link
               href="/"
-              className="text-sm text-white/50 transition-colors hover:text-white"
+              className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
             >
               Home
             </Link>
             <Link
               href="/dashboard"
-              className="text-sm text-white/50 transition-colors hover:text-white"
+              className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
             >
               Dashboard
             </Link>
             <Link
               href="/create"
-              className="text-sm text-white/50 transition-colors hover:text-white"
+              className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
             >
               Payment Links
             </Link>
             <Link
               href="/docs"
-              className="text-sm text-white/50 transition-colors hover:text-white"
+              className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
             >
               Docs
             </Link>
           </nav>
           <Link
             href="/dashboard"
-            className="rounded-lg border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-white/20"
+            className="rounded-lg border border-[#E2DFD5] bg-white/10 px-4 py-2 text-sm font-medium text-[#0C1829] transition-all hover:bg-white/20"
           >
             Dashboard
           </Link>
         </div>
       </header>
 
-      <div className="min-h-screen py-12 px-4 pt-32 bg-[#050507]">
+      <div className="min-h-screen py-12 px-4 pt-32 bg-[#FDFBF7]">
         <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -156,12 +156,12 @@ export default function MerchantPage() {
             className="text-center mb-12"
           >
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#a855f7] to-[#22d3ee] flex items-center justify-center mx-auto mb-6">
-              <Store className="w-8 h-8 text-white" />
+              <Store className="w-8 h-8 text-[#0C1829]" />
             </div>
-            <h1 className="text-4xl font-bold text-white mb-4">
+            <h1 className="text-4xl font-bold text-[#0C1829] mb-4">
               Merchant Setup
             </h1>
-            <p className="text-white/50 text-lg max-w-xl mx-auto">
+            <p className="text-[#7C8A9E] text-lg max-w-xl mx-auto">
               Non-custodial payments. Instant settlement. Full control of your
               funds.
             </p>
@@ -172,27 +172,27 @@ export default function MerchantPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 mb-6"
+            className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-6 mb-6"
           >
-            <h2 className="text-lg font-semibold text-white mb-4">
+            <h2 className="text-lg font-semibold text-[#0C1829] mb-4">
               Your Merchant Wallet
             </h2>
-            <div className="flex items-center gap-3 bg-white/[0.06] rounded-xl p-4">
+            <div className="flex items-center gap-3 bg-[#F3F2ED] rounded-xl p-4">
               <code className="text-[#22d3ee] font-mono text-sm flex-1 break-all">
                 {publicKey}
               </code>
               <button
                 onClick={() => copyToClipboard(publicKey!, "wallet")}
-                className="p-2 hover:bg-white/[0.08] rounded-lg transition-colors"
+                className="p-2 hover:bg-[#F3F2ED] rounded-lg transition-colors"
               >
                 {copied === "wallet" ? (
                   <Check className="w-5 h-5 text-cyan-400" />
                 ) : (
-                  <Copy className="w-5 h-5 text-white/50" />
+                  <Copy className="w-5 h-5 text-[#7C8A9E]" />
                 )}
               </button>
             </div>
-            <p className="text-white/30 text-sm mt-3">
+            <p className="text-[#7C8A9E] text-sm mt-3">
               Use this wallet address in your payment links to receive USDC.
             </p>
           </motion.div>
@@ -202,14 +202,14 @@ export default function MerchantPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6 mb-6"
+            className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-6 mb-6"
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-white">Your Balance</h2>
+              <h2 className="text-lg font-semibold text-[#0C1829]">Your Balance</h2>
               <button
                 onClick={fetchBalance}
                 disabled={loadingBalance}
-                className="text-sm text-white/50 hover:text-white transition-colors"
+                className="text-sm text-[#7C8A9E] hover:text-[#0C1829] transition-colors"
               >
                 {loadingBalance ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -220,10 +220,10 @@ export default function MerchantPage() {
             </div>
 
             <div className="flex items-end gap-2 mb-4">
-              <span className="text-4xl font-bold text-white">
+              <span className="text-4xl font-bold text-[#0C1829]">
                 {balance !== null ? balance.toFixed(2) : "—"}
               </span>
-              <span className="text-xl text-white/50 mb-1">USDC</span>
+              <span className="text-xl text-[#7C8A9E] mb-1">USDC</span>
             </div>
 
             <Link href={`/offramp?wallet=${publicKey}&amount=${balance || ""}`}>
@@ -233,7 +233,7 @@ export default function MerchantPage() {
               </button>
             </Link>
 
-            <p className="text-white/30 text-xs mt-3 text-center">
+            <p className="text-[#7C8A9E] text-xs mt-3 text-center">
               Sign in to your Sphere account to convert USDC → fiat
             </p>
           </motion.div>
@@ -246,15 +246,15 @@ export default function MerchantPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white/[0.03] border border-white/[0.06] hover:border-amber-500/50 rounded-2xl p-6 cursor-pointer transition-all"
+                className="bg-[#F3F2ED] border border-[#E2DFD5] hover:border-amber-500/50 rounded-2xl p-6 cursor-pointer transition-all"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
                     <Key className="w-6 h-6 text-amber-400" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold">Get API Key</h3>
-                    <p className="text-white/50 text-sm">For SDK integration</p>
+                    <h3 className="text-[#0C1829] font-semibold">Get API Key</h3>
+                    <p className="text-[#7C8A9E] text-sm">For SDK integration</p>
                   </div>
                 </div>
               </motion.div>
@@ -266,17 +266,17 @@ export default function MerchantPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white/[0.03] border border-white/[0.06] hover:border-[#a855f7]/50 rounded-2xl p-6 cursor-pointer transition-all"
+                className="bg-[#F3F2ED] border border-[#E2DFD5] hover:border-[#a855f7]/50 rounded-2xl p-6 cursor-pointer transition-all"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-[#a855f7]/20 flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-[#a855f7]" />
+                    <Zap className="w-6 h-6 text-[#1B6B4A]" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold">
+                    <h3 className="text-[#0C1829] font-semibold">
                       Create Payment Link
                     </h3>
-                    <p className="text-white/50 text-sm">
+                    <p className="text-[#7C8A9E] text-sm">
                       Generate a payment QR code
                     </p>
                   </div>
@@ -290,17 +290,17 @@ export default function MerchantPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white/[0.03] border border-white/[0.06] hover:border-[#22d3ee]/50 rounded-2xl p-6 cursor-pointer transition-all"
+                className="bg-[#F3F2ED] border border-[#E2DFD5] hover:border-[#22d3ee]/50 rounded-2xl p-6 cursor-pointer transition-all"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-[#22d3ee]/20 flex items-center justify-center">
                     <Code className="w-6 h-6 text-[#22d3ee]" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold">
+                    <h3 className="text-[#0C1829] font-semibold">
                       Integration Docs
                     </h3>
-                    <p className="text-white/50 text-sm">
+                    <p className="text-[#7C8A9E] text-sm">
                       Add checkout to your app
                     </p>
                   </div>
@@ -314,9 +314,9 @@ export default function MerchantPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-6"
+            className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-6"
           >
-            <h2 className="text-lg font-semibold text-white mb-6">
+            <h2 className="text-lg font-semibold text-[#0C1829] mb-6">
               Why Settlr
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -324,8 +324,8 @@ export default function MerchantPage() {
                 <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mx-auto mb-3">
                   <Shield className="w-6 h-6 text-cyan-400" />
                 </div>
-                <h3 className="text-white font-medium mb-1">Non-Custodial</h3>
-                <p className="text-white/30 text-sm">
+                <h3 className="text-[#0C1829] font-medium mb-1">Non-Custodial</h3>
+                <p className="text-[#7C8A9E] text-sm">
                   Funds settle directly to your wallet
                 </p>
               </div>
@@ -333,21 +333,21 @@ export default function MerchantPage() {
                 <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center mx-auto mb-3">
                   <Zap className="w-6 h-6 text-amber-400" />
                 </div>
-                <h3 className="text-white font-medium mb-1">
+                <h3 className="text-[#0C1829] font-medium mb-1">
                   Embedded Wallets
                 </h3>
-                <p className="text-white/30 text-sm">
+                <p className="text-[#7C8A9E] text-sm">
                   Customers pay with email, no extensions
                 </p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mx-auto mb-3">
-                  <Globe className="w-6 h-6 text-[#3B82F6]" />
+                <div className="w-12 h-12 rounded-xl bg-[#1B6B4A]/15 flex items-center justify-center mx-auto mb-3">
+                  <Globe className="w-6 h-6 text-[#1B6B4A]" />
                 </div>
-                <h3 className="text-white font-medium mb-1">
+                <h3 className="text-[#0C1829] font-medium mb-1">
                   Instant & Global
                 </h3>
-                <p className="text-white/30 text-sm">
+                <p className="text-[#7C8A9E] text-sm">
                   Accept from anywhere, settle instantly
                 </p>
               </div>
@@ -361,8 +361,8 @@ export default function MerchantPage() {
             transition={{ delay: 0.5 }}
             className="mt-6 text-center"
           >
-            <p className="text-white/30">
-              <span className="text-[#a855f7] font-semibold">
+            <p className="text-[#7C8A9E]">
+              <span className="text-[#1B6B4A] font-semibold">
                 Competitive volume-based pricing
               </span>{" "}
               · No monthly fees · No payment holds

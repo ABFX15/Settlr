@@ -177,7 +177,7 @@ export default function DemoStorePage() {
           >
             <span className="text-xl">🛒</span>
             {itemCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-6 h-6 bg-[var(--accent-primary)] text-white text-xs font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-6 h-6 bg-[var(--accent-primary)] text-[#0C1829] text-xs font-bold rounded-full flex items-center justify-center">
                 {itemCount}
               </span>
             )}
@@ -224,7 +224,7 @@ export default function DemoStorePage() {
                 }`}
               >
                 {plan.badge && (
-                  <div className="absolute top-3 right-3 px-2 py-0.5 bg-[var(--accent-primary)] text-white text-xs font-bold rounded-full">
+                  <div className="absolute top-3 right-3 px-2 py-0.5 bg-[var(--accent-primary)] text-[#0C1829] text-xs font-bold rounded-full">
                     {plan.badge}
                   </div>
                 )}
@@ -268,8 +268,8 @@ export default function DemoStorePage() {
                       isSelected
                         ? "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-red-500/20 hover:text-red-400"
                         : plan.popular
-                        ? "bg-[var(--accent-primary)] text-white hover:opacity-90"
-                        : "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[var(--accent-primary)] hover:text-white"
+                        ? "bg-[var(--accent-primary)] text-[#0C1829] hover:opacity-90"
+                        : "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[var(--accent-primary)] hover:text-[#0C1829]"
                     }`}
                   >
                     {isSelected ? "✓ Selected" : "Select Plan"}
@@ -321,7 +321,7 @@ export default function DemoStorePage() {
                   className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
                     isSelected
                       ? "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-red-500/20 hover:text-red-400"
-                      : "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[var(--accent-primary)] hover:text-white"
+                      : "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[var(--accent-primary)] hover:text-[#0C1829]"
                   }`}
                 >
                   {isSelected ? "✓ Added" : "Add"}
@@ -356,7 +356,7 @@ export default function DemoStorePage() {
       {isCartOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#FDFBF7]/50 backdrop-blur-sm"
             onClick={() => setIsCartOpen(false)}
           />
           <div className="relative w-full max-w-md bg-[var(--card-bg)] h-full overflow-auto animate-slide-in-right">
@@ -437,7 +437,7 @@ export default function DemoStorePage() {
 
                   <button
                     onClick={handleCheckout}
-                    className="w-full py-4 bg-[var(--accent-primary)] text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+                    className="w-full py-4 bg-[var(--accent-primary)] text-[#0C1829] rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
                   >
                     Pay with USDC
                   </button>

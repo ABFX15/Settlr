@@ -224,7 +224,7 @@ export default function CannabisPage() {
   const scale = useTransform(scrollYProgress, [0, 0.15], [1, 0.96]);
 
   return (
-    <main className="min-h-screen bg-[#050507]" ref={containerRef}>
+    <main className="min-h-screen bg-[#FDFBF7]" ref={containerRef}>
       {/* FAQ Schema for rich snippets */}
       <script
         type="application/ld+json"
@@ -271,7 +271,7 @@ export default function CannabisPage() {
         {/* Gradient background — earthy green */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(34,197,94,0.25),transparent)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#050507] to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FDFBF7] to-transparent" />
         </div>
 
         {/* Floating orbs */}
@@ -301,7 +301,7 @@ export default function CannabisPage() {
                 </span>
               </div>
 
-              <h1 className="mb-6 text-5xl font-bold leading-[1.1] tracking-tight text-white md:text-7xl">
+              <h1 className="mb-6 text-5xl font-bold leading-[1.1] tracking-tight text-[#0C1829] md:text-7xl">
                 Stop getting
                 <br />
                 <span className="relative">
@@ -339,7 +339,7 @@ export default function CannabisPage() {
                 </span>
               </h1>
 
-              <p className="mb-8 max-w-lg text-lg text-white/50">
+              <p className="mb-8 max-w-lg text-lg text-[#7C8A9E]">
                 Pay cultivators, processors, and distributors instantly in USDC.
                 No bank account required. No account to freeze. No cash vans.
                 Just fast, compliant B2B payments that actually work for
@@ -349,21 +349,21 @@ export default function CannabisPage() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/waitlist"
-                  className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#22c55e] to-[#16a34a] px-6 py-3.5 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#22c55e]/25"
+                  className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#22c55e] to-[#16a34a] px-6 py-3.5 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#22c55e]/15"
                 >
                   Join the Waitlist
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
                   href="#how-it-works"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3.5 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] bg-[#F3F2ED] px-6 py-3.5 font-semibold text-[#0C1829] backdrop-blur-sm transition-all hover:bg-[#F3F2ED]"
                 >
                   See How It Works
                 </Link>
               </div>
 
               {/* Trust signals */}
-              <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-white/30">
+              <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-[#7C8A9E]">
                 <span className="flex items-center gap-1.5">
                   <BadgeCheck className="h-4 w-4 text-[#22c55e]/60" />
                   OFAC Compliant
@@ -394,23 +394,23 @@ export default function CannabisPage() {
                     className="rounded-2xl border border-[#22c55e]/20 bg-gradient-to-br from-[#22c55e]/10 to-transparent p-6 backdrop-blur-sm"
                   >
                     <Ban className="mb-3 h-8 w-8 text-[#22c55e]" />
-                    <div className="text-3xl font-bold text-white">Zero</div>
-                    <div className="text-sm text-white/50">Bank dependency</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">Zero</div>
+                    <div className="text-sm text-[#7C8A9E]">Bank dependency</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     className="rounded-2xl border border-[#16a34a]/20 bg-gradient-to-br from-[#16a34a]/10 to-transparent p-6 backdrop-blur-sm"
                   >
                     <DollarSign className="mb-3 h-8 w-8 text-[#16a34a]" />
-                    <div className="text-3xl font-bold text-white">1%</div>
-                    <div className="text-sm text-white/50">vs 5-8% typical</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">1%</div>
+                    <div className="text-sm text-[#7C8A9E]">vs 5-8% typical</div>
                   </motion.div>
                 </div>
 
                 {/* Large card */}
                 <motion.div
                   whileHover={{ scale: 1.01 }}
-                  className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-sm"
+                  className="relative overflow-hidden rounded-2xl border border-[#E2DFD5] bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-sm"
                 >
                   <div className="absolute right-0 top-0 h-32 w-32 bg-gradient-to-bl from-[#22c55e]/20 to-transparent" />
                   <div className="relative">
@@ -418,11 +418,11 @@ export default function CannabisPage() {
                       <div className="rounded-lg bg-[#22c55e]/20 p-2">
                         <Truck className="h-6 w-6 text-[#22c55e]" />
                       </div>
-                      <span className="text-lg font-semibold text-white">
+                      <span className="text-lg font-semibold text-[#0C1829]">
                         Eliminate Cash Transport
                       </span>
                     </div>
-                    <p className="text-white/50">
+                    <p className="text-[#7C8A9E]">
                       No more armored vans, counting rooms, or vault storage.
                       Digital payments that settle in seconds with a complete
                       compliance trail.
@@ -437,16 +437,16 @@ export default function CannabisPage() {
                     className="rounded-2xl border border-[#22c55e]/20 bg-gradient-to-br from-[#22c55e]/5 to-transparent p-6 backdrop-blur-sm"
                   >
                     <Zap className="mb-3 h-8 w-8 text-[#22c55e]" />
-                    <div className="text-3xl font-bold text-white">&lt;1s</div>
-                    <div className="text-sm text-white/50">Settlement</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">&lt;1s</div>
+                    <div className="text-sm text-[#7C8A9E]">Settlement</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-6 backdrop-blur-sm"
+                    className="rounded-2xl border border-[#E2DFD5] bg-gradient-to-br from-white/5 to-transparent p-6 backdrop-blur-sm"
                   >
-                    <Shield className="mb-3 h-8 w-8 text-white" />
-                    <div className="text-3xl font-bold text-white">24/7</div>
-                    <div className="text-sm text-white/50">Always on</div>
+                    <Shield className="mb-3 h-8 w-8 text-[#0C1829]" />
+                    <div className="text-3xl font-bold text-[#0C1829]">24/7</div>
+                    <div className="text-sm text-[#7C8A9E]">Always on</div>
                   </motion.div>
                 </div>
               </div>
@@ -489,11 +489,11 @@ export default function CannabisPage() {
             viewport={{ once: true }}
             className="mb-16 text-center"
           >
-            <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
+            <h2 className="mb-4 text-4xl font-bold text-[#0C1829] md:text-5xl">
               The cannabis & marijuana banking
               <span className="text-red-500"> crisis is real</span>
             </h2>
-            <p className="mx-auto max-w-2xl text-white/40">
+            <p className="mx-auto max-w-2xl text-[#7C8A9E]">
               Your business is legal. Your products are tested. Your licenses
               are up to date. Yet banks keep closing your accounts, and the
               processors who'll work with you charge extortionate fees.
@@ -516,10 +516,10 @@ export default function CannabisPage() {
                     <X className="h-8 w-8" />
                   </div>
                   <Icon className="mb-4 h-8 w-8 text-red-400" />
-                  <h3 className="mb-2 font-semibold text-white">
+                  <h3 className="mb-2 font-semibold text-[#0C1829]">
                     {point.problem}
                   </h3>
-                  <p className="text-sm text-white/40">{point.detail}</p>
+                  <p className="text-sm text-[#7C8A9E]">{point.detail}</p>
                 </motion.div>
               );
             })}
@@ -542,10 +542,10 @@ export default function CannabisPage() {
                 Simple Setup
               </span>
             </div>
-            <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
+            <h2 className="mb-4 text-4xl font-bold text-[#0C1829] md:text-5xl">
               How cannabis & marijuana B2B payments work
             </h2>
-            <p className="mx-auto max-w-2xl text-white/40">
+            <p className="mx-auto max-w-2xl text-[#7C8A9E]">
               No bank relationship needed. No merchant account application. No
               approval wait. Set up in minutes.
             </p>
@@ -586,7 +586,7 @@ export default function CannabisPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.15 }}
-                  className="relative rounded-2xl border border-white/10 bg-white/[0.02] p-6"
+                  className="relative rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6"
                 >
                   <div className="mb-4 text-5xl font-black text-[#22c55e]/20">
                     {item.step}
@@ -594,10 +594,10 @@ export default function CannabisPage() {
                   <div className="mb-3 inline-flex rounded-xl bg-[#22c55e]/10 p-3">
                     <Icon className="h-6 w-6 text-[#22c55e]" />
                   </div>
-                  <h3 className="mb-2 text-lg font-semibold text-white">
+                  <h3 className="mb-2 text-lg font-semibold text-[#0C1829]">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-white/40">{item.desc}</p>
+                  <p className="text-sm text-[#7C8A9E]">{item.desc}</p>
                 </motion.div>
               );
             })}
@@ -614,7 +614,7 @@ export default function CannabisPage() {
             viewport={{ once: true }}
             className="mb-10 text-center"
           >
-            <h2 className="mb-4 text-3xl font-bold text-white">
+            <h2 className="mb-4 text-3xl font-bold text-[#0C1829]">
               Built for every part of the supply chain
             </h2>
           </motion.div>
@@ -630,15 +630,15 @@ export default function CannabisPage() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.03 }}
-                  className="flex flex-col items-center gap-3 rounded-2xl border-2 border-[#22c55e]/20 bg-[#050507] p-6 text-center shadow-lg transition-all hover:border-[#22c55e] hover:shadow-xl"
+                  className="flex flex-col items-center gap-3 rounded-2xl border-2 border-[#22c55e]/20 bg-[#FDFBF7] p-6 text-center shadow-lg transition-all hover:border-[#22c55e] hover:shadow-xl"
                 >
                   <div className="rounded-xl bg-gradient-to-br from-[#22c55e] to-[#16a34a] p-3">
-                    <Icon className="h-6 w-6 text-white" />
+                    <Icon className="h-6 w-6 text-[#0C1829]" />
                   </div>
-                  <span className="font-semibold text-white">
+                  <span className="font-semibold text-[#0C1829]">
                     {useCase.name}
                   </span>
-                  <span className="text-xs text-white/40">
+                  <span className="text-xs text-[#7C8A9E]">
                     {useCase.detail}
                   </span>
                 </motion.div>
@@ -657,16 +657,16 @@ export default function CannabisPage() {
             viewport={{ once: true }}
             className="mb-16 text-center"
           >
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2">
-              <Check className="h-4 w-4 text-white" />
-              <span className="text-sm font-medium text-white">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5]/30 bg-white/10 px-4 py-2">
+              <Check className="h-4 w-4 text-[#0C1829]" />
+              <span className="text-sm font-medium text-[#0C1829]">
                 Why Settlr for Cannabis
               </span>
             </div>
-            <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
+            <h2 className="mb-4 text-4xl font-bold text-[#0C1829] md:text-5xl">
               Payments that can&apos;t be
               <br />
-              <span className="text-[#050507]">shut down.</span>
+              <span className="text-[#0C1829]">shut down.</span>
             </h2>
           </motion.div>
 
@@ -681,26 +681,26 @@ export default function CannabisPage() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -5, scale: 1.02 }}
-                  className="group relative rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-sm transition-all hover:bg-white/20"
+                  className="group relative rounded-2xl border border-[#E2DFD5] bg-white/10 p-8 backdrop-blur-sm transition-all hover:bg-white/20"
                 >
                   <div className="relative">
                     <div className="mb-4 inline-flex rounded-xl bg-white/20 p-3">
-                      <Icon className="h-6 w-6 text-white" />
+                      <Icon className="h-6 w-6 text-[#0C1829]" />
                     </div>
 
                     <div className="mb-4">
-                      <span className="text-3xl font-bold text-white">
+                      <span className="text-3xl font-bold text-[#0C1829]">
                         {feature.stat}
                       </span>
-                      <span className="ml-2 text-sm text-white/70">
+                      <span className="ml-2 text-sm text-[#3B4963]">
                         {feature.statLabel}
                       </span>
                     </div>
 
-                    <h3 className="mb-2 text-xl font-semibold text-white">
+                    <h3 className="mb-2 text-xl font-semibold text-[#0C1829]">
                       {feature.title}
                     </h3>
-                    <p className="text-white/80">{feature.description}</p>
+                    <p className="text-[#0C1829]">{feature.description}</p>
                   </div>
                 </motion.div>
               );
@@ -710,7 +710,7 @@ export default function CannabisPage() {
       </section>
 
       {/* ───── Comparison Table ───── */}
-      <section className="relative bg-[#050507] px-4 py-24">
+      <section className="relative bg-[#FDFBF7] px-4 py-24">
         <div className="mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -718,7 +718,7 @@ export default function CannabisPage() {
             viewport={{ once: true }}
             className="mb-12 text-center"
           >
-            <h2 className="mb-4 text-4xl font-bold text-white">
+            <h2 className="mb-4 text-4xl font-bold text-[#0C1829]">
               Traditional Cannabis Banking vs.{" "}
               <span className="text-[#22c55e]">Settlr</span>
             </h2>
@@ -728,10 +728,10 @@ export default function CannabisPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]"
+            className="overflow-hidden rounded-2xl border border-[#E2DFD5] bg-white/[0.02]"
           >
-            <div className="grid grid-cols-3 border-b border-white/10 bg-white/[0.02]">
-              <div className="p-4 text-sm font-medium text-white/50">
+            <div className="grid grid-cols-3 border-b border-[#E2DFD5] bg-white/[0.02]">
+              <div className="p-4 text-sm font-medium text-[#7C8A9E]">
                 Feature
               </div>
               <div className="p-4 text-center text-sm font-medium text-red-400">
@@ -747,12 +747,12 @@ export default function CannabisPage() {
                 key={row.feature}
                 className={`grid grid-cols-3 ${
                   index !== comparisonRows.length - 1
-                    ? "border-b border-white/5"
+                    ? "border-b border-[#E2DFD5]"
                     : ""
                 }`}
               >
-                <div className="p-4 text-sm text-white">{row.feature}</div>
-                <div className="p-4 text-center text-sm text-white/40">
+                <div className="p-4 text-sm text-[#0C1829]">{row.feature}</div>
+                <div className="p-4 text-center text-sm text-[#7C8A9E]">
                   {row.traditional}
                 </div>
                 <div className="p-4 text-center text-sm font-medium text-[#22c55e]">
@@ -773,10 +773,10 @@ export default function CannabisPage() {
             viewport={{ once: true }}
             className="mb-12 text-center"
           >
-            <h2 className="mb-4 text-4xl font-bold text-white">
+            <h2 className="mb-4 text-4xl font-bold text-[#0C1829]">
               Frequently Asked Questions
             </h2>
-            <p className="text-white/40">
+            <p className="text-[#7C8A9E]">
               We know the cannabis industry has unique concerns. Here are the
               questions we hear most.
             </p>
@@ -790,15 +790,15 @@ export default function CannabisPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.08 }}
-                className="group rounded-xl border border-white/10 bg-white/[0.02] [&_summary::-webkit-details-marker]:hidden"
+                className="group rounded-xl border border-[#E2DFD5] bg-white/[0.02] [&_summary::-webkit-details-marker]:hidden"
               >
-                <summary className="flex cursor-pointer items-center justify-between p-5 text-white font-medium hover:text-[#22c55e] transition-colors">
+                <summary className="flex cursor-pointer items-center justify-between p-5 text-[#0C1829] font-medium hover:text-[#22c55e] transition-colors">
                   <span>{item.q}</span>
-                  <span className="ml-4 shrink-0 text-white/30 transition-transform group-open:rotate-45">
+                  <span className="ml-4 shrink-0 text-[#7C8A9E] transition-transform group-open:rotate-45">
                     +
                   </span>
                 </summary>
-                <div className="px-5 pb-5 text-sm leading-relaxed text-white/50">
+                <div className="px-5 pb-5 text-sm leading-relaxed text-[#7C8A9E]">
                   {item.a}
                 </div>
               </motion.details>
@@ -824,7 +824,7 @@ export default function CannabisPage() {
             </span>
           </div>
 
-          <h2 className="mb-6 text-4xl font-bold text-white md:text-5xl">
+          <h2 className="mb-6 text-4xl font-bold text-[#0C1829] md:text-5xl">
             Your business is legal.
             <br />
             <span className="bg-gradient-to-r from-[#22c55e] to-[#16a34a] bg-clip-text text-transparent">
@@ -832,7 +832,7 @@ export default function CannabisPage() {
             </span>
           </h2>
 
-          <p className="mb-8 text-lg text-white/50">
+          <p className="mb-8 text-lg text-[#7C8A9E]">
             Join cannabis operators moving from cash and unreliable banks to
             instant, compliant USDC payments. Set up in minutes, not months.
           </p>
@@ -840,20 +840,20 @@ export default function CannabisPage() {
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/waitlist"
-              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#22c55e] to-[#16a34a] px-8 py-4 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#22c55e]/25"
+              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#22c55e] to-[#16a34a] px-8 py-4 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#22c55e]/15"
             >
               Join the Waitlist
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/docs"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-8 py-4 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] bg-[#F3F2ED] px-8 py-4 font-semibold text-[#0C1829] backdrop-blur-sm transition-all hover:bg-[#F3F2ED]"
             >
               Read the Docs
             </Link>
           </div>
 
-          <p className="mt-6 text-xs text-white/20">
+          <p className="mt-6 text-xs text-[#7C8A9E]/60">
             Non-custodial · OFAC compliant · Full audit trail · No bank account
             needed
           </p>
@@ -869,10 +869,10 @@ export default function CannabisPage() {
             viewport={{ once: true }}
             className="rounded-2xl border border-[#22c55e]/20 bg-[#22c55e]/5 p-8"
           >
-            <h3 className="mb-3 text-xl font-semibold text-white">
+            <h3 className="mb-3 text-xl font-semibold text-[#0C1829]">
               📖 Related: Your Cannabis Business Got Debanked — Now What?
             </h3>
-            <p className="mb-4 text-white/50">
+            <p className="mb-4 text-[#7C8A9E]">
               70% of US cannabis and marijuana businesses have lost banking
               access at least once. Read our deep-dive on why banks keep closing
               accounts, what it costs you, and how B2B stablecoin payments

@@ -77,14 +77,14 @@ export default function TransactionsPage() {
   if (!authenticated) {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center text-center">
-        <Wallet className="mx-auto mb-6 h-12 w-12 text-white/15" />
+        <Wallet className="mx-auto mb-6 h-12 w-12 text-[#7C8A9E]/50" />
         <h2 className="mb-2 text-xl font-bold">Connect Your Wallet</h2>
-        <p className="mb-6 text-sm text-white/50">
+        <p className="mb-6 text-sm text-[#7C8A9E]">
           Sign in to view your transaction history
         </p>
         <button
           onClick={login}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#a78bfa] px-6 py-3 text-sm font-semibold text-white"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-6 py-3 text-sm font-semibold text-[#0C1829]"
         >
           <LogIn className="h-4 w-4" />
           Connect Wallet
@@ -98,7 +98,7 @@ export default function TransactionsPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold md:text-3xl">Transactions</h1>
-        <p className="mt-1 text-sm text-white/50">
+        <p className="mt-1 text-sm text-[#7C8A9E]">
           View and manage your payment history
         </p>
       </div>
@@ -112,8 +112,8 @@ export default function TransactionsPage() {
               onClick={() => setFilter(f)}
               className={`rounded-lg px-4 py-2 text-xs font-medium transition-colors ${
                 filter === f
-                  ? "bg-[#a78bfa] text-white"
-                  : "bg-white/[0.04] text-white/50 hover:text-white"
+                  ? "bg-[#1B6B4A] text-[#0C1829]"
+                  : "bg-[#F3F2ED] text-[#7C8A9E] hover:text-[#0C1829]"
               }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -125,7 +125,7 @@ export default function TransactionsPage() {
           <a
             href={`/api/merchants/${publicKey}/export`}
             download
-            className="flex items-center gap-2 rounded-lg bg-white/[0.04] px-4 py-2 text-xs font-medium text-white/60 transition-colors hover:bg-white/[0.08] hover:text-white"
+            className="flex items-center gap-2 rounded-lg bg-[#F3F2ED] px-4 py-2 text-xs font-medium text-[#3B4963] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829]"
           >
             <Download className="h-3.5 w-3.5" />
             Export CSV
@@ -134,16 +134,16 @@ export default function TransactionsPage() {
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#0d0d14] overflow-hidden">
+      <div className="rounded-2xl border border-[#E2DFD5] bg-[#0d0d14] overflow-hidden">
         {loading ? (
           <div className="flex h-40 items-center justify-center">
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#a78bfa] border-t-transparent" />
           </div>
         ) : filteredPayments.length === 0 ? (
           <div className="flex h-40 flex-col items-center justify-center text-center">
-            <ArrowLeftRight className="mx-auto mb-3 h-8 w-8 text-white/15" />
-            <p className="text-sm text-white/50">No transactions yet</p>
-            <p className="text-xs text-white/30">
+            <ArrowLeftRight className="mx-auto mb-3 h-8 w-8 text-[#7C8A9E]/50" />
+            <p className="text-sm text-[#7C8A9E]">No transactions yet</p>
+            <p className="text-xs text-[#7C8A9E]">
               Your payment history will appear here
             </p>
           </div>
@@ -151,23 +151,23 @@ export default function TransactionsPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/[0.06]">
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/40">
+                <tr className="border-b border-[#E2DFD5]">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#7C8A9E]">
                     Date
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/40">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#7C8A9E]">
                     Description
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/40">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#7C8A9E]">
                     Customer
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-medium text-white/40">
+                  <th className="px-6 py-4 text-right text-xs font-medium text-[#7C8A9E]">
                     Amount
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/40">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#7C8A9E]">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/40">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#7C8A9E]">
                     TX
                   </th>
                 </tr>
@@ -179,37 +179,37 @@ export default function TransactionsPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.03 }}
-                    className="border-b border-white/[0.04] transition-colors hover:bg-white/[0.02]"
+                    className="border-b border-[#E2DFD5]/[0.04] transition-colors hover:bg-white/[0.02]"
                   >
                     <td className="px-6 py-4">
-                      <span className="text-sm text-white/70">
+                      <span className="text-sm text-[#3B4963]">
                         {new Date(payment.completedAt).toLocaleDateString()}
                       </span>
-                      <span className="block text-[10px] text-white/30">
+                      <span className="block text-[10px] text-[#7C8A9E]">
                         {new Date(payment.completedAt).toLocaleTimeString()}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-white">
+                        <span className="text-sm text-[#0C1829]">
                           {payment.description || "Payment"}
                         </span>
                         {payment.isPrivate && (
-                          <Shield className="h-3.5 w-3.5 text-[#a78bfa]" />
+                          <Shield className="h-3.5 w-3.5 text-[#1B6B4A]" />
                         )}
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-mono text-xs text-white/50">
+                      <span className="font-mono text-xs text-[#7C8A9E]">
                         {payment.customerWallet.slice(0, 4)}...
                         {payment.customerWallet.slice(-4)}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <span className="text-sm font-semibold text-green-400">
+                      <span className="text-sm font-semibold text-[#1B6B4A]">
                         +${payment.amount.toFixed(2)}
                       </span>
-                      <span className="block text-[10px] text-white/30">
+                      <span className="block text-[10px] text-[#7C8A9E]">
                         {payment.currency}
                       </span>
                     </td>
@@ -217,7 +217,7 @@ export default function TransactionsPage() {
                       <span
                         className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-medium ${
                           payment.status === "completed"
-                            ? "bg-green-500/15 text-green-400"
+                            ? "bg-[#1B6B4A]/15 text-[#1B6B4A]"
                             : "bg-yellow-500/15 text-yellow-400"
                         }`}
                       >
@@ -236,7 +236,7 @@ export default function TransactionsPage() {
                         href={`https://solscan.io/tx/${payment.txSignature}?cluster=devnet`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="rounded-lg p-1.5 text-white/30 transition-colors hover:bg-white/5 hover:text-[#a78bfa]"
+                        className="rounded-lg p-1.5 text-[#7C8A9E] transition-colors hover:bg-[#F3F2ED] hover:text-[#1B6B4A]"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
                       </a>

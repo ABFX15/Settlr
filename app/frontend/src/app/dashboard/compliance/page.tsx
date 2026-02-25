@@ -123,20 +123,20 @@ export default function ComplianceSettingsPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-md rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8 text-center"
+          className="max-w-md rounded-2xl border border-[#E2DFD5] bg-[#F3F2ED] p-8 text-center"
         >
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#a78bfa]/10">
-            <Shield className="h-8 w-8 text-[#a78bfa]" />
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#1B6B4A]/10">
+            <Shield className="h-8 w-8 text-[#1B6B4A]" />
           </div>
-          <h2 className="mb-4 text-2xl font-bold text-white">
+          <h2 className="mb-4 text-2xl font-bold text-[#0C1829]">
             Compliance Settings
           </h2>
-          <p className="mb-6 text-white/50">
+          <p className="mb-6 text-[#7C8A9E]">
             Sign in to manage KYC/AML settings for your merchant account.
           </p>
           <button
             onClick={login}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#050507] px-6 py-3 font-semibold text-white"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#FDFBF7] px-6 py-3 font-semibold text-[#0C1829]"
           >
             <LogIn className="h-4 w-4" />
             Sign In
@@ -149,7 +149,7 @@ export default function ComplianceSettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-[#a78bfa]" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1B6B4A]" />
       </div>
     );
   }
@@ -160,7 +160,7 @@ export default function ComplianceSettingsPage() {
         {/* Back Link */}
         <Link
           href="/dashboard"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/50 hover:text-white"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-[#7C8A9E] hover:text-[#0C1829]"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Dashboard
@@ -173,14 +173,14 @@ export default function ComplianceSettingsPage() {
           className="mb-8"
         >
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#a78bfa]/10">
-              <Shield className="h-6 w-6 text-[#a78bfa]" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#1B6B4A]/10">
+              <Shield className="h-6 w-6 text-[#1B6B4A]" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-[#0C1829]">
                 Compliance Settings
               </h1>
-              <p className="text-sm text-white/50">
+              <p className="text-sm text-[#7C8A9E]">
                 Configure KYC verification for your customers
               </p>
             </div>
@@ -194,10 +194,10 @@ export default function ComplianceSettingsPage() {
           transition={{ delay: 0.1 }}
           className="mb-6 flex items-start gap-3 rounded-xl border border-[#38bdf8]/20 bg-[#38bdf8]/5 p-4"
         >
-          <Info className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#38bdf8]" />
-          <div className="text-sm text-[#38bdf8]">
+          <Info className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#1B6B4A]" />
+          <div className="text-sm text-[#1B6B4A]">
             <p className="font-medium">Why enable KYC?</p>
-            <p className="mt-1 text-[#38bdf8]/80">
+            <p className="mt-1 text-[#1B6B4A]/80">
               KYC (Know Your Customer) verification is required for licensed
               iGaming operators and helps prevent fraud. Customers complete a
               quick ID verification before their first payment.
@@ -210,15 +210,15 @@ export default function ComplianceSettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-6"
+          className="rounded-2xl border border-[#E2DFD5] bg-[#F3F2ED] p-6"
         >
           {/* KYC Toggle */}
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-white">
+              <h3 className="font-semibold text-[#0C1829]">
                 Enable Customer Verification
               </h3>
-              <p className="text-sm text-white/50">
+              <p className="text-sm text-[#7C8A9E]">
                 Require customers to verify identity before payment
               </p>
             </div>
@@ -227,11 +227,11 @@ export default function ComplianceSettingsPage() {
                 setSettings((s) => ({ ...s, kycEnabled: !s.kycEnabled }))
               }
               className={`relative h-7 w-12 rounded-full transition-colors ${
-                settings.kycEnabled ? "bg-[#a78bfa]" : "bg-white/[0.08]"
+                settings.kycEnabled ? "bg-[#1B6B4A]" : "bg-[#F3F2ED]"
               }`}
             >
               <div
-                className={`absolute top-1 h-5 w-5 rounded-full bg-[#050507] transition-transform ${
+                className={`absolute top-1 h-5 w-5 rounded-full bg-[#FDFBF7] transition-transform ${
                   settings.kycEnabled ? "translate-x-6" : "translate-x-1"
                 }`}
               />
@@ -243,9 +243,9 @@ export default function ComplianceSettingsPage() {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              className="border-t border-white/[0.06] pt-6"
+              className="border-t border-[#E2DFD5] pt-6"
             >
-              <h3 className="mb-4 font-semibold text-white">
+              <h3 className="mb-4 font-semibold text-[#0C1829]">
                 Verification Level
               </h3>
               <div className="space-y-3">
@@ -254,8 +254,8 @@ export default function ComplianceSettingsPage() {
                     key={level.id}
                     className={`flex cursor-pointer items-start gap-4 rounded-xl border p-4 transition-colors ${
                       settings.kycLevel === level.id
-                        ? "border-[#a78bfa] bg-[#a78bfa]/10"
-                        : "border-white/[0.06] hover:border-white/[0.08]"
+                        ? "border-[#a78bfa] bg-[#1B6B4A]/10"
+                        : "border-[#E2DFD5] hover:border-[#E2DFD5]"
                     }`}
                   >
                     <input
@@ -273,16 +273,16 @@ export default function ComplianceSettingsPage() {
                     />
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-white">
+                        <span className="font-medium text-[#0C1829]">
                           {level.name}
                         </span>
                         {level.recommended && (
-                          <span className="rounded bg-green-500/20 px-2 py-0.5 text-xs text-green-400">
+                          <span className="rounded bg-[#1B6B4A]/15 px-2 py-0.5 text-xs text-[#1B6B4A]">
                             Recommended for iGaming
                           </span>
                         )}
                       </div>
-                      <p className="mt-1 text-sm text-white/50">
+                      <p className="mt-1 text-sm text-[#7C8A9E]">
                         {level.description}
                       </p>
                     </div>
@@ -303,7 +303,7 @@ export default function ComplianceSettingsPage() {
           {/* Save Button */}
           <div className="mt-6 flex items-center justify-end gap-4">
             {saved && (
-              <span className="flex items-center gap-2 text-sm text-green-400">
+              <span className="flex items-center gap-2 text-sm text-[#1B6B4A]">
                 <CheckCircle2 className="h-4 w-4" />
                 Settings saved
               </span>
@@ -311,7 +311,7 @@ export default function ComplianceSettingsPage() {
             <button
               onClick={saveSettings}
               disabled={saving}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#050507] px-6 py-3 font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#FDFBF7] px-6 py-3 font-semibold text-[#0C1829] transition-all hover:opacity-90 disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -328,10 +328,10 @@ export default function ComplianceSettingsPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mt-4 text-center text-sm text-white/30"
+          className="mt-4 text-center text-sm text-[#7C8A9E]"
         >
           KYC verification is billed per successful verification.{" "}
-          <Link href="/waitlist" className="text-[#a78bfa] hover:underline">
+          <Link href="/waitlist" className="text-[#1B6B4A] hover:underline">
             Contact us for pricing
           </Link>
         </motion.p>

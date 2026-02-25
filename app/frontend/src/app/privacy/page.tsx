@@ -305,15 +305,15 @@ export default function PrivacyPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#050507]">
+      <main className="min-h-screen bg-[#FDFBF7]">
         {/* Hero */}
         <section className="relative overflow-hidden px-4 pb-12 pt-32">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(139,92,246,0.15),transparent)]" />
-            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#050507] to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FDFBF7] to-transparent" />
           </div>
           <div className="absolute right-[15%] top-[25%] h-64 w-64 rounded-full bg-purple-500/[0.07] blur-[100px]" />
-          <div className="absolute left-[10%] top-[35%] h-48 w-48 rounded-full bg-blue-500/[0.05] blur-[100px]" />
+          <div className="absolute left-[10%] top-[35%] h-48 w-48 rounded-full bg-[#1B6B4A]/[0.05] blur-[100px]" />
 
           <div className="relative mx-auto max-w-4xl text-center">
             <motion.div
@@ -321,7 +321,7 @@ export default function PrivacyPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-6 inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/[0.08] px-4 py-2"
             >
-              <Shield className="h-4 w-4 text-purple-400" />
+              <Shield className="h-4 w-4 text-[#1B6B4A]" />
               <span className="text-sm font-medium text-purple-300">
                 MagicBlock Private Ephemeral Rollups
               </span>
@@ -331,7 +331,7 @@ export default function PrivacyPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl"
+              className="mb-4 text-4xl font-bold tracking-tight text-[#0C1829] sm:text-5xl"
             >
               Private Payments{" "}
               <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
@@ -343,7 +343,7 @@ export default function PrivacyPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mx-auto mb-8 max-w-2xl text-lg text-white/50"
+              className="mx-auto mb-8 max-w-2xl text-lg text-[#7C8A9E]"
             >
               Payment data hidden inside Intel TDX hardware enclaves. Only
               permissioned parties see state. Sub-10ms latency, gasless
@@ -364,9 +364,9 @@ export default function PrivacyPage() {
               ].map(({ icon: Icon, label }) => (
                 <div
                   key={label}
-                  className="flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-sm text-white/50"
+                  className="flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-3 py-1.5 text-sm text-[#7C8A9E]"
                 >
-                  <Icon className="h-3.5 w-3.5 text-purple-400" />
+                  <Icon className="h-3.5 w-3.5 text-[#1B6B4A]" />
                   {label}
                 </div>
               ))}
@@ -392,20 +392,20 @@ export default function PrivacyPage() {
                   transition={{ delay: 0.1 * i }}
                   className={`relative rounded-xl border p-4 transition-all ${
                     isCompleted
-                      ? "border-purple-500/30 bg-purple-500/[0.08]"
+                      ? "border-[#1B6B4A]/30 bg-purple-500/[0.08]"
                       : isCurrent
-                      ? "border-blue-500/30 bg-blue-500/[0.06]"
-                      : "border-white/[0.06] bg-white/[0.02]"
+                      ? "border-[#1B6B4A]/30 bg-[#1B6B4A]/[0.06]"
+                      : "border-[#E2DFD5] bg-white/[0.02]"
                   }`}
                 >
                   <div className="mb-2 flex items-center gap-2">
                     <div
                       className={`flex h-7 w-7 items-center justify-center rounded-full ${
                         isCompleted
-                          ? "bg-purple-500/20 text-purple-400"
+                          ? "bg-purple-500/20 text-[#1B6B4A]"
                           : isCurrent
-                          ? "bg-blue-500/20 text-blue-400"
-                          : "bg-white/[0.06] text-white/30"
+                          ? "bg-[#1B6B4A]/15 text-[#1B6B4A]"
+                          : "bg-[#F3F2ED] text-[#7C8A9E]"
                       }`}
                     >
                       {isCompleted ? (
@@ -420,7 +420,7 @@ export default function PrivacyPage() {
                           ? "text-purple-300"
                           : isCurrent
                           ? "text-blue-300"
-                          : "text-white/30"
+                          : "text-[#7C8A9E]"
                       }`}
                     >
                       Step {i + 1}
@@ -428,12 +428,12 @@ export default function PrivacyPage() {
                   </div>
                   <h3
                     className={`text-sm font-semibold ${
-                      isActive || isCurrent ? "text-white" : "text-white/40"
+                      isActive || isCurrent ? "text-[#0C1829]" : "text-[#7C8A9E]"
                     }`}
                   >
                     {step.label}
                   </h3>
-                  <p className="mt-1 text-xs text-white/30">
+                  <p className="mt-1 text-xs text-[#7C8A9E]">
                     {step.description}
                   </p>
                 </motion.div>
@@ -447,14 +447,14 @@ export default function PrivacyPage() {
           <div className="grid gap-6 lg:grid-cols-5">
             {/* Control Panel */}
             <div className="lg:col-span-2">
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
-                <h2 className="mb-4 text-lg font-semibold text-white">
+              <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+                <h2 className="mb-4 text-lg font-semibold text-[#0C1829]">
                   Payment Details
                 </h2>
 
                 {/* Amount */}
                 <div className="mb-4">
-                  <label className="mb-1.5 block text-xs text-white/40">
+                  <label className="mb-1.5 block text-xs text-[#7C8A9E]">
                     Amount (USDC)
                   </label>
                   <input
@@ -472,14 +472,14 @@ export default function PrivacyPage() {
                       }))
                     }
                     disabled={session.status !== "idle"}
-                    className="w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
+                    className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-3 py-2 text-sm text-[#0C1829] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
                     placeholder="25.00"
                   />
                 </div>
 
                 {/* Memo */}
                 <div className="mb-4">
-                  <label className="mb-1.5 block text-xs text-white/40">
+                  <label className="mb-1.5 block text-xs text-[#7C8A9E]">
                     Memo
                   </label>
                   <input
@@ -489,28 +489,28 @@ export default function PrivacyPage() {
                       setSession((s) => ({ ...s, memo: e.target.value }))
                     }
                     disabled={session.status !== "idle"}
-                    className="w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
+                    className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-3 py-2 text-sm text-[#0C1829] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
                     placeholder="Payment memo"
                   />
                 </div>
 
                 {/* Fee display */}
-                <div className="mb-6 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+                <div className="mb-6 rounded-lg border border-[#E2DFD5] bg-white/[0.02] p-3">
                   <div className="flex justify-between text-xs">
-                    <span className="text-white/40">Amount</span>
-                    <span className="text-white/60">
+                    <span className="text-[#7C8A9E]">Amount</span>
+                    <span className="text-[#3B4963]">
                       {(session.amount / 1e6).toFixed(2)} USDC
                     </span>
                   </div>
                   <div className="mt-1 flex justify-between text-xs">
-                    <span className="text-white/40">Platform fee (1%)</span>
-                    <span className="text-white/60">
+                    <span className="text-[#7C8A9E]">Platform fee (1%)</span>
+                    <span className="text-[#3B4963]">
                       {(session.feeAmount / 1e6).toFixed(2)} USDC
                     </span>
                   </div>
-                  <div className="mt-2 border-t border-white/[0.06] pt-2">
+                  <div className="mt-2 border-t border-[#E2DFD5] pt-2">
                     <div className="flex justify-between text-xs font-medium">
-                      <span className="text-white/50">Merchant receives</span>
+                      <span className="text-[#7C8A9E]">Merchant receives</span>
                       <span className="text-purple-300">
                         {((session.amount - session.feeAmount) / 1e6).toFixed(
                           2,
@@ -530,7 +530,7 @@ export default function PrivacyPage() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       onClick={handleReset}
-                      className="w-full rounded-lg border border-white/[0.1] bg-white/[0.06] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-white/[0.1]"
+                      className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-3 text-sm font-medium text-[#0C1829] transition-colors hover:bg-white/[0.1]"
                     >
                       Reset Demo
                     </motion.button>
@@ -569,7 +569,7 @@ export default function PrivacyPage() {
                         : "bg-blue-400"
                     }`}
                   />
-                  <span className="text-xs text-white/40">
+                  <span className="text-xs text-[#7C8A9E]">
                     {session.status === "idle" && "Ready"}
                     {session.status === "pending" &&
                       "Session created — awaiting delegation"}
@@ -586,15 +586,15 @@ export default function PrivacyPage() {
             {/* Privacy Visualization + Log */}
             <div className="space-y-6 lg:col-span-3">
               {/* Privacy state visualization */}
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
-                <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-                  <Eye className="h-5 w-5 text-purple-400" />
+              <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+                <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[#0C1829]">
+                  <Eye className="h-5 w-5 text-[#1B6B4A]" />
                   Base-Layer Observer View
                 </h2>
 
-                <div className="rounded-lg border border-white/[0.06] bg-black/40 p-4 font-mono text-xs">
+                <div className="rounded-lg border border-[#E2DFD5] bg-[#FDFBF7]/40 p-4 font-mono text-xs">
                   {session.status === "idle" && (
-                    <div className="text-white/30">
+                    <div className="text-[#7C8A9E]">
                       <p>// No active session</p>
                       <p>// Click &quot;Create Session&quot; to begin</p>
                     </div>
@@ -602,29 +602,29 @@ export default function PrivacyPage() {
 
                   {session.status === "pending" && (
                     <div className="space-y-1">
-                      <p className="text-blue-400">
+                      <p className="text-[#1B6B4A]">
                         // Session created on base layer
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         payment_id:{" "}
-                        <span className="text-green-400">
+                        <span className="text-[#1B6B4A]">
                           &quot;{session.paymentId}&quot;
                         </span>
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         amount:{" "}
                         <span className="text-yellow-400">
                           {(session.amount / 1e6).toFixed(2)} USDC
                         </span>
-                        <span className="text-white/30">
+                        <span className="text-[#7C8A9E]">
                           {" "}
                           // visible on-chain
                         </span>
                       </p>
-                      <p className="text-white/60">
-                        status: <span className="text-blue-400">Pending</span>
+                      <p className="text-[#3B4963]">
+                        status: <span className="text-[#1B6B4A]">Pending</span>
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         delegated: <span className="text-red-400">false</span>
                       </p>
                     </div>
@@ -633,53 +633,53 @@ export default function PrivacyPage() {
                   {(session.status === "active" ||
                     session.status === "processed") && (
                     <div className="space-y-1">
-                      <p className="text-purple-400">
+                      <p className="text-[#1B6B4A]">
                         // ⚠️ Account delegated to PER — data hidden
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         payment_id:{" "}
-                        <span className="text-green-400">
+                        <span className="text-[#1B6B4A]">
                           &quot;{session.paymentId}&quot;
                         </span>
                       </p>
-                      <p className="text-white/30">
+                      <p className="text-[#7C8A9E]">
                         amount:{" "}
-                        <span className="text-purple-400/60">██████████</span>
-                        <span className="text-purple-400">
+                        <span className="text-[#1B6B4A]/60">██████████</span>
+                        <span className="text-[#1B6B4A]">
                           {" "}
                           // hidden in TEE
                         </span>
                       </p>
-                      <p className="text-white/30">
+                      <p className="text-[#7C8A9E]">
                         fee:{" "}
-                        <span className="text-purple-400/60">████████</span>
-                        <span className="text-purple-400">
+                        <span className="text-[#1B6B4A]/60">████████</span>
+                        <span className="text-[#1B6B4A]">
                           {" "}
                           // hidden in TEE
                         </span>
                       </p>
-                      <p className="text-white/30">
+                      <p className="text-[#7C8A9E]">
                         customer:{" "}
-                        <span className="text-purple-400/60">████████████</span>
-                        <span className="text-purple-400">
+                        <span className="text-[#1B6B4A]/60">████████████</span>
+                        <span className="text-[#1B6B4A]">
                           {" "}
                           // hidden in TEE
                         </span>
                       </p>
-                      <p className="text-white/30">
+                      <p className="text-[#7C8A9E]">
                         merchant:{" "}
-                        <span className="text-purple-400/60">████████████</span>
-                        <span className="text-purple-400">
+                        <span className="text-[#1B6B4A]/60">████████████</span>
+                        <span className="text-[#1B6B4A]">
                           {" "}
                           // hidden in TEE
                         </span>
                       </p>
-                      <p className="text-white/60">
-                        delegated: <span className="text-green-400">true</span>
+                      <p className="text-[#3B4963]">
+                        delegated: <span className="text-[#1B6B4A]">true</span>
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         status:{" "}
-                        <span className="text-purple-400">
+                        <span className="text-[#1B6B4A]">
                           {session.status === "active"
                             ? "Active (in TEE)"
                             : "Processed (in TEE)"}
@@ -698,44 +698,44 @@ export default function PrivacyPage() {
 
                   {session.status === "settled" && (
                     <div className="space-y-1">
-                      <p className="text-green-400">
+                      <p className="text-[#1B6B4A]">
                         // ✅ Payment settled — final state on-chain
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         payment_id:{" "}
-                        <span className="text-green-400">
+                        <span className="text-[#1B6B4A]">
                           &quot;{session.paymentId}&quot;
                         </span>
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         amount:{" "}
                         <span className="text-yellow-400">
                           {(session.amount / 1e6).toFixed(2)} USDC
                         </span>
-                        <span className="text-white/30"> // revealed</span>
+                        <span className="text-[#7C8A9E]"> // revealed</span>
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         fee:{" "}
                         <span className="text-yellow-400">
                           {(session.feeAmount / 1e6).toFixed(2)} USDC
                         </span>
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         merchant_receives:{" "}
-                        <span className="text-green-400">
+                        <span className="text-[#1B6B4A]">
                           {((session.amount - session.feeAmount) / 1e6).toFixed(
                             2,
                           )}{" "}
                           USDC
                         </span>
                       </p>
-                      <p className="text-white/60">
-                        status: <span className="text-green-400">Settled</span>
+                      <p className="text-[#3B4963]">
+                        status: <span className="text-[#1B6B4A]">Settled</span>
                       </p>
-                      <p className="text-white/60">
+                      <p className="text-[#3B4963]">
                         delegated: <span className="text-red-400">false</span>
                       </p>
-                      <p className="text-white/30">
+                      <p className="text-[#7C8A9E]">
                         // Processing history remains private
                       </p>
                     </div>
@@ -744,17 +744,17 @@ export default function PrivacyPage() {
               </div>
 
               {/* Transaction log */}
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
-                <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
-                  <Server className="h-4 w-4 text-blue-400" />
+              <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+                <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#0C1829]">
+                  <Server className="h-4 w-4 text-[#1B6B4A]" />
                   Transaction Log
                 </h2>
-                <div className="max-h-48 overflow-y-auto rounded-lg border border-white/[0.06] bg-black/40 p-3 font-mono text-xs">
+                <div className="max-h-48 overflow-y-auto rounded-lg border border-[#E2DFD5] bg-[#FDFBF7]/40 p-3 font-mono text-xs">
                   {logs.length === 0 ? (
-                    <p className="text-white/20">Waiting for first action...</p>
+                    <p className="text-[#7C8A9E]/60">Waiting for first action...</p>
                   ) : (
                     logs.map((log, i) => (
-                      <p key={i} className="text-white/50">
+                      <p key={i} className="text-[#7C8A9E]">
                         {log}
                       </p>
                     ))
@@ -764,29 +764,29 @@ export default function PrivacyPage() {
                 {/* Tx signatures */}
                 {Object.entries(session.txSignatures).length > 0 && (
                   <div className="mt-4 space-y-2">
-                    <h3 className="text-xs font-medium text-white/40">
+                    <h3 className="text-xs font-medium text-[#7C8A9E]">
                       Signatures
                     </h3>
                     {Object.entries(session.txSignatures).map(([step, sig]) =>
                       sig ? (
                         <div
                           key={step}
-                          className="flex items-center justify-between rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-1.5"
+                          className="flex items-center justify-between rounded-lg border border-[#E2DFD5]/[0.04] bg-white/[0.02] px-3 py-1.5"
                         >
                           <div className="flex items-center gap-2">
-                            <span className="text-xs capitalize text-white/40">
+                            <span className="text-xs capitalize text-[#7C8A9E]">
                               {step}
                             </span>
-                            <span className="font-mono text-xs text-white/50">
+                            <span className="font-mono text-xs text-[#7C8A9E]">
                               {sig.slice(0, 16)}...{sig.slice(-8)}
                             </span>
                           </div>
                           <button
                             onClick={() => copyToClipboard(sig, step)}
-                            className="text-white/30 transition-colors hover:text-white/60"
+                            className="text-[#7C8A9E] transition-colors hover:text-[#3B4963]"
                           >
                             {copied === step ? (
-                              <Check className="h-3 w-3 text-green-400" />
+                              <Check className="h-3 w-3 text-[#1B6B4A]" />
                             ) : (
                               <Copy className="h-3 w-3" />
                             )}
@@ -803,7 +803,7 @@ export default function PrivacyPage() {
 
         {/* How It Works */}
         <section className="relative mx-auto max-w-5xl px-4 pb-20">
-          <h2 className="mb-8 text-center text-2xl font-bold text-white">
+          <h2 className="mb-8 text-center text-2xl font-bold text-[#0C1829]">
             How Private Payments Work
           </h2>
 
@@ -840,25 +840,25 @@ export default function PrivacyPage() {
             ].map(({ title, description, icon: Icon, color }) => (
               <div
                 key={title}
-                className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6"
+                className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6"
               >
                 <div
                   className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${
                     color === "purple"
-                      ? "bg-purple-500/10 text-purple-400"
+                      ? "bg-[#1B6B4A]/10 text-[#1B6B4A]"
                       : color === "blue"
-                      ? "bg-blue-500/10 text-blue-400"
+                      ? "bg-[#1B6B4A]/10 text-[#1B6B4A]"
                       : color === "yellow"
                       ? "bg-yellow-500/10 text-yellow-400"
-                      : "bg-green-500/10 text-green-400"
+                      : "bg-[#1B6B4A]/10 text-[#1B6B4A]"
                   }`}
                 >
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="mb-2 text-base font-semibold text-white">
+                <h3 className="mb-2 text-base font-semibold text-[#0C1829]">
                   {title}
                 </h3>
-                <p className="text-sm leading-relaxed text-white/40">
+                <p className="text-sm leading-relaxed text-[#7C8A9E]">
                   {description}
                 </p>
               </div>
@@ -868,21 +868,21 @@ export default function PrivacyPage() {
           {/* Hackathon badge */}
           <div className="mt-12 rounded-xl border border-purple-500/20 bg-gradient-to-r from-purple-500/[0.06] to-blue-500/[0.06] p-6 text-center">
             <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/[0.08] px-3 py-1">
-              <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+              <Sparkles className="h-3.5 w-3.5 text-[#1B6B4A]" />
               <span className="text-xs font-medium text-purple-300">
                 SolanaBlitz Hackathon
               </span>
             </div>
-            <h3 className="mb-2 text-xl font-bold text-white">
+            <h3 className="mb-2 text-xl font-bold text-[#0C1829]">
               Built for MagicBlock Weekend Hackathon
             </h3>
-            <p className="mx-auto max-w-xl text-sm text-white/40">
+            <p className="mx-auto max-w-xl text-sm text-[#7C8A9E]">
               Private payments powered by MagicBlock&apos;s Private Ephemeral
               Rollups. Real-world use case: stablecoin payouts where payment
               data is hidden during processing — only the merchant and customer
               see state.
             </p>
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-white/30">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-[#7C8A9E]">
               <span>ephemeral-rollups-sdk 0.8</span>
               <span>•</span>
               <span>Anchor 0.31.1</span>
