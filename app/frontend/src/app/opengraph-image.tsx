@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Settlr — Stablecoin Payout Infrastructure for Platforms";
+export const alt = "Settlr — The Global Rail for Moving Money";
 export const size = {
   width: 1200,
   height: 630,
@@ -109,7 +109,7 @@ export default async function Image() {
                   backgroundColor: "#1B6B4A",
                 }}
               />
-              Stablecoin payout infrastructure
+              Stablecoin Infrastructure
             </div>
 
             {/* Headline */}
@@ -125,8 +125,10 @@ export default async function Image() {
                 fontFamily: "serif",
               }}
             >
-              <span style={{ color: "#0C1829" }}>Pay anyone, anywhere,</span>
-              <span style={{ color: "#1B6B4A" }}>with just their email</span>
+              <span style={{ color: "#0C1829" }}>The global rail</span>
+              <span style={{ color: "#0C1829" }}>
+                for moving <span style={{ color: "#1B6B4A" }}>money</span>.
+              </span>
             </div>
 
             {/* Subtitle */}
@@ -139,8 +141,8 @@ export default async function Image() {
                 maxWidth: 480,
               }}
             >
-              Send stablecoins to 180+ countries. 1% flat fee, settled in under
-              a second. No bank details needed.
+              Send stablecoins to anyone in 180+ countries with just their
+              email. No bank details. No wire fees. Settle in under a second.
             </div>
 
             {/* Stats row */}
@@ -214,31 +216,32 @@ export default async function Image() {
             </div>
             {/* Code lines */}
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <span style={{ fontSize: 14, color: "#2A9D6A" }}>
-                npm install @settlr/sdk
+              <span style={{ fontSize: 13, color: "#7C8A9E" }}>
+                {"// Send a payout"}
               </span>
-              <div style={{ height: 8 }} />
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.3)" }}>
-                {"import { SettlrClient }"}
-              </span>
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.3)" }}>
-                {'  from "@settlr/sdk"'}
-              </span>
-              <div style={{ height: 6 }} />
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-                {"client.pay({"}
+              <span style={{ fontSize: 14, color: "rgba(255,255,255,0.6)" }}>
+                {"const "}
+                <span style={{ color: "#2A9D6A" }}>payout</span>
+                {" = await"}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-                {'  email: "user@co.com",'}
+                {"  settlr.payouts.send({"}
+              </span>
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
+                {'    to: "maria@co.mx",'}
               </span>
               <span style={{ fontSize: 13, color: "#2A9D6A" }}>
-                {"  amount: 250_000,"}
+                {"    amount: 5_000,"}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-                {'  currency: "USDC"'}
+                {'    currency: "USDC",'}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-                {"})"}
+                {"  })"}
+              </span>
+              <div style={{ height: 6 }} />
+              <span style={{ fontSize: 13, color: "#7C8A9E" }}>
+                {"// Settled in <1s ✓"}
               </span>
             </div>
           </div>
@@ -269,18 +272,20 @@ export default async function Image() {
             settlr.dev
           </span>
           <div style={{ display: "flex", gap: 28 }}>
-            {["Non-custodial", "OFAC Compliant", "Solana"].map((tag) => (
-              <span
-                key={tag}
-                style={{
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.3)",
-                  letterSpacing: "0.03em",
-                }}
-              >
-                {tag}
-              </span>
-            ))}
+            {["Non-custodial", "OFAC Compliant", "Solana", "1% Flat Fee"].map(
+              (tag) => (
+                <span
+                  key={tag}
+                  style={{
+                    fontSize: 13,
+                    color: "rgba(255,255,255,0.3)",
+                    letterSpacing: "0.03em",
+                  }}
+                >
+                  {tag}
+                </span>
+              ),
+            )}
           </div>
         </div>
       </div>
