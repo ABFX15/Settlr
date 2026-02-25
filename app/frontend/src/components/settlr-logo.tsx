@@ -1,10 +1,11 @@
 "use client";
 
 /* ─── Design tokens ─── */
-const ACCENT = "#a78bfa";
-const OUTLINE = "#1a1a2e";
+const ACCENT = "#1B6B4A";
+const ACCENT_LIGHT = "#2A9D6A";
+const OUTLINE = "#0C1829";
 const HIGHLIGHT = "rgba(255,255,255,0.95)";
-const SHADOW_COLOR = "rgba(0,0,0,0.5)";
+const SHADOW_COLOR = "rgba(0,0,0,0.45)";
 
 /*
  * BubbleText — SVG-rendered bubble graffiti text.
@@ -42,16 +43,22 @@ function BubbleText({
       aria-label={text}
     >
       <defs>
-        {/* Shine gradient — top-left highlight fading to flat white */}
+        {/* Shine gradient — white fill */}
         <linearGradient id={`${id}-shine`} x1="0" y1="0" x2="0.3" y2="1">
           <stop offset="0%" stopColor="#ffffff" />
           <stop offset="40%" stopColor="#f0f0f0" />
           <stop offset="100%" stopColor="#d4d4d8" />
         </linearGradient>
 
-        {/* Purple dot gradient */}
+        {/* Green "r" gradient */}
+        <linearGradient id={`${id}-green`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={ACCENT_LIGHT} />
+          <stop offset="100%" stopColor={ACCENT} />
+        </linearGradient>
+
+        {/* Green dot gradient */}
         <radialGradient id={`${id}-dot`} cx="0.35" cy="0.35" r="0.65">
-          <stop offset="0%" stopColor="#c4b5fd" />
+          <stop offset="0%" stopColor={ACCENT_LIGHT} />
           <stop offset="100%" stopColor={ACCENT} />
         </radialGradient>
 
@@ -107,7 +114,7 @@ function BubbleText({
         {text}
       </text>
 
-      {/* Layer 3: White fill with gradient */}
+      {/* Layer 3: White fill with gradient — last 'r' in green */}
       <text
         x="50%"
         y="68%"
@@ -123,10 +130,11 @@ function BubbleText({
         strokeLinecap="round"
         paintOrder="stroke fill"
       >
-        {text}
+        <tspan>{text.slice(0, -1)}</tspan>
+        <tspan fill={`url(#${id}-green)`}>{text.slice(-1)}</tspan>
       </text>
 
-      {/* Purple accent dot */}
+      {/* Green accent dot */}
       <circle
         cx={`${52 + text.length * 3.6}%`}
         cy="48%"
@@ -162,11 +170,15 @@ function BubbleTextSmall({
       <defs>
         <linearGradient id={`${id}-shine`} x1="0" y1="0" x2="0.3" y2="1">
           <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="45%" stopColor="#f0f0f0" />
+          <stop offset="40%" stopColor="#f0f0f0" />
           <stop offset="100%" stopColor="#d4d4d8" />
         </linearGradient>
+        <linearGradient id={`${id}-green`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={ACCENT_LIGHT} />
+          <stop offset="100%" stopColor={ACCENT} />
+        </linearGradient>
         <radialGradient id={`${id}-dot`} cx="0.35" cy="0.35" r="0.65">
-          <stop offset="0%" stopColor="#c4b5fd" />
+          <stop offset="0%" stopColor={ACCENT_LIGHT} />
           <stop offset="100%" stopColor={ACCENT} />
         </radialGradient>
       </defs>
@@ -208,7 +220,7 @@ function BubbleTextSmall({
         {text}
       </text>
 
-      {/* Fill */}
+      {/* Fill — last 'r' in green */}
       <text
         x="50%"
         y="66%"
@@ -223,7 +235,8 @@ function BubbleTextSmall({
         strokeLinejoin="round"
         paintOrder="stroke fill"
       >
-        {text}
+        <tspan>{text.slice(0, -1)}</tspan>
+        <tspan fill={`url(#${id}-green)`}>{text.slice(-1)}</tspan>
       </text>
 
       {/* Dot */}
@@ -289,12 +302,12 @@ export function SettlrLogoWithIcon({
       >
         <defs>
           <radialGradient id={`s-mark-grad-${size}`} cx="0.35" cy="0.3" r="0.7">
-            <stop offset="0%" stopColor="#c4b5fd" />
+            <stop offset="0%" stopColor={ACCENT_LIGHT} />
             <stop offset="100%" stopColor={ACCENT} />
           </radialGradient>
           <linearGradient id={`s-letter-${size}`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="100%" stopColor="#e4e4e7" />
+            <stop offset="100%" stopColor="#E6F2EC" />
           </linearGradient>
         </defs>
         {/* BG */}
@@ -305,7 +318,7 @@ export function SettlrLogoWithIcon({
           height="36"
           rx="10"
           fill={`url(#s-mark-grad-${size})`}
-          stroke="#7c3aed"
+          stroke="#145A3D"
           strokeWidth="1.5"
         />
         {/* Shadow */}
@@ -335,7 +348,7 @@ export function SettlrLogoWithIcon({
           fontWeight="700"
           fontSize="24"
           fill={`url(#s-letter-${size})`}
-          stroke="#7c3aed"
+          stroke="#145A3D"
           strokeWidth="1.5"
           strokeLinejoin="round"
           paintOrder="stroke fill"

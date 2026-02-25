@@ -1035,7 +1035,7 @@ export default function HomePage() {
                   step: "02",
                   title: "We deliver privately",
                   description:
-                    "The recipient gets a white-labeled email — your brand, not ours. Under the hood, Settlr mints a confidential USDC transfer using SPL Token 2022 so the amount stays hidden on-chain.",
+                    "The recipient gets a white-labeled email — your brand, not ours. Under the hood, Settlr initiates a private USDC transfer using SPL Token 2022 so the amount stays hidden on-chain.",
                   icon: <Mail className="h-5 w-5" />,
                   detail: "No wallet needed. No seed phrase.",
                 },
