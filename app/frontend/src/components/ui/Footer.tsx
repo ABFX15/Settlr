@@ -4,23 +4,14 @@ import { SettlrLogo } from "@/components/settlr-logo";
 
 const footerLinks = {
   product: [
-    { href: "/send-payments", label: "Send Payments" },
-    { href: "/accept-payments", label: "Accept Payments" },
-    { href: "/pricing", label: "Pricing" },
-    { href: "/compare", label: "Compare" },
+    { href: "/settlement", label: "B2B Settlement Rail" },
+    { href: "/vaults", label: "Multisig Vaults" },
+    { href: "/audit", label: "Audit Trail" },
     { href: "/demo", label: "Demo" },
-    { href: "/offramp", label: "Cash Out" },
-    { href: "/vs/stripe-connect", label: "Settlr vs Stripe" },
   ],
   developers: [
     { href: "/docs", label: "Documentation" },
     { href: "/docs?tab=api", label: "API Reference" },
-    { href: "/integrations", label: "Integrations" },
-    { href: "/integrations/shopify", label: "Shopify" },
-    { href: "/integrations/woocommerce", label: "WooCommerce" },
-    { href: "/integrations/zapier", label: "Zapier" },
-    { href: "/integrations/slack", label: "Slack" },
-    { href: "/integrations/bubble", label: "Bubble" },
     {
       href: "https://www.npmjs.com/package/@settlr/sdk",
       label: "npm Package",
@@ -33,22 +24,20 @@ const footerLinks = {
     },
   ],
   industries: [
-    { href: "/industries/freelance", label: "Freelance" },
-    { href: "/industries/creators", label: "Creator Payouts" },
-    { href: "/industries/ecommerce", label: "E-Commerce" },
-    { href: "/industries/b2b", label: "B2B Payments" },
-    { href: "/industries/ai-saas", label: "AI & SaaS" },
-    { href: "/industries/data-labeling", label: "Data Labeling" },
-    { href: "/industries/igaming", label: "iGaming" },
-    { href: "/industries/cannabis", label: "Cannabis" },
-    { href: "/igaming", label: "Crypto Payments" },
+    { href: "/industries/cannabis", label: "Cannabis & Wholesalers" },
+    { href: "/industries/adult-content", label: "Adult Content Platforms" },
+  ],
+  compliance: [
+    { href: "/compliance", label: "2026 Whitepaper" },
+    { href: "/compliance#genius-act", label: "GENIUS Act 2025" },
+    { href: "/compliance#bsa-aml", label: "BSA/AML Framework" },
+    { href: "/compliance#kyb", label: "KYB Process" },
+    { href: "/privacy", label: "Privacy Policy" },
   ],
   company: [
     { href: "/help", label: "Support" },
     { href: "/blog", label: "Blog" },
-    { href: "/waitlist", label: "Contact Sales" },
-    { href: "/onboarding", label: "Get Started" },
-    { href: "/privacy", label: "Privacy Policy" },
+    { href: "/waitlist", label: "Request Access" },
     { href: "mailto:adam@settlr.dev", label: "Contact Us" },
   ],
 };
@@ -65,7 +54,7 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#E2DFD5] bg-[#FDFBF7]">
+    <footer className="border-t border-[#E5E7EB] bg-white">
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-6">
           {/* Brand Column */}
@@ -73,9 +62,10 @@ export function Footer() {
             <Link href="/" className="inline-block">
               <SettlrLogo size="sm" variant="dark" />
             </Link>
-            <p className="mt-4 max-w-xs text-sm text-[#7C8A9E]">
-              Non-custodial payout infrastructure. Pay anyone, anywhere — just
-              an email. Built on Solana.
+            <p className="mt-4 max-w-xs text-sm text-[#94A3B8]">
+              The settlement layer for restricted commerce. Non-custodial B2B
+              stablecoin rails for industries abandoned by traditional finance.
+              Built on Solana.
             </p>
             <div className="mt-6 flex gap-4">
               {socialLinks.map((social) => (
@@ -84,7 +74,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829]"
+                  className="rounded-lg p-2 text-[#94A3B8] transition-colors hover:bg-[#FAFAFA] hover:text-[#0A0F1E]"
                   aria-label={social.label}
                 >
                   <social.icon className="h-5 w-5" />
@@ -95,7 +85,7 @@ export function Footer() {
 
           {/* Product Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
+            <h4 className="mb-4 text-sm font-semibold text-[#0A0F1E]">
               Product
             </h4>
             <ul className="space-y-3">
@@ -103,7 +93,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                    className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
                   >
                     {link.label}
                   </Link>
@@ -114,7 +104,7 @@ export function Footer() {
 
           {/* Industries Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
+            <h4 className="mb-4 text-sm font-semibold text-[#0A0F1E]">
               Industries
             </h4>
             <ul className="space-y-3">
@@ -122,7 +112,23 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                    className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <h4 className="mb-4 mt-8 text-sm font-semibold text-[#0A0F1E]">
+              Compliance
+            </h4>
+            <ul className="space-y-3">
+              {footerLinks.compliance.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
                   >
                     {link.label}
                   </Link>
@@ -133,7 +139,7 @@ export function Footer() {
 
           {/* Developer Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
+            <h4 className="mb-4 text-sm font-semibold text-[#0A0F1E]">
               Developers
             </h4>
             <ul className="space-y-3">
@@ -144,14 +150,14 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                      className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
                     >
                       {link.label}
                     </a>
                   ) : (
                     <Link
                       href={link.href}
-                      className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                      className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
                     >
                       {link.label}
                     </Link>
@@ -163,7 +169,7 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
+            <h4 className="mb-4 text-sm font-semibold text-[#0A0F1E]">
               Company
             </h4>
             <ul className="space-y-3">
@@ -171,7 +177,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                    className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
                   >
                     {link.label}
                   </Link>
@@ -182,13 +188,13 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#E2DFD5] pt-8 md:flex-row">
-          <p className="text-sm text-[#7C8A9E]">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#E5E7EB] pt-8 md:flex-row">
+          <p className="text-sm text-[#94A3B8]">
             © {new Date().getFullYear()} Settlr. Built on Solana.
           </p>
-          <div className="flex items-center gap-2 text-sm text-[#7C8A9E]">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#1B6B4A]/30 bg-[#1B6B4A]/10 px-2 py-1 text-xs text-[#1B6B4A]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#1B6B4A]" />
+          <div className="flex items-center gap-2 text-sm text-[#94A3B8]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#10B981]/30 bg-[#10B981]/10 px-2 py-1 text-xs text-[#059669]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" />
               All systems operational
             </span>
           </div>

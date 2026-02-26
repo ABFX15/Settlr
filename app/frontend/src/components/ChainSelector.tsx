@@ -73,17 +73,17 @@ export function ChainSelector({
           flex items-center gap-2 px-4 py-2 rounded-lg border transition-all
           ${
             disabled
-              ? "bg-[#F3F2ED] border-[#E2DFD5] cursor-not-allowed opacity-50"
-              : "bg-[#F3F2ED] border-[#E2DFD5] hover:border-[#E2DFD5] cursor-pointer"
+              ? "bg-[#F5F5F5] border-[#E5E7EB] cursor-not-allowed opacity-50"
+              : "bg-[#F5F5F5] border-[#E5E7EB] hover:border-[#E5E7EB] cursor-pointer"
           }
         `}
       >
         <span className="text-lg" style={{ color: selectedInfo.color }}>
           {selectedInfo.icon}
         </span>
-        <span className="text-[#0C1829] font-medium">{selectedInfo.name}</span>
+        <span className="text-[#0A0F1E] font-medium">{selectedInfo.name}</span>
         <svg
-          className={`w-4 h-4 text-[#7C8A9E] transition-transform ${
+          className={`w-4 h-4 text-[#94A3B8] transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
           fill="none"
@@ -108,7 +108,7 @@ export function ChainSelector({
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="absolute top-full left-0 mt-2 w-48 bg-[#FDFBF7] border border-[#E2DFD5] rounded-lg shadow-xl z-50 overflow-hidden"
+            className="absolute top-full left-0 mt-2 w-48 bg-white border border-[#E5E7EB] rounded-lg shadow-xl z-50 overflow-hidden"
           >
             {availableChains.map((chain) => {
               const info = CHAIN_INFO[chain];
@@ -123,16 +123,16 @@ export function ChainSelector({
                   }}
                   className={`
                     w-full flex items-center gap-3 px-4 py-3 transition-colors
-                    ${isSelected ? "bg-[#F3F2ED]" : "hover:bg-[#F3F2ED]"}
+                    ${isSelected ? "bg-[#F5F5F5]" : "hover:bg-[#F5F5F5]"}
                   `}
                 >
                   <span className="text-lg" style={{ color: info.color }}>
                     {info.icon}
                   </span>
-                  <span className="text-[#0C1829]">{info.name}</span>
+                  <span className="text-[#0A0F1E]">{info.name}</span>
                   {isSelected && (
                     <svg
-                      className="w-4 h-4 text-[#1B6B4A] ml-auto"
+                      className="w-4 h-4 text-[#059669] ml-auto"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"

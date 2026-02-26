@@ -13,16 +13,16 @@ import {
   Lock,
   Globe,
   AlertTriangle,
-  Leaf,
-  Building2,
-  Truck,
+  Film,
+  CreditCard,
+  Clock,
   FileText,
   Scale,
   BadgeCheck,
-  Banknote,
-  HandCoins,
-  Clock,
   ChevronDown,
+  UserX,
+  Wallet,
+  Eye,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
@@ -88,181 +88,167 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 const features = [
   {
     icon: Ban,
-    title: "Can\u2019t Be Debanked",
+    title: "Deplatform-Proof",
     description:
-      "Non-custodial USDC settlements need no bank account. No processor, no merchant account, nothing to freeze.",
+      "Non-custodial rails mean no payment processor can cut you off. Your settlement infrastructure doesn\u2019t depend on Stripe, PayPal, or any bank.",
     stat: "0",
-    statLabel: "bank dependency",
+    statLabel: "deplatform risk",
   },
   {
     icon: Zap,
-    title: "Instant Settlement",
+    title: "Instant Creator Payouts",
     description:
-      "Pay cultivators, processors, and distributors in seconds. No more waiting days for ACH or wires to clear.",
-    stat: "<1s",
-    statLabel: "settlement",
+      "Pay creators the moment they earn. No 7-day holds, no net-30 delays. Settlement finalizes in under 5 seconds.",
+    stat: "<5s",
+    statLabel: "time to settle",
   },
   {
     icon: DollarSign,
-    title: "1% Flat \u2014 No Surprises",
+    title: "1% Flat Fee",
     description:
-      "Stop paying 5\u20138% to cannabis-friendly processors. One flat fee, no hidden charges, no rolling reserves.",
+      "High-risk processors charge 8\u201315% with rolling reserves. Settlr is 1% flat. No chargebacks, no reserves, no surprises.",
     stat: "1%",
     statLabel: "flat fee",
   },
   {
-    icon: Shield,
-    title: "Compliance Built In",
+    icon: Lock,
+    title: "Privacy by Default",
     description:
-      "Every wallet screened against OFAC sanctions. Full audit trail on-chain. Give regulators what they need.",
-    stat: "OFAC",
-    statLabel: "screening",
+      "TEE-based private settlements hide payout amounts and creator identities from on-chain observers. Your business data stays yours.",
+    stat: "TEE",
+    statLabel: "encrypted",
   },
   {
-    icon: Lock,
-    title: "Private Transactions",
+    icon: Shield,
+    title: "Compliance-Ready",
     description:
-      "Competitor intel is real. TEE-private receipts hide supplier volumes and pricing from on-chain observers.",
-    stat: "TEE",
-    statLabel: "privacy",
+      "Full KYB verification, OFAC screening, and an immutable audit trail. Satisfy auditors without exposing creator data publicly.",
+    stat: "KYB",
+    statLabel: "verified",
   },
   {
     icon: Globe,
-    title: "Multi-State, No Hassle",
+    title: "Global Reach",
     description:
-      "Operating in multiple states? One payment rail works everywhere. No state-by-state banking headaches.",
-    stat: "50",
-    statLabel: "states",
+      "Pay creators in any country. No blocked regions, no currency conversion headaches. USDC works the same everywhere.",
+    stat: "180+",
+    statLabel: "countries",
   },
 ];
 
 const painPoints = [
   {
-    icon: Ban,
-    problem: "Debanked \u2014 Again",
-    detail: "Average cannabis business loses banking 3x in first 2 years",
-  },
-  {
-    icon: Banknote,
-    problem: "Cash-Heavy Operations",
-    detail: "Armed transport, vault storage, cash counting = $1000s/month",
+    icon: UserX,
+    problem: "Deplatformed Overnight",
+    detail:
+      "Stripe, PayPal, and traditional processors routinely cut off adult content platforms with zero warning",
   },
   {
     icon: DollarSign,
-    problem: "Predatory Fees",
-    detail: "5\u20138% processing from the few willing processors",
+    problem: "Predatory Processing",
+    detail:
+      "High-risk MCC codes mean 8\u201315% fees + 10% rolling reserves held for 6 months",
   },
   {
-    icon: AlertTriangle,
-    problem: "Compliance Risk",
-    detail: "Inadequate audit trails invite regulatory scrutiny",
+    icon: CreditCard,
+    problem: "Chargeback Abuse",
+    detail:
+      "Buyers dispute charges to hide purchases. Platforms eat the cost + $25 chargeback fees",
   },
   {
     icon: Clock,
-    problem: "Slow Supplier Payments",
-    detail: "Multi-day ACH delays strain vendor relationships",
+    problem: "Payout Delays",
+    detail:
+      "Net-14 to net-30 creator payouts kill retention. Top creators leave for faster-paying platforms",
+  },
+  {
+    icon: AlertTriangle,
+    problem: "Banking Instability",
+    detail:
+      "Banks close accounts for \u201Creputational risk\u201D \u2014 even when everything is legal and verified",
   },
 ];
 
 const stats = [
-  { value: "$30B+", label: "US Legal Cannabis Market" },
-  { value: "70%+", label: "Still Cash-Dependent" },
-  { value: "$0", label: "Debanking Risk with Settlr" },
-  { value: "1%", label: "Flat Processing Fee" },
-];
-
-const useCases = [
-  {
-    name: "Cultivators",
-    icon: Leaf,
-    detail: "Pay trim crews, suppliers, and equipment vendors",
-  },
-  {
-    name: "Processors",
-    icon: Building2,
-    detail: "Settle with growers and packaging suppliers",
-  },
-  {
-    name: "Distributors",
-    icon: Truck,
-    detail: "Pay cultivators and manage multi-state logistics",
-  },
-  {
-    name: "Dispensaries",
-    icon: HandCoins,
-    detail: "Pay distributors and manage vendor invoices",
-  },
+  { value: "$15B+", label: "Creator Economy (Adult)" },
+  { value: "8\u201315%", label: "Typical Processing Fee" },
+  { value: "1%", label: "Settlr Flat Fee" },
+  { value: "<5s", label: "Settlement Finality" },
 ];
 
 const comparisonRows = [
   {
-    feature: "Bank account required?",
-    traditional: "Yes (and it gets closed)",
-    settlr: "No bank needed",
-  },
-  { feature: "Processing fee", traditional: "5\u20138%", settlr: "1% flat" },
-  {
-    feature: "Settlement time",
-    traditional: "3\u20135 business days",
-    settlr: "Under 5 seconds",
-  },
-  {
-    feature: "Cash handling costs",
-    traditional: "$1,000\u20135,000/mo",
-    settlr: "$0",
-  },
-  {
-    feature: "Compliance audit trail",
-    traditional: "Paper receipts",
-    settlr: "On-chain + exportable",
-  },
-  {
-    feature: "Multi-state support",
-    traditional: "Re-apply per state",
-    settlr: "Works everywhere",
-  },
-  {
-    feature: "Weekend/holiday",
-    traditional: "No processing",
-    settlr: "24/7/365",
-  },
-  {
-    feature: "Account closure risk",
-    traditional: "High \u2014 at bank\u2019s discretion",
+    feature: "Deplatforming risk",
+    traditional: "High \u2014 at processor\u2019s discretion",
     settlr: "Zero \u2014 non-custodial",
+  },
+  {
+    feature: "Processing fee",
+    traditional: "8\u201315% + rolling reserves",
+    settlr: "1% flat",
+  },
+  {
+    feature: "Chargebacks",
+    traditional: "Frequent + $25 dispute fee",
+    settlr: "Impossible \u2014 crypto is final",
+  },
+  {
+    feature: "Creator payout speed",
+    traditional: "Net-14 to net-30",
+    settlr: "Instant",
+  },
+  {
+    feature: "Rolling reserves",
+    traditional: "10% held for 6 months",
+    settlr: "None",
+  },
+  {
+    feature: "Privacy",
+    traditional: "Credit card statements expose purchases",
+    settlr: "TEE-encrypted \u2014 no public trace",
+  },
+  {
+    feature: "Global payouts",
+    traditional: "Wire fees + blocked countries",
+    settlr: "USDC to 180+ countries",
+  },
+  {
+    feature: "Audit trail",
+    traditional: "Fragmented bank records",
+    settlr: "On-chain + exportable",
   },
 ];
 
 const faqItems = [
   {
-    q: "Is this legal? How does this comply with cannabis regulations?",
-    a: "Settlr processes settlements in USDC (a regulated US dollar stablecoin issued by Circle, a licensed money transmitter). Because Settlr is non-custodial \u2014 we never hold or touch your funds \u2014 we operate as a software tool, not a money services business. Your state cannabis license and existing compliance remain in effect. Every transaction has a full on-chain audit trail that regulators can verify independently.",
+    q: "How does this protect my platform from deplatforming?",
+    a: 'Settlr is non-custodial — we provide the settlement software, but we never hold, touch, or control your funds. There\u2019s no "merchant account" for anyone to close. Funds flow directly between wallets on Solana. Even if a bank or processor wanted to shut you down, there\u2019s nothing to shut down — the rail is permissionless.',
   },
   {
-    q: "What happens when the SAFE Banking Act passes?",
-    a: "When federal banking reform comes, you\u2019ll have options. Until then, you need to operate today. Settlr gives you reliable, instant B2B settlements right now \u2014 and if banks open up, you can still keep using us for the speed, fee savings, and privacy benefits. Most clients find Settlr is better than traditional banking even without the debanking problem.",
+    q: "Do subscribers need a crypto wallet?",
+    a: "No. Subscribers can pay with USDC using an email-based embedded wallet (powered by Privy). They don\u2019t need to know anything about crypto, wallets, or Solana. The experience feels like any other checkout — but settlement is instant and can\u2019t be reversed.",
   },
   {
-    q: "How do my suppliers receive payments? Do they need crypto knowledge?",
-    a: "Your suppliers receive USDC to a wallet. They can set up in under 2 minutes using just an email address \u2014 no crypto expertise required. From there they can hold USDC (it\u2019s always worth $1), convert to cash via integrated offramp partners, or transfer to any other wallet. We handle all the blockchain complexity so they don\u2019t have to.",
+    q: "How do creator payouts work?",
+    a: "Creators receive USDC directly to their wallet as soon as you trigger a payout. No net-14 or net-30 delays. They can hold USDC (it\u2019s always worth $1), offramp to their bank via integrated partners, or transfer anywhere. Setup takes under 2 minutes with just an email.",
   },
   {
-    q: "How does this compare to paying with cash?",
-    a: "Cash costs more than people realize: armored transport ($500\u20132,000/mo), vault/safe costs, cash counting labor, theft/loss risk, and the compliance headache of documenting everything manually. With Settlr, every settlement is instant, trackable, and creates an automatic audit trail. No security vans, no counting rooms, no shrinkage.",
+    q: "What about chargebacks and fraud?",
+    a: 'Stablecoin payments are final — there is no chargeback mechanism. Once a subscriber pays, the funds are settled and cannot be reversed by a bank. This eliminates the chargeback abuse that plagues adult content platforms (where buyers dispute charges to "hide" purchases).',
   },
   {
-    q: "Can competitors see our payment activity on-chain?",
-    a: "Not with privacy mode enabled. Settlr uses TEE-based private transactions (MagicBlock Private Ephemeral Rollups) that hide settlement amounts from on-chain observers while transactions are being processed. Your supplier relationships and pricing remain confidential.",
+    q: "Is this compliant with financial regulations?",
+    a: "Yes. Settlr includes KYB verification for platforms, OFAC screening for wallets, and produces a full on-chain audit trail. We\u2019re built for the GENIUS Act (2025) stablecoin framework. Because we\u2019re non-custodial, we\u2019re a software provider — not a money transmitter.",
   },
   {
-    q: "What about IRS 280E tax requirements?",
-    a: "Every Settlr transaction is recorded on-chain with timestamps and amounts, giving you a clean, immutable record for tax purposes. You can export transaction history for your accountant. This is actually better than cash for 280E documentation since every settlement is independently verifiable.",
+    q: "What about user privacy? Credit card statements expose what people buy.",
+    a: 'With Settlr, there\u2019s no credit card statement entry like "OnlyFans" or "FanCentro" on a bank statement. Subscribers pay with USDC from a wallet — the only record is a generic on-chain transaction. With privacy mode (TEE), even the on-chain amount is hidden during processing.',
   },
 ];
 
 /* ═══════════════ PAGE ═══════════════ */
 
-export default function CannabisPage() {
+export default function AdultContentPage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Structured data */}
@@ -280,26 +266,6 @@ export default function CannabisPage() {
           }),
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Service",
-            name: "Settlr Cannabis B2B Settlements",
-            description:
-              "Non-custodial USDC settlement infrastructure for cannabis businesses. Pay cultivators, processors, and distributors instantly without bank accounts.",
-            provider: {
-              "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
-            },
-            serviceType: "Cannabis Payment Processing",
-            areaServed: "US",
-            url: "https://settlr.dev/industries/cannabis",
-          }),
-        }}
-      />
 
       <Navbar />
 
@@ -314,9 +280,9 @@ export default function CannabisPage() {
           <div className="max-w-3xl">
             <Reveal>
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#10B981]/20 bg-[#10B981]/[0.06] px-4 py-2">
-                <Leaf className="h-4 w-4 text-[#059669]" />
+                <Film className="h-4 w-4 text-[#059669]" />
                 <span className="text-sm font-medium text-[#059669]">
-                  Cannabis &amp; Wholesalers
+                  Adult Content Platforms
                 </span>
               </div>
             </Reveal>
@@ -326,16 +292,17 @@ export default function CannabisPage() {
                 className="mb-6 text-5xl font-bold leading-[1.08] text-[#0A0F1E] md:text-7xl"
                 style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
               >
-                Stop getting <span className="text-[#10B981]">debanked.</span>
+                Stop getting{" "}
+                <span className="text-[#10B981]">deplatformed.</span>
               </h1>
             </Reveal>
 
             <Reveal delay={0.1}>
               <p className="mb-8 max-w-2xl text-lg leading-relaxed text-[#94A3B8]">
-                Pay cultivators, processors, and distributors instantly in USDC.
-                No bank account required. No account to freeze. No cash vans.
-                Just fast, compliant B2B settlements that actually work for
-                cannabis.
+                Pay creators instantly, accept subscriber payments without
+                chargebacks, and never worry about a processor shutting you down
+                overnight. Non-custodial settlement rails that no one can cut
+                off.
               </p>
             </Reveal>
 
@@ -343,18 +310,15 @@ export default function CannabisPage() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/waitlist"
-                  className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white transition-all hover:opacity-90"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                  }}
+                  className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white transition-all hover:brightness-110"
+                  style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)" }}
                 >
                   Request Access
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
                   href="/demo"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-white px-7 py-3.5 font-semibold text-[#0A0F1E] transition-all hover:bg-[#FAFAFA]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-white px-7 py-3.5 font-semibold text-[#0A0F1E] transition-all hover:bg-[#F5F5F5]"
                 >
                   See the Demo
                 </Link>
@@ -365,15 +329,15 @@ export default function CannabisPage() {
               <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-[#94A3B8]">
                 <span className="flex items-center gap-1.5">
                   <BadgeCheck className="h-4 w-4 text-[#059669]" />
-                  GENIUS Act Compliant
+                  KYB Verified
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Shield className="h-4 w-4 text-[#059669]" />
                   Non-Custodial
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Scale className="h-4 w-4 text-[#059669]" />
-                  Full Audit Trail
+                  <Lock className="h-4 w-4 text-[#059669]" />
+                  TEE Privacy
                 </span>
               </div>
             </Reveal>
@@ -408,13 +372,13 @@ export default function CannabisPage() {
               className="mb-4 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
-              The cannabis banking{" "}
-              <span className="text-[#B91C1C]">crisis is real</span>
+              The payment{" "}
+              <span className="text-[#B91C1C]">deplatforming problem</span>
             </h2>
             <p className="mb-12 max-w-2xl text-[#94A3B8]">
-              Your business is legal. Your licenses are current. Yet banks keep
-              closing your accounts, and the processors who&apos;ll work with
-              you charge extortionate fees.
+              Your platform is legal. Your content is verified. But payment
+              processors treat you like a liability — charging extortionate
+              fees, holding reserves, or dropping you entirely.
             </p>
           </Reveal>
 
@@ -423,7 +387,7 @@ export default function CannabisPage() {
               const Icon = point.icon;
               return (
                 <Reveal key={point.problem} delay={i * 0.05}>
-                  <div className="rounded-xl border border-[#B91C1C]/15 bg-[#FEF2F2] p-5">
+                  <div className="rounded-2xl border border-[#B91C1C]/15 bg-[#FEF2F2] p-5">
                     <Icon className="mb-3 h-6 w-6 text-[#B91C1C]" />
                     <h3 className="mb-1 text-sm font-semibold text-[#0A0F1E]">
                       {point.problem}
@@ -445,11 +409,11 @@ export default function CannabisPage() {
               className="mb-4 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
-              Payments that can&apos;t be shut down.
+              Settlement rails that can&apos;t be shut off.
             </h2>
             <p className="mb-12 max-w-2xl text-[#94A3B8]">
-              Non-custodial means no bank, no processor, and no single point of
-              failure can freeze your settlement rail.
+              Non-custodial means no processor, no bank, and no platform policy
+              change can freeze your payments or hold your creators&apos; money.
             </p>
           </Reveal>
 
@@ -497,11 +461,11 @@ export default function CannabisPage() {
               className="mb-4 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
-              How cannabis B2B settlements work
+              How it works for your platform
             </h2>
             <p className="mb-12 max-w-2xl text-[#94A3B8]">
-              No bank relationship needed. No merchant account application. Set
-              up in minutes.
+              Two flows — subscriber payments in, creator payouts out. Both
+              instant, both non-custodial.
             </p>
           </Reveal>
 
@@ -509,26 +473,26 @@ export default function CannabisPage() {
             {[
               {
                 step: "01",
-                title: "Create Invoice",
-                desc: "Enter amount, add your supplier\u2019s email. That\u2019s it.",
-                icon: FileText,
+                title: "Subscriber Pays",
+                desc: "Subscriber pays with USDC via email-based wallet. No credit card statement, no chargeback risk.",
+                icon: Wallet,
               },
               {
                 step: "02",
-                title: "Supplier Gets Link",
-                desc: "They receive a settlement link. Pay with USDC \u2014 no wallet needed.",
-                icon: Globe,
-              },
-              {
-                step: "03",
                 title: "Instant Settlement",
-                desc: "Settlement finalizes in under 5 seconds on Solana. Both parties see confirmation.",
+                desc: "Funds settle to your vault in under 5 seconds. Non-custodial — Settlr never touches the money.",
                 icon: Zap,
               },
               {
+                step: "03",
+                title: "Creator Payout",
+                desc: "Trigger creator payouts instantly or on schedule. No net-14, no net-30 delays.",
+                icon: DollarSign,
+              },
+              {
                 step: "04",
-                title: "Audit Trail Ready",
-                desc: "Every settlement timestamped on-chain. Export for compliance, taxes, regulators.",
+                title: "Audit Trail",
+                desc: "Every transaction timestamped on-chain. Export for compliance, taxes, and financial reporting.",
                 icon: Scale,
               },
             ].map((item, i) => {
@@ -559,48 +523,15 @@ export default function CannabisPage() {
         </div>
       </section>
 
-      {/* ───── Use Cases ───── */}
-      <section className="px-4 py-24">
-        <div className="mx-auto max-w-5xl">
-          <Reveal>
-            <h2
-              className="mb-10 text-center text-3xl font-bold text-[#0A0F1E]"
-              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
-            >
-              Built for every part of the supply chain
-            </h2>
-          </Reveal>
-
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {useCases.map((uc, i) => {
-              const Icon = uc.icon;
-              return (
-                <Reveal key={uc.name} delay={i * 0.05}>
-                  <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#E5E7EB] bg-white p-6 text-center transition-colors hover:border-[#10B981]/30">
-                    <div className="rounded-lg bg-[#10B981]/[0.08] p-3">
-                      <Icon className="h-6 w-6 text-[#059669]" />
-                    </div>
-                    <span className="font-semibold text-[#0A0F1E]">
-                      {uc.name}
-                    </span>
-                    <span className="text-xs text-[#94A3B8]">{uc.detail}</span>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* ───── Comparison Table ───── */}
-      <section className="border-y border-[#E5E7EB] bg-white px-4 py-24">
+      <section className="px-4 py-24">
         <div className="mx-auto max-w-4xl">
           <Reveal>
             <h2
               className="mb-10 text-center text-3xl font-bold text-[#0A0F1E] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
-              Traditional Banking vs.{" "}
+              High-Risk Processors vs.{" "}
               <span className="text-[#10B981]">Settlr</span>
             </h2>
           </Reveal>
@@ -644,7 +575,7 @@ export default function CannabisPage() {
       </section>
 
       {/* ───── FAQ ───── */}
-      <section className="px-4 py-24">
+      <section className="border-t border-[#E5E7EB] bg-white px-4 py-24">
         <div className="mx-auto max-w-3xl">
           <Reveal>
             <h2
@@ -654,13 +585,13 @@ export default function CannabisPage() {
               Frequently Asked Questions
             </h2>
             <p className="mb-10 text-center text-[#94A3B8]">
-              We know the cannabis industry has unique concerns. Here are the
-              questions we hear most.
+              Common questions about using Settlr for adult content platform
+              payments.
             </p>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="rounded-2xl border border-[#E5E7EB] bg-white px-6">
+            <div className="rounded-2xl border border-[#E5E7EB] bg-[#FAFAFA] px-6">
               {faqItems.map((item, i) => (
                 <FAQItem key={i} q={item.q} a={item.a} />
               ))}
@@ -685,20 +616,19 @@ export default function CannabisPage() {
             className="mb-6 text-3xl font-bold text-white md:text-4xl"
             style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
           >
-            Your business is legal.{" "}
+            Your platform is legal.{" "}
             <span className="text-[#10B981]">Your payments should be too.</span>
           </h2>
           <p className="mb-8 text-lg text-[#94A3B8]">
-            Join cannabis operators moving from cash and unreliable banks to
-            instant, compliant USDC settlements. Set up in minutes, not months.
+            Join platforms replacing unreliable processors with instant,
+            non-custodial settlement rails. No chargebacks, no deplatforming, no
+            rolling reserves.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/waitlist"
-              className="group inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-white transition-all hover:opacity-90"
-              style={{
-                background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-              }}
+              className="group inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-white transition-all hover:brightness-110"
+              style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)" }}
             >
               Request Access
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -711,8 +641,7 @@ export default function CannabisPage() {
             </Link>
           </div>
           <p className="mt-6 text-xs text-[#94A3B8]/60">
-            Non-custodial \u00b7 GENIUS Act compliant \u00b7 Full audit trail
-            \u00b7 No bank account needed
+            Non-custodial · KYB verified · TEE privacy · No chargebacks
           </p>
         </motion.div>
       </section>

@@ -3,154 +3,136 @@
 [![npm version](https://img.shields.io/npm/v/@settlr/sdk.svg)](https://www.npmjs.com/package/@settlr/sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-**Global payout infrastructure for platforms.** Pay anyone, anywhere, with just their email.
+**The settlement layer for restricted commerce.** Non-custodial B2B stablecoin rails for industries abandoned by traditional finance.
 
-One API call sends USDC. Recipient claims it with any Solana wallet. No bank details, no forms, no delays.
+Cannabis operators, adult content platforms, and other high-risk verticals lose 8–12% to predatory processors — or can't get banked at all. Settlr replaces that with a 1% flat-fee, non-custodial settlement rail on Solana with instant finality and a cryptographic audit trail.
 
 ```bash
 npm install @settlr/sdk
 ```
 
 ```typescript
-import { PayoutClient } from "@settlr/sdk";
+import { SettlrClient } from "@settlr/sdk";
 
-const payouts = new PayoutClient({ apiKey: "sk_live_xxxxxxxxxxxx" });
+const settlr = new SettlrClient({ apiKey: "sk_live_xxxxxxxxxxxx" });
 
-const payout = await payouts.create({
-  email: "alice@example.com",
-  amount: 250.0,
-  memo: "March data labeling — 500 tasks",
+const invoice = await settlr.createInvoice({
+  to: "emerald-distribution@example.com",
+  amount: 45000.0,
+  memo: "INV-2026-0891 — Bulk Flower + Equipment",
+  complianceLevel: "genius-act",
 });
 
-console.log(payout.claimUrl); // https://settlr.dev/claim/...
+console.log(invoice.paymentUrl); // https://settlr.dev/invoice/...
 ```
 
-Recipient gets an email, clicks the link, enters a wallet address, and receives USDC on-chain in seconds.
+Recipient receives a cryptographically-secured invoice, pays in USDC/PYUSD, and settlement finalizes in under 5 seconds. On-chain receipt generated automatically for auditors.
 
-[Live site →](https://settlr.dev) · [Docs →](https://settlr.dev/docs) · [npm →](https://www.npmjs.com/package/@settlr/sdk)
+[Live Demo →](https://settlr.dev/demo) · [Docs →](https://settlr.dev/docs) · [npm →](https://www.npmjs.com/package/@settlr/sdk)
 
 ---
 
 ## Why Settlr?
 
-| Problem                                     | Settlr Solution                     |
-| ------------------------------------------- | ----------------------------------- |
-| International wires take 3-5 days           | Instant USDC settlement on Solana   |
-| Wire fees are $15-45 per transfer           | 1% flat fee                         |
-| Need full bank details for each recipient   | Just an email address               |
-| Workers in 100+ countries can't receive USD | USDC to any Solana wallet, anywhere |
-| Batch payroll is complex to build           | One API call for up to 500 payouts  |
+| The Problem                                     | The Settlr Rail                             |
+| ------------------------------------------------ | ------------------------------------------- |
+| Banks close your account for being "high-risk"   | Non-custodial — no bank can freeze your funds |
+| High-risk processors charge 8–12% + rolling reserves | 1% flat fee, no reserves, no hidden charges |
+| Wire transfers take 3–5 days + manual review     | T+0 settlement — finality in under 5 seconds |
+| Cash-heavy operations fail compliance audits     | Immutable on-chain audit trail for every dollar |
+| Payments get clawed back or reversed             | Settled means settled — cryptographic finality |
 
 ---
 
 ## Two Products
 
-### 🔵 Payout API (Core)
+### Settlement Rail (Core)
 
-Send money to anyone by email. Built for platforms paying workers, creators, and contractors globally.
+Non-custodial B2B payment rail for invoices, supplier payments, and distributor settlements. Built for operators who need money to actually arrive.
 
 ```typescript
-// Single payout
-const payout = await payouts.create({
-  email: "worker@example.com",
-  amount: 150.0,
-  memo: "February earnings",
+// Create a settlement invoice
+const invoice = await settlr.createInvoice({
+  to: "distributor@example.com",
+  amount: 45000.0,
+  memo: "Q1 bulk order — License #C12-0004782-LIC",
+  complianceLevel: "genius-act",
 });
 
-// Batch payouts (up to 500)
-const batch = await payouts.createBatch([
-  { email: "alice@example.com", amount: 250.0, memo: "March" },
-  { email: "bob@example.com", amount: 180.0, memo: "March" },
-  { email: "carol@example.com", amount: 320.0, memo: "March" },
-]);
+// Create a shareable payment link
+const link = await settlr.createPaymentLink({
+  amount: 12500.0,
+  memo: "Equipment deposit",
+  expiresIn: "7d",
+});
 ```
 
 **How it works:**
 
-1. Platform calls `POST /api/payouts` with email + amount
-2. Recipient gets an email with a claim link
-3. Recipient opens the link, enters any Solana wallet address
-4. USDC is transferred on-chain instantly
-5. Platform gets a webhook with the tx signature
+1. Operator generates a cryptographically-secured invoice or payment link
+2. Counterparty pays in USDC or PYUSD — no wallet setup required
+3. Settlement finalizes on-chain in under 5 seconds
+4. Both parties get an immutable receipt with compliance stamps (KYB, AML, GENIUS Act)
+5. Operator receives a webhook with the on-chain transaction signature
 
-### 🟢 Checkout SDK (Add-on)
+### Multisig Vaults (Add-on)
 
-Accept inbound payments with drop-in React components. Customers pay with email — no wallet setup needed.
-
-```tsx
-import { SettlrProvider, BuyButton } from "@settlr/sdk";
-
-<SettlrProvider
-  config={{ apiKey: "sk_live_xxx", merchant: { name: "My Store" } }}
->
-  <BuyButton
-    amount={25.0}
-    memo="Order #123"
-    onSuccess={(r) => console.log(r.signature)}
-  >
-    Pay $25.00
-  </BuyButton>
-</SettlrProvider>;
-```
+Treasury management with Squads multisig. Require multiple signers for large settlements, set spending limits, and maintain institutional-grade custody without a bank.
 
 ---
 
 ## Target Verticals
 
-### AI Data Labeling
+### Cannabis & Wholesalers
 
-Pay thousands of global annotators without collecting bank details. Batch 500 payouts per call.
+B2B settlements for growers, distributors, dispensaries, and equipment suppliers. Replace cash drops and 8% processors with a 1% digital rail that produces audit-ready receipts.
 
-### Creator Platforms
+### Adult Content Platforms
 
-Collect from fans with Checkout SDK, pay creators with Payout API. One integration for both directions.
-
-### Freelance Marketplaces
-
-Milestone-based payouts to contractors in 180+ countries. No international wire fees.
+Creator payouts and platform settlements without the constant threat of payment processor deplatforming. Non-custodial means no middleman can cut you off.
 
 ---
 
 ## REST API
 
-### Create Payout
+### Create Invoice
 
 ```bash
-curl -X POST https://settlr.dev/api/payouts \
+curl -X POST https://settlr.dev/api/invoices \
   -H "X-API-Key: sk_live_xxx" \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "worker@example.com",
-    "amount": 150.00,
-    "memo": "February payout"
+    "to": "distributor@example.com",
+    "amount": 45000.00,
+    "memo": "INV-2026-0891 — Bulk Flower",
+    "complianceLevel": "genius-act"
   }'
 ```
 
-### Batch Payouts
+### Create Payment Link
 
 ```bash
-curl -X POST https://settlr.dev/api/payouts/batch \
+curl -X POST https://settlr.dev/api/payment-links \
   -H "X-API-Key: sk_live_xxx" \
   -H "Content-Type: application/json" \
   -d '{
-    "payouts": [
-      { "email": "alice@example.com", "amount": 250.00, "memo": "March" },
-      { "email": "bob@example.com", "amount": 180.00, "memo": "March" }
-    ]
+    "amount": 12500.00,
+    "memo": "Equipment deposit",
+    "expiresIn": "7d"
   }'
 ```
 
-### List Payouts
+### List Settlements
 
 ```bash
-curl https://settlr.dev/api/payouts?status=claimed&limit=50 \
+curl https://settlr.dev/api/settlements?status=completed&limit=50 \
   -H "X-API-Key: sk_live_xxx"
 ```
 
-### Get Payout
+### Get Settlement Receipt
 
 ```bash
-curl https://settlr.dev/api/payouts/po_abc123 \
+curl https://settlr.dev/api/settlements/stl_abc123 \
   -H "X-API-Key: sk_live_xxx"
 ```
 
@@ -158,44 +140,39 @@ curl https://settlr.dev/api/payouts/po_abc123 \
 
 ## SDK
 
-### PayoutClient
+### SettlrClient
 
 ```typescript
-import { PayoutClient } from "@settlr/sdk";
+import { SettlrClient } from "@settlr/sdk";
 
-const payouts = new PayoutClient({
+const settlr = new SettlrClient({
   apiKey: "sk_live_xxxxxxxxxxxx",
   baseUrl: "https://settlr.dev", // optional
 });
 ```
 
-#### `payouts.create(options)`
+#### `settlr.createInvoice(options)`
 
 ```typescript
-const payout = await payouts.create({
-  email: "alice@example.com", // required
-  amount: 250.0, // required (USDC)
-  memo: "March earnings", // optional
-  metadata: { invoiceId: "42" }, // optional
+const invoice = await settlr.createInvoice({
+  to: "distributor@example.com",   // required
+  amount: 45000.00,                // required (USDC)
+  memo: "Q1 Bulk Order",          // optional
+  complianceLevel: "genius-act",  // optional
+  metadata: { poNumber: "PO-891" }, // optional
 });
-// Returns: { id, email, amount, status, claimUrl, expiresAt, ... }
+// Returns: { id, paymentUrl, amount, status, expiresAt, ... }
 ```
 
-#### `payouts.createBatch(payouts)`
+#### `settlr.createPaymentLink(options)`
 
 ```typescript
-const batch = await payouts.createBatch([
-  { email: "alice@example.com", amount: 250.0, memo: "March" },
-  { email: "bob@example.com", amount: 180.0, memo: "March" },
-]);
-// Returns: { id, total, count, payouts: [...] }
-```
-
-#### `payouts.get(id)` / `payouts.list(options?)`
-
-```typescript
-const payout = await payouts.get("po_abc123");
-const result = await payouts.list({ status: "claimed", limit: 50 });
+const link = await settlr.createPaymentLink({
+  amount: 12500.00,
+  memo: "Equipment deposit",
+  expiresIn: "7d",
+});
+// Returns: { id, url, amount, expiresAt, ... }
 ```
 
 ### Webhooks
@@ -206,24 +183,24 @@ import { createWebhookHandler } from "@settlr/sdk";
 export const POST = createWebhookHandler({
   secret: process.env.SETTLR_WEBHOOK_SECRET!,
   handlers: {
-    "payout.claimed": async (event) => {
-      console.log("Payout claimed!", event.payment.id);
+    "settlement.completed": async (event) => {
+      console.log("Settlement finalized!", event.settlement.id);
+      await updateBooks(event.settlement);
     },
-    "payment.completed": async (event) => {
-      await fulfillOrder(event.payment.orderId);
+    "invoice.paid": async (event) => {
+      await markInvoicePaid(event.invoice.id);
     },
   },
 });
 ```
 
-| Event                  | Description                                  |
-| ---------------------- | -------------------------------------------- |
-| `payout.created`       | Payout created, email sent                   |
-| `payout.claimed`       | Recipient claimed, USDC transferred on-chain |
-| `payout.expired`       | Claim link expired (7 days)                  |
-| `payout.failed`        | On-chain transfer failed                     |
-| `payment.completed`    | Checkout payment confirmed                   |
-| `subscription.renewed` | Subscription charge succeeded                |
+| Event                    | Description                                    |
+| ------------------------ | ---------------------------------------------- |
+| `invoice.created`        | Invoice generated and sent                     |
+| `invoice.paid`           | Recipient paid, settlement confirmed on-chain  |
+| `invoice.expired`        | Invoice expired (configurable)                 |
+| `settlement.completed`   | On-chain settlement finalized                  |
+| `settlement.failed`      | Settlement failed (insufficient funds, etc.)   |
 
 ---
 
@@ -237,9 +214,10 @@ export const POST = createWebhookHandler({
 | Database          | Supabase                 |
 | Email             | Resend                   |
 | Gasless           | Kora (Solana Foundation) |
-| Cross-chain       | Mayan (EVM → Solana)     |
 | Embedded wallets  | Privy                    |
 | Treasury security | Squads multisig          |
+| Privacy           | MagicBlock PER (TEE)     |
+| Risk screening    | Range Security           |
 
 ### On-Chain Program
 
@@ -263,18 +241,16 @@ x402-hack-payment/
 │       └── errors.rs
 ├── packages/sdk/                  # @settlr/sdk (published on npm)
 │   └── src/
-│       ├── payouts.ts             # PayoutClient — create, batch, get, list
-│       ├── client.ts              # Settlr checkout client
-│       ├── subscriptions.ts       # SubscriptionClient
-│       ├── one-click.ts           # OneClickClient
-│       ├── components.tsx         # BuyButton, CheckoutWidget, PaymentModal
+│       ├── client.ts              # SettlrClient — invoices, payment links, settlements
+│       ├── components.tsx         # React components
 │       ├── webhooks.ts            # Webhook handler + verification
-│       └── privacy.ts             # MagicBlock PER private payments
+│       └── privacy.ts            # MagicBlock PER private settlements
 ├── app/frontend/                  # Next.js app (settlr.dev)
 │   └── src/
-│       ├── app/api/payouts/       # Payout API (create, batch, claim, get)
-│       ├── app/claim/[token]/     # Recipient claim page
-│       ├── app/checkout/          # Hosted checkout
+│       ├── app/api/               # API routes (invoices, settlements, webhooks)
+│       ├── app/demo/              # Interactive institutional demo
+│       ├── app/create/            # Payment link creation
+│       ├── app/invoice/[token]/   # Invoice settlement page
 │       ├── lib/db.ts              # Database layer (Supabase + in-memory)
 │       └── lib/email.ts           # Transactional email (Resend)
 └── tests/                         # Anchor program tests
@@ -304,20 +280,26 @@ NEXT_PUBLIC_APP_URL=https://settlr.dev
 NEXT_PUBLIC_PRIVY_APP_ID=your_privy_app_id
 ```
 
-## API Keys
+## Compliance
 
-| Key Type | Prefix     | Use Case    |
-| -------- | ---------- | ----------- |
-| Live     | `sk_live_` | Production  |
-| Test     | `sk_test_` | Development |
+Settlr is built for the 2026 regulatory landscape:
+
+- **GENIUS Act (2025)** — Full stablecoin payment compliance
+- **BSA/AML** — On-chain audit trails satisfy reporting requirements
+- **KYB Verification** — All counterparties verified before settlement
+- **Non-Custodial** — Settlr never holds your funds; no money transmitter risk
+
+---
+
+## Fee Structure
 
 | Tier       | Rate Limit | Fee  |
 | ---------- | ---------- | ---- |
-| Free       | 60/min     | 2%   |
-| Pro        | 300/min    | 1.5% |
-| Enterprise | 1000/min   | 1%   |
+| Standard   | 60/min     | 1%   |
+| Growth     | 300/min    | 1%   |
+| Enterprise | 1000/min   | Custom |
 
-Get yours at [settlr.dev/onboarding](https://settlr.dev/onboarding).
+Apply at [settlr.dev/waitlist](https://settlr.dev/waitlist).
 
 ## License
 

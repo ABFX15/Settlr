@@ -20,14 +20,14 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 
 /* ─── Palette ─── */
-const CREAM = "#FDFBF7";
-const NAVY = "#0C1829";
-const SLATE = "#3B4963";
-const MUTED = "#7C8A9E";
-const GREEN = "#1B6B4A";
+const CREAM = "#FFFFFF";
+const NAVY = "#0A0F1E";
+const SLATE = "#4A5568";
+const MUTED = "#94A3B8";
+const GREEN = "#10B981";
 const ACCENT_LIGHT = "#2A9D6A";
 const TOPO = "#E8E4DA";
-const CARD_BORDER = "#E2DFD5";
+const CARD_BORDER = "#E5E7EB";
 
 /* ─── Animation variants ─── */
 const fadeUp = {
@@ -233,15 +233,15 @@ export default function StripeConnectComparison() {
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/waitlist"
-                className="inline-flex items-center gap-2 rounded-lg px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
-                style={{ background: GREEN }}
+                className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
+                style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)" }}
               >
                 Start Sending — Free
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/docs"
-                className="inline-flex items-center gap-2 rounded-lg border px-8 py-3.5 text-base font-semibold transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border px-8 py-3.5 text-base font-semibold transition-colors"
                 style={{ borderColor: CARD_BORDER, color: SLATE }}
               >
                 Read the Docs
@@ -447,7 +447,7 @@ export default function StripeConnectComparison() {
               style={{ fontFamily: "var(--font-jetbrains)" }}
             >
               <code>
-                <span style={{ color: "#7C8A9E" }}>
+                <span style={{ color: "#94A3B8" }}>
                   {"// npm install @settlr/sdk\n"}
                 </span>
                 <span style={{ color: MUTED }}>{"import "}</span>
@@ -586,15 +586,15 @@ export default function StripeConnectComparison() {
             >
               <Link
                 href="/waitlist"
-                className="inline-flex items-center gap-2 rounded-lg px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
-                style={{ background: GREEN }}
+                className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
+                style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)" }}
               >
                 Get Early Access
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/pricing"
-                className="inline-flex items-center gap-2 rounded-lg border px-8 py-3.5 text-base font-semibold text-white transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border px-8 py-3.5 text-base font-semibold text-white transition-colors"
                 style={{ borderColor: "rgba(255,255,255,0.15)" }}
               >
                 See Pricing

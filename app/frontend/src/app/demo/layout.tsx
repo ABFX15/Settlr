@@ -1,24 +1,24 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Live Demo — See Instant Global Payouts in Action",
+  title: "Live Demo — B2B Settlement Rail for Restricted Commerce",
   description:
-    "Try Settlr's payout infrastructure live. Send a test USDC payout to any email — see instant settlement, zero gas fees, and email-based claiming in action.",
+    "See how Settlr settles B2B invoices in under 5 seconds. Non-custodial, 1% flat, with a cryptographic audit trail. Try payment links and invoice settlement live.",
   keywords: [
-    "payout demo",
-    "USDC payout demo",
-    "instant settlement demo",
-    "global payout live demo",
-    "email payout demo",
+    "cannabis B2B settlement demo",
+    "stablecoin invoice settlement",
+    "non-custodial payment demo",
+    "USDC B2B payment link",
+    "restricted commerce settlement",
   ],
   alternates: { canonical: "/demo" },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Settlr",
-    title: "Settlr Demo — Instant Global Payouts in Action",
+    title: "Settlr Demo — B2B Settlement Rail in Action",
     description:
-      "See how one API call sends a payout to any email in the world. Instant settlement, zero gas, 180+ countries.",
+      "Create a payment link or settle a B2B invoice. Non-custodial, instant, with an on-chain audit trail.",
     url: "https://settlr.dev/demo",
     images: [
       {
@@ -31,8 +31,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr Demo — Instant Global Payouts",
-    description: "One API call, one email, instant settlement. Try it live.",
+    title: "Settlr Demo — B2B Settlement Rail",
+    description:
+      "Non-custodial B2B settlement in under 5 seconds. Try payment links and invoice settlement live.",
     images: ["/twitter-image"],
   },
 };

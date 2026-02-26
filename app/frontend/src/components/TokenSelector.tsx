@@ -45,14 +45,14 @@ export function TokenSelector({
                     px-4 py-3 rounded-xl border transition-all
                     ${
                       disabled
-                        ? "bg-[#FDFBF7]/50 border-[#E2DFD5] cursor-not-allowed opacity-60"
-                        : "bg-[#FDFBF7] border-[#E2DFD5] hover:border-[#a78bfa]/50 cursor-pointer"
+                        ? "bg-white/50 border-[#E5E7EB] cursor-not-allowed opacity-60"
+                        : "bg-white border-[#E5E7EB] hover:border-[#a78bfa]/50 cursor-pointer"
                     }
                 `}
       >
         <div className="flex items-center gap-3">
           {/* Token Logo */}
-          <div className="relative w-8 h-8 rounded-full overflow-hidden bg-[#F3F2ED] flex-shrink-0">
+          <div className="relative w-8 h-8 rounded-full overflow-hidden bg-[#F5F5F5] flex-shrink-0">
             {selectedToken.logoURI ? (
               <Image
                 src={selectedToken.logoURI}
@@ -65,7 +65,7 @@ export function TokenSelector({
                 }}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-xs font-bold text-[#7C8A9E]">
+              <div className="w-full h-full flex items-center justify-center text-xs font-bold text-[#94A3B8]">
                 {selectedToken.symbol.slice(0, 2)}
               </div>
             )}
@@ -73,15 +73,15 @@ export function TokenSelector({
 
           <div className="text-left">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-[#0C1829]">
+              <span className="font-semibold text-[#0A0F1E]">
                 {selectedToken.symbol}
               </span>
               {isLoadingQuote && (
-                <Loader2 className="w-3 h-3 animate-spin text-[#1B6B4A]" />
+                <Loader2 className="w-3 h-3 animate-spin text-[#10B981]" />
               )}
             </div>
             {showBalance && (
-              <div className="text-xs text-[#7C8A9E]">
+              <div className="text-xs text-[#94A3B8]">
                 Balance:{" "}
                 {balance.toLocaleString(undefined, {
                   maximumFractionDigits: 4,
@@ -97,7 +97,7 @@ export function TokenSelector({
           {requiredAmount && !isUsdc && (
             <div
               className={`text-right ${
-                hasEnoughBalance ? "text-[#1B6B4A]" : "text-red-400"
+                hasEnoughBalance ? "text-[#059669]" : "text-red-400"
               }`}
             >
               <div className="text-sm font-medium">
@@ -110,7 +110,7 @@ export function TokenSelector({
           )}
 
           <ChevronDown
-            className={`w-5 h-5 text-[#7C8A9E] transition-transform ${
+            className={`w-5 h-5 text-[#94A3B8] transition-transform ${
               isOpen ? "rotate-180" : ""
             }`}
           />
@@ -148,7 +148,7 @@ export function TokenSelector({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute z-50 w-full mt-2 bg-[#FDFBF7] border border-[#E2DFD5] rounded-xl shadow-xl overflow-hidden"
+              className="absolute z-50 w-full mt-2 bg-white border border-[#E5E7EB] rounded-xl shadow-xl overflow-hidden"
             >
               <div className="py-2 max-h-64 overflow-y-auto">
                 {availableTokens.map((token) => {
@@ -167,14 +167,14 @@ export function TokenSelector({
                                                 transition-colors
                                                 ${
                                                   isSelected
-                                                    ? "bg-[#1B6B4A]/15 text-[#1B6B4A]"
-                                                    : "hover:bg-[#F3F2ED] text-[#0C1829]"
+                                                    ? "bg-[#10B981]/15 text-[#059669]"
+                                                    : "hover:bg-[#F5F5F5] text-[#0A0F1E]"
                                                 }
                                             `}
                     >
                       <div className="flex items-center gap-3">
                         {/* Token Logo */}
-                        <div className="relative w-8 h-8 rounded-full overflow-hidden bg-[#F3F2ED] flex-shrink-0">
+                        <div className="relative w-8 h-8 rounded-full overflow-hidden bg-[#F5F5F5] flex-shrink-0">
                           {token.logoURI ? (
                             <Image
                               src={token.logoURI}
@@ -188,7 +188,7 @@ export function TokenSelector({
                               }}
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-xs font-bold text-[#7C8A9E]">
+                            <div className="w-full h-full flex items-center justify-center text-xs font-bold text-[#94A3B8]">
                               {token.symbol.slice(0, 2)}
                             </div>
                           )}
@@ -196,14 +196,14 @@ export function TokenSelector({
 
                         <div className="text-left">
                           <div className="font-medium">{token.symbol}</div>
-                          <div className="text-xs text-[#7C8A9E]">
+                          <div className="text-xs text-[#94A3B8]">
                             {token.name}
                           </div>
                         </div>
                       </div>
 
                       {isSelected && (
-                        <Check className="w-4 h-4 text-[#1B6B4A]" />
+                        <Check className="w-4 h-4 text-[#059669]" />
                       )}
                     </button>
                   );
@@ -211,7 +211,7 @@ export function TokenSelector({
               </div>
 
               {/* Footer note */}
-              <div className="px-4 py-2 border-t border-[#E2DFD5] text-xs text-[#7C8A9E] text-center">
+              <div className="px-4 py-2 border-t border-[#E5E7EB] text-xs text-[#94A3B8] text-center">
                 Swap powered by Jupiter
               </div>
             </motion.div>
@@ -225,8 +225,8 @@ export function TokenSelector({
 // Compact version for inline use
 export function TokenBadge({ token }: { token: TokenInfo }) {
   return (
-    <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-[#F3F2ED] rounded-full text-sm">
-      <div className="w-4 h-4 rounded-full overflow-hidden bg-[#F3F2ED]">
+    <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-[#F5F5F5] rounded-full text-sm">
+      <div className="w-4 h-4 rounded-full overflow-hidden bg-[#F5F5F5]">
         {token.logoURI && (
           <Image
             src={token.logoURI}
@@ -237,7 +237,7 @@ export function TokenBadge({ token }: { token: TokenInfo }) {
           />
         )}
       </div>
-      <span className="font-medium text-[#0C1829]">{token.symbol}</span>
+      <span className="font-medium text-[#0A0F1E]">{token.symbol}</span>
     </div>
   );
 }

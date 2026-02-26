@@ -1,6 +1,6 @@
 # Settlr Architecture Documentation
 
-> **Last Updated:** January 2026  
+> **Last Updated:** February 2026  
 > **SDK Version:** @settlr/sdk@0.6.0  
 > **Program ID:** `339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5` (Devnet)
 
@@ -8,30 +8,30 @@
 
 ## Overview
 
-Settlr is a USDC checkout solution built on Solana. It provides merchants with an embeddable payment widget, gasless transactions for customers, privacy-preserving payments, and optional KYC integration.
+Settlr is the settlement layer for restricted commerce — non-custodial B2B stablecoin rails built on Solana for industries abandoned by traditional finance (cannabis, adult content, and other high-risk verticals). It provides operators with instant settlement, gasless transactions, privacy-preserving payments via MagicBlock PER, and a full compliance/audit trail (GENIUS Act, BSA/AML, KYB).
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         CUSTOMER                                │
-│                    (Email or Wallet)                            │
+│                     B2B COUNTERPARTY                             │
+│              (Distributor, Supplier, Operator)                  │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                   SETTLR CHECKOUT WIDGET                        │
+│                   SETTLR SETTLEMENT RAIL                        │
 │                    (@settlr/sdk)                                │
-│  • React component or hosted page                               │
-│  • Privy embedded wallets                                       │
-│  • Gasless transactions                                         │
-│  • Privacy mode (MagicBlock PER private payments)                │
-│  • One-click payments                                           │
+│  • Invoice generation & payment links                           │
+│  • Privy embedded wallets (no wallet required)                  │
+│  • Gasless transactions (Kora-sponsored)                        │
+│  • Privacy mode (MagicBlock PER private settlements)             │
+│  • Compliance stamps (KYB, AML, GENIUS Act)                     │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                     SETTLR BACKEND                              │
 │                 (Next.js App Router)                            │
-│  • API routes for checkout, payments, webhooks                  │
+│  • API routes for invoices, settlements, webhooks               │
 │  • Supabase for persistence                                     │
 │  • Kora for gasless sponsorship (external wallets)              │
 │  • Privy for gasless sponsorship (embedded wallets)             │
@@ -41,11 +41,11 @@ Settlr is a USDC checkout solution built on Solana. It provides merchants with a
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                    SOLANA ANCHOR PROGRAM                        │
-│                    (payments + privacy)                         │
-│  • On-chain payment processing                                  │
-│  • Platform fee collection                                      │
-│  • Merchant management                                          │
-│  • MagicBlock PER private payments (TEE-secured)                │
+│                  (settlements + privacy)                        │
+│  • On-chain settlement processing + fee collection              │
+│  • Merchant (operator) management                               │
+│  • MagicBlock PER private settlements (TEE-secured)             │
+│  • Immutable audit trail for compliance                         │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
