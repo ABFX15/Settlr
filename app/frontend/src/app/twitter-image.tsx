@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Settlr — The Global Rail for Moving Money";
+export const alt = "Settlr — Stop Losing Money to Wire Transfers";
 export const size = {
   width: 1200,
   height: 630,
@@ -109,13 +109,13 @@ export default async function Image() {
                   backgroundColor: "#1B6B4A",
                 }}
               />
-              Stablecoin Infrastructure
+              Payout Infrastructure
             </div>
 
             {/* Headline */}
             <div
               style={{
-                fontSize: 54,
+                fontSize: 52,
                 fontWeight: 700,
                 lineHeight: 1.1,
                 letterSpacing: "-0.025em",
@@ -125,9 +125,9 @@ export default async function Image() {
                 fontFamily: "serif",
               }}
             >
-              <span style={{ color: "#0C1829" }}>The global rail</span>
+              <span style={{ color: "#0C1829" }}>Stop losing money</span>
               <span style={{ color: "#0C1829" }}>
-                for moving <span style={{ color: "#1B6B4A" }}>money</span>.
+                to <span style={{ color: "#1B6B4A" }}>wire transfers</span>.
               </span>
             </div>
 
@@ -141,8 +141,8 @@ export default async function Image() {
                 maxWidth: 480,
               }}
             >
-              Send stablecoins to anyone in 180+ countries with just their
-              email. No bank details. No wire fees. Settle in under a second.
+              Pay vendors and contractors in 180+ countries with just an email.
+              Sub-second settlement. 1% flat. Zero frozen accounts.
             </div>
 
             {/* Stats row */}
@@ -272,7 +272,7 @@ export default async function Image() {
             settlr.dev
           </span>
           <div style={{ display: "flex", gap: 28 }}>
-            {["Non-custodial", "OFAC Compliant", "Solana", "1% Flat Fee"].map(
+            {["Non-custodial", "180+ Countries", "Solana", "1% Flat Fee"].map(
               (tag) => (
                 <span
                   key={tag}
