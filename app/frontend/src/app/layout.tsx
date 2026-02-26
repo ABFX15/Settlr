@@ -163,6 +163,37 @@ export default function RootLayout({
         style={{ background: "#FDFBF7" }}
       >
         <ClientLayout>{children}</ClientLayout>
+        {/* SSR-rendered navigation for search engine crawlers (visually hidden) */}
+        <nav aria-label="Site navigation" className="sr-only">
+          <a href="/">Home</a>
+          <a href="/send-payments">Send Payments</a>
+          <a href="/accept-payments">Accept Payments</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/compare">Compare</a>
+          <a href="/demo">Demo</a>
+          <a href="/offramp">Cash Out</a>
+          <a href="/vs/stripe-connect">Settlr vs Stripe</a>
+          <a href="/docs">Documentation</a>
+          <a href="/integrations">Integrations</a>
+          <a href="/integrations/shopify">Shopify</a>
+          <a href="/integrations/woocommerce">WooCommerce</a>
+          <a href="/integrations/zapier">Zapier</a>
+          <a href="/integrations/slack">Slack</a>
+          <a href="/integrations/bubble">Bubble</a>
+          <a href="/industries/freelance">Freelance</a>
+          <a href="/industries/creators">Creator Payouts</a>
+          <a href="/industries/ecommerce">E-Commerce</a>
+          <a href="/industries/b2b">B2B Payments</a>
+          <a href="/industries/ai-saas">AI &amp; SaaS</a>
+          <a href="/industries/data-labeling">Data Labeling</a>
+          <a href="/industries/igaming">iGaming</a>
+          <a href="/industries/cannabis">Cannabis</a>
+          <a href="/blog">Blog</a>
+          <a href="/help">Help Center</a>
+          <a href="/waitlist">Contact Sales</a>
+          <a href="/onboarding">Get Started</a>
+          <a href="/privacy">Privacy Policy</a>
+        </nav>
       </body>
     </html>
   );

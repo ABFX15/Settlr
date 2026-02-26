@@ -9,6 +9,8 @@ const footerLinks = {
     { href: "/pricing", label: "Pricing" },
     { href: "/compare", label: "Compare" },
     { href: "/demo", label: "Demo" },
+    { href: "/offramp", label: "Cash Out" },
+    { href: "/vs/stripe-connect", label: "Settlr vs Stripe" },
   ],
   developers: [
     { href: "/docs", label: "Documentation" },
@@ -31,9 +33,15 @@ const footerLinks = {
     },
   ],
   industries: [
-    { href: "/industries/cannabis", label: "Cannabis Payments" },
-    { href: "/industries/creators", label: "Creator Payouts" },
     { href: "/industries/freelance", label: "Freelance" },
+    { href: "/industries/creators", label: "Creator Payouts" },
+    { href: "/industries/ecommerce", label: "E-Commerce" },
+    { href: "/industries/b2b", label: "B2B Payments" },
+    { href: "/industries/ai-saas", label: "AI & SaaS" },
+    { href: "/industries/data-labeling", label: "Data Labeling" },
+    { href: "/industries/igaming", label: "iGaming" },
+    { href: "/industries/cannabis", label: "Cannabis" },
+    { href: "/igaming", label: "Crypto Payments" },
   ],
   company: [
     { href: "/help", label: "Support" },
