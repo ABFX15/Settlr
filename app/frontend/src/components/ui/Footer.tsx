@@ -66,8 +66,8 @@ export function Footer() {
               <SettlrLogo size="sm" variant="dark" />
             </Link>
             <p className="mt-4 max-w-xs text-sm text-[#7C8A9E]">
-              Non-custodial crypto payment processor. Accept any token, receive
-              USDC instantly. Built on Solana.
+              Non-custodial payout infrastructure. Pay anyone, anywhere — just
+              an email. Built on Solana.
             </p>
             <div className="mt-6 flex gap-4">
               {socialLinks.map((social) => (

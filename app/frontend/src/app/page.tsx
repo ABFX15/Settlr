@@ -1,13 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useInView,
-  AnimatePresence,
-} from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -25,7 +19,6 @@ import {
   ArrowUpRight,
   X,
   AlertTriangle,
-  HeadphonesIcon,
   TrendingDown,
   Minus,
 } from "lucide-react";
@@ -870,7 +863,7 @@ export default function HomePage() {
                 <LivePulse />
               </Reveal>
 
-              {/* Emotional headline */}
+              {/* Emotional headline — targeted at platform CFOs */}
               <Reveal>
                 <h1
                   className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.06] tracking-tight mb-6"
@@ -917,16 +910,17 @@ export default function HomePage() {
                   className="text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto mb-10"
                   style={{ color: palette.slate }}
                 >
-                  Pay contractors in 180+ countries with just an email.
-                  Sub-second settlement. 1% flat. No frozen accounts, no wire
-                  fees, no support tickets.
+                  Your finance team shouldn&apos;t spend half their week chasing
+                  failed wires. Pay vendors and contractors in 180+ countries
+                  with just an email — sub-second settlement, 1% flat, zero
+                  frozen accounts.
                 </p>
               </Reveal>
 
-              {/* CTAs */}
+              {/* CTAs — demo is now primary for non-dev visitors */}
               <Reveal className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
                 <Link
-                  href="/docs"
+                  href="/demo"
                   className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                   style={{ ...greenGradient }}
                   onMouseEnter={(e) =>
@@ -936,11 +930,11 @@ export default function HomePage() {
                     Object.assign(e.currentTarget.style, greenGradient)
                   }
                 >
-                  Start Integrating
+                  See It Work in 30 Seconds
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/demo"
+                  href="/docs"
                   className="inline-flex items-center gap-2 rounded-xl border px-8 py-4 text-sm font-semibold transition-all duration-300 hover:bg-[#F3F2ED] hover:-translate-y-0.5"
                   style={{
                     borderColor: palette.cardBorder,
@@ -948,7 +942,7 @@ export default function HomePage() {
                     boxShadow: "0 2px 8px rgba(12, 24, 41, 0.06)",
                   }}
                 >
-                  Try Live Demo
+                  View Integration Docs
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </Reveal>
@@ -1341,45 +1335,52 @@ export default function HomePage() {
                   color: palette.navy,
                 }}
               >
-                Your contractors are furious.
+                Your payouts are bleeding money.
               </h2>
               <p
                 className="text-base sm:text-lg max-w-2xl mx-auto"
                 style={{ color: palette.slate }}
               >
                 Wire transfers fail. PayPal freezes accounts. Your finance team
-                drowns in spreadsheets and angry emails. Every failed payment is
-                a support ticket, a late contractor, and a broken relationship.
+                drowns in spreadsheets and angry vendors. Every failed payout is
+                a support ticket, a damaged supplier relationship, and real
+                revenue at risk.
               </p>
             </Reveal>
 
-            {/* Pain point cards */}
+            {/* Pain point cards — sourced industry data */}
             <div className="grid sm:grid-cols-3 gap-6 mb-14">
               {[
                 {
-                  icon: <HeadphonesIcon className="h-6 w-6" />,
-                  stat: "23",
-                  label: "support tickets / month",
+                  icon: <DollarSign className="h-6 w-6" />,
+                  stat: "6.35%",
+                  label: "avg cost to send $200 cross-border",
                   description:
-                    "from contractors whose payments failed or were frozen",
+                    "The global average remittance fee — eating into every international payout you make.",
+                  source: "World Bank Remittance Prices, 2024",
+                  sourceUrl: "https://remittanceprices.worldbank.org",
                   color: "#DC2626",
                   bgColor: "#FEF2F2",
                 },
                 {
                   icon: <TrendingDown className="h-6 w-6" />,
-                  stat: "5%+",
-                  label: "lost to PayPal fees",
+                  stat: "73%",
+                  label: "say payment delays damage supplier relationships",
                   description:
-                    "on every international payout — before currency conversion",
+                    "Late payments erode trust, trigger penalty clauses, and push your best vendors to competitors.",
+                  source: "Atradius Payment Practices, 2023",
+                  sourceUrl: "https://atradius.com/reports",
                   color: "#D97706",
                   bgColor: "#FFFBEB",
                 },
                 {
                   icon: <Clock className="h-6 w-6" />,
                   stat: "3–5",
-                  label: "days to settle wires",
+                  label: "days average wire settlement",
                   description:
-                    "while your contractors wait, chase, and lose trust",
+                    "While your vendors wait, your finance team fields 'where is my money?' emails on repeat.",
+                  source: "SWIFT gpi Benchmark, 2024",
+                  sourceUrl: "https://swift.com/gpi",
                   color: "#DC2626",
                   bgColor: "#FEF2F2",
                 },
@@ -1413,9 +1414,21 @@ export default function HomePage() {
                     >
                       {pain.label}
                     </p>
-                    <p className="text-xs" style={{ color: palette.muted }}>
+                    <p
+                      className="text-xs mb-2"
+                      style={{ color: palette.muted }}
+                    >
                       {pain.description}
                     </p>
+                    <a
+                      href={pain.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] underline underline-offset-2 transition-colors hover:text-[#0C1829]"
+                      style={{ color: palette.muted }}
+                    >
+                      {pain.source}
+                    </a>
                   </div>
                 </Reveal>
               ))}
@@ -1437,12 +1450,76 @@ export default function HomePage() {
                     color: palette.green,
                   }}
                 >
-                  Kill the support tickets.
+                  What if payouts just&hellip; worked?
                 </p>
                 <p className="text-sm" style={{ color: palette.slate }}>
                   With Settlr, payments don&apos;t fail. They settle in under a
-                  second. No frozen accounts. No angry emails. No chasing.
+                  second. 1% flat. No frozen accounts. No angry vendor emails.
+                  No chasing.
                 </p>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTION 1.75 — SOCIAL PROOF / EARLY ACCESS
+           ═══════════════════════════════════════════════════════════════ */}
+        <section
+          className="py-16 sm:py-20"
+          style={{ background: palette.cream }}
+        >
+          <div className="container mx-auto max-w-4xl px-6">
+            <Reveal className="text-center">
+              <div
+                className="rounded-2xl px-8 py-10 sm:px-14 sm:py-12"
+                style={{
+                  ...glass.strong,
+                  borderColor: palette.green + "20",
+                }}
+              >
+                <p
+                  className="text-sm font-semibold uppercase tracking-widest mb-3"
+                  style={{ color: palette.green }}
+                >
+                  Early Access
+                </p>
+                <h3
+                  className="text-2xl sm:text-3xl font-bold mb-3"
+                  style={{
+                    fontFamily: "var(--font-fraunces), Georgia, serif",
+                    color: palette.navy,
+                  }}
+                >
+                  Join the platforms switching to stablecoin payouts.
+                </h3>
+                <p
+                  className="text-base mb-8 max-w-xl mx-auto"
+                  style={{ color: palette.slate }}
+                >
+                  We&apos;re onboarding design partners now. Get priority
+                  access, dedicated integration support, and lock in Starter
+                  pricing.
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Link
+                    href="/waitlist"
+                    className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+                    style={{ ...greenGradient }}
+                    onMouseEnter={(e) =>
+                      Object.assign(e.currentTarget.style, greenGradientHover)
+                    }
+                    onMouseLeave={(e) =>
+                      Object.assign(e.currentTarget.style, greenGradient)
+                    }
+                  >
+                    Request Early Access
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <p className="text-sm" style={{ color: palette.muted }}>
+                    No commitment · Free during beta
+                  </p>
+                </div>
               </div>
             </Reveal>
           </div>
@@ -1802,6 +1879,31 @@ export default function HomePage() {
                 A side-by-side comparison of what you&apos;re paying now vs.
                 what you could be paying.
               </p>
+            </Reveal>
+
+            {/* "How It's Different" narrative */}
+            <Reveal className="mb-14">
+              <div
+                className="rounded-2xl p-8 sm:p-10"
+                style={{
+                  background: palette.navy,
+                  color: "#c9d1d9",
+                }}
+              >
+                <p
+                  className="text-lg sm:text-xl leading-relaxed"
+                  style={{ color: "#E8E4DA" }}
+                >
+                  Traditional payment processors rely on banks. Banks freeze
+                  accounts, charge hidden fees, and take days to settle.{" "}
+                  <span style={{ color: "#FFFFFF", fontWeight: 600 }}>
+                    Settlr moves money on stablecoin rails
+                  </span>{" "}
+                  — wallet to wallet, in under a second, with no intermediary
+                  bank in the middle. If your bank decides your industry is too
+                  risky, your payments still work.
+                </p>
+              </div>
             </Reveal>
 
             {/* Visual comparison table */}
@@ -2333,16 +2435,16 @@ export default function HomePage() {
                   a: "No. We create an embedded wallet automatically when someone receives their first payment. They never see a seed phrase, never need SOL, never touch a blockchain. The experience is: get an email, click a link, see your balance.",
                 },
                 {
-                  q: "What countries do you support?",
-                  a: "180+ countries. Recipients only need an email address and internet connection. No bank account required on their end, no geographic restrictions.",
-                },
-                {
                   q: "What are the fees?",
                   a: "From 0.5–1% per transaction depending on your tier. No FX fees, no wire fees, no receiving fees, no hidden charges. On $25,000/month in payouts you'd save over $1,000 vs PayPal international transfers.",
                 },
                 {
                   q: "How fast are payouts?",
                   a: "Instant. Stablecoin payments settle in under one second on Solana. No holds, no processing delays, no multi-day bank settlement windows.",
+                },
+                {
+                  q: "What countries do you support?",
+                  a: "180+ countries. Recipients only need an email address and internet connection. No bank account required on their end, no geographic restrictions.",
                 },
                 {
                   q: "How do recipients cash out?",
@@ -2377,9 +2479,9 @@ export default function HomePage() {
                   color: palette.navy,
                 }}
               >
-                Ready to move money
+                Ready to fix your
                 <br />
-                like it&apos;s 2026?
+                payout infrastructure?
               </h2>
               <p
                 className="text-base sm:text-lg mb-10 max-w-xl mx-auto"
@@ -2390,7 +2492,7 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
-                  href="/onboarding"
+                  href="/demo"
                   className="inline-flex items-center gap-2 rounded-xl px-9 py-4.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                   style={{ ...greenGradient }}
                   onMouseEnter={(e) =>
@@ -2400,11 +2502,11 @@ export default function HomePage() {
                     Object.assign(e.currentTarget.style, greenGradient)
                   }
                 >
-                  Start Integrating
+                  See It Work in 30 Seconds
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/compare"
+                  href="/onboarding"
                   className="inline-flex items-center gap-2 rounded-xl border px-9 py-4.5 text-sm font-semibold transition-all duration-300 hover:bg-[#F3F2ED] hover:-translate-y-0.5"
                   style={{
                     borderColor: palette.cardBorder,
@@ -2412,8 +2514,8 @@ export default function HomePage() {
                     boxShadow: "0 2px 8px rgba(12, 24, 41, 0.06)",
                   }}
                 >
-                  Compare to Alternatives
-                  <ChevronRight className="h-4 w-4" />
+                  Start Integrating
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             </Reveal>
