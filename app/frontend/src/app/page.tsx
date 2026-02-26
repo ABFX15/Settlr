@@ -912,7 +912,7 @@ export default function HomePage() {
                 >
                   Your finance team shouldn&apos;t spend half their week chasing
                   failed wires. Pay vendors and contractors in 180+ countries
-                  with just an email — sub-second settlement, 1% flat, zero
+                  with just an email. Sub-second settlement. 1% flat. Zero
                   frozen accounts.
                 </p>
               </Reveal>
