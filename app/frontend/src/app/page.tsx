@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useInView,
+  AnimatePresence,
+} from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -17,6 +23,11 @@ import {
   Building2,
   Zap,
   ArrowUpRight,
+  X,
+  AlertTriangle,
+  HeadphonesIcon,
+  TrendingDown,
+  Minus,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
@@ -104,6 +115,78 @@ function Reveal({
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* --- Animated counter (counts up on scroll into view) --- */
+function AnimatedCounter({
+  value,
+  prefix = "",
+  suffix = "",
+  duration = 1.4,
+  className = "",
+  style = {},
+}: {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  duration?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    let start = 0;
+    const startTime = performance.now();
+    const step = (now: number) => {
+      const elapsed = Math.min((now - startTime) / (duration * 1000), 1);
+      const eased = 1 - Math.pow(1 - elapsed, 3); // ease-out cubic
+      const current = Math.round(eased * value);
+      setDisplay(current);
+      if (elapsed < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, value, duration]);
+
+  return (
+    <span ref={ref} className={className} style={style}>
+      {prefix}
+      {display.toLocaleString()}
+      {suffix}
+    </span>
+  );
+}
+
+/* --- Slide-in from side (for timeline cards) --- */
+function SlideIn({
+  children,
+  className = "",
+  delay = 0,
+  direction = "left",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  direction?: "left" | "right";
+}) {
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        x: direction === "left" ? -60 : 60,
+        filter: "blur(4px)",
+      }}
+      whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -748,20 +831,20 @@ export default function HomePage() {
         </div>
 
         {/* ═══════════════════════════════════════════════════════════════
-            SECTION 1 — HERO  (Layered Depth: topo → grain → content → floating UI)
+            SECTION 1 — HERO  (Phone-forward, aspirational fintech)
            ═══════════════════════════════════════════════════════════════ */}
-        <section className="relative pt-36 pb-28 sm:pt-44 sm:pb-36 overflow-hidden">
-          {/* Layer 1 — Topographic contour lines (subtle global-logistics feel) */}
+        <section className="relative pt-36 pb-20 sm:pt-44 sm:pb-28 overflow-hidden">
+          {/* Layer 1 — Topographic contour lines */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               opacity: 0.045,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='600' height='600' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 300 Q75 270 150 300 T300 300 T450 300 T600 300' fill='none' stroke='%23004D40' stroke-width='0.8'/%3E%3Cpath d='M0 330 Q75 300 150 330 T300 330 T450 330 T600 330' fill='none' stroke='%23004D40' stroke-width='0.8'/%3E%3Cpath d='M0 270 Q75 240 150 270 T300 270 T450 270 T600 270' fill='none' stroke='%23004D40' stroke-width='0.8'/%3E%3Cpath d='M0 360 Q75 330 150 360 T300 360 T450 360 T600 360' fill='none' stroke='%23004D40' stroke-width='0.8'/%3E%3Cpath d='M0 240 Q75 210 150 240 T300 240 T450 240 T600 240' fill='none' stroke='%23004D40' stroke-width='0.8'/%3E%3Cpath d='M0 390 Q100 360 200 390 T400 390 T600 390' fill='none' stroke='%23004D40' stroke-width='0.6'/%3E%3Cpath d='M0 210 Q100 180 200 210 T400 210 T600 210' fill='none' stroke='%23004D40' stroke-width='0.6'/%3E%3Cpath d='M0 420 Q120 390 240 420 T480 420 T600 420' fill='none' stroke='%23004D40' stroke-width='0.4'/%3E%3Cpath d='M0 180 Q120 150 240 180 T480 180 T600 180' fill='none' stroke='%23004D40' stroke-width='0.4'/%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='600' height='600' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 300 Q75 270 150 300 T300 300 T450 300 T600 300' fill='none' stroke='%23004D40' stroke-width='0.8'/%3E%3Cpath d='M0 330 Q75 300 150 330 T300 330 T450 330 T600 330' fill='none' stroke='%23004D40' stroke-width='0.8'/%3E%3Cpath d='M0 270 Q75 240 150 270 T300 270 T450 270 T600 270' fill='none' stroke='%23004D40' stroke-width='0.8'/%3E%3C/svg%3E")`,
               backgroundSize: "600px 600px",
             }}
           />
 
-          {/* Layer 2 — Film grain texture (2% noise for premium physical weight) */}
+          {/* Layer 2 — Film grain */}
           <div
             className="absolute inset-0 pointer-events-none opacity-[0.025] mix-blend-multiply"
             style={{
@@ -770,7 +853,7 @@ export default function HomePage() {
             }}
           />
 
-          {/* Layer 3 — Subtle radial gradient giving depth to center */}
+          {/* Layer 3 — Radial depth gradient */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -780,167 +863,193 @@ export default function HomePage() {
           />
 
           <div className="container mx-auto max-w-7xl px-6 relative z-10">
-            <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-center">
-              {/* Left column — Copy + CTAs (3 cols) */}
-              <div className="lg:col-span-3 text-center lg:text-left">
-                {/* Live pulse badge */}
-                <Reveal className="flex justify-center lg:justify-start mb-8">
-                  <LivePulse />
-                </Reveal>
+            {/* Centered headline block */}
+            <div className="text-center max-w-4xl mx-auto mb-16">
+              {/* Live pulse badge */}
+              <Reveal className="flex justify-center mb-8">
+                <LivePulse />
+              </Reveal>
 
-                {/* Headline */}
-                <Reveal>
-                  <h1
-                    className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] tracking-tight mb-6"
-                    style={{
-                      fontFamily: "var(--font-fraunces), Georgia, serif",
-                      color: palette.navy,
-                    }}
-                  >
-                    The global rail
-                    <br />
-                    for moving{" "}
-                    <span
-                      style={{
-                        color: palette.green,
-                        textDecorationColor: palette.green + "30",
-                        textUnderlineOffset: "6px",
-                      }}
-                    >
-                      money
-                    </span>
-                    .
-                  </h1>
-                  <p
-                    className="text-lg sm:text-xl leading-relaxed max-w-2xl mb-10"
-                    style={{ color: palette.slate }}
-                  >
-                    Send stablecoins to anyone in 180+ countries with just their
-                    email. No bank details. No wire fees. No frozen accounts.
-                    Recipients cash out to local currency — instantly.
-                  </p>
-                </Reveal>
-
-                {/* CTAs */}
-                <Reveal className="flex flex-col sm:flex-row items-center lg:items-start gap-4 mb-12">
-                  <Link
-                    href="/docs"
-                    className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
-                    style={{ ...greenGradient }}
-                    onMouseEnter={(e) =>
-                      Object.assign(e.currentTarget.style, greenGradientHover)
-                    }
-                    onMouseLeave={(e) =>
-                      Object.assign(e.currentTarget.style, greenGradient)
-                    }
-                  >
-                    View Integration Docs
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/demo"
-                    className="inline-flex items-center gap-2 rounded-xl border px-8 py-4 text-sm font-semibold transition-all duration-300 hover:bg-[#F3F2ED] hover:-translate-y-0.5"
-                    style={{
-                      borderColor: palette.cardBorder,
-                      color: palette.navy,
-                      boxShadow: "0 2px 8px rgba(12, 24, 41, 0.06)",
-                    }}
-                  >
-                    Try Live Demo
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                </Reveal>
-
-                {/* Proof metrics row */}
-                <Reveal>
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-6 sm:gap-10">
-                    {[
-                      { value: "180+", label: "Countries" },
-                      { value: "<1s", label: "Settlement" },
-                      { value: "1%", label: "Flat fee" },
-                      { value: "$0", label: "Recipient cost" },
-                    ].map((stat) => (
-                      <div
-                        key={stat.label}
-                        className="text-center lg:text-left"
-                      >
-                        <span
-                          className="text-2xl sm:text-3xl font-bold block"
-                          style={{
-                            fontFamily: "var(--font-jetbrains), monospace",
-                            color: palette.navy,
-                          }}
-                        >
-                          {stat.value}
-                        </span>
-                        <span
-                          className="text-xs mt-0.5 block"
-                          style={{ color: palette.muted }}
-                        >
-                          {stat.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </Reveal>
-              </div>
-
-              {/* Right column — Floating product mockups (2 cols) */}
-              <div className="lg:col-span-2 relative hidden lg:flex items-center justify-center min-h-[520px]">
-                {/* Green glow behind cards */}
-                <div
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] pointer-events-none"
+              {/* Emotional headline */}
+              <Reveal>
+                <h1
+                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.06] tracking-tight mb-6"
                   style={{
-                    background:
-                      "radial-gradient(circle, rgba(27,107,74,0.12) 0%, rgba(27,107,74,0.04) 40%, transparent 70%)",
-                    filter: "blur(40px)",
+                    fontFamily: "var(--font-fraunces), Georgia, serif",
+                    color: palette.navy,
                   }}
-                />
-
-                {/* Floating Claim Card — the "hero image" IS the product */}
-                <Reveal delay={0.2} className="absolute top-4 right-0 z-20">
-                  <div
-                    className="w-[280px] rounded-2xl overflow-hidden transition-all duration-500"
+                >
+                  Stop losing money
+                  <br />
+                  to{" "}
+                  <span
+                    className="relative inline-block"
                     style={{
-                      ...glass.strong,
-                      boxShadow:
-                        "0 25px 60px -12px rgba(12,24,41,0.15), 0 8px 24px -8px rgba(12,24,41,0.1), inset 0 1px 0 rgba(255,255,255,0.9)",
-                      transform: "rotate(2deg)",
+                      color: palette.green,
                     }}
                   >
-                    {/* Card header */}
-                    <div
-                      className="px-5 py-4 border-b flex items-center gap-3"
-                      style={{
-                        borderColor: palette.cardBorder,
-                        background: "#FAFAF5",
-                      }}
+                    wire transfers
+                    <svg
+                      className="absolute -bottom-2 left-0 w-full"
+                      viewBox="0 0 200 8"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
+                      <motion.path
+                        d="M2 6C50 2 150 2 198 6"
+                        stroke={palette.green}
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeOpacity="0.3"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{
+                          duration: 1.2,
+                          delay: 0.8,
+                          ease: "easeOut",
+                        }}
+                      />
+                    </svg>
+                  </span>
+                  .
+                </h1>
+                <p
+                  className="text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto mb-10"
+                  style={{ color: palette.slate }}
+                >
+                  Pay contractors in 180+ countries with just an email.
+                  Sub-second settlement. 1% flat. No frozen accounts, no wire
+                  fees, no support tickets.
+                </p>
+              </Reveal>
+
+              {/* CTAs */}
+              <Reveal className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+                <Link
+                  href="/docs"
+                  className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+                  style={{ ...greenGradient }}
+                  onMouseEnter={(e) =>
+                    Object.assign(e.currentTarget.style, greenGradientHover)
+                  }
+                  onMouseLeave={(e) =>
+                    Object.assign(e.currentTarget.style, greenGradient)
+                  }
+                >
+                  Start Integrating
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/demo"
+                  className="inline-flex items-center gap-2 rounded-xl border px-8 py-4 text-sm font-semibold transition-all duration-300 hover:bg-[#F3F2ED] hover:-translate-y-0.5"
+                  style={{
+                    borderColor: palette.cardBorder,
+                    color: palette.navy,
+                    boxShadow: "0 2px 8px rgba(12, 24, 41, 0.06)",
+                  }}
+                >
+                  Try Live Demo
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </Reveal>
+            </div>
+
+            {/* Hero visual — Phone mockup centered, code + badge floating around it */}
+            <Reveal className="relative flex justify-center items-center min-h-[520px] sm:min-h-[560px]">
+              {/* Large green glow behind phone */}
+              <div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(27,107,74,0.14) 0%, rgba(27,107,74,0.04) 40%, transparent 70%)",
+                  filter: "blur(50px)",
+                }}
+              />
+
+              {/* MAIN: Phone mockup — front and center */}
+              <motion.div
+                className="relative z-20"
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.9,
+                  delay: 0.3,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <div
+                  className="w-[320px] sm:w-[340px] rounded-[2.5rem] border-[6px] overflow-hidden"
+                  style={{
+                    borderColor: palette.navy,
+                    background: palette.cream,
+                    boxShadow:
+                      "0 40px 80px -16px rgba(12,24,41,0.22), 0 16px 40px -12px rgba(12,24,41,0.14), 0 0 60px rgba(27,107,74,0.08)",
+                  }}
+                >
+                  {/* Phone status bar */}
+                  <div
+                    className="flex items-center justify-between px-6 py-2.5"
+                    style={{ background: palette.white }}
+                  >
+                    <span
+                      className="text-[12px] font-semibold"
+                      style={{ color: palette.navy }}
+                    >
+                      9:41
+                    </span>
+                    <div className="flex gap-1">
                       <div
-                        className="h-8 w-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
-                        style={{ background: palette.green }}
+                        className="w-4 h-2.5 rounded-sm border"
+                        style={{ borderColor: palette.navy }}
+                      >
+                        <div
+                          className="w-3 h-1.5 rounded-[1px] m-[1px]"
+                          style={{ background: palette.green }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Claim card content */}
+                  <div className="px-6 py-8 space-y-5">
+                    {/* Sender badge */}
+                    <div className="text-center">
+                      <div
+                        className="inline-flex h-12 w-12 items-center justify-center rounded-full text-white text-sm font-bold mb-2"
+                        style={{
+                          background: `linear-gradient(135deg, ${palette.green} 0%, #2A9D6A 100%)`,
+                        }}
                       >
                         S
                       </div>
-                      <div>
-                        <p
-                          className="text-[13px] font-semibold"
-                          style={{ color: palette.navy }}
-                        >
-                          You&apos;ve been paid
-                        </p>
-                        <p
-                          className="text-[11px]"
-                          style={{ color: palette.muted }}
-                        >
-                          via Acme Corp
-                        </p>
-                      </div>
-                    </div>
-                    {/* Amount */}
-                    <div className="px-5 py-6 text-center">
                       <p
-                        className="text-4xl font-bold"
+                        className="text-sm font-semibold"
+                        style={{ color: palette.navy }}
+                      >
+                        You&apos;ve been paid
+                      </p>
+                      <p className="text-xs" style={{ color: palette.muted }}>
+                        via Acme Corp
+                      </p>
+                    </div>
+
+                    {/* Amount */}
+                    <div
+                      className="rounded-2xl p-5 text-center"
+                      style={{
+                        background: "rgba(243, 242, 237, 0.7)",
+                        backdropFilter: "blur(8px)",
+                        border: "1px solid rgba(255,255,255,0.5)",
+                      }}
+                    >
+                      <p
+                        className="text-xs mb-1"
+                        style={{ color: palette.muted }}
+                      >
+                        Payment amount
+                      </p>
+                      <p
+                        className="text-4xl sm:text-5xl font-bold"
                         style={{
                           fontFamily: "var(--font-jetbrains), monospace",
                           color: palette.navy,
@@ -949,22 +1058,23 @@ export default function HomePage() {
                         $250.00
                       </p>
                       <p
-                        className="text-xs mt-1"
+                        className="text-xs mt-1.5"
                         style={{ color: palette.muted }}
                       >
                         USDC · Instant settlement
                       </p>
                     </div>
+
                     {/* Actions */}
-                    <div className="px-5 pb-5 space-y-2">
+                    <div className="space-y-2.5">
                       <div
-                        className="rounded-xl py-3 text-center text-sm font-semibold text-white"
+                        className="rounded-xl py-3.5 text-center text-sm font-semibold text-white"
                         style={{ ...greenGradient }}
                       >
                         Cash Out to Bank
                       </div>
                       <div
-                        className="rounded-xl py-3 text-center text-sm font-semibold border"
+                        className="rounded-xl py-3.5 text-center text-sm font-semibold border"
                         style={{
                           borderColor: palette.cardBorder,
                           color: palette.navy,
@@ -973,102 +1083,368 @@ export default function HomePage() {
                         Keep in USDC
                       </div>
                     </div>
-                  </div>
-                </Reveal>
 
-                {/* Floating Code Snippet card — behind and offset */}
-                <Reveal delay={0.35} className="absolute bottom-4 left-0 z-10">
-                  <div
-                    className="w-[260px] rounded-xl overflow-hidden"
-                    style={{
-                      boxShadow:
-                        "0 20px 50px -15px rgba(12,24,41,0.15), 0 6px 20px -6px rgba(12,24,41,0.1)",
-                      transform: "rotate(-1.5deg)",
-                    }}
-                  >
-                    {/* Editor header */}
-                    <div
-                      className="flex items-center gap-1.5 px-4 py-2.5"
-                      style={{ background: "#0d1117" }}
+                    <p
+                      className="text-center text-[10px]"
+                      style={{ color: palette.muted }}
                     >
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                      <span
-                        className="text-[10px] ml-2"
-                        style={{
-                          fontFamily: "var(--font-jetbrains), monospace",
-                          color: "#7C8A9E",
-                        }}
-                      >
-                        payout.ts
-                      </span>
-                    </div>
-                    <pre
-                      className="px-4 py-4 text-[11px] leading-relaxed"
-                      style={{
-                        fontFamily: "var(--font-jetbrains), monospace",
-                        background: palette.navy,
-                        color: "#c9d1d9",
-                      }}
-                    >
-                      <code>
-                        <span style={{ color: "#ff7b72" }}>await</span>
-                        {" settlr."}
-                        <span style={{ color: "#d2a8ff" }}>payout</span>
-                        {"."}
-                        <span style={{ color: "#d2a8ff" }}>create</span>
-                        {"({\n"}
-                        {"  "}
-                        <span style={{ color: "#79c0ff" }}>amount</span>
-                        {": "}
-                        <span style={{ color: "#79c0ff" }}>250</span>
-                        {",\n"}
-                        {"  "}
-                        <span style={{ color: "#79c0ff" }}>recipient</span>
-                        {': "'}
-                        <span style={{ color: "#a5d6ff" }}>maria@acme.co</span>
-                        {'",\n});'}
-                      </code>
-                    </pre>
+                      Powered by Settlr · Non-custodial
+                    </p>
                   </div>
-                </Reveal>
+                </div>
+              </motion.div>
 
-                {/* Decorative floating badge — settlement confirmation */}
-                <Reveal
-                  delay={0.5}
-                  className="absolute top-[45%] left-[-10px] z-30"
+              {/* Floating code snippet — left side */}
+              <motion.div
+                className="absolute left-[2%] sm:left-[8%] lg:left-[14%] top-[15%] z-10 hidden md:block"
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.6,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <div
+                  className="w-[240px] rounded-xl overflow-hidden"
+                  style={{
+                    boxShadow:
+                      "0 20px 50px -15px rgba(12,24,41,0.18), 0 6px 20px -6px rgba(12,24,41,0.1)",
+                    transform: "rotate(-2deg)",
+                  }}
                 >
                   <div
-                    className="flex items-center gap-2 rounded-full px-4 py-2"
+                    className="flex items-center gap-1.5 px-4 py-2.5"
+                    style={{ background: "#0d1117" }}
+                  >
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                    <span
+                      className="text-[10px] ml-2"
+                      style={{
+                        fontFamily: "var(--font-jetbrains), monospace",
+                        color: "#7C8A9E",
+                      }}
+                    >
+                      payout.ts
+                    </span>
+                  </div>
+                  <pre
+                    className="px-4 py-4 text-[11px] leading-relaxed"
                     style={{
-                      ...glass.strong,
-                      boxShadow:
-                        "0 8px 30px -8px rgba(12,24,41,0.12), inset 0 1px 0 rgba(255,255,255,0.9)",
+                      fontFamily: "var(--font-jetbrains), monospace",
+                      background: palette.navy,
+                      color: "#c9d1d9",
+                    }}
+                  >
+                    <code>
+                      <span style={{ color: "#ff7b72" }}>await</span>
+                      {" settlr."}
+                      <span style={{ color: "#d2a8ff" }}>payout</span>
+                      {"."}
+                      <span style={{ color: "#d2a8ff" }}>create</span>
+                      {"({\n"}
+                      {"  "}
+                      <span style={{ color: "#79c0ff" }}>amount</span>
+                      {": "}
+                      <span style={{ color: "#79c0ff" }}>250</span>
+                      {",\n"}
+                      {"  "}
+                      <span style={{ color: "#79c0ff" }}>recipient</span>
+                      {': "'}
+                      <span style={{ color: "#a5d6ff" }}>maria@acme.co</span>
+                      {'"\n});'}
+                    </code>
+                  </pre>
+                </div>
+              </motion.div>
+
+              {/* Floating settlement badge — right side */}
+              <motion.div
+                className="absolute right-[2%] sm:right-[8%] lg:right-[14%] top-[10%] z-30 hidden md:block"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.8,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <div
+                  className="flex items-center gap-2.5 rounded-full px-5 py-3"
+                  style={{
+                    ...glass.strong,
+                    boxShadow:
+                      "0 12px 40px -8px rgba(12,24,41,0.14), inset 0 1px 0 rgba(255,255,255,0.9)",
+                  }}
+                >
+                  <div
+                    className="h-6 w-6 rounded-full flex items-center justify-center"
+                    style={{ background: palette.greenLight }}
+                  >
+                    <Check
+                      className="h-3.5 w-3.5"
+                      style={{ color: palette.green }}
+                    />
+                  </div>
+                  <span
+                    className="text-sm font-semibold"
+                    style={{
+                      fontFamily: "var(--font-jetbrains), monospace",
+                      color: palette.green,
+                    }}
+                  >
+                    Settled in 0.4s
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* Floating countries badge — bottom right */}
+              <motion.div
+                className="absolute right-[4%] sm:right-[10%] lg:right-[16%] bottom-[8%] z-30 hidden md:block"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 1.0,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <div
+                  className="flex items-center gap-2.5 rounded-full px-5 py-3"
+                  style={{
+                    ...glass.strong,
+                    boxShadow:
+                      "0 12px 40px -8px rgba(12,24,41,0.14), inset 0 1px 0 rgba(255,255,255,0.9)",
+                  }}
+                >
+                  <Globe className="h-4 w-4" style={{ color: palette.green }} />
+                  <span
+                    className="text-sm font-semibold"
+                    style={{
+                      fontFamily: "var(--font-jetbrains), monospace",
+                      color: palette.navy,
+                    }}
+                  >
+                    180+ countries
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* Floating fee badge — bottom left */}
+              <motion.div
+                className="absolute left-[4%] sm:left-[10%] lg:left-[16%] bottom-[15%] z-30 hidden md:block"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 1.1,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <div
+                  className="flex items-center gap-2.5 rounded-full px-5 py-3"
+                  style={{
+                    ...glass.strong,
+                    boxShadow:
+                      "0 12px 40px -8px rgba(12,24,41,0.14), inset 0 1px 0 rgba(255,255,255,0.9)",
+                  }}
+                >
+                  <DollarSign
+                    className="h-4 w-4"
+                    style={{ color: palette.green }}
+                  />
+                  <span
+                    className="text-sm font-semibold"
+                    style={{
+                      fontFamily: "var(--font-jetbrains), monospace",
+                      color: palette.navy,
+                    }}
+                  >
+                    1% flat · $0 for recipients
+                  </span>
+                </div>
+              </motion.div>
+            </Reveal>
+
+            {/* Proof metrics row — below hero visual */}
+            <Reveal className="mt-16">
+              <div className="flex flex-wrap justify-center gap-8 sm:gap-14">
+                {[
+                  { value: "180+", label: "Countries" },
+                  { value: "<1s", label: "Settlement" },
+                  { value: "1%", label: "Flat fee" },
+                  { value: "$0", label: "Recipient cost" },
+                ].map((stat) => (
+                  <div key={stat.label} className="text-center">
+                    <span
+                      className="text-2xl sm:text-3xl font-bold block"
+                      style={{
+                        fontFamily: "var(--font-jetbrains), monospace",
+                        color: palette.navy,
+                      }}
+                    >
+                      {stat.value}
+                    </span>
+                    <span
+                      className="text-xs mt-0.5 block"
+                      style={{ color: palette.muted }}
+                    >
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTION 1.5 — EMOTIONAL HOOK ("Kill the support tickets")
+           ═══════════════════════════════════════════════════════════════ */}
+        <section
+          className="py-20 sm:py-28 relative overflow-hidden"
+          style={{ background: palette.white }}
+        >
+          {/* Subtle red tint gradient at top */}
+          <div
+            className="absolute top-0 left-0 right-0 h-px"
+            style={{
+              background: `linear-gradient(90deg, transparent 10%, ${palette.topo} 50%, transparent 90%)`,
+            }}
+          />
+          <div className="container mx-auto max-w-5xl px-6">
+            <Reveal className="text-center mb-14">
+              <div
+                className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-6"
+                style={{
+                  background: "#FEF2F2",
+                  border: "1px solid #FECACA",
+                }}
+              >
+                <AlertTriangle
+                  className="h-3.5 w-3.5"
+                  style={{ color: "#DC2626" }}
+                />
+                <span
+                  className="text-xs font-semibold"
+                  style={{ color: "#DC2626" }}
+                >
+                  The problem
+                </span>
+              </div>
+              <h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4"
+                style={{
+                  fontFamily: "var(--font-fraunces), Georgia, serif",
+                  color: palette.navy,
+                }}
+              >
+                Your contractors are furious.
+              </h2>
+              <p
+                className="text-base sm:text-lg max-w-2xl mx-auto"
+                style={{ color: palette.slate }}
+              >
+                Wire transfers fail. PayPal freezes accounts. Your finance team
+                drowns in spreadsheets and angry emails. Every failed payment is
+                a support ticket, a late contractor, and a broken relationship.
+              </p>
+            </Reveal>
+
+            {/* Pain point cards */}
+            <div className="grid sm:grid-cols-3 gap-6 mb-14">
+              {[
+                {
+                  icon: <HeadphonesIcon className="h-6 w-6" />,
+                  stat: "23",
+                  label: "support tickets / month",
+                  description:
+                    "from contractors whose payments failed or were frozen",
+                  color: "#DC2626",
+                  bgColor: "#FEF2F2",
+                },
+                {
+                  icon: <TrendingDown className="h-6 w-6" />,
+                  stat: "5%+",
+                  label: "lost to PayPal fees",
+                  description:
+                    "on every international payout — before currency conversion",
+                  color: "#D97706",
+                  bgColor: "#FFFBEB",
+                },
+                {
+                  icon: <Clock className="h-6 w-6" />,
+                  stat: "3–5",
+                  label: "days to settle wires",
+                  description:
+                    "while your contractors wait, chase, and lose trust",
+                  color: "#DC2626",
+                  bgColor: "#FEF2F2",
+                },
+              ].map((pain, i) => (
+                <Reveal key={pain.label} delay={i * 0.1}>
+                  <div
+                    className="rounded-2xl p-7 text-center h-full transition-all duration-300 hover:-translate-y-1"
+                    style={{
+                      ...glass.card,
+                      borderColor: pain.color + "20",
                     }}
                   >
                     <div
-                      className="h-5 w-5 rounded-full flex items-center justify-center"
-                      style={{ background: palette.greenLight }}
+                      className="inline-flex items-center justify-center w-11 h-11 rounded-xl mb-4"
+                      style={{ background: pain.bgColor, color: pain.color }}
                     >
-                      <Check
-                        className="h-3 w-3"
-                        style={{ color: palette.green }}
-                      />
+                      {pain.icon}
                     </div>
-                    <span
-                      className="text-xs font-semibold"
+                    <p
+                      className="text-4xl font-bold mb-1"
                       style={{
                         fontFamily: "var(--font-jetbrains), monospace",
-                        color: palette.green,
+                        color: pain.color,
                       }}
                     >
-                      Settled in 0.4s
-                    </span>
+                      {pain.stat}
+                    </p>
+                    <p
+                      className="text-sm font-semibold mb-2"
+                      style={{ color: palette.navy }}
+                    >
+                      {pain.label}
+                    </p>
+                    <p className="text-xs" style={{ color: palette.muted }}>
+                      {pain.description}
+                    </p>
                   </div>
                 </Reveal>
-              </div>
+              ))}
             </div>
+
+            {/* Resolution */}
+            <Reveal className="text-center">
+              <div
+                className="inline-block rounded-2xl px-10 py-7"
+                style={{
+                  background: palette.greenLight,
+                  border: `1px solid ${palette.green}25`,
+                }}
+              >
+                <p
+                  className="text-xl sm:text-2xl font-bold mb-2"
+                  style={{
+                    fontFamily: "var(--font-fraunces), Georgia, serif",
+                    color: palette.green,
+                  }}
+                >
+                  Kill the support tickets.
+                </p>
+                <p className="text-sm" style={{ color: palette.slate }}>
+                  With Settlr, payments don&apos;t fail. They settle in under a
+                  second. No frozen accounts. No angry emails. No chasing.
+                </p>
+              </div>
+            </Reveal>
           </div>
         </section>
 
@@ -1153,7 +1529,11 @@ export default function HomePage() {
                   detail: "30+ off-ramp partners worldwide.",
                 },
               ].map((item, i) => (
-                <Reveal key={item.step} delay={i * 0.1}>
+                <SlideIn
+                  key={item.step}
+                  delay={i * 0.12}
+                  direction={i % 2 === 0 ? "left" : "right"}
+                >
                   <div
                     className={`relative flex items-start gap-6 mb-16 last:mb-0 ${
                       i % 2 === 0
@@ -1163,13 +1543,16 @@ export default function HomePage() {
                   >
                     {/* Content */}
                     <div className="flex-1 ml-16 md:ml-0">
-                      <div
-                        className={`rounded-2xl p-7 sm:p-9 transition-all duration-300 ${
+                      <motion.div
+                        className={`rounded-2xl p-7 sm:p-9 transition-all duration-300 hover:-translate-y-1 ${
                           i % 2 === 0 ? "md:mr-12" : "md:ml-12"
                         }`}
                         style={{
                           ...glass.card,
                           borderColor: undefined,
+                        }}
+                        whileHover={{
+                          boxShadow: `0 16px 48px rgba(12, 24, 41, 0.12), 0 0 0 1px ${palette.green}25, inset 0 1px 0 rgba(255,255,255,0.9)`,
                         }}
                       >
                         <span
@@ -1205,25 +1588,34 @@ export default function HomePage() {
                         >
                           {item.detail}
                         </p>
-                      </div>
+                      </motion.div>
                     </div>
 
-                    {/* Timeline node */}
-                    <div
+                    {/* Timeline node — animated scale on scroll */}
+                    <motion.div
                       className="absolute left-8 md:left-1/2 -translate-x-1/2 flex items-center justify-center w-11 h-11 rounded-full border-2 z-10"
                       style={{
                         borderColor: palette.green,
                         background: palette.white,
                         boxShadow: `0 0 20px 4px ${palette.green}20, 0 0 8px 2px ${palette.green}10`,
                       }}
+                      initial={{ scale: 0, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true, margin: "-40px" }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                        delay: i * 0.12 + 0.2,
+                      }}
                     >
                       <span style={{ color: palette.green }}>{item.icon}</span>
-                    </div>
+                    </motion.div>
 
                     {/* Spacer for the other side on desktop */}
                     <div className="hidden md:block flex-1" />
                   </div>
-                </Reveal>
+                </SlideIn>
               ))}
             </div>
           </div>
@@ -1327,20 +1719,25 @@ export default function HomePage() {
                   desc: "Kora relayer covers all transaction fees. Recipients never need SOL, never see gas, never touch a blockchain.",
                 },
               ].map((f, i) => (
-                <Reveal key={f.title} delay={i * 0.08}>
-                  <div
-                    className="rounded-2xl p-8 h-full transition-all duration-300 hover:-translate-y-1 group"
+                <motion.div
+                  key={f.title}
+                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.08,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <motion.div
+                    className="rounded-2xl p-8 h-full transition-all duration-300 group cursor-default"
                     style={{
                       ...glass.card,
                     }}
-                    onMouseEnter={(e) => {
-                      Object.assign(e.currentTarget.style, glass.cardHover);
-                    }}
-                    onMouseLeave={(e) => {
-                      Object.assign(e.currentTarget.style, {
-                        boxShadow: glass.card.boxShadow,
-                        border: glass.card.border,
-                      });
+                    whileHover={{
+                      y: -6,
+                      boxShadow: `0 16px 48px rgba(12, 24, 41, 0.12), 0 0 0 1px ${palette.green}25, inset 0 1px 0 rgba(255,255,255,0.9)`,
                     }}
                   >
                     <div
@@ -1367,42 +1764,276 @@ export default function HomePage() {
                     >
                       {f.desc}
                     </p>
-                  </div>
-                </Reveal>
+                  </motion.div>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════
-            SECTION 5 — SAVINGS CALCULATOR
+            SECTION 5 — VISUAL COMPARISON TABLE + SAVINGS CALCULATOR
            ═══════════════════════════════════════════════════════════════ */}
         <section
           className="py-28 sm:py-36"
           style={{ background: palette.cream }}
         >
-          <div className="container mx-auto max-w-3xl px-6">
+          <div className="container mx-auto max-w-5xl px-6">
             <Reveal className="text-center mb-14">
               <p
                 className="text-sm font-semibold uppercase tracking-widest mb-3"
                 style={{ color: palette.green }}
               >
-                Cost Comparison
+                Why Switch
               </p>
               <h2
-                className="text-3xl sm:text-4xl font-bold"
+                className="text-3xl sm:text-4xl font-bold mb-4"
                 style={{
                   fontFamily: "var(--font-fraunces), Georgia, serif",
                   color: palette.navy,
                 }}
               >
-                Calculate your savings.
+                See the difference.
               </h2>
+              <p
+                className="text-base max-w-xl mx-auto"
+                style={{ color: palette.slate }}
+              >
+                A side-by-side comparison of what you&apos;re paying now vs.
+                what you could be paying.
+              </p>
             </Reveal>
 
+            {/* Visual comparison table */}
             <Reveal>
-              <SavingsCalculator />
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{
+                  ...glass.strong,
+                }}
+              >
+                {/* Table header */}
+                <div
+                  className="grid grid-cols-4 gap-0 border-b"
+                  style={{ borderColor: palette.cardBorder }}
+                >
+                  <div className="px-6 py-5">
+                    <span
+                      className="text-xs font-semibold uppercase tracking-wider"
+                      style={{ color: palette.muted }}
+                    >
+                      Feature
+                    </span>
+                  </div>
+                  <div
+                    className="px-6 py-5 text-center"
+                    style={{ background: "rgba(243, 242, 237, 0.5)" }}
+                  >
+                    <span
+                      className="text-sm font-bold"
+                      style={{ color: palette.muted }}
+                    >
+                      PayPal
+                    </span>
+                  </div>
+                  <div
+                    className="px-6 py-5 text-center"
+                    style={{ background: "rgba(243, 242, 237, 0.5)" }}
+                  >
+                    <span
+                      className="text-sm font-bold"
+                      style={{ color: palette.muted }}
+                    >
+                      Wire Transfer
+                    </span>
+                  </div>
+                  <div
+                    className="px-6 py-5 text-center relative"
+                    style={{ background: palette.greenLight }}
+                  >
+                    <span
+                      className="text-sm font-bold"
+                      style={{ color: palette.green }}
+                    >
+                      Settlr ✦
+                    </span>
+                  </div>
+                </div>
+
+                {/* Table rows */}
+                {[
+                  {
+                    feature: "Transaction fee",
+                    paypal: { text: "5%+", pass: false },
+                    wire: { text: "$25–50", pass: false },
+                    settlr: { text: "1% flat", pass: true },
+                  },
+                  {
+                    feature: "Settlement speed",
+                    paypal: { text: "3–5 days", pass: false },
+                    wire: { text: "1–5 days", pass: false },
+                    settlr: { text: "< 1 second", pass: true },
+                  },
+                  {
+                    feature: "Countries",
+                    paypal: { text: "~100", pass: null },
+                    wire: { text: "Varies", pass: false },
+                    settlr: { text: "180+", pass: true },
+                  },
+                  {
+                    feature: "Recipient cost",
+                    paypal: { text: "2–4% FX", pass: false },
+                    wire: { text: "$15–30", pass: false },
+                    settlr: { text: "$0", pass: true },
+                  },
+                  {
+                    feature: "Bank details needed",
+                    paypal: { text: "Account", pass: null },
+                    wire: { text: "SWIFT/IBAN", pass: false },
+                    settlr: { text: "Just email", pass: true },
+                  },
+                  {
+                    feature: "Account freezes",
+                    paypal: { text: "Common", pass: false },
+                    wire: { text: "Rare", pass: null },
+                    settlr: { text: "Impossible", pass: true },
+                  },
+                  {
+                    feature: "Batch payouts",
+                    paypal: { text: "Limited", pass: null },
+                    wire: { text: "No", pass: false },
+                    settlr: { text: "Unlimited", pass: true },
+                  },
+                  {
+                    feature: "Support tickets",
+                    paypal: { text: "Many", pass: false },
+                    wire: { text: "Many", pass: false },
+                    settlr: { text: "Zero", pass: true },
+                  },
+                ].map((row, i) => (
+                  <motion.div
+                    key={row.feature}
+                    className="grid grid-cols-4 gap-0 border-b last:border-b-0"
+                    style={{ borderColor: palette.cardBorder + "80" }}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: i * 0.05 }}
+                  >
+                    <div className="px-6 py-4 flex items-center">
+                      <span
+                        className="text-sm font-medium"
+                        style={{ color: palette.navy }}
+                      >
+                        {row.feature}
+                      </span>
+                    </div>
+                    {/* PayPal */}
+                    <div
+                      className="px-6 py-4 flex items-center justify-center gap-2"
+                      style={{ background: "rgba(243, 242, 237, 0.3)" }}
+                    >
+                      {row.paypal.pass === false && (
+                        <X
+                          className="h-4 w-4 shrink-0"
+                          style={{ color: "#DC2626" }}
+                        />
+                      )}
+                      {row.paypal.pass === null && (
+                        <Minus
+                          className="h-4 w-4 shrink-0"
+                          style={{ color: "#D97706" }}
+                        />
+                      )}
+                      {row.paypal.pass === true && (
+                        <Check
+                          className="h-4 w-4 shrink-0"
+                          style={{ color: palette.green }}
+                        />
+                      )}
+                      <span
+                        className="text-sm"
+                        style={{
+                          color:
+                            row.paypal.pass === false
+                              ? "#DC2626"
+                              : palette.slate,
+                        }}
+                      >
+                        {row.paypal.text}
+                      </span>
+                    </div>
+                    {/* Wire */}
+                    <div
+                      className="px-6 py-4 flex items-center justify-center gap-2"
+                      style={{ background: "rgba(243, 242, 237, 0.3)" }}
+                    >
+                      {row.wire.pass === false && (
+                        <X
+                          className="h-4 w-4 shrink-0"
+                          style={{ color: "#DC2626" }}
+                        />
+                      )}
+                      {row.wire.pass === null && (
+                        <Minus
+                          className="h-4 w-4 shrink-0"
+                          style={{ color: "#D97706" }}
+                        />
+                      )}
+                      {row.wire.pass === true && (
+                        <Check
+                          className="h-4 w-4 shrink-0"
+                          style={{ color: palette.green }}
+                        />
+                      )}
+                      <span
+                        className="text-sm"
+                        style={{
+                          color:
+                            row.wire.pass === false ? "#DC2626" : palette.slate,
+                        }}
+                      >
+                        {row.wire.text}
+                      </span>
+                    </div>
+                    {/* Settlr — highlighted column */}
+                    <div
+                      className="px-6 py-4 flex items-center justify-center gap-2"
+                      style={{ background: palette.greenLight + "80" }}
+                    >
+                      <Check
+                        className="h-4 w-4 shrink-0"
+                        style={{ color: palette.green }}
+                      />
+                      <span
+                        className="text-sm font-semibold"
+                        style={{ color: palette.green }}
+                      >
+                        {row.settlr.text}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </Reveal>
+
+            {/* Savings calculator below the table */}
+            <div className="mt-16 max-w-3xl mx-auto">
+              <Reveal className="text-center mb-10">
+                <h3
+                  className="text-2xl sm:text-3xl font-bold"
+                  style={{
+                    fontFamily: "var(--font-fraunces), Georgia, serif",
+                    color: palette.navy,
+                  }}
+                >
+                  Calculate your savings.
+                </h3>
+              </Reveal>
+              <Reveal>
+                <SavingsCalculator />
+              </Reveal>
+            </div>
           </div>
         </section>
 
