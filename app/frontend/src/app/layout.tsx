@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     template: "%s | Settlr",
   },
   description:
-    "Settlr is a non-custodial stablecoin settlement platform designed for B2B cannabis distributors and high-risk industries to process payments at a 1% flat fee. No bank interference, ever.",
+    "Settlr: Non-custodial stablecoin settlement for B2B cannabis and high-risk industries. 1% flat fee, instant finality, and no bank interference. Ever.",
   alternates: { canonical: "/" },
   authors: [{ name: "Settlr" }],
   icons: {
@@ -89,6 +89,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "@settlrp",
     title: "Settlr — Non-Custodial Stablecoin Settlement for High-Risk B2B",
     description:
       "Move capital with 100% certainty. Non-custodial USDC settlement for cannabis and high-risk supply chains. 1% flat, no bank interference.",

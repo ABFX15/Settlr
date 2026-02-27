@@ -275,6 +275,7 @@ export default function HomePage() {
             description:
               "Settlr is a non-custodial stablecoin settlement platform designed for B2B cannabis distributors and high-risk industries to process payments at a 1% flat fee.",
             foundingDate: "2025",
+            areaServed: "US",
             sameAs: ["https://x.com/settlrp"],
             knowsAbout: [
               "Cannabis B2B payments",
@@ -362,6 +363,45 @@ export default function HomePage() {
                 },
               },
             ],
+          }),
+        }}
+      />
+      {/* Structured data — BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://settlr.dev/",
+              },
+            ],
+          }),
+        }}
+      />
+      {/* Structured data — WebSite */}
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Settlr",
+            url: "https://settlr.dev",
+            description:
+              "Non-custodial B2B stablecoin settlement for cannabis and high-risk industries.",
+            publisher: {
+              "@type": "Organization",
+              name: "Settlr",
+              url: "https://settlr.dev",
+            },
           }),
         }}
       />
