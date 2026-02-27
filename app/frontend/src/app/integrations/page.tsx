@@ -11,6 +11,9 @@ import {
   MessageSquare,
   Globe,
   Check,
+  Monitor,
+  ArrowUpRight,
+  Leaf,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
@@ -111,6 +114,46 @@ const integrations = [
       "Approval workflows in-channel",
       "Payment receipts as thread replies",
       "Great for distributed teams",
+    ],
+  },
+];
+
+/* ── Cannabis POS integrations ─────────────────────────── */
+const cannabisPOS = [
+  {
+    name: "Flowhub",
+    role: "POS & Compliance",
+    description:
+      "Trigger B2B USDC settlement from Flowhub POS transactions. Receipts sync back to Flowhub for METRC-compliant reconciliation — no double data entry.",
+    url: "https://flowhub.com",
+    highlights: [
+      "POS-triggered invoice generation",
+      "METRC manifest tagging",
+      "Real-time settlement status",
+    ],
+  },
+  {
+    name: "Dutchie",
+    role: "E-commerce & Ordering",
+    description:
+      "Connect Dutchie wholesale orders to Settlr. When a retailer places an order, the USDC invoice and payment link are created automatically.",
+    url: "https://dutchie.com",
+    highlights: [
+      "Wholesale order → invoice automation",
+      "Retailer payment link delivery",
+      "Order status syncs on settlement",
+    ],
+  },
+  {
+    name: "LeafLink",
+    role: "B2B Marketplace",
+    description:
+      "Settle LeafLink marketplace transactions in USDC instead of waiting 30–60 days for ACH. Instant finality for every purchase order.",
+    url: "https://leaflink.com",
+    highlights: [
+      "Replace net-30 terms with instant USDC",
+      "Purchase order ↔ invoice sync",
+      "Cryptographic receipt per order",
     ],
   },
 ];
@@ -277,6 +320,103 @@ export default function IntegrationsPage() {
               </Reveal>
             );
           })}
+        </div>
+      </section>
+
+      {/* Cannabis POS Integrations */}
+      <section className="mx-auto max-w-6xl px-6 pb-28">
+        <Reveal>
+          <div className="mb-10">
+            <div
+              className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#10B981]/20 bg-[#10B981]/[0.08] px-4 py-1.5 text-[13px] font-medium"
+              style={{ color: "#059669" }}
+            >
+              <Leaf className="h-3.5 w-3.5" />
+              Cannabis Industry
+            </div>
+            <h2
+              className="text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-tight tracking-tight"
+              style={{ color: "#0A0F1E" }}
+            >
+              Cannabis POS &amp; marketplace integrations
+            </h2>
+            <p
+              className="mt-3 max-w-2xl text-base leading-relaxed"
+              style={{ color: "#4A5568" }}
+            >
+              Settlr connects to the cannabis-specific platforms your team
+              already uses — so B2B settlement flows directly from your POS or
+              procurement system.
+            </p>
+          </div>
+        </Reveal>
+
+        <div className="grid gap-8 md:grid-cols-3">
+          {cannabisPOS.map((platform, i) => (
+            <Reveal key={platform.name} delay={i * 0.06}>
+              <div
+                className="group relative flex h-full flex-col rounded-2xl border p-8 transition-all hover:shadow-md"
+                style={{ borderColor: "#E5E7EB", background: "#FAFAFA" }}
+              >
+                <div className="mb-5 flex items-center gap-3">
+                  <div
+                    className="inline-flex rounded-xl p-3"
+                    style={{ background: "rgba(16,185,129,0.1)" }}
+                  >
+                    <Monitor className="h-5 w-5" style={{ color: "#059669" }} />
+                  </div>
+                  <div>
+                    <h3
+                      className="text-lg font-semibold"
+                      style={{ color: "#0A0F1E" }}
+                    >
+                      {platform.name}
+                    </h3>
+                    <p
+                      className="text-xs font-medium"
+                      style={{ color: "#94A3B8" }}
+                    >
+                      {platform.role}
+                    </p>
+                  </div>
+                </div>
+
+                <p
+                  className="flex-1 text-sm leading-relaxed"
+                  style={{ color: "#4A5568" }}
+                >
+                  {platform.description}
+                </p>
+
+                <ul className="mt-5 space-y-2">
+                  {platform.highlights.map((h) => (
+                    <li
+                      key={h}
+                      className="flex items-start gap-2 text-xs"
+                      style={{ color: "#94A3B8" }}
+                    >
+                      <Check
+                        className="mt-0.5 h-3.5 w-3.5 flex-shrink-0"
+                        style={{ color: "#059669" }}
+                      />
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href={platform.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-medium transition-colors hover:opacity-80"
+                  style={{ color: "#059669" }}
+                >
+                  About {platform.name}
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </a>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 

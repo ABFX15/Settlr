@@ -19,6 +19,8 @@ import {
   AlertTriangle,
   Ban,
   Users,
+  Monitor,
+  ArrowUpRight,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
@@ -87,6 +89,10 @@ const faqs = [
   {
     q: "How much can a cannabis business save by eliminating cash?",
     a: "A cannabis business processing $2 million annually can save $60,000–$100,000 per year by eliminating cash handling. This includes eliminated armored car fees ($24,000–$48,000), reduced labor ($15,000–$25,000), eliminated shrinkage ($10,000–$40,000), and lower processing fees vs. high-risk merchant accounts.",
+  },
+  {
+    q: "Does Settlr integrate with cannabis POS systems like Flowhub, Dutchie, or LeafLink?",
+    a: "Yes. Settlr is building integrations with leading cannabis POS and marketplace platforms including Flowhub, Dutchie, and LeafLink. These integrations allow B2B invoices and settlements to flow directly from your existing POS or procurement system, so there's no double data entry. Receipts sync back to your POS for seamless reconciliation.",
   },
 ];
 
@@ -300,6 +306,90 @@ export default function CannabisB2BPaymentsPage() {
             flat, enabling instant digital payments across the entire cannabis
             supply chain without bank interference.
           </p>
+        </div>
+      </section>
+
+      {/* ═══════ INFRASTRUCTURE PARTNERS ═══════ */}
+      <section
+        className="py-14 sm:py-16"
+        style={{
+          borderTop: `1px solid ${p.border}`,
+          borderBottom: `1px solid ${p.border}`,
+        }}
+      >
+        <div className="mx-auto max-w-5xl px-6">
+          <R>
+            <p
+              className="mb-8 text-center text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: p.muted }}
+            >
+              Powered by institutional-grade infrastructure
+            </p>
+            <div className="flex flex-col items-center justify-center gap-12 sm:flex-row sm:gap-20">
+              {/* Circle USDC */}
+              <a
+                href="https://www.circle.com/usdc"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-3 transition-opacity hover:opacity-80"
+              >
+                <img
+                  src="/usdc-logo.png"
+                  alt="Circle USDC logo"
+                  className="h-12 w-auto object-contain sm:h-14"
+                  style={{ filter: "grayscale(0.3)" }}
+                />
+                <span
+                  className="text-xs font-semibold tracking-wide"
+                  style={{ color: p.slate }}
+                >
+                  Powered by Circle USDC
+                </span>
+                <span
+                  className="max-w-[220px] text-center text-[11px] leading-snug"
+                  style={{ color: p.muted }}
+                >
+                  Fully-reserved stablecoin backed by U.S. Treasuries &amp;
+                  cash. Issued by Circle, backed by BlackRock &amp; Goldman
+                  Sachs.
+                </span>
+              </a>
+
+              {/* Divider */}
+              <div
+                className="hidden h-24 w-px sm:block"
+                style={{ background: p.border }}
+              />
+
+              {/* Solana */}
+              <a
+                href="https://solana.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-3 transition-opacity hover:opacity-80"
+              >
+                <img
+                  src="/solana-logo.png"
+                  alt="Solana logo"
+                  className="h-12 w-auto object-contain sm:h-14"
+                  style={{ filter: "grayscale(0.3)" }}
+                />
+                <span
+                  className="text-xs font-semibold tracking-wide"
+                  style={{ color: p.slate }}
+                >
+                  Built on Solana
+                </span>
+                <span
+                  className="max-w-[220px] text-center text-[11px] leading-snug"
+                  style={{ color: p.muted }}
+                >
+                  Sub-second finality, &lt;$0.01 transaction costs. The fastest
+                  L1 blockchain, trusted by Visa &amp; Shopify.
+                </span>
+              </a>
+            </div>
+          </R>
         </div>
       </section>
 
@@ -564,6 +654,146 @@ export default function CannabisB2BPaymentsPage() {
               </R>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ═══════ POS & PLATFORM INTEGRATIONS ═══════ */}
+      <section style={{ background: p.navy }}>
+        <div className="mx-auto max-w-6xl px-6 py-20 sm:py-28">
+          <R className="text-center">
+            <p
+              className="mb-5 text-sm font-semibold uppercase tracking-widest"
+              style={{ color: p.green }}
+            >
+              Integrations
+            </p>
+            <h2
+              className="text-3xl font-bold tracking-tight text-white sm:text-4xl"
+              style={{ color: "#FFFFFF" }}
+            >
+              Connects to the tools you already use
+            </h2>
+            <p
+              className="mx-auto mt-5 max-w-lg text-base leading-relaxed"
+              style={{ color: "rgba(255,255,255,0.55)" }}
+            >
+              Settlr integrates with leading cannabis POS and wholesale
+              marketplace platforms so B2B payments flow directly from your
+              existing systems.
+            </p>
+          </R>
+
+          <div className="mt-14 grid gap-6 sm:grid-cols-3">
+            {[
+              {
+                name: "Flowhub",
+                role: "POS & Compliance",
+                desc: "Trigger B2B settlement from Flowhub POS transactions. Receipts sync back for METRC-compliant reconciliation.",
+                highlights: [
+                  "Invoice generation from POS sales",
+                  "Automatic METRC manifest tagging",
+                  "Real-time settlement status in dashboard",
+                ],
+                url: "https://flowhub.com",
+              },
+              {
+                name: "Dutchie",
+                role: "E-commerce & Ordering",
+                desc: "Connect Dutchie wholesale orders to Settlr settlement. When a retailer places an order, the invoice and USDC payment flow are created automatically.",
+                highlights: [
+                  "Wholesale order → invoice automation",
+                  "Retailer payment link delivery",
+                  "Order status syncs on settlement",
+                ],
+                url: "https://dutchie.com",
+              },
+              {
+                name: "LeafLink",
+                role: "B2B Marketplace",
+                desc: "Settle LeafLink marketplace transactions in USDC instead of waiting 30–60 days for ACH. Instant finality for every purchase order.",
+                highlights: [
+                  "Replace 30-day net terms with instant USDC",
+                  "Purchase order ↔ invoice sync",
+                  "Cryptographic receipt for each order",
+                ],
+                url: "https://leaflink.com",
+              },
+            ].map((platform, i) => (
+              <R key={platform.name} delay={i * 0.06}>
+                <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-8">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-xl"
+                      style={{ background: "rgba(16,185,129,0.15)" }}
+                    >
+                      <Monitor className="h-5 w-5" style={{ color: p.green }} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">
+                        {platform.name}
+                      </h3>
+                      <p
+                        className="text-xs font-medium"
+                        style={{ color: "rgba(255,255,255,0.4)" }}
+                      >
+                        {platform.role}
+                      </p>
+                    </div>
+                  </div>
+
+                  <p
+                    className="flex-1 text-sm leading-relaxed"
+                    style={{ color: "rgba(255,255,255,0.6)" }}
+                  >
+                    {platform.desc}
+                  </p>
+
+                  <ul className="mt-5 space-y-2">
+                    {platform.highlights.map((h) => (
+                      <li
+                        key={h}
+                        className="flex items-start gap-2 text-xs"
+                        style={{ color: "rgba(255,255,255,0.5)" }}
+                      >
+                        <Check
+                          className="mt-0.5 h-3.5 w-3.5 flex-shrink-0"
+                          style={{ color: p.green }}
+                        />
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <a
+                    href={platform.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-flex items-center gap-1 text-sm font-semibold transition-opacity hover:opacity-80"
+                    style={{ color: p.green }}
+                  >
+                    About {platform.name}
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </R>
+            ))}
+          </div>
+
+          <R delay={0.24}>
+            <div className="mt-12 text-center">
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
+                Don&apos;t see your platform? Settlr&apos;s REST API and
+                TypeScript SDK work with any system.{" "}
+                <Link
+                  href="/integrations"
+                  className="font-semibold underline transition-opacity hover:opacity-80"
+                  style={{ color: p.green }}
+                >
+                  View all integrations →
+                </Link>
+              </p>
+            </div>
+          </R>
         </div>
       </section>
 

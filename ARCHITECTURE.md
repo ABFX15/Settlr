@@ -83,6 +83,13 @@ x402-hack-payment/
 │   │   │   │   ├── gasless/   # Kora gasless endpoints
 │   │   │   │   ├── merchants/ # Merchant management
 │   │   │   │   ├── webhooks/  # Webhook handlers
+│   │   │   │   ├── integrations/
+│   │   │   │   │   └── leaflink/ # LeafLink cannabis wholesale
+│   │   │   │   │       ├── webhook/   # Inbound LL webhooks
+│   │   │   │   │       ├── callback/  # Internal payment callback
+│   │   │   │   │       ├── config/    # Merchant config CRUD
+│   │   │   │   │       ├── syncs/     # List sync records
+│   │   │   │   │       └── retry/     # Retry failed syncs
 │   │   │   │   └── subscriptions/
 │   │   │   └── checkout/[id]/ # Hosted checkout page
 │   │   ├── components/        # React components
@@ -91,7 +98,12 @@ x402-hack-payment/
 │   │   │   ├── supabase.ts    # Supabase client
 │   │   │   ├── kora.ts        # Kora gasless integration
 │   │   │   ├── sumsub.ts      # Sumsub KYC integration
-│   │   │   └── solana.ts      # Solana utilities
+│   │   │   ├── solana.ts      # Solana utilities
+│   │   │   └── leaflink/      # LeafLink integration
+│   │   │       ├── types.ts   # Order, webhook, sync, config types
+│   │   │       ├── client.ts  # LeafLink REST API wrapper
+│   │   │       ├── db.ts      # Sync & config CRUD (Supabase + in-memory)
+│   │   │       └── index.ts   # Barrel export
 │   │   ├── providers/         # React context providers
 │   │   └── anchor/            # Generated Anchor types
 │   └── supabase/
@@ -294,6 +306,41 @@ pub struct Payment {
 | status              | enum        | not_started/pending/verified/rejected |
 | verified_at         | timestamptz |                                       |
 
+#### leaflink_syncs
+
+| Column                | Type          | Description                                    |
+| --------------------- | ------------- | ---------------------------------------------- |
+| id                    | text          | Primary key (sync_xxx)                         |
+| merchant_id           | text          | Settlr merchant ID                             |
+| leaflink_order_id     | integer       | LeafLink order ID                              |
+| leaflink_order_number | text          | Human-readable PO number                       |
+| seller_email          | text          | Seller contact                                 |
+| buyer_email           | text          | Buyer contact                                  |
+| buyer_company         | text          | Buyer company name                             |
+| amount                | numeric(12,2) | USDC amount                                    |
+| settlr_invoice_id     | text          | FK to invoices                                 |
+| settlr_payment_link   | text          | Payment URL sent to buyer                      |
+| tx_signature          | text          | Solana transaction signature                   |
+| status                | text          | pending/link_sent/paid/synced/failed/cancelled |
+| metadata              | jsonb         | METRC tags, license numbers, line items        |
+| error                 | text          | Last error message (for failed syncs)          |
+| created_at            | timestamptz   |                                                |
+| updated_at            | timestamptz   | Auto-updated via trigger                       |
+
+#### leaflink_configs
+
+| Column              | Type        | Description                                 |
+| ------------------- | ----------- | ------------------------------------------- |
+| merchant_id         | text        | Primary key (FK to merchants)               |
+| leaflink_api_key    | text        | LeafLink API key (App auth)                 |
+| leaflink_company_id | integer     | LeafLink company ID                         |
+| auto_create_invoice | boolean     | Auto-create Settlr invoice (default: true)  |
+| auto_send_link      | boolean     | Auto-email payment link (default: true)     |
+| webhook_secret      | text        | HMAC secret for verifying LL webhooks       |
+| metrc_sync          | boolean     | Include METRC tags in memos (default: true) |
+| created_at          | timestamptz |                                             |
+| updated_at          | timestamptz | Auto-updated via trigger                    |
+
 ---
 
 ## API Routes
@@ -352,6 +399,16 @@ pub struct Payment {
 | `/api/kyc/init`    | POST   | Create Sumsub applicant      |
 | `/api/kyc/token`   | POST   | Get Sumsub access token      |
 | `/api/kyc/webhook` | POST   | Sumsub verification callback |
+
+### LeafLink Integration
+
+| Endpoint                              | Method   | Description                                              |
+| ------------------------------------- | -------- | -------------------------------------------------------- |
+| `/api/integrations/leaflink/webhook`  | POST     | Receives LeafLink order webhooks (HMAC-SHA256 verified)  |
+| `/api/integrations/leaflink/callback` | POST     | Internal callback when Settlr invoice is paid            |
+| `/api/integrations/leaflink/config`   | GET/POST | Merchant LeafLink integration config (validates API key) |
+| `/api/integrations/leaflink/syncs`    | GET      | List sync records (filterable by status)                 |
+| `/api/integrations/leaflink/retry`    | POST     | Retry failed sync-backs to LeafLink API                  |
 
 ---
 
@@ -523,6 +580,76 @@ GET / api / privacy / gaming; // API info and endpoint details
 
 ---
 
+### LeafLink (Cannabis B2B Wholesale Settlement)
+
+**Purpose:** Automated USDC settlement for LeafLink purchase orders. Replaces net-30/60 invoice terms with instant on-chain payment, syncs proof back to LeafLink.
+
+**Locations:**
+
+- `app/frontend/src/lib/leaflink/types.ts` — Full type system (orders, webhooks, syncs, configs)
+- `app/frontend/src/lib/leaflink/client.ts` — LeafLink REST API v2 wrapper
+- `app/frontend/src/lib/leaflink/db.ts` — Sync & config CRUD (Supabase + in-memory fallback)
+- `app/frontend/src/app/api/integrations/leaflink/` — 5 API route handlers
+
+**LeafLink API:**
+
+- Base URL: `https://www.leaflink.com/api/v2`
+- Auth: `Authorization: App {api_key}`
+- Endpoints used: `orders-received/{id}`, `orders-received/{id}/notes`, `companies/`
+
+**Data Flow:**
+
+```
+┌──────────┐     webhook      ┌──────────────┐    create     ┌──────────┐
+│ LeafLink │ ───────────────→ │ /ll/webhook   │ ──────────→  │ Supabase │
+│ (PO)     │                  │              │    invoice    │ invoices │
+└──────────┘                  └──────┬───────┘              └──────────┘
+                                     │
+                              email payment link
+                                     │
+                                     ▼
+                              ┌──────────────┐    pay USDC   ┌──────────┐
+                              │  Buyer inbox  │ ──────────→  │  Solana  │
+                              └──────────────┘              └────┬─────┘
+                                                                 │
+                                                          settlement confirmed
+                                                                 │
+                                                                 ▼
+┌──────────┐   set external_id  ┌──────────────┐  mark paid  ┌──────────┐
+│ LeafLink │ ←─────────────── │ /ll/callback  │ ←────────── │  Settlr  │
+│ (order)  │    + add note      │              │   webhook    │ backend  │
+└──────────┘                    └──────────────┘              └──────────┘
+```
+
+**Sync Statuses:**
+
+| Status      | Meaning                                   |
+| ----------- | ----------------------------------------- |
+| `pending`   | Webhook received, processing              |
+| `link_sent` | Payment link emailed to buyer             |
+| `paid`      | On-chain settlement confirmed             |
+| `synced`    | Proof written back to LeafLink API        |
+| `failed`    | LeafLink API sync-back failed (retryable) |
+| `cancelled` | LeafLink order was cancelled              |
+
+**Key Features:**
+
+- HMAC-SHA256 webhook signature verification (per-merchant secrets)
+- METRC tag extraction from line items for compliance memos
+- License number tracking (seller + buyer) in metadata
+- Automatic retry endpoint for failed sync-backs
+- In-memory fallback when Supabase is not configured
+- Branded HTML payment emails via Resend
+- Validates LeafLink API key against real API on config save
+
+**Database Tables:** `leaflink_syncs`, `leaflink_configs` (see Database Schema section)
+
+**Migration:** `supabase/migrations/20260227_leaflink_integration.sql`
+
+**Status:** ✅ Fully implemented
+
+---
+
 ### Mayan (Cross-Chain)
 
 **Purpose:** Bridge USDC from Ethereum/Base/Arbitrum to Solana
@@ -631,6 +758,11 @@ RANGE_API_KEY=
 
 # MagicBlock PER (TEE-based private payments)
 # PER_ENDPOINT=https://tee.magicblock.app
+
+# LeafLink Integration (cannabis B2B wholesale)
+LEAFLINK_CALLBACK_SECRET=       # Secret for internal payment callback auth
+LEAFLINK_RETRY_SECRET=          # Secret for cron-triggered retry endpoint
+# RESEND_FROM_EMAIL=            # Sender address for payment emails (default: noreply@settlr.dev)
 ```
 
 ---
@@ -660,11 +792,13 @@ RANGE_API_KEY=
 1. **Cross-chain (Mayan)** - Documented but not implemented
 2. **KYC Enforcement** - Sumsub integrated but not blocking payments
 3. **Subscriptions** - Database schema exists, full flow incomplete
-4. **Webhook Retry** - No automatic retry on webhook delivery failure
+4. **Webhook Retry** - No automatic retry on webhook delivery failure (LeafLink integration has its own retry)
 5. **Rate Limiting** - Basic implementation, needs Redis for production
 6. **Multi-sig** - Squads integration scaffolded in `init-with-squads.ts`
 7. **Privacy Cash Production** - Currently in demo mode (devnet simulation)
 8. **Kora Local Server** - Requires running Kora locally for gasless (Privy works independently)
+9. **Dutchie Integration** - Content pages exist; no API integration (Dutchie building own payments)
+10. **Flowhub Integration** - Content pages exist; no API integration yet (receipt sync planned)
 
 ---
 
@@ -699,15 +833,18 @@ npm publish --access public
 
 ## Quick Reference
 
-| What            | Where                               |
-| --------------- | ----------------------------------- |
-| Program source  | `programs/x402-hack-payment/src/`   |
-| Frontend        | `app/frontend/`                     |
-| SDK source      | `packages/sdk/src/`                 |
-| API routes      | `app/frontend/src/app/api/`         |
-| Database types  | `app/frontend/src/lib/db.ts`        |
-| Anchor IDL      | `target/idl/x402_hack_payment.json` |
-| Generated types | `target/types/x402_hack_payment.ts` |
+| What               | Where                                                                |
+| ------------------ | -------------------------------------------------------------------- |
+| Program source     | `programs/x402-hack-payment/src/`                                    |
+| Frontend           | `app/frontend/`                                                      |
+| SDK source         | `packages/sdk/src/`                                                  |
+| API routes         | `app/frontend/src/app/api/`                                          |
+| LeafLink routes    | `app/frontend/src/app/api/integrations/leaflink/`                    |
+| LeafLink library   | `app/frontend/src/lib/leaflink/`                                     |
+| LeafLink migration | `app/frontend/supabase/migrations/20260227_leaflink_integration.sql` |
+| Database types     | `app/frontend/src/lib/db.ts`                                         |
+| Anchor IDL         | `target/idl/x402_hack_payment.json`                                  |
+| Generated types    | `target/types/x402_hack_payment.ts`                                  |
 
 ---
 

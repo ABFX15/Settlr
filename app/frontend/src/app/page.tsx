@@ -679,6 +679,92 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════ */}
+        {/*  INFRASTRUCTURE PARTNERS                       */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section
+          className="py-14 sm:py-16"
+          style={{
+            borderTop: `1px solid ${p.border}`,
+            borderBottom: `1px solid ${p.border}`,
+          }}
+        >
+          <div className="mx-auto max-w-5xl px-6">
+            <R>
+              <p
+                className="mb-8 text-center text-xs font-semibold uppercase tracking-[0.2em]"
+                style={{ color: p.muted }}
+              >
+                Powered by institutional-grade infrastructure
+              </p>
+              <div className="flex flex-col items-center justify-center gap-12 sm:flex-row sm:gap-20">
+                {/* Circle USDC */}
+                <a
+                  href="https://www.circle.com/usdc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex flex-col items-center gap-3 transition-opacity hover:opacity-80"
+                >
+                  <img
+                    src="/usdc-logo.png"
+                    alt="Circle USDC logo"
+                    className="h-12 w-auto object-contain sm:h-14"
+                    style={{ filter: "grayscale(0.3)" }}
+                  />
+                  <span
+                    className="text-xs font-semibold tracking-wide"
+                    style={{ color: p.slate }}
+                  >
+                    Powered by Circle USDC
+                  </span>
+                  <span
+                    className="max-w-[220px] text-center text-[11px] leading-snug"
+                    style={{ color: p.muted }}
+                  >
+                    Fully-reserved stablecoin backed by U.S. Treasuries &amp;
+                    cash. Issued by Circle, backed by BlackRock &amp; Goldman
+                    Sachs.
+                  </span>
+                </a>
+
+                {/* Divider */}
+                <div
+                  className="hidden h-24 w-px sm:block"
+                  style={{ background: p.border }}
+                />
+
+                {/* Solana */}
+                <a
+                  href="https://solana.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex flex-col items-center gap-3 transition-opacity hover:opacity-80"
+                >
+                  <img
+                    src="/solana-logo.png"
+                    alt="Solana logo"
+                    className="h-12 w-auto object-contain sm:h-14"
+                    style={{ filter: "grayscale(0.3)" }}
+                  />
+                  <span
+                    className="text-xs font-semibold tracking-wide"
+                    style={{ color: p.slate }}
+                  >
+                    Built on Solana
+                  </span>
+                  <span
+                    className="max-w-[220px] text-center text-[11px] leading-snug"
+                    style={{ color: p.muted }}
+                  >
+                    Sub-second finality, &lt;$0.01 transaction costs. The
+                    fastest L1 blockchain, trusted by Visa &amp; Shopify.
+                  </span>
+                </a>
+              </div>
+            </R>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════ */}
         {/*  DARK STATS BAR — contrast break               */}
         {/* ═══════════════════════════════════════════════ */}
         <section style={{ background: p.navy }}>

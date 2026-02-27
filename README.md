@@ -34,13 +34,13 @@ Recipient receives a cryptographically-secured invoice, pays in USDC/PYUSD, and 
 
 ## Why Settlr?
 
-| The Problem                                     | The Settlr Rail                             |
-| ------------------------------------------------ | ------------------------------------------- |
-| Banks close your account for being "high-risk"   | Non-custodial — no bank can freeze your funds |
-| High-risk processors charge 8–12% + rolling reserves | 1% flat fee, no reserves, no hidden charges |
-| Wire transfers take 3–5 days + manual review     | T+0 settlement — finality in under 5 seconds |
-| Cash-heavy operations fail compliance audits     | Immutable on-chain audit trail for every dollar |
-| Payments get clawed back or reversed             | Settled means settled — cryptographic finality |
+| The Problem                                          | The Settlr Rail                                 |
+| ---------------------------------------------------- | ----------------------------------------------- |
+| Banks close your account for being "high-risk"       | Non-custodial — no bank can freeze your funds   |
+| High-risk processors charge 8–12% + rolling reserves | 1% flat fee, no reserves, no hidden charges     |
+| Wire transfers take 3–5 days + manual review         | T+0 settlement — finality in under 5 seconds    |
+| Cash-heavy operations fail compliance audits         | Immutable on-chain audit trail for every dollar |
+| Payments get clawed back or reversed                 | Settled means settled — cryptographic finality  |
 
 ---
 
@@ -90,6 +90,58 @@ B2B settlements for growers, distributors, dispensaries, and equipment suppliers
 ### Adult Content Platforms
 
 Creator payouts and platform settlements without the constant threat of payment processor deplatforming. Non-custodial means no middleman can cut you off.
+
+---
+
+## Integrations
+
+### LeafLink (Cannabis B2B Wholesale)
+
+Automated settlement for LeafLink purchase orders. When a PO is created on LeafLink, Settlr generates a USDC payment link, emails it to the buyer, and syncs the on-chain proof back to the LeafLink order — no manual invoicing or net-30/60 float.
+
+**Lifecycle:**
+
+```
+LeafLink PO → Settlr Invoice → Payment link emailed → Buyer pays USDC → Proof synced to LeafLink
+```
+
+**API Endpoints:**
+
+| Endpoint                              | Method   | Description                            |
+| ------------------------------------- | -------- | -------------------------------------- |
+| `/api/integrations/leaflink/webhook`  | POST     | Receives LeafLink order webhooks       |
+| `/api/integrations/leaflink/callback` | POST     | Internal callback when invoice is paid |
+| `/api/integrations/leaflink/config`   | GET/POST | Merchant integration settings          |
+| `/api/integrations/leaflink/syncs`    | GET      | List sync records with status filter   |
+| `/api/integrations/leaflink/retry`    | POST     | Retry failed LeafLink API syncs        |
+
+**Setup:**
+
+1. Add env vars to `.env.local`:
+   ```env
+   LEAFLINK_CALLBACK_SECRET=your_random_secret
+   ```
+2. Run the Supabase migration:
+   ```bash
+   # Via SQL Editor: paste contents of supabase/migrations/20260227_leaflink_integration.sql
+   # Or via CLI:
+   cd app/frontend && npx supabase db push
+   ```
+3. Configure via API:
+   ```bash
+   curl -X POST https://settlr.dev/api/integrations/leaflink/config \
+     -H "Content-Type: application/json" \
+     -d '{ "merchant_id": "your_id", "leaflink_api_key": "your_ll_key" }'
+   ```
+4. Set the returned webhook URL in your LeafLink account settings
+
+**Features:**
+
+- HMAC-SHA256 webhook signature verification
+- METRC tag extraction and inclusion in compliance memos
+- Automatic retry for failed sync-backs
+- In-memory fallback when Supabase is not configured
+- Branded HTML payment emails via Resend
 
 ---
 
@@ -155,10 +207,10 @@ const settlr = new SettlrClient({
 
 ```typescript
 const invoice = await settlr.createInvoice({
-  to: "distributor@example.com",   // required
-  amount: 45000.00,                // required (USDC)
-  memo: "Q1 Bulk Order",          // optional
-  complianceLevel: "genius-act",  // optional
+  to: "distributor@example.com", // required
+  amount: 45000.0, // required (USDC)
+  memo: "Q1 Bulk Order", // optional
+  complianceLevel: "genius-act", // optional
   metadata: { poNumber: "PO-891" }, // optional
 });
 // Returns: { id, paymentUrl, amount, status, expiresAt, ... }
@@ -168,7 +220,7 @@ const invoice = await settlr.createInvoice({
 
 ```typescript
 const link = await settlr.createPaymentLink({
-  amount: 12500.00,
+  amount: 12500.0,
   memo: "Equipment deposit",
   expiresIn: "7d",
 });
@@ -194,13 +246,13 @@ export const POST = createWebhookHandler({
 });
 ```
 
-| Event                    | Description                                    |
-| ------------------------ | ---------------------------------------------- |
-| `invoice.created`        | Invoice generated and sent                     |
-| `invoice.paid`           | Recipient paid, settlement confirmed on-chain  |
-| `invoice.expired`        | Invoice expired (configurable)                 |
-| `settlement.completed`   | On-chain settlement finalized                  |
-| `settlement.failed`      | Settlement failed (insufficient funds, etc.)   |
+| Event                  | Description                                   |
+| ---------------------- | --------------------------------------------- |
+| `invoice.created`      | Invoice generated and sent                    |
+| `invoice.paid`         | Recipient paid, settlement confirmed on-chain |
+| `invoice.expired`      | Invoice expired (configurable)                |
+| `settlement.completed` | On-chain settlement finalized                 |
+| `settlement.failed`    | Settlement failed (insufficient funds, etc.)  |
 
 ---
 
@@ -248,10 +300,13 @@ x402-hack-payment/
 ├── app/frontend/                  # Next.js app (settlr.dev)
 │   └── src/
 │       ├── app/api/               # API routes (invoices, settlements, webhooks)
+│       ├── app/api/integrations/  # Third-party integrations
+│       │   └── leaflink/          # LeafLink cannabis wholesale integration
 │       ├── app/demo/              # Interactive institutional demo
 │       ├── app/create/            # Payment link creation
 │       ├── app/invoice/[token]/   # Invoice settlement page
 │       ├── lib/db.ts              # Database layer (Supabase + in-memory)
+│       ├── lib/leaflink/          # LeafLink API client, types, DB layer
 │       └── lib/email.ts           # Transactional email (Resend)
 └── tests/                         # Anchor program tests
 ```
@@ -278,6 +333,10 @@ FEE_PAYER_SECRET_KEY=your_fee_payer_keypair
 RESEND_API_KEY=re_xxxxxxxxxxxx
 NEXT_PUBLIC_APP_URL=https://settlr.dev
 NEXT_PUBLIC_PRIVY_APP_ID=your_privy_app_id
+
+# LeafLink Integration (optional)
+LEAFLINK_CALLBACK_SECRET=your_random_secret
+LEAFLINK_RETRY_SECRET=your_cron_secret
 ```
 
 ## Compliance
@@ -293,10 +352,10 @@ Settlr is built for the 2026 regulatory landscape:
 
 ## Fee Structure
 
-| Tier       | Rate Limit | Fee  |
-| ---------- | ---------- | ---- |
-| Standard   | 60/min     | 1%   |
-| Growth     | 300/min    | 1%   |
+| Tier       | Rate Limit | Fee    |
+| ---------- | ---------- | ------ |
+| Standard   | 60/min     | 1%     |
+| Growth     | 300/min    | 1%     |
 | Enterprise | 1000/min   | Custom |
 
 Apply at [settlr.dev/waitlist](https://settlr.dev/waitlist).
