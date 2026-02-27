@@ -50,11 +50,12 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Settlr — Send USDC to Anyone by Email | Global Payout API",
+    default:
+      "Settlr — Non-Custodial B2B Stablecoin Settlement for Cannabis & High-Risk Industries",
     template: "%s | Settlr",
   },
   description:
-    "Pay contractors and freelancers in 180+ countries — no bank details, no wire fees, no frozen accounts. 1% flat, instant settlement on Solana.",
+    "Settlr is a non-custodial stablecoin settlement platform designed for B2B cannabis distributors and high-risk industries to process payments at a 1% flat fee. No bank interference, ever.",
   alternates: { canonical: "/" },
   authors: [{ name: "Settlr" }],
   icons: {
@@ -73,25 +74,26 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://settlr.dev",
     siteName: "Settlr",
-    title: "Settlr — Send USDC to Anyone by Email | Global Payout API",
+    title:
+      "Settlr — Non-Custodial B2B Stablecoin Settlement for Cannabis & High-Risk Industries",
     description:
-      "Pay anyone in 180+ countries with just an email. 1% flat fee, settles in seconds. No wire fees, no frozen accounts.",
+      "Enterprise payments for the debanked. Non-custodial USDC settlement for high-risk B2B supply chains at 1% flat. No bank interference, ever.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Settlr — Pay Anyone, Anywhere, With Just Their Email",
+        alt: "Settlr — Enterprise Payments for the Debanked",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr — Send USDC to Anyone by Email | Global Payout API",
+    title: "Settlr — Non-Custodial Stablecoin Settlement for High-Risk B2B",
     description:
-      "Pay contractors in 180+ countries instantly. 1% flat, no bank details needed. The Stripe alternative for payouts.",
+      "Move capital with 100% certainty. Non-custodial USDC settlement for cannabis and high-risk supply chains. 1% flat, no bank interference.",
     images: ["/twitter-image"],
-    creator: "@SettlrPay",
+    creator: "@settlrp",
   },
   robots: {
     index: true,
@@ -118,7 +120,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{ background: "#FDFBF7" }}>
+    <html lang="en" style={{ background: "#FFFFFF" }}>
       <head>
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -140,7 +142,7 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
-        <meta name="theme-color" content="#FDFBF7" />
+        <meta name="theme-color" content="#FFFFFF" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
@@ -160,19 +162,24 @@ export default function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} antialiased`}
-        style={{ background: "#FDFBF7" }}
+        style={{ background: "#FFFFFF" }}
       >
         <ClientLayout>{children}</ClientLayout>
         {/* SSR-rendered navigation for search engine crawlers (visually hidden) */}
         <nav aria-label="Site navigation" className="sr-only">
           <a href="/">Home</a>
-          <a href="/send-payments">Send Payments</a>
-          <a href="/accept-payments">Accept Payments</a>
+          <a href="/products/payment-links">Payment Links</a>
+          <a href="/products/invoices">Invoices</a>
           <a href="/pricing">Pricing</a>
           <a href="/compare">Compare</a>
+          <a href="/compare/settlr-vs-cash-armored-cars">
+            Settlr vs Cash &amp; Armored Cars
+          </a>
+          <a href="/compare/settlr-vs-high-risk-merchant-accounts">
+            Settlr vs High-Risk Merchant Accounts
+          </a>
           <a href="/demo">Demo</a>
-          <a href="/offramp">Cash Out</a>
-          <a href="/vs/stripe-connect">Settlr vs Stripe</a>
+          <a href="/learn">Knowledge Hub</a>
           <a href="/docs">Documentation</a>
           <a href="/integrations">Integrations</a>
           <a href="/integrations/shopify">Shopify</a>
@@ -180,17 +187,18 @@ export default function RootLayout({
           <a href="/integrations/zapier">Zapier</a>
           <a href="/integrations/slack">Slack</a>
           <a href="/integrations/bubble">Bubble</a>
-          <a href="/industries/freelance">Freelance</a>
+          <a href="/industries/cannabis">Cannabis B2B Payments</a>
+          <a href="/industries/cannabis-b2b-payments">
+            Cannabis B2B Supply Chain Payments
+          </a>
+          <a href="/industries/adult-content">Adult Content</a>
+          <a href="/industries/igaming">iGaming</a>
+          <a href="/industries/b2b">B2B Payments</a>
           <a href="/industries/creators">Creator Payouts</a>
           <a href="/industries/ecommerce">E-Commerce</a>
-          <a href="/industries/b2b">B2B Payments</a>
-          <a href="/industries/ai-saas">AI &amp; SaaS</a>
-          <a href="/industries/data-labeling">Data Labeling</a>
-          <a href="/industries/igaming">iGaming</a>
-          <a href="/industries/cannabis">Cannabis</a>
           <a href="/blog">Blog</a>
           <a href="/help">Help Center</a>
-          <a href="/waitlist">Contact Sales</a>
+          <a href="/waitlist">Apply for the Private Rail</a>
           <a href="/onboarding">Get Started</a>
           <a href="/privacy">Privacy Policy</a>
         </nav>

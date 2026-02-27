@@ -7,7 +7,8 @@ const footerLinks = {
     { href: "/products/payment-links", label: "Payment Links" },
     { href: "/products/invoices", label: "Invoices" },
     { href: "/demo", label: "Demo" },
-    { href: "/vs/stripe-connect", label: "Settlr vs Stripe" },
+    { href: "/compare", label: "Compare Providers" },
+    { href: "/learn", label: "Knowledge Hub" },
   ],
   developers: [
     { href: "/docs", label: "Docs" },
@@ -25,6 +26,10 @@ const footerLinks = {
   ],
   industries: [
     { href: "/industries/cannabis", label: "Cannabis & Wholesalers" },
+    {
+      href: "/industries/cannabis-b2b-payments",
+      label: "Cannabis B2B Payments",
+    },
     { href: "/industries/adult-content", label: "Adult Content Platforms" },
   ],
   compliance: [

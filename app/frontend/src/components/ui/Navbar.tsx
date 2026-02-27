@@ -17,6 +17,9 @@ import {
   Film,
   LinkIcon,
   FileText,
+  Truck,
+  GraduationCap,
+  Scale,
 } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
 
@@ -26,6 +29,18 @@ const navLinks = [
 ];
 
 const resourceLinks = [
+  {
+    href: "/learn",
+    label: "Knowledge Hub",
+    icon: GraduationCap,
+    description: "Guides, costs & compliance answers",
+  },
+  {
+    href: "/compare",
+    label: "Compare Providers",
+    icon: Scale,
+    description: "Settlr vs cash, high-risk processors",
+  },
   {
     href: "/demo",
     label: "Demo",
@@ -69,6 +84,12 @@ const industryLinks = [
     description: "B2B settlement for state-legal operators",
   },
   {
+    href: "/industries/cannabis-b2b-payments",
+    label: "Cannabis B2B Payments",
+    icon: Truck,
+    description: "Supply-chain settlement without cash or banks",
+  },
+  {
     href: "/industries/adult-content",
     label: "Adult Content Platforms",
     icon: Film,
@@ -97,7 +118,11 @@ export function Navbar() {
     pathname === "/vaults" ||
     pathname === "/audit";
   const isIndustriesActive = pathname.startsWith("/industries");
-  const isResourcesActive = pathname === "/demo" || pathname === "/docs";
+  const isResourcesActive =
+    pathname === "/demo" ||
+    pathname === "/docs" ||
+    pathname === "/learn" ||
+    pathname.startsWith("/compare");
 
   // Close dropdowns when clicking outside
   useEffect(() => {

@@ -1,5 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createApiKey, getApiKeysByMerchant, revokeApiKey } from "@/lib/db";
+import { createApiKey, getApiKeysByMerchant, revokeApiKey, getOrCreateMerchantByWallet } from "@/lib/db";
+
+/**
+ * Resolve a merchantId — if it looks like a Solana wallet address (base58, ~32-44 chars)
+ * rather than a UUID, look up (or create) the merchant record and return the UUID.
+ */
+async function resolveMerchantId(merchantId: string): Promise<string> {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(merchantId);
+    if (isUuid) return merchantId;
+
+    // Treat as a Solana wallet address → resolve to merchant UUID
+    const merchant = await getOrCreateMerchantByWallet(merchantId);
+    return merchant.id;
+}
 
 /**
  * POST /api/sdk/keys
@@ -8,14 +21,16 @@ import { createApiKey, getApiKeysByMerchant, revokeApiKey } from "@/lib/db";
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { merchantId, name, tier, isTest } = body;
+        const { merchantId: rawMerchantId, name, tier, isTest } = body;
 
-        if (!merchantId) {
+        if (!rawMerchantId) {
             return NextResponse.json(
                 { error: "Merchant ID required" },
                 { status: 400 }
             );
         }
+
+        const merchantId = await resolveMerchantId(rawMerchantId);
 
         const { apiKey, rawKey } = await createApiKey(
             merchantId,
@@ -50,16 +65,17 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
-        const merchantId = searchParams.get("merchantId");
+        const rawMerchantId = searchParams.get("merchantId");
 
-        if (!merchantId) {
+        if (!rawMerchantId) {
             return NextResponse.json(
                 { error: "Merchant ID required" },
                 { status: 400 }
             );
         }
 
-        console.log("[API Keys] Fetching keys for merchantId:", merchantId);
+        const merchantId = await resolveMerchantId(rawMerchantId);
+        console.log("[API Keys] Fetching keys for merchantId:", merchantId, "(resolved from:", rawMerchantId, ")");
         const keys = await getApiKeysByMerchant(merchantId);
         console.log("[API Keys] Found", keys.length, "keys for merchant");
 

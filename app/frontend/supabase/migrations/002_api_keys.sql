@@ -1,7 +1,7 @@
 -- API Keys table for SDK authentication
 CREATE TABLE IF NOT EXISTS api_keys (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    merchant_id VARCHAR(44) NOT NULL, -- Solana wallet address
+    merchant_id UUID NOT NULL REFERENCES merchants(id) ON DELETE CASCADE,
     key_hash VARCHAR(64) NOT NULL, -- Hashed API key
     key_prefix VARCHAR(16) NOT NULL, -- First 12 chars for display (e.g., "sk_live_abc...")
     name VARCHAR(255) NOT NULL,
