@@ -1,49 +1,44 @@
 # Settlr Architecture Documentation
 
 > **Last Updated:** February 2026  
-> **SDK Version:** @settlr/sdk@0.6.0  
 > **Program ID:** `339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5` (Devnet)
 
 ---
 
 ## Overview
 
-Settlr is the settlement layer for restricted commerce — non-custodial B2B stablecoin rails built on Solana for industries abandoned by traditional finance (cannabis, adult content, and other high-risk verticals). It provides operators with instant settlement, gasless transactions, privacy-preserving payments via MagicBlock PER, and a full compliance/audit trail (GENIUS Act, BSA/AML, KYB).
+Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2B USDC rails on Solana that replace cash drops and high-risk processors. The primary product is automated settlement for LeafLink purchase orders. Secondary paths include direct invoices, payment links, and an embeddable SDK for external developers.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     B2B COUNTERPARTY                             │
-│              (Distributor, Supplier, Operator)                  │
+│                        LEAFLINK                                 │
+│          (Cannabis wholesale marketplace — POs)                 │
 └─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                   SETTLR SETTLEMENT RAIL                        │
-│                    (@settlr/sdk)                                │
-│  • Invoice generation & payment links                           │
-│  • Privy embedded wallets (no wallet required)                  │
-│  • Gasless transactions (Kora-sponsored)                        │
-│  • Privacy mode (MagicBlock PER private settlements)             │
-│  • Compliance stamps (KYB, AML, GENIUS Act)                     │
-└─────────────────────────────────────────────────────────────────┘
-                              │
+                              │ webhook
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                     SETTLR BACKEND                              │
-│                 (Next.js App Router)                            │
-│  • API routes for invoices, settlements, webhooks               │
-│  • Supabase for persistence                                     │
-│  • Kora for gasless sponsorship (external wallets)              │
-│  • Privy for gasless sponsorship (embedded wallets)             │
-│  • Range Security for wallet risk screening                     │
+│                   (Next.js App Router)                          │
+│                                                                 │
+│  LeafLink Integration:                                          │
+│  • Webhook intake → invoice creation → payment link email       │
+│  • On-chain proof sync-back to LeafLink order                   │
+│  • METRC tag extraction + compliance memos                      │
+│                                                                 │
+│  Core Settlement:                                               │
+│  • Direct invoices & payment links                              │
+│  • Privy embedded wallets (no wallet setup required)            │
+│  • Gasless transactions (Kora-sponsored)                        │
+│  • Range Security wallet risk screening                         │
+│  • Supabase persistence (in-memory fallback)                    │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                    SOLANA ANCHOR PROGRAM                        │
-│                  (settlements + privacy)                        │
-│  • On-chain settlement processing + fee collection              │
-│  • Merchant (operator) management                               │
+│                                                                 │
+│  • USDC settlement processing + 1% platform fee                 │
+│  • Merchant (operator) on-chain registration                    │
 │  • MagicBlock PER private settlements (TEE-secured)             │
 │  • Immutable audit trail for compliance                         │
 └─────────────────────────────────────────────────────────────────┘
@@ -53,19 +48,20 @@ Settlr is the settlement layer for restricted commerce — non-custodial B2B sta
 
 ## Stack Summary
 
-| Layer       | Technology                           | Status                            |
-| ----------- | ------------------------------------ | --------------------------------- |
-| Frontend    | Next.js 16 (App Router)              | ✅ Implemented                    |
-| SDK         | @settlr/sdk (npm)                    | ✅ v0.6.0 published               |
-| Auth        | Privy (embedded wallets)             | ✅ Implemented                    |
-| Gasless     | Kora + Privy fee payer               | ✅ Implemented                    |
-| Privacy     | MagicBlock Private Ephemeral Rollups | ✅ Implemented                    |
-| Security    | Range (wallet risk screening)        | ✅ Implemented                    |
-| One-Click   | Saved payment methods                | ✅ Implemented                    |
-| Database    | Supabase (with in-memory fallback)   | ✅ Implemented                    |
-| KYC         | Sumsub                               | ⚠️ Scaffolded, not enforced       |
-| Cross-chain | Mayan                                | ❌ Documented but NOT implemented |
-| On-chain    | Anchor (Solana)                      | ✅ Deployed to devnet             |
+| Layer       | Technology                           | Status                      |
+| ----------- | ------------------------------------ | --------------------------- |
+| Frontend    | Next.js 16 (App Router)              | ✅ Implemented              |
+| LeafLink    | LeafLink REST API v2                 | ✅ Fully implemented        |
+| Auth        | Privy (embedded wallets)             | ✅ Implemented              |
+| Gasless     | Kora + Privy fee payer               | ✅ Implemented              |
+| Privacy     | MagicBlock Private Ephemeral Rollups | ✅ Implemented              |
+| Security    | Range (wallet risk screening)        | ✅ Implemented              |
+| One-Click   | Saved payment methods                | ✅ Implemented              |
+| Database    | Supabase (with in-memory fallback)   | ✅ Implemented              |
+| SDK         | @settlr/sdk (npm)                    | ✅ v0.6.0 published         |
+| KYC         | Sumsub                               | ⚠️ Scaffolded, not enforced |
+| Cross-chain | Mayan                                | ❌ Not implemented          |
+| On-chain    | Anchor (Solana)                      | ✅ Deployed to devnet       |
 
 ---
 
@@ -676,51 +672,11 @@ GET / api / privacy / gaming; // API info and endpoint details
 
 ## SDK (@settlr/sdk)
 
-### Installation
+npm package for external developers who want to embed Settlr settlement into their own platforms. **Not required** for the LeafLink integration or direct invoice flows — those are handled entirely by the backend.
 
-```bash
-npm install @settlr/sdk
-```
+See [packages/sdk/README.md](packages/sdk/README.md) for the full API reference.
 
-### Client Usage
-
-```typescript
-import { SettlrClient } from "@settlr/sdk";
-
-const settlr = new SettlrClient({
-  apiKey: "sk_test_...",
-  baseUrl: "https://settlr.xyz",
-});
-
-const session = await settlr.createCheckoutSession({
-  amount: 49.99,
-  currency: "USDC",
-  successUrl: "https://example.com/success",
-  cancelUrl: "https://example.com/cancel",
-});
-```
-
-### React Component
-
-```tsx
-import { CheckoutButton } from "@settlr/sdk";
-
-<CheckoutButton
-  apiKey="sk_test_..."
-  amount={49.99}
-  currency="USDC"
-  successUrl="/success"
-  cancelUrl="/cancel"
-/>;
-```
-
-### Webhook Verification
-
-```typescript
-import { verifyWebhookSignature } from "@settlr/sdk";
-
-const isValid = verifyWebhookSignature(payload, signature, secret);
-```
+**Exports:** `Settlr` client, `BuyButton` / `CheckoutWidget` / `PaymentModal` React components, `PayoutClient`, `OneClickClient`, `SubscriptionClient`, `createWebhookHandler`, privacy (MagicBlock PER), mobile checkout utilities.
 
 ---
 

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
-import { InteractivePlayground } from "@/components/docs/InteractivePlayground";
 import {
   Search,
   Book,
@@ -14,35 +13,32 @@ import {
   HelpCircle,
   Rocket,
   ExternalLink,
-  Play,
-  RefreshCw,
   Vault,
   Plug,
+  Leaf,
 } from "lucide-react";
 
 const docsTabs = [
-  { id: "quickstart", label: "Quick Start", icon: Rocket },
-  { id: "payouts", label: "Payout API", icon: Book },
-  { id: "react", label: "Checkout SDK", icon: Code2 },
-  { id: "subscriptions", label: "Subscriptions", icon: RefreshCw },
-  { id: "treasury", label: "Treasury", icon: Vault },
-  { id: "playground", label: "Playground", icon: Play },
-  { id: "api", label: "REST API", icon: Book },
+  { id: "quickstart", label: "Getting Started", icon: Rocket },
+  { id: "leaflink", label: "LeafLink", icon: Leaf },
+  { id: "invoices", label: "Invoices & Payments", icon: Book },
+  { id: "dashboard", label: "Dashboard", icon: Vault },
+  { id: "api", label: "REST API", icon: Code2 },
   { id: "webhooks", label: "Webhooks", icon: Webhook },
   { id: "integrations", label: "Integrations", icon: Plug },
+  { id: "sdk", label: "SDK", icon: Code2 },
   { id: "troubleshooting", label: "Troubleshooting", icon: HelpCircle },
 ];
 
 type TabId =
   | "quickstart"
-  | "payouts"
-  | "playground"
-  | "react"
-  | "subscriptions"
-  | "treasury"
+  | "leaflink"
+  | "invoices"
+  | "dashboard"
   | "api"
   | "webhooks"
   | "integrations"
+  | "sdk"
   | "troubleshooting";
 
 export default function DocsPage() {
@@ -107,21 +103,21 @@ export default function DocsPage() {
                 </p>
                 <div className="space-y-1">
                   <a
-                    href="https://www.npmjs.com/package/@settlr/sdk"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
-                  >
-                    npm Package
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                  <a
                     href="https://github.com/ABFX15/x402-hack-payment"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
                   >
                     GitHub
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                  <a
+                    href="https://www.npmjs.com/package/@settlr/sdk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
+                  >
+                    npm (SDK)
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 </div>
@@ -136,8 +132,8 @@ export default function DocsPage() {
               <div className="mb-10">
                 <h1 className="text-4xl font-bold mb-4">Documentation</h1>
                 <p className="text-xl text-[#3B4963]">
-                  Send global payouts and embed checkout — one SDK, two
-                  products.
+                  Stablecoin settlement infrastructure for cannabis B2B.
+                  Connects to your POS, automates invoicing, settles in USDC.
                 </p>
               </div>
 
@@ -149,7 +145,7 @@ export default function DocsPage() {
                     onClick={() => setActiveTab(tab.id as typeof activeTab)}
                     className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
                       activeTab === tab.id
-                        ? "text-[#1B6B4A] border-b-2 border-blue-500"
+                        ? "text-[#1B6B4A] border-b-2 border-[#1B6B4A]"
                         : "text-[#7C8A9E] hover:text-[#0C1829]"
                     }`}
                   >
@@ -161,14 +157,13 @@ export default function DocsPage() {
               {/* Content */}
               <div className="prose prose-invert max-w-none">
                 {activeTab === "quickstart" && <QuickStartContent />}
-                {activeTab === "payouts" && <PayoutsContent />}
-                {activeTab === "playground" && <PlaygroundContent />}
-                {activeTab === "react" && <ReactSDKContent />}
-                {activeTab === "subscriptions" && <SubscriptionsContent />}
-                {activeTab === "treasury" && <TreasuryContent />}
+                {activeTab === "leaflink" && <LeafLinkContent />}
+                {activeTab === "invoices" && <InvoicesContent />}
+                {activeTab === "dashboard" && <DashboardContent />}
                 {activeTab === "api" && <APIContent />}
                 {activeTab === "webhooks" && <WebhooksContent />}
                 {activeTab === "integrations" && <IntegrationsContent />}
+                {activeTab === "sdk" && <SDKContent />}
                 {activeTab === "troubleshooting" && <TroubleshootingContent />}
               </div>
             </div>
@@ -182,45 +177,52 @@ export default function DocsPage() {
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   GETTING STARTED
+   ═══════════════════════════════════════════════════════════ */
+
 function QuickStartContent() {
   return (
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Get Started in 5 Minutes</h2>
         <p className="text-[#7C8A9E] mb-6">
-          Settlr gives you two products in one SDK. Pick your path:
+          Settlr automates B2B cannabis payments. Connect your POS system and
+          invoices settle in USDC on Solana — no bank wires, no 30-day net
+          terms, no chargebacks.
         </p>
 
         {/* Two paths */}
         <div className="grid md:grid-cols-2 gap-4 mb-12">
-          <div className="rounded-xl border border-[#3B82F6]/20 bg-[#1B6B4A]/[0.05] p-5">
+          <div className="rounded-xl border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.05] p-5">
             <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-0.5 rounded-full mb-3">
-              Core product
+              Flagship
             </span>
             <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
-              Payout API
+              LeafLink Integration
             </h3>
             <p className="text-sm text-[#7C8A9E] mb-3">
-              Send money to anyone by email. One API call, 180+ countries, 1%
-              flat.
+              Connect your LeafLink account. When a purchase order is created,
+              Settlr auto-generates a USDC invoice and emails a payment link to
+              the buyer.
             </p>
             <span className="text-sm text-[#1B6B4A] font-medium">
-              See Payout API tab →
+              See LeafLink tab →
             </span>
           </div>
-          <div className="rounded-xl border border-emerald-400/20 bg-[#1B6B4A]/[0.05] p-5">
-            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/20 text-[#1B6B4A] px-2 py-0.5 rounded-full mb-3">
-              Add-on
+          <div className="rounded-xl border border-[#E2DFD5] bg-[#F3F2ED]/50 p-5">
+            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#7C8A9E]/10 text-[#7C8A9E] px-2 py-0.5 rounded-full mb-3">
+              Manual
             </span>
             <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
-              Checkout SDK
+              Direct Invoices
             </h3>
             <p className="text-sm text-[#7C8A9E] mb-3">
-              Embeddable React checkout for platforms that also need to collect
-              payments.
+              Create payment links directly from the dashboard or via API. No
+              POS integration required — works for any cannabis B2B transaction.
             </p>
             <span className="text-sm text-[#1B6B4A] font-medium">
-              See Checkout SDK tab →
+              See Invoices tab →
             </span>
           </div>
         </div>
@@ -234,13 +236,14 @@ function QuickStartContent() {
             <h3 className="text-xl font-semibold">Create Your Account</h3>
           </div>
           <p className="text-[#7C8A9E] mb-4">
-            Sign up to get your API key. Takes 30 seconds.
+            Sign up and complete merchant onboarding. You&apos;ll get an API key
+            and access to the operator dashboard.
           </p>
           <a
             href="/onboarding"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0C1829] font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#1B6B4A] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
           >
-            Get API Key →
+            Create Account →
           </a>
         </div>
 
@@ -250,698 +253,556 @@ function QuickStartContent() {
             <div className="w-8 h-8 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] flex items-center justify-center font-bold">
               2
             </div>
-            <h3 className="text-xl font-semibold">Install the SDK</h3>
+            <h3 className="text-xl font-semibold">Connect LeafLink</h3>
           </div>
-          <CodeBlock language="bash">{`npm install @settlr/sdk`}</CodeBlock>
+          <p className="text-[#7C8A9E] mb-4">
+            Paste your LeafLink API key in the Settlr dashboard. We validate it
+            immediately by calling LeafLink&apos;s company endpoint.
+          </p>
+          <CodeBlock language="bash">{`# Your LeafLink API key lives at:
+# LeafLink → Settings → Integrations → API
+# Auth format: "Authorization: App {your_key}"`}</CodeBlock>
         </div>
 
-        {/* Step 3 - Payout Example */}
+        {/* Step 3 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] flex items-center justify-center font-bold">
               3
             </div>
-            <h3 className="text-xl font-semibold">Send Your First Payout</h3>
+            <h3 className="text-xl font-semibold">Orders Auto-Settle</h3>
           </div>
-          <CodeBlock language="tsx">
-            {`import { Settlr } from '@settlr/sdk';
-
-const settlr = new Settlr({
-  apiKey: 'sk_live_your_api_key',
-});
-
-const payout = await settlr.payouts.create({
-  email: 'creator@example.com',
-  amount: 150.00,
-  currency: 'USDC',
-  memo: 'March earnings',
-});
-
-console.log(payout.status); // "sent"`}
-          </CodeBlock>
-          <p className="text-[#7C8A9E] text-sm mt-3">
-            💡 The recipient gets an email with a claim link. No wallet or bank
-            details needed.
+          <p className="text-[#7C8A9E] mb-4">
+            When a purchase order hits LeafLink, Settlr receives a webhook,
+            creates a USDC invoice, and emails the buyer a one-click payment
+            link. Settlement is instant.
           </p>
+          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 font-mono text-sm text-[#3B4963]">
+            <div className="space-y-1">
+              <p>LeafLink PO #4821 created → webhook fires</p>
+              <p>&nbsp;&nbsp;→ Settlr invoice INV-4821 auto-created</p>
+              <p>&nbsp;&nbsp;→ Payment link emailed to buyer</p>
+              <p>&nbsp;&nbsp;→ Buyer pays in USDC (one click)</p>
+              <p>&nbsp;&nbsp;→ Funds settle to your wallet instantly</p>
+              <p>&nbsp;&nbsp;→ LeafLink order marked &quot;paid&quot;</p>
+            </div>
+          </div>
         </div>
 
-        {/* Features */}
+        {/* Feature cards */}
         <div className="grid md:grid-cols-3 gap-6 mt-12">
           <FeatureCard
             icon="⚡"
             title="Instant Settlement"
-            description="Payouts and payments settle in under 1 second."
+            description="USDC settles in under 1 second on Solana. No 30-day net terms."
           />
           <FeatureCard
             icon="🔒"
-            title="Non-Custodial"
-            description="You control your funds. We never hold your money."
+            title="Compliance Ready"
+            description="METRC tag tracking, license verification, full audit trail."
           />
           <FeatureCard
-            icon="🌍"
-            title="180+ Countries"
-            description="Pay anyone, anywhere. No bank details required."
+            icon="🌿"
+            title="LeafLink Native"
+            description="Auto-syncs with your existing purchase order workflow."
           />
-        </div>
-
-        {/* Interactive Playground */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-bold mb-4">Try the Checkout SDK Live</h2>
-          <p className="text-[#7C8A9E] mb-6">
-            Edit the code below and click &quot;Try It&quot; to see how the
-            embedded checkout works. No setup required.
-          </p>
-          <InteractivePlayground showExamples={true} />
         </div>
       </section>
     </div>
   );
 }
 
-function PayoutsContent() {
+/* ═══════════════════════════════════════════════════════════
+   LEAFLINK INTEGRATION
+   ═══════════════════════════════════════════════════════════ */
+
+function LeafLinkContent() {
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="text-2xl font-bold mb-4">Payout API</h2>
+        <h2 className="text-2xl font-bold mb-4">LeafLink Integration</h2>
         <p className="text-[#7C8A9E] mb-6">
-          Send USDC to anyone in the world with just their email address. Your
-          core integration — one API call per payout.
+          Connect your LeafLink account to automate B2B cannabis settlement.
+          When purchase orders are created in LeafLink, Settlr automatically
+          generates USDC invoices and emails payment links to buyers.
         </p>
 
-        <div className="bg-[#1B6B4A]/10 border border-[#3B82F6]/30 rounded-lg p-4 mb-8">
+        {/* How it works */}
+        <div className="bg-[#1B6B4A]/10 border border-[#1B6B4A]/30 rounded-lg p-4 mb-8">
           <h3 className="text-lg font-semibold text-[#1B6B4A] mb-2">
             How it works
           </h3>
           <ol className="text-[#7C8A9E] text-sm space-y-2">
+            <li>1. Purchase order created in LeafLink (by buyer or seller)</li>
+            <li>2. LeafLink sends a webhook to Settlr</li>
+            <li>3. Settlr creates a USDC invoice + payment link</li>
+            <li>4. Buyer receives email with one-click payment link</li>
+            <li>5. Buyer pays in USDC — settles instantly on Solana</li>
             <li>
-              1. You call{" "}
-              <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
-                settlr.payouts.create()
-              </code>{" "}
-              with an email &amp; amount
-            </li>
-            <li>2. Recipient gets an email with a claim link</li>
-            <li>
-              3. They click, connect (or create) a wallet, and funds are theirs
+              6. Settlr updates the LeafLink order status to &quot;paid&quot;
             </li>
           </ol>
         </div>
 
-        {/* Single payout */}
-        <h3 className="text-xl font-semibold mb-4">Single Payout</h3>
-        <CodeBlock language="tsx">
-          {`import { Settlr } from '@settlr/sdk';
-
-const settlr = new Settlr({
-  apiKey: 'sk_live_your_api_key',
-});
-
-const payout = await settlr.payouts.create({
-  email: 'alice@example.com',
-  amount: 250.00,
-  currency: 'USDC',
-  memo: 'March data labeling — 500 tasks',
-  metadata: {
-    batchId: 'batch_001',
-    workerId: 'worker_alice',
-  },
-});
-
-// payout.id     → "po_abc123"
-// payout.status → "sent"
-// payout.claimUrl → "https://settlr.dev/claim/po_abc123"`}
-        </CodeBlock>
-
-        {/* Batch payouts */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">Batch Payouts</h3>
+        {/* Step 1: Get API Key */}
+        <h3 className="text-xl font-semibold mb-4">
+          1. Get Your LeafLink API Key
+        </h3>
         <p className="text-[#7C8A9E] mb-4">
-          Pay hundreds of people at once. Each recipient gets their own email.
+          In LeafLink, go to{" "}
+          <strong className="text-[#3B4963]">
+            Settings → Integrations → API
+          </strong>{" "}
+          and generate an API key. This is a real LeafLink feature — the key
+          gives Settlr read access to your orders and the ability to update
+          payment status.
         </p>
-        <CodeBlock language="tsx">
-          {`const batch = await settlr.payouts.createBatch([
-  { email: 'alice@example.com', amount: 250.00, memo: 'March earnings' },
-  { email: 'bob@example.com',   amount: 180.00, memo: 'March earnings' },
-  { email: 'carol@example.com', amount: 320.00, memo: 'March earnings' },
-]);
+        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-6">
+          <p className="text-sm text-[#7C8A9E]">
+            <strong className="text-[#3B4963]">Auth format:</strong>{" "}
+            <code className="text-[#1B6B4A] bg-white px-2 py-0.5 rounded">
+              Authorization: App &#123;your_api_key&#125;
+            </code>
+          </p>
+          <p className="text-sm text-[#7C8A9E] mt-2">
+            <strong className="text-[#3B4963]">Permissions needed:</strong> Read
+            orders, update order status
+          </p>
+        </div>
 
-console.log(batch.id);       // "batch_xyz"
-console.log(batch.total);    // 750.00
-console.log(batch.count);    // 3
-console.log(batch.status);   // "processing"`}
-        </CodeBlock>
-
-        {/* Check status */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">Check Payout Status</h3>
-        <CodeBlock language="tsx">
-          {`const payout = await settlr.payouts.get('po_abc123');
-
-// Statuses: "sent" → "claimed" → "settled"
-console.log(payout.status);    // "claimed"
-console.log(payout.claimedAt); // "2025-06-15T14:30:00Z"`}
-        </CodeBlock>
-
-        {/* List payouts */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">List Payouts</h3>
-        <CodeBlock language="tsx">
-          {`const payouts = await settlr.payouts.list({
-  status: 'claimed',
-  limit: 50,
-});
-
-payouts.data.forEach(p => {
-  console.log(p.email, p.amount, p.status);
+        {/* Step 2: Configure */}
+        <h3 className="text-xl font-semibold mb-4">2. Configure in Settlr</h3>
+        <p className="text-[#7C8A9E] mb-4">
+          Save your LeafLink credentials via the dashboard or API. Settlr
+          validates the key immediately by calling{" "}
+          <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
+            GET /api/v2/companies/
+          </code>{" "}
+          on LeafLink.
+        </p>
+        <CodeBlock language="typescript">
+          {`// POST /api/integrations/leaflink/config
+const response = await fetch('/api/integrations/leaflink/config', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'sk_live_your_settlr_key',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    leaflink_api_key: 'your_leaflink_api_key',
+    leaflink_company_id: 12345,
+    auto_create_invoice: true,   // Auto-create invoice on new PO
+    auto_send_link: true,        // Auto-email payment link to buyer
+    metrc_sync: true,            // Include METRC tags in metadata
+  }),
 });`}
         </CodeBlock>
 
-        {/* Webhooks */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">Payout Webhooks</h3>
+        {/* Step 3: Webhook */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">
+          3. Set Your Webhook URL
+        </h3>
         <p className="text-[#7C8A9E] mb-4">
-          Get notified when a recipient claims their payout.
+          In LeafLink, configure a webhook pointing to your Settlr instance.
+          LeafLink signs webhooks with HMAC-SHA256 — Settlr verifies every
+          payload.
         </p>
-        <CodeBlock language="json">
-          {`{
-  "event": "payout.claimed",
-  "data": {
-    "id": "po_abc123",
-    "email": "alice@example.com",
-    "amount": 250.00,
-    "status": "claimed",
-    "claimedAt": "2025-06-15T14:30:00Z",
-    "wallet": "7xKj...abc"
-  }
-}`}
+        <CodeBlock language="bash">
+          {`# Webhook URL to configure in LeafLink:
+# https://your-domain.com/api/integrations/leaflink/webhook
+#
+# LeafLink signs with HMAC-SHA256
+# Store the signing secret when configuring`}
         </CodeBlock>
 
-        {/* Payout props */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">Payout Parameters</h3>
-        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
-          <table className="w-full text-left">
-            <thead className="bg-white">
-              <tr>
-                <th className="px-4 py-3 font-medium">Parameter</th>
-                <th className="px-4 py-3 font-medium">Type</th>
-                <th className="px-4 py-3 font-medium">Description</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-800">
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">email</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Recipient&apos;s email address
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">amount</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">number</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Payout amount in USDC
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">memo</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Description shown to recipient in the email
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">metadata</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">object</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Custom key-value pairs for your records
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">currency</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">&apos;USDC&apos;</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Currency (USDC only for now)
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Event types */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">Payout Event Types</h3>
+        {/* Webhook events */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">Webhook Events</h3>
+        <p className="text-[#7C8A9E] mb-4">
+          Settlr listens for these LeafLink webhook events:
+        </p>
         <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
                 <th className="px-4 py-3 font-medium">Event</th>
-                <th className="px-4 py-3 font-medium">Description</th>
+                <th className="px-4 py-3 font-medium">Settlr Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-[#E2DFD5]">
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  payout.sent
+                  order.created
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Email sent to recipient with claim link
+                  Creates invoice + emails payment link to buyer
                 </td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  payout.claimed
+                  order.accepted
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Recipient claimed the payout
+                  Creates invoice if not already created
                 </td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  payout.expired
+                  order.cancelled
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Payout expired before being claimed
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  batch.completed
-                </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  All payouts in a batch have been sent
+                  Marks sync record as cancelled
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </section>
-    </div>
-  );
-}
 
-function PlaygroundContent() {
-  return (
-    <div className="space-y-8">
-      <section>
-        <h2 className="text-2xl font-bold mb-4">Interactive Playground</h2>
-        <p className="text-[#7C8A9E] mb-6">
-          Experiment with the Settlr SDK in real-time. Edit the code, try
-          different configurations, and see the checkout flow in action — no
-          setup required.
-        </p>
-
-        {/* Main Playground */}
-        <InteractivePlayground showExamples={true} />
-
-        {/* Tips Section */}
-        <div className="mt-12 grid md:grid-cols-2 gap-6">
-          <div className="rounded-xl border border-[#E2DFD5] bg-[#12121a] p-6">
-            <h3 className="text-lg font-semibold text-[#0C1829] mb-3">
-              💡 Pro Tips
-            </h3>
-            <ul className="text-sm text-[#3B4963] space-y-2">
-              <li>
-                • Change the{" "}
-                <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
-                  amount
-                </code>{" "}
-                prop to test different prices
-              </li>
-              <li>
-                • Add a{" "}
-                <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
-                  memo
-                </code>{" "}
-                for order descriptions
-              </li>
-              <li>
-                • Use{" "}
-                <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
-                  onSuccess
-                </code>{" "}
-                to handle completed payments
-              </li>
-              <li>• Try the dropdown to load different examples</li>
-            </ul>
-          </div>
-          <div className="rounded-xl border border-[#E2DFD5] bg-[#12121a] p-6">
-            <h3 className="text-lg font-semibold text-[#0C1829] mb-3">
-              🚀 Ready to Integrate?
-            </h3>
-            <p className="text-sm text-[#3B4963] mb-4">
-              When you're ready to accept real payments, create an account to
-              get your API key.
-            </p>
-            <a
-              href="/onboarding"
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#0C1829]"
-            >
-              Get API Key →
-            </a>
-          </div>
-        </div>
-
-        {/* Example Use Cases */}
-        <div className="mt-12">
-          <h3 className="text-xl font-semibold text-[#0C1829] mb-6">
-            Example Use Cases
-          </h3>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] p-4">
-              <span className="text-2xl">�️</span>
-              <h4 className="font-medium text-[#0C1829] mt-2">AI Data Labeling</h4>
-              <p className="text-sm text-[#7C8A9E] mt-1">
-                Annotator payouts, batch payments, global workforce
-              </p>
-            </div>
-            <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] p-4">
-              <span className="text-2xl">🎨</span>
-              <h4 className="font-medium text-[#0C1829] mt-2">Creator Platforms</h4>
-              <p className="text-sm text-[#7C8A9E] mt-1">
-                Creator payouts, royalties, international settlements
-              </p>
-            </div>
-            <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] p-4">
-              <span className="text-2xl">💼</span>
-              <h4 className="font-medium text-[#0C1829] mt-2">
-                Freelance Marketplaces
-              </h4>
-              <p className="text-sm text-[#7C8A9E] mt-1">
-                Contractor payouts, invoice settlements, global hiring
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function ReactSDKContent() {
-  return (
-    <div className="space-y-8">
-      <section>
-        <h2 className="text-2xl font-bold mb-4">Checkout SDK</h2>
-        <p className="text-[#7C8A9E] mb-6">
-          Embeddable checkout for platforms that also collect payments. React
-          hooks and components for full control over the payment flow.
-        </p>
-
-        {/* Prerequisites */}
-        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
-            Prerequisites
-          </h3>
-          <p className="text-[#7C8A9E] text-sm mb-3">
-            Before using the Checkout SDK, you need to:
-          </p>
-          <ol className="text-[#7C8A9E] text-sm space-y-2">
-            <li>
-              1.{" "}
-              <a href="/onboarding" className="text-[#1B6B4A] hover:underline">
-                Create a merchant account
-              </a>{" "}
-              to get your API key
-            </li>
-            <li>
-              2. Install the SDK:{" "}
-              <code className="text-[#1B6B4A] bg-white px-2 py-0.5 rounded">
-                npm install @settlr/sdk
-              </code>
-            </li>
-          </ol>
-        </div>
-
-        {/* Payment Modal - NEW */}
-        <div className="bg-[#1B6B4A]/10 border border-emerald-400/30 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-[#1B6B4A] mb-2">
-            Add-on product
-          </h3>
-          <p className="text-[#7C8A9E] text-sm">
-            The Checkout SDK is for platforms that need to{" "}
-            <strong className="text-[#3B4963]">collect</strong> payments (creator
-            tips, iGaming deposits, subscriptions). For{" "}
-            <strong className="text-[#3B4963]">sending</strong> payouts, use the
-            Payout API tab.
-          </p>
-        </div>
-
-        <h3 className="text-xl font-semibold mb-4">
-          1. Payment Modal (Recommended)
-        </h3>
+        {/* METRC */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">METRC Compliance</h3>
         <p className="text-[#7C8A9E] mb-4">
-          Keep users on your site with an embedded payment modal. Perfect for
-          platforms, payouts, and global payments.
+          When{" "}
+          <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
+            metrc_sync
+          </code>{" "}
+          is enabled, Settlr extracts METRC package tags, license numbers, and
+          manifest data from LeafLink line items and attaches them to the
+          invoice metadata. Full audit trail included with every settlement.
         </p>
-        <CodeBlock language="tsx">
-          {`import { usePaymentModal, Settlr } from '@settlr/sdk';
-
-// Initialize with your API key from onboarding
-const settlr = new Settlr({
-  apiKey: 'sk_live_your_api_key',
-  merchant: { name: 'YourPlatform' },
-});
-
-function SubscriptionPage() {
-  const { openPayment, PaymentModalComponent } = usePaymentModal();
-
-  const handleSubscribe = () => {
-    openPayment({
-      amount: 49.00,
-      memo: "Pro Plan Subscription",
-      onSuccess: (result) => {
-        console.log("Paid!", result.signature);
-        activateSubscription();
-      },
-    });
-  };
-
-  return (
-    <>
-      <button onClick={handleSubscribe}>
-        Subscribe to Pro - $49.00/mo
-      </button>
-      <PaymentModalComponent />
-    </>
-  );
+        <CodeBlock language="json">
+          {`{
+  "invoice_id": "INV-4821",
+  "metadata": {
+    "leaflink_order_id": 4821,
+    "metrc_tags": "1A4000000000000000012345,1A4000000000000000012346",
+    "seller_license": "C11-0000001-LIC",
+    "buyer_license": "C10-0000002-LIC"
+  }
 }`}
         </CodeBlock>
 
-        {/* Direct Modal Component */}
+        {/* Config options */}
         <h3 className="text-xl font-semibold mb-4 mt-8">
-          2. Direct Modal Component
+          Configuration Options
         </h3>
-        <p className="text-[#7C8A9E] mb-4">
-          For more control, use the PaymentModal component directly.
-        </p>
-        <CodeBlock language="tsx">
-          {`import { PaymentModal } from '@settlr/sdk';
-import { useState } from 'react';
-
-function ProductPage() {
-  const [showPayment, setShowPayment] = useState(false);
-
-  return (
-    <>
-      <button onClick={() => setShowPayment(true)}>
-        Buy Now - $49.99
-      </button>
-
-      {showPayment && (
-        <PaymentModal
-          amount={49.99}
-          merchantName="My Store"
-          merchantWallet="YOUR_WALLET_ADDRESS"
-          memo="Premium Bundle"
-          onSuccess={(result) => {
-            console.log("Payment complete!", result.signature);
-            setShowPayment(false);
-            deliverProduct();
-          }}
-          onClose={() => setShowPayment(false)}
-        />
-      )}
-    </>
-  );
-}`}
-        </CodeBlock>
-
-        {/* Redirect Flow */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">
-          3. Redirect Flow (Alternative)
-        </h3>
-        <p className="text-[#7C8A9E] mb-4">
-          For simpler integrations, redirect users to Settlr checkout.
-        </p>
-        <CodeBlock language="tsx">
-          {`import { Settlr } from '@settlr/sdk';
-
-const settlr = new Settlr({
-  apiKey: "sk_test_demo_xxxxxxxxxxxx",  // Use your key from onboarding
-  merchant: {
-    name: "My Store",
-    // walletAddress auto-fetched from API key
-  },
-});
-
-// Redirect to Settlr checkout
-const url = settlr.getCheckoutUrl({
-  amount: 29.99,
-  memo: "Order #1234",
-  successUrl: "https://mystore.com/success",
-});
-
-window.location.href = url;`}
-        </CodeBlock>
-
-        {/* Pay Button */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">2. Add a Pay Button</h3>
-        <p className="text-[#7C8A9E] mb-4">
-          The simplest way to accept payments.
-        </p>
-        <CodeBlock language="tsx">
-          {`import { BuyButton } from '@settlr/sdk';
-
-function ProductPage({ product }) {
-  return (
-    <div>
-      <h1>{product.name}</h1>
-      <p>\${product.price}</p>
-      
-      <BuyButton
-        amount={product.price}
-        memo={product.name}
-        onSuccess={(result) => {
-          // Payment complete! Fulfill the order
-          fulfillOrder(product.id, result.signature);
-        }}
-        onError={(error) => {
-          toast.error('Payment failed');
-        }}
-      >
-        Buy Now - \${product.price}
-      </BuyButton>
-    </div>
-  );
-}`}
-        </CodeBlock>
-
-        {/* useSettlr Hook */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">
-          3. Custom UI with useSettlr Hook
-        </h3>
-        <p className="text-[#7C8A9E] mb-4">
-          Build your own payment UI with full control.
-        </p>
-        <CodeBlock language="tsx">
-          {`import { useSettlr } from '@settlr/sdk';
-
-function CustomCheckout() {
-  const { pay, status, error } = useSettlr();
-  
-  const handlePayment = async () => {
-    const result = await pay({
-      recipient: 'MERCHANT_WALLET',
-      amount: 25.00,
-      currency: 'USDC',
-      memo: 'Order #12345',
-    });
-    
-    if (result.success) {
-      router.push('/thank-you?tx=' + result.signature);
-    }
-  };
-  
-  return (
-    <div>
-      <button 
-        onClick={handlePayment}
-        disabled={status === 'processing'}
-        className="bg-white text-black px-6 py-3 rounded-lg"
-      >
-        {status === 'processing' ? 'Processing...' : 'Pay $25.00'}
-      </button>
-      
-      {error && <p className="text-red-500">{error.message}</p>}
-    </div>
-  );
-}`}
-        </CodeBlock>
-
-        {/* Props Reference */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">Props Reference</h3>
         <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
-                <th className="px-4 py-3 font-medium">Prop</th>
-                <th className="px-4 py-3 font-medium">Type</th>
+                <th className="px-4 py-3 font-medium">Option</th>
+                <th className="px-4 py-3 font-medium">Default</th>
                 <th className="px-4 py-3 font-medium">Description</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-[#E2DFD5]">
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  recipient
+                  auto_create_invoice
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">true</td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Wallet address to receive payment
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">amount</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">number</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Payment amount in the specified currency
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">currency</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">'USDC' | 'SOL'</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Token to accept (default: USDC)
+                  Auto-create Settlr invoice when PO arrives
                 </td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  onSuccess
+                  auto_send_link
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">(tx) =&gt; void</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">true</td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Called when payment succeeds
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">onError</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">(err) =&gt; void</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Called when payment fails
+                  Auto-email payment link to buyer
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">label</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                  metrc_sync
+                </td>
+                <td className="px-4 py-3 text-[#7C8A9E]">true</td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Button text (default: "Pay with USDC")
+                  Include METRC tags &amp; licenses in metadata
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">memo</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">string</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Optional memo attached to transaction
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                  webhook_secret
                 </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">gasless</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">boolean</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">—</td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Enable gasless transactions (default: true)
+                  HMAC secret for verifying LeafLink webhooks
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        {/* Retry */}
+        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#0C1829] mb-2">
+            Failed Webhook Retry
+          </h4>
+          <p className="text-[#7C8A9E] text-sm">
+            If a webhook fails to process, you can retry it via{" "}
+            <code className="text-[#1B6B4A]">
+              POST /api/integrations/leaflink/retry
+            </code>
+            . The retry endpoint re-fetches the order from LeafLink and re-runs
+            the invoice creation flow.
+          </p>
+        </div>
       </section>
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════
+   INVOICES & PAYMENTS
+   ═══════════════════════════════════════════════════════════ */
+
+function InvoicesContent() {
+  return (
+    <div className="space-y-8">
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Invoices &amp; Payments</h2>
+        <p className="text-[#7C8A9E] mb-6">
+          Create USDC invoices for any cannabis B2B transaction. Works
+          standalone or alongside the LeafLink integration for orders that
+          don&apos;t originate from a POS.
+        </p>
+
+        {/* How it works */}
+        <div className="bg-[#1B6B4A]/10 border border-[#1B6B4A]/30 rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-[#1B6B4A] mb-2">
+            Settlement Flow
+          </h3>
+          <ol className="text-[#7C8A9E] text-sm space-y-2">
+            <li>1. You create an invoice (dashboard or API)</li>
+            <li>2. Buyer gets an email with a payment link</li>
+            <li>3. They click, connect a wallet, and pay in USDC</li>
+            <li>4. Funds settle to your wallet instantly on Solana</li>
+            <li>5. Both parties get a receipt with on-chain proof</li>
+          </ol>
+        </div>
+
+        {/* Create Invoice */}
+        <h3 className="text-xl font-semibold mb-4">Create an Invoice</h3>
+        <CodeBlock language="typescript">
+          {`// POST /api/payments
+const invoice = await fetch('/api/payments', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'sk_live_your_api_key',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    amount: 12500.00,
+    currency: 'USDC',
+    memo: 'PO #4821 — 500 units Purple Haze',
+    metadata: {
+      buyer_license: 'C10-0000002-LIC',
+      seller_license: 'C11-0000001-LIC',
+      metrc_tags: '1A4000000000000000012345',
+    },
+  }),
+});
+
+// Response:
+// {
+//   "id": "pay_abc123",
+//   "status": "pending",
+//   "amount": 12500.00,
+//   "paymentUrl": "https://settlr.dev/pay/pay_abc123",
+//   "expiresAt": "2025-07-15T12:00:00Z"
+// }`}
+        </CodeBlock>
+
+        {/* Payment Links */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">Payment Links</h3>
+        <p className="text-[#7C8A9E] mb-4">
+          Every invoice generates a unique payment link. Share it via email,
+          text, or any channel — the buyer clicks, connects a wallet, and pays.
+          No app download required.
+        </p>
+        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-6">
+          <p className="text-sm text-[#7C8A9E]">
+            <strong className="text-[#3B4963]">Payment URL format:</strong>{" "}
+            <code className="text-[#1B6B4A]">
+              https://settlr.dev/pay/&#123;payment_id&#125;
+            </code>
+          </p>
+          <p className="text-sm text-[#7C8A9E] mt-2">
+            Links expire after 7 days by default. The buyer sees the amount,
+            memo, and a one-click USDC payment button.
+          </p>
+        </div>
+
+        {/* Check Status */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">
+          Check Payment Status
+        </h3>
+        <CodeBlock language="typescript">
+          {`// GET /api/payments/:id
+const payment = await fetch('/api/payments/pay_abc123', {
+  headers: { 'X-API-Key': 'sk_live_your_api_key' },
+});
+
+// Statuses: "pending" → "completed" → "expired"
+// {
+//   "id": "pay_abc123",
+//   "status": "completed",
+//   "amount": 12500.00,
+//   "signature": "5xKj...abc",
+//   "paidAt": "2025-07-10T14:30:00Z"
+// }`}
+        </CodeBlock>
+
+        {/* Gasless */}
+        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#0C1829] mb-2">
+            Gasless Transactions
+          </h4>
+          <p className="text-[#7C8A9E] text-sm">
+            All Settlr payments are gasless by default. Buyers don&apos;t need
+            SOL for transaction fees — the fee payer is handled by Settlr&apos;s
+            infrastructure (powered by Kora).
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD
+   ═══════════════════════════════════════════════════════════ */
+
+function DashboardContent() {
+  return (
+    <div className="space-y-8">
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Operator Dashboard</h2>
+        <p className="text-[#7C8A9E] mb-6">
+          Monitor your settlement volume, manage integrations, and claim
+          platform fees from the admin dashboard.
+        </p>
+
+        {/* Overview */}
+        <h3 className="text-xl font-semibold mb-4">Dashboard Features</h3>
+        <div className="grid md:grid-cols-2 gap-4 mb-8">
+          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4">
+            <h4 className="font-medium text-[#0C1829] mb-2">
+              Settlement Volume
+            </h4>
+            <p className="text-sm text-[#7C8A9E]">
+              Real-time view of total USDC settled, active invoices, and payment
+              history across all channels.
+            </p>
+          </div>
+          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4">
+            <h4 className="font-medium text-[#0C1829] mb-2">LeafLink Status</h4>
+            <p className="text-sm text-[#7C8A9E]">
+              Connection health, last webhook received, sync records, and failed
+              webhook retry queue.
+            </p>
+          </div>
+          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4">
+            <h4 className="font-medium text-[#0C1829] mb-2">Treasury</h4>
+            <p className="text-sm text-[#7C8A9E]">
+              On-chain treasury balance, accumulated platform fees, and
+              one-click claim to your wallet.
+            </p>
+          </div>
+          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4">
+            <h4 className="font-medium text-[#0C1829] mb-2">Compliance Logs</h4>
+            <p className="text-sm text-[#7C8A9E]">
+              METRC tags, license numbers, and on-chain signatures for every
+              transaction. Export-ready audit trail.
+            </p>
+          </div>
+        </div>
+
+        {/* Treasury */}
+        <h3 className="text-xl font-semibold mb-4">Treasury &amp; Fees</h3>
+        <p className="text-[#7C8A9E] mb-4">
+          Every payment processed through Settlr collects a configurable
+          platform fee (default 2%) into a program-owned treasury PDA on Solana.
+          Authorized signers can claim accumulated fees at any time.
+        </p>
+        <div className="bg-[#F3F2ED] rounded-lg p-6 border border-[#E2DFD5] mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div>
+              <p className="text-sm text-[#7C8A9E] mb-1">Fee Collection</p>
+              <p className="text-lg font-semibold text-[#0C1829]">Automatic</p>
+              <p className="text-xs text-[#7C8A9E]">On every payment</p>
+            </div>
+            <div>
+              <p className="text-sm text-[#7C8A9E] mb-1">Claim Method</p>
+              <p className="text-lg font-semibold text-[#0C1829]">
+                Multisig / Wallet
+              </p>
+              <p className="text-xs text-[#7C8A9E]">Authority-gated</p>
+            </div>
+            <div>
+              <p className="text-sm text-[#7C8A9E] mb-1">Settlement</p>
+              <p className="text-lg font-semibold text-[#0C1829]">USDC</p>
+              <p className="text-xs text-[#7C8A9E]">Direct to your wallet</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Treasury API */}
+        <h3 className="text-xl font-semibold mb-4">Treasury API</h3>
+        <CodeBlock language="typescript">
+          {`// GET /api/admin/treasury — Check balance
+const treasury = await fetch('/api/admin/treasury', {
+  headers: { 'X-API-Key': 'sk_live_your_api_key' },
+});
+
+// {
+//   "balance": 1250.50,
+//   "totalVolume": 62525.00,
+//   "totalFees": 1250.50,
+//   "feeBps": 200,
+//   "isActive": true
+// }`}
+        </CodeBlock>
+
+        <CodeBlock language="typescript">
+          {`// POST /api/admin/claim — Claim platform fees
+const claim = await fetch('/api/admin/claim', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'sk_live_your_api_key',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    authority: 'YOUR_AUTHORITY_PUBKEY',
+  }),
+});
+
+// Returns an unsigned transaction — sign with your wallet`}
+        </CodeBlock>
+
+        {/* Dashboard link */}
+        <div className="bg-[#1B6B4A]/10 border border-[#1B6B4A]/20 rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#1B6B4A] mb-2">
+            Access the Dashboard
+          </h4>
+          <p className="text-[#7C8A9E] text-sm">
+            Visit{" "}
+            <a href="/admin" className="text-[#1B6B4A] hover:underline">
+              /admin
+            </a>{" "}
+            to see the live dashboard with real-time on-chain data, claim
+            button, and integration status.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REST API
+   ═══════════════════════════════════════════════════════════ */
 
 function APIContent() {
   return (
@@ -949,7 +810,8 @@ function APIContent() {
       <section>
         <h2 className="text-2xl font-bold mb-4">REST API Reference</h2>
         <p className="text-[#7C8A9E] mb-6">
-          Use our REST API for server-side payout and payment integrations.
+          Server-side API for payments, LeafLink configuration, and treasury
+          management.
         </p>
 
         {/* Base URL */}
@@ -961,7 +823,7 @@ function APIContent() {
         {/* Authentication */}
         <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-8">
           <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
-            🔐 Authentication
+            Authentication
           </h3>
           <p className="text-[#7C8A9E] text-sm mb-3">
             All API requests require your API key from{" "}
@@ -971,87 +833,113 @@ function APIContent() {
             .
           </p>
           <CodeBlock language="bash">
-            {`curl https://settlr.dev/api/payments \\
-  -H "X-API-Key: sk_test_demo_xxxxxxxxxxxx" \\
+            {`curl https://settlr.dev/api/payments \
+  -H "X-API-Key: sk_live_your_api_key" \
   -H "Content-Type: application/json"`}
           </CodeBlock>
         </div>
 
-        {/* Create Payout */}
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
-              POST
-            </span>
-            <code className="text-[#0C1829]">/payouts</code>
-            <span className="text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-0.5 rounded-full ml-auto">
-              Core
-            </span>
-          </div>
-          <div className="p-4">
-            <p className="text-[#7C8A9E] mb-4">
-              Create a new payout. The recipient receives an email with a claim
-              link.
-            </p>
-            <h4 className="font-medium mb-2">Request Body</h4>
-            <CodeBlock language="json">
-              {`{
-  "email": "alice@example.com",
-  "amount": 250.00,
-  "currency": "USDC",
-  "memo": "March earnings",
-  "metadata": {
-    "workerId": "worker_alice"
-  }
-}`}
-            </CodeBlock>
-            <h4 className="font-medium mb-2 mt-4">Response</h4>
-            <CodeBlock language="json">
-              {`{
-  "id": "po_abc123",
-  "status": "sent",
-  "email": "alice@example.com",
-  "amount": 250.00,
-  "claimUrl": "https://settlr.dev/claim/po_abc123",
-  "createdAt": "2025-06-15T10:00:00Z"
-}`}
-            </CodeBlock>
-          </div>
-        </div>
-
-        {/* Create Batch Payout */}
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
-              POST
-            </span>
-            <code className="text-[#0C1829]">/payouts/batch</code>
-            <span className="text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-0.5 rounded-full ml-auto">
-              Core
-            </span>
-          </div>
-          <div className="p-4">
-            <p className="text-[#7C8A9E] mb-4">
-              Create multiple payouts at once. Each recipient gets their own
-              email.
-            </p>
-            <h4 className="font-medium mb-2">Request Body</h4>
-            <CodeBlock language="json">
-              {`{
-  "payouts": [
-    { "email": "alice@example.com", "amount": 250.00, "memo": "March" },
-    { "email": "bob@example.com", "amount": 180.00, "memo": "March" }
-  ]
-}`}
-            </CodeBlock>
-          </div>
-        </div>
-
-        <h3 className="text-lg font-semibold text-[#3B4963] mt-10 mb-4">
-          Checkout Endpoints
+        {/* LeafLink Endpoints */}
+        <h3 className="text-lg font-semibold text-[#3B4963] mb-4">
+          LeafLink Integration
         </h3>
 
-        {/* Create Payment */}
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+              GET
+            </span>
+            <code className="text-[#0C1829]">
+              /integrations/leaflink/config
+            </code>
+          </div>
+          <div className="p-4">
+            <p className="text-[#7C8A9E]">
+              Get your current LeafLink integration configuration.
+            </p>
+          </div>
+        </div>
+
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+              POST
+            </span>
+            <code className="text-[#0C1829]">
+              /integrations/leaflink/config
+            </code>
+          </div>
+          <div className="p-4">
+            <p className="text-[#7C8A9E] mb-4">
+              Create or update your LeafLink integration. Validates the API key
+              against LeafLink before saving.
+            </p>
+            <h4 className="font-medium mb-2">Request Body</h4>
+            <CodeBlock language="json">
+              {`{
+  "leaflink_api_key": "your_leaflink_api_key",
+  "leaflink_company_id": 12345,
+  "auto_create_invoice": true,
+  "auto_send_link": true,
+  "metrc_sync": true,
+  "webhook_secret": "your_hmac_secret"
+}`}
+            </CodeBlock>
+          </div>
+        </div>
+
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+              POST
+            </span>
+            <code className="text-[#0C1829]">
+              /integrations/leaflink/webhook
+            </code>
+          </div>
+          <div className="p-4">
+            <p className="text-[#7C8A9E]">
+              Receives webhooks from LeafLink. Configure this URL in your
+              LeafLink webhook settings. Verifies HMAC-SHA256 signatures.
+            </p>
+          </div>
+        </div>
+
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+              POST
+            </span>
+            <code className="text-[#0C1829]">/integrations/leaflink/retry</code>
+          </div>
+          <div className="p-4">
+            <p className="text-[#7C8A9E]">
+              Retry a failed webhook. Re-fetches the order from LeafLink and
+              re-runs invoice creation.
+            </p>
+          </div>
+        </div>
+
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+              GET
+            </span>
+            <code className="text-[#0C1829]">/integrations/leaflink/syncs</code>
+          </div>
+          <div className="p-4">
+            <p className="text-[#7C8A9E]">
+              List all sync records — tracks each LeafLink order through the
+              invoice lifecycle.
+            </p>
+          </div>
+        </div>
+
+        {/* Payment Endpoints */}
+        <h3 className="text-lg font-semibold text-[#3B4963] mt-10 mb-4">
+          Payments &amp; Invoices
+        </h3>
+
         <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
           <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
@@ -1061,18 +949,17 @@ function APIContent() {
           </div>
           <div className="p-4">
             <p className="text-[#7C8A9E] mb-4">
-              Create a new payment request. The recipient is automatically set
-              to your registered payout wallet.
+              Create a USDC invoice with a payment link.
             </p>
             <h4 className="font-medium mb-2">Request Body</h4>
             <CodeBlock language="json">
               {`{
-  "amount": 10.00,
+  "amount": 12500.00,
   "currency": "USDC",
-  "memo": "Order #12345",
+  "memo": "PO #4821 — 500 units",
   "metadata": {
-    "orderId": "12345",
-    "customerId": "user_abc"
+    "buyer_license": "C10-0000002-LIC",
+    "metrc_tags": "1A4000000000000000012345"
   }
 }`}
             </CodeBlock>
@@ -1081,16 +968,15 @@ function APIContent() {
               {`{
   "id": "pay_abc123",
   "status": "pending",
-  "amount": 10.00,
+  "amount": 12500.00,
   "currency": "USDC",
-  "paymentUrl": "https://pay.settlr.io/pay_abc123",
-  "expiresAt": "2024-01-15T12:00:00Z"
+  "paymentUrl": "https://settlr.dev/pay/pay_abc123",
+  "expiresAt": "2025-07-15T12:00:00Z"
 }`}
             </CodeBlock>
           </div>
         </div>
 
-        {/* Get Payment */}
         <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
           <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
@@ -1099,24 +985,11 @@ function APIContent() {
             <code className="text-[#0C1829]">/payments/:id</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E] mb-4">Retrieve a payment by ID.</p>
-            <h4 className="font-medium mb-2">Response</h4>
-            <CodeBlock language="json">
-              {`{
-  "id": "pay_abc123",
-  "status": "completed",
-  "amount": 10.00,
-  "currency": "USDC",
-  "recipient": "YOUR_WALLET_ADDRESS",
-  "signature": "5xKj...abc",
-  "paidAt": "2024-01-15T11:30:00Z"
-}`}
-            </CodeBlock>
+            <p className="text-[#7C8A9E]">Retrieve a payment by ID.</p>
           </div>
         </div>
 
-        {/* List Payments */}
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
           <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               GET
@@ -1124,13 +997,12 @@ function APIContent() {
             <code className="text-[#0C1829]">/payments</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E] mb-4">
+            <p className="text-[#7C8A9E] mb-2">
               List all payments with optional filters.
             </p>
-            <h4 className="font-medium mb-2">Query Parameters</h4>
-            <div className="bg-[#F3F2ED] rounded-lg overflow-hidden mb-4">
+            <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
               <table className="w-full text-left">
-                <tbody className="divide-y divide-gray-800">
+                <tbody className="divide-y divide-[#E2DFD5]">
                   <tr>
                     <td className="px-4 py-2 font-mono text-[#1B6B4A]">
                       status
@@ -1160,10 +1032,52 @@ function APIContent() {
             </div>
           </div>
         </div>
+
+        {/* Treasury Endpoints */}
+        <h3 className="text-lg font-semibold text-[#3B4963] mt-10 mb-4">
+          Treasury
+        </h3>
+
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+              GET
+            </span>
+            <code className="text-[#0C1829]">/admin/treasury</code>
+          </div>
+          <div className="p-4">
+            <p className="text-[#7C8A9E] text-sm">
+              Returns treasury balance, platform config (fee BPS, authority,
+              total volume/fees), and PDA addresses.
+            </p>
+          </div>
+        </div>
+
+        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
+          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+              POST
+            </span>
+            <code className="text-[#0C1829]">/admin/claim</code>
+          </div>
+          <div className="p-4">
+            <p className="text-[#7C8A9E] text-sm">
+              Builds an unsigned{" "}
+              <code className="text-[#1B6B4A]">claim_platform_fees</code>{" "}
+              transaction. Send{" "}
+              <code className="text-[#1B6B4A]">{`{ "authority": "PUBKEY" }`}</code>
+              .
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════
+   WEBHOOKS
+   ═══════════════════════════════════════════════════════════ */
 
 function WebhooksContent() {
   return (
@@ -1171,15 +1085,15 @@ function WebhooksContent() {
       <section>
         <h2 className="text-2xl font-bold mb-4">Webhooks</h2>
         <p className="text-[#7C8A9E] mb-6">
-          Get notified in real-time when payments, payouts, and subscriptions
-          change state.
+          Get notified in real-time when payments settle, invoices are paid, or
+          LeafLink orders change state.
         </p>
 
         {/* Setup */}
         <h3 className="text-xl font-semibold mb-4">Setting Up Webhooks</h3>
         <p className="text-[#7C8A9E] mb-4">
-          Configure your webhook endpoint in the Settlr dashboard. We'll send a
-          POST request whenever a payment is completed.
+          Configure your webhook endpoint in the Settlr dashboard. We&apos;ll
+          send a POST request whenever a payment event occurs.
         </p>
 
         {/* Payload */}
@@ -1190,16 +1104,16 @@ function WebhooksContent() {
   "data": {
     "id": "pay_abc123",
     "status": "completed",
-    "amount": 10.00,
+    "amount": 12500.00,
     "currency": "USDC",
-    "recipient": "YOUR_WALLET_ADDRESS",
     "signature": "5xKj...abc",
-    "paidAt": "2025-06-15T11:30:00Z",
+    "paidAt": "2025-07-10T14:30:00Z",
     "metadata": {
-      "orderId": "12345"
+      "leaflink_order_id": 4821,
+      "buyer_license": "C10-0000002-LIC"
     }
   },
-  "timestamp": "2025-06-15T11:30:01Z"
+  "timestamp": "2025-07-10T14:30:01Z"
 }`}
         </CodeBlock>
 
@@ -1215,39 +1129,33 @@ import crypto from 'crypto';
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const signature = req.headers.get('x-settlr-signature');
-  
+
   // Verify the webhook signature
   const expectedSig = crypto
     .createHmac('sha256', process.env.SETTLR_WEBHOOK_SECRET!)
     .update(body)
     .digest('hex');
-  
+
   if (signature !== expectedSig) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
   }
-  
+
   const event = JSON.parse(body);
-  
+
   switch (event.event) {
     case 'payment.completed':
-      await fulfillOrder(event.data.metadata.orderId, event.data.id);
+      await markInvoicePaid(event.data.id, event.data.signature);
       break;
-    case 'payout.claimed':
-      await markPayoutClaimed(event.data.id, event.data.wallet);
+    case 'payment.expired':
+      await handleExpiredInvoice(event.data.id);
       break;
-    case 'payout.expired':
-      await handleExpiredPayout(event.data.id);
-      break;
-    case 'subscription.renewed':
-      await extendAccess(event.data.customerId, event.data.planId);
-      break;
-    case 'subscription.cancelled':
-      await revokeAccess(event.data.customerId);
+    case 'leaflink.order.synced':
+      await logLeafLinkSync(event.data.leaflink_order_id);
       break;
     default:
       console.log('Unhandled event:', event.event);
   }
-  
+
   return NextResponse.json({ received: true });
 }`}
         </CodeBlock>
@@ -1262,13 +1170,13 @@ export async function POST(req: NextRequest) {
                 <th className="px-4 py-3 font-medium">Description</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-[#E2DFD5]">
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payment.completed
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Payment was successful and confirmed on-chain
+                  Invoice paid and confirmed on-chain
                 </td>
               </tr>
               <tr>
@@ -1289,66 +1197,26 @@ export async function POST(req: NextRequest) {
               </tr>
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  payment.refunded
+                  leaflink.order.synced
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Payment was refunded to the customer
+                  LeafLink order processed and invoice created
                 </td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  payout.created
+                  leaflink.order.paid
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  New payout created and email sent to recipient
+                  LeafLink order invoice settled in USDC
                 </td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  payout.claimed
+                  leaflink.sync.failed
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Recipient claimed the payout to their wallet
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  payout.expired
-                </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Payout expired before being claimed (funds returned)
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  payout.failed
-                </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Payout failed — email undeliverable or on-chain error
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  subscription.created
-                </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  New subscription plan activated
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  subscription.renewed
-                </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Recurring subscription payment processed
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  subscription.cancelled
-                </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
-                  Subscription was cancelled by user or merchant
+                  LeafLink webhook processing failed (retryable)
                 </td>
               </tr>
             </tbody>
@@ -1357,10 +1225,11 @@ export async function POST(req: NextRequest) {
 
         {/* Security */}
         <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 mt-8">
-          <h4 className="font-medium text-yellow-400 mb-2">⚠️ Security Note</h4>
+          <h4 className="font-medium text-yellow-600 mb-2">⚠️ Security Note</h4>
           <p className="text-[#7C8A9E]">
             Always verify the webhook signature before processing events. Never
-            trust the payload without verification.
+            trust the payload without verification. Both Settlr webhooks and
+            LeafLink webhooks use HMAC-SHA256.
           </p>
         </div>
       </section>
@@ -1368,509 +1237,139 @@ export async function POST(req: NextRequest) {
   );
 }
 
-function SubscriptionsContent() {
+/* ═══════════════════════════════════════════════════════════
+   INTEGRATIONS
+   ═══════════════════════════════════════════════════════════ */
+
+function IntegrationsContent() {
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="text-2xl font-bold mb-4">Subscriptions</h2>
+        <h2 className="text-2xl font-bold mb-4">POS Integrations</h2>
         <p className="text-[#7C8A9E] mb-6">
-          Recurring USDC billing — create plans, manage subscribers, and handle
-          renewals automatically.
+          Settlr connects to the cannabis POS and ordering platforms your
+          business already uses. LeafLink is live today — Dutchie and Flowhub
+          are on the roadmap.
         </p>
 
-        {/* Create a Plan */}
-        <h3 className="text-xl font-semibold mb-4">Create a Plan</h3>
-        <p className="text-[#7C8A9E] mb-4">
-          Define a recurring plan that customers can subscribe to.
-        </p>
-        <CodeBlock language="tsx">
-          {`import { Settlr } from '@settlr/sdk';
+        {/* Integration cards */}
+        <div className="grid md:grid-cols-3 gap-4 mb-10">
+          <div className="rounded-lg border-2 border-[#1B6B4A]/30 bg-[#1B6B4A]/[0.05] p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">🌿</span>
+              <span className="text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-0.5 rounded-full">
+                Live
+              </span>
+            </div>
+            <h3 className="font-semibold mb-1">LeafLink</h3>
+            <p className="text-sm text-[#7C8A9E]">
+              Wholesale B2B ordering. Auto-creates USDC invoices from purchase
+              orders, syncs payment status back to LeafLink.
+            </p>
+          </div>
+          <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED]/50 p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">🛒</span>
+              <span className="text-[10px] font-bold tracking-widest uppercase bg-[#7C8A9E]/10 text-[#7C8A9E] px-2 py-0.5 rounded-full">
+                Planned
+              </span>
+            </div>
+            <h3 className="font-semibold mb-1">Dutchie</h3>
+            <p className="text-sm text-[#7C8A9E]">
+              Dispensary POS with METRC integration. Planned for Q3 2026.
+            </p>
+          </div>
+          <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED]/50 p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">📊</span>
+              <span className="text-[10px] font-bold tracking-widest uppercase bg-[#7C8A9E]/10 text-[#7C8A9E] px-2 py-0.5 rounded-full">
+                Planned
+              </span>
+            </div>
+            <h3 className="font-semibold mb-1">Flowhub</h3>
+            <p className="text-sm text-[#7C8A9E]">
+              Dispensary compliance platform. Planned for Q4 2026.
+            </p>
+          </div>
+        </div>
 
-const settlr = new Settlr({ apiKey: 'sk_live_your_api_key' });
-
-const plan = await settlr.subscriptions.createPlan({
-  name: 'Pro Monthly',
-  amount: 29.00,
-  currency: 'USDC',
-  interval: 'month',       // 'week' | 'month' | 'year'
-  trialDays: 7,
-  metadata: { tier: 'pro' },
-});
-
-console.log(plan.id);   // "plan_abc123"
-console.log(plan.active); // true`}
-        </CodeBlock>
-
-        {/* Subscribe a Customer */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">
-          Subscribe a Customer
+        {/* LeafLink Detail */}
+        <h3 className="text-xl font-semibold mb-4">
+          LeafLink Integration Detail
         </h3>
         <p className="text-[#7C8A9E] mb-4">
-          Attach a customer to a plan. They&apos;ll be charged automatically
-          each billing cycle.
+          The LeafLink integration is fully production-ready. See the LeafLink
+          tab for complete setup instructions, webhook events, METRC compliance,
+          and configuration options.
         </p>
-        <CodeBlock language="tsx">
-          {`const subscription = await settlr.subscriptions.create({
-  planId: 'plan_abc123',
-  customerEmail: 'alice@example.com',
-  // Optional: pre-authorized wallet for auto-debit
-  customerWallet: '7xKj...abc',
-});
 
-// subscription.id         → "sub_xyz789"
-// subscription.status     → "active"
-// subscription.nextBillingAt → "2025-07-15T00:00:00Z"`}
-        </CodeBlock>
-
-        {/* List Subscriptions */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">List Subscriptions</h3>
-        <CodeBlock language="tsx">
-          {`const subs = await settlr.subscriptions.list({
-  status: 'active',
-  limit: 50,
-});
-
-subs.data.forEach(s => {
-  console.log(s.customerEmail, s.planId, s.status);
-});`}
-        </CodeBlock>
-
-        {/* Cancel */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">
-          Cancel a Subscription
-        </h3>
-        <CodeBlock language="tsx">
-          {`await settlr.subscriptions.cancel('sub_xyz789', {
-  // 'immediate' ends now, 'end_of_period' lets them use remaining time
-  cancelAt: 'end_of_period',
-});`}
-        </CodeBlock>
-
-        {/* Webhook events */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">
-          Subscription Webhooks
-        </h3>
-        <p className="text-[#7C8A9E] mb-4">
-          Listen for subscription lifecycle events to keep your system in sync.
-        </p>
-        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
+        <h4 className="font-medium mb-2">API Routes</h4>
+        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden mb-6">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
-                <th className="px-4 py-3 font-medium">Event</th>
-                <th className="px-4 py-3 font-medium">Description</th>
+                <th className="px-4 py-3 font-medium">Route</th>
+                <th className="px-4 py-3 font-medium">Purpose</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-[#E2DFD5]">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  subscription.created
+                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                  /api/integrations/leaflink/config
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  New subscription activated
+                  GET/POST — manage integration config
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  subscription.renewed
+                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                  /api/integrations/leaflink/webhook
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Recurring payment processed
+                  POST — receives LeafLink webhooks
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  subscription.cancelled
+                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                  /api/integrations/leaflink/syncs
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Cancelled by user or merchant
+                  GET — list order sync records
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
-                  subscription.payment_failed
+                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                  /api/integrations/leaflink/retry
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Renewal payment failed (will retry)
+                  POST — retry failed webhooks
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                  /api/integrations/leaflink/callback
+                </td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
+                  POST — payment callback from buyer
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </section>
-    </div>
-  );
-}
 
-function TreasuryContent() {
-  return (
-    <div className="space-y-8">
-      <section>
-        <h2 className="text-2xl font-bold mb-4">Treasury</h2>
-        <p className="text-[#7C8A9E] mb-6">
-          Monitor your on-chain treasury, manage platform fees, and claim
-          accumulated revenue.
-        </p>
-
-        {/* Overview */}
-        <h3 className="text-xl font-semibold mb-4">How Treasury Works</h3>
-        <p className="text-[#7C8A9E] mb-4">
-          Every payment processed through Settlr collects a configurable
-          platform fee (default 2%) into a program-owned treasury PDA.
-          Authorized signers can claim accumulated fees at any time.
-        </p>
-        <div className="bg-[#F3F2ED] rounded-lg p-6 border border-[#E2DFD5] mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div>
-              <p className="text-sm text-[#7C8A9E] mb-1">Fee Collection</p>
-              <p className="text-lg font-semibold text-[#0C1829]">Automatic</p>
-              <p className="text-xs text-[#7C8A9E]">On every payment</p>
-            </div>
-            <div>
-              <p className="text-sm text-[#7C8A9E] mb-1">Claim Method</p>
-              <p className="text-lg font-semibold text-[#0C1829]">
-                Multisig / Wallet
-              </p>
-              <p className="text-xs text-[#7C8A9E]">Authority-gated</p>
-            </div>
-            <div>
-              <p className="text-sm text-[#7C8A9E] mb-1">Settlement</p>
-              <p className="text-lg font-semibold text-[#0C1829]">USDC</p>
-              <p className="text-xs text-[#7C8A9E]">Direct to your wallet</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Get Balance */}
-        <h3 className="text-xl font-semibold mb-4">Check Treasury Balance</h3>
-        <CodeBlock language="tsx">
-          {`const treasury = await settlr.treasury.getBalance();
-
-console.log(treasury.balance);       // 1250.50 (USDC)
-console.log(treasury.totalVolume);   // 62525.00
-console.log(treasury.totalFees);     // 1250.50
-console.log(treasury.feeBps);        // 200 (2.00%)
-console.log(treasury.isActive);      // true`}
-        </CodeBlock>
-
-        {/* Claim Fees */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">Claim Platform Fees</h3>
-        <p className="text-[#7C8A9E] mb-4">
-          Only the on-chain authority (your wallet or Squads multisig) can claim
-          fees. The API returns an unsigned transaction for you to sign.
-        </p>
-        <CodeBlock language="tsx">
-          {`// 1. Request unsigned claim transaction
-const { transaction } = await settlr.treasury.claim({
-  authority: 'YOUR_AUTHORITY_PUBKEY',
-});
-
-// 2. Sign with your wallet
-const signed = await wallet.signTransaction(transaction);
-
-// 3. Send to network
-const sig = await connection.sendRawTransaction(signed.serialize());
-console.log('Claimed! Tx:', sig);`}
-        </CodeBlock>
-
-        {/* REST API */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">REST Endpoints</h3>
-        <div className="space-y-4">
-          <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
-            <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
-              <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
-                GET
-              </span>
-              <code className="text-[#0C1829]">/api/admin/treasury</code>
-            </div>
-            <div className="p-4">
-              <p className="text-[#7C8A9E] text-sm">
-                Returns treasury balance, platform config (fee BPS, authority,
-                total volume/fees), and PDA addresses.
-              </p>
-            </div>
-          </div>
-
-          <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
-            <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
-              <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
-                POST
-              </span>
-              <code className="text-[#0C1829]">/api/admin/claim</code>
-            </div>
-            <div className="p-4">
-              <p className="text-[#7C8A9E] text-sm mb-2">
-                Builds an unsigned{" "}
-                <code className="text-[#1B6B4A]">claim_platform_fees</code>{" "}
-                transaction.
-              </p>
-              <CodeBlock language="json">
-                {`{
-  "authority": "YOUR_AUTHORITY_PUBKEY"
-}`}
-              </CodeBlock>
-            </div>
-          </div>
-        </div>
-
-        {/* Admin Dashboard */}
-        <div className="bg-[#1B6B4A]/10 border border-[#3B82F6]/20 rounded-lg p-4 mt-8">
-          <h4 className="font-medium text-[#1B6B4A] mb-2">
-            💡 Admin Dashboard
+        {/* Coming Soon */}
+        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#0C1829] mb-2">
+            Want a different POS integration?
           </h4>
           <p className="text-[#7C8A9E] text-sm">
-            Visit{" "}
-            <a href="/admin" className="text-[#1B6B4A] hover:underline">
-              /admin
-            </a>{" "}
-            to see a visual treasury dashboard with real-time on-chain data,
-            claim button, and authority verification.
-          </p>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function IntegrationsContent() {
-  const integrations = [
-    {
-      name: "Zapier",
-      slug: "zapier",
-      emoji: "⚡",
-      desc: "Connect Settlr to 6,000+ apps. Trigger payouts from form submissions, CRM events, or any Zapier workflow.",
-      setup: [
-        "Install the Settlr app from the Zapier marketplace",
-        "Connect your account with your Settlr API key",
-        "Pick a trigger (e.g. new Typeform submission) and an action (Send Payout or Create Batch Payout)",
-        "Map fields — recipient email, amount, memo — and enable the Zap",
-      ],
-      endpoints: [
-        "POST /api/payouts — Send a single payout",
-        "POST /api/payouts/batch — Send batch payouts",
-        "GET /api/payments — Trigger on new payments received",
-        "GET /api/payouts?status=completed — Trigger on completed payouts",
-      ],
-      example: `// Zapier action: Send Payout
-// Maps form fields → Settlr payout
-{
-  "recipient": "{{email}}",
-  "amount": {{amount}},
-  "memo": "Payment from {{source}}"
-}`,
-    },
-    {
-      name: "WooCommerce",
-      slug: "woocommerce",
-      emoji: "🛒",
-      desc: "Accept USDC at checkout in any WooCommerce store. Customers pay stablecoins, you get instant settlement.",
-      setup: [
-        "Download the Settlr WooCommerce plugin (PHP)",
-        "Upload to wp-content/plugins/ and activate",
-        'Go to WooCommerce → Settings → Payments → "Settlr — Pay with USDC"',
-        "Enter your API key and optional webhook secret",
-        "Customers see a USDC payment option at checkout",
-      ],
-      endpoints: [
-        "POST /api/payments — Create a payment session",
-        "GET /api/payments/:id — Check payment status",
-        "POST /api/payouts — Process refunds via payout",
-        "Webhooks — payment.completed marks the order as paid",
-      ],
-      example: `// Customer selects "Pay with USDC" at checkout
-// → Plugin calls POST /api/payments
-{
-  "amount": 49.99,
-  "currency": "USDC",
-  "metadata": {
-    "orderId": "WC-1234",
-    "customer": "jane@example.com"
-  }
-}
-// → Customer scans QR or connects wallet
-// → Webhook fires → order marked "Processing"`,
-    },
-    {
-      name: "Shopify",
-      slug: "shopify",
-      emoji: "🏪",
-      desc: "Add USDC payments to your Shopify store via an Express-based Payments App Extension.",
-      setup: [
-        "Clone the Shopify plugin from the Settlr GitHub repo",
-        "Configure SETTLR_API_KEY and SHOPIFY_API_SECRET in .env",
-        "Deploy the Express server (Vercel, Railway, etc.)",
-        "Install the Payments App Extension in your Shopify admin",
-        "Customers see USDC as a payment method at checkout",
-      ],
-      endpoints: [
-        "POST /api/payments — Create payment session",
-        "POST /api/payments/:id/confirm — Confirm on-chain",
-        "POST /api/payouts — Handle refunds",
-        "Webhooks — payment.completed resolves the session",
-      ],
-      example: `// Shopify sends payment session request
-// → Plugin creates Settlr payment
-// → Returns redirect URL for customer
-{
-  "redirect_url": "https://pay.settlr.dev/session/abc123",
-  "payment_id": "pay_xyz"
-}`,
-    },
-    {
-      name: "Slack",
-      slug: "slack",
-      emoji: "💬",
-      desc: "Send USDC payments from Slack with slash commands. Built-in approval workflows and thread receipts.",
-      setup: [
-        "Create a Slack App at api.slack.com/apps",
-        "Add slash commands: /pay, /pay-batch, /pay-balance, /pay-history",
-        "Set SETTLR_API_KEY and SLACK_SIGNING_SECRET in .env",
-        "Deploy the bot (Node.js / @slack/bolt)",
-        "Install to your workspace — team can send payouts from any channel",
-      ],
-      endpoints: [
-        "POST /api/payouts — /pay command",
-        "POST /api/payouts/batch — /pay-batch command",
-        "GET /api/balance — /pay-balance command",
-        "GET /api/payouts — /pay-history command",
-      ],
-      example: `// Slash command in Slack:
-/pay jane@example.com 50 USDC for design work
-
-// Bot responds in thread:
-✅ Payout sent!
-Recipient: jane@example.com
-Amount: 50.00 USDC
-Status: completed
-Signature: 5xKj...abc`,
-    },
-    {
-      name: "Bubble.io",
-      slug: "bubble",
-      emoji: "🫧",
-      desc: "Add stablecoin payments to Bubble apps with a no-code plugin. Drop-in actions and visual elements.",
-      setup: [
-        'Install the "Settlr Payments" plugin from the Bubble marketplace',
-        "Enter your API key in the plugin settings",
-        "Use the Send Payout or Create Payment actions in workflows",
-        "Optionally add the Payout Status visual element to pages",
-      ],
-      endpoints: [
-        "POST /api/payouts — Send Payout action",
-        "POST /api/payouts/batch — Batch Payout action",
-        "POST /api/payments — Create Payment action",
-        "GET /api/payouts/:id — Payout Status element",
-      ],
-      example: `// Bubble workflow example:
-// Trigger: Button "Pay Freelancer" is clicked
-// Action: Settlr - Send Payout
-//   recipient = Input Freelancer Email's value
-//   amount = Input Amount's value
-//   memo = Input Memo's value
-// 
-// On success → show "Payment sent!" popup`,
-    },
-  ];
-
-  return (
-    <div className="space-y-8">
-      <section>
-        <h2 className="text-2xl font-bold mb-4">Integrations</h2>
-        <p className="text-[#7C8A9E] mb-6">
-          Connect Settlr to the tools you already use. Each integration is
-          open-source and uses the same REST API documented in the{" "}
-          <button
-            className="text-[#1B6B4A] hover:underline"
-            onClick={() =>
-              window.dispatchEvent(
-                new CustomEvent("settlr:set-tab", { detail: "api" }),
-              )
-            }
-          >
-            API tab
-          </button>
-          .
-        </p>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
-          {integrations.map((i) => (
+            We&apos;re actively building out POS integrations for the cannabis
+            industry. If you use a platform not listed here, let us know at{" "}
             <a
-              key={i.slug}
-              href={`/integrations/${i.slug}`}
-              className="block rounded-lg border border-[#E2DFD5] bg-white/[0.02] p-5 hover:border-[#3B82F6]/40 hover:bg-[#F3F2ED] transition-all"
+              href="mailto:support@settlr.dev"
+              className="text-[#1B6B4A] hover:underline"
             >
-              <div className="text-2xl mb-2">{i.emoji}</div>
-              <h3 className="font-semibold mb-1">{i.name}</h3>
-              <p className="text-sm text-[#7C8A9E] line-clamp-2">{i.desc}</p>
-            </a>
-          ))}
-        </div>
-
-        {/* Detailed sections */}
-        {integrations.map((integration) => (
-          <div
-            key={integration.slug}
-            id={`integration-${integration.slug}`}
-            className="mb-12 scroll-mt-24"
-          >
-            <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
-              <span className="text-2xl">{integration.emoji}</span>
-              {integration.name}
-            </h3>
-            <p className="text-[#7C8A9E] mb-4">{integration.desc}</p>
-
-            <h4 className="font-medium mb-2">Setup</h4>
-            <ol className="list-decimal list-inside space-y-1 text-[#3B4963] mb-4 text-sm">
-              {integration.setup.map((step, idx) => (
-                <li key={idx}>{step}</li>
-              ))}
-            </ol>
-
-            <h4 className="font-medium mb-2">API Endpoints Used</h4>
-            <ul className="space-y-1 mb-4">
-              {integration.endpoints.map((ep, idx) => (
-                <li
-                  key={idx}
-                  className="flex items-start gap-2 text-sm text-[#3B4963]"
-                >
-                  <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#1B6B4A]" />
-                  <code className="text-[#3B4963] text-xs">{ep}</code>
-                </li>
-              ))}
-            </ul>
-
-            <h4 className="font-medium mb-2">Example</h4>
-            <CodeBlock language="typescript">{integration.example}</CodeBlock>
-
-            <a
-              href={`https://github.com/ABFX15/Settlr/tree/master/plugins/${integration.slug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-[#1B6B4A] hover:underline"
-            >
-              View source on GitHub
-              <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
-        ))}
-
-        {/* Auth section */}
-        <div className="rounded-lg border border-[#E2DFD5] bg-white/[0.02] p-6 mt-8">
-          <h3 className="text-lg font-semibold mb-3">Authentication</h3>
-          <p className="text-[#7C8A9E] text-sm mb-3">
-            All integrations authenticate with your Settlr API key. Pass it as a
-            Bearer token:
-          </p>
-          <CodeBlock language="bash">
-            {`curl -H "Authorization: Bearer sk_live_YOUR_KEY" \\
-  https://settlr.dev/api/payouts`}
-          </CodeBlock>
-          <p className="text-[#7C8A9E] text-sm">
-            Use <code className="text-[#3B4963]">sk_test_</code> keys for
-            development and <code className="text-[#3B4963]">sk_live_</code> keys
-            for production. Manage keys in the{" "}
-            <a href="/dashboard" className="text-[#1B6B4A] hover:underline">
-              dashboard
+              support@settlr.dev
             </a>
             .
           </p>
@@ -1880,90 +1379,230 @@ Signature: 5xKj...abc`,
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   SDK (FOR DEVELOPERS)
+   ═══════════════════════════════════════════════════════════ */
+
+function SDKContent() {
+  return (
+    <div className="space-y-8">
+      <section>
+        <h2 className="text-2xl font-bold mb-4">SDK</h2>
+        <p className="text-[#7C8A9E] mb-6">
+          The{" "}
+          <code className="text-[#1B6B4A] bg-[#1B6B4A]/10 px-1 rounded">
+            @settlr/sdk
+          </code>{" "}
+          npm package provides React components and a TypeScript client for
+          developers who want to build custom payment experiences on top of
+          Settlr.
+        </p>
+
+        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-8">
+          <p className="text-sm text-[#7C8A9E]">
+            <strong className="text-[#3B4963]">Note:</strong> The SDK is
+            optional. The LeafLink integration and direct invoices work entirely
+            server-side — no SDK required. The SDK is for developers who want
+            embeddable React components.
+          </p>
+        </div>
+
+        {/* Install */}
+        <h3 className="text-xl font-semibold mb-4">Install</h3>
+        <CodeBlock language="bash">{`npm install @settlr/sdk`}</CodeBlock>
+
+        {/* Quick Example */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">Quick Example</h3>
+        <CodeBlock language="tsx">
+          {`import { PaymentModal, Settlr } from '@settlr/sdk';
+import { useState } from 'react';
+
+const settlr = new Settlr({
+  apiKey: 'sk_live_your_api_key',
+  merchant: { name: 'Green Valley Farms' },
+});
+
+function PayInvoice({ invoiceId, amount }: { invoiceId: string; amount: number }) {
+  const [show, setShow] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setShow(true)}>
+        Pay Invoice — \${amount.toFixed(2)} USDC
+      </button>
+      {show && (
+        <PaymentModal
+          amount={amount}
+          merchantName="Green Valley Farms"
+          memo={\`Invoice \${invoiceId}\`}
+          onSuccess={(result) => {
+            console.log('Settled!', result.signature);
+            setShow(false);
+          }}
+          onClose={() => setShow(false)}
+        />
+      )}
+    </>
+  );
+}`}
+        </CodeBlock>
+
+        {/* Exports */}
+        <h3 className="text-xl font-semibold mb-4 mt-8">
+          What&apos;s Included
+        </h3>
+        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
+          <table className="w-full text-left">
+            <thead className="bg-white">
+              <tr>
+                <th className="px-4 py-3 font-medium">Export</th>
+                <th className="px-4 py-3 font-medium">Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#E2DFD5]">
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">Settlr</td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
+                  Main client — payments, payouts, treasury
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                  PaymentModal
+                </td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
+                  Embedded USDC payment modal
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                  BuyButton
+                </td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
+                  One-click payment button
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                  CheckoutWidget
+                </td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
+                  Full checkout component with wallet connection
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                  useSettlr
+                </td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
+                  React hook for custom payment UI
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                  PayoutClient
+                </td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
+                  Send payouts by email
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                  createWebhookHandler
+                </td>
+                <td className="px-4 py-3 text-[#7C8A9E]">
+                  Typed webhook handler factory
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Link to full docs */}
+        <div className="bg-[#1B6B4A]/10 border border-[#1B6B4A]/20 rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#1B6B4A] mb-2">
+            Full SDK Documentation
+          </h4>
+          <p className="text-[#7C8A9E] text-sm">
+            See the{" "}
+            <a
+              href="https://www.npmjs.com/package/@settlr/sdk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#1B6B4A] hover:underline"
+            >
+              npm package README
+            </a>{" "}
+            for complete API reference, props tables, and advanced usage.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TROUBLESHOOTING
+   ═══════════════════════════════════════════════════════════ */
+
 function TroubleshootingContent() {
   return (
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Troubleshooting</h2>
-        <p className="text-[#7C8A9E] mb-6">Common issues and how to fix them.</p>
+        <p className="text-[#7C8A9E] mb-6">
+          Common issues and how to fix them.
+        </p>
 
-        {/* FAQ Items */}
         <div className="space-y-4">
           <TroubleshootingItem
+            question="LeafLink webhooks not arriving"
+            answer={`Check these common issues:\n• Verify the webhook URL in LeafLink points to your domain (not localhost)\n• Ensure your endpoint is publicly accessible over HTTPS\n• Check that your HMAC webhook secret matches between LeafLink and Settlr config\n• Look at /api/integrations/leaflink/syncs for processed webhook records\n• Use /api/integrations/leaflink/retry to re-process a failed webhook`}
+          />
+
+          <TroubleshootingItem
+            question="LeafLink API key validation failing"
+            answer={`When you save your LeafLink config, Settlr validates the key by calling GET /api/v2/companies/ on LeafLink. Common issues:\n• Make sure you copied the full API key from LeafLink (Settings → Integrations → API)\n• The auth format is 'App {key}' — Settlr handles this automatically\n• Check that your LeafLink account has API access enabled\n• Verify the company ID matches your LeafLink account`}
+          />
+
+          <TroubleshootingItem
             question="Payment stuck on 'Processing'"
-            answer="This usually means the transaction is waiting for confirmation. Solana transactions typically confirm in 1-2 seconds. If it's stuck longer:
-• Check your internet connection
-• The RPC endpoint may be congested - try refreshing
-• If using devnet, the network may be slow - wait 30 seconds and try again"
+            answer={`This usually means the transaction is waiting for confirmation. Solana transactions typically confirm in 1-2 seconds. If stuck longer:\n• Check your internet connection\n• The RPC endpoint may be congested — try refreshing\n• If using devnet, the network may be slower — wait 30 seconds`}
           />
 
           <TroubleshootingItem
             question="'Insufficient balance' error"
-            answer="The user's wallet doesn't have enough USDC to complete the payment. They can:
-• Buy USDC using the built-in fiat on-ramp (card purchase)
-• Transfer USDC from another wallet
-• Swap another token for USDC via Jupiter (built-in)"
+            answer={`The buyer's wallet doesn't have enough USDC to complete the payment. They can:\n• Transfer USDC from another wallet\n• Buy USDC using the built-in fiat on-ramp\n• Swap another token for USDC via Jupiter (built-in)`}
           />
 
           <TroubleshootingItem
-            question="Webhook not receiving events"
-            answer="Check these common issues:
-• Verify your webhook URL is publicly accessible (not localhost)
-• Ensure your endpoint returns 200 status within 5 seconds
-• Check your webhook secret matches the one in your dashboard
-• Look for HTTPS - webhooks require SSL in production"
+            question="Invoice not auto-created from LeafLink order"
+            answer={`Check these settings:\n• Verify auto_create_invoice is set to true in your LeafLink config\n• Check that the webhook event type is order.created or order.accepted\n• Look for errors in /api/integrations/leaflink/syncs\n• The LeafLink order must have a valid total amount`}
           />
 
           <TroubleshootingItem
-            question="'Invalid API key' error"
-            answer="Your API key may be incorrect or expired:
-• Make sure you're using the full key (starts with sk_test_ or sk_live_)
-• Check for extra spaces or newlines
-• Verify you're using the right key for your environment (test vs live)
-• Generate a new key from the dashboard if needed"
+            question="Webhook signature verification failing"
+            answer={`Both LeafLink and Settlr webhooks use HMAC-SHA256:\n• Make sure the webhook secret in your config matches LeafLink's signing secret\n• The signature is computed over the raw request body — don't parse before verifying\n• Check for encoding issues — the body must be the exact bytes received`}
           />
 
           <TroubleshootingItem
-            question="Cross-chain payment taking too long"
-            answer="Payments from Ethereum/Base/Arbitrum are bridged via Mayan and take 1-3 minutes:
-• Ethereum mainnet: 1-3 min (slower due to block times)
-• L2s (Base, Arbitrum, Optimism): 1-2 min
-• Check the transaction on the source chain explorer
-• Mayan bridge status: bridge.mayan.finance"
-          />
-
-          <TroubleshootingItem
-            question="BuyButton not rendering"
-            answer="Make sure you've wrapped your app with SettlrProvider:
-
-import { SettlrProvider, BuyButton } from '@settlr/sdk';
-
-<SettlrProvider config={{ apiKey: '...', merchant: { name: '...' } }}>
-  <BuyButton amount={10}>Pay</BuyButton>
-</SettlrProvider>"
-          />
-
-          <TroubleshootingItem
-            question="Can I test without real money?"
-            answer="Yes! Use Solana devnet for testing:
-• Get devnet SOL from faucet.solana.com
-• Get devnet USDC from the test faucet in our demo
-• Use sk_test_ API keys - they skip validation
-• All checkout flows work identically on devnet"
+            question="How do I test without real money?"
+            answer={`Use Solana devnet for testing:\n• Get devnet SOL from faucet.solana.com\n• Get devnet USDC from the test faucet in our demo\n• All payment flows work identically on devnet\n• Use sk_test_ API keys for development`}
           />
 
           <TroubleshootingItem
             question="How do I get support?"
-            answer="We're here to help:
-• GitHub Issues: github.com/ABFX15/x402-hack-payment
-• Discord: Coming soon
-• Email: support@settlr.dev"
+            answer={`We're here to help:\n• GitHub Issues: github.com/ABFX15/x402-hack-payment\n• Email: support@settlr.dev`}
           />
         </div>
       </section>
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SHARED COMPONENTS
+   ═══════════════════════════════════════════════════════════ */
 
 function TroubleshootingItem({
   question,
@@ -2013,7 +1652,6 @@ function CodeBlock({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Simple syntax highlighting
   const highlightCode = (code: string, lang: string) => {
     if (lang === "bash") {
       return code.split("\n").map((line, i) => (
@@ -2032,7 +1670,6 @@ function CodeBlock({
 
     if (lang === "json") {
       return code.split("\n").map((line, i) => {
-        // Highlight JSON
         const highlighted = line
           .replace(/"([^"]+)":/g, '<span class="text-[#1B6B4A]">"$1"</span>:')
           .replace(/: "([^"]+)"/g, ': <span class="text-[#1B6B4A]">"$1"</span>')
@@ -2047,7 +1684,6 @@ function CodeBlock({
       });
     }
 
-    // TypeScript/TSX highlighting
     const keywords = [
       "import",
       "export",
@@ -2100,7 +1736,6 @@ function CodeBlock({
     ];
 
     return code.split("\n").map((line, lineIndex) => {
-      // Handle comments
       if (line.trim().startsWith("//")) {
         return (
           <div key={lineIndex} className="text-[#7C8A9E]">
@@ -2109,14 +1744,10 @@ function CodeBlock({
         );
       }
 
-      // Process the line character by character for proper highlighting
       const lineChars = line;
-
-      // Simple tokenizer
       const tokens: { type: string; value: string }[] = [];
       let i = 0;
       while (i < lineChars.length) {
-        // String (double quotes)
         if (
           lineChars[i] === '"' ||
           lineChars[i] === "'" ||
@@ -2139,13 +1770,11 @@ function CodeBlock({
           continue;
         }
 
-        // Comment
         if (lineChars[i] === "/" && lineChars[i + 1] === "/") {
           tokens.push({ type: "comment", value: lineChars.slice(i) });
           break;
         }
 
-        // Word (identifier or keyword)
         if (/[a-zA-Z_$]/.test(lineChars[i])) {
           let word = "";
           while (i < lineChars.length && /[a-zA-Z0-9_$]/.test(lineChars[i])) {
@@ -2165,7 +1794,6 @@ function CodeBlock({
           continue;
         }
 
-        // Number
         if (/[0-9]/.test(lineChars[i])) {
           let num = "";
           while (i < lineChars.length && /[0-9._]/.test(lineChars[i])) {
@@ -2175,7 +1803,6 @@ function CodeBlock({
           continue;
         }
 
-        // JSX tags
         if (lineChars[i] === "<" && /[A-Za-z\/]/.test(lineChars[i + 1] || "")) {
           let tag = "<";
           i++;
@@ -2190,11 +1817,9 @@ function CodeBlock({
           continue;
         }
 
-        // Operators and punctuation
         tokens.push({ type: "punctuation", value: lineChars[i++] });
       }
 
-      // Render tokens
       return (
         <div key={lineIndex}>
           {tokens.map((token, tokenIndex) => {
@@ -2268,7 +1893,7 @@ function CodeBlock({
         </span>
         <button
           onClick={handleCopy}
-          className="text-xs text-[#7C8A9E] hover:text-[#0C1829] transition-colors px-2 py-1 rounded hover:bg-[#E8E4DA]"
+          className="text-xs text-[#7C8A9E] hover:text-[#0C1829] transition-colors px-2 py-1 rounded hover:bg-[#E8E4Da]"
         >
           {copied ? "✓ Copied" : "Copy"}
         </button>
