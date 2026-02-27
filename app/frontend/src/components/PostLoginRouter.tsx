@@ -60,7 +60,7 @@ export function PostLoginRouter() {
     if (
       status === "needs-onboarding" &&
       (pathname === "/dashboard" ||
-        pathname === "/merchant" ||
+        pathname.startsWith("/dashboard/") ||
         pathname === "/create" ||
         pathname.startsWith("/api-keys"))
     ) {

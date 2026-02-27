@@ -1093,7 +1093,7 @@ const invoice = await settlr.createInvoice({
             {/* Next Steps */}
             <div className="grid grid-cols-2 gap-4">
               <Link
-                href="/merchant"
+                href="/dashboard"
                 className="flex items-center justify-center gap-2 p-4 rounded-xl border font-medium text-sm transition-all hover:opacity-80"
                 style={{ borderColor: c.green, color: c.green }}
               >

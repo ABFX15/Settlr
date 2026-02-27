@@ -112,7 +112,7 @@ export function Navbar() {
   // Determine where the primary CTA should link to
   const { status: onboardingStatus } = useOnboardingStatus();
   const ctaHref =
-    onboardingStatus === "onboarded" ? "/merchant" : "/onboarding";
+    onboardingStatus === "onboarded" ? "/dashboard" : "/onboarding";
   const ctaLabel =
     onboardingStatus === "onboarded" ? "Dashboard" : "Get Started";
 

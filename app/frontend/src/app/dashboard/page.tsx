@@ -24,6 +24,7 @@ import {
   LogIn,
   ArrowLeftRight,
 } from "lucide-react";
+import { VaultCard } from "@/components/VaultCard";
 
 function formatUSD(amount: number): string {
   return new Intl.NumberFormat("en-US", {
@@ -122,6 +123,9 @@ export default function DashboardPage() {
           </Link>
         </div>
       </div>
+
+      {/* Vault & Balance */}
+      <VaultCard />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
