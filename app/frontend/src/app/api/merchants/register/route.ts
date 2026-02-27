@@ -1,14 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createMerchant, createApiKey, getMerchantByWallet } from "@/lib/db";
+import { createMerchant, createApiKey, getMerchantByWallet, getMerchantBySignerWallet } from "@/lib/db";
 
 /**
  * POST /api/merchants/register
- * Register a new merchant and generate an API key
+ * Register a new merchant and generate an API key.
+ * 
+ * Accepts:
+ *   - name: Business name (required)
+ *   - walletAddress: Settlement address — vault PDA if Squads, or personal wallet (required)
+ *   - signerWallet: The user's personal wallet (Phantom/Solflare) for auth lookups
+ *   - multisigPda: The Squads multisig PDA (if using Squads vault)
+ *   - licenseNumber: Cannabis license number (optional)
+ *   - websiteUrl: Business website (optional)
+ *   - webhookUrl: Webhook endpoint (optional)
  */
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { name, websiteUrl, walletAddress, webhookUrl } = body;
+        const { name, websiteUrl, walletAddress, webhookUrl, signerWallet, multisigPda, licenseNumber } = body;
 
         // Validate required fields
         if (!name || typeof name !== "string" || name.trim().length < 2) {
@@ -34,21 +43,27 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Check if wallet already registered
-        const existingMerchant = await getMerchantByWallet(walletAddress);
-        if (existingMerchant) {
+        // Check if already registered by wallet_address OR signer_wallet
+        const existingByWallet = await getMerchantByWallet(walletAddress);
+        const existingBySigner = signerWallet ? await getMerchantBySignerWallet(signerWallet) : null;
+        const existing = existingByWallet || existingBySigner;
+
+        if (existing) {
             return NextResponse.json(
                 { error: "This wallet address is already registered" },
                 { status: 409 }
             );
         }
 
-        // Create merchant
+        // Create merchant with all fields
         const merchant = await createMerchant({
             name: name.trim(),
             websiteUrl: websiteUrl || null,
             walletAddress,
             webhookUrl: webhookUrl || null,
+            signerWallet: signerWallet || null,
+            multisigPda: multisigPda || null,
+            licenseNumber: licenseNumber || null,
         });
 
         // Generate API key (test key for now, can be upgraded later)
@@ -65,6 +80,8 @@ export async function POST(request: NextRequest) {
                 id: merchant.id,
                 name: merchant.name,
                 walletAddress: merchant.walletAddress,
+                signerWallet: merchant.signerWallet,
+                multisigPda: merchant.multisigPda,
                 createdAt: merchant.createdAt,
             },
             apiKey: rawKey, // Return raw key only once
@@ -81,7 +98,7 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET /api/merchants/register
- * Check if a wallet is already registered
+ * Check if a wallet is already registered (checks both wallet_address and signer_wallet)
  */
 export async function GET(request: NextRequest) {
     try {
@@ -95,6 +112,7 @@ export async function GET(request: NextRequest) {
             );
         }
 
+        // getMerchantByWallet now checks both wallet_address and signer_wallet
         const merchant = await getMerchantByWallet(walletAddress);
 
         return NextResponse.json({
@@ -103,6 +121,9 @@ export async function GET(request: NextRequest) {
                 ? {
                     id: merchant.id,
                     name: merchant.name,
+                    walletAddress: merchant.walletAddress,
+                    signerWallet: merchant.signerWallet,
+                    multisigPda: merchant.multisigPda,
                 }
                 : null,
         });

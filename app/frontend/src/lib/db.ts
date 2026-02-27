@@ -13,6 +13,12 @@ export interface Merchant {
     name: string;
     websiteUrl?: string | null;
     walletAddress: string;
+    /** The signer's personal wallet (Phantom/Solflare) — used for auth lookups */
+    signerWallet?: string | null;
+    /** The Squads multisig PDA that governs the vault */
+    multisigPda?: string | null;
+    /** Cannabis license number (METRC/BioTrack) */
+    licenseNumber?: string | null;
     webhookUrl?: string | null;
     webhookSecret?: string | null;
     kycEnabled?: boolean;
@@ -688,12 +694,8 @@ export async function getAllPayments(): Promise<Payment[]> {
 
 export async function getPaymentsByMerchantWallet(walletAddress: string): Promise<Payment[]> {
     if (isSupabaseConfigured()) {
-        // First get the merchant by wallet address
-        const { data: merchant } = await supabase
-            .from("merchants")
-            .select("id")
-            .eq("wallet_address", walletAddress)
-            .single();
+        // First try wallet_address, then signer_wallet
+        const merchant = await getMerchantByWallet(walletAddress);
 
         if (!merchant) {
             return [];
@@ -775,30 +777,49 @@ export async function getMerchant(id: string): Promise<Merchant | null> {
     }
 }
 
+/**
+ * Parse a Supabase merchant row into a Merchant object.
+ */
+function parseMerchantRow(data: any): Merchant {
+    return {
+        id: data.id,
+        name: data.name,
+        walletAddress: data.wallet_address,
+        signerWallet: data.signer_wallet || null,
+        multisigPda: data.multisig_pda || null,
+        licenseNumber: data.license_number || null,
+        websiteUrl: data.website_url || null,
+        webhookUrl: data.webhook_url,
+        webhookSecret: data.webhook_secret,
+        createdAt: new Date(data.created_at),
+        updatedAt: new Date(data.updated_at),
+    };
+}
+
 export async function getMerchantByWallet(walletAddress: string): Promise<Merchant | null> {
     if (isSupabaseConfigured()) {
+        // Try wallet_address first (vault PDA), then signer_wallet
         const { data, error } = await supabase
             .from("merchants")
             .select("*")
             .eq("wallet_address", walletAddress)
             .single();
 
-        if (error || !data) {
-            return null;
-        }
+        if (!error && data) return parseMerchantRow(data);
 
-        return {
-            id: data.id,
-            name: data.name,
-            walletAddress: data.wallet_address,
-            webhookUrl: data.webhook_url,
-            webhookSecret: data.webhook_secret,
-            createdAt: new Date(data.created_at),
-            updatedAt: new Date(data.updated_at),
-        };
+        // Fallback: check signer_wallet column
+        const { data: data2, error: error2 } = await supabase
+            .from("merchants")
+            .select("*")
+            .eq("signer_wallet", walletAddress)
+            .single();
+
+        if (!error2 && data2) return parseMerchantRow(data2);
+
+        return null;
     } else {
         for (const merchant of memoryMerchants.values()) {
-            if (merchant.walletAddress === walletAddress) {
+            if (merchant.walletAddress === walletAddress || merchant.signerWallet === walletAddress) {
                 return merchant;
             }
         }
@@ -807,18 +828,44 @@ export async function getMerchantByWallet(walletAddress: string): Promise<Mercha
 }
 
 /**
- * Look up a merchant by wallet address, creating one if it doesn't exist.
- * Used by dashboard routes that authenticate via wallet pubkey.
+ * Look up a merchant specifically by signer wallet (the user's Phantom/Solflare address).
+ */
+export async function getMerchantBySignerWallet(signerWallet: string): Promise<Merchant | null> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("merchants")
+            .select("*")
+            .eq("signer_wallet", signerWallet)
+            .single();
+
+        if (error || !data) return null;
+        return parseMerchantRow(data);
+    } else {
+        for (const merchant of memoryMerchants.values()) {
+            if (merchant.signerWallet === signerWallet) {
+                return merchant;
+            }
+        }
+        return null;
+    }
+}
+
+/**
+ * Look up a merchant by wallet address (checks both wallet_address and signer_wallet),
+ * creating one if it doesn't exist. Used by dashboard routes that authenticate via wallet pubkey.
  */
 export async function getOrCreateMerchantByWallet(walletAddress: string): Promise<Merchant> {
+    // Check both wallet_address (vault PDA) and signer_wallet (personal wallet)
     const existing = await getMerchantByWallet(walletAddress);
     if (existing) return existing;
 
-    // Auto-create a merchant record for this wallet
+    // Auto-create a merchant record — store as both walletAddress and signerWallet
+    // since we don't know if this wallet will later create a vault
     try {
         return await createMerchant({
             name: `Merchant ${walletAddress.slice(0, 8)}`,
             walletAddress,
+            signerWallet: walletAddress,
             webhookUrl: null,
         });
     } catch {
@@ -830,17 +877,28 @@ export async function getOrCreateMerchantByWallet(walletAddress: string): Promis
 }
 
 export async function createMerchant(
-    data: Pick<Merchant, "name" | "walletAddress" | "webhookUrl"> & { websiteUrl?: string | null }
+    data: Pick<Merchant, "name" | "walletAddress" | "webhookUrl"> & {
+        websiteUrl?: string | null;
+        signerWallet?: string | null;
+        multisigPda?: string | null;
+        licenseNumber?: string | null;
+    }
 ): Promise<Merchant> {
     if (isSupabaseConfigured()) {
+        const insertData: Record<string, any> = {
+            name: data.name,
+            website_url: data.websiteUrl || null,
+            wallet_address: data.walletAddress,
+            webhook_url: data.webhookUrl,
+        };
+        // Only include optional columns if provided
+        if (data.signerWallet) insertData.signer_wallet = data.signerWallet;
+        if (data.multisigPda) insertData.multisig_pda = data.multisigPda;
+        if (data.licenseNumber) insertData.license_number = data.licenseNumber;
+
         const { data: inserted, error } = await supabase
             .from("merchants")
-            .insert({
-                name: data.name,
-                website_url: data.websiteUrl,
-                wallet_address: data.walletAddress,
-                webhook_url: data.webhookUrl,
-            })
+            .insert(insertData)
             .select()
             .single();
 
@@ -849,22 +907,16 @@ export async function createMerchant(
             throw new Error("Failed to create merchant");
         }
 
-        return {
-            id: inserted.id,
-            name: inserted.name,
-            walletAddress: inserted.wallet_address,
-            websiteUrl: inserted.website_url,
-            webhookUrl: inserted.webhook_url,
-            webhookSecret: inserted.webhook_secret,
-            createdAt: new Date(inserted.created_at),
-            updatedAt: new Date(inserted.updated_at),
-        };
+        return parseMerchantRow(inserted);
     } else {
         const merchant: Merchant = {
             id: crypto.randomUUID(),
             name: data.name,
             websiteUrl: data.websiteUrl || null,
             walletAddress: data.walletAddress,
+            signerWallet: data.signerWallet || null,
+            multisigPda: data.multisigPda || null,
+            licenseNumber: data.licenseNumber || null,
             webhookUrl: data.webhookUrl,
             createdAt: new Date(),
             updatedAt: new Date(),

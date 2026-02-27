@@ -17,6 +17,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { resolveMerchantId } from "@/lib/resolve-merchant";
 
 function generateId(prefix: string): string {
     return `${prefix}_${crypto.randomBytes(12).toString("hex")}`;
@@ -51,7 +52,7 @@ function calculatePeriodEnd(
 export async function GET(request: NextRequest) {
     try {
         const params = request.nextUrl.searchParams;
-        const merchantId = params.get("merchantId");
+        const rawMerchantId = params.get("merchantId");
         const customerWallet = params.get("customer");
         const status = params.get("status");
         const planId = params.get("planId");
@@ -59,6 +60,9 @@ export async function GET(request: NextRequest) {
         if (!isSupabaseConfigured()) {
             return NextResponse.json({ subscriptions: [], demo: true });
         }
+
+        // Resolve wallet address to UUID if needed
+        const merchantId = rawMerchantId ? await resolveMerchantId(rawMerchantId) : null;
 
         let query = supabase
             .from("subscriptions")

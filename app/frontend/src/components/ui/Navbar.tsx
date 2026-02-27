@@ -22,6 +22,7 @@ import {
   Scale,
 } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -107,6 +108,13 @@ export function Navbar() {
   const industriesRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
   const { ready, authenticated, login, logout } = usePrivy();
+
+  // Determine where the primary CTA should link to
+  const { status: onboardingStatus } = useOnboardingStatus();
+  const ctaHref =
+    onboardingStatus === "onboarded" ? "/merchant" : "/onboarding";
+  const ctaLabel =
+    onboardingStatus === "onboarded" ? "Dashboard" : "Get Started";
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -371,10 +379,10 @@ export function Navbar() {
           {ready && authenticated ? (
             <>
               <Link
-                href="/dashboard"
+                href={ctaHref}
                 className="rounded-full border border-[#E5E7EB] bg-[#FAFAFA] px-4 py-2 text-sm font-medium text-[#0A0F1E] transition-all hover:bg-[#F0F0F0]"
               >
-                Dashboard
+                {ctaLabel}
               </Link>
               <button
                 onClick={logout}
@@ -513,11 +521,11 @@ export function Navbar() {
                 {ready && authenticated ? (
                   <>
                     <Link
-                      href="/dashboard"
+                      href={ctaHref}
                       onClick={() => setMobileMenuOpen(false)}
                       className="rounded-full border border-[#E5E7EB] bg-[#FAFAFA] px-4 py-3 text-center text-sm font-medium text-[#0A0F1E]"
                     >
-                      Dashboard
+                      {ctaLabel}
                     </Link>
                     <button
                       onClick={() => {

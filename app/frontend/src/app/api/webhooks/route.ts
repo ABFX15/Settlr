@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { resolveMerchantId } from "@/lib/resolve-merchant";
 
 // In-memory storage for webhooks (fallback)
 const memoryWebhooks = new Map<string, WebhookConfig>();
@@ -30,14 +31,16 @@ function generateWebhookSecret(): string {
  */
 export async function GET(request: NextRequest) {
     try {
-        const merchantId = request.nextUrl.searchParams.get("merchantId");
+        const rawMerchantId = request.nextUrl.searchParams.get("merchantId");
 
-        if (!merchantId) {
+        if (!rawMerchantId) {
             return NextResponse.json(
                 { error: "merchantId is required" },
                 { status: 400 }
             );
         }
+
+        const merchantId = await resolveMerchantId(rawMerchantId);
 
         if (isSupabaseConfigured()) {
             const { data, error } = await supabase
@@ -86,14 +89,16 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { merchantId, url, events } = body;
+        const { merchantId: rawMerchantId, url, events } = body;
 
-        if (!merchantId || !url || !events || events.length === 0) {
+        if (!rawMerchantId || !url || !events || events.length === 0) {
             return NextResponse.json(
                 { error: "merchantId, url, and events are required" },
                 { status: 400 }
             );
         }
+
+        const merchantId = await resolveMerchantId(rawMerchantId);
 
         // Validate URL
         try {

@@ -759,6 +759,40 @@ export default function HomePage() {
                     fastest L1 blockchain, trusted by Visa &amp; Shopify.
                   </span>
                 </a>
+
+                {/* Divider */}
+                <div
+                  className="hidden h-24 w-px sm:block"
+                  style={{ background: p.border }}
+                />
+
+                {/* Squads */}
+                <a
+                  href="https://squads.so"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex flex-col items-center gap-3 transition-opacity hover:opacity-80"
+                >
+                  <img
+                    src="/squads-logo.png"
+                    alt="Squads Protocol logo"
+                    className="h-12 w-auto object-contain sm:h-14"
+                    style={{ filter: "grayscale(0.3)" }}
+                  />
+                  <span
+                    className="text-xs font-semibold tracking-wide"
+                    style={{ color: p.slate }}
+                  >
+                    Secured by Squads
+                  </span>
+                  <span
+                    className="max-w-[220px] text-center text-[11px] leading-snug"
+                    style={{ color: p.muted }}
+                  >
+                    Every merchant gets a Squads multisig vault. Board-approved
+                    treasury governance with 2-of-3 signing.
+                  </span>
+                </a>
               </div>
             </R>
           </div>

@@ -1,18 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createApiKey, getApiKeysByMerchant, revokeApiKey, getOrCreateMerchantByWallet } from "@/lib/db";
-
-/**
- * Resolve a merchantId — if it looks like a Solana wallet address (base58, ~32-44 chars)
- * rather than a UUID, look up (or create) the merchant record and return the UUID.
- */
-async function resolveMerchantId(merchantId: string): Promise<string> {
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(merchantId);
-    if (isUuid) return merchantId;
-
-    // Treat as a Solana wallet address → resolve to merchant UUID
-    const merchant = await getOrCreateMerchantByWallet(merchantId);
-    return merchant.id;
-}
+import { createApiKey, getApiKeysByMerchant, revokeApiKey } from "@/lib/db";
+import { resolveMerchantId } from "@/lib/resolve-merchant";
 
 /**
  * POST /api/sdk/keys

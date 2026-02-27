@@ -178,9 +178,55 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7,
         },
 
+        // ── Products ──
+        {
+            url: `${baseUrl}/products/invoices`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/products/payment-links`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+
+        // ── Compliance & Learn ──
+        {
+            url: `${baseUrl}/compliance`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.9,
+        },
+        {
+            url: `${baseUrl}/learn`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/learn/exile-tax`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.9,
+        },
+
         // ── Comparison pages (high-intent SEO) ──
         {
             url: `${baseUrl}/vs/stripe-connect`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.9,
+        },
+        {
+            url: `${baseUrl}/compare/settlr-vs-high-risk-merchant-accounts`,
+            lastModified,
+            changeFrequency: 'monthly',
+            priority: 0.9,
+        },
+        {
+            url: `${baseUrl}/compare/settlr-vs-cash-armored-cars`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.9,

@@ -33,13 +33,48 @@ export default function CreatePaymentPage() {
   const [solanaPayUrl, setSolanaPayUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [showQR, setShowQR] = useState(false);
+  const [settlementAddress, setSettlementAddress] = useState<string | null>(
+    null,
+  );
+
+  // Resolve settlement address: prefer vault PDA over raw wallet
+  useEffect(() => {
+    if (!publicKey) {
+      setSettlementAddress(null);
+      return;
+    }
+    // Check if merchant is registered and has a vault PDA
+    const vaultPda = localStorage.getItem(`settlr_vault_pda_${publicKey}`);
+    if (vaultPda) {
+      setSettlementAddress(vaultPda);
+    } else {
+      // Try fetching from API
+      fetch(`/api/merchants/register?wallet=${publicKey}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.registered && data.merchant?.walletAddress) {
+            setSettlementAddress(data.merchant.walletAddress);
+            // Cache for next time
+            localStorage.setItem(
+              `settlr_vault_pda_${publicKey}`,
+              data.merchant.walletAddress,
+            );
+          } else {
+            // Fallback to signer wallet
+            setSettlementAddress(publicKey);
+          }
+        })
+        .catch(() => setSettlementAddress(publicKey));
+    }
+  }, [publicKey]);
 
   // Generate payment link when amount is entered
   useEffect(() => {
-    if (amount && parseFloat(amount) > 0 && publicKey) {
+    const payTo = settlementAddress || publicKey;
+    if (amount && parseFloat(amount) > 0 && payTo) {
       const params = new URLSearchParams({
         amount,
-        to: publicKey,
+        to: payTo,
         ...(merchantName && { merchant: merchantName }),
         ...(memo && { memo }),
       });
@@ -58,12 +93,12 @@ export default function CreatePaymentPage() {
         label: merchantName || "Settlr",
         message: memo || `Payment of $${amount} USDC`,
       });
-      setSolanaPayUrl(`solana:${publicKey}?${solanaParams.toString()}`);
+      setSolanaPayUrl(`solana:${payTo}?${solanaParams.toString()}`);
     } else {
       setPaymentLink(null);
       setSolanaPayUrl(null);
     }
-  }, [amount, merchantName, memo, publicKey]);
+  }, [amount, merchantName, memo, publicKey, settlementAddress]);
 
   const copyToClipboard = async () => {
     if (paymentLink) {
@@ -201,8 +236,12 @@ export default function CreatePaymentPage() {
             <p className="text-[var(--text-muted)]">
               Payments go directly to:{" "}
               <span className="font-mono text-[#1B6B4A]">
-                {publicKey?.slice(0, 4)}...{publicKey?.slice(-4)}
+                {(settlementAddress || publicKey)?.slice(0, 4)}...
+                {(settlementAddress || publicKey)?.slice(-4)}
               </span>
+              {settlementAddress && settlementAddress !== publicKey && (
+                <span className="ml-1 text-xs text-[#7C8A9E]">(vault)</span>
+              )}
             </p>
           </div>
 

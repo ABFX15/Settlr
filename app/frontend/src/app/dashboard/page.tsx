@@ -44,9 +44,7 @@ export default function DashboardPage() {
     async function fetchPayments() {
       if (!publicKey) return;
       try {
-        const res = await fetch(
-          `/api/payments?merchantId=${publicKey}&limit=10`,
-        );
+        const res = await fetch(`/api/payments?wallet=${publicKey}&limit=10`);
         if (res.ok) {
           const data = await res.json();
           setPayments(data.payments || []);
@@ -155,7 +153,9 @@ export default function DashboardPage() {
             <Receipt className="h-4 w-4" />
             Transactions
           </div>
-          <div className="text-2xl font-bold text-[#0C1829]">{payments.length}</div>
+          <div className="text-2xl font-bold text-[#0C1829]">
+            {payments.length}
+          </div>
           <div className="text-xs text-[#7C8A9E] mt-1">All time</div>
         </motion.div>
 
@@ -250,7 +250,9 @@ export default function DashboardPage() {
         className="rounded-xl border border-[#E2DFD5] bg-white/[0.02]"
       >
         <div className="flex items-center justify-between border-b border-[#E2DFD5] px-6 py-4">
-          <h3 className="text-sm font-medium text-[#0C1829]">Recent Activity</h3>
+          <h3 className="text-sm font-medium text-[#0C1829]">
+            Recent Activity
+          </h3>
           <Link
             href="/dashboard/transactions"
             className="text-xs text-[#1B6B4A] hover:text-[#c4b5fd] flex items-center gap-1"

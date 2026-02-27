@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { resolveMerchantId } from "@/lib/resolve-merchant";
 
 // In-memory storage for subscription plans (fallback)
 const memoryPlans = new Map<string, SubscriptionPlan>();
@@ -31,14 +32,16 @@ function generatePlanId(): string {
  */
 export async function GET(request: NextRequest) {
     try {
-        const merchantId = request.nextUrl.searchParams.get("merchantId");
+        const rawMerchantId = request.nextUrl.searchParams.get("merchantId");
 
-        if (!merchantId) {
+        if (!rawMerchantId) {
             return NextResponse.json(
                 { error: "merchantId is required" },
                 { status: 400 }
             );
         }
+
+        const merchantId = await resolveMerchantId(rawMerchantId);
 
         if (isSupabaseConfigured()) {
             const { data, error } = await supabase
@@ -93,7 +96,7 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const {
-            merchantId,
+            merchantId: rawMerchantId,
             name,
             description,
             amount,
@@ -103,12 +106,14 @@ export async function POST(request: NextRequest) {
             features = [],
         } = body;
 
-        if (!merchantId || !name || !amount) {
+        if (!rawMerchantId || !name || !amount) {
             return NextResponse.json(
                 { error: "merchantId, name, and amount are required" },
                 { status: 400 }
             );
         }
+
+        const merchantId = await resolveMerchantId(rawMerchantId);
 
         const now = new Date().toISOString();
         const plan: SubscriptionPlan = {

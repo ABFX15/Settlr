@@ -743,6 +743,75 @@ LEAFLINK_RETRY_SECRET=          # Secret for cron-triggered retry endpoint
 
 ---
 
+## Squads Vault-First Settlement Architecture
+
+Every Settlr merchant settles into a **Squads v4 Smart Account** — not a raw wallet. This is not an optional add-on; vaults are the default settlement destination.
+
+### Why Vault-First
+
+A raw keypair wallet is unsuitable for commercial treasury:
+
+| Concern             | Raw Wallet                    | Squads Smart Account                              |
+| ------------------- | ----------------------------- | ------------------------------------------------- |
+| **Governance**      | Single signer can drain funds | Configurable M-of-N signing threshold             |
+| **Recovery**        | Lost seed phrase = lost funds | Social recovery + backup signers                  |
+| **Spending limits** | All-or-nothing                | Per-tx and daily limits enforced on-chain         |
+| **Audit trail**     | Address visible, no identity  | Full log: who signed, when, what amount, for what |
+| **Compliance**      | Hard to prove authorization   | Immutable proof of board-approved disbursements   |
+
+### Progressive Onboarding (3 Phases)
+
+The vault complexity scales with the operator's volume. Onboarding feels like a normal app, then grows into enterprise governance.
+
+#### Phase 1 — Soft Start (1-of-1)
+
+- New merchant signs up → Settlr creates a Squads Smart Account with **1-of-1 signing** (the merchant's own key).
+- UX is identical to a standard wallet. Merchant doesn't need to know "multisig" exists.
+- All settlements flow into this vault by default.
+
+#### Phase 2 — Growth Threshold ($5K+)
+
+- When cumulative vault deposits exceed **$5,000**, Settlr prompts: _"Add a second signer to protect your funds."_
+- Merchant adds a CFO, partner, or accountant as a second signer → vault upgrades to **2-of-2**.
+- Spending limits can be configured (e.g., auto-approve < $500, require 2 signatures above).
+
+#### Phase 3 — Enterprise Governance
+
+For operators processing $50K+/month:
+
+- **N-of-M signing** (e.g., 2-of-3 board members for disbursements > $5K)
+- **Whitelisted suppliers** — pre-approved addresses (e.g., verified LeafLink invoices) settle automatically with 1 signature
+- **Recurring payroll** — scheduled USDC payroll with time-locked approval
+- **Tiered authority** — different threshold for petty cash ($200, any signer) vs. equipment purchase ($10K, quorum required)
+- **On-chain audit export** — every signed transaction generates an immutable receipt suitable for BSA/AML reporting
+
+### Technical Integration
+
+```
+scripts/
+├── init-with-squads.ts       # Scaffold: initialize Squads vault as platform authority
+├── claim-fees.ts             # Admin fee claims require Squads vault signature
+programs/x402-hack-payment/
+└── src/
+    └── state/
+        └── platform_config.rs    # authority: Pubkey → points to Squads vault
+```
+
+- The `authority` field in `PlatformConfig` is set to the Squads vault address (not a personal keypair).
+- Fee claims (`claim_platform_fees`) require a valid Squads transaction proposal signed by the vault's threshold.
+- Merchant settlement addresses are Squads vault PDAs, not raw wallets.
+
+### Current Status
+
+- [x] Squads integration scaffolded (`init-with-squads.ts`)
+- [x] `PlatformConfig.authority` designed to accept vault addresses
+- [ ] Auto-provision Squads vault on merchant signup
+- [ ] Progressive signer upgrade prompts (Phase 2/3)
+- [ ] LeafLink invoice → whitelisted address auto-settlement
+- [ ] On-chain audit trail export
+
+---
+
 ## Known Gaps / TODOs
 
 1. **Cross-chain (Mayan)** - Documented but not implemented
@@ -750,7 +819,7 @@ LEAFLINK_RETRY_SECRET=          # Secret for cron-triggered retry endpoint
 3. **Subscriptions** - Database schema exists, full flow incomplete
 4. **Webhook Retry** - No automatic retry on webhook delivery failure (LeafLink integration has its own retry)
 5. **Rate Limiting** - Basic implementation, needs Redis for production
-6. **Multi-sig** - Squads integration scaffolded in `init-with-squads.ts`
+6. **Multi-sig (Squads)** - Scaffolded in `init-with-squads.ts`; vault-first architecture designed (see section above) but auto-provisioning not yet implemented
 7. **Privacy Cash Production** - Currently in demo mode (devnet simulation)
 8. **Kora Local Server** - Requires running Kora locally for gasless (Privy works independently)
 9. **Dutchie Integration** - Content pages exist; no API integration (Dutchie building own payments)

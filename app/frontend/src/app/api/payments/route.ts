@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAllPayments, getPaymentsByMerchantWallet } from "@/lib/db";
+import { resolveMerchantId } from "@/lib/resolve-merchant";
 
 /**
  * GET /api/payments
  * 
- * Fetch payments - optionally filter by merchant wallet
+ * Fetch payments - filter by merchant wallet or merchantId
  * Query params:
- *   - wallet: merchant wallet address to filter by
+ *   - wallet: merchant wallet address to filter by (checks both wallet_address and signer_wallet)
+ *   - merchantId: UUID or wallet address (resolved to UUID, then looks up wallet)
  */
 export async function GET(request: NextRequest) {
     try {
@@ -15,6 +17,7 @@ export async function GET(request: NextRequest) {
 
         let payments;
         if (wallet) {
+            // getMerchantByWallet now checks both wallet_address and signer_wallet
             payments = await getPaymentsByMerchantWallet(wallet);
         } else {
             payments = await getAllPayments();

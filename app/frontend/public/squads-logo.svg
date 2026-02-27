@@ -1,0 +1,6 @@
+<svg width="200" height="48" viewBox="0 0 200 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="4" y="4" width="40" height="40" rx="8" fill="#1A1A2E" stroke="#3B82F6" stroke-width="2"/>
+  <path d="M24 12L14 18V30L24 36L34 30V18L24 12Z" fill="#3B82F6" fill-opacity="0.15" stroke="#3B82F6" stroke-width="1.5"/>
+  <path d="M24 18L19 21V27L24 30L29 27V21L24 18Z" fill="#3B82F6"/>
+  <text x="54" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#1A1A2E" letter-spacing="1">SQUADS</text>
+</svg>
