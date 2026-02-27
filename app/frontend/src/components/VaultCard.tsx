@@ -179,7 +179,6 @@ export function VaultCard() {
         vaultInfo.multisigPda,
         new PublicKey(publicKey),
         new PublicKey(newSignerAddress),
-        { proposer: true, voter: true, executor: true },
         newThreshold,
       );
       const provider = await (solanaWallet as any)?.getProvider?.();
