@@ -992,7 +992,10 @@ export default function CompliancePage() {
               <Stamp className="mx-auto mb-4 h-8 w-8 text-white/60" />
               <h2
                 className="text-2xl font-bold text-white sm:text-3xl"
-                style={{ fontFamily: "var(--font-fraunces), serif" }}
+                style={{
+                  fontFamily: "var(--font-fraunces), serif",
+                  color: "#FFFFFF",
+                }}
               >
                 Compliance Should Not Be a Competitive Disadvantage
               </h2>

@@ -311,7 +311,10 @@ export default function AdultContentPage() {
                 <Link
                   href="/waitlist"
                   className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white transition-all hover:brightness-110"
-                  style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)" }}
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                  }}
                 >
                   Request Access
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -614,7 +617,10 @@ export default function AdultContentPage() {
         >
           <h2
             className="mb-6 text-3xl font-bold text-white md:text-4xl"
-            style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+            style={{
+              fontFamily: "var(--font-fraunces), Georgia, serif",
+              color: "#FFFFFF",
+            }}
           >
             Your platform is legal.{" "}
             <span className="text-[#10B981]">Your payments should be too.</span>
@@ -628,7 +634,9 @@ export default function AdultContentPage() {
             <Link
               href="/waitlist"
               className="group inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-white transition-all hover:brightness-110"
-              style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)" }}
+              style={{
+                background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+              }}
             >
               Request Access
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

@@ -572,7 +572,10 @@ export default function CannabisB2BPaymentsPage() {
         <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
           <R>
             <div className="text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              <h2
+                className="text-3xl font-bold tracking-tight text-white sm:text-4xl"
+                style={{ color: "#FFFFFF" }}
+              >
                 Cost comparison: $2M annual revenue
               </h2>
               <div className="mt-10 grid gap-8 sm:grid-cols-3">
@@ -727,7 +730,10 @@ export default function CannabisB2BPaymentsPage() {
                 />
               </div>
               <div className="relative z-10">
-                <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                <h2
+                  className="text-4xl font-bold tracking-tight text-white sm:text-5xl"
+                  style={{ color: "#FFFFFF" }}
+                >
                   Your supply chain,{" "}
                   <span
                     style={{

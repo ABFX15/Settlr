@@ -2059,7 +2059,10 @@ export default function HomePage() {
                 </div>
 
                 <div className="relative z-10">
-                  <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                  <h2
+                    className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
+                    style={{ color: "#FFFFFF" }}
+                  >
                     Stop paying the{" "}
                     <span
                       style={{

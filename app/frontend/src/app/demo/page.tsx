@@ -732,7 +732,10 @@ export default function DemoPage() {
           >
             <h2
               className="mb-6 text-3xl font-bold text-white md:text-4xl"
-              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+              style={{
+                fontFamily: "var(--font-fraunces), Georgia, serif",
+                color: "#FFFFFF",
+              }}
             >
               Stop Paying the Exile Tax
             </h2>

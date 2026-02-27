@@ -234,7 +234,10 @@ export default function StripeConnectComparison() {
               <Link
                 href="/waitlist"
                 className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
-                style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)" }}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                }}
               >
                 Start Sending — Free
                 <ArrowRight className="h-4 w-4" />
@@ -566,7 +569,7 @@ export default function StripeConnectComparison() {
               custom={0}
               variants={fadeUp}
               className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl"
-              style={{ fontFamily: "var(--font-fraunces)" }}
+              style={{ fontFamily: "var(--font-fraunces)", color: "#FFFFFF" }}
             >
               Ready to ditch the 5-day wait?
             </motion.h2>
@@ -587,7 +590,10 @@ export default function StripeConnectComparison() {
               <Link
                 href="/waitlist"
                 className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
-                style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)" }}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                }}
               >
                 Get Early Access
                 <ArrowRight className="h-4 w-4" />

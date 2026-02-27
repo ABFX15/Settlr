@@ -207,7 +207,7 @@ function CellValue({ value }: { value: string | boolean | null }) {
   if (value === true)
     return (
       <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/15">
-        <Check className="h-3.5 w-3.5 text-[#1B6B4A]" />
+        <Check className="h-3.5 w-3.5 text-[#10B981]" />
       </span>
     );
   if (value === false)
@@ -216,8 +216,8 @@ function CellValue({ value }: { value: string | boolean | null }) {
         <X className="h-3.5 w-3.5 text-red-400/60" />
       </span>
     );
-  if (value === null) return <Minus className="h-4 w-4 text-[#7C8A9E]/60" />;
-  return <span className="text-sm text-[#3B4963]">{value}</span>;
+  if (value === null) return <Minus className="h-4 w-4 text-[#94A3B8]/60" />;
+  return <span className="text-sm text-[#4A5568]">{value}</span>;
 }
 
 /* ═══════════════════════════════════════
@@ -226,7 +226,7 @@ function CellValue({ value }: { value: string | boolean | null }) {
 export default function ComparePage() {
   return (
     <main
-      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#4A5568] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       {/* JSON-LD for comparison page */}
@@ -253,21 +253,21 @@ export default function ComparePage() {
 
       {/* ── Hero ── */}
       <section className="relative pt-32 pb-16 md:pt-40 md:pb-20">
-        <div className="absolute left-1/2 top-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#1B6B4A]/[0.04] blur-[150px]" />
+        <div className="absolute left-1/2 top-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#10B981]/[0.04] blur-[150px]" />
         <div className="mx-auto max-w-4xl px-6 text-center">
           <Reveal>
-            <p className="mb-4 text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
+            <p className="mb-4 text-sm font-medium uppercase tracking-widest text-[#10B981]">
               Payment gateway comparison
             </p>
           </Reveal>
           <Reveal delay={0.05}>
-            <h1 className="text-4xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-semibold tracking-tight text-[#0A0F1E] md:text-5xl lg:text-6xl">
               Best crypto payment gateway{" "}
-              <span className="text-[#1B6B4A]">for 2026</span>
+              <span className="text-[#10B981]">for 2026</span>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#7C8A9E]">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#94A3B8]">
               How does Settlr compare to Stripe, Coinbase Commerce, NOWPayments,
               and BitPay? We break down fees, settlement speed, custody model,
               developer experience, and global coverage so you can make an
@@ -308,15 +308,17 @@ export default function ComparePage() {
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.08}>
               <div
-                className="rounded-xl border-l-2 bg-white/[0.02] p-5"
+                className="rounded-xl border-l-2 bg-[#FAFAFA] p-5"
                 style={{ borderColor: item.color }}
               >
                 <item.icon
                   className="mb-2 h-5 w-5"
                   style={{ color: item.color }}
                 />
-                <p className="text-sm font-semibold text-[#0C1829]">{item.title}</p>
-                <p className="mt-1 text-xs text-[#7C8A9E]">{item.text}</p>
+                <p className="text-sm font-semibold text-[#0A0F1E]">
+                  {item.title}
+                </p>
+                <p className="mt-1 text-xs text-[#94A3B8]">{item.text}</p>
               </div>
             </Reveal>
           ))}
@@ -328,21 +330,21 @@ export default function ComparePage() {
         {features.map((section, si) => (
           <Reveal key={section.category} delay={si * 0.05}>
             <div className="mb-8">
-              <h2 className="mb-4 text-lg font-semibold text-[#0C1829]">
+              <h2 className="mb-4 text-lg font-semibold text-[#0A0F1E]">
                 {section.category}
               </h2>
-              <div className="overflow-x-auto rounded-xl border border-[#E2DFD5]">
+              <div className="overflow-x-auto rounded-xl border border-[#E5E7EB]">
                 <table className="w-full min-w-[700px]">
                   <thead>
-                    <tr className="border-b border-[#E2DFD5] bg-white/[0.02]">
-                      <th className="py-3 pl-5 pr-3 text-left text-xs font-medium uppercase tracking-wider text-[#7C8A9E]">
+                    <tr className="border-b border-[#E5E7EB] bg-[#FAFAFA]">
+                      <th className="py-3 pl-5 pr-3 text-left text-xs font-medium uppercase tracking-wider text-[#94A3B8]">
                         Feature
                       </th>
                       {providers.map((p) => (
                         <th
                           key={p.name}
                           className={`px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider ${
-                            p.highlight ? "text-[#1B6B4A]" : "text-[#7C8A9E]"
+                            p.highlight ? "text-[#10B981]" : "text-[#94A3B8]"
                           }`}
                         >
                           {p.name}
@@ -354,16 +356,16 @@ export default function ComparePage() {
                     {section.rows.map((row, ri) => (
                       <tr
                         key={row.label}
-                        className={`border-b border-[#E2DFD5]/[0.03] ${
-                          ri % 2 === 0 ? "" : "bg-white/[0.01]"
+                        className={`border-b border-[#E5E7EB] ${
+                          ri % 2 === 0 ? "" : "bg-[#FAFAFA]"
                         }`}
                       >
                         <td className="py-3.5 pl-5 pr-3">
-                          <span className="text-sm text-[#3B4963]">
+                          <span className="text-sm text-[#4A5568]">
                             {row.label}
                           </span>
                           {row.note && (
-                            <p className="mt-0.5 text-[10px] leading-tight text-[#7C8A9E]/60">
+                            <p className="mt-0.5 text-[10px] leading-tight text-[#94A3B8]/60">
                               {row.note}
                             </p>
                           )}
@@ -372,7 +374,7 @@ export default function ComparePage() {
                           <td
                             key={vi}
                             className={`px-3 py-3.5 text-center ${
-                              vi === 0 ? "bg-[#1B6B4A]/[0.03]" : ""
+                              vi === 0 ? "bg-[#10B981]/[0.03]" : ""
                             }`}
                           >
                             <CellValue value={val} />
@@ -389,18 +391,18 @@ export default function ComparePage() {
 
         {/* Sources */}
         <Reveal>
-          <div className="mt-8 rounded-xl bg-white/[0.02] p-6">
-            <h3 className="mb-3 text-sm font-semibold text-[#7C8A9E]">
+          <div className="mt-8 rounded-xl bg-[#FAFAFA] p-6">
+            <h3 className="mb-3 text-sm font-semibold text-[#94A3B8]">
               Sources &amp; methodology
             </h3>
-            <ul className="space-y-1.5 text-xs leading-relaxed text-[#7C8A9E]">
+            <ul className="space-y-1.5 text-xs leading-relaxed text-[#94A3B8]">
               <li>
                 • Stripe pricing and settlement data from{" "}
                 <a
                   href="https://stripe.com/pricing"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-[#7C8A9E]"
+                  className="underline hover:text-[#4A5568]"
                 >
                   stripe.com/pricing
                 </a>{" "}
@@ -409,7 +411,7 @@ export default function ComparePage() {
                   href="https://stripe.com/global"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-[#7C8A9E]"
+                  className="underline hover:text-[#4A5568]"
                 >
                   stripe.com/global
                 </a>
@@ -421,7 +423,7 @@ export default function ComparePage() {
                   href="https://commerce.coinbase.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-[#7C8A9E]"
+                  className="underline hover:text-[#4A5568]"
                 >
                   commerce.coinbase.com
                 </a>
@@ -433,7 +435,7 @@ export default function ComparePage() {
                   href="https://nowpayments.io/pricing"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-[#7C8A9E]"
+                  className="underline hover:text-[#4A5568]"
                 >
                   nowpayments.io/pricing
                 </a>
@@ -445,7 +447,7 @@ export default function ComparePage() {
                   href="https://triple-a.io/cryptocurrency-ownership-data"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-[#7C8A9E]"
+                  className="underline hover:text-[#4A5568]"
                 >
                   Triple-A Cryptocurrency Ownership Data (2024)
                 </a>
@@ -457,7 +459,7 @@ export default function ComparePage() {
                   href="https://solana.com/docs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-[#7C8A9E]"
+                  className="underline hover:text-[#4A5568]"
                 >
                   Solana documentation
                 </a>
@@ -469,7 +471,7 @@ export default function ComparePage() {
                   href="https://www.federalreserve.gov"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-[#7C8A9E]"
+                  className="underline hover:text-[#4A5568]"
                 >
                   Federal Reserve payment system data
                 </a>
@@ -485,15 +487,15 @@ export default function ComparePage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="border-t border-[#E2DFD5]/[0.04] bg-gradient-to-b from-white/[0.02] to-transparent">
+      <section className="border-t border-[#E5E7EB] bg-gradient-to-b from-[#FAFAFA] to-transparent">
         <div className="mx-auto max-w-3xl px-6 py-24 text-center">
           <Reveal>
-            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-[#0A0F1E] md:text-4xl">
               Ready to ditch card network gatekeeping?
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-4 max-w-lg text-[#7C8A9E]">
+            <p className="mx-auto mt-4 max-w-lg text-[#94A3B8]">
               Switch to Settlr in under 30 minutes. No content restrictions,
               instant settlement, 1% flat. Built for creator platforms.
             </p>
@@ -502,14 +504,18 @@ export default function ComparePage() {
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-7 py-3.5 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-white shadow-lg shadow-[#10B981]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                }}
               >
                 Start integrating
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/docs"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-7 py-3.5 text-[15px] font-medium text-[#4A5568] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0F1E]"
               >
                 Read the docs
               </Link>

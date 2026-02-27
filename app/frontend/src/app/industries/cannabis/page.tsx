@@ -683,7 +683,10 @@ export default function CannabisPage() {
         >
           <h2
             className="mb-6 text-3xl font-bold text-white md:text-4xl"
-            style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+            style={{
+              fontFamily: "var(--font-fraunces), Georgia, serif",
+              color: "#FFFFFF",
+            }}
           >
             Your business is legal.{" "}
             <span className="text-[#10B981]">Your payments should be too.</span>
