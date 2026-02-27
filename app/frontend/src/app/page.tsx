@@ -272,7 +272,7 @@ export default function HomePage() {
             applicationCategory: "FinanceApplication",
             operatingSystem: "All",
             description:
-              "The Settlement Layer for Restricted Commerce. Non-custodial B2B stablecoin rails for the cannabis industry.",
+              "Enterprise payments for the debanked. Non-custodial USDC settlement for high-risk B2B supply chains.",
             offers: {
               "@type": "Offer",
               name: "Private Rail",
@@ -289,7 +289,7 @@ export default function HomePage() {
               "BSA/AML integrated KYB",
               "Squads multisig treasury",
             ],
-            sameAs: ["https://twitter.com/SettlrPay"],
+            sameAs: ["https://x.com/settlrp"],
           }),
         }}
       />
@@ -371,7 +371,7 @@ export default function HomePage() {
                   className="mt-10 text-5xl font-extrabold leading-[1.04] tracking-tight sm:text-6xl lg:text-[80px]"
                   style={{ color: p.navy }}
                 >
-                  The settlement layer for{" "}
+                  Enterprise payments for the{" "}
                   <span
                     style={{
                       background:
@@ -380,18 +380,19 @@ export default function HomePage() {
                       WebkitTextFillColor: "transparent",
                     }}
                   >
-                    restricted commerce
+                    debanked.
                   </span>
                 </h1>
               </R>
 
               <R delay={0.12}>
                 <p
-                  className="mx-auto mt-8 max-w-md text-lg leading-relaxed sm:text-xl"
+                  className="mx-auto mt-8 max-w-lg text-lg leading-relaxed sm:text-xl"
                   style={{ color: p.slate }}
                 >
-                  Non-custodial stablecoin rails for the industries banks
-                  won&apos;t serve.
+                  Move capital with 100% certainty. We provide non-custodial
+                  USDC settlement for high-risk B2B supply chains. No bank
+                  interference, ever.
                 </p>
               </R>
 
@@ -408,7 +409,7 @@ export default function HomePage() {
                     boxShadow: "0 4px 24px rgba(16,185,129,0.25)",
                   }}
                 >
-                  Request Access
+                  Apply for the Private Rail
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <Link

@@ -9,14 +9,14 @@ import {
   Menu,
   X,
   ChevronDown,
-  Lock,
   Zap,
-  Scale,
   FileCheck,
   Play,
   BookOpen,
   Leaf,
   Film,
+  LinkIcon,
+  FileText,
 } from "lucide-react";
 import { usePrivy } from "@privy-io/react-auth";
 
@@ -48,22 +48,16 @@ const resourceLinks = [
 
 const productLinks = [
   {
-    href: "/settlement",
-    label: "B2B Settlement Rail",
-    icon: Zap,
-    description: "Non-custodial invoice settlement",
+    href: "/products/payment-links",
+    label: "Payment Links",
+    icon: LinkIcon,
+    description: "Shareable links for instant settlement",
   },
   {
-    href: "/vaults",
-    label: "Multisig Vaults",
-    icon: Lock,
-    description: "Squads-powered treasury management",
-  },
-  {
-    href: "/audit",
-    label: "Audit Trail",
-    icon: Scale,
-    description: "Cryptographic on-chain receipts",
+    href: "/products/invoices",
+    label: "Invoices",
+    icon: FileText,
+    description: "B2B invoice settlement on-chain",
   },
 ];
 

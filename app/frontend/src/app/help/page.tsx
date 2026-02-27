@@ -19,8 +19,25 @@ import {
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 
-/* ─── Reveal ─── */
-function Reveal({
+/* ── Design tokens (matches homepage) ──────────────────── */
+const p = {
+  bg: "#FFFFFF",
+  bgSubtle: "#FAFAFA",
+  bgMuted: "#F5F5F5",
+  navy: "#0A0F1E",
+  slate: "#4A5568",
+  muted: "#94A3B8",
+  green: "#10B981",
+  greenDark: "#059669",
+  border: "#E5E7EB",
+  white: "#FFFFFF",
+};
+
+const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
+const springFast = { type: "spring" as const, stiffness: 260, damping: 24 };
+
+/* ── Scroll-triggered reveal ───────────────────────────── */
+function R({
   children,
   className = "",
   delay = 0,
@@ -31,10 +48,10 @@ function Reveal({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 36 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ ...spring, delay }}
       className={className}
     >
       {children}
@@ -42,6 +59,11 @@ function Reveal({
   );
 }
 
+const cardStatic =
+  "rounded-3xl shadow-sm transition-all duration-300 hover:shadow-md";
+const cardBorder = `1px solid ${p.border}`;
+
+/* ── Data ──────────────────────────────────────────────── */
 const categories = [
   { id: "getting-started", label: "Getting Started", icon: Zap },
   { id: "payments", label: "Payments", icon: RefreshCw },
@@ -126,55 +148,76 @@ const faqs: Record<string, { q: string; a: string }[]> = {
 const quickLinks = [
   {
     title: "Documentation",
-    description: "Comprehensive API docs and guides",
+    description: "Comprehensive API docs and integration guides",
     icon: Book,
     href: "/docs",
     external: false,
   },
   {
     title: "Contact Support",
-    description: "Get help from our team",
+    description: "Get help from our team directly",
     icon: Mail,
     href: "mailto:support@settlr.dev",
     external: true,
   },
   {
     title: "Twitter / X",
-    description: "Follow for updates",
+    description: "Follow for updates and announcements",
     icon: Twitter,
-    href: "https://x.com/SettlrPay",
+    href: "https://x.com/settlrp",
     external: true,
   },
 ];
 
+/* ── FAQ accordion ─────────────────────────────────────── */
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] transition-colors hover:border-[#E2DFD5]">
+    <div
+      className="overflow-hidden rounded-2xl transition-all duration-300"
+      style={{
+        background: p.white,
+        boxShadow: isOpen
+          ? "0 4px 24px rgba(0,0,0,0.06)"
+          : "0 1px 4px rgba(0,0,0,0.04)",
+        border: `1px solid ${isOpen ? "rgba(16,185,129,0.25)" : p.border}`,
+      }}
+    >
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between p-6 text-left"
+        className="flex w-full items-center justify-between px-8 py-6 text-left"
       >
-        <span className="pr-4 text-[15px] font-semibold text-[#0C1829]">
+        <span
+          className="pr-4 text-base font-semibold"
+          style={{ color: p.navy }}
+        >
           {question}
         </span>
-        <ChevronDown
-          className={`h-4 w-4 flex-shrink-0 text-[#7C8A9E] transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={springFast}
+          className="shrink-0"
+        >
+          <ChevronDown className="h-4 w-4" style={{ color: p.muted }} />
+        </motion.div>
       </button>
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ ...spring, opacity: { duration: 0.2 } }}
+            className="overflow-hidden"
           >
-            <div className="px-6 pb-6 text-sm leading-relaxed text-[#7C8A9E]">
-              {answer}
+            <div className="px-8 pb-6">
+              <p
+                className="text-[15px] leading-relaxed"
+                style={{ color: p.slate }}
+              >
+                {answer}
+              </p>
             </div>
           </motion.div>
         )}
@@ -183,120 +226,190 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
+/* ════════════════════════════════════════════════════════ */
+/*  PAGE                                                   */
+/* ════════════════════════════════════════════════════════ */
 export default function HelpPage() {
   const [activeCategory, setActiveCategory] = useState("getting-started");
 
   return (
-    <main className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased">
+    <div className="min-h-screen" style={{ background: p.bg, color: p.slate }}>
       <Navbar />
 
-      {/* ── Hero ── */}
-      <section className="relative pt-32 pb-20 md:pt-44 md:pb-24">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-[#1B6B4A]/[0.05] blur-[128px]" />
+      {/* ═══════ HERO ═══════ */}
+      <section className="relative overflow-hidden pb-24 pt-40 sm:pb-32 sm:pt-56">
+        <div className="pointer-events-none absolute inset-0">
+          <div
+            className="absolute left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 rounded-full opacity-[0.12] blur-[120px]"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(16,185,129,0.2), transparent 70%)",
+            }}
+          />
+        </div>
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
-          <Reveal>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-1.5 text-[13px] text-[#3B4963]">
-              <MessageCircle className="h-3.5 w-3.5" />
+          <R>
+            <div
+              className="mx-auto inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-sm"
+              style={{
+                background: p.white,
+                border: cardBorder,
+                color: p.navy,
+              }}
+            >
+              <MessageCircle
+                className="h-3.5 w-3.5"
+                style={{ color: p.green }}
+              />
               We&apos;re here to help
             </div>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h1 className="text-4xl font-semibold tracking-tight md:text-6xl">
-              Help & <span className="text-[#1B6B4A]">support</span>
+          </R>
+
+          <R delay={0.06}>
+            <h1
+              className="mt-8 text-5xl font-extrabold leading-[1.04] tracking-tight sm:text-6xl"
+              style={{ color: p.navy }}
+            >
+              Help &amp;{" "}
+              <span
+                style={{
+                  background:
+                    "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                support
+              </span>
             </h1>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mx-auto mt-5 max-w-xl text-lg text-[#7C8A9E]">
+          </R>
+
+          <R delay={0.12}>
+            <p
+              className="mx-auto mt-6 max-w-md text-lg leading-relaxed"
+              style={{ color: p.slate }}
+            >
               Find answers to common questions or reach out to our team.
             </p>
-          </Reveal>
+          </R>
         </div>
       </section>
 
-      {/* ── Quick Links ── */}
-      <section className="mx-auto max-w-5xl px-6 pb-20">
-        <div className="grid gap-6 md:grid-cols-3">
-          {quickLinks.map((link, i) => {
-            const Icon = link.icon;
-            const Tag = link.external ? "a" : Link;
-            const extraProps = link.external
-              ? { target: "_blank", rel: "noopener noreferrer" }
-              : {};
-            return (
-              <Reveal key={link.title} delay={i * 0.08}>
-                <Tag
-                  href={link.href}
-                  {...(extraProps as any)}
-                  className="group flex h-full flex-col rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-7 transition-colors hover:border-[#E2DFD5] hover:bg-[#F3F2ED]"
-                >
-                  <div className="mb-4 inline-flex rounded-xl bg-white/[0.05] p-2.5 self-start">
-                    <Icon className="h-5 w-5 text-[#3B4963]" />
-                  </div>
-                  <h3 className="flex items-center gap-2 text-[15px] font-semibold text-[#0C1829]">
-                    {link.title}
-                    {link.external && (
-                      <ExternalLink className="h-3.5 w-3.5 text-[#7C8A9E]" />
-                    )}
-                  </h3>
-                  <p className="mt-2 text-sm text-[#7C8A9E]">
-                    {link.description}
-                  </p>
-                </Tag>
-              </Reveal>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
-        <div className="mx-auto max-w-4xl px-6 py-28">
-          <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
-              FAQ
-            </p>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-              Frequently asked questions
-            </h2>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mt-3 text-base text-[#7C8A9E]">
-              Browse by category to find what you need
-            </p>
-          </Reveal>
-
-          {/* Category tabs */}
-          <div className="mt-10 flex flex-wrap gap-2">
-            {categories.map((cat) => {
-              const Icon = cat.icon;
+      {/* ═══════ QUICK LINKS — bento style ═══════ */}
+      <section className="pb-32 sm:pb-48">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="grid gap-5 md:grid-cols-3">
+            {quickLinks.map((link, i) => {
+              const Icon = link.icon;
+              const Tag = link.external ? "a" : Link;
+              const extraProps = link.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {};
               return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                    activeCategory === cat.id
-                      ? "bg-white text-[#0C1829]"
-                      : "bg-[#F3F2ED] text-[#7C8A9E] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
-                  }`}
-                >
-                  <Icon className="h-3.5 w-3.5" />
-                  {cat.label}
-                </button>
+                <R key={link.title} delay={i * 0.06}>
+                  <Tag
+                    href={link.href}
+                    {...(extraProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+                    className={`group block h-full ${cardStatic}`}
+                    style={{
+                      background: p.white,
+                      border: cardBorder,
+                      padding: "2rem",
+                    }}
+                  >
+                    <div
+                      className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl"
+                      style={{ background: p.bgMuted }}
+                    >
+                      <Icon className="h-5 w-5" style={{ color: p.slate }} />
+                    </div>
+                    <h3
+                      className="flex items-center gap-2 text-base font-bold"
+                      style={{ color: p.navy }}
+                    >
+                      {link.title}
+                      {link.external && (
+                        <ExternalLink
+                          className="h-3.5 w-3.5"
+                          style={{ color: p.muted }}
+                        />
+                      )}
+                    </h3>
+                    <p
+                      className="mt-2 text-sm leading-relaxed"
+                      style={{ color: p.slate }}
+                    >
+                      {link.description}
+                    </p>
+                  </Tag>
+                </R>
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ═══════ FAQ ═══════ */}
+      <section className="py-32 sm:py-48" style={{ background: p.bgSubtle }}>
+        <div className="mx-auto max-w-4xl px-6">
+          <R className="text-center">
+            <p
+              className="mb-5 text-sm font-semibold uppercase tracking-widest"
+              style={{ color: p.muted }}
+            >
+              FAQ
+            </p>
+            <h2
+              className="text-4xl font-bold tracking-tight sm:text-5xl"
+              style={{ color: p.navy }}
+            >
+              Frequently asked questions
+            </h2>
+            <p className="mt-5 text-lg" style={{ color: p.slate }}>
+              Browse by category to find what you need.
+            </p>
+          </R>
+
+          {/* Category tabs */}
+          <R delay={0.06}>
+            <div className="mt-14 flex flex-wrap justify-center gap-2">
+              {categories.map((cat) => {
+                const Icon = cat.icon;
+                const active = activeCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveCategory(cat.id)}
+                    className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200"
+                    style={{
+                      background: active ? p.navy : p.white,
+                      color: active ? p.white : p.slate,
+                      border: `1px solid ${active ? p.navy : p.border}`,
+                    }}
+                  >
+                    <Icon
+                      className="h-3.5 w-3.5"
+                      style={{
+                        color: active ? "rgba(255,255,255,0.6)" : p.muted,
+                      }}
+                    />
+                    {cat.label}
+                  </button>
+                );
+              })}
+            </div>
+          </R>
 
           {/* FAQ items */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCategory}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="mt-8 space-y-4"
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25 }}
+              className="mt-10 space-y-4"
             >
               {faqs[activeCategory]?.map((faq) => (
                 <FAQItem key={faq.q} question={faq.q} answer={faq.a} />
@@ -306,43 +419,98 @@ export default function HelpPage() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#3B82F6]/[0.06] via-transparent to-transparent" />
-
-        <div className="mx-auto max-w-3xl px-6 py-32 text-center">
-          <Reveal>
-            <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">
-              Still have <span className="text-[#1B6B4A]">questions?</span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
-              Our team is here to help. Reach out and we&apos;ll get back to you
-              within 24 hours.
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <a
-                href="mailto:support@settlr.dev"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-8 py-4 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
-              >
-                Contact support
-                <ArrowRight className="h-4 w-4" />
-              </a>
-              <Link
-                href="/demo"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829]"
-              >
-                Try demo
-              </Link>
+      {/* ═══════ DARK STATS BAR ═══════ */}
+      <section style={{ background: p.navy }}>
+        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+          <R>
+            <div className="grid grid-cols-2 gap-y-10 sm:grid-cols-4">
+              {[
+                { value: "<24h", label: "Response time" },
+                { value: "24/7", label: "Support available" },
+                { value: "99.9%", label: "Uptime SLA" },
+                { value: "5 min", label: "Avg. integration" },
+              ].map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <p className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                    {stat.value}
+                  </p>
+                  <p
+                    className="mt-2 text-sm font-medium"
+                    style={{ color: "rgba(255,255,255,0.45)" }}
+                  >
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
             </div>
-          </Reveal>
+          </R>
+        </div>
+      </section>
+
+      {/* ═══════ FINAL CTA ═══════ */}
+      <section className="py-32 sm:py-48">
+        <div className="mx-auto max-w-5xl px-6">
+          <R>
+            <div
+              className="relative overflow-hidden rounded-[2rem] px-8 py-20 text-center sm:px-16 sm:py-28"
+              style={{ background: p.navy }}
+            >
+              <div className="pointer-events-none absolute inset-0">
+                <div
+                  className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-[120px]"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(16,185,129,0.4), transparent 70%)",
+                  }}
+                />
+              </div>
+              <div className="relative z-10">
+                <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                  Still have{" "}
+                  <span
+                    style={{
+                      background: "linear-gradient(135deg, #10B981, #34D399)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
+                    questions?
+                  </span>
+                </h2>
+                <p
+                  className="mx-auto mt-6 max-w-md text-lg"
+                  style={{ color: "rgba(255,255,255,0.55)" }}
+                >
+                  Our team is here to help. Reach out and we&apos;ll get back to
+                  you within 24 hours.
+                </p>
+                <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+                  <a
+                    href="mailto:support@settlr.dev"
+                    className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                      boxShadow: "0 4px 24px rgba(16,185,129,0.3)",
+                    }}
+                  >
+                    Contact Support
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </a>
+                  <Link
+                    href="/demo"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/20 px-10 py-4 text-base font-semibold text-white transition-all duration-200 hover:bg-white/10"
+                  >
+                    Try Demo
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </R>
         </div>
       </section>
 
       <Footer />
-    </main>
+    </div>
   );
 }

@@ -4,8 +4,9 @@ import { SettlrLogo } from "@/components/settlr-logo";
 
 const footerLinks = {
   product: [
+    { href: "/products/payment-links", label: "Payment Links" },
+    { href: "/products/invoices", label: "Invoices" },
     { href: "/demo", label: "Demo" },
-    { href: "/docs", label: "Documentation" },
     { href: "/vs/stripe-connect", label: "Settlr vs Stripe" },
   ],
   developers: [
@@ -42,7 +43,7 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { href: "https://x.com/SettlrPay", icon: Twitter, label: "Twitter" },
+  { href: "https://x.com/settlrp", icon: Twitter, label: "Twitter" },
   {
     href: "https://github.com/ABFX15/x402-hack-payment",
     icon: Github,
