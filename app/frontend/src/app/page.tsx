@@ -5,29 +5,21 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
-  Check,
   ChevronDown,
-  Shield,
-  Lock,
   DollarSign,
   Zap,
   AlertTriangle,
-  Banknote,
   FileCheck,
   Eye,
   Scale,
-  X,
   ArrowUpRight,
-  Clock,
-  Globe,
-  Fingerprint,
   CheckCircle2,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 
 /* ── Design tokens ─────────────────────────────────────── */
-const palette = {
+const p = {
   bg: "#FFFFFF",
   bgSubtle: "#FAFAFA",
   bgMuted: "#F5F5F5",
@@ -36,9 +28,6 @@ const palette = {
   muted: "#94A3B8",
   green: "#10B981",
   greenDark: "#059669",
-  greenDeep: "#047857",
-  greenGlow: "rgba(16,185,129,0.15)",
-  greenBorder: "rgba(16,185,129,0.2)",
   border: "#E5E7EB",
   borderSubtle: "#F0F0F0",
   red: "#EF4444",
@@ -49,8 +38,8 @@ const palette = {
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 const springFast = { type: "spring" as const, stiffness: 260, damping: 24 };
 
-/* ── Reveal ─────────────────────────────────────────────── */
-function Reveal({
+/* ── Scroll-triggered reveal ───────────────────────────── */
+function R({
   children,
   className = "",
   delay = 0,
@@ -61,9 +50,9 @@ function Reveal({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 36 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
+      viewport={{ once: true, margin: "-80px" }}
       transition={{ ...spring, delay }}
       className={className}
     >
@@ -72,7 +61,7 @@ function Reveal({
   );
 }
 
-/* ── Animated counter ─────────────────────────────────── */
+/* ── Animated counter ──────────────────────────────────── */
 function Counter({
   end,
   suffix = "",
@@ -86,115 +75,151 @@ function Counter({
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
-  const [value, setValue] = useState(0);
-
+  const [val, setVal] = useState(0);
   useEffect(() => {
     if (!inView) return;
-    let start = 0;
+    let n = 0;
     const step = end / (duration * 60);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= end) {
-        setValue(end);
-        clearInterval(timer);
-      } else {
-        setValue(Math.floor(start));
-      }
+    const t = setInterval(() => {
+      n += step;
+      if (n >= end) {
+        setVal(end);
+        clearInterval(t);
+      } else setVal(Math.floor(n));
     }, 1000 / 60);
-    return () => clearInterval(timer);
+    return () => clearInterval(t);
   }, [inView, end, duration]);
-
   return (
     <span ref={ref}>
       {prefix}
-      {value}
+      {val}
       {suffix}
     </span>
   );
 }
 
-/* ── Live Settlement Ticker ───────────────────────────── */
-function SettlementTicker() {
-  const settlements = [
-    { from: "CO Cultivator", to: "OR Distributor", amount: 14250, time: 0.8 },
-    { from: "CA Processor", to: "NV Retailer", amount: 47500, time: 0.6 },
-    { from: "MI Grower", to: "IL Dispensary", amount: 8900, time: 0.9 },
-    { from: "WA Extractor", to: "AZ Distributor", amount: 32000, time: 0.7 },
-  ];
-  const [idx, setIdx] = useState(0);
-  useEffect(() => {
-    const t = setInterval(
-      () => setIdx((i) => (i + 1) % settlements.length),
-      3800,
-    );
-    return () => clearInterval(t);
-  }, []);
-  const tx = settlements[idx];
+/* ── Floating notification cards (Sorbet-style hero treatment) ── */
+const heroNotifications = [
+  {
+    label: "Settlement Complete",
+    detail: "$47,500 → Pacific Distributors",
+    time: "0.6s",
+    position: "left-[2%] top-[18%] sm:left-[4%]",
+  },
+  {
+    label: "KYB Verified",
+    detail: "GreenLeaf Farms · CO",
+    time: "Just now",
+    position: "right-[2%] top-[12%] sm:right-[4%]",
+  },
+  {
+    label: "Invoice Paid",
+    detail: "$14,250 · Mountain Extracts",
+    time: "0.8s",
+    position: "left-[6%] bottom-[28%] sm:left-[8%]",
+  },
+  {
+    label: "Compliance Check",
+    detail: "OFAC · BSA/AML · Passed",
+    time: "Real-time",
+    position: "right-[4%] bottom-[32%] sm:right-[6%]",
+  },
+];
 
+function FloatingCard({
+  label,
+  detail,
+  time,
+  position,
+  delay,
+}: {
+  label: string;
+  detail: string;
+  time: string;
+  position: string;
+  delay: number;
+}) {
   return (
-    <AnimatePresence mode="wait">
+    <motion.div
+      className={`absolute ${position} z-20 hidden md:block`}
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ ...spring, delay }}
+    >
       <motion.div
-        key={tx.from}
-        className="inline-flex items-center gap-3 rounded-full border px-5 py-2.5 backdrop-blur-sm"
+        className="rounded-2xl px-5 py-4 shadow-lg backdrop-blur-sm"
         style={{
-          background: "rgba(255,255,255,0.8)",
-          borderColor: palette.border,
+          background: "rgba(255,255,255,0.92)",
+          border: `1px solid ${p.border}`,
+          maxWidth: 220,
         }}
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
-        transition={springFast}
+        animate={{ y: [0, -6, 0] }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: delay * 2,
+        }}
       >
-        <span className="relative flex h-2 w-2">
-          <span
-            className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-            style={{ background: palette.green }}
-          />
-          <span
-            className="relative inline-flex h-2 w-2 rounded-full"
-            style={{ background: palette.green }}
-          />
-        </span>
-        <span className="text-xs font-medium" style={{ color: palette.slate }}>
-          <span style={{ color: palette.greenDark, fontWeight: 700 }}>
-            ${tx.amount.toLocaleString()}
-          </span>{" "}
-          settled · {tx.from} → {tx.to}{" "}
-          <span style={{ color: palette.muted }}>· {tx.time}s</span>
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span
+              className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+              style={{ background: p.green }}
+            />
+            <span
+              className="relative inline-flex h-2 w-2 rounded-full"
+              style={{ background: p.green }}
+            />
+          </span>
+          <span className="text-[11px] font-bold" style={{ color: p.navy }}>
+            {label}
+          </span>
+        </div>
+        <p
+          className="mt-1.5 text-[11px] leading-snug"
+          style={{ color: p.slate }}
+        >
+          {detail}
+        </p>
+        <p className="mt-1 text-[10px] font-medium" style={{ color: p.muted }}>
+          {time}
+        </p>
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   );
 }
 
-/* ── FAQ Item ─────────────────────────────────────────── */
-function FAQItem({ question, answer }: { question: string; answer: string }) {
+/* ── FAQ Item ──────────────────────────────────────────── */
+function FAQ({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
-
   return (
     <div
-      className="overflow-hidden rounded-2xl border transition-all duration-300"
+      className="overflow-hidden rounded-2xl transition-all duration-300"
       style={{
-        borderColor: open ? palette.greenBorder : palette.border,
-        background: open ? "rgba(16,185,129,0.02)" : palette.white,
+        background: p.white,
+        boxShadow: open
+          ? "0 4px 24px rgba(0,0,0,0.06)"
+          : "0 1px 4px rgba(0,0,0,0.04)",
+        border: `1px solid ${open ? "rgba(16,185,129,0.25)" : p.border}`,
       }}
     >
       <button
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-6 py-5 text-left"
+        className="flex w-full items-center justify-between px-8 py-6 text-left"
       >
         <span
-          className="pr-4 text-[15px] font-semibold"
-          style={{ color: palette.navy }}
+          className="pr-4 text-base font-semibold"
+          style={{ color: p.navy }}
         >
-          {question}
+          {q}
         </span>
         <motion.div
           animate={{ rotate: open ? 180 : 0 }}
           transition={springFast}
           className="shrink-0"
         >
-          <ChevronDown className="h-4 w-4" style={{ color: palette.muted }} />
+          <ChevronDown className="h-4 w-4" style={{ color: p.muted }} />
         </motion.div>
       </button>
       <AnimatePresence initial={false}>
@@ -206,12 +231,12 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
             transition={{ ...spring, opacity: { duration: 0.2 } }}
             className="overflow-hidden"
           >
-            <div className="px-6 pb-5">
+            <div className="px-8 pb-6">
               <p
-                className="text-sm leading-relaxed"
-                style={{ color: palette.slate }}
+                className="text-[15px] leading-relaxed"
+                style={{ color: p.slate }}
               >
-                {answer}
+                {a}
               </p>
             </div>
           </motion.div>
@@ -220,6 +245,13 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
     </div>
   );
 }
+
+/* card helper — soft shadow, hover lift */
+const card =
+  "rounded-3xl shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1";
+const cardStatic =
+  "rounded-3xl shadow-sm transition-all duration-300 hover:shadow-md";
+const cardBorder = `1px solid ${p.border}`;
 
 /* ════════════════════════════════════════════════════════ */
 /*  PAGE                                                   */
@@ -240,20 +272,19 @@ export default function HomePage() {
             applicationCategory: "FinanceApplication",
             operatingSystem: "All",
             description:
-              "The Settlement Layer for Restricted Commerce. Non-custodial B2B stablecoin rails for the cannabis industry. 1% flat, instant settlement, zero bank dependency.",
+              "The Settlement Layer for Restricted Commerce. Non-custodial B2B stablecoin rails for the cannabis industry.",
             offers: {
               "@type": "Offer",
               name: "Private Rail",
               price: "0",
               priceCurrency: "USD",
-              description:
-                "1% flat per transaction. No monthly minimums. No hidden fees.",
+              description: "1% flat per transaction.",
               url: "https://settlr.dev/onboarding",
             },
             featureList: [
               "Non-custodial B2B settlement",
               "Instant finality on Solana",
-              "GENIUS Act 2025 compliant stablecoins",
+              "GENIUS Act 2025 compliant",
               "Cryptographic audit trail",
               "BSA/AML integrated KYB",
               "Squads multisig treasury",
@@ -275,15 +306,15 @@ export default function HomePage() {
                 name: "What is Settlr?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Settlr is the settlement layer for restricted commerce — non-custodial B2B stablecoin rails built for cannabis and other high-risk industries.",
+                  text: "Settlr is non-custodial B2B stablecoin rails for cannabis and other high-risk industries.",
                 },
               },
               {
                 "@type": "Question",
-                name: "Is Settlr compliant with federal regulations?",
+                name: "Is Settlr compliant?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Yes. Settlr exclusively uses GENIUS Act 2025-compliant payment stablecoins and integrates BSA/AML Know Your Business (KYB) screening.",
+                  text: "Yes. GENIUS Act 2025-compliant stablecoins with BSA/AML KYB screening.",
                 },
               },
               {
@@ -291,7 +322,7 @@ export default function HomePage() {
                 name: "What are the fees?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "1% flat per transaction. No monthly minimums, no hidden FX markups, no processor surcharges.",
+                  text: "1% flat per transaction. No minimums, no hidden fees.",
                 },
               },
               {
@@ -299,7 +330,7 @@ export default function HomePage() {
                 name: "Does Settlr hold my funds?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "No. Settlr is non-custodial. Funds move peer-to-peer from your vault to your supplier's vault. We never have signing authority.",
+                  text: "No. Non-custodial. Funds move peer-to-peer. We never have signing authority.",
                 },
               },
             ],
@@ -309,42 +340,38 @@ export default function HomePage() {
 
       <div
         className="min-h-screen"
-        style={{ background: palette.bg, color: palette.slate }}
+        style={{ background: p.bg, color: p.slate }}
       >
         <Navbar />
 
-        {/* ═══ HERO ═══ */}
-        <section className="relative overflow-hidden pb-24 pt-36 sm:pb-32 sm:pt-48">
-          {/* Subtle gradient orbs */}
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  HERO                                          */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="relative overflow-hidden pb-32 pt-40 sm:pb-48 sm:pt-56">
+          {/* Single soft gradient orb */}
           <div className="pointer-events-none absolute inset-0">
             <div
-              className="absolute -left-40 -top-40 h-[600px] w-[600px] rounded-full opacity-30 blur-3xl"
+              className="absolute left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 rounded-full opacity-[0.15] blur-[120px]"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(16,185,129,0.15), transparent 70%)",
-              }}
-            />
-            <div
-              className="absolute -right-32 top-20 h-[500px] w-[500px] rounded-full opacity-20 blur-3xl"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(16,185,129,0.1), transparent 70%)",
+                  "radial-gradient(circle, rgba(16,185,129,0.2), transparent 70%)",
               }}
             />
           </div>
 
-          <div className="relative z-10 mx-auto max-w-6xl px-6">
-            <div className="mx-auto max-w-3xl text-center">
-              <Reveal>
-                <SettlementTicker />
-              </Reveal>
+          {/* Floating notification cards — Sorbet-style */}
+          {heroNotifications.map((n, i) => (
+            <FloatingCard key={n.label} {...n} delay={0.6 + i * 0.25} />
+          ))}
 
-              <Reveal delay={0.06}>
+          <div className="relative z-10 mx-auto max-w-5xl px-6">
+            <div className="mx-auto max-w-3xl text-center">
+              <R delay={0.06}>
                 <h1
-                  className="mt-8 text-5xl font-bold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl"
-                  style={{ color: palette.navy }}
+                  className="mt-10 text-5xl font-extrabold leading-[1.04] tracking-tight sm:text-6xl lg:text-[80px]"
+                  style={{ color: p.navy }}
                 >
-                  The Settlement Layer for{" "}
+                  The settlement layer for{" "}
                   <span
                     style={{
                       background:
@@ -353,38 +380,32 @@ export default function HomePage() {
                       WebkitTextFillColor: "transparent",
                     }}
                   >
-                    Restricted Commerce
+                    restricted commerce
                   </span>
                 </h1>
-              </Reveal>
+              </R>
 
-              <Reveal delay={0.12}>
+              <R delay={0.12}>
                 <p
-                  className="mx-auto mt-6 max-w-xl text-lg leading-relaxed sm:text-xl"
-                  style={{ color: palette.slate }}
+                  className="mx-auto mt-8 max-w-md text-lg leading-relaxed sm:text-xl"
+                  style={{ color: p.slate }}
                 >
-                  Non-custodial B2B stablecoin rails for cannabis, adult
-                  content, and every industry banks refuse to serve.{" "}
-                  <span
-                    className="font-semibold"
-                    style={{ color: palette.navy }}
-                  >
-                    1% flat. Instant settlement.
-                  </span>
+                  Non-custodial stablecoin rails for the industries banks
+                  won&apos;t serve.
                 </p>
-              </Reveal>
+              </R>
 
-              <Reveal
-                delay={0.18}
-                className="mt-10 flex flex-wrap items-center justify-center gap-4"
+              <R
+                delay={0.24}
+                className="mt-14 flex flex-wrap items-center justify-center gap-4"
               >
                 <Link
                   href="/waitlist"
-                  className="group inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
+                  className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                   style={{
                     background:
                       "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                    boxShadow: "0 4px 24px rgba(16,185,129,0.3)",
+                    boxShadow: "0 4px 24px rgba(16,185,129,0.25)",
                   }}
                 >
                   Request Access
@@ -392,20 +413,16 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href="/demo"
-                  className="inline-flex items-center gap-2 rounded-full border px-8 py-4 text-sm font-semibold transition-all duration-200 hover:bg-gray-50"
-                  style={{
-                    borderColor: palette.border,
-                    color: palette.navy,
-                  }}
+                  className="inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold transition-all duration-200 hover:bg-gray-50"
+                  style={{ border: `1px solid ${p.border}`, color: p.navy }}
                 >
                   Watch Demo
-                  <ArrowUpRight className="h-4 w-4" />
                 </Link>
-              </Reveal>
+              </R>
 
-              {/* Trust badges */}
-              <Reveal delay={0.26}>
-                <div className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+              {/* Muted trust line */}
+              <R delay={0.3}>
+                <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
                   {[
                     "GENIUS Act Compliant",
                     "Non-Custodial",
@@ -415,54 +432,53 @@ export default function HomePage() {
                     <div key={badge} className="flex items-center gap-2">
                       <CheckCircle2
                         className="h-3.5 w-3.5"
-                        style={{ color: palette.green }}
+                        style={{ color: p.muted }}
                       />
                       <span
                         className="text-xs font-medium"
-                        style={{ color: palette.muted }}
+                        style={{ color: p.muted }}
                       >
                         {badge}
                       </span>
                     </div>
                   ))}
                 </div>
-              </Reveal>
+              </R>
             </div>
 
-            {/* Hero product visual */}
-            <Reveal delay={0.3}>
+            {/* Product visual — dashboard mockup */}
+            <R delay={0.34}>
               <div
-                className="mx-auto mt-16 max-w-4xl overflow-hidden rounded-2xl border shadow-2xl"
+                className="mx-auto mt-24 max-w-4xl overflow-hidden rounded-3xl"
                 style={{
-                  borderColor: palette.border,
                   boxShadow:
-                    "0 25px 80px rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.04)",
+                    "0 25px 80px rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.03)",
                 }}
               >
-                {/* Mock dashboard header */}
+                {/* Browser chrome */}
                 <div
-                  className="flex items-center gap-2 border-b px-5 py-3"
+                  className="flex items-center gap-2 px-5 py-3"
                   style={{
-                    background: palette.bgSubtle,
-                    borderColor: palette.border,
+                    background: p.bgSubtle,
+                    borderBottom: `1px solid ${p.border}`,
                   }}
                 >
                   <div className="flex gap-1.5">
-                    <div className="h-3 w-3 rounded-full bg-red-400" />
-                    <div className="h-3 w-3 rounded-full bg-amber-400" />
-                    <div className="h-3 w-3 rounded-full bg-green-400" />
+                    <div className="h-3 w-3 rounded-full bg-red-400/80" />
+                    <div className="h-3 w-3 rounded-full bg-amber-400/80" />
+                    <div className="h-3 w-3 rounded-full bg-green-400/80" />
                   </div>
                   <div
                     className="flex-1 text-center text-xs font-medium"
-                    style={{ color: palette.muted }}
+                    style={{ color: p.muted }}
                   >
                     settlr.dev/dashboard
                   </div>
                 </div>
-                {/* Mock dashboard content */}
+                {/* Stats row */}
                 <div
                   className="grid grid-cols-3 gap-px"
-                  style={{ background: palette.border }}
+                  style={{ background: p.border }}
                 >
                   {[
                     { label: "Volume (30d)", value: "$2.4M", change: "+18%" },
@@ -471,43 +487,47 @@ export default function HomePage() {
                       value: "3.2s",
                       change: "-0.4s",
                     },
-                    { label: "Transactions", value: "1,847", change: "+124" },
-                  ].map((stat) => (
+                    {
+                      label: "Transactions",
+                      value: "1,847",
+                      change: "+124",
+                    },
+                  ].map((s) => (
                     <div
-                      key={stat.label}
-                      className="p-5"
-                      style={{ background: palette.bg }}
+                      key={s.label}
+                      className="p-6"
+                      style={{ background: p.bg }}
                     >
                       <p
                         className="text-xs font-medium"
-                        style={{ color: palette.muted }}
+                        style={{ color: p.muted }}
                       >
-                        {stat.label}
+                        {s.label}
                       </p>
                       <p
                         className="mt-1 text-2xl font-bold tracking-tight"
-                        style={{ color: palette.navy }}
+                        style={{ color: p.navy }}
                       >
-                        {stat.value}
+                        {s.value}
                       </p>
                       <p
                         className="mt-0.5 text-xs font-semibold"
-                        style={{ color: palette.green }}
+                        style={{ color: p.green }}
                       >
-                        {stat.change}
+                        {s.change}
                       </p>
                     </div>
                   ))}
                 </div>
-                {/* Recent settlements */}
-                <div style={{ background: palette.bg }}>
+                {/* Settlements list */}
+                <div style={{ background: p.bg }}>
                   <div
-                    className="border-t px-5 py-3"
-                    style={{ borderColor: palette.border }}
+                    className="px-5 py-3"
+                    style={{ borderTop: `1px solid ${p.border}` }}
                   >
                     <p
                       className="text-xs font-semibold uppercase tracking-wider"
-                      style={{ color: palette.muted }}
+                      style={{ color: p.muted }}
                     >
                       Recent Settlements
                     </p>
@@ -534,41 +554,36 @@ export default function HomePage() {
                   ].map((row) => (
                     <div
                       key={row.from}
-                      className="flex items-center justify-between border-t px-5 py-3"
-                      style={{ borderColor: palette.borderSubtle }}
+                      className="flex items-center justify-between px-5 py-3"
+                      style={{ borderTop: `1px solid ${p.borderSubtle}` }}
                     >
                       <div className="flex items-center gap-3">
                         <div
                           className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
                           style={{
-                            background: palette.greenGlow,
-                            color: palette.greenDark,
+                            background: p.bgMuted,
+                            color: p.slate,
                           }}
                         >
                           {row.from[0]}
                         </div>
-                        <div>
-                          <p
-                            className="text-sm font-medium"
-                            style={{ color: palette.navy }}
-                          >
-                            {row.from} → {row.to}
-                          </p>
-                        </div>
+                        <p
+                          className="text-sm font-medium"
+                          style={{ color: p.navy }}
+                        >
+                          {row.from} → {row.to}
+                        </p>
                       </div>
                       <div className="flex items-center gap-4">
                         <span
                           className="text-sm font-semibold"
-                          style={{ color: palette.navy }}
+                          style={{ color: p.navy }}
                         >
                           {row.amount}
                         </span>
                         <span
                           className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
-                          style={{
-                            background: palette.greenGlow,
-                            color: palette.greenDark,
-                          }}
+                          style={{ background: p.bgMuted, color: p.slate }}
                         >
                           Settled · {row.time}
                         </span>
@@ -577,557 +592,584 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-            </Reveal>
+            </R>
           </div>
         </section>
 
-        {/* ═══ STATS BAR ═══ */}
-        <section
-          className="border-y py-16"
-          style={{ borderColor: palette.border }}
-        >
-          <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-12 px-6 sm:gap-20">
-            {[
-              { value: 1, suffix: "%", label: "Flat fee", prefix: "" },
-              { value: 5, suffix: "s", label: "Settlement time", prefix: "<" },
-              { value: 0, suffix: "", label: "Bank dependency", prefix: "" },
-              {
-                value: 280,
-                suffix: "K+",
-                label: "Settled this quarter",
-                prefix: "$",
-              },
-            ].map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 0.06}>
-                <div className="text-center">
-                  <p
-                    className="text-4xl font-bold tracking-tight sm:text-5xl"
-                    style={{ color: palette.navy }}
-                  >
-                    <Counter
-                      end={stat.value}
-                      suffix={stat.suffix}
-                      prefix={stat.prefix}
-                    />
-                  </p>
-                  <p
-                    className="mt-1 text-sm font-medium"
-                    style={{ color: palette.muted }}
-                  >
-                    {stat.label}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  DARK STATS BAR — contrast break               */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section style={{ background: p.navy }}>
+          <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+            <R>
+              <div className="grid grid-cols-2 gap-y-10 sm:grid-cols-4">
+                {[
+                  { value: "$280K+", label: "Settled to date" },
+                  { value: "<5s", label: "Time to finality" },
+                  { value: "1%", label: "Flat fee" },
+                  { value: "0", label: "Funds held in custody" },
+                ].map((stat, i) => (
+                  <div key={stat.label} className="text-center">
+                    <p className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                      {stat.value}
+                    </p>
+                    <p
+                      className="mt-2 text-sm font-medium"
+                      style={{ color: "rgba(255,255,255,0.45)" }}
+                    >
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </R>
           </div>
         </section>
 
-        {/* ═══ PROBLEM — BENTO GRID ═══ */}
-        <section className="py-24 sm:py-32">
-          <div className="mx-auto max-w-6xl px-6">
-            <Reveal className="mx-auto max-w-2xl text-center">
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  PROBLEM — Two cards only                      */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="py-32 sm:py-48">
+          <div className="mx-auto max-w-5xl px-6">
+            <R className="mx-auto max-w-2xl text-center">
               <p
-                className="mb-4 text-sm font-semibold uppercase tracking-widest"
-                style={{ color: palette.red }}
+                className="mb-5 text-sm font-semibold uppercase tracking-widest"
+                style={{ color: p.muted }}
               >
                 The Problem
               </p>
               <h2
-                className="text-3xl font-bold tracking-tight sm:text-4xl"
-                style={{ color: palette.navy }}
+                className="text-4xl font-bold tracking-tight sm:text-5xl"
+                style={{ color: p.navy }}
               >
                 Legally compliant. Financially exiled.
               </h2>
-              <p
-                className="mt-4 text-base leading-relaxed"
-                style={{ color: palette.slate }}
-              >
-                You operate a state-legal business, yet the financial system
-                treats you like a liability.
+              <p className="mt-5 text-lg" style={{ color: p.slate }}>
+                State-legal businesses still can&apos;t access basic financial
+                infrastructure.
               </p>
-            </Reveal>
+            </R>
 
-            {/* Bento grid — 2 large + 1 tall right */}
-            <div className="mt-16 grid gap-4 md:grid-cols-3">
-              {/* Big card left */}
-              <Reveal className="md:col-span-2">
+            <div className="mt-20 grid gap-8 md:grid-cols-2">
+              <R>
                 <div
-                  className="relative overflow-hidden rounded-2xl border p-8 sm:p-10"
+                  className={card}
                   style={{
-                    borderColor: palette.border,
-                    background: palette.bg,
+                    background: p.white,
+                    border: cardBorder,
+                    padding: "3rem",
                   }}
                 >
                   <div
-                    className="absolute -right-20 -top-20 h-60 w-60 rounded-full opacity-40 blur-3xl"
-                    style={{
-                      background:
-                        "radial-gradient(circle, rgba(239,68,68,0.1), transparent 70%)",
-                    }}
-                  />
-                  <div
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                    style={{ background: "rgba(239,68,68,0.08)" }}
+                    className="inline-flex h-14 w-14 items-center justify-center rounded-2xl"
+                    style={{ background: "rgba(239,68,68,0.06)" }}
                   >
-                    <DollarSign
-                      className="h-6 w-6"
-                      style={{ color: palette.red }}
-                    />
+                    <DollarSign className="h-7 w-7" style={{ color: p.red }} />
                   </div>
                   <h3
-                    className="mt-6 text-2xl font-bold"
-                    style={{ color: palette.navy }}
+                    className="mt-8 text-2xl font-bold"
+                    style={{ color: p.navy }}
                   >
                     The &ldquo;High-Risk&rdquo; Tax
                   </h3>
                   <p
-                    className="mt-3 max-w-lg text-base leading-relaxed"
-                    style={{ color: palette.slate }}
+                    className="mt-4 text-base leading-relaxed"
+                    style={{ color: p.slate }}
                   >
-                    Traditional processors charge 5–9% because they know you
-                    have no other choice. Your margins shrink while theirs grow.
-                    Every quarter, you lose tens of thousands in fees that go
-                    straight to someone else&apos;s bottom line.
+                    Processors charge 5–9% because you have no alternative. Your
+                    margins disappear into someone else&apos;s bottom line.
                   </p>
-                  <div className="mt-6 flex gap-6">
+                  <div className="mt-10 flex gap-10">
                     <div>
                       <p
-                        className="text-3xl font-bold"
-                        style={{ color: palette.red }}
+                        className="text-4xl font-bold"
+                        style={{ color: p.red }}
                       >
                         5–9%
                       </p>
-                      <p className="text-xs" style={{ color: palette.muted }}>
+                      <p className="mt-1 text-sm" style={{ color: p.muted }}>
                         Processing fees
                       </p>
                     </div>
                     <div>
                       <p
-                        className="text-3xl font-bold"
-                        style={{ color: palette.red }}
+                        className="text-4xl font-bold"
+                        style={{ color: p.red }}
                       >
                         $12K+
                       </p>
-                      <p className="text-xs" style={{ color: palette.muted }}>
+                      <p className="mt-1 text-sm" style={{ color: p.muted }}>
                         Monthly overpayment
                       </p>
                     </div>
                   </div>
                 </div>
-              </Reveal>
+              </R>
 
-              {/* Stacked right */}
-              <div className="flex flex-col gap-4">
-                <Reveal delay={0.06}>
+              <R delay={0.08}>
+                <div
+                  className={card}
+                  style={{
+                    background: p.white,
+                    border: cardBorder,
+                    padding: "3rem",
+                  }}
+                >
                   <div
-                    className="rounded-2xl border p-6"
-                    style={{
-                      borderColor: palette.border,
-                      background: palette.bg,
-                    }}
+                    className="inline-flex h-14 w-14 items-center justify-center rounded-2xl"
+                    style={{ background: "rgba(245,158,11,0.06)" }}
                   >
-                    <div
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-xl"
-                      style={{ background: "rgba(245,158,11,0.08)" }}
-                    >
-                      <AlertTriangle
-                        className="h-5 w-5"
-                        style={{ color: palette.amber }}
-                      />
-                    </div>
-                    <h3
-                      className="mt-4 text-lg font-bold"
-                      style={{ color: palette.navy }}
-                    >
-                      Account Freezes
-                    </h3>
-                    <p
-                      className="mt-2 text-sm leading-relaxed"
-                      style={{ color: palette.slate }}
-                    >
-                      Banks can freeze your operating accounts for &ldquo;manual
-                      review,&rdquo; paralyzing your supply chain for weeks.
-                    </p>
+                    <AlertTriangle
+                      className="h-7 w-7"
+                      style={{ color: p.amber }}
+                    />
                   </div>
-                </Reveal>
-
-                <Reveal delay={0.12}>
-                  <div
-                    className="rounded-2xl border p-6"
-                    style={{
-                      borderColor: palette.border,
-                      background: palette.bg,
-                    }}
+                  <h3
+                    className="mt-8 text-2xl font-bold"
+                    style={{ color: p.navy }}
                   >
-                    <div
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-xl"
-                      style={{ background: "rgba(239,68,68,0.08)" }}
-                    >
-                      <Banknote
-                        className="h-5 w-5"
-                        style={{ color: palette.red }}
-                      />
+                    Account Freezes &amp; Cash
+                  </h3>
+                  <p
+                    className="mt-4 text-base leading-relaxed"
+                    style={{ color: p.slate }}
+                  >
+                    Banks freeze accounts without warning. The
+                    alternative&nbsp;— moving physical cash&nbsp;— is dangerous,
+                    expensive, and impossible to scale.
+                  </p>
+                  <div className="mt-10 flex gap-10">
+                    <div>
+                      <p
+                        className="text-4xl font-bold"
+                        style={{ color: p.amber }}
+                      >
+                        72hrs
+                      </p>
+                      <p className="mt-1 text-sm" style={{ color: p.muted }}>
+                        Avg. freeze duration
+                      </p>
                     </div>
-                    <h3
-                      className="mt-4 text-lg font-bold"
-                      style={{ color: palette.navy }}
-                    >
-                      The Cash Burden
-                    </h3>
-                    <p
-                      className="mt-2 text-sm leading-relaxed"
-                      style={{ color: palette.slate }}
-                    >
-                      Moving physical cash is dangerous, expensive, and an
-                      accounting nightmare. It doesn&apos;t scale.
-                    </p>
+                    <div>
+                      <p
+                        className="text-4xl font-bold"
+                        style={{ color: p.amber }}
+                      >
+                        $0
+                      </p>
+                      <p className="mt-1 text-sm" style={{ color: p.muted }}>
+                        Recourse available
+                      </p>
+                    </div>
                   </div>
-                </Reveal>
-              </div>
+                </div>
+              </R>
             </div>
           </div>
         </section>
 
-        {/* ═══ PRODUCT — BENTO GRID ═══ */}
-        <section
-          className="py-24 sm:py-32"
-          style={{ background: palette.bgSubtle }}
-        >
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  PRODUCT — mockups inside cards, not icons     */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="py-32 sm:py-48" style={{ background: p.bgSubtle }}>
           <div className="mx-auto max-w-6xl px-6">
-            <Reveal className="mx-auto max-w-2xl text-center">
+            <R className="mx-auto max-w-2xl text-center">
               <p
-                className="mb-4 text-sm font-semibold uppercase tracking-widest"
-                style={{ color: palette.green }}
+                className="mb-5 text-sm font-semibold uppercase tracking-widest"
+                style={{ color: p.muted }}
               >
-                How it works
+                How It Works
               </p>
               <h2
-                className="text-3xl font-bold tracking-tight sm:text-4xl"
-                style={{ color: palette.navy }}
+                className="text-4xl font-bold tracking-tight sm:text-5xl"
+                style={{ color: p.navy }}
               >
                 Institutional rails. Zero custody.
               </h2>
-              <p
-                className="mt-4 text-base leading-relaxed"
-                style={{ color: palette.slate }}
-              >
-                Settlr is a software layer — not a bank. Funds move peer-to-peer
-                between multisig vaults that you and your suppliers control.
+              <p className="mt-5 text-lg" style={{ color: p.slate }}>
+                A software layer&nbsp;— not a bank. Funds move peer-to-peer
+                between vaults you control.
               </p>
-            </Reveal>
+            </R>
 
-            {/* 3-col bento */}
-            <div className="mt-16 grid gap-4 md:grid-cols-3">
-              {/* Feature 1 — spans 2 cols */}
-              <Reveal className="md:col-span-2">
+            <div className="mt-20 grid gap-6 md:grid-cols-2">
+              {/* Featured — full width with vault-to-vault product mockup */}
+              <R className="md:col-span-2">
                 <div
-                  className="relative h-full overflow-hidden rounded-2xl border p-8 sm:p-10"
-                  style={{
-                    borderColor: palette.border,
-                    background: palette.bg,
-                  }}
+                  className={`${cardStatic} relative overflow-hidden`}
+                  style={{ background: p.white, border: cardBorder }}
                 >
-                  <div
-                    className="absolute -right-20 -top-20 h-60 w-60 rounded-full opacity-30 blur-3xl"
-                    style={{
-                      background:
-                        "radial-gradient(circle, rgba(16,185,129,0.15), transparent 70%)",
-                    }}
-                  />
-                  <div
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                    style={{ background: palette.greenGlow }}
-                  >
-                    <Lock
-                      className="h-6 w-6"
-                      style={{ color: palette.greenDark }}
-                    />
-                  </div>
-                  <h3
-                    className="mt-6 text-2xl font-bold"
-                    style={{ color: palette.navy }}
-                  >
-                    Non-custodial by design
-                  </h3>
-                  <p
-                    className="mt-3 max-w-lg text-base leading-relaxed"
-                    style={{ color: palette.slate }}
-                  >
-                    Funds move atomically from your vault to your
-                    supplier&apos;s vault in a single Solana transaction. At no
-                    point does Settlr (or any Settlr-controlled wallet) have
-                    unilateral control over your funds.
-                  </p>
-                  {/* Mini flow diagram */}
-                  <div className="mt-8 flex items-center gap-4">
-                    <div
-                      className="flex items-center gap-2 rounded-xl border px-4 py-3"
-                      style={{ borderColor: palette.border }}
-                    >
-                      <Lock
-                        className="h-4 w-4"
-                        style={{ color: palette.green }}
-                      />
-                      <span
-                        className="text-sm font-semibold"
-                        style={{ color: palette.navy }}
+                  <div className="grid items-center gap-0 lg:grid-cols-2">
+                    <div style={{ padding: "3rem 3rem 3rem 3.5rem" }}>
+                      <h3
+                        className="text-3xl font-bold"
+                        style={{ color: p.navy }}
                       >
-                        Your Vault
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div
-                        className="h-px w-6"
-                        style={{ background: palette.green }}
-                      />
-                      <Zap
-                        className="h-4 w-4"
-                        style={{ color: palette.green }}
-                      />
-                      <div
-                        className="h-px w-6"
-                        style={{ background: palette.green }}
-                      />
-                    </div>
-                    <div
-                      className="flex items-center gap-2 rounded-xl border px-4 py-3"
-                      style={{ borderColor: palette.border }}
-                    >
-                      <Shield
-                        className="h-4 w-4"
-                        style={{ color: palette.green }}
-                      />
-                      <span
-                        className="text-sm font-semibold"
-                        style={{ color: palette.navy }}
+                        Non-custodial by design
+                      </h3>
+                      <p
+                        className="mt-4 max-w-md text-base leading-relaxed"
+                        style={{ color: p.slate }}
                       >
-                        Supplier Vault
-                      </span>
+                        Funds move atomically from your vault to your
+                        supplier&apos;s vault in a single Solana transaction.
+                        Settlr never has signing authority.
+                      </p>
+                    </div>
+                    {/* Product mockup — vault transfer visualization */}
+                    <div className="px-6 pb-6 lg:px-8 lg:pb-8 lg:pt-8">
+                      <div
+                        className="rounded-2xl p-6"
+                        style={{
+                          background: p.bgSubtle,
+                          border: `1px solid ${p.border}`,
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div
+                            className="rounded-xl px-4 py-3"
+                            style={{
+                              background: p.white,
+                              border: `1px solid ${p.border}`,
+                            }}
+                          >
+                            <p
+                              className="text-[10px] font-semibold uppercase tracking-wider"
+                              style={{ color: p.muted }}
+                            >
+                              Your Vault
+                            </p>
+                            <p
+                              className="mt-1 text-lg font-bold"
+                              style={{ color: p.navy }}
+                            >
+                              $125,400
+                            </p>
+                            <p
+                              className="text-[10px]"
+                              style={{ color: p.muted }}
+                            >
+                              Squads 3/5 multisig
+                            </p>
+                          </div>
+                          <div className="flex flex-col items-center gap-1 px-4">
+                            <div className="flex items-center gap-1">
+                              <div
+                                className="h-px w-6 sm:w-10"
+                                style={{ background: p.green }}
+                              />
+                              <Zap
+                                className="h-3.5 w-3.5"
+                                style={{ color: p.green }}
+                              />
+                              <div
+                                className="h-px w-6 sm:w-10"
+                                style={{ background: p.green }}
+                              />
+                            </div>
+                            <span
+                              className="text-[10px] font-bold"
+                              style={{ color: p.green }}
+                            >
+                              3.2s
+                            </span>
+                          </div>
+                          <div
+                            className="rounded-xl px-4 py-3"
+                            style={{
+                              background: p.white,
+                              border: `1px solid ${p.border}`,
+                            }}
+                          >
+                            <p
+                              className="text-[10px] font-semibold uppercase tracking-wider"
+                              style={{ color: p.muted }}
+                            >
+                              Supplier
+                            </p>
+                            <p
+                              className="mt-1 text-lg font-bold"
+                              style={{ color: p.navy }}
+                            >
+                              +$47,500
+                            </p>
+                            <p
+                              className="text-[10px]"
+                              style={{ color: p.muted }}
+                            >
+                              Verified · CO License
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className="mt-4 flex items-center gap-2 rounded-lg px-3 py-2"
+                          style={{
+                            background: p.white,
+                            border: `1px solid ${p.border}`,
+                          }}
+                        >
+                          <CheckCircle2
+                            className="h-3.5 w-3.5"
+                            style={{ color: p.green }}
+                          />
+                          <span
+                            className="text-[11px] font-medium"
+                            style={{ color: p.navy }}
+                          >
+                            Tx confirmed ·{" "}
+                            <span style={{ color: p.muted }}>
+                              Slot 284,291,003 · Fee $475 (1%)
+                            </span>
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </Reveal>
+              </R>
 
-              {/* Feature 2 — tall right */}
-              <Reveal delay={0.06}>
+              {/* Instant finality — with settlement timeline mockup */}
+              <R delay={0.06}>
                 <div
-                  className="flex h-full flex-col rounded-2xl border p-8"
+                  className={`${card} flex h-full flex-col`}
                   style={{
-                    borderColor: palette.border,
-                    background: palette.bg,
+                    background: p.white,
+                    border: cardBorder,
+                    padding: "2.5rem",
                   }}
                 >
-                  <div
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                    style={{ background: palette.greenGlow }}
-                  >
-                    <Zap
-                      className="h-6 w-6"
-                      style={{ color: palette.greenDark }}
-                    />
-                  </div>
-                  <h3
-                    className="mt-6 text-xl font-bold"
-                    style={{ color: palette.navy }}
-                  >
+                  <h3 className="text-2xl font-bold" style={{ color: p.navy }}>
                     Instant finality
                   </h3>
                   <p
-                    className="mt-3 text-sm leading-relaxed"
-                    style={{ color: palette.slate }}
+                    className="mt-3 text-base leading-relaxed"
+                    style={{ color: p.slate }}
                   >
-                    Invoices settle in seconds — not days. No
-                    &ldquo;pending&rdquo; states. No ACH reversals. Final means
-                    final.
+                    Invoices settle in seconds&nbsp;— not days. No
+                    &ldquo;pending&rdquo; states. No ACH reversals.
                   </p>
+                  {/* Mini timeline mockup */}
                   <div className="mt-auto pt-8">
                     <div
-                      className="rounded-xl border p-4 text-center"
+                      className="rounded-2xl p-5"
                       style={{
-                        borderColor: palette.border,
-                        background: palette.bgSubtle,
+                        background: p.bgSubtle,
+                        border: `1px solid ${p.border}`,
                       }}
                     >
-                      <p
-                        className="text-3xl font-bold"
-                        style={{ color: palette.green }}
-                      >
-                        &lt;5s
-                      </p>
-                      <p
-                        className="mt-1 text-xs font-medium"
-                        style={{ color: palette.muted }}
-                      >
-                        Average settlement
-                      </p>
+                      <div className="space-y-3">
+                        {[
+                          {
+                            label: "Invoice created",
+                            time: "0.0s",
+                            done: true,
+                          },
+                          { label: "Payment signed", time: "1.1s", done: true },
+                          {
+                            label: "On-chain confirmed",
+                            time: "3.2s",
+                            done: true,
+                          },
+                          {
+                            label: "Receipt generated",
+                            time: "3.4s",
+                            done: true,
+                          },
+                        ].map((step, si) => (
+                          <div
+                            key={step.label}
+                            className="flex items-center gap-3"
+                          >
+                            <div
+                              className="flex h-5 w-5 items-center justify-center rounded-full"
+                              style={{
+                                background: step.done ? p.green : p.bgMuted,
+                              }}
+                            >
+                              {step.done && (
+                                <CheckCircle2 className="h-3 w-3 text-white" />
+                              )}
+                            </div>
+                            <span
+                              className="flex-1 text-xs font-medium"
+                              style={{ color: p.navy }}
+                            >
+                              {step.label}
+                            </span>
+                            <span
+                              className="text-[10px] font-bold tabular-nums"
+                              style={{ color: p.muted }}
+                            >
+                              {step.time}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </Reveal>
+              </R>
 
-              {/* Feature 3 */}
-              <Reveal delay={0.08}>
+              {/* 1% flat — with fee comparison mockup */}
+              <R delay={0.12}>
                 <div
-                  className="rounded-2xl border p-8"
+                  className={`${card} flex h-full flex-col`}
                   style={{
-                    borderColor: palette.border,
-                    background: palette.bg,
+                    background: p.white,
+                    border: cardBorder,
+                    padding: "2.5rem",
                   }}
                 >
-                  <div
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                    style={{ background: palette.greenGlow }}
-                  >
-                    <DollarSign
-                      className="h-6 w-6"
-                      style={{ color: palette.greenDark }}
-                    />
-                  </div>
-                  <h3
-                    className="mt-6 text-xl font-bold"
-                    style={{ color: palette.navy }}
-                  >
+                  <h3 className="text-2xl font-bold" style={{ color: p.navy }}>
                     1% flat. That&apos;s it.
                   </h3>
                   <p
-                    className="mt-3 text-sm leading-relaxed"
-                    style={{ color: palette.slate }}
+                    className="mt-3 text-base leading-relaxed"
+                    style={{ color: p.slate }}
                   >
-                    No monthly minimums. No hidden FX markups. No processor
-                    surcharges. One number, always.
+                    No monthly minimums. No hidden markups. No processor
+                    surcharges.
                   </p>
-                </div>
-              </Reveal>
-
-              {/* Feature 4 */}
-              <Reveal delay={0.1}>
-                <div
-                  className="rounded-2xl border p-8"
-                  style={{
-                    borderColor: palette.border,
-                    background: palette.bg,
-                  }}
-                >
-                  <div
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                    style={{ background: palette.greenGlow }}
-                  >
-                    <Eye
-                      className="h-6 w-6"
-                      style={{ color: palette.greenDark }}
-                    />
+                  {/* Fee comparison mockup */}
+                  <div className="mt-auto pt-8">
+                    <div
+                      className="rounded-2xl p-5"
+                      style={{
+                        background: p.bgSubtle,
+                        border: `1px solid ${p.border}`,
+                      }}
+                    >
+                      <p
+                        className="mb-3 text-[10px] font-semibold uppercase tracking-wider"
+                        style={{ color: p.muted }}
+                      >
+                        On a $50,000 settlement
+                      </p>
+                      <div className="space-y-2.5">
+                        {[
+                          {
+                            label: "High-risk processor",
+                            fee: "$3,500",
+                            pct: "7%",
+                            color: p.red,
+                            width: "70%",
+                          },
+                          {
+                            label: "Cash + armored car",
+                            fee: "$1,500",
+                            pct: "3%",
+                            color: p.amber,
+                            width: "30%",
+                          },
+                          {
+                            label: "Settlr",
+                            fee: "$500",
+                            pct: "1%",
+                            color: p.green,
+                            width: "10%",
+                          },
+                        ].map((row) => (
+                          <div key={row.label}>
+                            <div className="flex items-center justify-between text-[11px]">
+                              <span
+                                className="font-medium"
+                                style={{ color: p.navy }}
+                              >
+                                {row.label}
+                              </span>
+                              <span
+                                className="font-bold"
+                                style={{ color: row.color }}
+                              >
+                                {row.fee}{" "}
+                                <span style={{ color: p.muted }}>
+                                  ({row.pct})
+                                </span>
+                              </span>
+                            </div>
+                            <div
+                              className="mt-1 h-2 overflow-hidden rounded-full"
+                              style={{ background: p.bgMuted }}
+                            >
+                              <div
+                                className="h-full rounded-full"
+                                style={{
+                                  background: row.color,
+                                  width: row.width,
+                                }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <h3
-                    className="mt-6 text-xl font-bold"
-                    style={{ color: palette.navy }}
-                  >
-                    On-chain audit trail
-                  </h3>
-                  <p
-                    className="mt-3 text-sm leading-relaxed"
-                    style={{ color: palette.slate }}
-                  >
-                    Every transaction generates a cryptographically verifiable
-                    receipt. Immutable, tamper-proof, auditor-friendly.
-                  </p>
                 </div>
-              </Reveal>
-
-              {/* Feature 5 */}
-              <Reveal delay={0.12}>
-                <div
-                  className="rounded-2xl border p-8"
-                  style={{
-                    borderColor: palette.border,
-                    background: palette.bg,
-                  }}
-                >
-                  <div
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                    style={{ background: palette.greenGlow }}
-                  >
-                    <Fingerprint
-                      className="h-6 w-6"
-                      style={{ color: palette.greenDark }}
-                    />
-                  </div>
-                  <h3
-                    className="mt-6 text-xl font-bold"
-                    style={{ color: palette.navy }}
-                  >
-                    Privacy where it matters
-                  </h3>
-                  <p
-                    className="mt-3 text-sm leading-relaxed"
-                    style={{ color: palette.slate }}
-                  >
-                    Sensitive details encrypted via TEE (MagicBlock PER). Trade
-                    secrets stay secret while compliance passes.
-                  </p>
-                </div>
-              </Reveal>
+              </R>
             </div>
           </div>
         </section>
 
-        {/* ═══ COMPARISON TABLE ═══ */}
-        <section className="py-24 sm:py-32">
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  COMPARISON                                    */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="py-32 sm:py-48">
           <div className="mx-auto max-w-5xl px-6">
-            <Reveal className="mx-auto max-w-2xl text-center">
+            <R className="mx-auto max-w-2xl text-center">
               <p
-                className="mb-4 text-sm font-semibold uppercase tracking-widest"
-                style={{ color: palette.green }}
+                className="mb-5 text-sm font-semibold uppercase tracking-widest"
+                style={{ color: p.muted }}
               >
                 The Comparison
               </p>
               <h2
-                className="text-3xl font-bold tracking-tight sm:text-4xl"
-                style={{ color: palette.navy }}
+                className="text-4xl font-bold tracking-tight sm:text-5xl"
+                style={{ color: p.navy }}
               >
                 See the difference
               </h2>
-            </Reveal>
+            </R>
 
-            <Reveal className="mt-12">
+            <R className="mt-16">
               <div
-                className="overflow-hidden rounded-2xl border"
-                style={{ borderColor: palette.border }}
+                className="overflow-hidden rounded-3xl shadow-sm"
+                style={{ border: cardBorder }}
               >
                 <table className="w-full text-sm" style={{ minWidth: 600 }}>
                   <thead>
-                    <tr style={{ background: palette.bgSubtle }}>
+                    <tr style={{ background: p.bgSubtle }}>
                       <th
-                        className="border-b px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider"
+                        className="px-8 py-5 text-left text-xs font-semibold uppercase tracking-wider"
                         style={{
-                          color: palette.muted,
-                          borderColor: palette.border,
+                          color: p.muted,
+                          borderBottom: `1px solid ${p.border}`,
                         }}
                       >
                         Feature
                       </th>
                       <th
-                        className="border-b px-6 py-4 text-center text-xs font-semibold uppercase tracking-wider"
+                        className="px-8 py-5 text-center text-xs font-semibold uppercase tracking-wider"
                         style={{
-                          color: palette.muted,
-                          borderColor: palette.border,
+                          color: p.muted,
+                          borderBottom: `1px solid ${p.border}`,
                         }}
                       >
-                        Cash & Armored Cars
+                        Cash &amp; Armored Cars
                       </th>
                       <th
-                        className="border-b px-6 py-4 text-center text-xs font-semibold uppercase tracking-wider"
+                        className="px-8 py-5 text-center text-xs font-semibold uppercase tracking-wider"
                         style={{
-                          color: palette.muted,
-                          borderColor: palette.border,
+                          color: p.muted,
+                          borderBottom: `1px solid ${p.border}`,
                         }}
                       >
                         High-Risk Processors
                       </th>
                       <th
-                        className="border-b px-6 py-4 text-center text-xs font-semibold uppercase tracking-wider"
+                        className="px-8 py-5 text-center text-xs font-semibold uppercase tracking-wider"
                         style={{
-                          color: palette.green,
-                          borderColor: palette.border,
+                          color: p.green,
+                          borderBottom: `1px solid ${p.border}`,
                         }}
                       >
                         Settlr
@@ -1139,102 +1181,103 @@ export default function HomePage() {
                       {
                         feature: "Transaction Fee",
                         cash: "2% + Security",
-                        processor: "5.0%–9.0%",
-                        settlr: "1.0% Flat",
+                        proc: "5.0–9.0%",
+                        us: "1.0% Flat",
                       },
                       {
                         feature: "Settlement Speed",
                         cash: "Days",
-                        processor: "3–5 Business Days",
-                        settlr: "< 5 seconds",
+                        proc: "3–5 Business Days",
+                        us: "< 5 seconds",
                       },
                       {
                         feature: "Risk of Freeze",
                         cash: "High",
-                        processor: "Very High",
-                        settlr: "Zero",
+                        proc: "Very High",
+                        us: "Zero",
                       },
                       {
                         feature: "Audit Trail",
                         cash: "Manual",
-                        processor: "Fragmented",
-                        settlr: "On-Chain",
+                        proc: "Fragmented",
+                        us: "On-Chain",
                       },
                       {
                         feature: "Custody",
                         cash: "You (physical)",
-                        processor: "They hold it",
-                        settlr: "Non-custodial",
+                        proc: "They hold it",
+                        us: "Non-custodial",
                       },
                     ].map((row, i) => (
                       <tr
                         key={row.feature}
-                        style={{ borderColor: palette.border }}
-                        className={i < 4 ? "border-b" : ""}
+                        style={{
+                          borderBottom:
+                            i < 4 ? `1px solid ${p.border}` : undefined,
+                        }}
                       >
                         <td
-                          className="px-6 py-4 font-semibold"
-                          style={{ color: palette.navy }}
+                          className="px-8 py-5 font-semibold"
+                          style={{ color: p.navy }}
                         >
                           {row.feature}
                         </td>
                         <td
-                          className="px-6 py-4 text-center text-[13px]"
-                          style={{ color: palette.red }}
+                          className="px-8 py-5 text-center"
+                          style={{ color: p.red }}
                         >
                           {row.cash}
                         </td>
                         <td
-                          className="px-6 py-4 text-center text-[13px]"
-                          style={{ color: palette.red }}
+                          className="px-8 py-5 text-center"
+                          style={{ color: p.red }}
                         >
-                          {row.processor}
+                          {row.proc}
                         </td>
                         <td
-                          className="px-6 py-4 text-center text-[13px] font-bold"
-                          style={{ color: palette.green }}
+                          className="px-8 py-5 text-center font-bold"
+                          style={{ color: p.green }}
                         >
-                          {row.settlr}
+                          {row.us}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-            </Reveal>
+            </R>
           </div>
         </section>
 
-        {/* ═══ HOW IT WORKS — 3 STEPS ═══ */}
-        <section
-          className="py-24 sm:py-32"
-          style={{ background: palette.bgSubtle }}
-        >
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  THREE STEPS                                   */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="py-32 sm:py-48" style={{ background: p.bgSubtle }}>
           <div className="mx-auto max-w-6xl px-6">
-            <Reveal className="mx-auto max-w-2xl text-center">
+            <R className="mx-auto max-w-2xl text-center">
               <p
-                className="mb-4 text-sm font-semibold uppercase tracking-widest"
-                style={{ color: palette.green }}
+                className="mb-5 text-sm font-semibold uppercase tracking-widest"
+                style={{ color: p.muted }}
               >
                 Get Started
               </p>
               <h2
-                className="text-3xl font-bold tracking-tight sm:text-4xl"
-                style={{ color: palette.navy }}
+                className="text-4xl font-bold tracking-tight sm:text-5xl"
+                style={{ color: p.navy }}
               >
                 Three steps to your first settlement
               </h2>
-            </Reveal>
+            </R>
 
-            <div className="mt-16 grid gap-6 md:grid-cols-3">
+            <div className="mt-20 grid gap-8 md:grid-cols-3">
               {[
                 {
                   step: "01",
                   title: "Verify your business",
-                  desc: "Complete KYB verification in minutes. We verify your state licenses, cannabis permits, and business entity.",
+                  desc: "Complete KYB verification in minutes. We check state licences, cannabis permits, and business entity.",
                   icon: FileCheck,
                   visual: (
-                    <div className="mt-6 space-y-2">
+                    <div className="mt-8 space-y-2.5">
                       {[
                         "Business Entity",
                         "State License",
@@ -1242,17 +1285,17 @@ export default function HomePage() {
                       ].map((item) => (
                         <div
                           key={item}
-                          className="flex items-center gap-3 rounded-xl border px-4 py-2.5"
-                          style={{ borderColor: palette.border }}
+                          className="flex items-center gap-3 rounded-xl px-4 py-3"
+                          style={{
+                            background: p.bgSubtle,
+                            border: `1px solid ${p.border}`,
+                          }}
                         >
                           <CheckCircle2
                             className="h-4 w-4"
-                            style={{ color: palette.green }}
+                            style={{ color: p.muted }}
                           />
-                          <span
-                            className="text-sm"
-                            style={{ color: palette.navy }}
-                          >
+                          <span className="text-sm" style={{ color: p.navy }}>
                             {item}
                           </span>
                         </div>
@@ -1263,40 +1306,40 @@ export default function HomePage() {
                 {
                   step: "02",
                   title: "Create an invoice",
-                  desc: "Generate a settlement request or share a payment link. Your counterparty receives a simple, clean checkout.",
+                  desc: "Generate a settlement request or share a payment link. Your counterparty gets a simple checkout.",
                   icon: DollarSign,
                   visual: (
                     <div
-                      className="mt-6 rounded-xl border p-4"
+                      className="mt-8 rounded-xl p-5"
                       style={{
-                        borderColor: palette.border,
-                        background: palette.bgSubtle,
+                        background: p.bgSubtle,
+                        border: `1px solid ${p.border}`,
                       }}
                     >
                       <div className="flex items-center justify-between">
                         <span
                           className="text-xs font-medium"
-                          style={{ color: palette.muted }}
+                          style={{ color: p.muted }}
                         >
                           Invoice #1047
                         </span>
                         <span
                           className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
                           style={{
-                            background: palette.greenGlow,
-                            color: palette.greenDark,
+                            background: p.bgMuted,
+                            color: p.slate,
                           }}
                         >
                           Ready
                         </span>
                       </div>
                       <p
-                        className="mt-2 text-2xl font-bold"
-                        style={{ color: palette.navy }}
+                        className="mt-3 text-3xl font-bold"
+                        style={{ color: p.navy }}
                       >
-                        $45,000.00
+                        $45,000
                       </p>
-                      <p className="text-xs" style={{ color: palette.muted }}>
+                      <p className="mt-1 text-xs" style={{ color: p.muted }}>
                         GreenLeaf Farms → Pacific Dist.
                       </p>
                     </div>
@@ -1309,236 +1352,301 @@ export default function HomePage() {
                   icon: Zap,
                   visual: (
                     <div
-                      className="mt-6 rounded-xl border p-4"
+                      className="mt-8 rounded-xl p-5"
                       style={{
-                        borderColor: palette.border,
-                        background: palette.bgSubtle,
+                        background: p.bgSubtle,
+                        border: `1px solid ${p.border}`,
                       }}
                     >
                       <div className="flex items-center gap-2">
                         <CheckCircle2
                           className="h-5 w-5"
-                          style={{ color: palette.green }}
+                          style={{ color: p.green }}
                         />
                         <span
                           className="text-sm font-bold"
-                          style={{ color: palette.green }}
+                          style={{ color: p.navy }}
                         >
                           Settled
                         </span>
                       </div>
-                      <div className="mt-3 space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span style={{ color: palette.muted }}>
-                            Time to finality
-                          </span>
-                          <span
-                            className="font-semibold"
-                            style={{ color: palette.navy }}
+                      <div className="mt-4 space-y-2">
+                        {[
+                          ["Time to finality", "3.2s"],
+                          ["Platform fee", "$450 (1%)"],
+                          ["Net to supplier", "$44,550"],
+                        ].map(([label, value]) => (
+                          <div
+                            key={label}
+                            className="flex justify-between text-xs"
                           >
-                            3.2s
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-xs">
-                          <span style={{ color: palette.muted }}>
-                            Platform fee
-                          </span>
-                          <span
-                            className="font-semibold"
-                            style={{ color: palette.navy }}
-                          >
-                            $450 (1%)
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-xs">
-                          <span style={{ color: palette.muted }}>
-                            Net to supplier
-                          </span>
-                          <span
-                            className="font-semibold"
-                            style={{ color: palette.navy }}
-                          >
-                            $44,550
-                          </span>
-                        </div>
+                            <span style={{ color: p.muted }}>{label}</span>
+                            <span
+                              className="font-semibold"
+                              style={{ color: p.navy }}
+                            >
+                              {value}
+                            </span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ),
                 },
               ].map((item, i) => (
-                <Reveal key={item.step} delay={i * 0.08}>
+                <R key={item.step} delay={i * 0.08}>
                   <div
-                    className="flex h-full flex-col rounded-2xl border p-8"
+                    className={`${card} flex h-full flex-col`}
                     style={{
-                      borderColor: palette.border,
-                      background: palette.bg,
+                      background: p.white,
+                      border: cardBorder,
+                      padding: "2.5rem",
                     }}
                   >
                     <div className="flex items-center gap-4">
                       <span
                         className="text-sm font-bold"
-                        style={{ color: palette.green }}
+                        style={{ color: p.navy }}
                       >
                         {item.step}
                       </span>
                       <div
                         className="inline-flex h-10 w-10 items-center justify-center rounded-xl"
-                        style={{ background: palette.greenGlow }}
+                        style={{ background: p.bgMuted }}
                       >
                         <item.icon
                           className="h-5 w-5"
-                          style={{ color: palette.greenDark }}
+                          style={{ color: p.slate }}
                         />
                       </div>
                     </div>
                     <h3
-                      className="mt-5 text-xl font-bold"
-                      style={{ color: palette.navy }}
+                      className="mt-6 text-xl font-bold"
+                      style={{ color: p.navy }}
                     >
                       {item.title}
                     </h3>
                     <p
-                      className="mt-2 text-sm leading-relaxed"
-                      style={{ color: palette.slate }}
+                      className="mt-3 text-sm leading-relaxed"
+                      style={{ color: p.slate }}
                     >
                       {item.desc}
                     </p>
                     {item.visual}
                   </div>
-                </Reveal>
+                </R>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ═══ CFO COMPLIANCE ═══ */}
-        <section className="py-24 sm:py-32">
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  TRUST — Bento grid                            */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="py-32 sm:py-48">
           <div className="mx-auto max-w-6xl px-6">
-            <div className="grid items-center gap-16 lg:grid-cols-2">
-              <Reveal>
-                <p
-                  className="mb-4 text-sm font-semibold uppercase tracking-widest"
-                  style={{ color: palette.green }}
+            <R className="mx-auto max-w-2xl text-center">
+              <p
+                className="mb-5 text-sm font-semibold uppercase tracking-widest"
+                style={{ color: p.muted }}
+              >
+                For Your CFO
+              </p>
+              <h2
+                className="text-4xl font-bold tracking-tight sm:text-5xl"
+                style={{ color: p.navy }}
+              >
+                Built for the 2026 regulatory landscape
+              </h2>
+            </R>
+
+            {/* Bento grid — asymmetric card sizes */}
+            <div className="mt-20 grid gap-5 md:grid-cols-3 md:grid-rows-2">
+              {/* Large — spans 2 cols */}
+              <R className="md:col-span-2 md:row-span-1">
+                <div
+                  className={`${cardStatic} h-full`}
+                  style={{
+                    background: p.white,
+                    border: cardBorder,
+                    padding: "2.5rem",
+                  }}
                 >
-                  CFO Reassurance
-                </p>
-                <h2
-                  className="text-3xl font-bold tracking-tight sm:text-4xl"
-                  style={{ color: palette.navy }}
-                >
-                  Built for the 2026 regulatory landscape
-                </h2>
-                <p
-                  className="mt-4 max-w-lg text-base leading-relaxed"
-                  style={{ color: palette.slate }}
-                >
-                  We understand that for a CFO, &ldquo;crypto&rdquo; sounds like
-                  &ldquo;risk.&rdquo; We built Settlr to change that — every
-                  component is designed for audit-readiness and regulatory
-                  clarity.
-                </p>
-                <div className="mt-8 space-y-4">
-                  {[
-                    {
-                      icon: Scale,
-                      title: "GENIUS Act 2025 Compliant",
-                      desc: "We exclusively use federal-framework payment stablecoins. Fully regulated, fully backed.",
-                    },
-                    {
-                      icon: Eye,
-                      title: "Full Transparency",
-                      desc: "Every transaction generates a cryptographically verifiable receipt for your auditors.",
-                    },
-                    {
-                      icon: FileCheck,
-                      title: "BSA/AML Integrated",
-                      desc: "We handle KYB heavy-lifting so your supply chain stays clean and compliant.",
-                    },
-                  ].map((item) => (
-                    <div key={item.title} className="flex gap-4">
-                      <div
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                        style={{ background: palette.greenGlow }}
+                  <div className="flex items-start gap-4">
+                    <div
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                      style={{ background: p.bgMuted }}
+                    >
+                      <Scale className="h-5 w-5" style={{ color: p.slate }} />
+                    </div>
+                    <div>
+                      <h3
+                        className="text-lg font-bold"
+                        style={{ color: p.navy }}
                       >
-                        <item.icon
-                          className="h-5 w-5"
-                          style={{ color: palette.greenDark }}
-                        />
-                      </div>
-                      <div>
-                        <h4
-                          className="text-sm font-bold"
-                          style={{ color: palette.navy }}
-                        >
-                          {item.title}
-                        </h4>
+                        GENIUS Act 2025 Compliant
+                      </h3>
+                      <p
+                        className="mt-2 text-sm leading-relaxed"
+                        style={{ color: p.slate }}
+                      >
+                        Federal-framework payment stablecoins. USDC by Circle —
+                        fully regulated, fully backed, fully audited. Not
+                        algorithmic, not offshore.
+                      </p>
+                    </div>
+                  </div>
+                  {/* Inline compliance mockup */}
+                  <div className="mt-6 grid grid-cols-3 gap-3">
+                    {[
+                      { label: "Stablecoin", value: "USDC", sub: "Circle" },
+                      { label: "Framework", value: "GENIUS", sub: "Federal" },
+                      { label: "Reserve", value: "1:1", sub: "US Treasuries" },
+                    ].map((item) => (
+                      <div
+                        key={item.label}
+                        className="rounded-xl px-4 py-3"
+                        style={{
+                          background: p.bgSubtle,
+                          border: `1px solid ${p.border}`,
+                        }}
+                      >
                         <p
-                          className="mt-0.5 text-sm leading-relaxed"
-                          style={{ color: palette.slate }}
+                          className="text-[10px] font-semibold uppercase tracking-wider"
+                          style={{ color: p.muted }}
                         >
-                          {item.desc}
+                          {item.label}
+                        </p>
+                        <p
+                          className="mt-1 text-lg font-bold"
+                          style={{ color: p.navy }}
+                        >
+                          {item.value}
+                        </p>
+                        <p className="text-[10px]" style={{ color: p.muted }}>
+                          {item.sub}
                         </p>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-                <div className="mt-8">
-                  <Link
-                    href="/compliance"
-                    className="inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-80"
-                    style={{ color: palette.green }}
-                  >
-                    Read our 2026 Compliance Whitepaper
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </Reveal>
+              </R>
 
-              {/* Compliance visual */}
-              <Reveal delay={0.1}>
+              {/* Small — 1 col */}
+              <R delay={0.06}>
                 <div
-                  className="rounded-2xl border p-6 sm:p-8"
+                  className={`${cardStatic} flex h-full flex-col items-center justify-center text-center`}
                   style={{
-                    borderColor: palette.border,
-                    background: palette.bg,
+                    background: p.navy,
+                    padding: "2.5rem",
+                    minHeight: 200,
+                  }}
+                >
+                  <Eye
+                    className="h-7 w-7"
+                    style={{ color: "rgba(255,255,255,0.4)" }}
+                  />
+                  <h3 className="mt-4 text-lg font-bold text-white">
+                    Full Transparency
+                  </h3>
+                  <p
+                    className="mt-2 text-sm leading-relaxed"
+                    style={{ color: "rgba(255,255,255,0.5)" }}
+                  >
+                    Every transaction generates a cryptographic on-chain
+                    receipt.
+                  </p>
+                </div>
+              </R>
+
+              {/* Small — 1 col */}
+              <R delay={0.1}>
+                <div
+                  className={`${cardStatic} h-full`}
+                  style={{
+                    background: p.white,
+                    border: cardBorder,
+                    padding: "2.5rem",
+                  }}
+                >
+                  <FileCheck className="h-6 w-6" style={{ color: p.slate }} />
+                  <h3
+                    className="mt-4 text-lg font-bold"
+                    style={{ color: p.navy }}
+                  >
+                    BSA/AML Integrated
+                  </h3>
+                  <p
+                    className="mt-2 text-sm leading-relaxed"
+                    style={{ color: p.slate }}
+                  >
+                    KYB heavy-lifting handled. State licences, beneficial
+                    owners, OFAC SDN — all screened.
+                  </p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {["KYB", "OFAC", "SDN", "BSA"].map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full px-3 py-1 text-[10px] font-bold"
+                        style={{ background: p.bgMuted, color: p.slate }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </R>
+
+              {/* Medium — spans 2 cols, compliance status dashboard */}
+              <R delay={0.14} className="md:col-span-2">
+                <div
+                  className={`${cardStatic} h-full`}
+                  style={{
+                    background: p.white,
+                    border: cardBorder,
+                    padding: "2.5rem",
                   }}
                 >
                   <p
-                    className="mb-6 text-xs font-semibold uppercase tracking-widest"
-                    style={{ color: palette.muted }}
+                    className="mb-4 text-[11px] font-semibold uppercase tracking-widest"
+                    style={{ color: p.muted }}
                   >
-                    Compliance Snapshot
+                    Compliance Status — Live
                   </p>
-                  <div className="space-y-4">
+                  <div className="grid gap-3 sm:grid-cols-2">
                     {[
                       { label: "GENIUS Act (2025)", status: "Compliant" },
                       { label: "BSA/AML Screening", status: "Active" },
                       { label: "KYB Verification", status: "Enforced" },
                       { label: "OFAC SDN Check", status: "Real-Time" },
                       { label: "On-Chain Audit Trail", status: "Immutable" },
+                      { label: "SOC 2 Readiness", status: "In Progress" },
                     ].map((item) => (
                       <div
                         key={item.label}
-                        className="flex items-center justify-between rounded-xl border px-4 py-3"
-                        style={{ borderColor: palette.border }}
+                        className="flex items-center justify-between rounded-xl px-4 py-3"
+                        style={{
+                          background: p.bgSubtle,
+                          border: `1px solid ${p.border}`,
+                        }}
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2.5">
                           <CheckCircle2
-                            className="h-4 w-4"
-                            style={{ color: palette.green }}
+                            className="h-3.5 w-3.5"
+                            style={{ color: p.green }}
                           />
                           <span
-                            className="text-sm font-medium"
-                            style={{ color: palette.navy }}
+                            className="text-xs font-medium"
+                            style={{ color: p.navy }}
                           >
                             {item.label}
                           </span>
                         </div>
                         <span
-                          className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
+                          className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
                           style={{
-                            background: palette.greenGlow,
-                            color: palette.greenDark,
+                            background: "rgba(16,185,129,0.08)",
+                            color: p.greenDark,
                           }}
                         >
                           {item.status}
@@ -1546,79 +1654,83 @@ export default function HomePage() {
                       </div>
                     ))}
                   </div>
+                  <div className="mt-5">
+                    <Link
+                      href="/compliance"
+                      className="inline-flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-70"
+                      style={{ color: p.navy }}
+                    >
+                      Read our 2026 Compliance Whitepaper
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
                 </div>
-              </Reveal>
+              </R>
             </div>
           </div>
         </section>
 
-        {/* ═══ INDUSTRIES ═══ */}
-        <section
-          className="py-24 sm:py-32"
-          style={{ background: palette.bgSubtle }}
-        >
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  INDUSTRIES                                    */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="py-32 sm:py-48" style={{ background: p.bgSubtle }}>
           <div className="mx-auto max-w-6xl px-6">
-            <Reveal className="mx-auto max-w-2xl text-center">
+            <R className="mx-auto max-w-2xl text-center">
               <p
-                className="mb-4 text-sm font-semibold uppercase tracking-widest"
-                style={{ color: palette.green }}
+                className="mb-5 text-sm font-semibold uppercase tracking-widest"
+                style={{ color: p.muted }}
               >
                 Industries
               </p>
               <h2
-                className="text-3xl font-bold tracking-tight sm:text-4xl"
-                style={{ color: palette.navy }}
+                className="text-4xl font-bold tracking-tight sm:text-5xl"
+                style={{ color: p.navy }}
               >
                 Built for the businesses banks won&apos;t serve
               </h2>
-            </Reveal>
+            </R>
 
-            <div className="mt-16 grid gap-6 md:grid-cols-2">
+            <div className="mt-20 grid gap-8 md:grid-cols-2">
               {[
                 {
                   title: "Cannabis & Wholesalers",
-                  desc: "B2B settlement for state-licensed cultivators, processors, and distributors. Stop getting debanked.",
+                  desc: "B2B settlement for state-licensed cultivators, processors, and distributors.",
                   href: "/industries/cannabis",
-                  stats: ["40+ States", "$25B Market", "100% Non-Custodial"],
+                  stats: ["40+ States", "$25B Market", "Non-Custodial"],
                   gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
                 },
                 {
                   title: "Adult Content Platforms",
-                  desc: "Creator payouts without deplatforming risk. 1% flat vs 8–15% high-risk processing.",
+                  desc: "Creator payouts without deplatforming risk. 1% flat vs 8–15% processing.",
                   href: "/industries/adult-content",
                   stats: ["Instant Payouts", "No Chargebacks", "TEE Privacy"],
                   gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
                 },
               ].map((item, i) => (
-                <Reveal key={item.title} delay={i * 0.08}>
+                <R key={item.title} delay={i * 0.08}>
                   <Link href={item.href} className="group block">
                     <div
-                      className="overflow-hidden rounded-2xl border transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1"
-                      style={{
-                        borderColor: palette.border,
-                        background: palette.bg,
-                      }}
+                      className="overflow-hidden rounded-3xl shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1"
+                      style={{ background: p.white, border: cardBorder }}
                     >
-                      {/* Color header */}
                       <div
-                        className="px-8 py-10 text-white"
+                        className="px-10 py-12 text-white"
                         style={{ background: item.gradient }}
                       >
                         <h3 className="text-2xl font-bold">{item.title}</h3>
-                        <p className="mt-2 text-sm leading-relaxed text-white/80">
+                        <p className="mt-3 text-base leading-relaxed text-white/80">
                           {item.desc}
                         </p>
                       </div>
-                      {/* Footer */}
-                      <div className="flex items-center justify-between px-8 py-5">
+                      <div className="flex items-center justify-between px-10 py-6">
                         <div className="flex flex-wrap gap-3">
                           {item.stats.map((stat) => (
                             <span
                               key={stat}
-                              className="rounded-full border px-3 py-1 text-xs font-medium"
+                              className="rounded-full px-3 py-1 text-xs font-medium"
                               style={{
-                                borderColor: palette.border,
-                                color: palette.slate,
+                                border: `1px solid ${p.border}`,
+                                color: p.slate,
                               }}
                             >
                               {stat}
@@ -1627,33 +1739,32 @@ export default function HomePage() {
                         </div>
                         <ArrowUpRight
                           className="h-5 w-5 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                          style={{ color: palette.green }}
+                          style={{ color: p.muted }}
                         />
                       </div>
                     </div>
                   </Link>
-                </Reveal>
+                </R>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ═══ FAQ ═══ */}
-        <section className="py-24 sm:py-32">
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  FAQ                                           */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="py-32 sm:py-48">
           <div className="mx-auto max-w-3xl px-6">
-            <Reveal className="text-center">
+            <R className="text-center">
               <h2
-                className="text-3xl font-bold tracking-tight sm:text-4xl"
-                style={{ color: palette.navy }}
+                className="text-4xl font-bold tracking-tight sm:text-5xl"
+                style={{ color: p.navy }}
               >
                 Frequently asked questions
               </h2>
-              <p className="mt-4 text-base" style={{ color: palette.slate }}>
-                Get answers to common questions here
-              </p>
-            </Reveal>
+            </R>
 
-            <div className="mt-12 space-y-3">
+            <div className="mt-16 space-y-4">
               {[
                 {
                   q: "Is Settlr a bank?",
@@ -1661,61 +1772,52 @@ export default function HomePage() {
                 },
                 {
                   q: "What stablecoins do you use?",
-                  a: "We exclusively use GENIUS Act 2025-compliant payment stablecoins \u2014 USDC issued by Circle. Not algorithmic, not offshore, fully backed and audited.",
+                  a: "USDC issued by Circle \u2014 a GENIUS Act 2025-compliant payment stablecoin. Not algorithmic, not offshore, fully backed and audited.",
                 },
                 {
                   q: "How is this different from a high-risk processor?",
-                  a: "High-risk processors charge 5\u20139% and can freeze your funds at any time because they are custodial. Settlr charges 1% flat, settles instantly, and is non-custodial \u2014 there is nothing to freeze.",
+                  a: "High-risk processors charge 5\u20139% and can freeze your funds because they\u2019re custodial. Settlr charges 1% flat, settles instantly, and is non-custodial \u2014 there\u2019s nothing to freeze.",
                 },
                 {
                   q: "What does my auditor see?",
-                  a: "Every transaction generates a cryptographically verifiable on-chain receipt. Amount, timestamp, sender, recipient \u2014 all immutable and tamper-proof. Your auditors get a clean, automated trail.",
+                  a: "Every transaction generates a cryptographically verifiable on-chain receipt. Amount, timestamp, sender, recipient \u2014 all immutable and tamper-proof.",
                 },
                 {
-                  q: "Do I need crypto expertise to use this?",
-                  a: "No. Settlr abstracts away the blockchain entirely. You see invoices, settlements, and receipts. The underlying infrastructure runs on Solana, but your team never needs to interact with it directly.",
-                },
-                {
-                  q: "Who is eligible for the Private Rail?",
-                  a: "We are currently onboarding state-licensed cannabis distributors, cultivators, and processors operating in legal markets. Contact us to discuss eligibility for your operation.",
+                  q: "Do I need crypto expertise?",
+                  a: "No. You see invoices, settlements, and receipts. The blockchain runs underneath but your team never interacts with it directly.",
                 },
               ].map((faq, i) => (
-                <Reveal key={faq.q} delay={i * 0.03}>
-                  <FAQItem question={faq.q} answer={faq.a} />
-                </Reveal>
+                <R key={faq.q} delay={i * 0.03}>
+                  <FAQ q={faq.q} a={faq.a} />
+                </R>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ═══ FINAL CTA ═══ */}
-        <section className="py-24 sm:py-32">
+        {/* ═══════════════════════════════════════════════ */}
+        {/*  FINAL CTA                                     */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="py-32 sm:py-48">
           <div className="mx-auto max-w-5xl px-6">
-            <Reveal>
+            <R>
               <div
-                className="relative overflow-hidden rounded-3xl px-8 py-16 text-center sm:px-16 sm:py-24"
-                style={{ background: palette.navy }}
+                className="relative overflow-hidden rounded-[2rem] px-8 py-20 text-center sm:px-16 sm:py-28"
+                style={{ background: p.navy }}
               >
-                {/* Subtle gradient orbs */}
+                {/* Accent orb */}
                 <div className="pointer-events-none absolute inset-0">
                   <div
-                    className="absolute -left-20 -top-20 h-80 w-80 rounded-full opacity-20 blur-3xl"
+                    className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-[120px]"
                     style={{
                       background:
                         "radial-gradient(circle, rgba(16,185,129,0.4), transparent 70%)",
                     }}
                   />
-                  <div
-                    className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full opacity-20 blur-3xl"
-                    style={{
-                      background:
-                        "radial-gradient(circle, rgba(16,185,129,0.3), transparent 70%)",
-                    }}
-                  />
                 </div>
 
                 <div className="relative z-10">
-                  <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                  <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
                     Stop paying the{" "}
                     <span
                       style={{
@@ -1724,20 +1826,20 @@ export default function HomePage() {
                         WebkitTextFillColor: "transparent",
                       }}
                     >
-                      &ldquo;Exile Tax&rdquo;
+                      &ldquo;exile tax&rdquo;
                     </span>
                   </h2>
                   <p
-                    className="mx-auto mt-4 max-w-lg text-base leading-relaxed sm:text-lg"
-                    style={{ color: "rgba(255,255,255,0.6)" }}
+                    className="mx-auto mt-6 max-w-md text-lg"
+                    style={{ color: "rgba(255,255,255,0.55)" }}
                   >
-                    Settlr is onboarding a limited number of B2B operators for
-                    our Private Rail. Secure your 1% flat rate today.
+                    We&apos;re onboarding a limited number of B2B operators for
+                    the Private Rail.
                   </p>
-                  <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+                  <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
                     <Link
                       href="/waitlist"
-                      className="group inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+                      className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                       style={{
                         background:
                           "linear-gradient(135deg, #10B981 0%, #059669 100%)",
@@ -1749,14 +1851,14 @@ export default function HomePage() {
                     </Link>
                     <Link
                       href="/demo"
-                      className="inline-flex items-center gap-2 rounded-full border border-white/20 px-8 py-4 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/20 px-10 py-4 text-base font-semibold text-white transition-all duration-200 hover:bg-white/10"
                     >
                       See the Demo
                     </Link>
                   </div>
                 </div>
               </div>
-            </Reveal>
+            </R>
           </div>
         </section>
 

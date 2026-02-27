@@ -4,13 +4,12 @@ import { SettlrLogo } from "@/components/settlr-logo";
 
 const footerLinks = {
   product: [
-    { href: "/settlement", label: "B2B Settlement Rail" },
-    { href: "/vaults", label: "Multisig Vaults" },
-    { href: "/audit", label: "Audit Trail" },
     { href: "/demo", label: "Demo" },
+    { href: "/docs", label: "Documentation" },
+    { href: "/vs/stripe-connect", label: "Settlr vs Stripe" },
   ],
   developers: [
-    { href: "/docs", label: "Documentation" },
+    { href: "/docs", label: "Docs" },
     { href: "/docs?tab=api", label: "API Reference" },
     {
       href: "https://www.npmjs.com/package/@settlr/sdk",
