@@ -117,20 +117,32 @@ export default function OnboardingPage() {
       const { multisigPda, vaultPda, transaction } =
         await buildCreateVaultTransaction(creatorPubkey, connection);
 
-      // Sign with the merchant's wallet
-      // Serialize + deserialize to ensure all internal buffers are Uint8Array
-      // (Phantom rejects Buffer objects that don't pass instanceof Uint8Array)
-      const serialized = transaction.serialize({
-        requireAllSignatures: false,
-      });
-      const normalizedTx = Transaction.from(serialized);
-      const signedTx = await signTransaction(normalizedTx);
+      // Use signAndSendTransaction to avoid Phantom's Uint8Array/Buffer
+      // incompatibility. Phantom handles the encoding internally this way.
+      const provider = await (wallet as any).getProvider?.();
+      if (!provider) throw new Error("Wallet provider not available");
 
-      // Send the signed transaction
-      const signature = await connection.sendRawTransaction(
-        signedTx.serialize(),
-        { skipPreflight: false, preflightCommitment: "confirmed" },
-      );
+      let signature: string;
+
+      if (provider.signAndSendTransaction) {
+        // Phantom / Solflare — preferred path
+        const result = await provider.signAndSendTransaction(transaction);
+        signature = result.signature || result;
+      } else if (provider.request) {
+        // Privy embedded wallet via JSON-RPC style
+        const serializedMsg = transaction.serializeMessage();
+        // Convert to proper Uint8Array to avoid Buffer issues
+        const messageBytes = new Uint8Array(serializedMsg);
+        const result = await provider.request({
+          method: "signAndSendTransaction",
+          params: { message: messageBytes },
+        });
+        signature = result.signature || result;
+      } else {
+        throw new Error(
+          "Wallet does not support signAndSendTransaction. Please use Phantom or Solflare.",
+        );
+      }
 
       // Confirm
       await connection.confirmTransaction(

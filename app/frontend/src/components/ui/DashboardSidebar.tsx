@@ -14,8 +14,6 @@ import {
   Key,
   RefreshCw,
   Shield,
-  BarChart3,
-  Settings,
   HelpCircle,
   ChevronLeft,
   ChevronRight,
@@ -45,7 +43,6 @@ const navSections = [
         icon: ArrowLeftRight,
         label: "Transactions",
       },
-      { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics" },
     ],
   },
   {
@@ -53,12 +50,12 @@ const navSections = [
     items: [
       { href: "/dashboard/treasury", icon: Wallet, label: "Treasury" },
       { href: "/dashboard/invoices", icon: FileText, label: "Invoices" },
-      { href: "/dashboard/offramp", icon: ArrowDownToLine, label: "Off-Ramp" },
       {
         href: "/dashboard/subscriptions",
         icon: RefreshCw,
-        label: "Subscriptions",
+        label: "Recurring",
       },
+      { href: "/dashboard/offramp", icon: ArrowDownToLine, label: "Off-Ramp" },
     ],
   },
   {
@@ -69,10 +66,9 @@ const navSections = [
     ],
   },
   {
-    label: "Settings",
+    label: "Account",
     items: [
       { href: "/dashboard/compliance", icon: Shield, label: "Compliance" },
-      { href: "/dashboard/settings", icon: Settings, label: "Settings" },
       { href: "/help", icon: HelpCircle, label: "Support" },
     ],
   },
