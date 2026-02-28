@@ -20,16 +20,16 @@ import { Footer } from "@/components/ui/Footer";
 /* ── Design tokens (matches homepage) ──────────────────── */
 const p = {
   bg: "#FFFFFF",
-  bgSubtle: "#FAFAFA",
+  bgSubtle: "#F7F6F1",
   bgMuted: "#F5F5F5",
-  navy: "#0A0F1E",
-  slate: "#4A5568",
-  muted: "#94A3B8",
-  green: "#10B981",
-  greenDark: "#059669",
-  border: "#E5E7EB",
-  red: "#EF4444",
-  amber: "#F59E0B",
+  navy: "#0C1829",
+  slate: "#3B4963",
+  muted: "#7C8A9E",
+  green: "#1B6B4A",
+  greenDark: "#155939",
+  border: "#E2E2D1",
+  red: "#DC2626",
+  amber: "#B8860B",
   white: "#FFFFFF",
 };
 
@@ -75,7 +75,7 @@ export default function InvoicesPage() {
             className="absolute left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 rounded-full opacity-[0.12] blur-[120px]"
             style={{
               background:
-                "radial-gradient(circle, rgba(16,185,129,0.2), transparent 70%)",
+                "radial-gradient(circle, rgba(27,107,74,0.2), transparent 70%)",
             }}
           />
         </div>
@@ -105,7 +105,7 @@ export default function InvoicesPage() {
                 <span
                   style={{
                     background:
-                      "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -134,8 +134,8 @@ export default function InvoicesPage() {
                 className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                 style={{
                   background:
-                    "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                  boxShadow: "0 4px 24px rgba(16,185,129,0.25)",
+                    "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                  boxShadow: "0 4px 24px rgba(27,107,74,0.25)",
                 }}
               >
                 Request Access
@@ -200,7 +200,7 @@ export default function InvoicesPage() {
                   <span
                     className="rounded-full px-3 py-1 text-[11px] font-semibold"
                     style={{
-                      background: "rgba(16,185,129,0.08)",
+                      background: "rgba(27,107,74,0.08)",
                       color: p.greenDark,
                     }}
                   >
@@ -430,7 +430,7 @@ export default function InvoicesPage() {
                     <div
                       className="mt-3 rounded-lg py-2 text-center text-[10px] font-semibold"
                       style={{
-                        background: "rgba(16,185,129,0.08)",
+                        background: "rgba(27,107,74,0.08)",
                         color: p.greenDark,
                       }}
                     >
@@ -794,7 +794,7 @@ export default function InvoicesPage() {
                   className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-[120px]"
                   style={{
                     background:
-                      "radial-gradient(circle, rgba(16,185,129,0.4), transparent 70%)",
+                      "radial-gradient(circle, rgba(27,107,74,0.4), transparent 70%)",
                   }}
                 />
               </div>
@@ -806,7 +806,7 @@ export default function InvoicesPage() {
                   Send your first{" "}
                   <span
                     style={{
-                      background: "linear-gradient(135deg, #10B981, #34D399)",
+                      background: "linear-gradient(135deg, #1B6B4A, #2D9D6E)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                     }}
@@ -827,8 +827,8 @@ export default function InvoicesPage() {
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:
-                        "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                      boxShadow: "0 4px 24px rgba(16,185,129,0.3)",
+                        "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                      boxShadow: "0 4px 24px rgba(27,107,74,0.3)",
                     }}
                   >
                     Request Access

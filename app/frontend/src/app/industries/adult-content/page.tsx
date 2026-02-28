@@ -54,14 +54,14 @@ function Reveal({
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-[#E5E7EB] last:border-0">
+    <div className="border-b border-[#E2E2D1] last:border-0">
       <button
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between py-5 text-left"
       >
-        <span className="pr-4 font-medium text-[#0A0F1E]">{q}</span>
+        <span className="pr-4 font-medium text-[#0C1829]">{q}</span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-[#94A3B8] transition-transform ${
+          className={`h-5 w-5 shrink-0 text-[#7C8A9E] transition-transform ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -75,7 +75,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
             transition={spring}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-sm leading-relaxed text-[#94A3B8]">{a}</p>
+            <p className="pb-5 text-sm leading-relaxed text-[#7C8A9E]">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -272,16 +272,16 @@ export default function AdultContentPage() {
       {/* ───── Hero ───── */}
       <section className="relative overflow-hidden px-4 pb-20 pt-32">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.10),transparent)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(27,107,74,0.10),transparent)]" />
         </div>
-        <div className="absolute right-[15%] top-[20%] h-72 w-72 rounded-full bg-[#10B981]/[0.06] blur-[120px]" />
+        <div className="absolute right-[15%] top-[20%] h-72 w-72 rounded-full bg-[#1B6B4A]/[0.06] blur-[120px]" />
 
         <div className="relative mx-auto max-w-5xl">
           <div className="max-w-3xl">
             <Reveal>
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#10B981]/20 bg-[#10B981]/[0.06] px-4 py-2">
-                <Film className="h-4 w-4 text-[#059669]" />
-                <span className="text-sm font-medium text-[#059669]">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.06] px-4 py-2">
+                <Film className="h-4 w-4 text-[#155939]" />
+                <span className="text-sm font-medium text-[#155939]">
                   Adult Content Platforms
                 </span>
               </div>
@@ -289,16 +289,16 @@ export default function AdultContentPage() {
 
             <Reveal delay={0.05}>
               <h1
-                className="mb-6 text-5xl font-bold leading-[1.08] text-[#0A0F1E] md:text-7xl"
+                className="mb-6 text-5xl font-bold leading-[1.08] text-[#0C1829] md:text-7xl"
                 style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
               >
                 Stop getting{" "}
-                <span className="text-[#10B981]">deplatformed.</span>
+                <span className="text-[#1B6B4A]">deplatformed.</span>
               </h1>
             </Reveal>
 
             <Reveal delay={0.1}>
-              <p className="mb-8 max-w-2xl text-lg leading-relaxed text-[#94A3B8]">
+              <p className="mb-8 max-w-2xl text-lg leading-relaxed text-[#7C8A9E]">
                 Pay creators instantly, accept subscriber payments without
                 chargebacks, and never worry about a processor shutting you down
                 overnight. Non-custodial settlement rails that no one can cut
@@ -313,7 +313,7 @@ export default function AdultContentPage() {
                   className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white transition-all hover:brightness-110"
                   style={{
                     background:
-                      "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
                   }}
                 >
                   Request Access
@@ -321,7 +321,7 @@ export default function AdultContentPage() {
                 </Link>
                 <Link
                   href="/demo"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-white px-7 py-3.5 font-semibold text-[#0A0F1E] transition-all hover:bg-[#F5F5F5]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#E2E2D1] bg-white px-7 py-3.5 font-semibold text-[#0C1829] transition-all hover:bg-[#F5F5F5]"
                 >
                   See the Demo
                 </Link>
@@ -329,17 +329,17 @@ export default function AdultContentPage() {
             </Reveal>
 
             <Reveal delay={0.2}>
-              <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-[#94A3B8]">
+              <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-[#7C8A9E]">
                 <span className="flex items-center gap-1.5">
-                  <BadgeCheck className="h-4 w-4 text-[#059669]" />
+                  <BadgeCheck className="h-4 w-4 text-[#155939]" />
                   KYB Verified
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Shield className="h-4 w-4 text-[#059669]" />
+                  <Shield className="h-4 w-4 text-[#155939]" />
                   Non-Custodial
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Lock className="h-4 w-4 text-[#059669]" />
+                  <Lock className="h-4 w-4 text-[#155939]" />
                   TEE Privacy
                 </span>
               </div>
@@ -349,18 +349,18 @@ export default function AdultContentPage() {
       </section>
 
       {/* ───── Stats ───── */}
-      <section className="border-y border-[#E5E7EB] bg-white px-4 py-14">
+      <section className="border-y border-[#E2E2D1] bg-white px-4 py-14">
         <div className="mx-auto grid max-w-5xl grid-cols-2 gap-8 md:grid-cols-4">
           {stats.map((stat, i) => (
             <Reveal key={stat.label} delay={i * 0.05}>
               <div className="text-center">
                 <div
-                  className="mb-1 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
+                  className="mb-1 text-3xl font-bold text-[#0C1829] md:text-4xl"
                   style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
                 >
                   {stat.value}
                 </div>
-                <div className="text-sm text-[#94A3B8]">{stat.label}</div>
+                <div className="text-sm text-[#7C8A9E]">{stat.label}</div>
               </div>
             </Reveal>
           ))}
@@ -372,13 +372,13 @@ export default function AdultContentPage() {
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h2
-              className="mb-4 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
+              className="mb-4 text-3xl font-bold text-[#0C1829] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               The payment{" "}
               <span className="text-[#B91C1C]">deplatforming problem</span>
             </h2>
-            <p className="mb-12 max-w-2xl text-[#94A3B8]">
+            <p className="mb-12 max-w-2xl text-[#7C8A9E]">
               Your platform is legal. Your content is verified. But payment
               processors treat you like a liability — charging extortionate
               fees, holding reserves, or dropping you entirely.
@@ -392,10 +392,10 @@ export default function AdultContentPage() {
                 <Reveal key={point.problem} delay={i * 0.05}>
                   <div className="rounded-2xl border border-[#B91C1C]/15 bg-[#FEF2F2] p-5">
                     <Icon className="mb-3 h-6 w-6 text-[#B91C1C]" />
-                    <h3 className="mb-1 text-sm font-semibold text-[#0A0F1E]">
+                    <h3 className="mb-1 text-sm font-semibold text-[#0C1829]">
                       {point.problem}
                     </h3>
-                    <p className="text-xs text-[#94A3B8]">{point.detail}</p>
+                    <p className="text-xs text-[#7C8A9E]">{point.detail}</p>
                   </div>
                 </Reveal>
               );
@@ -409,12 +409,12 @@ export default function AdultContentPage() {
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h2
-              className="mb-4 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
+              className="mb-4 text-3xl font-bold text-[#0C1829] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               Settlement rails that can&apos;t be shut off.
             </h2>
-            <p className="mb-12 max-w-2xl text-[#94A3B8]">
+            <p className="mb-12 max-w-2xl text-[#7C8A9E]">
               Non-custodial means no processor, no bank, and no platform policy
               change can freeze your payments or hold your creators&apos; money.
             </p>
@@ -425,29 +425,29 @@ export default function AdultContentPage() {
               const Icon = f.icon;
               return (
                 <Reveal key={f.title} delay={i * 0.05}>
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6 transition-colors hover:bg-[#FAFAFA]">
+                  <div className="rounded-2xl border border-[#E2E2D1] bg-white p-6 transition-colors hover:bg-[#F7F6F1]">
                     <div className="mb-4 flex items-center justify-between">
-                      <div className="rounded-lg bg-[#10B981]/[0.08] p-2.5">
-                        <Icon className="h-5 w-5 text-[#059669]" />
+                      <div className="rounded-lg bg-[#1B6B4A]/[0.08] p-2.5">
+                        <Icon className="h-5 w-5 text-[#155939]" />
                       </div>
                       <div className="text-right">
                         <span
-                          className="text-2xl font-bold text-[#0A0F1E]"
+                          className="text-2xl font-bold text-[#0C1829]"
                           style={{
                             fontFamily: "var(--font-fraunces), Georgia, serif",
                           }}
                         >
                           {f.stat}
                         </span>
-                        <span className="ml-1.5 text-xs text-[#94A3B8]">
+                        <span className="ml-1.5 text-xs text-[#7C8A9E]">
                           {f.statLabel}
                         </span>
                       </div>
                     </div>
-                    <h3 className="mb-2 font-semibold text-[#0A0F1E]">
+                    <h3 className="mb-2 font-semibold text-[#0C1829]">
                       {f.title}
                     </h3>
-                    <p className="text-sm text-[#94A3B8]">{f.description}</p>
+                    <p className="text-sm text-[#7C8A9E]">{f.description}</p>
                   </div>
                 </Reveal>
               );
@@ -457,16 +457,16 @@ export default function AdultContentPage() {
       </section>
 
       {/* ───── How It Works ───── */}
-      <section className="border-y border-[#E5E7EB] bg-white px-4 py-24">
+      <section className="border-y border-[#E2E2D1] bg-white px-4 py-24">
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h2
-              className="mb-4 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
+              className="mb-4 text-3xl font-bold text-[#0C1829] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               How it works for your platform
             </h2>
-            <p className="mb-12 max-w-2xl text-[#94A3B8]">
+            <p className="mb-12 max-w-2xl text-[#7C8A9E]">
               Two flows — subscriber payments in, creator payouts out. Both
               instant, both non-custodial.
             </p>
@@ -502,22 +502,22 @@ export default function AdultContentPage() {
               const Icon = item.icon;
               return (
                 <Reveal key={item.step} delay={i * 0.08}>
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-[#FAFAFA] p-6">
+                  <div className="rounded-2xl border border-[#E2E2D1] bg-[#F7F6F1] p-6">
                     <div
-                      className="mb-4 text-4xl font-bold text-[#10B981]/20"
+                      className="mb-4 text-4xl font-bold text-[#1B6B4A]/20"
                       style={{
                         fontFamily: "var(--font-fraunces), Georgia, serif",
                       }}
                     >
                       {item.step}
                     </div>
-                    <div className="mb-3 inline-flex rounded-lg bg-[#10B981]/[0.08] p-2.5">
-                      <Icon className="h-5 w-5 text-[#059669]" />
+                    <div className="mb-3 inline-flex rounded-lg bg-[#1B6B4A]/[0.08] p-2.5">
+                      <Icon className="h-5 w-5 text-[#155939]" />
                     </div>
-                    <h3 className="mb-2 font-semibold text-[#0A0F1E]">
+                    <h3 className="mb-2 font-semibold text-[#0C1829]">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-[#94A3B8]">{item.desc}</p>
+                    <p className="text-sm text-[#7C8A9E]">{item.desc}</p>
                   </div>
                 </Reveal>
               );
@@ -531,24 +531,24 @@ export default function AdultContentPage() {
         <div className="mx-auto max-w-4xl">
           <Reveal>
             <h2
-              className="mb-10 text-center text-3xl font-bold text-[#0A0F1E] md:text-4xl"
+              className="mb-10 text-center text-3xl font-bold text-[#0C1829] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               High-Risk Processors vs.{" "}
-              <span className="text-[#10B981]">Settlr</span>
+              <span className="text-[#1B6B4A]">Settlr</span>
             </h2>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="overflow-hidden rounded-2xl border border-[#E5E7EB]">
-              <div className="grid grid-cols-3 border-b border-[#E5E7EB] bg-[#F5F5F5]">
-                <div className="p-4 text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
+            <div className="overflow-hidden rounded-2xl border border-[#E2E2D1]">
+              <div className="grid grid-cols-3 border-b border-[#E2E2D1] bg-[#F5F5F5]">
+                <div className="p-4 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
                   Feature
                 </div>
                 <div className="p-4 text-center text-xs font-semibold uppercase tracking-wider text-[#B91C1C]">
                   Traditional
                 </div>
-                <div className="p-4 text-center text-xs font-semibold uppercase tracking-wider text-[#059669]">
+                <div className="p-4 text-center text-xs font-semibold uppercase tracking-wider text-[#155939]">
                   Settlr
                 </div>
               </div>
@@ -557,17 +557,17 @@ export default function AdultContentPage() {
                   key={row.feature}
                   className={`grid grid-cols-3 ${
                     i !== comparisonRows.length - 1
-                      ? "border-b border-[#E5E7EB]"
+                      ? "border-b border-[#E2E2D1]"
                       : ""
                   }`}
                 >
-                  <div className="p-4 text-sm text-[#0A0F1E]">
+                  <div className="p-4 text-sm text-[#0C1829]">
                     {row.feature}
                   </div>
-                  <div className="p-4 text-center text-sm text-[#94A3B8]">
+                  <div className="p-4 text-center text-sm text-[#7C8A9E]">
                     {row.traditional}
                   </div>
-                  <div className="p-4 text-center text-sm font-medium text-[#059669]">
+                  <div className="p-4 text-center text-sm font-medium text-[#155939]">
                     {row.settlr}
                   </div>
                 </div>
@@ -578,23 +578,23 @@ export default function AdultContentPage() {
       </section>
 
       {/* ───── FAQ ───── */}
-      <section className="border-t border-[#E5E7EB] bg-white px-4 py-24">
+      <section className="border-t border-[#E2E2D1] bg-white px-4 py-24">
         <div className="mx-auto max-w-3xl">
           <Reveal>
             <h2
-              className="mb-4 text-center text-3xl font-bold text-[#0A0F1E] md:text-4xl"
+              className="mb-4 text-center text-3xl font-bold text-[#0C1829] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               Frequently Asked Questions
             </h2>
-            <p className="mb-10 text-center text-[#94A3B8]">
+            <p className="mb-10 text-center text-[#7C8A9E]">
               Common questions about using Settlr for adult content platform
               payments.
             </p>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="rounded-2xl border border-[#E5E7EB] bg-[#FAFAFA] px-6">
+            <div className="rounded-2xl border border-[#E2E2D1] bg-[#F7F6F1] px-6">
               {faqItems.map((item, i) => (
                 <FAQItem key={i} q={item.q} a={item.a} />
               ))}
@@ -605,8 +605,8 @@ export default function AdultContentPage() {
 
       {/* ───── CTA ───── */}
       <section className="relative overflow-hidden px-4 py-24">
-        <div className="absolute inset-0 bg-[#0A0F1E]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(16,185,129,0.15),transparent)]" />
+        <div className="absolute inset-0 bg-[#0C1829]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(27,107,74,0.15),transparent)]" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -623,9 +623,9 @@ export default function AdultContentPage() {
             }}
           >
             Your platform is legal.{" "}
-            <span className="text-[#10B981]">Your payments should be too.</span>
+            <span className="text-[#1B6B4A]">Your payments should be too.</span>
           </h2>
-          <p className="mb-8 text-lg text-[#94A3B8]">
+          <p className="mb-8 text-lg text-[#7C8A9E]">
             Join platforms replacing unreliable processors with instant,
             non-custodial settlement rails. No chargebacks, no deplatforming, no
             rolling reserves.
@@ -635,7 +635,7 @@ export default function AdultContentPage() {
               href="/waitlist"
               className="group inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-white transition-all hover:brightness-110"
               style={{
-                background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                background: "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
               }}
             >
               Request Access
@@ -648,7 +648,7 @@ export default function AdultContentPage() {
               Read the Docs
             </Link>
           </div>
-          <p className="mt-6 text-xs text-[#94A3B8]/60">
+          <p className="mt-6 text-xs text-[#7C8A9E]/60">
             Non-custodial · KYB verified · TEE privacy · No chargebacks
           </p>
         </motion.div>

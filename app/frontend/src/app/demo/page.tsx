@@ -6,8 +6,8 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import {
   ArrowRight,
+  ArrowLeft,
   Check,
-  FileText,
   Clock,
   Shield,
   CheckCircle2,
@@ -15,21 +15,34 @@ import {
   ExternalLink,
   Fingerprint,
   Stamp,
+  Building2,
+  FileText,
+  Zap,
+  Receipt,
+  Loader2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 
-/* ─── spring config ─── */
+/* --- spring config --- */
 const spring = { type: "spring" as const, stiffness: 80, damping: 18 };
 
-/* ─── Settlr Verified Seal ─── */
+/* --- Steps --- */
+const STEPS = [
+  { id: 1, label: "Your Business", icon: Building2 },
+  { id: 2, label: "Invoice", icon: FileText },
+  { id: 3, label: "Settlement", icon: Zap },
+  { id: 4, label: "Receipt", icon: Receipt },
+] as const;
+
+/* --- Settlr Verified Seal --- */
 function VerifiedSeal({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[#10B981]/20 bg-[#10B981]/[0.08] px-3 py-1 ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.08] px-3 py-1 ${className}`}
     >
-      <Stamp className="h-3.5 w-3.5 text-[#059669]" />
+      <Stamp className="h-3.5 w-3.5 text-[#155939]" />
       <span
-        className="text-[11px] font-semibold uppercase tracking-wider text-[#059669]"
+        className="text-[11px] font-semibold uppercase tracking-wider text-[#155939]"
         style={{ fontFamily: "var(--font-jetbrains), monospace" }}
       >
         Settlr Verified
@@ -38,15 +51,18 @@ function VerifiedSeal({ className = "" }: { className?: string }) {
   );
 }
 
-/* ─── Settlement progress animation ─── */
-function SettlementProgress() {
+/* --- Settlement progress animation --- */
+function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
   const [settled, setSettled] = useState(false);
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setSettled(true), 2400);
+    const timer = setTimeout(() => {
+      setSettled(true);
+      onSettled?.();
+    }, 2400);
     return () => clearTimeout(timer);
-  }, []);
+  }, [onSettled]);
 
   useEffect(() => {
     if (settled) return;
@@ -66,10 +82,10 @@ function SettlementProgress() {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {/* Traditional Rail */}
-      <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6">
+      <div className="rounded-2xl border border-[#E2E2D1] bg-white p-6">
         <div className="mb-4 flex items-center gap-2">
           <Clock className="h-5 w-5 text-[#B8860B]" />
-          <span className="text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">
+          <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
             Traditional Wire
           </span>
         </div>
@@ -90,11 +106,13 @@ function SettlementProgress() {
           >
             PENDING
           </span>
-          <span className="text-xs text-[#94A3B8]">Est. 3-5 business days</span>
+          <span className="text-xs text-[#7C8A9E]">
+            Est. 3-5 business days
+          </span>
         </div>
         <div className="mt-4 rounded-lg bg-[#FFFBEB] p-3">
           <p className="text-xs text-[#92400E]">
-            <strong>⚠ Notice:</strong> Subject to manual bank review. High-risk
+            <strong>{"\u26A0"} Notice:</strong> Subject to manual bank review. High-risk
             MCC codes may trigger additional holds or account freeze.
           </p>
         </div>
@@ -104,35 +122,34 @@ function SettlementProgress() {
       <div
         className="relative overflow-hidden rounded-2xl border p-6 transition-all duration-500"
         style={{
-          borderColor: settled ? "#10B981" : "#E5E7EB",
+          borderColor: settled ? "#1B6B4A" : "#E2E2D1",
           background: settled
-            ? "linear-gradient(135deg, rgba(16,185,129,0.04), rgba(16,185,129,0.01))"
+            ? "linear-gradient(135deg, rgba(27,107,74,0.04), rgba(27,107,74,0.01))"
             : "white",
         }}
       >
-        {/* Settled pulse ring */}
         <AnimatePresence>
           {settled && (
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: [0, 0.3, 0], scale: [0.8, 1.4, 1.8] }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="absolute inset-0 rounded-2xl border-2 border-[#10B981]"
+              className="absolute inset-0 rounded-2xl border-2 border-[#1B6B4A]"
             />
           )}
         </AnimatePresence>
 
         <div className="relative">
           <div className="mb-4 flex items-center gap-2">
-            <Shield className="h-5 w-5 text-[#059669]" />
-            <span className="text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">
+            <Shield className="h-5 w-5 text-[#155939]" />
+            <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
               Settlr Private Rail
             </span>
           </div>
           <div className="mb-3 flex items-center gap-3">
-            <div className="h-2.5 w-full overflow-hidden rounded-full bg-[#10B981]/10">
+            <div className="h-2.5 w-full overflow-hidden rounded-full bg-[#1B6B4A]/10">
               <motion.div
-                className="h-full rounded-full bg-[#10B981]"
+                className="h-full rounded-full bg-[#1B6B4A]"
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}
                 transition={{ duration: 2.2, ease: "easeOut" }}
@@ -149,12 +166,10 @@ function SettlementProgress() {
                   transition={spring}
                   className="flex items-center gap-2"
                 >
-                  <CheckCircle2 className="h-5 w-5 text-[#059669]" />
+                  <CheckCircle2 className="h-5 w-5 text-[#155939]" />
                   <span
-                    className="text-sm font-bold text-[#059669]"
-                    style={{
-                      fontFamily: "var(--font-jetbrains), monospace",
-                    }}
+                    className="text-sm font-bold text-[#155939]"
+                    style={{ fontFamily: "var(--font-jetbrains), monospace" }}
                   >
                     SETTLED
                   </span>
@@ -165,17 +180,15 @@ function SettlementProgress() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="text-sm font-medium text-[#059669]"
-                  style={{
-                    fontFamily: "var(--font-jetbrains), monospace",
-                  }}
+                  className="text-sm font-medium text-[#155939]"
+                  style={{ fontFamily: "var(--font-jetbrains), monospace" }}
                 >
                   CONFIRMING...
                 </motion.span>
               )}
             </AnimatePresence>
             <span
-              className="text-xs text-[#94A3B8]"
+              className="text-xs text-[#7C8A9E]"
               style={{ fontFamily: "var(--font-jetbrains), monospace" }}
             >
               T+{elapsed.toFixed(1)}s
@@ -188,10 +201,10 @@ function SettlementProgress() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 transition={{ delay: 0.3, ...spring }}
-                className="mt-4 rounded-lg bg-[#10B981]/[0.08] p-3"
+                className="mt-4 rounded-lg bg-[#1B6B4A]/[0.08] p-3"
               >
-                <p className="text-xs text-[#059669]">
-                  <strong>✓ Final.</strong> Non-custodial settlement complete.
+                <p className="text-xs text-[#155939]">
+                  <strong>{"\u2713"} Final.</strong> Non-custodial settlement complete.
                   Funds cannot be frozen, reversed, or clawed back.
                 </p>
               </motion.div>
@@ -203,55 +216,837 @@ function SettlementProgress() {
   );
 }
 
-/* ─── Reveal wrapper ─── */
-function Reveal({
-  children,
-  delay = 0,
+/* --- Stepper indicator --- */
+function Stepper({ current }: { current: number }) {
+  return (
+    <div className="flex items-center justify-center gap-1 sm:gap-2">
+      {STEPS.map((step, i) => {
+        const Icon = step.icon;
+        const isActive = step.id === current;
+        const isDone = step.id < current;
+
+        return (
+          <div key={step.id} className="flex items-center gap-1 sm:gap-2">
+            <div className="flex flex-col items-center gap-1.5">
+              <motion.div
+                animate={{
+                  background: isDone
+                    ? "#1B6B4A"
+                    : isActive
+                      ? "#0C1829"
+                      : "#F5F5F5",
+                  borderColor: isDone || isActive ? "transparent" : "#E2E2D1",
+                }}
+                className="flex h-9 w-9 items-center justify-center rounded-full border"
+              >
+                {isDone ? (
+                  <Check className="h-4 w-4 text-white" />
+                ) : (
+                  <Icon
+                    className={`h-4 w-4 ${isActive ? "text-white" : "text-[#7C8A9E]"}`}
+                  />
+                )}
+              </motion.div>
+              <span
+                className={`hidden text-[10px] font-semibold uppercase tracking-wider sm:block ${
+                  isActive
+                    ? "text-[#0C1829]"
+                    : isDone
+                      ? "text-[#155939]"
+                      : "text-[#7C8A9E]"
+                }`}
+              >
+                {step.label}
+              </span>
+            </div>
+            {i < STEPS.length - 1 && (
+              <div
+                className="mb-5 hidden h-px w-8 sm:block md:w-16"
+                style={{
+                  background: step.id < current ? "#1B6B4A" : "#E2E2D1",
+                }}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* --- Form field helper --- */
+function Field({
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  prefix,
 }: {
-  children: React.ReactNode;
-  delay?: number;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+  type?: string;
+  prefix?: string;
 }) {
   return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+        {label}
+      </label>
+      <div className="relative">
+        {prefix && (
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#7C8A9E]">
+            {prefix}
+          </span>
+        )}
+        <input
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          className={`w-full rounded-lg border border-[#E2E2D1] bg-white px-3 py-2.5 text-sm text-[#0C1829] placeholder:text-[#7C8A9E]/50 transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20 ${prefix ? "pl-7" : ""}`}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* --- Select helper --- */
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+        {label}
+      </label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-lg border border-[#E2E2D1] bg-white px-3 py-2.5 text-sm text-[#0C1829] transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+/* --- Type for form state --- */
+interface DemoForm {
+  businessName: string;
+  licenseNumber: string;
+  state: string;
+  recipientName: string;
+  recipientLicense: string;
+  recipientState: string;
+  amount: string;
+  description: string;
+}
+
+const STATE_OPTIONS = [
+  { value: "OR", label: "Oregon" },
+  { value: "CO", label: "Colorado" },
+  { value: "CA", label: "California" },
+  { value: "WA", label: "Washington" },
+  { value: "MI", label: "Michigan" },
+  { value: "IL", label: "Illinois" },
+  { value: "MA", label: "Massachusetts" },
+  { value: "NV", label: "Nevada" },
+  { value: "AZ", label: "Arizona" },
+  { value: "NY", label: "New York" },
+];
+
+/* =================================================================
+   STEP 1 - Business Details
+   ================================================================= */
+function StepBusiness({
+  form,
+  setForm,
+}: {
+  form: DemoForm;
+  setForm: React.Dispatch<React.SetStateAction<DemoForm>>;
+}) {
+  const update = useCallback(
+    (key: keyof DemoForm) => (v: string) =>
+      setForm((f) => ({ ...f, [key]: v })),
+    [setForm]
+  );
+
+  return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ delay, ...spring }}
+      key="step-1"
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -40 }}
+      transition={spring}
     >
-      {children}
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+          1
+        </div>
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          Your Business
+        </span>
+      </div>
+
+      <h2
+        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+      >
+        Enter Your Details
+      </h2>
+      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+        Fill in your business details to generate a compliant,
+        cryptographically-secured invoice. This is a demo {"\u2014"} no real data is
+        stored.
+      </p>
+
+      <div
+        className="rounded-2xl border border-[#E2E2D1] bg-white p-6 md:p-8"
+        style={{
+          boxShadow:
+            "0 4px 24px rgba(10,15,30,0.04), inset 0 1px 0 rgba(255,255,255,0.6)",
+        }}
+      >
+        {/* Sender */}
+        <div className="mb-8">
+          <div className="mb-4 flex items-center gap-2">
+            <Building2 className="h-4 w-4 text-[#155939]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#155939]">
+              Your Company (Sender)
+            </span>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="Business Name"
+              value={form.businessName}
+              onChange={update("businessName")}
+              placeholder="Pacific Growers Collective"
+            />
+            <Field
+              label="License Number"
+              value={form.licenseNumber}
+              onChange={update("licenseNumber")}
+              placeholder="C12-0004782-LIC"
+            />
+            <SelectField
+              label="State"
+              value={form.state}
+              onChange={update("state")}
+              options={STATE_OPTIONS}
+            />
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="mb-8 border-t border-[#E2E2D1]" />
+
+        {/* Recipient */}
+        <div className="mb-8">
+          <div className="mb-4 flex items-center gap-2">
+            <Building2 className="h-4 w-4 text-[#7C8A9E]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#7C8A9E]">
+              Recipient
+            </span>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="Business Name"
+              value={form.recipientName}
+              onChange={update("recipientName")}
+              placeholder="Emerald Distribution Partners"
+            />
+            <Field
+              label="License Number"
+              value={form.recipientLicense}
+              onChange={update("recipientLicense")}
+              placeholder="D09-0011294-LIC"
+            />
+            <SelectField
+              label="State"
+              value={form.recipientState}
+              onChange={update("recipientState")}
+              options={STATE_OPTIONS}
+            />
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="mb-8 border-t border-[#E2E2D1]" />
+
+        {/* Invoice details */}
+        <div>
+          <div className="mb-4 flex items-center gap-2">
+            <FileText className="h-4 w-4 text-[#7C8A9E]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#7C8A9E]">
+              Invoice Details
+            </span>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="Settlement Amount"
+              value={form.amount}
+              onChange={update("amount")}
+              placeholder="45000"
+              type="number"
+              prefix="$"
+            />
+            <Field
+              label="Description"
+              value={form.description}
+              onChange={update("description")}
+              placeholder="Bulk Flower - Indoor Premium"
+            />
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   MAIN PAGE
-   ═══════════════════════════════════════════════════════════════ */
+/* =================================================================
+   STEP 2 - Generated Invoice
+   ================================================================= */
+function StepInvoice({ form }: { form: DemoForm }) {
+  const amount = parseFloat(form.amount) || 45000;
+  const fee = amount * 0.01;
+  const invId = useMemo(
+    () =>
+      `INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000 + 1000))}`,
+    []
+  );
 
-export default function DemoPage() {
-  const txId = "5KQrV...gT8mZ";
+  return (
+    <motion.div
+      key="step-2"
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -40 }}
+      transition={spring}
+    >
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+          2
+        </div>
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          The Clean Invoice
+        </span>
+      </div>
+
+      <h2
+        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+      >
+        Cryptographically-Secured. Bank-Free.
+      </h2>
+      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+        Your invoice is ready. No bank routing numbers to leak, no wire
+        instructions to mistype. Review and proceed to settlement.
+      </p>
+
+      {/* Glassmorphism invoice card */}
+      <div className="relative">
+        <div
+          className="absolute inset-0 rounded-2xl opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, #0C1829 0px, #0C1829 1px, transparent 1px, transparent 32px)",
+          }}
+        />
+
+        <div
+          className="relative rounded-2xl border border-white/60 p-6 shadow-xl backdrop-blur-sm md:p-8"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.88))",
+            boxShadow:
+              "0 8px 32px rgba(10,15,30,0.08), inset 0 1px 0 rgba(255,255,255,0.6)",
+          }}
+        >
+          {/* Header */}
+          <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+            <div>
+              <div className="mb-1 flex items-center gap-3">
+                <h3
+                  className="text-lg font-bold text-[#0C1829]"
+                  style={{
+                    fontFamily: "var(--font-fraunces), Georgia, serif",
+                  }}
+                >
+                  Invoice #{invId}
+                </h3>
+                <VerifiedSeal />
+              </div>
+              <p className="text-sm text-[#7C8A9E]">
+                Issued{" "}
+                {new Date().toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}{" "}
+                {"\u00B7"} Due on receipt
+              </p>
+            </div>
+            <div className="flex items-center gap-2 rounded-lg border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.06] px-3 py-1.5">
+              <Shield className="h-3.5 w-3.5 text-[#155939]" />
+              <span className="text-xs font-medium text-[#155939]">
+                Compliant with GENIUS Act (2025)
+              </span>
+            </div>
+          </div>
+
+          {/* Parties */}
+          <div className="mb-6 grid gap-6 sm:grid-cols-2">
+            <div>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+                From
+              </p>
+              <p className="font-semibold text-[#0C1829]">
+                {form.businessName || "Pacific Growers Collective, LLC"}
+              </p>
+              <p className="text-sm text-[#7C8A9E]">
+                License #{form.licenseNumber || "C12-0004782-LIC"} {"\u00B7"}{" "}
+                {STATE_OPTIONS.find((s) => s.value === form.state)?.label ||
+                  "Oregon"}
+              </p>
+            </div>
+            <div>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+                To
+              </p>
+              <p className="font-semibold text-[#0C1829]">
+                {form.recipientName || "Emerald Distribution Partners"}
+              </p>
+              <p className="text-sm text-[#7C8A9E]">
+                License #{form.recipientLicense || "D09-0011294-LIC"} {"\u00B7"}{" "}
+                {STATE_OPTIONS.find((s) => s.value === form.recipientState)
+                  ?.label || "Colorado"}
+              </p>
+            </div>
+          </div>
+
+          {/* Line items */}
+          <div className="mb-6 overflow-hidden rounded-xl border border-[#E2E2D1]">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-[#E2E2D1] bg-[#F5F5F5]/60">
+                  <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+                    Description
+                  </th>
+                  <th className="px-4 py-2.5 text-right text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+                    Amount
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#E2E2D1]">
+                <tr>
+                  <td className="px-4 py-3 text-sm text-[#0C1829]">
+                    {form.description ||
+                      "Bulk Flower - Indoor Premium (Hybrid)"}
+                  </td>
+                  <td
+                    className="px-4 py-3 text-right text-sm font-medium text-[#0C1829]"
+                    style={{
+                      fontFamily: "var(--font-jetbrains), monospace",
+                    }}
+                  >
+                    $
+                    {amount.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Total & fee */}
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="text-xs text-[#7C8A9E]">
+                Platform fee: $
+                {fee.toLocaleString("en-US", { minimumFractionDigits: 2 })}{" "}
+                (1.00%)
+              </p>
+              <p className="text-xs text-[#7C8A9E]">
+                Payment accepted in USDC or PYUSD
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+                Total Due
+              </p>
+              <p
+                className="text-3xl font-bold text-[#0C1829] md:text-4xl"
+                style={{
+                  fontFamily: "var(--font-fraunces), Georgia, serif",
+                }}
+              >
+                ${Math.floor(amount).toLocaleString("en-US")}
+                <span className="text-xl text-[#7C8A9E]">
+                  .
+                  {String(((amount % 1) * 100).toFixed(0)).padStart(2, "0")}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* =================================================================
+   STEP 3 - Live Settlement
+   ================================================================= */
+function StepSettlement({ onSettled }: { onSettled: () => void }) {
+  return (
+    <motion.div
+      key="step-3"
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -40 }}
+      transition={spring}
+    >
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+          3
+        </div>
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          T+0 Settlement
+        </span>
+      </div>
+
+      <h2
+        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+      >
+        Settled. Not Pending.
+      </h2>
+      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+        In cannabis, &ldquo;settled&rdquo; means the money is safe {"\u2014"} it
+        can&apos;t be frozen, reversed, or clawed back. Watch your settlement
+        finalize in real time.
+      </p>
+
+      <SettlementProgress onSettled={onSettled} />
+    </motion.div>
+  );
+}
+
+/* =================================================================
+   STEP 4 - Receipt
+   ================================================================= */
+function StepReceipt({ form }: { form: DemoForm }) {
+  const amount = parseFloat(form.amount) || 45000;
+  const fee = amount * 0.01;
+  const [copied, setCopied] = useState(false);
+
   const fullTxId =
     "5KQrVxH9Bc3nGfKpM2wLj7dR4sTv6YhN8aE1uXqW0cFbJmA3iDpZoUy9tXgT8mZ";
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(fullTxId).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <motion.div
+      key="step-4"
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -40 }}
+      transition={spring}
+    >
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+          4
+        </div>
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          The Audit Trail
+        </span>
+      </div>
+
+      <h2
+        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+      >
+        The Receipt Your CFO Actually Wants
+      </h2>
+      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+        Instant reconciliation. Every dollar traced to a verified source on an
+        immutable ledger your auditors will love.
+      </p>
+
+      <div
+        className="relative rounded-2xl border border-white/60 p-6 shadow-xl backdrop-blur-sm md:p-8"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.88))",
+          boxShadow:
+            "0 8px 32px rgba(10,15,30,0.08), inset 0 1px 0 rgba(255,255,255,0.6)",
+        }}
+      >
+        {/* Receipt header */}
+        <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+          <div>
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              Settlement Receipt
+            </p>
+            <h3
+              className="text-lg font-bold text-[#0C1829]"
+              style={{
+                fontFamily: "var(--font-fraunces), Georgia, serif",
+              }}
+            >
+              #INV-2026-0891
+            </h3>
+          </div>
+          <VerifiedSeal />
+        </div>
+
+        {/* Stats grid */}
+        <div className="mb-6 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-xl border border-[#E2E2D1] bg-[#F7F6F1] p-4">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              Amount
+            </p>
+            <p
+              className="text-xl font-bold text-[#0C1829]"
+              style={{
+                fontFamily: "var(--font-fraunces), Georgia, serif",
+              }}
+            >
+              $
+              {amount.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}
+            </p>
+            <p className="mt-0.5 text-xs text-[#7C8A9E]">
+              {amount.toLocaleString("en-US", {
+                minimumFractionDigits: 6,
+              })}{" "}
+              USDC
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-[#E2E2D1] bg-[#F7F6F1] p-4">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              Time to Finality
+            </p>
+            <p
+              className="text-xl font-bold text-[#155939]"
+              style={{
+                fontFamily: "var(--font-fraunces), Georgia, serif",
+              }}
+            >
+              4.0s
+            </p>
+            <p className="mt-0.5 text-xs text-[#7C8A9E]">
+              vs. 3-5 days traditional
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-[#E2E2D1] bg-[#F7F6F1] p-4">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              Platform Fee
+            </p>
+            <p
+              className="text-xl font-bold text-[#0C1829]"
+              style={{
+                fontFamily: "var(--font-fraunces), Georgia, serif",
+              }}
+            >
+              $
+              {fee.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}
+            </p>
+            <p className="mt-0.5 text-xs text-[#7C8A9E]">
+              1.00% flat {"\u00B7"} No hidden fees
+            </p>
+          </div>
+        </div>
+
+        {/* On-chain details */}
+        <div className="space-y-4 rounded-xl border border-[#E2E2D1] bg-[#F7F6F1] p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              On-Chain Transaction
+            </span>
+            <a
+              href="#"
+              className="inline-flex items-center gap-1 text-xs font-medium text-[#155939] hover:underline"
+            >
+              View on Solscan
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <code
+              className="flex-1 truncate rounded-md bg-[#0C1829]/[0.04] px-3 py-2 text-xs text-[#3B4963]"
+              style={{
+                fontFamily: "var(--font-jetbrains), monospace",
+              }}
+            >
+              {fullTxId}
+            </code>
+            <button
+              onClick={handleCopy}
+              className="shrink-0 rounded-md border border-[#E2E2D1] bg-white p-2 text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+            >
+              {copied ? (
+                <Check className="h-4 w-4 text-[#155939]" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </button>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div>
+              <p className="text-xs text-[#7C8A9E]">Block</p>
+              <p
+                className="text-sm font-medium text-[#0C1829]"
+                style={{
+                  fontFamily: "var(--font-jetbrains), monospace",
+                }}
+              >
+                #298,412,067
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-[#7C8A9E]">Timestamp</p>
+              <p
+                className="text-sm font-medium text-[#0C1829]"
+                style={{
+                  fontFamily: "var(--font-jetbrains), monospace",
+                }}
+              >
+                {new Date().toISOString().replace("T", " ").slice(0, 19)} UTC
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-[#7C8A9E]">Network Fee</p>
+              <p
+                className="text-sm font-medium text-[#0C1829]"
+                style={{
+                  fontFamily: "var(--font-jetbrains), monospace",
+                }}
+              >
+                0.000005 SOL
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Compliance stamps */}
+        <div className="mt-6 flex flex-wrap gap-2">
+          {[
+            "KYB Verified",
+            "AML Screened",
+            "GENIUS Act Compliant",
+            "BSA Reporting Ready",
+          ].map((stamp) => (
+            <div
+              key={stamp}
+              className="flex items-center gap-1.5 rounded-full border border-[#1B6B4A]/15 bg-[#1B6B4A]/[0.05] px-3 py-1.5"
+            >
+              <Check className="h-3 w-3 text-[#155939]" />
+              <span className="text-xs font-medium text-[#155939]">
+                {stamp}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* =================================================================
+   MAIN PAGE
+   ================================================================= */
+export default function DemoPage() {
+  const [step, setStep] = useState(1);
+  const [settlementDone, setSettlementDone] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const [form, setForm] = useState<DemoForm>({
+    businessName: "",
+    licenseNumber: "",
+    state: "OR",
+    recipientName: "",
+    recipientLicense: "",
+    recipientState: "CO",
+    amount: "45000",
+    description: "",
+  });
+
+  const canAdvance = useMemo(() => {
+    if (step === 3) return settlementDone;
+    return true;
+  }, [step, settlementDone]);
+
+  const handleNext = useCallback(() => {
+    if (step >= 4) return;
+    if (step === 2) {
+      // Simulate signing delay
+      setIsProcessing(true);
+      setTimeout(() => {
+        setIsProcessing(false);
+        setStep((s) => s + 1);
+      }, 800);
+      return;
+    }
+    setStep((s) => s + 1);
+  }, [step]);
+
+  const handleBack = useCallback(() => {
+    if (step <= 1) return;
+    if (step === 3) {
+      setSettlementDone(false);
+    }
+    setStep((s) => s - 1);
+  }, [step]);
 
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-white">
-        {/* ── Hero ── */}
-        <section className="relative overflow-hidden px-4 pb-20 pt-32">
+      <main className="min-h-screen bg-[#FDFBF7]">
+        {/* Hero */}
+        <section className="relative overflow-hidden px-4 pb-8 pt-32">
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.10),transparent)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(27,107,74,0.10),transparent)]" />
           </div>
-          <div className="absolute right-[15%] top-[20%] h-72 w-72 rounded-full bg-[#10B981]/[0.06] blur-[120px]" />
+          <div className="absolute right-[15%] top-[20%] h-72 w-72 rounded-full bg-[#1B6B4A]/[0.06] blur-[120px]" />
 
           <div className="relative mx-auto max-w-4xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-[#F5F5F5] px-4 py-2"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E2E2D1] bg-[#F5F5F5] px-4 py-2"
             >
-              <Fingerprint className="h-4 w-4 text-[#059669]" />
-              <span className="text-sm font-medium text-[#4A5568]">
-                Institutional Demo
+              <Fingerprint className="h-4 w-4 text-[#155939]" />
+              <span className="text-sm font-medium text-[#3B4963]">
+                Interactive Demo
               </span>
             </motion.div>
 
@@ -259,510 +1054,136 @@ export default function DemoPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mb-6 text-5xl font-bold leading-[1.08] text-[#0A0F1E] md:text-7xl"
+              className="mb-4 text-4xl font-bold leading-[1.08] text-[#0C1829] md:text-6xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
-              Settlement <span className="text-[#059669]">Certainty</span>,
-              <br />
-              Not Settlement{" "}
-              <span className="text-[#94A3B8] line-through decoration-[#B91C1C]/40 decoration-2">
-                Anxiety
-              </span>
+              Try a Settlement
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-[#94A3B8]"
+              className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-[#7C8A9E]"
             >
-              Walk through a real B2B cannabis settlement — from invoice
-              generation to final receipt. Non-custodial, instant, with a
-              cryptographic trail your auditors will love.
+              Walk through a real B2B cannabis settlement in 4 steps. Enter your
+              details, generate an invoice, watch it settle, and get your
+              receipt.
             </motion.p>
+
+            {/* Stepper */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Stepper current={step} />
+            </motion.div>
           </div>
         </section>
 
-        {/* ──────────────── STEP 1: THE CLEAN INVOICE ──────────────── */}
-        <section className="relative px-4 pb-28">
-          <div className="mx-auto max-w-5xl">
-            <Reveal>
-              <div className="mb-3 flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#10B981] text-sm font-bold text-white">
-                  1
-                </div>
-                <span className="text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">
-                  The Clean Invoice
-                </span>
-              </div>
-              <h2
-                className="mb-4 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
-                style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
-              >
-                Cryptographically-Secured. Bank-Free.
-              </h2>
-              <p className="mb-10 max-w-2xl text-[#94A3B8]">
-                Generate cryptographically-secured invoices. Your recipient pays
-                in USDC/PYUSD. No bank routing numbers to leak, no wire
-                instructions to mistype.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              {/* Glassmorphism invoice card */}
-              <div className="relative">
-                {/* Ledger background pattern */}
-                <div
-                  className="absolute inset-0 rounded-2xl opacity-[0.03]"
-                  style={{
-                    backgroundImage:
-                      "repeating-linear-gradient(0deg, #0A0F1E 0px, #0A0F1E 1px, transparent 1px, transparent 32px)",
-                  }}
+        {/* Step content */}
+        <section className="relative px-4 pb-28 pt-8">
+          <div className="mx-auto max-w-4xl">
+            <AnimatePresence mode="wait">
+              {step === 1 && <StepBusiness form={form} setForm={setForm} />}
+              {step === 2 && <StepInvoice form={form} />}
+              {step === 3 && (
+                <StepSettlement
+                  onSettled={() => setSettlementDone(true)}
                 />
+              )}
+              {step === 4 && <StepReceipt form={form} />}
+            </AnimatePresence>
+          </div>
+        </section>
 
+        {/* Navigation buttons */}
+        <section className="sticky bottom-0 z-20 border-t border-[#E2E2D1] bg-[#FDFBF7]/90 backdrop-blur-md">
+          <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
+            <button
+              onClick={handleBack}
+              disabled={step <= 1}
+              className="flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-[#7C8A9E] transition-colors hover:text-[#0C1829] disabled:cursor-not-allowed disabled:opacity-30"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </button>
+
+            <div className="flex items-center gap-1.5">
+              {STEPS.map((s) => (
                 <div
-                  className="relative rounded-2xl border border-white/60 p-8 shadow-xl backdrop-blur-sm md:p-10"
+                  key={s.id}
+                  className={`h-1.5 rounded-full transition-all ${
+                    s.id === step
+                      ? "w-6 bg-[#1B6B4A]"
+                      : s.id < step
+                        ? "w-1.5 bg-[#1B6B4A]/40"
+                        : "w-1.5 bg-[#E2E2D1]"
+                  }`}
+                />
+              ))}
+            </div>
+
+            {step < 4 ? (
+              <button
+                onClick={handleNext}
+                disabled={!canAdvance || isProcessing}
+                className="group flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+                style={{
+                  background:
+                    canAdvance && !isProcessing
+                      ? "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)"
+                      : "#7C8A9E",
+                }}
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Signing...
+                  </>
+                ) : step === 2 ? (
+                  <>
+                    Sign &amp; Settle
+                    <Zap className="h-4 w-4" />
+                  </>
+                ) : step === 3 && !settlementDone ? (
+                  <>
+                    Settling...
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    Next
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </>
+                )}
+              </button>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/waitlist"
+                  className="group flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
                   style={{
                     background:
-                      "linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.88))",
-                    boxShadow:
-                      "0 8px 32px rgba(10,15,30,0.08), inset 0 1px 0 rgba(255,255,255,0.6)",
+                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
                   }}
                 >
-                  {/* Header */}
-                  <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-                    <div>
-                      <div className="mb-1 flex items-center gap-3">
-                        <h3
-                          className="text-xl font-bold text-[#0A0F1E]"
-                          style={{
-                            fontFamily: "var(--font-fraunces), Georgia, serif",
-                          }}
-                        >
-                          Invoice #INV-2026-0891
-                        </h3>
-                        <VerifiedSeal />
-                      </div>
-                      <p className="text-sm text-[#94A3B8]">
-                        Issued Feb 26, 2026 · Due on receipt
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 rounded-lg border border-[#10B981]/20 bg-[#10B981]/[0.06] px-3 py-1.5">
-                      <Shield className="h-3.5 w-3.5 text-[#059669]" />
-                      <span className="text-xs font-medium text-[#059669]">
-                        Compliant with GENIUS Act (2025)
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Parties */}
-                  <div className="mb-8 grid gap-6 sm:grid-cols-2">
-                    <div>
-                      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                        From
-                      </p>
-                      <p className="font-semibold text-[#0A0F1E]">
-                        Pacific Growers Collective, LLC
-                      </p>
-                      <p className="text-sm text-[#94A3B8]">
-                        License #C12-0004782-LIC · Portland, OR
-                      </p>
-                    </div>
-                    <div>
-                      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                        To
-                      </p>
-                      <p className="font-semibold text-[#0A0F1E]">
-                        Emerald Distribution Partners
-                      </p>
-                      <p className="text-sm text-[#94A3B8]">
-                        License #D09-0011294-LIC · Denver, CO
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Line items */}
-                  <div className="mb-8 overflow-hidden rounded-2xl border border-[#E5E7EB]">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-[#E5E7EB] bg-[#F5F5F5]/60">
-                          <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                            Description
-                          </th>
-                          <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                            Qty
-                          </th>
-                          <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                            Unit Price
-                          </th>
-                          <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                            Amount
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#E5E7EB]">
-                        <tr>
-                          <td className="px-4 py-3 text-sm text-[#0A0F1E]">
-                            Bulk Flower — Indoor Premium (Hybrid)
-                          </td>
-                          <td
-                            className="px-4 py-3 text-right text-sm text-[#4A5568]"
-                            style={{
-                              fontFamily: "var(--font-jetbrains), monospace",
-                            }}
-                          >
-                            15 lbs
-                          </td>
-                          <td
-                            className="px-4 py-3 text-right text-sm text-[#4A5568]"
-                            style={{
-                              fontFamily: "var(--font-jetbrains), monospace",
-                            }}
-                          >
-                            $2,800.00
-                          </td>
-                          <td
-                            className="px-4 py-3 text-right text-sm font-medium text-[#0A0F1E]"
-                            style={{
-                              fontFamily: "var(--font-jetbrains), monospace",
-                            }}
-                          >
-                            $42,000.00
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="px-4 py-3 text-sm text-[#0A0F1E]">
-                            Hydroponic Equipment — LED Array (x2)
-                          </td>
-                          <td
-                            className="px-4 py-3 text-right text-sm text-[#4A5568]"
-                            style={{
-                              fontFamily: "var(--font-jetbrains), monospace",
-                            }}
-                          >
-                            2
-                          </td>
-                          <td
-                            className="px-4 py-3 text-right text-sm text-[#4A5568]"
-                            style={{
-                              fontFamily: "var(--font-jetbrains), monospace",
-                            }}
-                          >
-                            $1,500.00
-                          </td>
-                          <td
-                            className="px-4 py-3 text-right text-sm font-medium text-[#0A0F1E]"
-                            style={{
-                              fontFamily: "var(--font-jetbrains), monospace",
-                            }}
-                          >
-                            $3,000.00
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* Total */}
-                  <div className="flex items-end justify-between">
-                    <div className="text-sm text-[#94A3B8]">
-                      Payment accepted in USDC or PYUSD
-                    </div>
-                    <div className="text-right">
-                      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                        Total Due
-                      </p>
-                      <p
-                        className="text-4xl font-bold text-[#0A0F1E] md:text-5xl"
-                        style={{
-                          fontFamily: "var(--font-fraunces), Georgia, serif",
-                        }}
-                      >
-                        $45,000
-                        <span className="text-2xl text-[#94A3B8]">.00</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  Request Access
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+                <button
+                  onClick={() => {
+                    setStep(1);
+                    setSettlementDone(false);
+                  }}
+                  className="rounded-lg border border-[#E2E2D1] px-5 py-2.5 text-sm font-semibold text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                >
+                  Try Again
+                </button>
               </div>
-            </Reveal>
+            )}
           </div>
-        </section>
-
-        {/* ──────────────── STEP 2: THE MAGIC MOMENT ──────────────── */}
-        <section className="relative px-4 pb-28">
-          <div className="mx-auto max-w-5xl">
-            <Reveal>
-              <div className="mb-3 flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#10B981] text-sm font-bold text-white">
-                  2
-                </div>
-                <span className="text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">
-                  T+0 Settlement
-                </span>
-              </div>
-              <h2
-                className="mb-4 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
-                style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
-              >
-                Settled. Not Pending.
-              </h2>
-              <p className="mb-10 max-w-2xl text-[#94A3B8]">
-                In the cannabis world, &ldquo;settled&rdquo; means the money is
-                safe — it can&apos;t be frozen, reversed, or clawed back. Watch
-                a $45,000 B2B settlement finalize in real time.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              <SettlementProgress />
-            </Reveal>
-          </div>
-        </section>
-
-        {/* ──────────────── STEP 3: THE CFO RECEIPT ──────────────── */}
-        <section className="relative px-4 pb-28">
-          <div className="mx-auto max-w-5xl">
-            <Reveal>
-              <div className="mb-3 flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#10B981] text-sm font-bold text-white">
-                  3
-                </div>
-                <span className="text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">
-                  The Audit Trail
-                </span>
-              </div>
-              <h2
-                className="mb-4 text-3xl font-bold text-[#0A0F1E] md:text-4xl"
-                style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
-              >
-                The Receipt Your CFO Actually Wants
-              </h2>
-              <p className="mb-10 max-w-2xl text-[#94A3B8]">
-                Instant reconciliation for your books. Give your auditors a
-                clear, immutable trail that proves every dollar is from a
-                verified source.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              {/* Receipt card — glassmorphism */}
-              <div
-                className="relative rounded-2xl border border-white/60 p-8 shadow-xl backdrop-blur-sm md:p-10"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.88))",
-                  boxShadow:
-                    "0 8px 32px rgba(10,15,30,0.08), inset 0 1px 0 rgba(255,255,255,0.6)",
-                }}
-              >
-                {/* Receipt header */}
-                <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-                  <div>
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                      Settlement Receipt
-                    </p>
-                    <h3
-                      className="text-xl font-bold text-[#0A0F1E]"
-                      style={{
-                        fontFamily: "var(--font-fraunces), Georgia, serif",
-                      }}
-                    >
-                      #INV-2026-0891
-                    </h3>
-                  </div>
-                  <VerifiedSeal />
-                </div>
-
-                {/* Receipt grid */}
-                <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-[#FAFAFA] p-4">
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                      Settlement Amount
-                    </p>
-                    <p
-                      className="text-2xl font-bold text-[#0A0F1E]"
-                      style={{
-                        fontFamily: "var(--font-fraunces), Georgia, serif",
-                      }}
-                    >
-                      $45,000.00
-                    </p>
-                    <p className="mt-1 text-xs text-[#94A3B8]">
-                      45,000.000000 USDC
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-[#FAFAFA] p-4">
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                      Time to Finality
-                    </p>
-                    <p
-                      className="text-2xl font-bold text-[#059669]"
-                      style={{
-                        fontFamily: "var(--font-fraunces), Georgia, serif",
-                      }}
-                    >
-                      4.0s
-                    </p>
-                    <p className="mt-1 text-xs text-[#94A3B8]">
-                      vs. 3-5 days traditional
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-[#FAFAFA] p-4">
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                      Platform Fee
-                    </p>
-                    <p
-                      className="text-2xl font-bold text-[#0A0F1E]"
-                      style={{
-                        fontFamily: "var(--font-fraunces), Georgia, serif",
-                      }}
-                    >
-                      $450.00
-                    </p>
-                    <p className="mt-1 text-xs text-[#94A3B8]">
-                      1.00% flat · No hidden fees
-                    </p>
-                  </div>
-                </div>
-
-                {/* On-chain details */}
-                <div className="space-y-4 rounded-2xl border border-[#E5E7EB] bg-[#FAFAFA] p-5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-                      On-Chain Transaction
-                    </span>
-                    <a
-                      href="#"
-                      className="inline-flex items-center gap-1 text-xs font-medium text-[#059669] hover:underline"
-                    >
-                      View on Solscan
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <code
-                      className="flex-1 truncate rounded-md bg-[#0A0F1E]/[0.04] px-3 py-2 text-xs text-[#4A5568]"
-                      style={{
-                        fontFamily: "var(--font-jetbrains), monospace",
-                      }}
-                    >
-                      {fullTxId}
-                    </code>
-                    <button className="shrink-0 rounded-md border border-[#E5E7EB] bg-white p-2 text-[#94A3B8] transition-colors hover:text-[#0A0F1E]">
-                      <Copy className="h-4 w-4" />
-                    </button>
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <div>
-                      <p className="text-xs text-[#94A3B8]">Block</p>
-                      <p
-                        className="text-sm font-medium text-[#0A0F1E]"
-                        style={{
-                          fontFamily: "var(--font-jetbrains), monospace",
-                        }}
-                      >
-                        #298,412,067
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-[#94A3B8]">Timestamp</p>
-                      <p
-                        className="text-sm font-medium text-[#0A0F1E]"
-                        style={{
-                          fontFamily: "var(--font-jetbrains), monospace",
-                        }}
-                      >
-                        2026-02-26 14:32:08 UTC
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-[#94A3B8]">Network Fee</p>
-                      <p
-                        className="text-sm font-medium text-[#0A0F1E]"
-                        style={{
-                          fontFamily: "var(--font-jetbrains), monospace",
-                        }}
-                      >
-                        0.000005 SOL
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Compliance stamps */}
-                <div className="mt-6 flex flex-wrap gap-3">
-                  {[
-                    "KYB Verified",
-                    "AML Screened",
-                    "GENIUS Act Compliant",
-                    "BSA Reporting Ready",
-                  ].map((stamp) => (
-                    <div
-                      key={stamp}
-                      className="flex items-center gap-1.5 rounded-full border border-[#10B981]/15 bg-[#10B981]/[0.05] px-3 py-1.5"
-                    >
-                      <Check className="h-3 w-3 text-[#059669]" />
-                      <span className="text-xs font-medium text-[#059669]">
-                        {stamp}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* ── CTA ── */}
-        <section className="relative overflow-hidden px-4 py-24">
-          <div className="absolute inset-0 bg-[#0A0F1E]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(16,185,129,0.15),transparent)]" />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={spring}
-            className="relative mx-auto max-w-3xl text-center"
-          >
-            <h2
-              className="mb-6 text-3xl font-bold text-white md:text-4xl"
-              style={{
-                fontFamily: "var(--font-fraunces), Georgia, serif",
-                color: "#FFFFFF",
-              }}
-            >
-              Stop Paying the Exile Tax
-            </h2>
-            <p className="mb-8 text-[#94A3B8]">
-              Join the operators replacing 8% high-risk processors with a 1%
-              non-custodial settlement rail. Apply for early access.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link
-                href="/waitlist"
-                className="group inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-white transition-all hover:brightness-110"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                }}
-              >
-                Request Access
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                href="/create"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-8 py-4 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
-              >
-                Create a Payment Link
-              </Link>
-            </div>
-          </motion.div>
         </section>
       </main>
       <Footer />

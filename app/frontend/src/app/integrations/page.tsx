@@ -328,21 +328,21 @@ export default function IntegrationsPage() {
         <Reveal>
           <div className="mb-10">
             <div
-              className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#10B981]/20 bg-[#10B981]/[0.08] px-4 py-1.5 text-[13px] font-medium"
-              style={{ color: "#059669" }}
+              className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.08] px-4 py-1.5 text-[13px] font-medium"
+              style={{ color: "#155939" }}
             >
               <Leaf className="h-3.5 w-3.5" />
               Cannabis Industry
             </div>
             <h2
               className="text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-tight tracking-tight"
-              style={{ color: "#0A0F1E" }}
+              style={{ color: "#0C1829" }}
             >
               Cannabis POS &amp; marketplace integrations
             </h2>
             <p
               className="mt-3 max-w-2xl text-base leading-relaxed"
-              style={{ color: "#4A5568" }}
+              style={{ color: "#3B4963" }}
             >
               Settlr connects to the cannabis-specific platforms your team
               already uses — so B2B settlement flows directly from your POS or
@@ -356,25 +356,25 @@ export default function IntegrationsPage() {
             <Reveal key={platform.name} delay={i * 0.06}>
               <div
                 className="group relative flex h-full flex-col rounded-2xl border p-8 transition-all hover:shadow-md"
-                style={{ borderColor: "#E5E7EB", background: "#FAFAFA" }}
+                style={{ borderColor: "#E2E2D1", background: "#F7F6F1" }}
               >
                 <div className="mb-5 flex items-center gap-3">
                   <div
                     className="inline-flex rounded-xl p-3"
-                    style={{ background: "rgba(16,185,129,0.1)" }}
+                    style={{ background: "rgba(27,107,74,0.1)" }}
                   >
-                    <Monitor className="h-5 w-5" style={{ color: "#059669" }} />
+                    <Monitor className="h-5 w-5" style={{ color: "#155939" }} />
                   </div>
                   <div>
                     <h3
                       className="text-lg font-semibold"
-                      style={{ color: "#0A0F1E" }}
+                      style={{ color: "#0C1829" }}
                     >
                       {platform.name}
                     </h3>
                     <p
                       className="text-xs font-medium"
-                      style={{ color: "#94A3B8" }}
+                      style={{ color: "#7C8A9E" }}
                     >
                       {platform.role}
                     </p>
@@ -383,7 +383,7 @@ export default function IntegrationsPage() {
 
                 <p
                   className="flex-1 text-sm leading-relaxed"
-                  style={{ color: "#4A5568" }}
+                  style={{ color: "#3B4963" }}
                 >
                   {platform.description}
                 </p>
@@ -393,11 +393,11 @@ export default function IntegrationsPage() {
                     <li
                       key={h}
                       className="flex items-start gap-2 text-xs"
-                      style={{ color: "#94A3B8" }}
+                      style={{ color: "#7C8A9E" }}
                     >
                       <Check
                         className="mt-0.5 h-3.5 w-3.5 flex-shrink-0"
-                        style={{ color: "#059669" }}
+                        style={{ color: "#155939" }}
                       />
                       {h}
                     </li>
@@ -409,7 +409,7 @@ export default function IntegrationsPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-6 inline-flex items-center gap-1 text-sm font-medium transition-colors hover:opacity-80"
-                  style={{ color: "#059669" }}
+                  style={{ color: "#155939" }}
                 >
                   About {platform.name}
                   <ArrowUpRight className="h-3.5 w-3.5" />

@@ -19,21 +19,22 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
+import { ComplianceSeal } from "@/components/ui/ComplianceSeal";
 
-/* ── Design tokens ─────────────────────────────────────── */
+/* ── Design tokens (unified warm palette) ──────────────── */
 const p = {
-  bg: "#FFFFFF",
-  bgSubtle: "#FAFAFA",
-  bgMuted: "#F5F5F5",
-  navy: "#0A0F1E",
-  slate: "#4A5568",
-  muted: "#94A3B8",
-  green: "#10B981",
-  greenDark: "#059669",
-  border: "#E5E7EB",
-  borderSubtle: "#F0F0F0",
-  red: "#EF4444",
-  amber: "#F59E0B",
+  bg: "#FDFBF7",
+  bgSubtle: "#F7F6F1",
+  bgMuted: "#F3F2ED",
+  navy: "#0C1829",
+  slate: "#3B4963",
+  muted: "#7C8A9E",
+  green: "#1B6B4A",
+  greenDark: "#155939",
+  border: "#E2E2D1",
+  borderSubtle: "#EDECE4",
+  red: "#DC2626",
+  amber: "#B8860B",
   white: "#FFFFFF",
 };
 
@@ -203,7 +204,7 @@ function FAQ({ q, a }: { q: string; a: string }) {
         boxShadow: open
           ? "0 4px 24px rgba(0,0,0,0.06)"
           : "0 1px 4px rgba(0,0,0,0.04)",
-        border: `1px solid ${open ? "rgba(16,185,129,0.25)" : p.border}`,
+        border: `1px solid ${open ? "rgba(27,107,74,0.25)" : p.border}`,
       }}
     >
       <button
@@ -248,12 +249,17 @@ function FAQ({ q, a }: { q: string; a: string }) {
   );
 }
 
-/* card helper — soft shadow, hover lift */
+/* card helper — 1px sharp borders, inset option */
 const card =
-  "rounded-3xl shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1";
-const cardStatic =
-  "rounded-3xl shadow-sm transition-all duration-300 hover:shadow-md";
+  "rounded-2xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5";
+const cardStatic = "rounded-2xl transition-all duration-300 hover:shadow-sm";
 const cardBorder = `1px solid ${p.border}`;
+const cardInset = {
+  background: p.bgMuted,
+  border: cardBorder,
+  boxShadow:
+    "inset 0 2px 4px rgba(0,0,0,0.04), inset 0 0 0 1px rgba(0,0,0,0.02)",
+};
 
 /* ════════════════════════════════════════════════════════ */
 /*  PAGE                                                   */
@@ -422,7 +428,7 @@ export default function HomePage() {
               className="absolute left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 rounded-full opacity-[0.15] blur-[120px]"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(16,185,129,0.2), transparent 70%)",
+                  "radial-gradient(circle, rgba(27,107,74,0.2), transparent 70%)",
               }}
             />
           </div>
@@ -433,17 +439,26 @@ export default function HomePage() {
           ))}
 
           <div className="relative z-10 mx-auto max-w-5xl px-6">
+            {/* Compliance seal — top right */}
+            <div className="absolute right-6 top-0 hidden lg:block">
+              <ComplianceSeal size={100} />
+            </div>
+
             <div className="mx-auto max-w-3xl text-center">
               <R delay={0.06}>
                 <h1
-                  className="mt-10 text-5xl font-extrabold leading-[1.04] tracking-tight sm:text-6xl lg:text-[80px]"
-                  style={{ color: p.navy }}
+                  className="mt-10 text-5xl leading-[1.04] tracking-[-0.03em] sm:text-6xl lg:text-[80px]"
+                  style={{
+                    color: p.navy,
+                    fontFamily: "var(--font-fraunces), Georgia, serif",
+                    fontWeight: 800,
+                  }}
                 >
                   Enterprise payments for the{" "}
                   <span
                     style={{
                       background:
-                        "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                        "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                     }}
@@ -473,8 +488,8 @@ export default function HomePage() {
                   className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                   style={{
                     background:
-                      "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                    boxShadow: "0 4px 24px rgba(16,185,129,0.25)",
+                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                    boxShadow: "0 4px 24px rgba(27,107,74,0.25)",
                   }}
                 >
                   Apply for the Private Rail
@@ -973,7 +988,10 @@ export default function HomePage() {
         {/* ═══════════════════════════════════════════════ */}
         {/*  PRODUCT — mockups inside cards, not icons     */}
         {/* ═══════════════════════════════════════════════ */}
-        <section className="py-32 sm:py-48" style={{ background: p.bgSubtle }}>
+        <section
+          className="section-bordered py-32 sm:py-48"
+          style={{ background: p.bgSubtle }}
+        >
           <div className="mx-auto max-w-6xl px-6">
             <R className="mx-auto max-w-2xl text-center">
               <p
@@ -1454,7 +1472,10 @@ export default function HomePage() {
         {/* ═══════════════════════════════════════════════ */}
         {/*  THREE STEPS                                   */}
         {/* ═══════════════════════════════════════════════ */}
-        <section className="py-32 sm:py-48" style={{ background: p.bgSubtle }}>
+        <section
+          className="section-bordered py-32 sm:py-48"
+          style={{ background: p.bgSubtle }}
+        >
           <div className="mx-auto max-w-6xl px-6">
             <R className="mx-auto max-w-2xl text-center">
               <p
@@ -1762,7 +1783,7 @@ export default function HomePage() {
                     <div className="flex items-center gap-2">
                       <Shield
                         className="h-4 w-4"
-                        style={{ color: "#10B981" }}
+                        style={{ color: "#1B6B4A" }}
                       />
                       <span
                         className="text-[10px] font-bold uppercase tracking-widest"
@@ -1774,11 +1795,11 @@ export default function HomePage() {
                     <span
                       className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold"
                       style={{
-                        background: "rgba(16,185,129,0.15)",
-                        color: "#10B981",
+                        background: "rgba(27,107,74,0.15)",
+                        color: "#1B6B4A",
                       }}
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#1B6B4A]" />
                       Verified
                     </span>
                   </div>
@@ -1869,12 +1890,12 @@ export default function HomePage() {
                         </p>
                         <p
                           className="mt-0.5 font-mono text-sm font-bold"
-                          style={{ color: "#10B981" }}
+                          style={{ color: "#1B6B4A" }}
                         >
                           $██,███
                           <span
                             className="text-[10px] font-normal"
-                            style={{ color: "rgba(16,185,129,0.5)" }}
+                            style={{ color: "rgba(27,107,74,0.5)" }}
                           >
                             .██ USDC
                           </span>
@@ -2007,7 +2028,7 @@ export default function HomePage() {
                         <span
                           className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
                           style={{
-                            background: "rgba(16,185,129,0.08)",
+                            background: "rgba(27,107,74,0.08)",
                             color: p.greenDark,
                           }}
                         >
@@ -2035,7 +2056,10 @@ export default function HomePage() {
         {/* ═══════════════════════════════════════════════ */}
         {/*  INDUSTRIES                                    */}
         {/* ═══════════════════════════════════════════════ */}
-        <section className="py-32 sm:py-48" style={{ background: p.bgSubtle }}>
+        <section
+          className="section-bordered py-32 sm:py-48"
+          style={{ background: p.bgSubtle }}
+        >
           <div className="mx-auto max-w-6xl px-6">
             <R className="mx-auto max-w-2xl text-center">
               <p
@@ -2059,14 +2083,14 @@ export default function HomePage() {
                   desc: "B2B settlement for state-licensed cultivators, processors, and distributors.",
                   href: "/industries/cannabis",
                   stats: ["40+ States", "$25B Market", "Non-Custodial"],
-                  gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
+                  gradient: "linear-gradient(135deg, #155939 0%, #0F4D35 100%)",
                 },
                 {
                   title: "Adult Content Platforms",
                   desc: "Creator payouts without deplatforming risk. 1% flat vs 8–15% processing.",
                   href: "/industries/adult-content",
                   stats: ["Instant Payouts", "No Chargebacks", "TEE Privacy"],
-                  gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                  gradient: "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
                 },
               ].map((item, i) => (
                 <R key={item.title} delay={i * 0.08}>
@@ -2173,7 +2197,7 @@ export default function HomePage() {
                     className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-[120px]"
                     style={{
                       background:
-                        "radial-gradient(circle, rgba(16,185,129,0.4), transparent 70%)",
+                        "radial-gradient(circle, rgba(27,107,74,0.4), transparent 70%)",
                     }}
                   />
                 </div>
@@ -2186,7 +2210,7 @@ export default function HomePage() {
                     Stop paying the{" "}
                     <span
                       style={{
-                        background: "linear-gradient(135deg, #10B981, #34D399)",
+                        background: "linear-gradient(135deg, #1B6B4A, #2D9D6E)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                       }}
@@ -2207,8 +2231,8 @@ export default function HomePage() {
                       className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                       style={{
                         background:
-                          "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                        boxShadow: "0 4px 24px rgba(16,185,129,0.3)",
+                          "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                        boxShadow: "0 4px 24px rgba(27,107,74,0.3)",
                       }}
                     >
                       Apply for Onboarding

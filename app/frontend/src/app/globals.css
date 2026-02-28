@@ -8,6 +8,12 @@
   --card-hover: #f7f6f1;
   --border: #e2dfd5;
   --border-hover: #c9c5ba;
+  --border-sharp: #e2e2d1;
+
+  /* Inset card */
+  --card-inset: #f5f4ef;
+  --card-inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.02);
 
   /* Pop card style */
   --card-pop: #fffef5;
@@ -49,6 +55,9 @@
   /* Glass (light version) */
   --glass: rgba(253, 251, 247, 0.85);
   --glass-border: rgba(226, 223, 213, 0.6);
+
+  /* Serif heading font */
+  --font-heading: var(--font-fraunces), Georgia, "Times New Roman", serif;
 }
 
 @theme inline {
@@ -79,8 +88,21 @@ body {
 h1,
 h2,
 h3 {
-  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  font-family: var(--font-heading);
   color: #0c1829;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-weight: 800;
+}
+
+h2 {
+  font-weight: 700;
+}
+
+h3 {
+  font-weight: 600;
 }
 
 code,
@@ -100,6 +122,52 @@ pre,
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' /%3E%3C/svg%3E");
   background-size: 200px 200px;
+}
+
+/* ═══ Global noise texture — kills flat-digital feel ═══ */
+.noise-global::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.02;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' /%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ═══ Inset card — pressed-into-paper look ═══ */
+.card-inset {
+  background: var(--card-inset);
+  border: 1px solid var(--border-sharp);
+  border-radius: 12px;
+  box-shadow: var(--card-inset-shadow);
+  transition: all 0.2s ease;
+}
+
+.card-inset:hover {
+  box-shadow: var(--card-inset-shadow), 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* ═══ Sharp-bordered section card — 1px rule ═══ */
+.card-sharp {
+  background: var(--card);
+  border: 1px solid var(--border-sharp);
+  border-radius: 12px;
+  transition: all 0.25s ease;
+}
+
+.card-sharp:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* ═══ Section wrapper with border ═══ */
+.section-bordered {
+  border-top: 1px solid var(--border-sharp);
+  border-bottom: 1px solid var(--border-sharp);
 }
 
 /* Animated gradient background */

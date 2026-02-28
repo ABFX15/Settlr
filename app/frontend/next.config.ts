@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
   // Silence workspace root warning
   turbopack: {
     root: ".",
+    resolveAlias: {
+      // Prevent Turbopack from bundling Node-only logging packages
+      // (pulled in via @walletconnect/logger → pino → thread-stream)
+      pino: { browser: "./browser.js" },
+      "pino-pretty": false,
+      "thread-stream": false,
+      "why-is-node-running": false,
+    },
   },
   // Image optimization
   images: {

@@ -97,7 +97,7 @@ export function DashboardSidebar() {
   const sidebarContent = (
     <>
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between border-b border-[#E5E7EB] px-4">
+      <div className="flex h-16 items-center justify-between border-b border-[#E2E2D1] px-4">
         {!collapsed && (
           <Link href="/" className="flex items-center gap-2">
             <SettlrLogoWithIcon size="sm" variant="dark" />
@@ -105,7 +105,7 @@ export function DashboardSidebar() {
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hidden rounded-lg p-2 text-[#94A3B8] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0F1E] lg:block"
+          className="hidden rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F5F5F5] hover:text-[#0C1829] lg:block"
         >
           {collapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -115,7 +115,7 @@ export function DashboardSidebar() {
         </button>
         <button
           onClick={() => setMobileOpen(false)}
-          className="rounded-lg p-2 text-[#94A3B8] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0F1E] lg:hidden"
+          className="rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F5F5F5] hover:text-[#0C1829] lg:hidden"
         >
           <X className="h-4 w-4" />
         </button>
@@ -126,7 +126,7 @@ export function DashboardSidebar() {
         {navSections.map((section) => (
           <div key={section.label} className="mb-5">
             {!collapsed && (
-              <div className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-[#94A3B8]/70">
+              <div className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-[#7C8A9E]/70">
                 {section.label}
               </div>
             )}
@@ -143,18 +143,18 @@ export function DashboardSidebar() {
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                       active
-                        ? "bg-[#10B981]/15 text-[#059669]"
-                        : "text-[#94A3B8] hover:bg-[#F5F5F5] hover:text-[#0A0F1E]"
+                        ? "bg-[#1B6B4A]/15 text-[#155939]"
+                        : "text-[#7C8A9E] hover:bg-[#F5F5F5] hover:text-[#0C1829]"
                     } ${collapsed ? "justify-center" : ""}`}
                   >
                     <item.icon
                       className={`h-[18px] w-[18px] flex-shrink-0 ${
-                        active ? "text-[#059669]" : ""
+                        active ? "text-[#155939]" : ""
                       }`}
                     />
                     {!collapsed && <span>{item.label}</span>}
                     {active && !collapsed && (
-                      <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+                      <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[#1B6B4A]" />
                     )}
                   </Link>
                 );
@@ -165,25 +165,25 @@ export function DashboardSidebar() {
       </nav>
 
       {/* Wallet + Logout */}
-      <div className="border-t border-[#E5E7EB] p-3">
+      <div className="border-t border-[#E2E2D1] p-3">
         {authenticated && connected && publicKey ? (
           <div className="space-y-2">
             {!collapsed && (
               <div className="flex items-center gap-2 rounded-xl bg-[#F5F5F5] px-3 py-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#10B981]/15">
-                  <Wallet className="h-3.5 w-3.5 text-[#059669]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1B6B4A]/15">
+                  <Wallet className="h-3.5 w-3.5 text-[#155939]" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-medium text-[#4A5568]">
+                  <p className="truncate text-xs font-medium text-[#3B4963]">
                     {publicKey.slice(0, 4)}...{publicKey.slice(-4)}
                   </p>
                 </div>
                 <button
                   onClick={copyWallet}
-                  className="text-[#94A3B8] transition-colors hover:text-[#4A5568]"
+                  className="text-[#7C8A9E] transition-colors hover:text-[#3B4963]"
                 >
                   {copied ? (
-                    <Check className="h-3.5 w-3.5 text-[#059669]" />
+                    <Check className="h-3.5 w-3.5 text-[#155939]" />
                   ) : (
                     <Copy className="h-3.5 w-3.5" />
                   )}
@@ -192,7 +192,7 @@ export function DashboardSidebar() {
             )}
             <button
               onClick={logout}
-              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#94A3B8] transition-colors hover:bg-red-500/10 hover:text-red-400 ${
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#7C8A9E] transition-colors hover:bg-red-500/10 hover:text-red-400 ${
                 collapsed ? "justify-center" : ""
               }`}
             >
@@ -203,7 +203,7 @@ export function DashboardSidebar() {
         ) : (
           <button
             onClick={login}
-            className={`flex w-full items-center gap-3 rounded-xl bg-[#10B981] px-3 py-2.5 text-sm font-semibold text-[#0A0F1E] transition-colors hover:bg-[#10B981]/80 ${
+            className={`flex w-full items-center gap-3 rounded-xl bg-[#1B6B4A] px-3 py-2.5 text-sm font-semibold text-[#0C1829] transition-colors hover:bg-[#1B6B4A]/80 ${
               collapsed ? "justify-center" : ""
             }`}
           >
@@ -218,17 +218,17 @@ export function DashboardSidebar() {
   return (
     <>
       {/* Mobile menu trigger — placed top-left on mobile */}
-      <div className="fixed left-0 right-0 top-0 z-40 flex h-14 items-center justify-between border-b border-[#E5E7EB] bg-white/95 px-4 backdrop-blur-xl lg:hidden">
+      <div className="fixed left-0 right-0 top-0 z-40 flex h-14 items-center justify-between border-b border-[#E2E2D1] bg-white/95 px-4 backdrop-blur-xl lg:hidden">
         <button
           onClick={() => setMobileOpen(true)}
-          className="rounded-lg p-2 text-[#4A5568] transition-colors hover:bg-[#F5F5F5]"
+          className="rounded-lg p-2 text-[#3B4963] transition-colors hover:bg-[#F5F5F5]"
         >
           <Menu className="h-5 w-5" />
         </button>
         <SettlrLogoWithIcon size="sm" variant="dark" />
         <Link
           href="/create"
-          className="flex items-center gap-1.5 rounded-lg bg-[#10B981] px-3 py-1.5 text-xs font-semibold text-[#0A0F1E]"
+          className="flex items-center gap-1.5 rounded-lg bg-[#1B6B4A] px-3 py-1.5 text-xs font-semibold text-[#0C1829]"
         >
           <Plus className="h-3.5 w-3.5" />
           New
@@ -242,7 +242,7 @@ export function DashboardSidebar() {
           onClick={() => setMobileOpen(false)}
         >
           <div
-            className="absolute left-0 top-0 h-full w-64 border-r border-[#E5E7EB] bg-[#0a0a12] flex flex-col"
+            className="absolute left-0 top-0 h-full w-64 border-r border-[#E2E2D1] bg-[#0a0a12] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {sidebarContent}
@@ -252,7 +252,7 @@ export function DashboardSidebar() {
 
       {/* Desktop sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-30 hidden h-full flex-col border-r border-[#E5E7EB] bg-[#0a0a12] transition-all duration-300 lg:flex ${
+        className={`fixed left-0 top-0 z-30 hidden h-full flex-col border-r border-[#E2E2D1] bg-[#0a0a12] transition-all duration-300 lg:flex ${
           collapsed ? "w-[72px]" : "w-[240px]"
         }`}
       >
@@ -273,16 +273,16 @@ export function DashboardTopBar() {
   const { publicKey } = useActiveWallet();
 
   return (
-    <div className="hidden h-14 items-center justify-between border-b border-[#E5E7EB] px-8 lg:flex">
+    <div className="hidden h-14 items-center justify-between border-b border-[#E2E2D1] px-8 lg:flex">
       <div />
       <div className="flex items-center gap-3">
-        <button className="relative rounded-lg p-2 text-[#94A3B8] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0F1E]">
+        <button className="relative rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F5F5F5] hover:text-[#0C1829]">
           <Bell className="h-4 w-4" />
-          <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+          <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#1B6B4A]" />
         </button>
         <Link
           href="/create"
-          className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#0A0F1E] shadow-lg shadow-white/5 transition-all hover:shadow-[#0A0F1E]/5"
+          className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#0C1829] shadow-lg shadow-white/5 transition-all hover:shadow-[#0C1829]/5"
         >
           <Plus className="h-4 w-4" />
           New Payment

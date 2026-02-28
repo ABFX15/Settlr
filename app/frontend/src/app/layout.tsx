@@ -121,7 +121,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{ background: "#FFFFFF" }}>
+    <html lang="en" style={{ background: "#FDFBF7" }}>
       <head>
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -143,7 +143,7 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
-        <meta name="theme-color" content="#FFFFFF" />
+        <meta name="theme-color" content="#FDFBF7" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
@@ -162,8 +162,8 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} antialiased`}
-        style={{ background: "#FFFFFF" }}
+        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} noise-global antialiased`}
+        style={{ background: "#FDFBF7" }}
       >
         <ClientLayout>{children}</ClientLayout>
         {/* SSR-rendered navigation for search engine crawlers (visually hidden) */}

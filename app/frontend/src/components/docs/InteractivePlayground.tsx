@@ -252,16 +252,16 @@ export function InteractivePlayground({
   };
 
   return (
-    <div className="rounded-2xl border border-[#E5E7EB] bg-[#0d0d14] overflow-hidden">
+    <div className="rounded-2xl border border-[#E2E2D1] bg-[#0d0d14] overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#E5E7EB] bg-white px-4 py-3">
+      <div className="flex items-center justify-between border-b border-[#E2E2D1] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           <div className="flex gap-1.5">
             <div className="h-3 w-3 rounded-full bg-red-500/60" />
             <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
-            <div className="h-3 w-3 rounded-full bg-[#10B981]/60" />
+            <div className="h-3 w-3 rounded-full bg-[#1B6B4A]/60" />
           </div>
-          <span className="text-sm font-medium text-[#4A5568]">
+          <span className="text-sm font-medium text-[#3B4963]">
             Interactive Playground
           </span>
         </div>
@@ -271,7 +271,7 @@ export function InteractivePlayground({
           <div className="relative">
             <button
               onClick={() => setShowExampleDropdown(!showExampleDropdown)}
-              className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-[#F5F5F5] px-3 py-1.5 text-sm text-[#0A0F1E] transition-colors hover:bg-[#F5F5F5]"
+              className="flex items-center gap-2 rounded-lg border border-[#E2E2D1] bg-[#F5F5F5] px-3 py-1.5 text-sm text-[#0C1829] transition-colors hover:bg-[#F5F5F5]"
             >
               <span>{selectedExample.name}</span>
               <ChevronDown
@@ -286,7 +286,7 @@ export function InteractivePlayground({
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-[#E5E7EB] bg-[#12121a] p-2 shadow-xl"
+                  className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-[#E2E2D1] bg-[#12121a] p-2 shadow-xl"
                 >
                   {examples.map((example) => (
                     <button
@@ -294,14 +294,14 @@ export function InteractivePlayground({
                       onClick={() => handleLoadExample(example)}
                       className={`flex w-full flex-col items-start rounded-lg px-3 py-2 text-left transition-colors ${
                         selectedExample.id === example.id
-                          ? "bg-[#10B981]/10 text-[#059669]"
-                          : "text-[#4A5568] hover:bg-[#F5F5F5] hover:text-[#0A0F1E]"
+                          ? "bg-[#1B6B4A]/10 text-[#155939]"
+                          : "text-[#3B4963] hover:bg-[#F5F5F5] hover:text-[#0C1829]"
                       }`}
                     >
                       <span className="text-sm font-medium">
                         {example.name}
                       </span>
-                      <span className="text-xs text-[#94A3B8]">
+                      <span className="text-xs text-[#7C8A9E]">
                         {example.description}
                       </span>
                     </button>
@@ -315,26 +315,26 @@ export function InteractivePlayground({
 
       <div className="grid lg:grid-cols-2">
         {/* Code Editor */}
-        <div className="border-b border-[#E5E7EB] lg:border-b-0 lg:border-r">
-          <div className="flex items-center justify-between border-b border-[#E5E7EB] px-4 py-2">
-            <span className="text-xs font-medium text-[#94A3B8]">
+        <div className="border-b border-[#E2E2D1] lg:border-b-0 lg:border-r">
+          <div className="flex items-center justify-between border-b border-[#E2E2D1] px-4 py-2">
+            <span className="text-xs font-medium text-[#7C8A9E]">
               component.tsx
             </span>
             <div className="flex gap-2">
               <button
                 onClick={handleReset}
-                className="rounded p-1.5 text-[#94A3B8] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0F1E]"
+                className="rounded p-1.5 text-[#7C8A9E] transition-colors hover:bg-[#F5F5F5] hover:text-[#0C1829]"
                 title="Reset"
               >
                 <RotateCcw className="h-4 w-4" />
               </button>
               <button
                 onClick={handleCopy}
-                className="rounded p-1.5 text-[#94A3B8] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0F1E]"
+                className="rounded p-1.5 text-[#7C8A9E] transition-colors hover:bg-[#F5F5F5] hover:text-[#0C1829]"
                 title="Copy"
               >
                 {copied ? (
-                  <Check className="h-4 w-4 text-[#059669]" />
+                  <Check className="h-4 w-4 text-[#155939]" />
                 ) : (
                   <Copy className="h-4 w-4" />
                 )}
@@ -360,7 +360,7 @@ export function InteractivePlayground({
                       className="table-row"
                     >
                       <span
-                        className="table-cell select-none pr-4 text-right text-[#94A3B8]/60 text-xs"
+                        className="table-cell select-none pr-4 text-right text-[#7C8A9E]/60 text-xs"
                         style={{ width: "2rem" }}
                       >
                         {i + 1}
@@ -389,15 +389,15 @@ export function InteractivePlayground({
             />
           </div>
           {/* Action Bar */}
-          <div className="flex items-center justify-between border-t border-[#E5E7EB] px-4 py-3">
-            <div className="flex items-center gap-2 text-xs text-[#94A3B8]">
+          <div className="flex items-center justify-between border-t border-[#E2E2D1] px-4 py-3">
+            <div className="flex items-center gap-2 text-xs text-[#7C8A9E]">
               <Zap className="h-3 w-3 text-yellow-400" />
               <span>Devnet Mode</span>
             </div>
             <button
               onClick={handleRun}
               disabled={isRunning}
-              className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#0A0F1E] shadow-lg shadow-[#0A0F1E]/5 transition-all hover:shadow-[#0A0F1E]/5 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#0C1829] shadow-lg shadow-[#0C1829]/5 transition-all hover:shadow-[#0C1829]/5 disabled:opacity-50"
             >
               {isRunning ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -411,15 +411,15 @@ export function InteractivePlayground({
 
         {/* Preview Panel */}
         <div className="bg-[#08080c]">
-          <div className="flex items-center justify-between border-b border-[#E5E7EB] px-4 py-2">
-            <span className="text-xs font-medium text-[#94A3B8]">Preview</span>
+          <div className="flex items-center justify-between border-b border-[#E2E2D1] px-4 py-2">
+            <span className="text-xs font-medium text-[#7C8A9E]">Preview</span>
             {showPreview && (
               <button
                 onClick={() => {
                   setShowPreview(false);
                   setCheckoutStep("idle");
                 }}
-                className="rounded p-1 text-[#94A3B8] transition-colors hover:bg-[#F5F5F5] hover:text-[#0A0F1E]"
+                className="rounded p-1 text-[#7C8A9E] transition-colors hover:bg-[#F5F5F5] hover:text-[#0C1829]"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -433,7 +433,7 @@ export function InteractivePlayground({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="text-center text-[#94A3B8]"
+                  className="text-center text-[#7C8A9E]"
                 >
                   <Play className="mx-auto mb-3 h-8 w-8" />
                   <p className="text-sm">Click "Try It" to see the preview</p>
@@ -462,12 +462,12 @@ export function InteractivePlayground({
       </div>
 
       {/* Footer */}
-      <div className="border-t border-[#E5E7EB] bg-white px-4 py-3">
-        <div className="flex items-center justify-between text-xs text-[#94A3B8]">
+      <div className="border-t border-[#E2E2D1] bg-white px-4 py-3">
+        <div className="flex items-center justify-between text-xs text-[#7C8A9E]">
           <span>💡 Edit the code above and click "Try It" to see changes</span>
           <a
             href="/demo"
-            className="text-[#059669] transition-colors hover:text-[#059669]/80"
+            className="text-[#155939] transition-colors hover:text-[#155939]/80"
           >
             Try with real payments →
           </a>
@@ -499,7 +499,7 @@ function CheckoutSimulator({
     return (
       <button
         onClick={onStartCheckout}
-        className="w-full rounded-xl bg-white py-4 text-lg font-semibold text-[#0A0F1E] shadow-lg shadow-[#0A0F1E]/5 transition-all hover:shadow-[#0A0F1E]/5"
+        className="w-full rounded-xl bg-white py-4 text-lg font-semibold text-[#0C1829] shadow-lg shadow-[#0C1829]/5 transition-all hover:shadow-[#0C1829]/5"
       >
         Pay ${amount.toFixed(2)}
       </button>
@@ -511,24 +511,24 @@ function CheckoutSimulator({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full space-y-4 rounded-xl border border-[#E5E7EB] bg-[#12121a] p-4"
+        className="w-full space-y-4 rounded-xl border border-[#E2E2D1] bg-[#12121a] p-4"
       >
         <div className="text-center">
-          <p className="text-lg font-semibold text-[#0A0F1E]">
+          <p className="text-lg font-semibold text-[#0C1829]">
             ${amount.toFixed(2)}
           </p>
-          <p className="text-sm text-[#94A3B8]">{memo}</p>
+          <p className="text-sm text-[#7C8A9E]">{memo}</p>
         </div>
         <input
           type="email"
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg border border-[#E5E7EB] bg-[#F5F5F5] px-4 py-3 text-[#0A0F1E] placeholder:text-[#94A3B8] focus:border-purple-500/50 focus:outline-none"
+          className="w-full rounded-lg border border-[#E2E2D1] bg-[#F5F5F5] px-4 py-3 text-[#0C1829] placeholder:text-[#7C8A9E] focus:border-purple-500/50 focus:outline-none"
         />
         <button
           onClick={onEnterEmail}
-          className="w-full rounded-lg bg-purple-500 py-3 font-semibold text-white transition-colors hover:bg-[#10B981]"
+          className="w-full rounded-lg bg-purple-500 py-3 font-semibold text-white transition-colors hover:bg-[#1B6B4A]"
         >
           Continue
         </button>
@@ -541,25 +541,25 @@ function CheckoutSimulator({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full space-y-3 rounded-xl border border-[#E5E7EB] bg-[#12121a] p-4"
+        className="w-full space-y-3 rounded-xl border border-[#E2E2D1] bg-[#12121a] p-4"
       >
         <div className="text-center">
-          <p className="text-lg font-semibold text-[#0A0F1E]">
+          <p className="text-lg font-semibold text-[#0C1829]">
             ${amount.toFixed(2)}
           </p>
-          <p className="text-sm text-[#94A3B8]">{memo}</p>
+          <p className="text-sm text-[#7C8A9E]">{memo}</p>
         </div>
         <div className="space-y-2">
           <button
             onClick={onConfirmPayment}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#512da8] py-3 font-semibold text-[#0A0F1E] transition-colors hover:bg-[#5e35b1]"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#512da8] py-3 font-semibold text-[#0C1829] transition-colors hover:bg-[#5e35b1]"
           >
             <Wallet className="h-5 w-5" />
             Pay with Wallet
           </button>
           <button
             onClick={onConfirmPayment}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#E5E7EB] py-3 font-semibold text-[#0A0F1E] transition-colors hover:bg-[#F5F5F5]"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#E2E2D1] py-3 font-semibold text-[#0C1829] transition-colors hover:bg-[#F5F5F5]"
           >
             <CreditCard className="h-5 w-5" />
             Pay with Card
@@ -574,12 +574,12 @@ function CheckoutSimulator({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full space-y-4 rounded-xl border border-[#E5E7EB] bg-[#12121a] p-6 text-center"
+        className="w-full space-y-4 rounded-xl border border-[#E2E2D1] bg-[#12121a] p-6 text-center"
       >
-        <Loader2 className="mx-auto h-10 w-10 animate-spin text-[#10B981]" />
+        <Loader2 className="mx-auto h-10 w-10 animate-spin text-[#1B6B4A]" />
         <div>
-          <p className="font-semibold text-[#0A0F1E]">Processing Payment</p>
-          <p className="text-sm text-[#94A3B8]">Confirming on Solana...</p>
+          <p className="font-semibold text-[#0C1829]">Processing Payment</p>
+          <p className="text-sm text-[#7C8A9E]">Confirming on Solana...</p>
         </div>
       </motion.div>
     );
@@ -590,22 +590,22 @@ function CheckoutSimulator({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full space-y-4 rounded-xl border border-[#10B981]/20 bg-[#10B981]/5 p-6 text-center"
+        className="w-full space-y-4 rounded-xl border border-[#1B6B4A]/20 bg-[#1B6B4A]/5 p-6 text-center"
       >
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", delay: 0.2 }}
         >
-          <CheckCircle2 className="mx-auto h-12 w-12 text-[#10B981]" />
+          <CheckCircle2 className="mx-auto h-12 w-12 text-[#1B6B4A]" />
         </motion.div>
         <div>
-          <p className="font-semibold text-[#0A0F1E]">Payment Successful!</p>
-          <p className="text-sm text-[#94A3B8]">
+          <p className="font-semibold text-[#0C1829]">Payment Successful!</p>
+          <p className="text-sm text-[#7C8A9E]">
             ${amount.toFixed(2)} • {memo}
           </p>
         </div>
-        <div className="rounded-lg bg-white/20 px-3 py-2 font-mono text-xs text-[#059669]">
+        <div className="rounded-lg bg-white/20 px-3 py-2 font-mono text-xs text-[#155939]">
           tx: 5Kj2...x8mN
         </div>
       </motion.div>

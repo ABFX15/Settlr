@@ -59,7 +59,7 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#E5E7EB] bg-white">
+    <footer className="border-t border-[#E2E2D1] bg-[#FDFBF7]">
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-6">
           {/* Brand Column */}
@@ -67,7 +67,7 @@ export function Footer() {
             <Link href="/" className="inline-block">
               <SettlrLogo size="sm" variant="dark" />
             </Link>
-            <p className="mt-4 max-w-xs text-sm text-[#94A3B8]">
+            <p className="mt-4 max-w-xs text-sm text-[#7C8A9E]">
               The settlement layer for restricted commerce. Non-custodial B2B
               stablecoin rails for industries abandoned by traditional finance.
               Built on Solana.
@@ -79,7 +79,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg p-2 text-[#94A3B8] transition-colors hover:bg-[#FAFAFA] hover:text-[#0A0F1E]"
+                  className="rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F7F6F1] hover:text-[#0C1829]"
                   aria-label={social.label}
                 >
                   <social.icon className="h-5 w-5" />
@@ -90,7 +90,7 @@ export function Footer() {
 
           {/* Product Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0A0F1E]">
+            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
               Product
             </h4>
             <ul className="space-y-3">
@@ -98,7 +98,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
+                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
                   >
                     {link.label}
                   </Link>
@@ -109,7 +109,7 @@ export function Footer() {
 
           {/* Industries Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0A0F1E]">
+            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
               Industries
             </h4>
             <ul className="space-y-3">
@@ -117,7 +117,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
+                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
                   >
                     {link.label}
                   </Link>
@@ -125,7 +125,7 @@ export function Footer() {
               ))}
             </ul>
 
-            <h4 className="mb-4 mt-8 text-sm font-semibold text-[#0A0F1E]">
+            <h4 className="mb-4 mt-8 text-sm font-semibold text-[#0C1829]">
               Compliance
             </h4>
             <ul className="space-y-3">
@@ -133,7 +133,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
+                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
                   >
                     {link.label}
                   </Link>
@@ -144,7 +144,7 @@ export function Footer() {
 
           {/* Developer Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0A0F1E]">
+            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
               Developers
             </h4>
             <ul className="space-y-3">
@@ -155,14 +155,14 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
+                      className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
                     >
                       {link.label}
                     </a>
                   ) : (
                     <Link
                       href={link.href}
-                      className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
+                      className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
                     >
                       {link.label}
                     </Link>
@@ -174,7 +174,7 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0A0F1E]">
+            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
               Company
             </h4>
             <ul className="space-y-3">
@@ -182,7 +182,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[#94A3B8] transition-colors hover:text-[#0A0F1E]"
+                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
                   >
                     {link.label}
                   </Link>
@@ -193,13 +193,13 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#E5E7EB] pt-8 md:flex-row">
-          <p className="text-sm text-[#94A3B8]">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#E2E2D1] pt-8 md:flex-row">
+          <p className="text-sm text-[#7C8A9E]">
             © {new Date().getFullYear()} Settlr. Built on Solana.
           </p>
-          <div className="flex items-center gap-2 text-sm text-[#94A3B8]">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#10B981]/30 bg-[#10B981]/10 px-2 py-1 text-xs text-[#059669]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+          <div className="flex items-center gap-2 text-sm text-[#7C8A9E]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#1B6B4A]/30 bg-[#1B6B4A]/10 px-2 py-1 text-xs text-[#155939]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#1B6B4A]" />
               All systems operational
             </span>
           </div>
