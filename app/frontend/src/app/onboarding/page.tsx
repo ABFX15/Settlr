@@ -118,7 +118,13 @@ export default function OnboardingPage() {
         await buildCreateVaultTransaction(creatorPubkey, connection);
 
       // Sign with the merchant's wallet
-      const signedTx = await signTransaction(transaction);
+      // Serialize + deserialize to ensure all internal buffers are Uint8Array
+      // (Phantom rejects Buffer objects that don't pass instanceof Uint8Array)
+      const serialized = transaction.serialize({
+        requireAllSignatures: false,
+      });
+      const normalizedTx = Transaction.from(serialized);
+      const signedTx = await signTransaction(normalizedTx);
 
       // Send the signed transaction
       const signature = await connection.sendRawTransaction(
