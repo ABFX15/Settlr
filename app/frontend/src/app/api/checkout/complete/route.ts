@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkoutSessions, CheckoutSession } from "../sessions/route";
+import { checkoutSessions } from "../store";
 import {
     getCheckoutSession,
     updateCheckoutSession,
     createPayment,
     Payment,
+    CheckoutSession,
 } from "@/lib/db";
 import { screenPaymentParties } from "@/lib/range";
 import crypto from "crypto";

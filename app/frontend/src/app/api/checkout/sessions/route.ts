@@ -6,14 +6,7 @@ import {
     updateCheckoutSession,
     CheckoutSession,
 } from "@/lib/db";
-
-// Re-export CheckoutSession type for other routes
-export type { CheckoutSession };
-
-// Legacy in-memory store for backwards compatibility during migration
-// TODO: Remove after full migration to Supabase
-const checkoutSessions = new Map<string, CheckoutSession>();
-export { checkoutSessions };
+import { checkoutSessions } from "../store";
 
 // Generate a unique checkout session ID
 function generateSessionId(): string {
