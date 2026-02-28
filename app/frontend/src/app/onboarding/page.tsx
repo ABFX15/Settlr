@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePrivy } from "@privy-io/react-auth";
+import { useSignTransaction } from "@privy-io/react-auth/solana";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import { buildCreateVaultTransaction, shortenAddress } from "@/lib/squads";
@@ -60,6 +61,7 @@ interface OnboardingState {
 export default function OnboardingPage() {
   const { authenticated, login, ready } = usePrivy();
   const { publicKey, connected, wallet } = useActiveWallet();
+  const { signTransaction: privySignTransaction } = useSignTransaction();
 
   const [state, setState] = useState<OnboardingState>({
     step: 1,
@@ -117,32 +119,16 @@ export default function OnboardingPage() {
       const { multisigPda, vaultPda, transaction } =
         await buildCreateVaultTransaction(creatorPubkey, connection);
 
-      // Use signAndSendTransaction to avoid Phantom's Uint8Array/Buffer
-      // incompatibility. Phantom handles the encoding internally this way.
-      const provider = await (wallet as any).getProvider?.();
-      if (!provider) throw new Error("Wallet provider not available");
-
-      let signature: string;
-
-      if (provider.signAndSendTransaction) {
-        // Phantom / Solflare — preferred path
-        const result = await provider.signAndSendTransaction(transaction);
-        signature = result.signature || result;
-      } else if (provider.request) {
-        // Privy embedded wallet via JSON-RPC style
-        const serializedMsg = transaction.serializeMessage();
-        // Convert to proper Uint8Array to avoid Buffer issues
-        const messageBytes = new Uint8Array(serializedMsg);
-        const result = await provider.request({
-          method: "signAndSendTransaction",
-          params: { message: messageBytes },
-        });
-        signature = result.signature || result;
-      } else {
-        throw new Error(
-          "Wallet does not support signAndSendTransaction. Please use Phantom or Solflare.",
-        );
-      }
+      // Serialize the partially-signed transaction (createKey already signed)
+      // and use Privy's useSignTransaction hook which works with all wallet types
+      const txBytes = new Uint8Array(
+        transaction.serialize({ requireAllSignatures: false }),
+      );
+      const { signedTransaction } = await privySignTransaction({
+        transaction: txBytes,
+        wallet: wallet as any,
+      });
+      const signature = await connection.sendRawTransaction(signedTransaction);
 
       // Confirm
       await connection.confirmTransaction(

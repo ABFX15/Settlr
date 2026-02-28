@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useSignTransaction } from "@privy-io/react-auth/solana";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddress, getAccount } from "@solana/spl-token";
 import {
@@ -41,6 +42,7 @@ const RPC_ENDPOINT =
  */
 export function VaultCard() {
   const { solanaWallet, publicKey, connected, wallet } = useActiveWallet();
+  const { signTransaction: privySignTx } = useSignTransaction();
 
   const [copied, setCopied] = useState<string | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
@@ -181,10 +183,18 @@ export function VaultCard() {
         new PublicKey(newSignerAddress),
         newThreshold,
       );
-      const provider = await (solanaWallet as any)?.getProvider?.();
-      if (!provider) throw new Error("Wallet provider not available");
+      // Use Privy's signTransaction hook + manual send instead
       for (const tx of txs) {
-        const { signature } = await provider.signAndSendTransaction(tx);
+        const txBytes = new Uint8Array(
+          tx.serialize({ requireAllSignatures: false }),
+        );
+        const { signedTransaction } = await privySignTx({
+          transaction: txBytes,
+          wallet: solanaWallet as any,
+        });
+        const signature = await connection.sendRawTransaction(
+          signedTransaction,
+        );
         console.log("Add-signer tx:", signature);
       }
       setShowAddSigner(false);

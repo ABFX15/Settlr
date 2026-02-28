@@ -80,10 +80,22 @@ export async function buildCreateVaultTransaction(
         programId: SQUADS_PROGRAM_ID,
     });
 
+    // Fetch the Squads program config to get the protocol treasury address.
+    // The `treasury` account in multisigCreateV2 is the Squads protocol
+    // treasury (where creation fees go), NOT our merchant vault PDA.
+    const [programConfigPda] = multisig.getProgramConfigPda({
+        programId: SQUADS_PROGRAM_ID,
+    });
+    const programConfig =
+        await multisig.accounts.ProgramConfig.fromAccountAddress(
+            connection,
+            programConfigPda,
+        );
+
     // Build the multisig creation instruction
     // 1-of-1: merchant is sole member with all permissions
     const ix: TransactionInstruction = multisig.instructions.multisigCreateV2({
-        treasury: vaultPda,
+        treasury: programConfig.treasury,
         creator,
         multisigPda,
         configAuthority: null, // No external config authority — members govern themselves
