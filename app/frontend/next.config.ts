@@ -5,12 +5,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: ".",
     resolveAlias: {
-      // Prevent Turbopack from bundling Node-only logging packages
-      // (pulled in via @walletconnect/logger → pino → thread-stream)
-      pino: { browser: "./browser.js" },
-      "pino-pretty": false,
-      "thread-stream": false,
-      "why-is-node-running": false,
+      // Prevent Turbopack from bundling Node-only logging packages.
+      // The chain is: @privy-io/react-auth/solana → @walletconnect/logger
+      //   → pino → thread-stream (has test files with intentional syntax errors).
+      // Turbopack doesn't support `false` as a value, so we alias to stub files.
+      pino: "./src/lib/stubs/pino.js",
+      "pino-pretty": "./src/lib/stubs/empty.js",
+      "thread-stream": "./src/lib/stubs/empty.js",
+      "why-is-node-running": "./src/lib/stubs/empty.js",
     },
   },
   // Image optimization
