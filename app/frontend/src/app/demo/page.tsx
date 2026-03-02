@@ -20,8 +20,17 @@ import {
   Zap,
   Receipt,
   Loader2,
+  Wallet,
 } from "lucide-react";
 import { useEffect, useState, useCallback, useMemo } from "react";
+import { usePrivy } from "@privy-io/react-auth";
+import { useWallets, useSignTransaction } from "@privy-io/react-auth/solana";
+import {
+  Connection,
+  PublicKey,
+  Transaction,
+  TransactionInstruction,
+} from "@solana/web3.js";
 
 /* --- spring config --- */
 const spring = { type: "spring" as const, stiffness: 80, damping: 18 };
@@ -106,14 +115,12 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
           >
             PENDING
           </span>
-          <span className="text-xs text-[#7C8A9E]">
-            Est. 3-5 business days
-          </span>
+          <span className="text-xs text-[#7C8A9E]">Est. 3-5 business days</span>
         </div>
         <div className="mt-4 rounded-lg bg-[#FFFBEB] p-3">
           <p className="text-xs text-[#92400E]">
-            <strong>{"\u26A0"} Notice:</strong> Subject to manual bank review. High-risk
-            MCC codes may trigger additional holds or account freeze.
+            <strong>{"\u26A0"} Notice:</strong> Subject to manual bank review.
+            High-risk MCC codes may trigger additional holds or account freeze.
           </p>
         </div>
       </div>
@@ -204,8 +211,8 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
                 className="mt-4 rounded-lg bg-[#1B6B4A]/[0.08] p-3"
               >
                 <p className="text-xs text-[#155939]">
-                  <strong>{"\u2713"} Final.</strong> Non-custodial settlement complete.
-                  Funds cannot be frozen, reversed, or clawed back.
+                  <strong>{"\u2713"} Final.</strong> Non-custodial settlement
+                  complete. Funds cannot be frozen, reversed, or clawed back.
                 </p>
               </motion.div>
             )}
@@ -233,8 +240,8 @@ function Stepper({ current }: { current: number }) {
                   background: isDone
                     ? "#1B6B4A"
                     : isActive
-                      ? "#0C1829"
-                      : "#F5F5F5",
+                    ? "#0C1829"
+                    : "#F5F5F5",
                   borderColor: isDone || isActive ? "transparent" : "#E2E2D1",
                 }}
                 className="flex h-9 w-9 items-center justify-center rounded-full border"
@@ -243,7 +250,9 @@ function Stepper({ current }: { current: number }) {
                   <Check className="h-4 w-4 text-white" />
                 ) : (
                   <Icon
-                    className={`h-4 w-4 ${isActive ? "text-white" : "text-[#7C8A9E]"}`}
+                    className={`h-4 w-4 ${
+                      isActive ? "text-white" : "text-[#7C8A9E]"
+                    }`}
                   />
                 )}
               </motion.div>
@@ -252,8 +261,8 @@ function Stepper({ current }: { current: number }) {
                   isActive
                     ? "text-[#0C1829]"
                     : isDone
-                      ? "text-[#155939]"
-                      : "text-[#7C8A9E]"
+                    ? "text-[#155939]"
+                    : "text-[#7C8A9E]"
                 }`}
               >
                 {step.label}
@@ -306,7 +315,9 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`w-full rounded-lg border border-[#E2E2D1] bg-white px-3 py-2.5 text-sm text-[#0C1829] placeholder:text-[#7C8A9E]/50 transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20 ${prefix ? "pl-7" : ""}`}
+          className={`w-full rounded-lg border border-[#E2E2D1] bg-white px-3 py-2.5 text-sm text-[#0C1829] placeholder:text-[#7C8A9E]/50 transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20 ${
+            prefix ? "pl-7" : ""
+          }`}
         />
       </div>
     </div>
@@ -383,7 +394,7 @@ function StepBusiness({
   const update = useCallback(
     (key: keyof DemoForm) => (v: string) =>
       setForm((f) => ({ ...f, [key]: v })),
-    [setForm]
+    [setForm],
   );
 
   return (
@@ -411,8 +422,8 @@ function StepBusiness({
       </h2>
       <p className="mb-8 max-w-xl text-[#7C8A9E]">
         Fill in your business details to generate a compliant,
-        cryptographically-secured invoice. This is a demo {"\u2014"} no real data is
-        stored.
+        cryptographically-secured invoice. This is a demo {"\u2014"} no real
+        data is stored.
       </p>
 
       <div
@@ -526,8 +537,10 @@ function StepInvoice({ form }: { form: DemoForm }) {
   const fee = amount * 0.01;
   const invId = useMemo(
     () =>
-      `INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000 + 1000))}`,
-    []
+      `INV-${new Date().getFullYear()}-${String(
+        Math.floor(Math.random() * 9000 + 1000),
+      )}`,
+    [],
   );
 
   return (
@@ -698,8 +711,7 @@ function StepInvoice({ form }: { form: DemoForm }) {
               >
                 ${Math.floor(amount).toLocaleString("en-US")}
                 <span className="text-xl text-[#7C8A9E]">
-                  .
-                  {String(((amount % 1) * 100).toFixed(0)).padStart(2, "0")}
+                  .{String(((amount % 1) * 100).toFixed(0)).padStart(2, "0")}
                 </span>
               </p>
             </div>
@@ -751,12 +763,20 @@ function StepSettlement({ onSettled }: { onSettled: () => void }) {
 /* =================================================================
    STEP 4 - Receipt
    ================================================================= */
-function StepReceipt({ form }: { form: DemoForm }) {
+function StepReceipt({
+  form,
+  realSignature,
+}: {
+  form: DemoForm;
+  realSignature?: string | null;
+}) {
   const amount = parseFloat(form.amount) || 45000;
   const fee = amount * 0.01;
   const [copied, setCopied] = useState(false);
 
+  const isReal = !!realSignature;
   const fullTxId =
+    realSignature ||
     "5KQrVxH9Bc3nGfKpM2wLj7dR4sTv6YhN8aE1uXqW0cFbJmA3iDpZoUy9tXgT8mZ";
 
   const handleCopy = () => {
@@ -818,7 +838,23 @@ function StepReceipt({ form }: { form: DemoForm }) {
               #INV-2026-0891
             </h3>
           </div>
-          <VerifiedSeal />
+          <div className="flex flex-col items-end gap-2">
+            <VerifiedSeal />
+            {isReal ? (
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-[#155939]/20 bg-[#155939]/[0.08] px-3 py-1">
+                <Fingerprint className="h-3 w-3 text-[#155939]" />
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-[#155939]">
+                  Signed with real wallet
+                </span>
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-[#7C8A9E]/20 bg-[#7C8A9E]/[0.06] px-3 py-1">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-[#7C8A9E]">
+                  Simulated
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Stats grid */}
@@ -891,10 +927,16 @@ function StepReceipt({ form }: { form: DemoForm }) {
               On-Chain Transaction
             </span>
             <a
-              href="#"
+              href={
+                isReal
+                  ? `https://solscan.io/tx/${fullTxId}?cluster=devnet`
+                  : "#"
+              }
+              target={isReal ? "_blank" : undefined}
+              rel={isReal ? "noopener noreferrer" : undefined}
               className="inline-flex items-center gap-1 text-xs font-medium text-[#155939] hover:underline"
             >
-              View on Solscan
+              {isReal ? "View on Solscan (Devnet)" : "View on Solscan"}
               <ExternalLink className="h-3 w-3" />
             </a>
           </div>
@@ -984,10 +1026,29 @@ function StepReceipt({ form }: { form: DemoForm }) {
 /* =================================================================
    MAIN PAGE
    ================================================================= */
+/* Solana Memo Program */
+const MEMO_PROGRAM_ID = new PublicKey(
+  "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+);
+
 export default function DemoPage() {
   const [step, setStep] = useState(1);
   const [settlementDone, setSettlementDone] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [realSignature, setRealSignature] = useState<string | null>(null);
+
+  /* ── Privy hooks ── */
+  const { authenticated, login } = usePrivy();
+  const { wallets } = useWallets();
+  const { signTransaction } = useSignTransaction();
+
+  const activeWallet = useMemo(() => {
+    if (!wallets?.length) return undefined;
+    // Prefer external wallet, fall back to embedded
+    return (
+      wallets.find((w) => (w as any).walletClientType !== "privy") ?? wallets[0]
+    );
+  }, [wallets]);
 
   const [form, setForm] = useState<DemoForm>({
     businessName: "",
@@ -1005,19 +1066,86 @@ export default function DemoPage() {
     return true;
   }, [step, settlementDone]);
 
-  const handleNext = useCallback(() => {
+  /* ── Sign (real) or simulate ── */
+  const handleNext = useCallback(async () => {
     if (step >= 4) return;
+
     if (step === 2) {
-      // Simulate signing delay
       setIsProcessing(true);
+
+      // If the user has a Privy wallet, build & sign a real Memo tx on devnet
+      if (authenticated && activeWallet) {
+        try {
+          const connection = new Connection(
+            "https://api.devnet.solana.com",
+            "confirmed",
+          );
+          const { blockhash } = await connection.getLatestBlockhash();
+          const userPubkey = new PublicKey(activeWallet.address);
+
+          const memo = `settlr:demo:${form.businessName || "Demo"}:$${
+            form.amount || "45000"
+          }`;
+          const tx = new Transaction();
+          tx.add(
+            new TransactionInstruction({
+              keys: [{ pubkey: userPubkey, isSigner: true, isWritable: false }],
+              programId: MEMO_PROGRAM_ID,
+              data: Buffer.from(memo),
+            }),
+          );
+          tx.recentBlockhash = blockhash;
+          tx.feePayer = userPubkey;
+
+          const txBytes = new Uint8Array(
+            tx.serialize({
+              requireAllSignatures: false,
+              verifySignatures: false,
+            }),
+          );
+
+          const { signedTransaction } = await signTransaction({
+            transaction: txBytes,
+            wallet: activeWallet,
+            chain: "solana:devnet",
+          });
+
+          // Extract the signature from the signed tx
+          const signedTx = Transaction.from(signedTransaction);
+          if (signedTx.signature) {
+            const bs58 = await import("bs58");
+            setRealSignature(bs58.default.encode(signedTx.signature));
+          }
+
+          setIsProcessing(false);
+          setStep((s) => s + 1);
+          return;
+        } catch (err) {
+          console.warn(
+            "[Demo] Wallet signing cancelled or failed, falling back to simulation:",
+            err,
+          );
+          // Fall through to simulation
+        }
+      }
+
+      // Simulation fallback (anonymous or signing failed)
       setTimeout(() => {
         setIsProcessing(false);
         setStep((s) => s + 1);
       }, 800);
       return;
     }
+
     setStep((s) => s + 1);
-  }, [step]);
+  }, [
+    step,
+    authenticated,
+    activeWallet,
+    signTransaction,
+    form.businessName,
+    form.amount,
+  ]);
 
   const handleBack = useCallback(() => {
     if (step <= 1) return;
@@ -1087,13 +1215,61 @@ export default function DemoPage() {
           <div className="mx-auto max-w-4xl">
             <AnimatePresence mode="wait">
               {step === 1 && <StepBusiness form={form} setForm={setForm} />}
-              {step === 2 && <StepInvoice form={form} />}
-              {step === 3 && (
-                <StepSettlement
-                  onSettled={() => setSettlementDone(true)}
-                />
+              {step === 2 && (
+                <>
+                  <StepInvoice form={form} />
+
+                  {/* Signing-mode indicator */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.25, ...spring }}
+                    className="mt-5 rounded-xl border border-[#E2E2D1] bg-white/80 p-4"
+                  >
+                    {authenticated && activeWallet ? (
+                      <div className="flex items-center gap-3">
+                        <Wallet className="h-5 w-5 shrink-0 text-[#155939]" />
+                        <div>
+                          <p className="text-sm font-semibold text-[#0C1829]">
+                            Live Signing Enabled
+                          </p>
+                          <p className="text-xs text-[#7C8A9E]">
+                            Your wallet ({activeWallet.address.slice(0, 4)}...
+                            {activeWallet.address.slice(-4)}) will sign a real
+                            Solana devnet transaction
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Fingerprint className="h-5 w-5 shrink-0 text-[#7C8A9E]" />
+                          <div>
+                            <p className="text-sm font-semibold text-[#0C1829]">
+                              Simulation Mode
+                            </p>
+                            <p className="text-xs text-[#7C8A9E]">
+                              Log in to sign with a real embedded wallet
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => login()}
+                          className="rounded-lg border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.06] px-4 py-2 text-xs font-semibold text-[#155939] transition-colors hover:bg-[#1B6B4A]/[0.12]"
+                        >
+                          Log in
+                        </button>
+                      </div>
+                    )}
+                  </motion.div>
+                </>
               )}
-              {step === 4 && <StepReceipt form={form} />}
+              {step === 3 && (
+                <StepSettlement onSettled={() => setSettlementDone(true)} />
+              )}
+              {step === 4 && (
+                <StepReceipt form={form} realSignature={realSignature} />
+              )}
             </AnimatePresence>
           </div>
         </section>
@@ -1118,8 +1294,8 @@ export default function DemoPage() {
                     s.id === step
                       ? "w-6 bg-[#1B6B4A]"
                       : s.id < step
-                        ? "w-1.5 bg-[#1B6B4A]/40"
-                        : "w-1.5 bg-[#E2E2D1]"
+                      ? "w-1.5 bg-[#1B6B4A]/40"
+                      : "w-1.5 bg-[#E2E2D1]"
                   }`}
                 />
               ))}
