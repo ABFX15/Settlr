@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/compare",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr Payout Comparison",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "Settlr vs PayPal vs Wire — Payout Comparison",
     description:
       "1% flat vs 5%+ PayPal vs $25+ wire. Compare the best way to pay globally.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

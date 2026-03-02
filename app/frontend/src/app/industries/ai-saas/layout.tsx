@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Pay AI trainers, data annotators, and SaaS affiliates worldwide. 1% flat, instant settlement.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr — AI & SaaS Payouts",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "AI & SaaS Payouts — Pay Global Contributors",
     description:
       "Pay AI trainers and SaaS affiliates worldwide. 1% flat, instant USDC settlement.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

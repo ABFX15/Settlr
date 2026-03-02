@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Add instant USDC payouts to your Shopify store. 1% flat, 180+ countries.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr + Shopify",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Shopify Payouts — Pay Vendors via Settlr",
     description:
       "Add instant USDC payouts to your Shopify store. 1% flat, 180+ countries.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

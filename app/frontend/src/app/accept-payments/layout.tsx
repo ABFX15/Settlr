@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Accept USDC payments with a simple checkout link. No chargebacks, instant settlement, 1% flat.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr — Accept Payments",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Accept Payments — USDC Checkout for Any Platform",
     description:
       "Accept USDC payments with checkout links. No chargebacks, instant settlement.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

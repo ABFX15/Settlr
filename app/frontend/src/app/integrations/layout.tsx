@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Connect Settlr with Shopify, WooCommerce, Zapier, Slack, Bubble, and more.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr — Integrations",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Integrations — Connect Settlr to Your Stack",
     description:
       "Connect Settlr with Shopify, WooCommerce, Zapier, Slack, Bubble, and more.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

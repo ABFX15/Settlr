@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Payout infrastructure for marketplaces. Pay sellers in 180+ countries, 1% flat, instant.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr — E-Commerce Payouts",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "E-Commerce Payouts — Pay Sellers Worldwide",
     description:
       "Pay marketplace sellers in 180+ countries. 1% flat, instant USDC settlement.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

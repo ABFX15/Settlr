@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Get real-time payout notifications in Slack. Know when payments land.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr + Slack",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Slack Notifications — Payout Alerts in Slack",
     description:
       "Real-time payout notifications in Slack. Know when payments land.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

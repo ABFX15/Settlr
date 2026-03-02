@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/demo",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr Live Demo",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Settlr Demo — B2B Settlement Rail",
     description:
       "Non-custodial B2B settlement in under 5 seconds. Try payment links and invoice settlement live.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

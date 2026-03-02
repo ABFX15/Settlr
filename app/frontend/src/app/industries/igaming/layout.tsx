@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Pay players and affiliates instantly with USDC. No chargebacks, 1% flat fee, 180+ countries.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr — iGaming Payouts",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "iGaming Payouts — Instant Crypto Withdrawals",
     description:
       "Pay players and affiliates instantly with USDC. No chargebacks, 1% flat, 180+ countries.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

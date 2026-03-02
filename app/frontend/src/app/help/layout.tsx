@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/help",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr Help Center",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Settlr Help Center",
     description: "FAQs and support for global USDC payouts with Settlr.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

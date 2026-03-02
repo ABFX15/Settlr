@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/industries/freelance",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr Freelance Payouts",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Freelance Marketplace Payouts",
     description:
       "Pay contractors globally by email. 1% flat, instant USDC, no wire fees or bank details.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

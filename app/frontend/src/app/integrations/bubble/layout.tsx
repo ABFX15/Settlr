@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Add instant USDC payouts to your Bubble app. No code required.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Settlr + Bubble",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Bubble Plugin — No-Code USDC Payouts",
     description:
       "Add instant USDC payouts to your Bubble app. No code required.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 

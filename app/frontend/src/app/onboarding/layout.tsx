@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/onboarding",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/opengraph-image?v=2",
         width: 1200,
         height: 630,
         alt: "Get Started with Settlr",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     title: "Get Started with Settlr — Global Payouts in 30 Minutes",
     description:
       "Start sending USDC payouts to anyone, anywhere, with just their email.",
-    images: ["/twitter-image"],
+    images: ["/twitter-image?v=2"],
   },
 };
 
