@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Read the Settlr privacy policy. How we collect, use, store, and protect your data when you use our payout platform.",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr — Privacy Policy",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Settlr Privacy Policy",
     description:
       "How Settlr collects, uses, and protects your data when using our payout infrastructure.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

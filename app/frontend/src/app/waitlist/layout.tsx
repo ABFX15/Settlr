@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/waitlist",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr Enterprise",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Contact Sales | Settlr",
     description:
       "Enterprise payout infrastructure. Custom integrations, volume pricing, dedicated support.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

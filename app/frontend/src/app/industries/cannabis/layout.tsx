@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/industries/cannabis",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr Cannabis Payments",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "Cannabis B2B Payments",
     description:
       "Stop getting debanked. Pay cannabis suppliers instantly in USDC. 1% flat, full audit trail.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

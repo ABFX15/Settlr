@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/pricing",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr Pricing",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     title: "Settlr Pricing — 1% Flat Payout Fees",
     description:
       "1% flat per payout to 180+ countries. No FX fees, no wire fees, no hidden charges.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

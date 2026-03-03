@@ -21,7 +21,7 @@ export const metadata: Metadata = {
       "Guides on global payout infrastructure, stablecoin settlements, and cross-border payments.",
     url: "https://settlr.dev/blog",
     images: [
-      { url: "/opengraph-image?v=2", width: 1200, height: 630, alt: "Settlr Blog" },
+      { url: "/opengraph-image?v=3", width: 1200, height: 630, alt: "Settlr Blog" },
     ],
   },
   twitter: {
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "Settlr Blog — Payout Guides & Insights",
     description:
       "Insights on stablecoin payouts, cross-border payments, and payout infrastructure.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

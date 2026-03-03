@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/industries/data-labeling",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr Data Labeling Payouts",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: "Data Labeling Payouts",
     description:
       "Pay thousands of annotators globally. 1% flat, instant USDC, email-only. Built for annotation platforms.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

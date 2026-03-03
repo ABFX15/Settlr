@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/industries/creators",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr Creator Payouts",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Creator Payouts",
     description:
       "Pay creators globally with just their email. 1% flat, instant USDC, no country restrictions.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

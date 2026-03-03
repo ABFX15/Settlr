@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Send B2B payments to vendors and suppliers in 180+ countries. 1% flat, instant settlement.",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr — B2B Payments",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "B2B Payments — Pay Vendors and Suppliers Globally",
     description:
       "Send B2B payments to vendors in 180+ countries. 1% flat, no wire fees.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

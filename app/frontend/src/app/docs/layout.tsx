@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/docs",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr Documentation",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     title: "Settlr Docs — Payout SDK & API Reference",
     description:
       "Integrate global USDC payouts in under 30 minutes. TypeScript SDK, webhooks, REST API.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

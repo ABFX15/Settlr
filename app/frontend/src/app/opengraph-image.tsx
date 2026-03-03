@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Settlr — Stop Losing Money to Wire Transfers";
+export const alt = "Settlr — Enterprise Payments for the Debanked";
 export const size = {
   width: 1200,
   height: 630,
@@ -109,7 +109,7 @@ export default async function Image() {
                   backgroundColor: "#1B6B4A",
                 }}
               />
-              Payout Infrastructure
+              Non-Custodial Settlement
             </div>
 
             {/* Headline */}
@@ -125,9 +125,9 @@ export default async function Image() {
                 fontFamily: "serif",
               }}
             >
-              <span style={{ color: "#0C1829" }}>Stop losing money</span>
+              <span style={{ color: "#0C1829" }}>Enterprise payments</span>
               <span style={{ color: "#0C1829" }}>
-                to <span style={{ color: "#1B6B4A" }}>wire transfers</span>.
+                for the <span style={{ color: "#1B6B4A" }}>debanked</span>.
               </span>
             </div>
 
@@ -141,8 +141,8 @@ export default async function Image() {
                 maxWidth: 480,
               }}
             >
-              Pay vendors and contractors in 180+ countries with just an email.
-              Sub-second settlement. 1% flat. Zero frozen accounts.
+              Non-custodial USDC settlement for high-risk B2B supply chains. 1%
+              flat fee. Sub-second finality. No bank interference, ever.
             </div>
 
             {/* Stats row */}

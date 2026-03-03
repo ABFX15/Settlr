@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Add instant USDC payouts to WooCommerce. 1% flat, 180+ countries.",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr + WooCommerce",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "WooCommerce Payouts — USDC Plugin for WordPress",
     description:
       "Add instant USDC payouts to WooCommerce. 1% flat, 180+ countries.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

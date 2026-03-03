@@ -80,7 +80,7 @@ export const metadata: Metadata = {
       "Enterprise payments for the debanked. Non-custodial USDC settlement for high-risk B2B supply chains at 1% flat. No bank interference, ever.",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr — Enterprise Payments for the Debanked",
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
     title: "Settlr — Non-Custodial Stablecoin Settlement for High-Risk B2B",
     description:
       "Move capital with 100% certainty. Non-custodial USDC settlement for cannabis and high-risk supply chains. 1% flat, no bank interference.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
     creator: "@settlrp",
   },
   robots: {

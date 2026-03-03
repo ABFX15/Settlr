@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       tags: post.tags,
       images: [
         {
-          url: "/opengraph-image?v=2",
+          url: "/opengraph-image?v=3",
           width: 1200,
           height: 630,
           alt: post.title,
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: ["/twitter-image?v=2"],
+      images: ["/twitter-image?v=3"],
     },
   };
 }

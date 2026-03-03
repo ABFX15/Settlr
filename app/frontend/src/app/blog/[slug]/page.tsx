@@ -3,7 +3,14 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock, Calendar, User, Tag } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Calendar,
+  User,
+  Tag,
+  HelpCircle,
+} from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import { posts } from "../posts";
@@ -95,6 +102,27 @@ export default function BlogPostPage() {
         }}
       />
 
+      {/* FAQ schema for AEO — only if post has FAQs */}
+      {post.faqs && post.faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: post.faqs.map((faq) => ({
+                "@type": "Question",
+                name: faq.question,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: faq.answer,
+                },
+              })),
+            }),
+          }}
+        />
+      )}
+
       <Navbar />
 
       <article className="relative pt-32 pb-24 md:pt-40">
@@ -165,6 +193,33 @@ export default function BlogPostPage() {
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </Reveal>
+
+          {/* FAQ section — visible for AEO + user trust */}
+          {post.faqs && post.faqs.length > 0 && (
+            <Reveal delay={0.3}>
+              <div className="mt-14">
+                <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold">
+                  <HelpCircle className="h-5 w-5 text-[#1B6B4A]" />
+                  Frequently Asked Questions
+                </h2>
+                <div className="space-y-5">
+                  {post.faqs.map((faq, i) => (
+                    <div
+                      key={i}
+                      className="rounded-lg border border-[#E2DFD5] bg-[#FAFAF8] p-5"
+                    >
+                      <h3 className="text-[15px] font-semibold text-[#0C1829]">
+                        {faq.question}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-[#3B4963]">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          )}
 
           {/* Bottom CTA */}
           <Reveal delay={0.1}>

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Send USDC to anyone in 180+ countries using just their email. 1% flat, instant settlement.",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr — Send Payments",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Send Payments — Pay Anyone With Just an Email",
     description:
       "Send USDC to anyone in 180+ countries. 1% flat fee, instant settlement.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Trigger Settlr payouts from any Zapier workflow. Connect 5,000+ apps.",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr + Zapier",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Zapier Integration — Automate Payouts",
     description:
       "Trigger Settlr payouts from any Zapier workflow. Connect 5,000+ apps.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 

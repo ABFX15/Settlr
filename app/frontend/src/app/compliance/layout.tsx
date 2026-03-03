@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     url: "https://settlr.dev/compliance",
     images: [
       {
-        url: "/opengraph-image?v=2",
+        url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
         alt: "Settlr Compliance Whitepaper",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "Settlr Compliance Whitepaper",
     description:
       "GENIUS Act, BSA/AML, KYB — how Settlr keeps restricted commerce compliant on-chain.",
-    images: ["/twitter-image?v=2"],
+    images: ["/twitter-image?v=3"],
   },
 };
 
