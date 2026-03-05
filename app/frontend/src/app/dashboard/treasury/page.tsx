@@ -79,7 +79,7 @@ const TX_TYPE_LABELS: Record<
   },
   payout_reserved: { label: "Reserved", color: "text-yellow-400", icon: Clock },
   payout_released: {
-    label: "Payout Sent",
+    label: "Settlement Sent",
     color: "text-[#1B6B4A]",
     icon: ArrowUpRight,
   },
@@ -220,7 +220,7 @@ export default function TreasuryPage() {
             Treasury
           </h1>
           <p className="text-[#7C8A9E] mb-8">
-            Fund your payout balance and track deposits.
+            Fund your settlement balance and track deposits.
           </p>
 
           <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-8 text-center">
@@ -262,7 +262,7 @@ export default function TreasuryPage() {
             Treasury
           </h1>
           <p className="text-[#7C8A9E] mb-8">
-            Fund your payout balance and track deposits.
+            Fund your settlement balance and track deposits.
           </p>
 
           <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-8 text-center">
@@ -310,7 +310,9 @@ export default function TreasuryPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">Treasury</h1>
-            <p className="text-[#7C8A9E] mt-1">Manage your payout balance</p>
+            <p className="text-[#7C8A9E] mt-1">
+              Manage your settlement balance
+            </p>
           </div>
           <button
             onClick={fetchBalance}
@@ -336,7 +338,9 @@ export default function TreasuryPage() {
             <div className="text-2xl font-semibold text-[#1B6B4A]">
               {formatUSD(balance.available)}
             </div>
-            <div className="text-xs text-[#7C8A9E] mt-1">Ready for payouts</div>
+            <div className="text-xs text-[#7C8A9E] mt-1">
+              Ready for settlements
+            </div>
           </motion.div>
 
           <motion.div
@@ -352,7 +356,9 @@ export default function TreasuryPage() {
             <div className="text-2xl font-semibold text-yellow-400">
               {formatUSD(balance.reserved)}
             </div>
-            <div className="text-xs text-[#7C8A9E] mt-1">In-flight payouts</div>
+            <div className="text-xs text-[#7C8A9E] mt-1">
+              In-flight settlements
+            </div>
           </motion.div>
 
           <motion.div
@@ -506,7 +512,7 @@ export default function TreasuryPage() {
                   <Wallet className="mx-auto h-8 w-8 text-[#7C8A9E]/60 mb-3" />
                   <p className="text-sm text-[#7C8A9E]">No transactions yet</p>
                   <p className="text-xs text-[#7C8A9E]/70 mt-1">
-                    Fund your balance to start sending payouts
+                    Fund your balance to start sending settlements
                   </p>
                 </div>
               ) : (

@@ -1,7 +1,7 @@
 {
   "name": "@settlr/shopify-app",
   "version": "1.0.0",
-  "description": "Settlr Shopify app — USDC payments at checkout",
+  "description": "Settlr Shopify app — non-custodial USDC settlement at checkout",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",

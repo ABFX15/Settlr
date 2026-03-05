@@ -194,9 +194,7 @@ export default function RootLayout({
           </a>
           <a href="/industries/adult-content">Adult Content</a>
           <a href="/industries/igaming">iGaming</a>
-          <a href="/industries/b2b">B2B Payments</a>
-          <a href="/industries/creators">Creator Payouts</a>
-          <a href="/industries/ecommerce">E-Commerce</a>
+          <a href="/industries/b2b">B2B Settlement</a>
           <a href="/blog">Blog</a>
           <a href="/help">Help Center</a>
           <a href="/waitlist">Apply for the Private Rail</a>

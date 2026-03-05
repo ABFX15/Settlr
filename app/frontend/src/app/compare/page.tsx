@@ -236,14 +236,14 @@ export default function ComparePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "Crypto Payment Gateway Comparison — Settlr vs Stripe vs Coinbase Commerce",
+            name: "Stablecoin Settlement Gateway Comparison — Settlr vs Stripe vs Coinbase Commerce",
             description:
-              "Detailed comparison of crypto payment gateways including fees, settlement speed, custody model, developer experience, and global coverage.",
+              "Detailed comparison of stablecoin settlement gateways including fees, settlement speed, custody model, developer experience, and global coverage.",
             url: "https://settlr.dev/compare",
             mainEntity: {
               "@type": "Table",
               about:
-                "Comparison of crypto payment processors: Settlr, Stripe, Coinbase Commerce, NOWPayments, BitPay",
+                "Comparison of stablecoin settlement processors: Settlr, Stripe, Coinbase Commerce, NOWPayments, BitPay",
             },
           }),
         }}
@@ -262,7 +262,7 @@ export default function ComparePage() {
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="text-4xl font-semibold tracking-tight text-[#0C1829] md:text-5xl lg:text-6xl">
-              Best crypto payment gateway{" "}
+              Best stablecoin settlement gateway{" "}
               <span className="text-[#1B6B4A]">for 2026</span>
             </h1>
           </Reveal>
@@ -301,8 +301,8 @@ export default function ComparePage() {
             },
             {
               icon: Globe,
-              title: "180+ countries",
-              text: "vs Stripe's 47 payout countries",
+              title: "No bank needed",
+              text: "vs Stripe's 47 settlement countries",
               color: "#fbbf24",
             },
           ].map((item, i) => (

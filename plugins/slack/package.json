@@ -1,7 +1,7 @@
 {
   "name": "@settlr/slack-bot",
   "version": "1.0.0",
-  "description": "Settlr Slack bot — send USDC payments with /pay slash commands",
+  "description": "Settlr Slack bot — trigger USDC settlements with /settle slash commands",
   "main": "dist/app.js",
   "scripts": {
     "build": "tsc",

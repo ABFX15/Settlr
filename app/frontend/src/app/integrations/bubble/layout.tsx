@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bubble Plugin — No-Code USDC Payouts",
+  title: "Bubble Plugin — No-Code USDC Settlement",
   description:
-    "Add instant USDC payouts to your Bubble app. No code required — drag-and-drop global payment infrastructure.",
+    "Add instant USDC settlement to your Bubble app. No code required — drag-and-drop non-custodial payment infrastructure.",
   alternates: { canonical: "/integrations/bubble" },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://settlr.dev/integrations/bubble",
     siteName: "Settlr",
-    title: "Bubble Plugin — No-Code USDC Payouts",
+    title: "Bubble Plugin — No-Code USDC Settlement",
     description:
-      "Add instant USDC payouts to your Bubble app. No code required.",
+      "Add instant USDC settlement to your Bubble app. No code required.",
     images: [
       {
         url: "/opengraph-image?v=3",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bubble Plugin — No-Code USDC Payouts",
+    title: "Bubble Plugin — No-Code USDC Settlement",
     description:
-      "Add instant USDC payouts to your Bubble app. No code required.",
+      "Add instant USDC settlement to your Bubble app. No code required.",
     images: ["/twitter-image?v=3"],
   },
 };

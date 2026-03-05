@@ -1,34 +1,39 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog — Payouts, Stablecoins & Guides",
+  title: "Blog — Settlement, Stablecoins & Compliance",
   description:
-    "Guides and insights on global payouts, stablecoin settlements, cross-border payments, and building payout systems.",
+    "Guides and insights on non-custodial B2B settlement, stablecoin compliance, high-risk payment processing, and building settlement infrastructure for the debanked.",
   keywords: [
-    "global payout guides",
-    "stablecoin payout blog",
-    "cross-border payment insights",
-    "USDC payout infrastructure",
-    "Solana payout guides",
+    "non-custodial settlement guides",
+    "stablecoin settlement blog",
+    "high-risk payment processing insights",
+    "USDC settlement infrastructure",
+    "cannabis payment processing blog",
   ],
   alternates: { canonical: "/blog" },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Settlr",
-    title: "Settlr Blog — Payout Guides & Insights",
+    title: "Settlr Blog — Settlement Guides & Insights",
     description:
-      "Guides on global payout infrastructure, stablecoin settlements, and cross-border payments.",
+      "Guides on non-custodial settlement infrastructure, stablecoin compliance, and high-risk B2B payments.",
     url: "https://settlr.dev/blog",
     images: [
-      { url: "/opengraph-image?v=3", width: 1200, height: 630, alt: "Settlr Blog" },
+      {
+        url: "/opengraph-image?v=3",
+        width: 1200,
+        height: 630,
+        alt: "Settlr Blog",
+      },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr Blog — Payout Guides & Insights",
+    title: "Settlr Blog — Settlement Guides & Insights",
     description:
-      "Insights on stablecoin payouts, cross-border payments, and payout infrastructure.",
+      "Insights on non-custodial settlement, stablecoin compliance, and high-risk B2B infrastructure.",
     images: ["/twitter-image?v=3"],
   },
 };

@@ -35,7 +35,7 @@ const features = [
   {
     icon: Clock,
     title: "Instant Withdrawals",
-    description: "Non-custodial payouts with no approval delays.",
+    description: "Non-custodial withdrawals with no approval delays.",
     stat: "0",
     statLabel: "waiting time",
   },
@@ -102,7 +102,7 @@ const stats = [
   { value: "$2T+", label: "Crypto Market Cap" },
   { value: "0.001%", label: "Transaction Fees" },
   { value: "400ms", label: "Settlement Time" },
-  { value: "150+", label: "Countries" },
+  { value: "0", label: "Frozen Accounts" },
 ];
 
 export default function IGamingPage() {
@@ -238,8 +238,12 @@ export default function IGamingPage() {
                     className="rounded-2xl border border-[#14F195]/20 bg-gradient-to-br from-[#14F195]/10 to-transparent p-6 backdrop-blur-sm"
                   >
                     <Zap className="mb-3 h-8 w-8 text-[#1B6B4A]" />
-                    <div className="text-3xl font-bold text-[#0C1829]">400ms</div>
-                    <div className="text-sm text-[#7C8A9E]">Settlement time</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">
+                      400ms
+                    </div>
+                    <div className="text-sm text-[#7C8A9E]">
+                      Settlement time
+                    </div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
@@ -267,8 +271,8 @@ export default function IGamingPage() {
                       </span>
                     </div>
                     <p className="text-[#7C8A9E]">
-                      Accept payments from 150+ countries. No payment processor
-                      restrictions. Crypto has no borders.
+                      Accept deposits from players globally. No payment
+                      processor restrictions. Stablecoins have no borders.
                     </p>
                   </div>
                 </motion.div>
@@ -280,15 +284,21 @@ export default function IGamingPage() {
                     className="rounded-2xl border border-[#00D4FF]/20 bg-gradient-to-br from-[#00D4FF]/10 to-transparent p-6 backdrop-blur-sm"
                   >
                     <DollarSign className="mb-3 h-8 w-8 text-[#1B6B4A]" />
-                    <div className="text-3xl font-bold text-[#0C1829]">0.5%</div>
-                    <div className="text-sm text-[#7C8A9E]">Transaction fee</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">
+                      0.5%
+                    </div>
+                    <div className="text-sm text-[#7C8A9E]">
+                      Transaction fee
+                    </div>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     className="rounded-2xl border border-[#E2DFD5] bg-gradient-to-br from-white/5 to-transparent p-6 backdrop-blur-sm"
                   >
                     <Wallet className="mb-3 h-8 w-8 text-[#0C1829]" />
-                    <div className="text-3xl font-bold text-[#0C1829]">No KYC</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">
+                      No KYC
+                    </div>
                     <div className="text-sm text-[#7C8A9E]">For players</div>
                   </motion.div>
                 </div>

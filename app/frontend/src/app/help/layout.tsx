@@ -3,14 +3,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Help Center — FAQs & Support",
   description:
-    "Get help with Settlr payouts. FAQs, documentation, and support for platforms sending USDC payouts globally.",
+    "Get help with Settlr settlement infrastructure. FAQs, documentation, and support for non-custodial USDC settlement.",
   keywords: [
     "settlr help",
-    "payout help",
-    "USDC payout support",
+    "settlement help",
+    "USDC settlement support",
     "settlr faq",
-    "global payout support",
-    "email payout help",
+    "non-custodial settlement support",
+    "high-risk payment help",
   ],
   alternates: { canonical: "/help" },
   openGraph: {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "Settlr",
     title: "Settlr Help Center",
     description:
-      "Find answers to common questions about sending global payouts with Settlr.",
+      "Find answers to common questions about non-custodial USDC settlement with Settlr.",
     url: "https://settlr.dev/help",
     images: [
       {
@@ -33,7 +33,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Settlr Help Center",
-    description: "FAQs and support for global USDC payouts with Settlr.",
+    description:
+      "FAQs and support for non-custodial USDC settlement with Settlr.",
     images: ["/twitter-image?v=3"],
   },
 };

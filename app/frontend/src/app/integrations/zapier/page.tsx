@@ -58,7 +58,7 @@ export default function ZapierPage() {
             operatingSystem: "Web",
             url: "https://settlr.dev/integrations/zapier",
             description:
-              "Connect stablecoin payments to 8,000+ apps via Zapier. Trigger USDC payouts from any workflow — no code required.",
+              "Connect stablecoin payments to 8,000+ apps via Zapier. Trigger USDC settlements from any workflow — no code required.",
             provider: { "@id": "https://settlr.dev/#organization" },
             about: { "@id": "https://settlr.dev/#defined-term" },
           }),
@@ -98,9 +98,10 @@ export default function ZapierPage() {
 
           <Reveal delay={0.1}>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
-              Trigger USDC payouts from any Zapier workflow. New Airtable row →
-              pay a contractor. Typeform submission → send a bounty. CRM deal
-              closed → pay affiliate commission. No code, no custom API work.
+              Trigger USDC settlements from any Zapier workflow. New Airtable
+              row → pay a contractor. Typeform submission → send a bounty. CRM
+              deal closed → pay affiliate commission. No code, no custom API
+              work.
             </p>
           </Reveal>
 
@@ -143,7 +144,7 @@ export default function ZapierPage() {
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-              Any trigger → stablecoin payout
+              Any trigger → stablecoin settlement
             </h2>
           </Reveal>
 
@@ -157,11 +158,11 @@ export default function ZapierPage() {
               {
                 step: "02",
                 title: "Map the fields",
-                text: 'Connect the recipient email and amount to Settlr\'s "Send USDC Payout" action. Set currency, memo, and metadata.',
+                text: 'Connect the recipient email and amount to Settlr\'s "Send USDC" action. Set currency, memo, and metadata.',
               },
               {
                 step: "03",
-                title: "Payout sent automatically",
+                title: "Settlement sent automatically",
                 text: "Recipient gets an email with their USDC. Settled in under a second. Zapier logs the transaction hash for your records.",
               },
             ].map((item, i) => (
@@ -206,7 +207,7 @@ export default function ZapierPage() {
           {[
             {
               trigger: "Google Sheets",
-              action: "New row with email + amount → send USDC payout",
+              action: "New row with email + amount → send USDC settlement",
             },
             {
               trigger: "Typeform",
@@ -226,7 +227,7 @@ export default function ZapierPage() {
             },
             {
               trigger: "Stripe",
-              action: "Payment received → split revenue via USDC payout",
+              action: "Payment received → split revenue via USDC settlement",
             },
           ].map((zap, i) => (
             <Reveal key={zap.trigger} delay={i * 0.04}>
@@ -261,7 +262,7 @@ export default function ZapierPage() {
               {
                 icon: Globe,
                 title: "8,000+ apps",
-                text: "Connect payouts to any tool in the Zapier ecosystem.",
+                text: "Connect settlements to any tool in the Zapier ecosystem.",
               },
               {
                 icon: Clock,
@@ -275,13 +276,13 @@ export default function ZapierPage() {
               },
               {
                 icon: Mail,
-                title: "Email-based payouts",
-                text: "Recipients don't need wallets. Just an email address.",
+                title: "Wallet-based settlements",
+                text: "Recipients don't need bank accounts. Just a wallet address.",
               },
               {
                 icon: Users,
                 title: "Multi-step Zaps",
-                text: "Chain payouts with approvals, notifications, and logging.",
+                text: "Chain settlements with approvals, notifications, and logging.",
               },
               {
                 icon: Shield,
@@ -321,13 +322,14 @@ export default function ZapierPage() {
         <div className="mx-auto max-w-3xl px-6 py-28 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-              Automate your <span style={{ color }}>stablecoin payouts</span>
+              Automate your{" "}
+              <span style={{ color }}>stablecoin settlements</span>
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
-              The first stablecoin payout connector on Zapier. Connect to 8,000+
-              apps in minutes.
+              The first stablecoin settlement connector on Zapier. Connect to
+              8,000+ apps in minutes.
             </p>
           </Reveal>
           <Reveal delay={0.1}>

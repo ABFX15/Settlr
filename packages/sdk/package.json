@@ -1,7 +1,7 @@
 {
   "name": "@settlr/sdk",
   "version": "0.6.8",
-  "description": "Settlr SDK — Global payout infrastructure. Pay anyone, anywhere, with just their email. One API call sends USDC, recipient claims with any Solana wallet. Batch payouts, webhooks, hosted claim page.",
+  "description": "Settlr SDK — Non-custodial USDC settlement infrastructure for high-risk B2B supply chains. One API call settles USDC on Solana. Batch settlements, webhooks, multisig custody.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

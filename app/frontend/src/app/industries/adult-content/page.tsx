@@ -96,9 +96,9 @@ const features = [
   },
   {
     icon: Zap,
-    title: "Instant Creator Payouts",
+    title: "Instant Creator Settlement",
     description:
-      "Pay creators the moment they earn. No 7-day holds, no net-30 delays. Settlement finalizes in under 5 seconds.",
+      "Settle with creators the moment they earn. No 7-day holds, no net-30 delays. Settlement finalizes in under 5 seconds.",
     stat: "<5s",
     statLabel: "time to settle",
   },
@@ -157,9 +157,9 @@ const painPoints = [
   },
   {
     icon: Clock,
-    problem: "Payout Delays",
+    problem: "Settlement Delays",
     detail:
-      "Net-14 to net-30 creator payouts kill retention. Top creators leave for faster-paying platforms",
+      "Net-14 to net-30 creator settlements kill retention. Top creators leave for faster-paying platforms",
   },
   {
     icon: AlertTriangle,
@@ -208,9 +208,9 @@ const comparisonRows = [
     settlr: "TEE-encrypted \u2014 no public trace",
   },
   {
-    feature: "Global payouts",
+    feature: "Global settlement",
     traditional: "Wire fees + blocked countries",
-    settlr: "USDC to 180+ countries",
+    settlr: "USDC settlement, 180+ countries",
   },
   {
     feature: "Audit trail",
@@ -229,8 +229,8 @@ const faqItems = [
     a: "No. Subscribers can pay with USDC using an email-based embedded wallet (powered by Privy). They don\u2019t need to know anything about crypto, wallets, or Solana. The experience feels like any other checkout — but settlement is instant and can\u2019t be reversed.",
   },
   {
-    q: "How do creator payouts work?",
-    a: "Creators receive USDC directly to their wallet as soon as you trigger a payout. No net-14 or net-30 delays. They can hold USDC (it\u2019s always worth $1), offramp to their bank via integrated partners, or transfer anywhere. Setup takes under 2 minutes with just an email.",
+    q: "How do creator settlements work?",
+    a: "Creators receive USDC directly to their wallet as soon as you trigger a settlement. No net-14 or net-30 delays. They can hold USDC (it\u2019s always worth $1), offramp to their bank via integrated partners, or transfer anywhere.",
   },
   {
     q: "What about chargebacks and fraud?",
@@ -467,7 +467,7 @@ export default function AdultContentPage() {
               How it works for your platform
             </h2>
             <p className="mb-12 max-w-2xl text-[#7C8A9E]">
-              Two flows — subscriber payments in, creator payouts out. Both
+              Two flows — subscriber payments in, creator settlements out. Both
               instant, both non-custodial.
             </p>
           </Reveal>
@@ -488,8 +488,8 @@ export default function AdultContentPage() {
               },
               {
                 step: "03",
-                title: "Creator Payout",
-                desc: "Trigger creator payouts instantly or on schedule. No net-14, no net-30 delays.",
+                title: "Creator Settlement",
+                desc: "Trigger creator settlements instantly or on schedule. No net-14, no net-30 delays.",
                 icon: DollarSign,
               },
               {

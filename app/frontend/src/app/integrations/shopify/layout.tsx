@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Shopify Payouts — Pay Vendors via Settlr",
+  title: "Shopify Settlement — Non-Custodial USDC via Settlr",
   description:
-    "Add instant USDC payouts to your Shopify store. Pay vendors and suppliers globally with 1% flat fee.",
+    "Add non-custodial USDC settlement to your Shopify store. 1% flat fee, instant finality, no bank interference.",
   alternates: { canonical: "/integrations/shopify" },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://settlr.dev/integrations/shopify",
     siteName: "Settlr",
-    title: "Shopify Payouts — Pay Vendors via Settlr",
+    title: "Shopify Settlement — Non-Custodial USDC via Settlr",
     description:
-      "Add instant USDC payouts to your Shopify store. 1% flat, 180+ countries.",
+      "Non-custodial USDC settlement for Shopify. 1% flat, instant finality.",
     images: [
       {
         url: "/opengraph-image?v=3",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shopify Payouts — Pay Vendors via Settlr",
+    title: "Shopify Settlement — Non-Custodial USDC via Settlr",
     description:
-      "Add instant USDC payouts to your Shopify store. 1% flat, 180+ countries.",
+      "Non-custodial USDC settlement for Shopify. 1% flat, instant finality.",
     images: ["/twitter-image?v=3"],
   },
 };

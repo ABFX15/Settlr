@@ -25,7 +25,7 @@ const plans: Plan[] = [
     billing: "/month",
     icon: "🚀",
     features: [
-      "Up to 100 payouts/month",
+      "Up to 100 settlements/month",
       "Email-based claiming",
       "Webhook notifications",
       "Devnet sandbox",
@@ -39,8 +39,8 @@ const plans: Plan[] = [
     billing: "/month",
     icon: "📈",
     features: [
-      "Up to 1,000 payouts/month",
-      "Batch payouts (CSV & API)",
+      "Up to 1,000 settlements/month",
+      "Batch settlements (CSV & API)",
       "Recurring subscriptions",
       "Priority support",
       "Custom branding",
@@ -56,7 +56,7 @@ const plans: Plan[] = [
     billing: "/month",
     icon: "⚡",
     features: [
-      "Unlimited payouts",
+      "Unlimited settlements",
       "Dedicated treasury account",
       "SOC 2 compliance report",
       "Gasless transactions",
@@ -96,7 +96,7 @@ const addons: Plan[] = [
   {
     id: "a2",
     name: "Privacy Shield (PER)",
-    description: "TEE-based privacy for sensitive payout data",
+    description: "TEE-based privacy for sensitive settlement data",
     price: 99.0,
     billing: "/month",
     icon: "🔒",

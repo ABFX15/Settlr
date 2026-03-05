@@ -1,41 +1,40 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Settlr vs PayPal vs Wire — Payout Comparison",
+  title: "Settlr vs Traditional Processors — Settlement Comparison",
   description:
-    "Compare Settlr fees, speed, and coverage with PayPal, Wise, Payoneer, Stripe Connect, and wire transfers.",
+    "Compare Settlr non-custodial USDC settlement with traditional high-risk payment processors. 1% flat vs 5-8% industry average.",
   keywords: [
-    "payout comparison",
-    "PayPal alternative payouts",
-    "Wise alternative",
-    "Payoneer alternative",
-    "Stripe Connect alternative",
-    "cheapest international payouts",
-    "best payout platform",
+    "settlement comparison",
+    "high-risk payment processor comparison",
+    "cannabis payment processor alternative",
+    "non-custodial settlement vs traditional",
+    "cheapest high-risk processing",
+    "best settlement platform",
   ],
   alternates: { canonical: "/compare" },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Settlr",
-    title: "Settlr vs PayPal vs Wire — Payout Comparison",
+    title: "Settlr vs Traditional Processors — Settlement Comparison",
     description:
-      "Compare payout fees, speed, and coverage across Settlr, PayPal, Wise, Payoneer, and wire transfers.",
+      "Compare settlement fees, speed, and compliance. 1% flat vs 5-8% traditional high-risk processors.",
     url: "https://settlr.dev/compare",
     images: [
       {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Settlr Payout Comparison",
+        alt: "Settlr Settlement Comparison",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr vs PayPal vs Wire — Payout Comparison",
+    title: "Settlr vs Traditional Processors — Settlement Comparison",
     description:
-      "1% flat vs 5%+ PayPal vs $25+ wire. Compare the best way to pay globally.",
+      "1% flat non-custodial USDC settlement vs 5-8% traditional high-risk processors.",
     images: ["/twitter-image?v=3"],
   },
 };

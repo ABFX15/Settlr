@@ -520,7 +520,7 @@ export default function OfframpPage() {
                 Off-Ramp
               </h1>
               <p className="text-sm text-[#7C8A9E]">
-                Convert USDC to local currency — 180+ countries supported
+                Convert USDC to local currency
               </p>
             </div>
           </div>
@@ -1014,7 +1014,7 @@ export default function OfframpPage() {
                   {
                     icon: Globe,
                     title: "Select your region",
-                    desc: "Choose from 180+ countries with localized withdrawal options",
+                    desc: "Choose your region with localized withdrawal options",
                   },
                   {
                     icon: DollarSign,

@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Documentation — Payout SDK & API Reference",
+  title: "Documentation — Settlement SDK & API Reference",
   description:
-    "Integrate Settlr payouts in under 30 minutes. TypeScript SDK, React components, webhooks, and REST API docs for sending USDC payouts globally on Solana.",
+    "Integrate Settlr non-custodial USDC settlement in under 30 minutes. TypeScript SDK, React components, webhooks, and REST API for high-risk B2B settlement on Solana.",
   keywords: [
-    "payout API documentation",
-    "USDC payout SDK",
-    "stablecoin payout API",
-    "Solana payout integration",
-    "TypeScript payout SDK",
-    "email payout API",
+    "settlement API documentation",
+    "USDC settlement SDK",
+    "stablecoin settlement API",
+    "Solana settlement integration",
+    "TypeScript settlement SDK",
+    "non-custodial settlement API",
   ],
   alternates: { canonical: "/docs" },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Settlr",
-    title: "Settlr Docs — Payout SDK & API Reference",
+    title: "Settlr Docs — Settlement SDK & API Reference",
     description:
-      "TypeScript SDK, React components, webhooks, and API docs for global USDC payouts. Integrate in under 30 minutes.",
+      "TypeScript SDK, React components, webhooks, and API docs for non-custodial USDC settlement. Integrate in under 30 minutes.",
     url: "https://settlr.dev/docs",
     images: [
       {
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr Docs — Payout SDK & API Reference",
+    title: "Settlr Docs — Settlement SDK & API Reference",
     description:
-      "Integrate global USDC payouts in under 30 minutes. TypeScript SDK, webhooks, REST API.",
+      "Integrate non-custodial USDC settlement in under 30 minutes. TypeScript SDK, webhooks, REST API.",
     images: ["/twitter-image?v=3"],
   },
 };

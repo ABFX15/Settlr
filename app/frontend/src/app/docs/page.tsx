@@ -1463,7 +1463,7 @@ function PayInvoice({ invoiceId, amount }: { invoiceId: string; amount: number }
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">Settlr</td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Main client — payments, payouts, treasury
+                  Main client — payments, settlement, treasury
                 </td>
               </tr>
               <tr>
@@ -1503,7 +1503,7 @@ function PayInvoice({ invoiceId, amount }: { invoiceId: string; amount: number }
                   PayoutClient
                 </td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
-                  Send payouts by email
+                  Send settlements to wallets
                 </td>
               </tr>
               <tr>

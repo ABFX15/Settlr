@@ -94,7 +94,7 @@ const industryLinks = [
     href: "/industries/adult-content",
     label: "Adult Content Platforms",
     icon: Film,
-    description: "Creator payouts without deplatforming risk",
+    description: "Non-custodial settlement without deplatforming risk",
   },
 ];
 

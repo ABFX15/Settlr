@@ -29,13 +29,13 @@ const features = [
     icon: Clock,
     title: "Fast Withdrawals",
     description:
-      "Non-custodial payouts with no approval delays. Players get their winnings instantly.",
+      "Non-custodial withdrawals with no approval delays. Players get their winnings instantly.",
   },
   {
     icon: Shield,
     title: "Zero Chargebacks",
     description:
-      "Crypto payments are irreversible. Eliminate fraud losses and disputes completely.",
+      "Stablecoin settlements are irreversible. Eliminate fraud losses and disputes completely.",
   },
   {
     icon: Wallet,
@@ -160,7 +160,7 @@ export default function IGamingPage() {
               Zero Chargebacks.
             </span>
             <br />
-            Instant Payouts.
+            Instant Settlement.
           </motion.h1>
 
           <motion.p
@@ -250,7 +250,7 @@ export default function IGamingPage() {
               vs Traditional Payment Processors
             </h2>
             <p className="text-lg text-[#7C8A9E]">
-              See why crypto payments win for gaming
+              See why stablecoin settlement wins for gaming
             </p>
           </motion.div>
 

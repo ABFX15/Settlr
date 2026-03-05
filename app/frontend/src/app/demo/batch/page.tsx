@@ -362,7 +362,7 @@ export default function BatchPayoutDemo() {
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-1.5">
                 <Users className="h-4 w-4 text-[#1B6B4A]" />
                 <span className="text-sm font-medium text-[#3B4963]">
-                  Batch Payouts
+                  Batch Settlements
                 </span>
               </div>
               <h1
@@ -585,7 +585,7 @@ export default function BatchPayoutDemo() {
                         color: GREEN,
                       },
                       {
-                        label: "Total Payout",
+                        label: "Total Settlement",
                         value: `$${totalAmount.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                         })}`,
@@ -817,7 +817,7 @@ export default function BatchPayoutDemo() {
                       style={{ background: GREEN }}
                     >
                       <Send className="h-4 w-4" />
-                      Send {validRows.length} Payout
+                      Send {validRows.length} Settlement
                       {validRows.length !== 1 ? "s" : ""} — $
                       {totalAmount.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
@@ -845,7 +845,7 @@ export default function BatchPayoutDemo() {
                       className="mb-2 text-xl font-semibold"
                       style={{ color: NAVY }}
                     >
-                      Sending Payouts...
+                      Sending Settlements...
                     </h3>
                     <p className="mb-8" style={{ color: MUTED }}>
                       Creating batch and sending claim emails to{" "}
@@ -900,7 +900,7 @@ export default function BatchPayoutDemo() {
                           Batch Sent Successfully
                         </h3>
                         <p className="mt-1" style={{ color: SLATE }}>
-                          {result.count} payouts totaling{" "}
+                          {result.count} settlements totaling{" "}
                           <strong>
                             $
                             {result.total.toLocaleString("en-US", {

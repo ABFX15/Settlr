@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "iGaming Crypto Payments",
+  title: "iGaming Settlement — Non-Custodial USDC",
   description:
-    "Crypto payment infrastructure for online gaming platforms. Instant deposits, fast withdrawals, zero chargebacks.",
+    "Non-custodial USDC settlement for online gaming. Instant deposits, instant withdrawals, zero chargebacks, no bank interference.",
   robots: {
     index: false,
     follow: true,

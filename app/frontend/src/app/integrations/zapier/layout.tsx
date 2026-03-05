@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Zapier Integration — Automate Payouts",
+  title: "Zapier Integration — Automate Settlements",
   description:
-    "Trigger Settlr payouts from any Zapier workflow. Connect 5,000+ apps to instant global payments.",
+    "Trigger Settlr USDC settlements from any Zapier workflow. Connect 5,000+ apps to non-custodial B2B settlement.",
   alternates: { canonical: "/integrations/zapier" },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://settlr.dev/integrations/zapier",
     siteName: "Settlr",
-    title: "Zapier Integration — Automate Payouts",
+    title: "Zapier Integration — Automate Settlements",
     description:
-      "Trigger Settlr payouts from any Zapier workflow. Connect 5,000+ apps.",
+      "Trigger Settlr settlements from any Zapier workflow. Connect 5,000+ apps.",
     images: [
       {
         url: "/opengraph-image?v=3",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zapier Integration — Automate Payouts",
+    title: "Zapier Integration — Automate Settlements",
     description:
-      "Trigger Settlr payouts from any Zapier workflow. Connect 5,000+ apps.",
+      "Trigger Settlr settlements from any Zapier workflow. Connect 5,000+ apps.",
     images: ["/twitter-image?v=3"],
   },
 };

@@ -1,7 +1,7 @@
 {
   "name": "Settlr",
   "short_name": "Settlr",
-  "description": "Send USDC to anyone by email — global payout infrastructure for platforms.",
+  "description": "Non-custodial USDC settlement infrastructure for high-risk B2B supply chains.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FDFBF7",

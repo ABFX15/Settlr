@@ -98,9 +98,9 @@ export default function ShopifyPage() {
           <Reveal delay={0.1}>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
               Shopify added Solana Pay, but it doesn&apos;t cover stablecoin
-              payouts, gasless checkout, or non-custodial settlement. Settlr
-              fills the gap. Accept USDC with zero gas fees for customers and
-              instant settlement for merchants.
+              settlement, gasless checkout, or non-custodial infrastructure.
+              Settlr fills the gap. Accept USDC with zero gas fees for customers
+              and instant settlement for merchants.
             </p>
           </Reveal>
 
@@ -147,7 +147,7 @@ export default function ShopifyPage() {
             </h2>
             <p className="mt-4 max-w-xl text-[#7C8A9E] leading-relaxed">
               Shopify blockchain integrations handle basic token payments. But
-              merchants need programmable payouts, gasless UX, and real
+              merchants need programmable settlement, gasless UX, and real
               settlement infrastructure. Settlr adds what&apos;s missing.
             </p>
           </Reveal>

@@ -1,7 +1,7 @@
 {
   "name": "@settlr/zapier",
   "version": "1.0.0",
-  "description": "Settlr Zapier integration — trigger payout actions from 8,000+ apps",
+  "description": "Settlr Zapier integration — trigger USDC settlement actions from 8,000+ apps",
   "main": "index.js",
   "scripts": {
     "build": "tsc",

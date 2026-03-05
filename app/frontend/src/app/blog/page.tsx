@@ -68,8 +68,8 @@ export default function BlogPage() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mx-auto mt-4 max-w-xl text-lg text-[#7C8A9E]">
-              Crypto payments, Solana development, stablecoin infrastructure,
-              and building global-first products.
+              Non-custodial settlement, stablecoin compliance, high-risk B2B
+              infrastructure, and building for the debanked.
             </p>
           </Reveal>
         </div>

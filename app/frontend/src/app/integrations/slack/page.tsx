@@ -58,7 +58,7 @@ export default function SlackPage() {
             operatingSystem: "Web",
             url: "https://settlr.dev/integrations/slack",
             description:
-              "Send USDC payments from Slack. Use slash commands to pay anyone by email, get approval workflows, and thread receipts.",
+              "Trigger USDC settlements from Slack. Use slash commands to settle with vendors, get approval workflows, and thread receipts.",
             provider: { "@id": "https://settlr.dev/#organization" },
             about: { "@id": "https://settlr.dev/#defined-term" },
           }),
@@ -107,7 +107,7 @@ export default function SlackPage() {
               </code>{" "}
               and it&apos;s done. Send stablecoin payments to anyone from the
               channel where your team already works. Approval workflows, thread
-              receipts, and payout notifications — all inside Slack.
+              receipts, and settlement notifications — all inside Slack.
             </p>
           </Reveal>
 
@@ -164,7 +164,7 @@ export default function SlackPage() {
               {
                 command: "/pay-batch payroll.csv",
                 description:
-                  "Upload a CSV and pay everyone at once. Batch payouts for payroll, bounties, or contest prizes.",
+                  "Upload a CSV and pay everyone at once. Batch settlements for payroll, bounties, or contest prizes.",
               },
               {
                 command: "/pay-status tx_abc123",
@@ -213,7 +213,7 @@ export default function SlackPage() {
           {[
             {
               icon: Zap,
-              title: "Instant payouts",
+              title: "Instant settlements",
               text: "Type a command, payment sends in seconds. No login to a dashboard, no CSV upload to a bank portal.",
             },
             {
@@ -229,7 +229,7 @@ export default function SlackPage() {
             {
               icon: Bell,
               title: "Payment notifications",
-              text: "Get notified when payouts complete, when recipients claim funds, or when approvals are needed.",
+              text: "Get notified when settlements complete, when recipients claim funds, or when approvals are needed.",
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.06}>
@@ -280,7 +280,7 @@ export default function SlackPage() {
               },
               {
                 title: "Sales teams",
-                text: "Close a deal, trigger an instant commission payout from Slack. The whole team sees the celebration.",
+                text: "Close a deal, trigger an instant commission settlement from Slack. The whole team sees the celebration.",
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.08}>
@@ -309,7 +309,7 @@ export default function SlackPage() {
         <div className="mt-12 grid gap-3 sm:grid-cols-2">
           {[
             "/pay slash command — send USDC by email",
-            "Batch payouts via CSV upload",
+            "Batch settlements via CSV upload",
             "Manager approval workflows with thread buttons",
             "On-chain receipt links in every confirmation",
             "Balance and payment status checks",
@@ -341,13 +341,13 @@ export default function SlackPage() {
         <div className="mx-auto max-w-3xl px-6 py-28 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-              Pay anyone with a{" "}
+              Settle with anyone via{" "}
               <span style={{ color: colorLight }}>Slack command</span>
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
-              /pay email amount. That&apos;s it. Stablecoin payouts from the
+              /pay email amount. That&apos;s it. Stablecoin settlement from the
               channel where your team already works.
             </p>
           </Reveal>

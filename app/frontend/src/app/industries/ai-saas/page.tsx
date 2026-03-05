@@ -43,17 +43,17 @@ const features = [
   },
   {
     icon: Wallet,
-    title: "Email-Only Checkout",
+    title: "Wallet-Based Checkout",
     description:
-      "Fans pay with just an email — no wallet download, no crypto UX. Embedded wallets via Privy handle everything.",
+      "Embedded wallets via Privy handle everything. No MetaMask, no crypto UX friction.",
     stat: "3x",
     statLabel: "higher conversion",
   },
   {
     icon: Zap,
-    title: "Instant Creator Payouts",
+    title: "Instant Creator Settlement",
     description:
-      "Pay creators anywhere in the world by email. No bank details, no wire fees, no 5-day ACH wait.",
+      "Settle with creators instantly. No bank details, no wire fees, no 5-day ACH wait.",
     stat: "< 1s",
     statLabel: "settlement",
   },
@@ -93,7 +93,7 @@ const painPoints = [
   },
   {
     icon: Clock,
-    problem: "Payout Delays",
+    problem: "Settlement Delays",
     detail: "7-day holds and rolling reserves slow creator pay",
   },
   {
@@ -106,7 +106,7 @@ const painPoints = [
 const stats = [
   { value: "1%", label: "Flat Fee" },
   { value: "< 1s", label: "Settlement" },
-  { value: "180+", label: "Countries" },
+  { value: "180+", label: "No Bank Needed" },
   { value: "$0", label: "Content Restrictions" },
 ];
 
@@ -145,7 +145,7 @@ export default function AiSaasPage() {
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#1B6B4A]/[0.1] px-4 py-2">
                 <Sparkles className="h-4 w-4 text-[#1B6B4A]" />
                 <span className="text-sm font-medium text-[#1B6B4A]">
-                  Built for creator platforms
+                  Built for debanked platforms
                 </span>
               </div>
 
@@ -158,9 +158,9 @@ export default function AiSaasPage() {
               </h1>
 
               <p className="mb-8 max-w-lg text-lg text-[#7C8A9E]">
-                Collect payments from fans and pay out creators instantly — with
-                no card network deciding what content is allowed. One SDK, 1%
-                flat, instant settlement.
+                Collect from fans and settle with creators instantly — with no
+                card network deciding what content is allowed. One SDK, 1% flat,
+                instant settlement.
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -205,7 +205,9 @@ export default function AiSaasPage() {
                     className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6 backdrop-blur-sm"
                   >
                     <Lock className="mb-3 h-8 w-8 text-[#1B6B4A]" />
-                    <div className="text-3xl font-bold text-[#0C1829]">Private</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">
+                      Private
+                    </div>
                     <div className="text-sm text-[#7C8A9E]">
                       Encrypted receipts
                     </div>
@@ -224,12 +226,12 @@ export default function AiSaasPage() {
                         <Globe className="h-6 w-6 text-[#1B6B4A]" />
                       </div>
                       <span className="text-lg font-semibold text-[#0C1829]">
-                        Checkout + Payouts
+                        Checkout + Settlement
                       </span>
                     </div>
                     <p className="text-[#7C8A9E]">
-                      Fans pay with just an email. Creators get paid instantly
-                      to 180+ countries. No bank details, no wire fees.
+                      Fans pay via embedded wallets. Creators get settled
+                      instantly. No bank details, no wire fees.
                     </p>
                   </div>
                 </motion.div>
@@ -249,7 +251,9 @@ export default function AiSaasPage() {
                     className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6 backdrop-blur-sm"
                   >
                     <Ban className="mb-3 h-8 w-8 text-[#fbbf24]" />
-                    <div className="text-3xl font-bold text-[#0C1829]">Zero</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">
+                      Zero
+                    </div>
                     <div className="text-sm text-[#7C8A9E]">
                       Content restrictions
                     </div>
@@ -343,7 +347,7 @@ export default function AiSaasPage() {
             className="mb-10 text-center"
           >
             <h2 className="mb-4 text-3xl font-bold text-[#0C1829]">
-              Built for every creator vertical
+              Built for every debanked vertical
             </h2>
           </motion.div>
 
@@ -363,7 +367,9 @@ export default function AiSaasPage() {
                   <div className="rounded-xl bg-[#1B6B4A]/15 p-3">
                     <Icon className="h-6 w-6 text-[#1B6B4A]" />
                   </div>
-                  <span className="font-medium text-[#0C1829]">{useCase.name}</span>
+                  <span className="font-medium text-[#0C1829]">
+                    {useCase.name}
+                  </span>
                 </motion.div>
               );
             })}
@@ -535,8 +541,8 @@ export default function AiSaasPage() {
           </h2>
 
           <p className="mb-8 text-lg text-[#7C8A9E]">
-            Join platforms that own their payment stack. Checkout + payouts in
-            one SDK. No one can shut you down.
+            Join platforms that own their payment stack. Checkout + settlement
+            in one SDK. No one can shut you down.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">

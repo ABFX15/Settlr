@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Sales — Enterprise Payouts",
+  title: "Contact Sales — Enterprise Settlement",
   description:
-    "Talk to the Settlr team about enterprise payout infrastructure. Custom integrations, volume pricing, and dedicated support for platforms paying globally.",
+    "Talk to the Settlr team about enterprise non-custodial settlement infrastructure. Custom integrations, volume pricing, and dedicated support for high-risk industries.",
   alternates: { canonical: "/waitlist" },
   openGraph: {
     type: "website",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "Settlr",
     title: "Contact Sales | Settlr",
     description:
-      "Enterprise payout infrastructure. Custom integrations, volume pricing, dedicated support.",
+      "Enterprise non-custodial settlement infrastructure. Custom integrations, volume pricing, dedicated support.",
     url: "https://settlr.dev/waitlist",
     images: [
       {
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Contact Sales | Settlr",
     description:
-      "Enterprise payout infrastructure. Custom integrations, volume pricing, dedicated support.",
+      "Enterprise non-custodial settlement infrastructure. Custom integrations, volume pricing, dedicated support.",
     images: ["/twitter-image?v=3"],
   },
 };

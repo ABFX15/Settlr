@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Slack Notifications — Payout Alerts in Slack",
+  title: "Slack Notifications — Settlement Alerts in Slack",
   description:
-    "Get real-time Settlr payout notifications in Slack. Know instantly when payments are sent, confirmed, and claimed.",
+    "Get real-time Settlr settlement notifications in Slack. Know instantly when payments are sent, confirmed, and settled.",
   alternates: { canonical: "/integrations/slack" },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://settlr.dev/integrations/slack",
     siteName: "Settlr",
-    title: "Slack Notifications — Payout Alerts in Slack",
+    title: "Slack Notifications — Settlement Alerts in Slack",
     description:
-      "Get real-time payout notifications in Slack. Know when payments land.",
+      "Get real-time settlement notifications in Slack. Know when payments settle.",
     images: [
       {
         url: "/opengraph-image?v=3",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Slack Notifications — Payout Alerts in Slack",
+    title: "Slack Notifications — Settlement Alerts in Slack",
     description:
-      "Real-time payout notifications in Slack. Know when payments land.",
+      "Real-time settlement notifications in Slack. Know when payments settle.",
     images: ["/twitter-image?v=3"],
   },
 };

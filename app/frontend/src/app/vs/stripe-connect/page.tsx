@@ -83,7 +83,7 @@ const comparisonRows = [
   },
   {
     feature: "Compliance (OFAC / AML)",
-    settlr: "Built-in screening on every payout",
+    settlr: "Built-in screening on every settlement",
     stripe: "Via Connect, requires configuration",
     winner: "tie",
   },
@@ -110,15 +110,15 @@ const comparisonRows = [
 const painPoints = [
   {
     icon: Clock,
-    title: "Wait 5 days for payouts to land?",
+    title: "Wait 5 days for settlements to land?",
     description:
-      "Stripe Connect batches payouts on a rolling schedule. Your contractors wait days for money they earned today. Settlr settles in under a second.",
+      "Stripe Connect batches payouts on a rolling schedule. Your vendors wait days for money they're owed. Settlr settles in under a second.",
   },
   {
     icon: Globe,
-    title: "Only 47 countries?",
+    title: "Debanked? Stripe won't serve you.",
     description:
-      "Stripe Connect requires recipients to have a local bank account in a supported country. Settlr pays anyone with an email address — 180+ countries, no bank details needed.",
+      "Stripe Connect won't touch cannabis, adult content, or other high-risk verticals. Settlr is built for the debanked — non-custodial USDC, no bank interference.",
   },
   {
     icon: DollarSign,
@@ -161,11 +161,11 @@ const faqs = [
   },
   {
     q: "How does Settlr handle compliance?",
-    a: "Every payout is screened against OFAC and global sanctions lists in real-time. We maintain an audit trail for every transaction. Confidential transfers on SPL Token 2022 ensure amounts stay private on-chain while maintaining full compliance.",
+    a: "Every settlement is screened against OFAC and global sanctions lists in real-time. We maintain an audit trail for every transaction. Confidential transfers on SPL Token 2022 ensure amounts stay private on-chain while maintaining full compliance.",
   },
   {
     q: "Can I migrate from Stripe Connect?",
-    a: "Yes. Most teams integrate Settlr in under an hour. You can run both systems in parallel during migration — use Stripe for card processing and Settlr for payouts.",
+    a: "Yes. Most teams integrate Settlr in under an hour. You can run both systems in parallel during migration — use Stripe for card processing and Settlr for settlement.",
   },
   {
     q: "What about chargebacks?",
@@ -226,8 +226,8 @@ export default function StripeConnectComparison() {
               style={{ color: SLATE }}
             >
               Stripe Connect was built for card payments. Settlr was built for
-              payouts. Faster settlement, lower fees, 180+ countries — no bank
-              details required.
+              non-custodial B2B settlement. Faster finality, lower fees, built
+              for the debanked.
             </p>
 
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -580,7 +580,7 @@ export default function StripeConnectComparison() {
               style={{ color: "rgba(255,255,255,0.6)" }}
             >
               Join platforms already saving thousands per month in fees and
-              settling payouts in under a second.
+              settling B2B invoices in under a second.
             </motion.p>
             <motion.div
               custom={2}
@@ -619,9 +619,9 @@ export default function StripeConnectComparison() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "Settlr vs Stripe Connect — Faster, Cheaper Global Payouts",
+            name: "Settlr vs Stripe Connect — Faster, Cheaper B2B Settlement",
             description:
-              "Compare Settlr and Stripe Connect for global payouts. Settlr settles in seconds, costs 1% flat, and reaches 180+ countries with just an email.",
+              "Compare Settlr and Stripe Connect for B2B settlement. Settlr settles in seconds with non-custodial USDC, costs 1% flat, and serves high-risk industries.",
             url: "https://settlr.dev/vs/stripe-connect",
             breadcrumb: {
               "@type": "BreadcrumbList",

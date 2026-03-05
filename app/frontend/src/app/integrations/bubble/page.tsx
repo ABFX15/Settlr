@@ -57,7 +57,7 @@ export default function BubblePage() {
             operatingSystem: "Web",
             url: "https://settlr.dev/integrations/bubble",
             description:
-              "Add USDC payments to any Bubble.io app. Drag-and-drop stablecoin checkout and payouts for no-code builders.",
+              "Add USDC settlement to any Bubble.io app. Drag-and-drop stablecoin checkout and settlement for no-code builders.",
             provider: { "@id": "https://settlr.dev/#organization" },
             about: { "@id": "https://settlr.dev/#defined-term" },
           }),
@@ -99,7 +99,7 @@ export default function BubblePage() {
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
               3M+ apps run on Bubble.io. Zero of them have native stablecoin
               payment infrastructure. The Settlr plugin gives every no-code
-              builder drag-and-drop USDC checkout and payouts — no blockchain
+              builder drag-and-drop USDC checkout and settlement — no blockchain
               knowledge required.
             </p>
           </Reveal>
@@ -147,7 +147,7 @@ export default function BubblePage() {
             </h2>
             <p className="mt-4 max-w-xl text-[#7C8A9E] leading-relaxed">
               Bubble builders accept Stripe. That&apos;s it. No stablecoin
-              checkout, no USDC payouts, no crypto payment rails. Settlr is the
+              checkout, no USDC settlement, no stablecoin rails. Settlr is the
               first plugin to bring programmable stablecoin infrastructure to
               the no-code ecosystem.
             </p>
@@ -220,16 +220,16 @@ export default function BubblePage() {
         <div className="mt-16 grid gap-8 md:grid-cols-3">
           {[
             {
-              title: "Freelance marketplaces",
-              text: "Build a Fiverr-style marketplace on Bubble. Clients pay USDC, freelancers receive instant payouts. No escrow middleman.",
+              title: "B2B invoicing",
+              text: "Build a B2B invoicing app on Bubble. Vendors receive instant USDC settlement. No escrow middleman.",
             },
             {
               title: "SaaS subscription billing",
               text: "Accept USDC for monthly plans. Automated recurring payments, usage-based billing, and instant revenue recognition.",
             },
             {
-              title: "Creator platforms",
-              text: "Launch a Patreon-like platform with stablecoin subscriptions. Creators get paid directly, fans skip card fees.",
+              title: "High-risk platforms",
+              text: "Launch platforms for debanked verticals with stablecoin settlement. No card-network content restrictions.",
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.08}>
@@ -315,7 +315,7 @@ export default function BubblePage() {
             "Visual checkout element — drag and drop",
             "USDC payments with gasless UX for buyers",
             "Workflow triggers on payment events",
-            "Payout actions — send USDC from workflows",
+            "Settlement actions — send USDC from workflows",
             "Works with Bubble's user authentication",
             "Customizable styles to match your app",
             "Webhook events for external integrations",

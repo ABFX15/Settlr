@@ -47,13 +47,13 @@ const integrations = [
     name: "Zapier Connector",
     tagline: "Connect stablecoin payments to 8,000+ apps",
     description:
-      "Trigger USDC payouts from any Zapier workflow. Connect Settlr to your CRM, project management, invoicing, or any of 8,000+ apps — no code required. No payout connectors like this exist yet.",
+      "Trigger USDC settlements from any Zapier workflow. Connect Settlr to your CRM, project management, invoicing, or any of 8,000+ apps — no code required. No settlement connectors like this exist yet.",
     color: "#FF4A00",
     highlights: [
-      "Trigger payouts from any Zapier event",
+      "Trigger settlements from any Zapier event",
       "8,000+ app integrations out of the box",
-      "No-code payout automation",
-      "First stablecoin payout connector on Zapier",
+      "No-code settlement automation",
+      "First stablecoin settlement connector on Zapier",
     ],
   },
   {
@@ -92,13 +92,13 @@ const integrations = [
     name: "Bubble.io Plugin",
     tagline: "Stablecoin payments for the no-code ecosystem",
     description:
-      "Add USDC payments to any Bubble.io app with drag-and-drop. The no-code market has 3M+ apps and zero stablecoin payment plugins. Be the first to offer your users crypto checkout.",
+      "Add USDC payments to any Bubble.io app with drag-and-drop. The no-code market has 3M+ apps and zero stablecoin payment plugins. Be the first to offer your users stablecoin settlement.",
     color: "#3B82F6",
     highlights: [
       "Drag-and-drop integration",
       "No stablecoin competitors in Bubble marketplace",
       "3M+ Bubble apps can use it instantly",
-      "Full checkout + payout support",
+      "Full checkout + settlement support",
     ],
   },
   {
@@ -107,7 +107,7 @@ const integrations = [
     name: "Slack Bot",
     tagline: "Send stablecoin payments from a Slack message",
     description:
-      "Type /pay worker@email.com $50 in any Slack channel. Instant USDC payout, no context switching. Perfect for ops teams, finance approvals, and quick contractor payments.",
+      "Type /pay worker@email.com $50 in any Slack channel. Instant USDC settlement, no context switching. Perfect for ops teams, finance approvals, and quick contractor payments.",
     color: "#4A154B",
     highlights: [
       "Slash command: /pay email amount",
@@ -186,7 +186,7 @@ export default function IntegrationsPage() {
                   name: "Zapier Integration",
                   url: "https://settlr.dev/integrations/zapier",
                   description:
-                    "Connect Settlr to 6,000+ apps. Trigger USDC payouts from CRM events, form submissions, and more.",
+                    "Connect Settlr to 6,000+ apps. Trigger USDC settlements from CRM events, form submissions, and more.",
                 },
                 {
                   "@type": "ListItem",

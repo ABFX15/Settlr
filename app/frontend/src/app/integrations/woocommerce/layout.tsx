@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "WooCommerce Payouts — USDC Plugin for WordPress",
+  title: "WooCommerce Settlement — Non-Custodial USDC for WordPress",
   description:
-    "Add instant USDC payouts to WooCommerce. Pay marketplace sellers globally with 1% flat fee, no wire delays.",
+    "Add non-custodial USDC settlement to WooCommerce. 1% flat fee, instant finality, no bank interference.",
   alternates: { canonical: "/integrations/woocommerce" },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://settlr.dev/integrations/woocommerce",
     siteName: "Settlr",
-    title: "WooCommerce Payouts — USDC Plugin for WordPress",
+    title: "WooCommerce Settlement — Non-Custodial USDC for WordPress",
     description:
-      "Add instant USDC payouts to WooCommerce. 1% flat, 180+ countries.",
+      "Non-custodial USDC settlement for WooCommerce. 1% flat, instant finality.",
     images: [
       {
         url: "/opengraph-image?v=3",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "WooCommerce Payouts — USDC Plugin for WordPress",
+    title: "WooCommerce Settlement — Non-Custodial USDC for WordPress",
     description:
-      "Add instant USDC payouts to WooCommerce. 1% flat, 180+ countries.",
+      "Non-custodial USDC settlement for WooCommerce. 1% flat, instant finality.",
     images: ["/twitter-image?v=3"],
   },
 };

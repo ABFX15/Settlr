@@ -2087,9 +2087,13 @@ export default function HomePage() {
                 },
                 {
                   title: "Adult Content Platforms",
-                  desc: "Creator payouts without deplatforming risk. 1% flat vs 8–15% processing.",
+                  desc: "Non-custodial settlement without deplatforming risk. 1% flat vs 8–15% processing.",
                   href: "/industries/adult-content",
-                  stats: ["Instant Payouts", "No Chargebacks", "TEE Privacy"],
+                  stats: [
+                    "Instant Settlement",
+                    "No Chargebacks",
+                    "TEE Privacy",
+                  ],
                   gradient: "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
                 },
               ].map((item, i) => (

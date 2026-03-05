@@ -50,11 +50,11 @@ const features = [
   },
   {
     icon: Globe,
-    title: "Accept From Anywhere",
+    title: "No Bank Interference",
     description:
-      "Clients in 195+ countries can pay you. No banking restrictions.",
-    stat: "195+",
-    statLabel: "countries",
+      "Settle with any counterparty. No account freezes, no deplatforming.",
+    stat: "0",
+    statLabel: "frozen accounts",
   },
   {
     icon: Shield,
@@ -93,14 +93,14 @@ const stats = [
   { value: "1%", label: "Flat Fee" },
   { value: "Instant", label: "Settlement" },
   { value: "24/7", label: "Processing" },
-  { value: "195+", label: "Countries" },
+  { value: "0", label: "Frozen Accounts" },
 ];
 
 const useCases = [
-  { name: "Freelance Dev", icon: FileText },
-  { name: "Agencies", icon: Building2 },
-  { name: "Consultants", icon: Users },
-  { name: "Contractors", icon: Wallet },
+  { name: "Cannabis Wholesale", icon: FileText },
+  { name: "CBD & Supplements", icon: Building2 },
+  { name: "Adult Content", icon: Users },
+  { name: "iGaming", icon: Wallet },
 ];
 
 export default function B2BPage() {
@@ -145,7 +145,7 @@ export default function B2BPage() {
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#22d3ee]/30 bg-[#22d3ee]/10 px-4 py-2">
                 <Users className="h-4 w-4 text-[#22d3ee]" />
                 <span className="text-sm font-medium text-[#22d3ee]">
-                  For B2B & Freelancers
+                  For B2B & Debanked Industries
                 </span>
               </div>
 
@@ -190,8 +190,8 @@ export default function B2BPage() {
               </h1>
 
               <p className="mb-8 max-w-lg text-lg text-[#7C8A9E]">
-                Ditch expensive wire transfers. Send invoices, get paid in USDC
-                instantly, from clients in 195+ countries. 24/7/365.
+                Ditch expensive wire transfers. Settle B2B invoices in USDC
+                instantly, with no bank interference. 24/7/365.
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -226,7 +226,9 @@ export default function B2BPage() {
                     className="rounded-2xl border border-[#22d3ee]/20 bg-gradient-to-br from-[#22d3ee]/10 to-transparent p-6 backdrop-blur-sm"
                   >
                     <Zap className="mb-3 h-8 w-8 text-[#22d3ee]" />
-                    <div className="text-3xl font-bold text-[#0C1829]">Instant</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">
+                      Instant
+                    </div>
                     <div className="text-sm text-[#7C8A9E]">Settlement</div>
                   </motion.div>
                   <motion.div
@@ -268,7 +270,9 @@ export default function B2BPage() {
                     className="rounded-2xl border border-[#14F195]/20 bg-gradient-to-br from-[#14F195]/10 to-transparent p-6 backdrop-blur-sm"
                   >
                     <Clock className="mb-3 h-8 w-8 text-[#1B6B4A]" />
-                    <div className="text-3xl font-bold text-[#0C1829]">24/7</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">
+                      24/7
+                    </div>
                     <div className="text-sm text-[#7C8A9E]">Processing</div>
                   </motion.div>
                   <motion.div
@@ -276,7 +280,9 @@ export default function B2BPage() {
                     className="rounded-2xl border border-[#E2DFD5] bg-gradient-to-br from-white/5 to-transparent p-6 backdrop-blur-sm"
                   >
                     <Shield className="mb-3 h-8 w-8 text-[#0C1829]" />
-                    <div className="text-3xl font-bold text-[#0C1829]">Final</div>
+                    <div className="text-3xl font-bold text-[#0C1829]">
+                      Final
+                    </div>
                     <div className="text-sm text-[#7C8A9E]">No reversals</div>
                   </motion.div>
                 </div>
@@ -366,7 +372,9 @@ export default function B2BPage() {
             viewport={{ once: true }}
             className="mb-10 text-center"
           >
-            <h2 className="mb-4 text-3xl font-bold text-[#0C1829]">Perfect for</h2>
+            <h2 className="mb-4 text-3xl font-bold text-[#0C1829]">
+              Perfect for
+            </h2>
           </motion.div>
 
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -385,7 +393,9 @@ export default function B2BPage() {
                   <div className="rounded-xl bg-gradient-to-br from-[#22d3ee] to-[#a855f7] p-3">
                     <Icon className="h-6 w-6 text-[#0C1829]" />
                   </div>
-                  <span className="font-medium text-[#0C1829]">{useCase.name}</span>
+                  <span className="font-medium text-[#0C1829]">
+                    {useCase.name}
+                  </span>
                 </motion.div>
               );
             })}
@@ -404,7 +414,9 @@ export default function B2BPage() {
           >
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5]/30 bg-white/10 px-4 py-2">
               <Check className="h-4 w-4 text-[#0C1829]" />
-              <span className="text-sm font-medium text-[#0C1829]">Why Settlr</span>
+              <span className="text-sm font-medium text-[#0C1829]">
+                Why Settlr
+              </span>
             </div>
             <h2 className="mb-4 text-4xl font-bold text-[#0C1829] md:text-5xl">
               Invoice. Send link.
@@ -555,8 +567,8 @@ export default function B2BPage() {
           </h2>
 
           <p className="mb-8 text-lg text-[#7C8A9E]">
-            Join freelancers and agencies saving thousands per year on wire fees
-            while getting paid faster.
+            Join cannabis operators and debanked businesses saving thousands per
+            year on wire fees while settling instantly.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">

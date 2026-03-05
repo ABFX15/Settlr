@@ -98,30 +98,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
         {
-            url: `${baseUrl}/industries/creators`,
-            lastModified,
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/industries/freelance`,
-            lastModified,
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/industries/data-labeling`,
-            lastModified,
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/industries/ecommerce`,
-            lastModified,
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
             url: `${baseUrl}/industries/igaming`,
             lastModified,
             changeFrequency: 'monthly',

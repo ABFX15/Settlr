@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Get Started — Send Global Payouts in 30 Minutes",
+  title: "Get Started — Deploy Non-Custodial Settlement in 30 Minutes",
   description:
-    "Set up your Settlr platform account and start sending USDC payouts globally. Non-custodial, email-only, deploy to production in under 30 minutes.",
+    "Set up your Settlr account and start settling B2B transactions with non-custodial USDC on Solana. Deploy to production in under 30 minutes.",
   keywords: [
-    "payout API setup",
-    "USDC payout onboarding",
-    "global payout integration",
-    "stablecoin payout quickstart",
+    "settlement API setup",
+    "USDC settlement onboarding",
+    "non-custodial settlement integration",
+    "stablecoin settlement quickstart",
   ],
   alternates: { canonical: "/onboarding" },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Settlr",
-    title: "Get Started with Settlr — Global Payouts in 30 Minutes",
+    title: "Get Started with Settlr — Non-Custodial Settlement in 30 Minutes",
     description:
-      "Set up your platform and send USDC payouts to 180+ countries. Non-custodial, deploy in minutes.",
+      "Deploy non-custodial USDC settlement for high-risk B2B supply chains. Live in minutes.",
     url: "https://settlr.dev/onboarding",
     images: [
       {
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Get Started with Settlr — Global Payouts in 30 Minutes",
+    title: "Get Started with Settlr — Non-Custodial Settlement in 30 Minutes",
     description:
-      "Start sending USDC payouts to anyone, anywhere, with just their email.",
+      "Deploy non-custodial USDC settlement for your B2B supply chain. No bank interference.",
     images: ["/twitter-image?v=3"],
   },
 };

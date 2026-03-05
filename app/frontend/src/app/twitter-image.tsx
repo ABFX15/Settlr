@@ -150,7 +150,7 @@ export default async function Image() {
               {[
                 { value: "<1s", label: "Settlement" },
                 { value: "1%", label: "Flat Fee" },
-                { value: "180+", label: "Countries" },
+                { value: "24/7", label: "No Banks" },
               ].map((stat) => (
                 <div
                   key={stat.label}
@@ -217,18 +217,18 @@ export default async function Image() {
             {/* Code lines */}
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <span style={{ fontSize: 13, color: "#7C8A9E" }}>
-                {"// Send a payout"}
+                {"// Settle a B2B invoice"}
               </span>
               <span style={{ fontSize: 14, color: "rgba(255,255,255,0.6)" }}>
                 {"const "}
-                <span style={{ color: "#2A9D6A" }}>payout</span>
+                <span style={{ color: "#2A9D6A" }}>settlement</span>
                 {" = await"}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-                {"  settlr.payouts.send({"}
+                {"  settlr.settle({"}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-                {'    to: "maria@co.mx",'}
+                {'    to: "vendor.sol",'}
               </span>
               <span style={{ fontSize: 13, color: "#2A9D6A" }}>
                 {"    amount: 5_000,"}
@@ -272,7 +272,7 @@ export default async function Image() {
             settlr.dev
           </span>
           <div style={{ display: "flex", gap: 28 }}>
-            {["Non-custodial", "180+ Countries", "Solana", "1% Flat Fee"].map(
+            {["Non-custodial", "Multisig", "Solana", "1% Flat Fee"].map(
               (tag) => (
                 <span
                   key={tag}

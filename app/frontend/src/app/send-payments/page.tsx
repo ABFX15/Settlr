@@ -56,12 +56,12 @@ export default function SendPaymentsPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Service",
-            name: "Settlr Payout API",
-            serviceType: "Stablecoin payout infrastructure",
+            name: "Settlr Settlement API",
+            serviceType: "Non-custodial USDC settlement infrastructure",
             provider: { "@id": "https://settlr.dev/#organization" },
             url: "https://settlr.dev/send-payments",
             description:
-              "Send USDC to anyone in 180+ countries with just their email. Instant settlement, non-custodial, from 1% per transaction.",
+              "Non-custodial USDC settlement for high-risk B2B supply chains. Instant finality, 1% flat fee, no bank interference.",
             areaServed: "Worldwide",
             about: { "@id": "https://settlr.dev/#defined-term" },
           }),
@@ -78,22 +78,22 @@ export default function SendPaymentsPage() {
           <Reveal>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#1B6B4A]/[0.1] px-4 py-1.5 text-[13px] text-[#1B6B4A] font-medium">
               <ArrowUpRight className="h-3.5 w-3.5" />
-              Payout API
+              Settlement API
             </div>
           </Reveal>
 
           <Reveal delay={0.05}>
             <h1 className="max-w-3xl text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.1] tracking-tight">
-              Send stablecoin payments{" "}
-              <span className="text-[#1B6B4A]">to anyone, anywhere</span>
+              Non-custodial B2B settlement{" "}
+              <span className="text-[#1B6B4A]">for the debanked</span>
             </h1>
           </Reveal>
 
           <Reveal delay={0.1}>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
-              One API call. Recipient gets an email. USDC lands in their wallet
-              in under a second. No bank details, no crypto knowledge, no
-              geographic restrictions. Works in 180+ countries.
+              One API call. USDC settles to your vendor&apos;s wallet in under a
+              second. Non-custodial multisig, no bank interference, no
+              chargebacks. Built for cannabis and high-risk B2B.
             </p>
           </Reveal>
 
@@ -107,7 +107,7 @@ export default function SendPaymentsPage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/docs?tab=payouts"
+                href="/docs?tab=settlement"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
                 Read the docs
@@ -137,8 +137,8 @@ export default function SendPaymentsPage() {
                 step: "01",
                 icon: Code2,
                 title: "Call the API",
-                text: "Send a payout with one SDK call — just an email address and an amount in USDC. We handle wallet creation, gas, and delivery.",
-                code: `await settlr.payout({
+                text: "Send a settlement with one SDK call — just a wallet address and an amount in USDC. We handle gas, multisig, and finality.",
+                code: `await settlr.settle({
   to: "worker@email.com",
   amount: 50,
   currency: "USDC"
@@ -217,8 +217,8 @@ export default function SendPaymentsPage() {
             },
             {
               icon: Globe,
-              title: "180+ countries, no restrictions",
-              text: "Anywhere your recipient has an email address. No bank account required. No SWIFT codes. No geographic exclusions.",
+              title: "No geographic restrictions",
+              text: "Settle with any vendor who has a Solana wallet. No bank account required. No SWIFT codes. No intermediaries.",
               color: "#fbbf24",
             },
             {
@@ -273,18 +273,18 @@ export default function SendPaymentsPage() {
             {[
               {
                 icon: Mail,
-                title: "Email-only delivery",
-                text: "Recipients don't need wallets, apps, or bank accounts. Just an email address.",
+                title: "Wallet-based delivery",
+                text: "Vendors receive directly to their Solana wallet. Non-custodial, no intermediaries.",
               },
               {
                 icon: Users,
-                title: "Batch payouts",
-                text: "Upload a CSV or use the API to send hundreds of payments at once. All settled in seconds.",
+                title: "Batch settlements",
+                text: "Upload a CSV or use the API to send hundreds of settlements at once. All settled in seconds.",
               },
               {
                 icon: RefreshCw,
-                title: "Recurring payments",
-                text: "Set up subscription payouts that trigger automatically. Ideal for contractors and creator payments.",
+                title: "Recurring settlements",
+                text: "Set up recurring settlements that trigger automatically. Ideal for vendor and contractor payments.",
               },
               {
                 icon: Lock,
@@ -412,34 +412,30 @@ export default function SendPaymentsPage() {
               Who sends payments with Settlr
             </h2>
             <p className="mt-4 text-center text-[#7C8A9E]">
-              Any platform that moves money to people globally.
+              Any business in a debanked or high-risk industry.
             </p>
           </Reveal>
 
           <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
-                label: "Freelance marketplaces",
-                link: "/industries/freelance",
+                label: "Cannabis wholesale",
+                link: "/industries/cannabis",
               },
               {
-                label: "Creator platforms",
-                link: "/industries/creators",
-              },
-              {
-                label: "Data labeling companies",
-                link: "/industries/data-labeling",
+                label: "Adult content",
+                link: "/industries/adult-content",
               },
               {
                 label: "iGaming operators",
                 link: "/industries/igaming",
               },
               {
-                label: "E-commerce payouts",
-                link: "/industries/ecommerce",
+                label: "AI SaaS platforms",
+                link: "/industries/ai-saas",
               },
               {
-                label: "B2B SaaS platforms",
+                label: "B2B supply chains",
                 link: "/industries/b2b",
               },
             ].map((item, i) => (

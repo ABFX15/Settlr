@@ -225,7 +225,7 @@ export default function BlogPostPage() {
           <Reveal delay={0.1}>
             <div className="mt-16 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-8 text-center">
               <h3 className="text-xl font-semibold">
-                Ready to start accepting crypto payments?
+                Ready to settle without bank interference?
               </h3>
               <p className="mt-2 text-sm text-[#7C8A9E]">
                 Non-custodial, 1% flat fees, instant settlement. Integrate in

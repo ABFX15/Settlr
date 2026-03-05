@@ -1,5 +1,5 @@
 /**
- * Email utility for sending payout claim emails.
+ * Email utility for sending settlement notification emails.
  *
  * Uses Resend in production (RESEND_API_KEY env var).
  * Falls back to console.log for development / when no key is set.
@@ -90,7 +90,7 @@ export async function sendInstantPayoutEmail(params: {
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
         <div style="text-align: center; margin-bottom: 32px;">
             <div style="background: #34d399; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 16px;">✓</div>
-            <h1 style="color: #111; font-size: 24px; margin: 0;">Instant payout received</h1>
+            <h1 style="color: #111; font-size: 24px; margin: 0;">Instant settlement received</h1>
         </div>
         <div style="background: #f0fdf4; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #bbf7d0;">
             <p style="color: #666; font-size: 14px; margin: 0 0 8px;">Amount</p>
@@ -110,7 +110,7 @@ export async function sendInstantPayoutEmail(params: {
         </p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
         <p style="color: #bbb; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — global payout infrastructure
+            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — non-custodial settlement infrastructure
         </p>
     </div>`;
 
@@ -147,7 +147,7 @@ export async function sendAuthLinkEmail(params: {
         </p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
         <p style="color: #bbb; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — global payout infrastructure
+            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — non-custodial settlement infrastructure
         </p>
     </div>`;
 
@@ -203,7 +203,7 @@ export async function sendPayoutClaimEmail(params: {
         </p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
         <p style="color: #bbb; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — global payout infrastructure
+            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — non-custodial settlement infrastructure
         </p>
     </div>`;
 

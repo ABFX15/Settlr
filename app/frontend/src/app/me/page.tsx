@@ -562,7 +562,7 @@ export default function RecipientDashboard() {
                 >
                   Settlr
                 </a>{" "}
-                — global payout infrastructure
+                — non-custodial settlement infrastructure
               </p>
             </motion.div>
           )}
