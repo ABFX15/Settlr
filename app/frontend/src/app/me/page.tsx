@@ -233,7 +233,7 @@ export default function RecipientDashboard() {
             >
               <h2 className="text-2xl font-bold mb-2">Recipient Dashboard</h2>
               <p className="text-gray-400 mb-8">
-                Sign in with the email you received payouts on.
+                Sign in with the email you received settlements on.
               </p>
               <div className="flex gap-3 max-w-md mx-auto">
                 <input
@@ -343,7 +343,7 @@ export default function RecipientDashboard() {
                 </div>
                 <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-4">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
-                    Payouts
+                    Settlements
                   </p>
                   <p className="text-2xl font-bold">{profile.totalPayouts}</p>
                 </div>
@@ -442,7 +442,7 @@ export default function RecipientDashboard() {
                   <div>
                     <p className="text-sm font-medium">Instant delivery</p>
                     <p className="text-xs text-gray-500">
-                      Auto-send payouts to your saved wallet
+                      Auto-send settlements to your saved wallet
                     </p>
                   </div>
                   <button
@@ -465,7 +465,7 @@ export default function RecipientDashboard() {
                   <div>
                     <p className="text-sm font-medium">Email notifications</p>
                     <p className="text-xs text-gray-500">
-                      Get notified when you receive payouts
+                      Get notified when you receive settlements
                     </p>
                   </div>
                   <button
@@ -489,12 +489,14 @@ export default function RecipientDashboard() {
                 </div>
               </div>
 
-              {/* Payout history */}
+              {/* Settlement history */}
               <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-5">
-                <h3 className="font-semibold text-lg mb-4">Payout History</h3>
+                <h3 className="font-semibold text-lg mb-4">
+                  Settlement History
+                </h3>
                 {payouts.length === 0 ? (
                   <p className="text-gray-500 text-sm text-center py-6">
-                    No payouts yet
+                    No settlements yet
                   </p>
                 ) : (
                   <div className="space-y-3">

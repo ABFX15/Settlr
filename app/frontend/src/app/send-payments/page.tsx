@@ -481,10 +481,10 @@ export default function SendPaymentsPage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/accept-payments"
+                href="/docs"
                 className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
               >
-                Accept payments instead →
+                View API docs →
               </Link>
             </div>
           </Reveal>
