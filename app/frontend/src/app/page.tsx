@@ -104,27 +104,27 @@ function Counter({
 /* ── Floating notification cards (Sorbet-style hero treatment) ── */
 const heroNotifications = [
   {
-    label: "Settlement Complete",
-    detail: "$47,500 → Pacific Distributors",
-    time: "0.6s",
+    label: "Payment Received",
+    detail: "$47,500 from GreenLeaf Farms, CO",
+    time: "Settled in 0.6s",
     position: "left-[2%] top-[18%] sm:left-[4%]",
   },
   {
-    label: "KYB Verified",
-    detail: "GreenLeaf Farms · CO",
+    label: "New Operator Approved",
+    detail: "Mountain Extracts · License verified",
     time: "Just now",
     position: "right-[2%] top-[12%] sm:right-[4%]",
   },
   {
-    label: "Invoice Paid",
-    detail: "$14,250 · Mountain Extracts",
-    time: "0.8s",
+    label: "Grower Paid",
+    detail: "$14,250 to Sunrise Cultivation, OR",
+    time: "No hold, no review",
     position: "left-[6%] bottom-[28%] sm:left-[8%]",
   },
   {
-    label: "Compliance Check",
-    detail: "OFAC · BSA/AML · Passed",
-    time: "Real-time",
+    label: "Audit Trail Saved",
+    detail: "Invoice #1047 · Timestamped receipt",
+    time: "Automatic",
     position: "right-[4%] bottom-[32%] sm:right-[6%]",
   },
 ];
@@ -454,7 +454,7 @@ export default function HomePage() {
                     fontWeight: 800,
                   }}
                 >
-                  Enterprise payments for the{" "}
+                  The payment rail cannabis wholesalers{" "}
                   <span
                     style={{
                       background:
@@ -463,7 +463,7 @@ export default function HomePage() {
                       WebkitTextFillColor: "transparent",
                     }}
                   >
-                    debanked.
+                    can&rsquo;t be cut off from.
                   </span>
                 </h1>
               </R>
@@ -473,9 +473,10 @@ export default function HomePage() {
                   className="mx-auto mt-8 max-w-lg text-lg leading-relaxed sm:text-xl"
                   style={{ color: p.slate }}
                 >
-                  Move capital with 100% certainty. We provide non-custodial
-                  USDC settlement for high-risk B2B supply chains. No bank
-                  interference, ever.
+                  Pay your growers and distributors in seconds — not days. Built
+                  for cannabis, adult content, and every legal industry the
+                  banks won&rsquo;t serve. 1% flat fee, instant finality, no
+                  frozen accounts.
                 </p>
               </R>
 
@@ -508,10 +509,10 @@ export default function HomePage() {
               <R delay={0.3}>
                 <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
                   {[
-                    "GENIUS Act Compliant",
-                    "Non-Custodial",
-                    "SOC 2 Ready",
-                    "BSA/AML",
+                    "No bank account needed",
+                    "You hold your own funds",
+                    "Full audit trail",
+                    "1% flat — no surprises",
                   ].map((badge) => (
                     <div key={badge} className="flex items-center gap-2">
                       <CheckCircle2
