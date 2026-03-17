@@ -26,10 +26,10 @@ function Counter({ end, suffix = "" }: { end: number; suffix?: string }) {
   }, [inView, end]);
 
   return (
-    <p ref={ref} className="text-3xl font-bold" style={{ color: t.navy }}>
+    <span ref={ref}>
       {val}
       {suffix}
-    </p>
+    </span>
   );
 }
 
