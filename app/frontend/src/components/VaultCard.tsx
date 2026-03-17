@@ -217,7 +217,7 @@ export function VaultCard() {
       {/* ═══════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         {/* Vault Status */}
-        <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5">
+        <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-emerald-500/10 p-2.5">
@@ -239,7 +239,7 @@ export function VaultCard() {
             <button
               onClick={fetchVault}
               disabled={loadingVault}
-              className="p-1.5 rounded-lg hover:bg-[#F3F2ED] transition-colors"
+              className="p-1.5 rounded-lg hover:bg-[#F3F4F6] transition-colors"
             >
               <RefreshCw
                 className={`h-3.5 w-3.5 text-[#7C8A9E] ${
@@ -252,7 +252,7 @@ export function VaultCard() {
           {vaultInfo ? (
             <div className="space-y-3">
               {/* Vault PDA */}
-              <div className="rounded-lg bg-[#FDFBF7] border border-[#E2DFD5] px-3 py-2">
+              <div className="rounded-lg bg-[#FFFFFF] border border-[#E5E7EB] px-3 py-2">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-[#7C8A9E] mb-0.5">
                   Settlement Address
                 </p>
@@ -347,7 +347,7 @@ export function VaultCard() {
         </div>
 
         {/* Balance */}
-        <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5">
+        <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-emerald-500/10 p-2.5">
@@ -363,7 +363,7 @@ export function VaultCard() {
             <button
               onClick={fetchBalance}
               disabled={loadingBalance}
-              className="p-1.5 rounded-lg hover:bg-[#F3F2ED] transition-colors"
+              className="p-1.5 rounded-lg hover:bg-[#F3F4F6] transition-colors"
             >
               <RefreshCw
                 className={`h-3.5 w-3.5 text-[#7C8A9E] ${
@@ -424,7 +424,7 @@ export function VaultCard() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="rounded-2xl border border-[#E2DFD5] bg-[#F3F2ED] p-6 max-w-md w-full"
+              className="rounded-2xl border border-[#E5E7EB] bg-[#F3F4F6] p-6 max-w-md w-full"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-6">
@@ -466,7 +466,7 @@ export function VaultCard() {
                     value={newSignerAddress}
                     onChange={(e) => setNewSignerAddress(e.target.value)}
                     placeholder="Paste Solana address"
-                    className="w-full px-3 py-2.5 rounded-lg text-xs font-mono bg-[#FDFBF7] border border-[#E2DFD5] text-[#0C1829] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
+                    className="w-full px-3 py-2.5 rounded-lg text-xs font-mono bg-[#FFFFFF] border border-[#E5E7EB] text-[#0C1829] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
                   />
                 </div>
 
@@ -477,7 +477,7 @@ export function VaultCard() {
                   <select
                     value={newThreshold}
                     onChange={(e) => setNewThreshold(Number(e.target.value))}
-                    className="w-full px-3 py-2.5 rounded-lg text-xs bg-[#FDFBF7] border border-[#E2DFD5] text-[#0C1829] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
+                    className="w-full px-3 py-2.5 rounded-lg text-xs bg-[#FFFFFF] border border-[#E5E7EB] text-[#0C1829] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
                   >
                     {vaultInfo &&
                       Array.from(

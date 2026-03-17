@@ -57,10 +57,10 @@ export default function DocsPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-[#FDFBF7] text-[#0C1829] pt-16">
+      <div className="min-h-screen bg-[#FFFFFF] text-[#0C1829] pt-16">
         <div className="flex">
           {/* Sidebar */}
-          <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 border-r border-[#E2DFD5] bg-[#0d0d14] overflow-y-auto">
+          <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 border-r border-[#E5E7EB] bg-[#0d0d14] overflow-y-auto">
             <div className="p-4">
               {/* Search */}
               <div className="relative mb-6">
@@ -70,7 +70,7 @@ export default function DocsPage() {
                   placeholder="Search docs..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] py-2 pl-10 pr-4 text-sm text-[#0C1829] placeholder:text-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none"
+                  className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] py-2 pl-10 pr-4 text-sm text-[#0C1829] placeholder:text-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none"
                 />
               </div>
 
@@ -86,7 +86,7 @@ export default function DocsPage() {
                       className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                         isActive
                           ? "bg-[#1B6B4A]/10 text-[#1B6B4A]"
-                          : "text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
+                          : "text-[#3B4963] hover:bg-[#F3F4F6] hover:text-[#0C1829]"
                       }`}
                     >
                       <Icon className="h-4 w-4" />
@@ -97,7 +97,7 @@ export default function DocsPage() {
               </nav>
 
               {/* External Links */}
-              <div className="mt-8 border-t border-[#E2DFD5] pt-6">
+              <div className="mt-8 border-t border-[#E5E7EB] pt-6">
                 <p className="mb-3 text-xs font-semibold uppercase text-[#7C8A9E]">
                   Resources
                 </p>
@@ -106,7 +106,7 @@ export default function DocsPage() {
                     href="https://github.com/ABFX15/x402-hack-payment"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F4F6] hover:text-[#0C1829]"
                   >
                     GitHub
                     <ExternalLink className="h-3 w-3" />
@@ -115,7 +115,7 @@ export default function DocsPage() {
                     href="https://www.npmjs.com/package/@settlr/sdk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F4F6] hover:text-[#0C1829]"
                   >
                     npm (SDK)
                     <ExternalLink className="h-3 w-3" />
@@ -138,7 +138,7 @@ export default function DocsPage() {
               </div>
 
               {/* Mobile Navigation Tabs */}
-              <div className="flex gap-1 mb-8 border-b border-[#E2DFD5] overflow-x-auto lg:hidden">
+              <div className="flex gap-1 mb-8 border-b border-[#E5E7EB] overflow-x-auto lg:hidden">
                 {docsTabs.map((tab) => (
                   <button
                     key={tab.id}
@@ -210,7 +210,7 @@ function QuickStartContent() {
               See LeafLink tab →
             </span>
           </div>
-          <div className="rounded-xl border border-[#E2DFD5] bg-[#F3F2ED]/50 p-5">
+          <div className="rounded-xl border border-[#E5E7EB] bg-[#F3F4F6]/50 p-5">
             <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#7C8A9E]/10 text-[#7C8A9E] px-2 py-0.5 rounded-full mb-3">
               Manual
             </span>
@@ -277,7 +277,7 @@ function QuickStartContent() {
             creates a USDC invoice, and emails the buyer a one-click payment
             link. Settlement is instant.
           </p>
-          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 font-mono text-sm text-[#3B4963]">
+          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 font-mono text-sm text-[#3B4963]">
             <div className="space-y-1">
               <p>LeafLink PO #4821 created → webhook fires</p>
               <p>&nbsp;&nbsp;→ Settlr invoice INV-4821 auto-created</p>
@@ -357,7 +357,7 @@ function LeafLinkContent() {
           gives Settlr read access to your orders and the ability to update
           payment status.
         </p>
-        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-6">
+        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mb-6">
           <p className="text-sm text-[#7C8A9E]">
             <strong className="text-[#3B4963]">Auth format:</strong>{" "}
             <code className="text-[#1B6B4A] bg-white px-2 py-0.5 rounded">
@@ -420,7 +420,7 @@ const response = await fetch('/api/integrations/leaflink/config', {
         <p className="text-[#7C8A9E] mb-4">
           Settlr listens for these LeafLink webhook events:
         </p>
-        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
+        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -428,7 +428,7 @@ const response = await fetch('/api/integrations/leaflink/config', {
                 <th className="px-4 py-3 font-medium">Settlr Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E2DFD5]">
+            <tbody className="divide-y divide-[#E5E7EB]">
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   order.created
@@ -484,7 +484,7 @@ const response = await fetch('/api/integrations/leaflink/config', {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           Configuration Options
         </h3>
-        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
+        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -493,7 +493,7 @@ const response = await fetch('/api/integrations/leaflink/config', {
                 <th className="px-4 py-3 font-medium">Description</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E2DFD5]">
+            <tbody className="divide-y divide-[#E5E7EB]">
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   auto_create_invoice
@@ -535,7 +535,7 @@ const response = await fetch('/api/integrations/leaflink/config', {
         </div>
 
         {/* Retry */}
-        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mt-8">
+        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mt-8">
           <h4 className="font-medium text-[#0C1829] mb-2">
             Failed Webhook Retry
           </h4>
@@ -621,7 +621,7 @@ const invoice = await fetch('/api/payments', {
           text, or any channel — the buyer clicks, connects a wallet, and pays.
           No app download required.
         </p>
-        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-6">
+        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mb-6">
           <p className="text-sm text-[#7C8A9E]">
             <strong className="text-[#3B4963]">Payment URL format:</strong>{" "}
             <code className="text-[#1B6B4A]">
@@ -655,7 +655,7 @@ const payment = await fetch('/api/payments/pay_abc123', {
         </CodeBlock>
 
         {/* Gasless */}
-        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mt-8">
+        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mt-8">
           <h4 className="font-medium text-[#0C1829] mb-2">
             Gasless Transactions
           </h4>
@@ -687,7 +687,7 @@ function DashboardContent() {
         {/* Overview */}
         <h3 className="text-xl font-semibold mb-4">Dashboard Features</h3>
         <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4">
+          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4">
             <h4 className="font-medium text-[#0C1829] mb-2">
               Settlement Volume
             </h4>
@@ -696,21 +696,21 @@ function DashboardContent() {
               history across all channels.
             </p>
           </div>
-          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4">
+          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4">
             <h4 className="font-medium text-[#0C1829] mb-2">LeafLink Status</h4>
             <p className="text-sm text-[#7C8A9E]">
               Connection health, last webhook received, sync records, and failed
               webhook retry queue.
             </p>
           </div>
-          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4">
+          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4">
             <h4 className="font-medium text-[#0C1829] mb-2">Treasury</h4>
             <p className="text-sm text-[#7C8A9E]">
               On-chain treasury balance, accumulated platform fees, and
               one-click claim to your wallet.
             </p>
           </div>
-          <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4">
+          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4">
             <h4 className="font-medium text-[#0C1829] mb-2">Compliance Logs</h4>
             <p className="text-sm text-[#7C8A9E]">
               METRC tags, license numbers, and on-chain signatures for every
@@ -726,7 +726,7 @@ function DashboardContent() {
           platform fee (default 2%) into a program-owned treasury PDA on Solana.
           Authorized signers can claim accumulated fees at any time.
         </p>
-        <div className="bg-[#F3F2ED] rounded-lg p-6 border border-[#E2DFD5] mb-6">
+        <div className="bg-[#F3F4F6] rounded-lg p-6 border border-[#E5E7EB] mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <div>
               <p className="text-sm text-[#7C8A9E] mb-1">Fee Collection</p>
@@ -815,13 +815,13 @@ function APIContent() {
         </p>
 
         {/* Base URL */}
-        <div className="bg-[#F3F2ED] rounded-lg p-4 mb-6">
+        <div className="bg-[#F3F4F6] rounded-lg p-4 mb-6">
           <p className="text-[#7C8A9E] text-sm mb-1">Base URL</p>
           <code className="text-[#1B6B4A]">https://settlr.dev/api</code>
         </div>
 
         {/* Authentication */}
-        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-8">
+        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mb-8">
           <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
             Authentication
           </h3>
@@ -844,8 +844,8 @@ function APIContent() {
           LeafLink Integration
         </h3>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
@@ -860,8 +860,8 @@ function APIContent() {
           </div>
         </div>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
@@ -888,8 +888,8 @@ function APIContent() {
           </div>
         </div>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
@@ -905,8 +905,8 @@ function APIContent() {
           </div>
         </div>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
@@ -920,8 +920,8 @@ function APIContent() {
           </div>
         </div>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
@@ -940,8 +940,8 @@ function APIContent() {
           Payments &amp; Invoices
         </h3>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
@@ -977,8 +977,8 @@ function APIContent() {
           </div>
         </div>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
@@ -989,8 +989,8 @@ function APIContent() {
           </div>
         </div>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
@@ -1000,9 +1000,9 @@ function APIContent() {
             <p className="text-[#7C8A9E] mb-2">
               List all payments with optional filters.
             </p>
-            <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
+            <div className="bg-[#F3F4F6] rounded-lg overflow-hidden">
               <table className="w-full text-left">
-                <tbody className="divide-y divide-[#E2DFD5]">
+                <tbody className="divide-y divide-[#E5E7EB]">
                   <tr>
                     <td className="px-4 py-2 font-mono text-[#1B6B4A]">
                       status
@@ -1038,8 +1038,8 @@ function APIContent() {
           Treasury
         </h3>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
@@ -1053,8 +1053,8 @@ function APIContent() {
           </div>
         </div>
 
-        <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
-          <div className="bg-[#F3F2ED] px-4 py-3 flex items-center gap-3">
+        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden">
+          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
             <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
@@ -1162,7 +1162,7 @@ export async function POST(req: NextRequest) {
 
         {/* Events */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Event Types</h3>
-        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
+        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -1170,7 +1170,7 @@ export async function POST(req: NextRequest) {
                 <th className="px-4 py-3 font-medium">Description</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E2DFD5]">
+            <tbody className="divide-y divide-[#E5E7EB]">
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">
                   payment.completed
@@ -1267,7 +1267,7 @@ function IntegrationsContent() {
               orders, syncs payment status back to LeafLink.
             </p>
           </div>
-          <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED]/50 p-5">
+          <div className="rounded-lg border border-[#E5E7EB] bg-[#F3F4F6]/50 p-5">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-2xl">🛒</span>
               <span className="text-[10px] font-bold tracking-widest uppercase bg-[#7C8A9E]/10 text-[#7C8A9E] px-2 py-0.5 rounded-full">
@@ -1279,7 +1279,7 @@ function IntegrationsContent() {
               Dispensary POS with METRC integration. Planned for Q3 2026.
             </p>
           </div>
-          <div className="rounded-lg border border-[#E2DFD5] bg-[#F3F2ED]/50 p-5">
+          <div className="rounded-lg border border-[#E5E7EB] bg-[#F3F4F6]/50 p-5">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-2xl">📊</span>
               <span className="text-[10px] font-bold tracking-widest uppercase bg-[#7C8A9E]/10 text-[#7C8A9E] px-2 py-0.5 rounded-full">
@@ -1304,7 +1304,7 @@ function IntegrationsContent() {
         </p>
 
         <h4 className="font-medium mb-2">API Routes</h4>
-        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden mb-6">
+        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden mb-6">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -1312,7 +1312,7 @@ function IntegrationsContent() {
                 <th className="px-4 py-3 font-medium">Purpose</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E2DFD5]">
+            <tbody className="divide-y divide-[#E5E7EB]">
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
                   /api/integrations/leaflink/config
@@ -1358,7 +1358,7 @@ function IntegrationsContent() {
         </div>
 
         {/* Coming Soon */}
-        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mt-8">
+        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mt-8">
           <h4 className="font-medium text-[#0C1829] mb-2">
             Want a different POS integration?
           </h4>
@@ -1398,7 +1398,7 @@ function SDKContent() {
           Settlr.
         </p>
 
-        <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-4 mb-8">
+        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mb-8">
           <p className="text-sm text-[#7C8A9E]">
             <strong className="text-[#3B4963]">Note:</strong> The SDK is
             optional. The LeafLink integration and direct invoices work entirely
@@ -1451,7 +1451,7 @@ function PayInvoice({ invoiceId, amount }: { invoiceId: string; amount: number }
         <h3 className="text-xl font-semibold mb-4 mt-8">
           What&apos;s Included
         </h3>
-        <div className="bg-[#F3F2ED] rounded-lg overflow-hidden">
+        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -1459,7 +1459,7 @@ function PayInvoice({ invoiceId, amount }: { invoiceId: string; amount: number }
                 <th className="px-4 py-3 font-medium">Description</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E2DFD5]">
+            <tbody className="divide-y divide-[#E5E7EB]">
               <tr>
                 <td className="px-4 py-3 font-mono text-[#1B6B4A]">Settlr</td>
                 <td className="px-4 py-3 text-[#7C8A9E]">
@@ -1614,10 +1614,10 @@ function TroubleshootingItem({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-[#E2DFD5] rounded-lg overflow-hidden">
+    <div className="border border-[#E5E7EB] rounded-lg overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-[#F3F2ED] transition-colors"
+        className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-[#F3F4F6] transition-colors"
       >
         <span className="font-medium">{question}</span>
         <span
@@ -1886,8 +1886,8 @@ function CodeBlock({
   };
 
   return (
-    <div className="relative bg-[#F3F2ED] rounded-lg overflow-hidden mb-4 border border-[#E2DFD5]">
-      <div className="flex items-center justify-between px-4 py-2 bg-white/70 border-b border-[#E2DFD5]">
+    <div className="relative bg-[#F3F4F6] rounded-lg overflow-hidden mb-4 border border-[#E5E7EB]">
+      <div className="flex items-center justify-between px-4 py-2 bg-white/70 border-b border-[#E5E7EB]">
         <span className="text-xs text-[#7C8A9E] uppercase font-medium">
           {language}
         </span>
@@ -1915,7 +1915,7 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg p-6">
+    <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-6">
       <div className="text-3xl mb-3">{icon}</div>
       <h3 className="font-semibold mb-2">{title}</h3>
       <p className="text-[#7C8A9E] text-sm">{description}</p>

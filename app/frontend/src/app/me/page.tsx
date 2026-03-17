@@ -201,7 +201,7 @@ export default function RecipientDashboard() {
   // ---------------------------------------------------------------------------
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7] text-[#0C1829] flex items-start justify-center pt-12 px-4 pb-20">
+    <main className="min-h-screen bg-[#FFFFFF] text-[#0C1829] flex items-start justify-center pt-12 px-4 pb-20">
       <div className="w-full max-w-2xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -242,7 +242,7 @@ export default function RecipientDashboard() {
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && requestMagicLink()}
                   placeholder="you@example.com"
-                  className="flex-1 bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg px-4 py-3 text-[#0C1829] placeholder:text-gray-500 focus:outline-none focus:border-[#1B6B4A]/50"
+                  className="flex-1 bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg px-4 py-3 text-[#0C1829] placeholder:text-gray-500 focus:outline-none focus:border-[#1B6B4A]/50"
                 />
                 <button
                   onClick={requestMagicLink}
@@ -333,7 +333,7 @@ export default function RecipientDashboard() {
             >
               {/* Stats row */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-4">
+                <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-4">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
                     Total received
                   </p>
@@ -341,13 +341,13 @@ export default function RecipientDashboard() {
                     ${profile.totalReceived.toFixed(2)}
                   </p>
                 </div>
-                <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-4">
+                <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-4">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
                     Settlements
                   </p>
                   <p className="text-2xl font-bold">{profile.totalPayouts}</p>
                 </div>
-                <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-4">
+                <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-4">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
                     Balance
                   </p>
@@ -382,7 +382,7 @@ export default function RecipientDashboard() {
               )}
 
               {/* Settings card */}
-              <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-5 space-y-4">
+              <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-5 space-y-4">
                 <h3 className="font-semibold text-lg">Settings</h3>
 
                 {/* Wallet */}
@@ -396,7 +396,7 @@ export default function RecipientDashboard() {
                         value={newWallet}
                         onChange={(e) => setNewWallet(e.target.value)}
                         placeholder="Solana wallet address"
-                        className="flex-1 bg-[#F3F2ED] border border-[#E2DFD5] rounded-lg px-3 py-2 text-sm text-[#0C1829] placeholder:text-gray-600 focus:outline-none focus:border-[#1B6B4A]/50"
+                        className="flex-1 bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#0C1829] placeholder:text-gray-600 focus:outline-none focus:border-[#1B6B4A]/50"
                       />
                       <button
                         onClick={() =>
@@ -416,7 +416,7 @@ export default function RecipientDashboard() {
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <code className="text-sm text-gray-300 bg-[#F3F2ED] px-3 py-1.5 rounded-lg">
+                      <code className="text-sm text-gray-300 bg-[#F3F4F6] px-3 py-1.5 rounded-lg">
                         {profile.walletAddress
                           ? `${profile.walletAddress.slice(
                               0,
@@ -490,7 +490,7 @@ export default function RecipientDashboard() {
               </div>
 
               {/* Settlement history */}
-              <div className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl p-5">
+              <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-5">
                 <h3 className="font-semibold text-lg mb-4">
                   Settlement History
                 </h3>
@@ -503,7 +503,7 @@ export default function RecipientDashboard() {
                     {payouts.map((p) => (
                       <div
                         key={p.id}
-                        className="flex items-center justify-between py-2 border-b border-[#E2DFD5] last:border-0"
+                        className="flex items-center justify-between py-2 border-b border-[#E5E7EB] last:border-0"
                       >
                         <div>
                           <p className="font-medium">

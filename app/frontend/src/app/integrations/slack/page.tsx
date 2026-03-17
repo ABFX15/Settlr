@@ -44,7 +44,7 @@ export default function SlackPage() {
 
   return (
     <main
-      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <script
@@ -100,7 +100,7 @@ export default function SlackPage() {
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
               Type{" "}
               <code
-                className="rounded bg-[#F3F2ED] px-2 py-0.5 text-sm font-mono"
+                className="rounded bg-[#F3F4F6] px-2 py-0.5 text-sm font-mono"
                 style={{ color: colorLight }}
               >
                 /pay alice@email.com 250
@@ -128,7 +128,7 @@ export default function SlackPage() {
               </a>
               <Link
                 href="/docs"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E5E7EB] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
               >
                 Setup docs
               </Link>
@@ -138,7 +138,7 @@ export default function SlackPage() {
       </section>
 
       {/* Slash commands */}
-      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E5E7EB]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
             <p
@@ -178,9 +178,9 @@ export default function SlackPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.command} delay={i * 0.06}>
-                <div className="rounded-2xl border border-[#E2DFD5] bg-[#08080d] p-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
+                <div className="rounded-2xl border border-[#E5E7EB] bg-[#08080d] p-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
                   <code
-                    className="shrink-0 rounded-lg bg-[#F3F2ED] px-4 py-2 text-sm font-mono"
+                    className="shrink-0 rounded-lg bg-[#F3F4F6] px-4 py-2 text-sm font-mono"
                     style={{ color: colorLight }}
                   >
                     {item.command}
@@ -260,7 +260,7 @@ export default function SlackPage() {
       </section>
 
       {/* Use cases */}
-      <section className="border-y border-[#E2DFD5]/[0.04]">
+      <section className="border-y border-[#E5E7EB]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
@@ -284,7 +284,7 @@ export default function SlackPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.08}>
-                <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+                <div className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
                   <h3 className="text-[15px] font-semibold text-[#0C1829]">
                     {item.title}
                   </h3>
@@ -318,7 +318,7 @@ export default function SlackPage() {
             "Full audit log visible in Slack threads",
           ].map((feature, i) => (
             <Reveal key={feature} delay={i * 0.04}>
-              <div className="flex items-center gap-3 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4">
+              <div className="flex items-center gap-3 rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-4">
                 <Check
                   className="h-4 w-4 flex-shrink-0"
                   style={{ color: colorLight }}
@@ -368,7 +368,7 @@ export default function SlackPage() {
               </a>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
               >
                 Get API key
               </Link>

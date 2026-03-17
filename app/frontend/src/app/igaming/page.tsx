@@ -101,9 +101,9 @@ const comparisonData = [
 
 export default function IGamingPage() {
   return (
-    <main className="min-h-screen bg-[#FDFBF7]">
+    <main className="min-h-screen bg-[#FFFFFF]">
       {/* Header */}
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#E2DFD5] bg-[#FDFBF7]/80 px-4 py-4 backdrop-blur-xl md:px-8">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#E5E7EB] bg-[#FFFFFF]/80 px-4 py-4 backdrop-blur-xl md:px-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <SettlrLogoWithIcon size="sm" variant="dark" />
@@ -130,7 +130,7 @@ export default function IGamingPage() {
           </nav>
           <Link
             href="/waitlist"
-            className="rounded-lg bg-[#FDFBF7] px-4 py-2 text-sm font-medium text-[#0C1829] transition-all hover:opacity-90"
+            className="rounded-lg bg-[#FFFFFF] px-4 py-2 text-sm font-medium text-[#0C1829] transition-all hover:opacity-90"
           >
             Join Waitlist
           </Link>
@@ -181,14 +181,14 @@ export default function IGamingPage() {
           >
             <Link
               href="/waitlist"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#FDFBF7] px-8 py-4 text-lg font-semibold text-[#0C1829] shadow-lg shadow-purple-500/30 transition-all hover:shadow-purple-500/50"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#FFFFFF] px-8 py-4 text-lg font-semibold text-[#0C1829] shadow-lg shadow-purple-500/30 transition-all hover:shadow-purple-500/50"
             >
               Request Access
               <ArrowRight className="h-5 w-5" />
             </Link>
             <Link
               href="/docs"
-              className="inline-flex items-center gap-2 rounded-xl border-2 border-[#a78bfa]/50 px-8 py-4 text-lg font-semibold text-[#0C1829] transition-all hover:bg-[#F3F2ED]"
+              className="inline-flex items-center gap-2 rounded-xl border-2 border-[#a78bfa]/50 px-8 py-4 text-lg font-semibold text-[#0C1829] transition-all hover:bg-[#F3F4F6]"
             >
               View Documentation
             </Link>
@@ -222,7 +222,7 @@ export default function IGamingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="rounded-2xl border border-[#E2DFD5] bg-[#F3F2ED] p-6 backdrop-blur-sm transition-all hover:border-[#a78bfa]/30 hover:bg-[#F3F2ED]"
+                className="rounded-2xl border border-[#E5E7EB] bg-[#F3F4F6] p-6 backdrop-blur-sm transition-all hover:border-[#a78bfa]/30 hover:bg-[#F3F4F6]"
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1B6B4A]/10">
                   <feature.icon className="h-6 w-6 text-[#1B6B4A]" />
@@ -258,9 +258,9 @@ export default function IGamingPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="overflow-hidden rounded-2xl border border-[#E2DFD5]"
+            className="overflow-hidden rounded-2xl border border-[#E5E7EB]"
           >
-            <div className="grid grid-cols-3 border-b border-[#E2DFD5] bg-[#F3F2ED] p-4">
+            <div className="grid grid-cols-3 border-b border-[#E5E7EB] bg-[#F3F4F6] p-4">
               <div className="font-semibold text-[#7C8A9E]">Feature</div>
               <div className="text-center font-semibold text-[#7C8A9E]">
                 Traditional
@@ -274,7 +274,7 @@ export default function IGamingPage() {
                 key={row.feature}
                 className={`grid grid-cols-3 p-4 ${
                   index < comparisonData.length - 1
-                    ? "border-b border-[#E2DFD5]"
+                    ? "border-b border-[#E5E7EB]"
                     : ""
                 }`}
               >
@@ -342,7 +342,7 @@ export default function IGamingPage() {
               </p>
               <Link
                 href="/waitlist"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#FDFBF7] px-6 py-3 font-semibold text-[#0C1829] transition-all hover:opacity-90"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#FFFFFF] px-6 py-3 font-semibold text-[#0C1829] transition-all hover:opacity-90"
               >
                 Join Waitlist
                 <ArrowRight className="h-5 w-5" />
@@ -363,7 +363,7 @@ export default function IGamingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#E2DFD5] px-4 py-12">
+      <footer className="border-t border-[#E5E7EB] px-4 py-12">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
           <div className="flex items-center gap-2">
             <SettlrLogoWithIcon size="sm" variant="dark" />

@@ -1906,7 +1906,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Loading step
   if (step === "loading") {
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-[#1B6B4A] animate-spin mx-auto mb-4" />
           <p className="text-[#7C8A9E]">Loading checkout...</p>
@@ -1918,7 +1918,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Auth step - login with email/social
   if (step === "auth") {
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4 pb-safe">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4 pb-safe">
         {/* Close/Back button */}
         <button
           onClick={() => {
@@ -1930,7 +1930,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               router.push("/");
             }
           }}
-          className="fixed top-4 right-4 p-2 bg-[#F3F2ED] hover:bg-[#F3F2ED] rounded-full transition-colors z-50 sm:top-6 sm:right-6"
+          className="fixed top-4 right-4 p-2 bg-[#F3F4F6] hover:bg-[#F3F4F6] rounded-full transition-colors z-50 sm:top-6 sm:right-6"
           aria-label="Close"
         >
           <X className="w-5 h-5 text-[#7C8A9E]" />
@@ -1941,7 +1941,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md px-2 sm:px-0"
         >
-          <div className="bg-[#FDFBF7]/80 backdrop-blur-xl rounded-3xl border border-[#E2DFD5] p-4 sm:p-6 mb-6">
+          <div className="bg-[#FFFFFF]/80 backdrop-blur-xl rounded-3xl border border-[#E5E7EB] p-4 sm:p-6 mb-6">
             <div className="text-center mb-6">
               {/* Privacy indicator badge */}
               {isPrivatePayment && (
@@ -1970,7 +1970,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               )}
             </div>
 
-            <div className="border-t border-[#E2DFD5] pt-6">
+            <div className="border-t border-[#E5E7EB] pt-6">
               <p className="text-center text-[#3B4963] mb-4">
                 Choose how to pay
               </p>
@@ -1991,15 +1991,15 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   </button>
 
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 h-px bg-[#F3F2ED]" />
+                    <div className="flex-1 h-px bg-[#F3F4F6]" />
                     <span className="text-[#7C8A9E] text-xs">or</span>
-                    <div className="flex-1 h-px bg-[#F3F2ED]" />
+                    <div className="flex-1 h-px bg-[#F3F4F6]" />
                   </div>
 
                   {/* Email login - Creates embedded wallet */}
                   <button
                     onClick={() => login({ loginMethods: ["email"] })}
-                    className="w-full py-4 bg-[#F3F2ED] border border-[#E2DFD5] text-[#0C1829] font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-[#F3F2ED] transition-colors"
+                    className="w-full py-4 bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-[#F3F4F6] transition-colors"
                   >
                     <Mail className="w-5 h-5" />
                     Continue with Email
@@ -2042,14 +2042,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Wallet creation step
   if (step === "wallet") {
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4 relative">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4 relative">
         {/* Close/Back button */}
         <button
           onClick={() => {
             logout();
             setStep("auth");
           }}
-          className="absolute top-4 right-4 p-2 bg-[#F3F2ED] hover:bg-[#F3F2ED] rounded-full transition-colors z-10"
+          className="absolute top-4 right-4 p-2 bg-[#F3F4F6] hover:bg-[#F3F4F6] rounded-full transition-colors z-10"
           aria-label="Close"
         >
           <X className="w-5 h-5 text-[#7C8A9E]" />
@@ -2060,7 +2060,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md"
         >
-          <div className="bg-[#FDFBF7]/80 backdrop-blur-xl rounded-3xl border border-[#E2DFD5] p-6">
+          <div className="bg-[#FFFFFF]/80 backdrop-blur-xl rounded-3xl border border-[#E5E7EB] p-6">
             <div className="text-center mb-6">
               <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4">
                 <Wallet className="w-8 h-8 text-[#0C1829]" />
@@ -2105,7 +2105,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // KYC verification step
   if (step === "kyc") {
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4 relative">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4 relative">
         {/* Close/Back button */}
         <button
           onClick={() => {
@@ -2117,7 +2117,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               router.push("/");
             }
           }}
-          className="absolute top-4 right-4 p-2 bg-[#F3F2ED] hover:bg-[#F3F2ED] rounded-full transition-colors z-10"
+          className="absolute top-4 right-4 p-2 bg-[#F3F4F6] hover:bg-[#F3F4F6] rounded-full transition-colors z-10"
           aria-label="Close"
         >
           <X className="w-5 h-5 text-[#7C8A9E]" />
@@ -2128,7 +2128,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md"
         >
-          <div className="bg-[#FDFBF7]/80 backdrop-blur-xl rounded-3xl border border-[#E2DFD5] p-6">
+          <div className="bg-[#FFFFFF]/80 backdrop-blur-xl rounded-3xl border border-[#E5E7EB] p-6">
             <div className="text-center mb-6">
               <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-[#0C1829]" />
@@ -2142,7 +2142,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             </div>
 
             {/* Payment preview */}
-            <div className="p-4 bg-[#F3F2ED] rounded-xl mb-6">
+            <div className="p-4 bg-[#F3F4F6] rounded-xl mb-6">
               <div className="flex justify-between items-center">
                 <span className="text-[#7C8A9E]">Amount</span>
                 <span className="text-[#0C1829] font-semibold">
@@ -2253,7 +2253,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   }
                 }}
                 disabled={checkingKyc}
-                className="w-full py-4 bg-[#F3F2ED] text-[#0C1829] font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-[#F3F2ED] transition-colors disabled:opacity-50"
+                className="w-full py-4 bg-[#F3F4F6] text-[#0C1829] font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-[#F3F4F6] transition-colors disabled:opacity-50"
               >
                 {checkingKyc ? (
                   <>
@@ -2288,7 +2288,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     const hasCorrectWallet = isEvmChain ? hasEvmWallet : !!activeWallet;
 
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4 pb-safe relative overflow-y-auto">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4 pb-safe relative overflow-y-auto">
         {/* Close/Back button */}
         <button
           onClick={() => {
@@ -2300,7 +2300,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               router.push("/");
             }
           }}
-          className="absolute top-4 right-4 p-2 bg-[#F3F2ED] hover:bg-[#F3F2ED] rounded-full transition-colors z-10 sm:top-6 sm:right-6"
+          className="absolute top-4 right-4 p-2 bg-[#F3F4F6] hover:bg-[#F3F4F6] rounded-full transition-colors z-10 sm:top-6 sm:right-6"
           aria-label="Close"
         >
           <X className="w-5 h-5 text-[#7C8A9E]" />
@@ -2311,9 +2311,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md px-2 sm:px-0 my-4"
         >
-          <div className="bg-[#FDFBF7]/80 backdrop-blur-xl rounded-3xl border border-[#E2DFD5] p-4 sm:p-6">
+          <div className="bg-[#FFFFFF]/80 backdrop-blur-xl rounded-3xl border border-[#E5E7EB] p-4 sm:p-6">
             {/* User info */}
-            <div className="flex items-center justify-between mb-4 sm:mb-6 p-3 bg-[#F3F2ED] rounded-xl">
+            <div className="flex items-center justify-between mb-4 sm:mb-6 p-3 bg-[#F3F4F6] rounded-xl">
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#1B6B4A] flex items-center justify-center">
                   <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#0C1829]" />
@@ -2335,7 +2335,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
             {/* Wallet info */}
             {activeWallet && (
-              <div className="flex items-center gap-3 mb-6 p-3 bg-[#F3F2ED] rounded-xl">
+              <div className="flex items-center gap-3 mb-6 p-3 bg-[#F3F4F6] rounded-xl">
                 <Wallet className="w-5 h-5 text-[#1B6B4A]" />
                 <div className="flex-1 min-w-0">
                   <p className="text-[#7C8A9E] text-xs">
@@ -2364,7 +2364,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             )}
 
             {/* Chain Selector */}
-            <div className="mb-4 p-3 bg-[#F3F2ED] rounded-xl">
+            <div className="mb-4 p-3 bg-[#F3F4F6] rounded-xl">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[#7C8A9E] text-xs mb-1">Pay with USDC on</p>
@@ -2462,7 +2462,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             )}
 
             {/* Payment details */}
-            <div className="bg-[#F3F2ED] rounded-2xl p-4 mb-4">
+            <div className="bg-[#F3F4F6] rounded-2xl p-4 mb-4">
               <div className="flex justify-between items-center mb-3">
                 <span className="text-[#7C8A9E]">To</span>
                 <span className="text-[#0C1829]">{merchantName}</span>
@@ -2660,7 +2660,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                       href="https://faucet.circle.com/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-2 bg-[#F3F2ED] text-[#3B4963] text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-[#F3F2ED] transition-colors mb-3"
+                      className="w-full py-2 bg-[#F3F4F6] text-[#3B4963] text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-[#F3F4F6] transition-colors mb-3"
                     >
                       <Plus className="w-4 h-4" />
                       Get Devnet USDC (Circle Faucet)
@@ -2676,7 +2676,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                       navigator.clipboard.writeText(activeWallet.address);
                       alert("Address copied!");
                     }}
-                    className="flex items-center justify-center gap-2 mx-auto px-3 py-1.5 bg-[#F3F2ED] rounded-lg hover:bg-[#F3F2ED] transition-colors"
+                    className="flex items-center justify-center gap-2 mx-auto px-3 py-1.5 bg-[#F3F4F6] rounded-lg hover:bg-[#F3F4F6] transition-colors"
                   >
                     <span className="text-xs font-mono text-[#3B4963]">
                       {activeWallet.address.slice(0, 8)}...
@@ -2731,7 +2731,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                       href="https://faucet.solana.com/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-2 bg-[#F3F2ED] text-[#3B4963] text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-[#F3F2ED] transition-colors"
+                      className="w-full py-2 bg-[#F3F4F6] text-[#3B4963] text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-[#F3F4F6] transition-colors"
                     >
                       <Fuel className="w-4 h-4" />
                       Get Devnet SOL (Faucet)
@@ -2797,7 +2797,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                     : useGasless && gaslessAvailable
                     ? "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:opacity-90"
                     : "bg-white text-[#0C1829] hover:opacity-90"
-                  : "bg-[#F3F2ED] text-[#7C8A9E] cursor-not-allowed"
+                  : "bg-[#F3F4F6] text-[#7C8A9E] cursor-not-allowed"
               }`}
             >
               {isEvmChain ? (
@@ -2865,7 +2865,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
 
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -2897,7 +2897,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     const explorerName = isCrossChain ? "Mayan Explorer" : "Solscan";
 
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -3042,14 +3042,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             {successUrl ? (
               <a
                 href={successUrl}
-                className="block w-full py-3 bg-[#F3F2ED] text-[#0C1829] font-semibold rounded-xl hover:bg-[#F3F2ED] transition-colors text-center"
+                className="block w-full py-3 bg-[#F3F4F6] text-[#0C1829] font-semibold rounded-xl hover:bg-[#F3F4F6] transition-colors text-center"
               >
                 Return to Store
               </a>
             ) : (
               <Link
                 href="/demo/store"
-                className="block w-full py-3 bg-[#F3F2ED] text-[#0C1829] font-semibold rounded-xl hover:bg-[#F3F2ED] transition-colors text-center"
+                className="block w-full py-3 bg-[#F3F4F6] text-[#0C1829] font-semibold rounded-xl hover:bg-[#F3F4F6] transition-colors text-center"
               >
                 Browse Plans
               </Link>
@@ -3071,7 +3071,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Error step
   if (step === "error") {
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -3097,7 +3097,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             </button>
             <Link
               href="/"
-              className="block w-full py-3 bg-[#F3F2ED] text-[#0C1829] font-semibold rounded-xl hover:bg-[#F3F2ED] transition-colors"
+              className="block w-full py-3 bg-[#F3F4F6] text-[#0C1829] font-semibold rounded-xl hover:bg-[#F3F4F6] transition-colors"
             >
               Cancel
             </Link>

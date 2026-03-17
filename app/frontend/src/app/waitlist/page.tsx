@@ -48,9 +48,9 @@ export default function WaitlistPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7] text-[#0C1829]">
+    <main className="min-h-screen bg-[#FFFFFF] text-[#0C1829]">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#E2DFD5]">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#FFFFFF]/80 backdrop-blur-md border-b border-[#E5E7EB]">
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
             <SettlrLogoWithIcon size="sm" variant="dark" />
@@ -64,7 +64,7 @@ export default function WaitlistPage() {
             </Link>
             <Link
               href="/demo/store"
-              className="px-4 py-2 rounded-lg bg-[#FDFBF7] text-[#0C1829] text-sm font-medium"
+              className="px-4 py-2 rounded-lg bg-[#FFFFFF] text-[#0C1829] text-sm font-medium"
             >
               Try Demo
             </Link>
@@ -95,7 +95,7 @@ export default function WaitlistPage() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8 text-center"
+              className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 text-center"
             >
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#1B6B4A]/15 flex items-center justify-center">
                 <svg
@@ -118,7 +118,7 @@ export default function WaitlistPage() {
               </p>
               <Link
                 href="/demo/store"
-                className="inline-block px-6 py-3 rounded-lg bg-[#FDFBF7] text-[#0C1829] font-medium"
+                className="inline-block px-6 py-3 rounded-lg bg-[#FFFFFF] text-[#0C1829] font-medium"
               >
                 Try the Demo
               </Link>
@@ -129,7 +129,7 @@ export default function WaitlistPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               onSubmit={handleSubmit}
-              className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8 space-y-6"
+              className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 space-y-6"
             >
               <div>
                 <label className="block text-sm font-medium text-[#0C1829] mb-2">
@@ -141,7 +141,7 @@ export default function WaitlistPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="w-full px-4 py-3 rounded-lg bg-[#F3F2ED] border border-[#E2DFD5] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#a855f7]/50"
+                  className="w-full px-4 py-3 rounded-lg bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#a855f7]/50"
                 />
               </div>
 
@@ -155,7 +155,7 @@ export default function WaitlistPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@company.com"
-                  className="w-full px-4 py-3 rounded-lg bg-[#F3F2ED] border border-[#E2DFD5] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#a855f7]/50"
+                  className="w-full px-4 py-3 rounded-lg bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#a855f7]/50"
                 />
               </div>
 
@@ -168,7 +168,7 @@ export default function WaitlistPage() {
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   placeholder="Your company (optional)"
-                  className="w-full px-4 py-3 rounded-lg bg-[#F3F2ED] border border-[#E2DFD5] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#a855f7]/50"
+                  className="w-full px-4 py-3 rounded-lg bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#a855f7]/50"
                 />
               </div>
 
@@ -181,14 +181,14 @@ export default function WaitlistPage() {
                   onChange={(e) => setUseCase(e.target.value)}
                   placeholder="Tell us about your project and how you plan to use Settlr..."
                   rows={4}
-                  className="w-full px-4 py-3 rounded-lg bg-[#F3F2ED] border border-[#E2DFD5] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#a855f7]/50 resize-none"
+                  className="w-full px-4 py-3 rounded-lg bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#a855f7]/50 resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-lg bg-[#FDFBF7] text-[#0C1829] font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="w-full py-4 rounded-lg bg-[#FFFFFF] text-[#0C1829] font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {loading ? "Submitting..." : "Submit Request"}
               </button>

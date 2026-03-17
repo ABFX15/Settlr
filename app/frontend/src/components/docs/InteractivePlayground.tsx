@@ -252,9 +252,9 @@ export function InteractivePlayground({
   };
 
   return (
-    <div className="rounded-2xl border border-[#E2E2D1] bg-[#0d0d14] overflow-hidden">
+    <div className="rounded-2xl border border-[#E5E7EB] bg-[#0d0d14] overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#E2E2D1] bg-white px-4 py-3">
+      <div className="flex items-center justify-between border-b border-[#E5E7EB] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           <div className="flex gap-1.5">
             <div className="h-3 w-3 rounded-full bg-red-500/60" />
@@ -271,7 +271,7 @@ export function InteractivePlayground({
           <div className="relative">
             <button
               onClick={() => setShowExampleDropdown(!showExampleDropdown)}
-              className="flex items-center gap-2 rounded-lg border border-[#E2E2D1] bg-[#F5F5F5] px-3 py-1.5 text-sm text-[#0C1829] transition-colors hover:bg-[#F5F5F5]"
+              className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-[#F5F5F5] px-3 py-1.5 text-sm text-[#0C1829] transition-colors hover:bg-[#F5F5F5]"
             >
               <span>{selectedExample.name}</span>
               <ChevronDown
@@ -286,7 +286,7 @@ export function InteractivePlayground({
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-[#E2E2D1] bg-[#12121a] p-2 shadow-xl"
+                  className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-[#E5E7EB] bg-[#12121a] p-2 shadow-xl"
                 >
                   {examples.map((example) => (
                     <button
@@ -315,8 +315,8 @@ export function InteractivePlayground({
 
       <div className="grid lg:grid-cols-2">
         {/* Code Editor */}
-        <div className="border-b border-[#E2E2D1] lg:border-b-0 lg:border-r">
-          <div className="flex items-center justify-between border-b border-[#E2E2D1] px-4 py-2">
+        <div className="border-b border-[#E5E7EB] lg:border-b-0 lg:border-r">
+          <div className="flex items-center justify-between border-b border-[#E5E7EB] px-4 py-2">
             <span className="text-xs font-medium text-[#7C8A9E]">
               component.tsx
             </span>
@@ -389,7 +389,7 @@ export function InteractivePlayground({
             />
           </div>
           {/* Action Bar */}
-          <div className="flex items-center justify-between border-t border-[#E2E2D1] px-4 py-3">
+          <div className="flex items-center justify-between border-t border-[#E5E7EB] px-4 py-3">
             <div className="flex items-center gap-2 text-xs text-[#7C8A9E]">
               <Zap className="h-3 w-3 text-yellow-400" />
               <span>Devnet Mode</span>
@@ -411,7 +411,7 @@ export function InteractivePlayground({
 
         {/* Preview Panel */}
         <div className="bg-[#08080c]">
-          <div className="flex items-center justify-between border-b border-[#E2E2D1] px-4 py-2">
+          <div className="flex items-center justify-between border-b border-[#E5E7EB] px-4 py-2">
             <span className="text-xs font-medium text-[#7C8A9E]">Preview</span>
             {showPreview && (
               <button
@@ -462,7 +462,7 @@ export function InteractivePlayground({
       </div>
 
       {/* Footer */}
-      <div className="border-t border-[#E2E2D1] bg-white px-4 py-3">
+      <div className="border-t border-[#E5E7EB] bg-white px-4 py-3">
         <div className="flex items-center justify-between text-xs text-[#7C8A9E]">
           <span>💡 Edit the code above and click "Try It" to see changes</span>
           <a
@@ -511,7 +511,7 @@ function CheckoutSimulator({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full space-y-4 rounded-xl border border-[#E2E2D1] bg-[#12121a] p-4"
+        className="w-full space-y-4 rounded-xl border border-[#E5E7EB] bg-[#12121a] p-4"
       >
         <div className="text-center">
           <p className="text-lg font-semibold text-[#0C1829]">
@@ -524,7 +524,7 @@ function CheckoutSimulator({
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg border border-[#E2E2D1] bg-[#F5F5F5] px-4 py-3 text-[#0C1829] placeholder:text-[#7C8A9E] focus:border-purple-500/50 focus:outline-none"
+          className="w-full rounded-lg border border-[#E5E7EB] bg-[#F5F5F5] px-4 py-3 text-[#0C1829] placeholder:text-[#7C8A9E] focus:border-purple-500/50 focus:outline-none"
         />
         <button
           onClick={onEnterEmail}
@@ -541,7 +541,7 @@ function CheckoutSimulator({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full space-y-3 rounded-xl border border-[#E2E2D1] bg-[#12121a] p-4"
+        className="w-full space-y-3 rounded-xl border border-[#E5E7EB] bg-[#12121a] p-4"
       >
         <div className="text-center">
           <p className="text-lg font-semibold text-[#0C1829]">
@@ -559,7 +559,7 @@ function CheckoutSimulator({
           </button>
           <button
             onClick={onConfirmPayment}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#E2E2D1] py-3 font-semibold text-[#0C1829] transition-colors hover:bg-[#F5F5F5]"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#E5E7EB] py-3 font-semibold text-[#0C1829] transition-colors hover:bg-[#F5F5F5]"
           >
             <CreditCard className="h-5 w-5" />
             Pay with Card
@@ -574,7 +574,7 @@ function CheckoutSimulator({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full space-y-4 rounded-xl border border-[#E2E2D1] bg-[#12121a] p-6 text-center"
+        className="w-full space-y-4 rounded-xl border border-[#E5E7EB] bg-[#12121a] p-6 text-center"
       >
         <Loader2 className="mx-auto h-10 w-10 animate-spin text-[#1B6B4A]" />
         <div>

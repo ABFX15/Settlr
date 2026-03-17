@@ -51,7 +51,7 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <main className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased">
+      <main className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased">
         <Navbar />
         <div className="flex min-h-[60vh] items-center justify-center">
           <div className="text-center">
@@ -74,7 +74,7 @@ export default function BlogPostPage() {
 
   return (
     <main
-      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       {/* JSON-LD for blog post */}
@@ -174,7 +174,7 @@ export default function BlogPostPage() {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 rounded-md bg-[#F3F2ED] px-2.5 py-1 text-xs font-medium text-[#7C8A9E]"
+                  className="inline-flex items-center gap-1 rounded-md bg-[#F3F4F6] px-2.5 py-1 text-xs font-medium text-[#7C8A9E]"
                 >
                   <Tag className="h-2.5 w-2.5" />
                   {tag}
@@ -184,7 +184,7 @@ export default function BlogPostPage() {
           </Reveal>
 
           {/* Divider */}
-          <div className="mt-10 mb-10 h-px bg-[#F3F2ED]" />
+          <div className="mt-10 mb-10 h-px bg-[#F3F4F6]" />
 
           {/* Content */}
           <Reveal delay={0.25}>
@@ -206,7 +206,7 @@ export default function BlogPostPage() {
                   {post.faqs.map((faq, i) => (
                     <div
                       key={i}
-                      className="rounded-lg border border-[#E2DFD5] bg-[#FAFAF8] p-5"
+                      className="rounded-lg border border-[#E5E7EB] bg-[#FAFAF8] p-5"
                     >
                       <h3 className="text-[15px] font-semibold text-[#0C1829]">
                         {faq.question}
@@ -223,7 +223,7 @@ export default function BlogPostPage() {
 
           {/* Bottom CTA */}
           <Reveal delay={0.1}>
-            <div className="mt-16 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-8 text-center">
+            <div className="mt-16 rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-8 text-center">
               <h3 className="text-xl font-semibold">
                 Ready to settle without bank interference?
               </h3>
@@ -240,7 +240,7 @@ export default function BlogPostPage() {
                 </Link>
                 <Link
                   href="/docs"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-6 py-3 text-sm font-medium text-[#3B4963] transition-colors hover:text-[#0C1829]"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-6 py-3 text-sm font-medium text-[#3B4963] transition-colors hover:text-[#0C1829]"
                 >
                   Read the docs
                 </Link>

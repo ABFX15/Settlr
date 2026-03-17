@@ -97,7 +97,7 @@ export function DashboardSidebar() {
   const sidebarContent = (
     <>
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between border-b border-[#E2E2D1] px-4">
+      <div className="flex h-16 items-center justify-between border-b border-[#E5E7EB] px-4">
         {!collapsed && (
           <Link href="/" className="flex items-center gap-2">
             <SettlrLogoWithIcon size="sm" variant="dark" />
@@ -165,7 +165,7 @@ export function DashboardSidebar() {
       </nav>
 
       {/* Wallet + Logout */}
-      <div className="border-t border-[#E2E2D1] p-3">
+      <div className="border-t border-[#E5E7EB] p-3">
         {authenticated && connected && publicKey ? (
           <div className="space-y-2">
             {!collapsed && (
@@ -218,7 +218,7 @@ export function DashboardSidebar() {
   return (
     <>
       {/* Mobile menu trigger — placed top-left on mobile */}
-      <div className="fixed left-0 right-0 top-0 z-40 flex h-14 items-center justify-between border-b border-[#E2E2D1] bg-white/95 px-4 backdrop-blur-xl lg:hidden">
+      <div className="fixed left-0 right-0 top-0 z-40 flex h-14 items-center justify-between border-b border-[#E5E7EB] bg-white/95 px-4 backdrop-blur-xl lg:hidden">
         <button
           onClick={() => setMobileOpen(true)}
           className="rounded-lg p-2 text-[#3B4963] transition-colors hover:bg-[#F5F5F5]"
@@ -242,7 +242,7 @@ export function DashboardSidebar() {
           onClick={() => setMobileOpen(false)}
         >
           <div
-            className="absolute left-0 top-0 h-full w-64 border-r border-[#E2E2D1] bg-[#0a0a12] flex flex-col"
+            className="absolute left-0 top-0 h-full w-64 border-r border-[#E5E7EB] bg-[#0a0a12] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {sidebarContent}
@@ -252,7 +252,7 @@ export function DashboardSidebar() {
 
       {/* Desktop sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-30 hidden h-full flex-col border-r border-[#E2E2D1] bg-[#0a0a12] transition-all duration-300 lg:flex ${
+        className={`fixed left-0 top-0 z-30 hidden h-full flex-col border-r border-[#E5E7EB] bg-[#0a0a12] transition-all duration-300 lg:flex ${
           collapsed ? "w-[72px]" : "w-[240px]"
         }`}
       >
@@ -273,7 +273,7 @@ export function DashboardTopBar() {
   const { publicKey } = useActiveWallet();
 
   return (
-    <div className="hidden h-14 items-center justify-between border-b border-[#E2E2D1] px-8 lg:flex">
+    <div className="hidden h-14 items-center justify-between border-b border-[#E5E7EB] px-8 lg:flex">
       <div />
       <div className="flex items-center gap-3">
         <button className="relative rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F5F5F5] hover:text-[#0C1829]">

@@ -242,7 +242,7 @@ export async function sendInvoiceEmail(params: {
             <h1 style="color: #0C1829; font-size: 24px; margin: 0 0 8px;">Invoice from ${merchantName}</h1>
             <p style="color: #7C8A9E; font-size: 14px; margin: 0;">${invoiceNumber}</p>
         </div>
-        <div style="background: #F8F7F3; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #E2DFD5;">
+        <div style="background: #F8F7F3; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #E5E7EB;">
             <p style="color: #7C8A9E; font-size: 14px; margin: 0 0 8px;">Amount Due</p>
             <p style="color: #0C1829; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
             <p style="color: #7C8A9E; font-size: 14px; margin: 8px 0 0;">Due by ${dueFormatted}</p>
@@ -260,7 +260,7 @@ export async function sendInvoiceEmail(params: {
         <p style="color: #7C8A9E; font-size: 12px; text-align: center;">
             Pay with USDC — no bank account needed. Funds settle instantly on Solana.
         </p>
-        <hr style="border: none; border-top: 1px solid #E2DFD5; margin: 32px 0;" />
+        <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
         <p style="color: #7C8A9E; font-size: 11px; text-align: center;">
             Powered by <a href="https://settlr.dev" style="color: #1B6B4A; text-decoration: none;">Settlr</a> — stablecoin payment infrastructure
         </p>

@@ -161,7 +161,7 @@ const cannabisPOS = [
 export default function IntegrationsPage() {
   return (
     <main
-      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <script
@@ -266,7 +266,7 @@ export default function IntegrationsPage() {
               <Reveal key={integration.slug} delay={i * 0.06}>
                 <Link
                   href={`/integrations/${integration.slug}`}
-                  className="group relative flex h-full flex-col rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-8 transition-all hover:border-[#E2DFD5]/[0.12] hover:bg-[#F3F2ED]"
+                  className="group relative flex h-full flex-col rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-8 transition-all hover:border-[#E5E7EB]/[0.12] hover:bg-[#F3F4F6]"
                 >
                   <div className="mb-6 flex items-center gap-4">
                     <div
@@ -356,7 +356,7 @@ export default function IntegrationsPage() {
             <Reveal key={platform.name} delay={i * 0.06}>
               <div
                 className="group relative flex h-full flex-col rounded-2xl border p-8 transition-all hover:shadow-md"
-                style={{ borderColor: "#E2E2D1", background: "#F7F6F1" }}
+                style={{ borderColor: "#E5E7EB", background: "#F9FAFB" }}
               >
                 <div className="mb-5 flex items-center gap-3">
                   <div
@@ -421,7 +421,7 @@ export default function IntegrationsPage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-[#E2DFD5]/[0.04]">
+      <section className="border-t border-[#E5E7EB]/[0.04]">
         <div className="mx-auto max-w-3xl px-6 py-28 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
@@ -445,7 +445,7 @@ export default function IntegrationsPage() {
               </Link>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
               >
                 Get started
               </Link>

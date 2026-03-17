@@ -159,7 +159,7 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#E2E2D1] bg-[#FDFBF7]/85 backdrop-blur-xl">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#E5E7EB] bg-white/90 backdrop-blur-sm">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -221,7 +221,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-[#E2E2D1] bg-[#FDFBF7]/98 p-2 shadow-xl backdrop-blur-xl"
+                  className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-[#E5E7EB] bg-white/98 p-2 shadow-lg backdrop-blur-sm"
                 >
                   {productLinks.map((link) => (
                     <Link
@@ -231,7 +231,7 @@ export function Navbar() {
                       className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-colors ${
                         pathname === link.href
                           ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                          : "text-[#3B4963] hover:bg-[#F7F6F1] hover:text-[#0C1829]"
+                          : "text-[#3B4963] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
                       }`}
                     >
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1B6B4A]/10">
@@ -282,7 +282,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-72 rounded-2xl border border-[#E2E2D1] bg-[#FDFBF7]/98 p-2 shadow-xl backdrop-blur-xl"
+                  className="absolute left-0 top-full mt-2 w-72 rounded-2xl border border-[#E5E7EB] bg-white/98 p-2 shadow-lg backdrop-blur-sm"
                 >
                   {industryLinks.map((link) => (
                     <Link
@@ -292,7 +292,7 @@ export function Navbar() {
                       className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-colors ${
                         pathname === link.href
                           ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                          : "text-[#3B4963] hover:bg-[#F7F6F1] hover:text-[#0C1829]"
+                          : "text-[#3B4963] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
                       }`}
                     >
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1B6B4A]/10">
@@ -343,7 +343,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-[#E2E2D1] bg-[#FDFBF7]/98 p-2 shadow-xl backdrop-blur-xl"
+                  className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-[#E5E7EB] bg-white/98 p-2 shadow-lg backdrop-blur-sm"
                 >
                   {resourceLinks.map((link) => (
                     <Link
@@ -354,7 +354,7 @@ export function Navbar() {
                         pathname === link.href ||
                         pathname.startsWith(link.href + "/")
                           ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                          : "text-[#3B4963] hover:bg-[#F7F6F1] hover:text-[#0C1829]"
+                          : "text-[#3B4963] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
                       }`}
                     >
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1B6B4A]/10">
@@ -380,7 +380,7 @@ export function Navbar() {
             <>
               <Link
                 href={ctaHref}
-                className="rounded-full border border-[#E2E2D1] bg-[#F7F6F1] px-4 py-2 text-sm font-medium text-[#0C1829] transition-all hover:bg-[#F0F0F0]"
+                className="rounded-full border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-2 text-sm font-medium text-[#0C1829] transition-all hover:bg-[#F0F0F0]"
               >
                 {ctaLabel}
               </Link>
@@ -416,7 +416,7 @@ export function Navbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F7F6F1] hover:text-[#0C1829] md:hidden"
+          className="rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F9FAFB] hover:text-[#0C1829] md:hidden"
         >
           {mobileMenuOpen ? (
             <X className="h-5 w-5" />
@@ -433,7 +433,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-b border-[#E2E2D1] bg-[#FDFBF7]/98 backdrop-blur-xl md:hidden"
+            className="border-b border-[#E5E7EB] bg-white/98 backdrop-blur-xl md:hidden"
           >
             <div className="flex flex-col px-4 py-4">
               {navLinks.map((link) => (
@@ -444,7 +444,7 @@ export function Navbar() {
                   className={`rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                     isActive(link.href)
                       ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                      : "text-[#7C8A9E] hover:bg-[#F7F6F1] hover:text-[#0C1829]"
+                      : "text-[#7C8A9E] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
                   }`}
                 >
                   {link.label}
@@ -452,7 +452,7 @@ export function Navbar() {
               ))}
 
               {/* Mobile Products Section */}
-              <div className="mt-2 border-t border-[#E2E2D1] pt-2">
+              <div className="mt-2 border-t border-[#E5E7EB] pt-2">
                 <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
                   Products
                 </div>
@@ -464,7 +464,7 @@ export function Navbar() {
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                       pathname === link.href
                         ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                        : "text-[#7C8A9E] hover:bg-[#F7F6F1] hover:text-[#0C1829]"
+                        : "text-[#7C8A9E] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
                     }`}
                   >
                     <link.icon className="h-4 w-4 text-[#155939]" />
@@ -474,7 +474,7 @@ export function Navbar() {
               </div>
 
               {/* Mobile Industries Section */}
-              <div className="mt-2 border-t border-[#E2E2D1] pt-2">
+              <div className="mt-2 border-t border-[#E5E7EB] pt-2">
                 <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
                   Industries
                 </div>
@@ -486,7 +486,7 @@ export function Navbar() {
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                       pathname === link.href
                         ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                        : "text-[#7C8A9E] hover:bg-[#F7F6F1] hover:text-[#0C1829]"
+                        : "text-[#7C8A9E] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
                     }`}
                   >
                     <link.icon className="h-4 w-4 text-[#155939]" />
@@ -496,7 +496,7 @@ export function Navbar() {
               </div>
 
               {/* Mobile Resources Section */}
-              <div className="mt-2 border-t border-[#E2E2D1] pt-2">
+              <div className="mt-2 border-t border-[#E5E7EB] pt-2">
                 <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
                   Resources
                 </div>
@@ -508,7 +508,7 @@ export function Navbar() {
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                       pathname === link.href
                         ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                        : "text-[#7C8A9E] hover:bg-[#F7F6F1] hover:text-[#0C1829]"
+                        : "text-[#7C8A9E] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
                     }`}
                   >
                     <link.icon className="h-4 w-4 text-[#155939]" />
@@ -517,13 +517,13 @@ export function Navbar() {
                 ))}
               </div>
 
-              <div className="mt-4 flex flex-col gap-2 border-t border-[#E2E2D1] pt-4">
+              <div className="mt-4 flex flex-col gap-2 border-t border-[#E5E7EB] pt-4">
                 {ready && authenticated ? (
                   <>
                     <Link
                       href={ctaHref}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-full border border-[#E2E2D1] bg-[#F7F6F1] px-4 py-3 text-center text-sm font-medium text-[#0C1829]"
+                      className="rounded-full border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-center text-sm font-medium text-[#0C1829]"
                     >
                       {ctaLabel}
                     </Link>
@@ -544,7 +544,7 @@ export function Navbar() {
                         login();
                         setMobileMenuOpen(false);
                       }}
-                      className="rounded-full border border-[#E2E2D1] px-4 py-3 text-sm font-medium text-[#7C8A9E]"
+                      className="rounded-full border border-[#E5E7EB] px-4 py-3 text-sm font-medium text-[#7C8A9E]"
                     >
                       Sign In
                     </button>

@@ -119,7 +119,7 @@ const useCases = [
 
 export default function AiSaasPage() {
   return (
-    <main className="min-h-screen bg-[#FDFBF7]">
+    <main className="min-h-screen bg-[#FFFFFF]">
       <Navbar />
 
       {/* Hero Section */}
@@ -127,7 +127,7 @@ export default function AiSaasPage() {
         {/* Background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.15),transparent)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FDFBF7] to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FFFFFF] to-transparent" />
         </div>
 
         {/* Ambient glow */}
@@ -173,7 +173,7 @@ export default function AiSaasPage() {
                 </Link>
                 <Link
                   href="/demo/store"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] bg-[#F3F2ED] px-6 py-3.5 font-semibold text-[#0C1829] backdrop-blur-sm transition-all hover:bg-[#F3F2ED]"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] bg-[#F3F4F6] px-6 py-3.5 font-semibold text-[#0C1829] backdrop-blur-sm transition-all hover:bg-[#F3F4F6]"
                 >
                   See a Live Demo
                 </Link>
@@ -192,7 +192,7 @@ export default function AiSaasPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6 backdrop-blur-sm"
+                    className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6 backdrop-blur-sm"
                   >
                     <CreditCard className="mb-3 h-8 w-8 text-[#1B6B4A]" />
                     <div className="text-3xl font-bold text-[#0C1829]">1%</div>
@@ -202,7 +202,7 @@ export default function AiSaasPage() {
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6 backdrop-blur-sm"
+                    className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6 backdrop-blur-sm"
                   >
                     <Lock className="mb-3 h-8 w-8 text-[#1B6B4A]" />
                     <div className="text-3xl font-bold text-[#0C1829]">
@@ -217,7 +217,7 @@ export default function AiSaasPage() {
                 {/* Large feature card */}
                 <motion.div
                   whileHover={{ scale: 1.01 }}
-                  className="relative overflow-hidden rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-8 backdrop-blur-sm"
+                  className="relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-8 backdrop-blur-sm"
                 >
                   <div className="absolute right-0 top-0 h-32 w-32 bg-gradient-to-bl from-[#3B82F6]/10 to-transparent" />
                   <div className="relative">
@@ -240,7 +240,7 @@ export default function AiSaasPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6 backdrop-blur-sm"
+                    className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6 backdrop-blur-sm"
                   >
                     <Shield className="mb-3 h-8 w-8 text-[#34d399]" />
                     <div className="text-3xl font-bold text-[#0C1829]">0%</div>
@@ -248,7 +248,7 @@ export default function AiSaasPage() {
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6 backdrop-blur-sm"
+                    className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6 backdrop-blur-sm"
                   >
                     <Ban className="mb-3 h-8 w-8 text-[#fbbf24]" />
                     <div className="text-3xl font-bold text-[#0C1829]">
@@ -266,7 +266,7 @@ export default function AiSaasPage() {
       </section>
 
       {/* Stats Banner */}
-      <section className="relative border-y border-[#E2DFD5] px-4 py-16">
+      <section className="relative border-y border-[#E5E7EB] px-4 py-16">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((stat, index) => (
@@ -362,7 +362,7 @@ export default function AiSaasPage() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
-                  className="flex flex-col items-center gap-3 rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6 text-center transition-all hover:border-[#3B82F6]/30 hover:bg-[#F3F2ED]"
+                  className="flex flex-col items-center gap-3 rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6 text-center transition-all hover:border-[#3B82F6]/30 hover:bg-[#F3F4F6]"
                 >
                   <div className="rounded-xl bg-[#1B6B4A]/15 p-3">
                     <Icon className="h-6 w-6 text-[#1B6B4A]" />
@@ -410,7 +410,7 @@ export default function AiSaasPage() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -5 }}
-                  className="group relative rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-8 transition-all hover:border-[#E2DFD5] hover:bg-[#F3F2ED]"
+                  className="group relative rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-8 transition-all hover:border-[#E5E7EB] hover:bg-[#F3F4F6]"
                 >
                   <div className="relative">
                     <div className="mb-4 inline-flex rounded-xl bg-[#1B6B4A]/10 p-3">
@@ -457,9 +457,9 @@ export default function AiSaasPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="overflow-hidden rounded-2xl border border-[#E2DFD5] bg-white/[0.02]"
+            className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white/[0.02]"
           >
-            <div className="grid grid-cols-3 border-b border-[#E2DFD5] bg-white/[0.02]">
+            <div className="grid grid-cols-3 border-b border-[#E5E7EB] bg-white/[0.02]">
               <div className="p-4 text-sm font-medium text-[#7C8A9E]">
                 Platform
               </div>
@@ -495,7 +495,7 @@ export default function AiSaasPage() {
             ].map((row) => (
               <div
                 key={row.platform}
-                className="grid grid-cols-3 border-b border-[#E2DFD5]"
+                className="grid grid-cols-3 border-b border-[#E5E7EB]"
               >
                 <div className="p-4 text-[#0C1829]">{row.platform}</div>
                 <div className="p-4 text-center text-red-400">{row.fee}</div>
@@ -555,7 +555,7 @@ export default function AiSaasPage() {
             </Link>
             <Link
               href="/demo/store"
-              className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] bg-[#F3F2ED] px-8 py-4 font-semibold text-[#0C1829] backdrop-blur-sm transition-all hover:bg-[#F3F2ED]"
+              className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] bg-[#F3F4F6] px-8 py-4 font-semibold text-[#0C1829] backdrop-blur-sm transition-all hover:bg-[#F3F4F6]"
             >
               See a Live Demo
             </Link>

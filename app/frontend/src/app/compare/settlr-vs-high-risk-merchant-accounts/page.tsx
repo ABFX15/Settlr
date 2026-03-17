@@ -22,7 +22,7 @@ import { Footer } from "@/components/ui/Footer";
 /* ── Design tokens ─────────────────────────────────────── */
 const p = {
   bg: "#FFFFFF",
-  bgSubtle: "#F7F6F1",
+  bgSubtle: "#F9FAFB",
   bgMuted: "#F5F5F5",
   navy: "#0C1829",
   slate: "#3B4963",
@@ -31,7 +31,7 @@ const p = {
   greenDark: "#155939",
   red: "#DC2626",
   amber: "#B8860B",
-  border: "#E2E2D1",
+  border: "#E5E7EB",
   white: "#FFFFFF",
 };
 

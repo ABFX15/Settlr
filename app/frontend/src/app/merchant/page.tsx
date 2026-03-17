@@ -15,7 +15,7 @@ export default function MerchantRedirect() {
   }, [router]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FDFBF7]">
+    <div className="flex min-h-screen items-center justify-center bg-[#FFFFFF]">
       <p className="text-sm text-[#7C8A9E]">Redirecting to dashboard…</p>
     </div>
   );

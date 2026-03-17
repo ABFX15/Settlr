@@ -47,7 +47,7 @@ export default function BlogPage() {
 
   return (
     <main
-      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <Navbar />
@@ -81,7 +81,7 @@ export default function BlogPage() {
           <Reveal>
             <Link
               href={`/blog/${featured.slug}`}
-              className="group block overflow-hidden rounded-2xl border border-[#E2DFD5] bg-white/[0.02] transition-colors hover:bg-[#F3F2ED]"
+              className="group block overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white/[0.02] transition-colors hover:bg-[#F3F4F6]"
             >
               <div className="p-8 md:p-10">
                 <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -111,7 +111,7 @@ export default function BlogPage() {
                     {featured.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-md bg-[#F3F2ED] px-2 py-0.5 text-[10px] font-medium text-[#7C8A9E]"
+                        className="rounded-md bg-[#F3F4F6] px-2 py-0.5 text-[10px] font-medium text-[#7C8A9E]"
                       >
                         {tag}
                       </span>
@@ -132,7 +132,7 @@ export default function BlogPage() {
               <Reveal key={post.slug} delay={i * 0.06}>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="group flex h-full flex-col rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6 transition-colors hover:bg-[#F3F2ED]"
+                  className="group flex h-full flex-col rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6 transition-colors hover:bg-[#F3F4F6]"
                 >
                   <div className="mb-3 flex items-center gap-3">
                     <span className="flex items-center gap-1.5 text-xs text-[#7C8A9E]">
@@ -158,7 +158,7 @@ export default function BlogPage() {
                       {post.tags.slice(0, 2).map((tag) => (
                         <span
                           key={tag}
-                          className="rounded bg-[#F3F2ED] px-1.5 py-0.5 text-[10px] text-[#7C8A9E]/70"
+                          className="rounded bg-[#F3F4F6] px-1.5 py-0.5 text-[10px] text-[#7C8A9E]/70"
                         >
                           {tag}
                         </span>

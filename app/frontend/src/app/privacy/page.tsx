@@ -305,12 +305,12 @@ export default function PrivacyPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#FDFBF7]">
+      <main className="min-h-screen bg-[#FFFFFF]">
         {/* Hero */}
         <section className="relative overflow-hidden px-4 pb-12 pt-32">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(139,92,246,0.15),transparent)]" />
-            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FDFBF7] to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FFFFFF] to-transparent" />
           </div>
           <div className="absolute right-[15%] top-[25%] h-64 w-64 rounded-full bg-purple-500/[0.07] blur-[100px]" />
           <div className="absolute left-[10%] top-[35%] h-48 w-48 rounded-full bg-[#1B6B4A]/[0.05] blur-[100px]" />
@@ -364,7 +364,7 @@ export default function PrivacyPage() {
               ].map(({ icon: Icon, label }) => (
                 <div
                   key={label}
-                  className="flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-3 py-1.5 text-sm text-[#7C8A9E]"
+                  className="flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-1.5 text-sm text-[#7C8A9E]"
                 >
                   <Icon className="h-3.5 w-3.5 text-[#1B6B4A]" />
                   {label}
@@ -395,7 +395,7 @@ export default function PrivacyPage() {
                       ? "border-[#1B6B4A]/30 bg-purple-500/[0.08]"
                       : isCurrent
                       ? "border-[#1B6B4A]/30 bg-[#1B6B4A]/[0.06]"
-                      : "border-[#E2DFD5] bg-white/[0.02]"
+                      : "border-[#E5E7EB] bg-white/[0.02]"
                   }`}
                 >
                   <div className="mb-2 flex items-center gap-2">
@@ -405,7 +405,7 @@ export default function PrivacyPage() {
                           ? "bg-purple-500/20 text-[#1B6B4A]"
                           : isCurrent
                           ? "bg-[#1B6B4A]/15 text-[#1B6B4A]"
-                          : "bg-[#F3F2ED] text-[#7C8A9E]"
+                          : "bg-[#F3F4F6] text-[#7C8A9E]"
                       }`}
                     >
                       {isCompleted ? (
@@ -447,7 +447,7 @@ export default function PrivacyPage() {
           <div className="grid gap-6 lg:grid-cols-5">
             {/* Control Panel */}
             <div className="lg:col-span-2">
-              <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+              <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6">
                 <h2 className="mb-4 text-lg font-semibold text-[#0C1829]">
                   Payment Details
                 </h2>
@@ -472,7 +472,7 @@ export default function PrivacyPage() {
                       }))
                     }
                     disabled={session.status !== "idle"}
-                    className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-3 py-2 text-sm text-[#0C1829] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
+                    className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2 text-sm text-[#0C1829] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
                     placeholder="25.00"
                   />
                 </div>
@@ -489,13 +489,13 @@ export default function PrivacyPage() {
                       setSession((s) => ({ ...s, memo: e.target.value }))
                     }
                     disabled={session.status !== "idle"}
-                    className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-3 py-2 text-sm text-[#0C1829] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
+                    className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2 text-sm text-[#0C1829] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
                     placeholder="Payment memo"
                   />
                 </div>
 
                 {/* Fee display */}
-                <div className="mb-6 rounded-lg border border-[#E2DFD5] bg-white/[0.02] p-3">
+                <div className="mb-6 rounded-lg border border-[#E5E7EB] bg-white/[0.02] p-3">
                   <div className="flex justify-between text-xs">
                     <span className="text-[#7C8A9E]">Amount</span>
                     <span className="text-[#3B4963]">
@@ -508,7 +508,7 @@ export default function PrivacyPage() {
                       {(session.feeAmount / 1e6).toFixed(2)} USDC
                     </span>
                   </div>
-                  <div className="mt-2 border-t border-[#E2DFD5] pt-2">
+                  <div className="mt-2 border-t border-[#E5E7EB] pt-2">
                     <div className="flex justify-between text-xs font-medium">
                       <span className="text-[#7C8A9E]">Merchant receives</span>
                       <span className="text-purple-300">
@@ -530,7 +530,7 @@ export default function PrivacyPage() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       onClick={handleReset}
-                      className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-3 text-sm font-medium text-[#0C1829] transition-colors hover:bg-white/[0.1]"
+                      className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-3 text-sm font-medium text-[#0C1829] transition-colors hover:bg-white/[0.1]"
                     >
                       Reset Demo
                     </motion.button>
@@ -586,13 +586,13 @@ export default function PrivacyPage() {
             {/* Privacy Visualization + Log */}
             <div className="space-y-6 lg:col-span-3">
               {/* Privacy state visualization */}
-              <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+              <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6">
                 <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[#0C1829]">
                   <Eye className="h-5 w-5 text-[#1B6B4A]" />
                   Base-Layer Observer View
                 </h2>
 
-                <div className="rounded-lg border border-[#E2DFD5] bg-[#FDFBF7]/40 p-4 font-mono text-xs">
+                <div className="rounded-lg border border-[#E5E7EB] bg-[#FFFFFF]/40 p-4 font-mono text-xs">
                   {session.status === "idle" && (
                     <div className="text-[#7C8A9E]">
                       <p>// No active session</p>
@@ -744,12 +744,12 @@ export default function PrivacyPage() {
               </div>
 
               {/* Transaction log */}
-              <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+              <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6">
                 <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#0C1829]">
                   <Server className="h-4 w-4 text-[#1B6B4A]" />
                   Transaction Log
                 </h2>
-                <div className="max-h-48 overflow-y-auto rounded-lg border border-[#E2DFD5] bg-[#FDFBF7]/40 p-3 font-mono text-xs">
+                <div className="max-h-48 overflow-y-auto rounded-lg border border-[#E5E7EB] bg-[#FFFFFF]/40 p-3 font-mono text-xs">
                   {logs.length === 0 ? (
                     <p className="text-[#7C8A9E]/60">Waiting for first action...</p>
                   ) : (
@@ -771,7 +771,7 @@ export default function PrivacyPage() {
                       sig ? (
                         <div
                           key={step}
-                          className="flex items-center justify-between rounded-lg border border-[#E2DFD5]/[0.04] bg-white/[0.02] px-3 py-1.5"
+                          className="flex items-center justify-between rounded-lg border border-[#E5E7EB]/[0.04] bg-white/[0.02] px-3 py-1.5"
                         >
                           <div className="flex items-center gap-2">
                             <span className="text-xs capitalize text-[#7C8A9E]">
@@ -840,7 +840,7 @@ export default function PrivacyPage() {
             ].map(({ title, description, icon: Icon, color }) => (
               <div
                 key={title}
-                className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6"
+                className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
               >
                 <div
                   className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${

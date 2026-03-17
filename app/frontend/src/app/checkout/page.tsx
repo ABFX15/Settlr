@@ -7,7 +7,7 @@ export default function CheckoutPage() {
       <h1 className="sr-only">Checkout — Settlr</h1>
       <Suspense
         fallback={
-          <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+          <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center">
             <div className="w-8 h-8 border-2 border-[#1B6B4A] border-t-transparent rounded-full animate-spin" />
           </div>
         }

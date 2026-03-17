@@ -223,7 +223,7 @@ export default function TreasuryPage() {
             Fund your settlement balance and track deposits.
           </p>
 
-          <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-8 text-center">
+          <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-8 text-center">
             <Wallet className="mx-auto h-10 w-10 text-[#7C8A9E]/60 mb-4" />
             <p className="text-sm text-[#7C8A9E] mb-6">
               Connect your wallet to view your treasury balance.
@@ -265,7 +265,7 @@ export default function TreasuryPage() {
             Fund your settlement balance and track deposits.
           </p>
 
-          <div className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-8 text-center">
+          <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-8 text-center">
             {loading ? (
               <>
                 <RefreshCw className="mx-auto h-8 w-8 text-[#7C8A9E]/60 mb-4 animate-spin" />
@@ -317,7 +317,7 @@ export default function TreasuryPage() {
           <button
             onClick={fetchBalance}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-2 text-sm text-[#3B4963] hover:bg-[#F3F2ED] transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-2 text-sm text-[#3B4963] hover:bg-[#F3F4F6] transition-colors"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
@@ -402,7 +402,7 @@ export default function TreasuryPage() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6"
+                className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
               >
                 <h3 className="text-sm font-medium text-[#0C1829] mb-4">
                   Fund Your Balance
@@ -410,7 +410,7 @@ export default function TreasuryPage() {
                 <p className="text-xs text-[#7C8A9E] mb-3">
                   Send USDC to this address on Solana {depositInfo.cluster}:
                 </p>
-                <div className="flex items-center gap-2 rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-3 py-2.5">
+                <div className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2.5">
                   <code className="flex-1 text-xs text-[#3B4963] break-all font-mono">
                     {depositInfo.depositAddress}
                   </code>
@@ -436,7 +436,7 @@ export default function TreasuryPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6"
+              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
             >
               <h3 className="text-sm font-medium text-[#0C1829] mb-4">
                 Confirm Deposit
@@ -455,7 +455,7 @@ export default function TreasuryPage() {
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value)}
                     placeholder="100.00"
-                    className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none"
+                    className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -467,7 +467,7 @@ export default function TreasuryPage() {
                     value={depositTx}
                     onChange={(e) => setDepositTx(e.target.value)}
                     placeholder="5Uh8..."
-                    className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none font-mono"
                   />
                 </div>
                 <button
@@ -499,9 +499,9 @@ export default function TreasuryPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="rounded-xl border border-[#E2DFD5] bg-white/[0.02]"
+              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02]"
             >
-              <div className="border-b border-[#E2DFD5] px-6 py-4">
+              <div className="border-b border-[#E5E7EB] px-6 py-4">
                 <h3 className="text-sm font-medium text-[#0C1829]">
                   Transaction History
                 </h3>
@@ -535,7 +535,7 @@ export default function TreasuryPage() {
                       >
                         <div
                           className={`rounded-lg p-2 ${
-                            isCredit ? "bg-emerald-500/10" : "bg-[#F3F2ED]"
+                            isCredit ? "bg-emerald-500/10" : "bg-[#F3F4F6]"
                           }`}
                         >
                           <Icon className={`h-4 w-4 ${meta.color}`} />

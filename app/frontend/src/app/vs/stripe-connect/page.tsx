@@ -27,7 +27,7 @@ const MUTED = "#7C8A9E";
 const GREEN = "#1B6B4A";
 const ACCENT_LIGHT = "#2A9D6A";
 const TOPO = "#E8E4DA";
-const CARD_BORDER = "#E2E2D1";
+const CARD_BORDER = "#E5E7EB";
 
 /* ─── Animation variants ─── */
 const fadeUp = {

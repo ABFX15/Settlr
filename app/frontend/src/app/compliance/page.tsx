@@ -29,7 +29,7 @@ const palette = {
   muted: "#7C8A9E",
   green: "#155939",
   gold: "#B8860B",
-  cardBorder: "#E2E2D1",
+  cardBorder: "#E5E7EB",
   red: "#B91C1C",
 };
 
@@ -852,7 +852,7 @@ export default function CompliancePage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr style={{ backgroundColor: "#F7F6F1" }}>
+                    <tr style={{ backgroundColor: "#F9FAFB" }}>
                       {["Factor", "Standard", "Elevated", "High"].map((h) => (
                         <th
                           key={h}
@@ -1048,7 +1048,7 @@ export default function CompliancePage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr style={{ backgroundColor: "#F7F6F1" }}>
+                    <tr style={{ backgroundColor: "#F9FAFB" }}>
                       <th
                         className="px-4 py-3 text-xs font-semibold uppercase tracking-wider sm:px-6"
                         style={{ color: palette.muted }}
@@ -1253,7 +1253,7 @@ export default function CompliancePage() {
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <div
                       className="rounded-xl p-3"
-                      style={{ backgroundColor: "#F7F6F1" }}
+                      style={{ backgroundColor: "#F9FAFB" }}
                     >
                       <p
                         className="text-[10px] font-semibold uppercase tracking-wider"
@@ -1270,7 +1270,7 @@ export default function CompliancePage() {
                     </div>
                     <div
                       className="rounded-xl p-3"
-                      style={{ backgroundColor: "#F7F6F1" }}
+                      style={{ backgroundColor: "#F9FAFB" }}
                     >
                       <p
                         className="text-[10px] font-semibold uppercase tracking-wider"
@@ -1456,7 +1456,7 @@ export default function CompliancePage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr style={{ backgroundColor: "#F7F6F1" }}>
+                    <tr style={{ backgroundColor: "#F9FAFB" }}>
                       {["Record Type", "Retention Period", "Storage"].map(
                         (h) => (
                           <th

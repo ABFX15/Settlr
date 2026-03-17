@@ -54,7 +54,7 @@ function Reveal({
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-[#E2E2D1] last:border-0">
+    <div className="border-b border-[#E5E7EB] last:border-0">
       <button
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between py-5 text-left"
@@ -321,7 +321,7 @@ export default function AdultContentPage() {
                 </Link>
                 <Link
                   href="/demo"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#E2E2D1] bg-white px-7 py-3.5 font-semibold text-[#0C1829] transition-all hover:bg-[#F5F5F5]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-white px-7 py-3.5 font-semibold text-[#0C1829] transition-all hover:bg-[#F5F5F5]"
                 >
                   See the Demo
                 </Link>
@@ -349,7 +349,7 @@ export default function AdultContentPage() {
       </section>
 
       {/* ───── Stats ───── */}
-      <section className="border-y border-[#E2E2D1] bg-white px-4 py-14">
+      <section className="border-y border-[#E5E7EB] bg-white px-4 py-14">
         <div className="mx-auto grid max-w-5xl grid-cols-2 gap-8 md:grid-cols-4">
           {stats.map((stat, i) => (
             <Reveal key={stat.label} delay={i * 0.05}>
@@ -425,7 +425,7 @@ export default function AdultContentPage() {
               const Icon = f.icon;
               return (
                 <Reveal key={f.title} delay={i * 0.05}>
-                  <div className="rounded-2xl border border-[#E2E2D1] bg-white p-6 transition-colors hover:bg-[#F7F6F1]">
+                  <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6 transition-colors hover:bg-[#F9FAFB]">
                     <div className="mb-4 flex items-center justify-between">
                       <div className="rounded-lg bg-[#1B6B4A]/[0.08] p-2.5">
                         <Icon className="h-5 w-5 text-[#155939]" />
@@ -457,7 +457,7 @@ export default function AdultContentPage() {
       </section>
 
       {/* ───── How It Works ───── */}
-      <section className="border-y border-[#E2E2D1] bg-white px-4 py-24">
+      <section className="border-y border-[#E5E7EB] bg-white px-4 py-24">
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h2
@@ -502,7 +502,7 @@ export default function AdultContentPage() {
               const Icon = item.icon;
               return (
                 <Reveal key={item.step} delay={i * 0.08}>
-                  <div className="rounded-2xl border border-[#E2E2D1] bg-[#F7F6F1] p-6">
+                  <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-6">
                     <div
                       className="mb-4 text-4xl font-bold text-[#1B6B4A]/20"
                       style={{
@@ -540,8 +540,8 @@ export default function AdultContentPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="overflow-hidden rounded-2xl border border-[#E2E2D1]">
-              <div className="grid grid-cols-3 border-b border-[#E2E2D1] bg-[#F5F5F5]">
+            <div className="overflow-hidden rounded-2xl border border-[#E5E7EB]">
+              <div className="grid grid-cols-3 border-b border-[#E5E7EB] bg-[#F5F5F5]">
                 <div className="p-4 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
                   Feature
                 </div>
@@ -557,7 +557,7 @@ export default function AdultContentPage() {
                   key={row.feature}
                   className={`grid grid-cols-3 ${
                     i !== comparisonRows.length - 1
-                      ? "border-b border-[#E2E2D1]"
+                      ? "border-b border-[#E5E7EB]"
                       : ""
                   }`}
                 >
@@ -578,7 +578,7 @@ export default function AdultContentPage() {
       </section>
 
       {/* ───── FAQ ───── */}
-      <section className="border-t border-[#E2E2D1] bg-white px-4 py-24">
+      <section className="border-t border-[#E5E7EB] bg-white px-4 py-24">
         <div className="mx-auto max-w-3xl">
           <Reveal>
             <h2
@@ -594,7 +594,7 @@ export default function AdultContentPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="rounded-2xl border border-[#E2E2D1] bg-[#F7F6F1] px-6">
+            <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] px-6">
               {faqItems.map((item, i) => (
                 <FAQItem key={i} q={item.q} a={item.a} />
               ))}

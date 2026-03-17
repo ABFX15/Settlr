@@ -26,7 +26,7 @@ const SLATE = "#3B4963";
 const MUTED = "#7C8A9E";
 const GREEN = "#1B6B4A";
 const TOPO = "#E8E4DA";
-const CARD_BORDER = "#E2DFD5";
+const CARD_BORDER = "#E5E7EB";
 
 /* ─── Types ─── */
 interface LineItem {
@@ -562,7 +562,7 @@ export default function CreateInvoicePage() {
           <button
             onClick={() => handleSubmit(false)}
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-[#F3F2ED] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-[#F3F4F6] disabled:opacity-50"
             style={{ borderColor: CARD_BORDER, color: NAVY }}
           >
             {saving ? (

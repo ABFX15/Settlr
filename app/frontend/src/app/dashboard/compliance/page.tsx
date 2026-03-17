@@ -123,7 +123,7 @@ export default function ComplianceSettingsPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-md rounded-2xl border border-[#E2DFD5] bg-[#F3F2ED] p-8 text-center"
+          className="max-w-md rounded-2xl border border-[#E5E7EB] bg-[#F3F4F6] p-8 text-center"
         >
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#1B6B4A]/10">
             <Shield className="h-8 w-8 text-[#1B6B4A]" />
@@ -136,7 +136,7 @@ export default function ComplianceSettingsPage() {
           </p>
           <button
             onClick={login}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#FDFBF7] px-6 py-3 font-semibold text-[#0C1829]"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#FFFFFF] px-6 py-3 font-semibold text-[#0C1829]"
           >
             <LogIn className="h-4 w-4" />
             Sign In
@@ -210,7 +210,7 @@ export default function ComplianceSettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="rounded-2xl border border-[#E2DFD5] bg-[#F3F2ED] p-6"
+          className="rounded-2xl border border-[#E5E7EB] bg-[#F3F4F6] p-6"
         >
           {/* KYC Toggle */}
           <div className="mb-6 flex items-center justify-between">
@@ -227,11 +227,11 @@ export default function ComplianceSettingsPage() {
                 setSettings((s) => ({ ...s, kycEnabled: !s.kycEnabled }))
               }
               className={`relative h-7 w-12 rounded-full transition-colors ${
-                settings.kycEnabled ? "bg-[#1B6B4A]" : "bg-[#F3F2ED]"
+                settings.kycEnabled ? "bg-[#1B6B4A]" : "bg-[#F3F4F6]"
               }`}
             >
               <div
-                className={`absolute top-1 h-5 w-5 rounded-full bg-[#FDFBF7] transition-transform ${
+                className={`absolute top-1 h-5 w-5 rounded-full bg-[#FFFFFF] transition-transform ${
                   settings.kycEnabled ? "translate-x-6" : "translate-x-1"
                 }`}
               />
@@ -243,7 +243,7 @@ export default function ComplianceSettingsPage() {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              className="border-t border-[#E2DFD5] pt-6"
+              className="border-t border-[#E5E7EB] pt-6"
             >
               <h3 className="mb-4 font-semibold text-[#0C1829]">
                 Verification Level
@@ -255,7 +255,7 @@ export default function ComplianceSettingsPage() {
                     className={`flex cursor-pointer items-start gap-4 rounded-xl border p-4 transition-colors ${
                       settings.kycLevel === level.id
                         ? "border-[#a78bfa] bg-[#1B6B4A]/10"
-                        : "border-[#E2DFD5] hover:border-[#E2DFD5]"
+                        : "border-[#E5E7EB] hover:border-[#E5E7EB]"
                     }`}
                   >
                     <input
@@ -311,7 +311,7 @@ export default function ComplianceSettingsPage() {
             <button
               onClick={saveSettings}
               disabled={saving}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#FDFBF7] px-6 py-3 font-semibold text-[#0C1829] transition-all hover:opacity-90 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#FFFFFF] px-6 py-3 font-semibold text-[#0C1829] transition-all hover:opacity-90 disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

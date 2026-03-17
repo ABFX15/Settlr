@@ -29,12 +29,12 @@ import Image from "next/image";
 
 // ─── Design tokens ────────────────────────────────────────
 const c = {
-  bg: "#FDFBF7",
-  card: "#F3F2ED",
+  bg: "#FFFFFF",
+  card: "#F3F4F6",
   navy: "#0C1829",
   slate: "#3B4963",
   muted: "#7C8A9E",
-  border: "#E2DFD5",
+  border: "#E5E7EB",
   green: "#1B6B4A",
   greenBg: "rgba(27,107,74,0.06)",
   red: "#dc2626",

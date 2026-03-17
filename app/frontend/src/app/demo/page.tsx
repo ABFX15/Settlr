@@ -91,7 +91,7 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {/* Traditional Rail */}
-      <div className="rounded-2xl border border-[#E2E2D1] bg-white p-6">
+      <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6">
         <div className="mb-4 flex items-center gap-2">
           <Clock className="h-5 w-5 text-[#B8860B]" />
           <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
@@ -129,7 +129,7 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
       <div
         className="relative overflow-hidden rounded-2xl border p-6 transition-all duration-500"
         style={{
-          borderColor: settled ? "#1B6B4A" : "#E2E2D1",
+          borderColor: settled ? "#1B6B4A" : "#E5E7EB",
           background: settled
             ? "linear-gradient(135deg, rgba(27,107,74,0.04), rgba(27,107,74,0.01))"
             : "white",
@@ -242,7 +242,7 @@ function Stepper({ current }: { current: number }) {
                     : isActive
                     ? "#0C1829"
                     : "#F5F5F5",
-                  borderColor: isDone || isActive ? "transparent" : "#E2E2D1",
+                  borderColor: isDone || isActive ? "transparent" : "#E5E7EB",
                 }}
                 className="flex h-9 w-9 items-center justify-center rounded-full border"
               >
@@ -272,7 +272,7 @@ function Stepper({ current }: { current: number }) {
               <div
                 className="mb-5 hidden h-px w-8 sm:block md:w-16"
                 style={{
-                  background: step.id < current ? "#1B6B4A" : "#E2E2D1",
+                  background: step.id < current ? "#1B6B4A" : "#E5E7EB",
                 }}
               />
             )}
@@ -315,7 +315,7 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`w-full rounded-lg border border-[#E2E2D1] bg-white px-3 py-2.5 text-sm text-[#0C1829] placeholder:text-[#7C8A9E]/50 transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20 ${
+          className={`w-full rounded-lg border border-[#E5E7EB] bg-white px-3 py-2.5 text-sm text-[#0C1829] placeholder:text-[#7C8A9E]/50 transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20 ${
             prefix ? "pl-7" : ""
           }`}
         />
@@ -344,7 +344,7 @@ function SelectField({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-[#E2E2D1] bg-white px-3 py-2.5 text-sm text-[#0C1829] transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
+        className="w-full rounded-lg border border-[#E5E7EB] bg-white px-3 py-2.5 text-sm text-[#0C1829] transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -427,7 +427,7 @@ function StepBusiness({
       </p>
 
       <div
-        className="rounded-2xl border border-[#E2E2D1] bg-white p-6 md:p-8"
+        className="rounded-2xl border border-[#E5E7EB] bg-white p-6 md:p-8"
         style={{
           boxShadow:
             "0 4px 24px rgba(10,15,30,0.04), inset 0 1px 0 rgba(255,255,255,0.6)",
@@ -464,7 +464,7 @@ function StepBusiness({
         </div>
 
         {/* Divider */}
-        <div className="mb-8 border-t border-[#E2E2D1]" />
+        <div className="mb-8 border-t border-[#E5E7EB]" />
 
         {/* Recipient */}
         <div className="mb-8">
@@ -497,7 +497,7 @@ function StepBusiness({
         </div>
 
         {/* Divider */}
-        <div className="mb-8 border-t border-[#E2E2D1]" />
+        <div className="mb-8 border-t border-[#E5E7EB]" />
 
         {/* Invoice details */}
         <div>
@@ -653,10 +653,10 @@ function StepInvoice({ form }: { form: DemoForm }) {
           </div>
 
           {/* Line items */}
-          <div className="mb-6 overflow-hidden rounded-xl border border-[#E2E2D1]">
+          <div className="mb-6 overflow-hidden rounded-xl border border-[#E5E7EB]">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[#E2E2D1] bg-[#F5F5F5]/60">
+                <tr className="border-b border-[#E5E7EB] bg-[#F5F5F5]/60">
                   <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
                     Description
                   </th>
@@ -665,7 +665,7 @@ function StepInvoice({ form }: { form: DemoForm }) {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E2E2D1]">
+              <tbody className="divide-y divide-[#E5E7EB]">
                 <tr>
                   <td className="px-4 py-3 text-sm text-[#0C1829]">
                     {form.description ||
@@ -859,7 +859,7 @@ function StepReceipt({
 
         {/* Stats grid */}
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-[#E2E2D1] bg-[#F7F6F1] p-4">
+          <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
             <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
               Amount
             </p>
@@ -882,7 +882,7 @@ function StepReceipt({
             </p>
           </div>
 
-          <div className="rounded-xl border border-[#E2E2D1] bg-[#F7F6F1] p-4">
+          <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
             <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
               Time to Finality
             </p>
@@ -899,7 +899,7 @@ function StepReceipt({
             </p>
           </div>
 
-          <div className="rounded-xl border border-[#E2E2D1] bg-[#F7F6F1] p-4">
+          <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
             <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
               Platform Fee
             </p>
@@ -921,7 +921,7 @@ function StepReceipt({
         </div>
 
         {/* On-chain details */}
-        <div className="space-y-4 rounded-xl border border-[#E2E2D1] bg-[#F7F6F1] p-5">
+        <div className="space-y-4 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
               On-Chain Transaction
@@ -952,7 +952,7 @@ function StepReceipt({
             </code>
             <button
               onClick={handleCopy}
-              className="shrink-0 rounded-md border border-[#E2E2D1] bg-white p-2 text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+              className="shrink-0 rounded-md border border-[#E5E7EB] bg-white p-2 text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
             >
               {copied ? (
                 <Check className="h-4 w-4 text-[#155939]" />
@@ -1158,7 +1158,7 @@ export default function DemoPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#FDFBF7]">
+      <main className="min-h-screen bg-[#FFFFFF]">
         {/* Hero */}
         <section className="relative overflow-hidden px-4 pb-8 pt-32">
           <div className="absolute inset-0">
@@ -1170,7 +1170,7 @@ export default function DemoPage() {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E2E2D1] bg-[#F5F5F5] px-4 py-2"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-[#F5F5F5] px-4 py-2"
             >
               <Fingerprint className="h-4 w-4 text-[#155939]" />
               <span className="text-sm font-medium text-[#3B4963]">
@@ -1224,7 +1224,7 @@ export default function DemoPage() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.25, ...spring }}
-                    className="mt-5 rounded-xl border border-[#E2E2D1] bg-white/80 p-4"
+                    className="mt-5 rounded-xl border border-[#E5E7EB] bg-white/80 p-4"
                   >
                     {authenticated && activeWallet ? (
                       <div className="flex items-center gap-3">
@@ -1275,7 +1275,7 @@ export default function DemoPage() {
         </section>
 
         {/* Navigation buttons */}
-        <section className="sticky bottom-0 z-20 border-t border-[#E2E2D1] bg-[#FDFBF7]/90 backdrop-blur-md">
+        <section className="sticky bottom-0 z-20 border-t border-[#E5E7EB] bg-[#FFFFFF]/90 backdrop-blur-md">
           <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
             <button
               onClick={handleBack}
@@ -1295,7 +1295,7 @@ export default function DemoPage() {
                       ? "w-6 bg-[#1B6B4A]"
                       : s.id < step
                       ? "w-1.5 bg-[#1B6B4A]/40"
-                      : "w-1.5 bg-[#E2E2D1]"
+                      : "w-1.5 bg-[#E5E7EB]"
                   }`}
                 />
               ))}
@@ -1353,7 +1353,7 @@ export default function DemoPage() {
                     setStep(1);
                     setSettlementDone(false);
                   }}
-                  className="rounded-lg border border-[#E2E2D1] px-5 py-2.5 text-sm font-semibold text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                  className="rounded-lg border border-[#E5E7EB] px-5 py-2.5 text-sm font-semibold text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
                 >
                   Try Again
                 </button>

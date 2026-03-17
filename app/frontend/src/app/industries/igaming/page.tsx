@@ -116,7 +116,7 @@ export default function IGamingPage() {
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7]" ref={containerRef}>
+    <main className="min-h-screen bg-[#FFFFFF]" ref={containerRef}>
       <Navbar />
 
       {/* Hero Section - Unique asymmetric layout */}
@@ -124,7 +124,7 @@ export default function IGamingPage() {
         {/* Animated gradient mesh background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(153,69,255,0.3),transparent)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FDFBF7] to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FFFFFF] to-transparent" />
         </div>
 
         {/* Floating orbs */}
@@ -216,7 +216,7 @@ export default function IGamingPage() {
                 </Link>
                 <Link
                   href="/docs"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] bg-[#F3F2ED] px-6 py-3.5 font-semibold text-[#0C1829] backdrop-blur-sm transition-all hover:bg-[#F3F2ED]"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] bg-[#F3F4F6] px-6 py-3.5 font-semibold text-[#0C1829] backdrop-blur-sm transition-all hover:bg-[#F3F4F6]"
                 >
                   View Documentation
                 </Link>
@@ -258,7 +258,7 @@ export default function IGamingPage() {
                 {/* Large feature card */}
                 <motion.div
                   whileHover={{ scale: 1.01 }}
-                  className="relative overflow-hidden rounded-2xl border border-[#E2DFD5] bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-sm"
+                  className="relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-sm"
                 >
                   <div className="absolute right-0 top-0 h-32 w-32 bg-gradient-to-bl from-[#14F195]/20 to-transparent" />
                   <div className="relative">
@@ -293,7 +293,7 @@ export default function IGamingPage() {
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="rounded-2xl border border-[#E2DFD5] bg-gradient-to-br from-white/5 to-transparent p-6 backdrop-blur-sm"
+                    className="rounded-2xl border border-[#E5E7EB] bg-gradient-to-br from-white/5 to-transparent p-6 backdrop-blur-sm"
                   >
                     <Wallet className="mb-3 h-8 w-8 text-[#0C1829]" />
                     <div className="text-3xl font-bold text-[#0C1829]">
@@ -388,7 +388,7 @@ export default function IGamingPage() {
             viewport={{ once: true }}
             className="mb-16 text-center"
           >
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5]/30 bg-white/10 px-4 py-2">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#E5E7EB]/30 bg-white/10 px-4 py-2">
               <Check className="h-4 w-4 text-[#0C1829]" />
               <span className="text-sm font-medium text-[#0C1829]">
                 The Settlr Solution
@@ -412,7 +412,7 @@ export default function IGamingPage() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -5, scale: 1.02 }}
-                  className="group relative rounded-2xl border border-[#E2DFD5] bg-white/10 p-8 backdrop-blur-sm transition-all hover:bg-white/20"
+                  className="group relative rounded-2xl border border-[#E5E7EB] bg-white/10 p-8 backdrop-blur-sm transition-all hover:bg-white/20"
                 >
                   <div className="relative">
                     <div className="mb-4 inline-flex rounded-xl bg-white/20 p-3">
@@ -458,9 +458,9 @@ export default function IGamingPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="overflow-hidden rounded-2xl border border-[#E2DFD5] bg-white/[0.02]"
+            className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white/[0.02]"
           >
-            <div className="grid grid-cols-3 border-b border-[#E2DFD5] bg-white/[0.02]">
+            <div className="grid grid-cols-3 border-b border-[#E5E7EB] bg-white/[0.02]">
               <div className="p-4 text-sm font-medium text-[#7C8A9E]">
                 Feature
               </div>
@@ -503,7 +503,7 @@ export default function IGamingPage() {
               <div
                 key={row.feature}
                 className={`grid grid-cols-3 ${
-                  index !== 5 ? "border-b border-[#E2DFD5]" : ""
+                  index !== 5 ? "border-b border-[#E5E7EB]" : ""
                 }`}
               >
                 <div className="p-4 text-[#0C1829]">{row.feature}</div>
@@ -529,7 +529,7 @@ export default function IGamingPage() {
           viewport={{ once: true }}
           className="relative mx-auto max-w-3xl text-center"
         >
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-2">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-2">
             <TrendingUp className="h-4 w-4 text-[#1B6B4A]" />
             <span className="text-sm font-medium text-[#1B6B4A]">
               Ready to scale?

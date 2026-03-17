@@ -308,7 +308,7 @@ export default function ComparePage() {
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.08}>
               <div
-                className="rounded-xl border-l-2 bg-[#F7F6F1] p-5"
+                className="rounded-xl border-l-2 bg-[#F9FAFB] p-5"
                 style={{ borderColor: item.color }}
               >
                 <item.icon
@@ -333,10 +333,10 @@ export default function ComparePage() {
               <h2 className="mb-4 text-lg font-semibold text-[#0C1829]">
                 {section.category}
               </h2>
-              <div className="overflow-x-auto rounded-xl border border-[#E2E2D1]">
+              <div className="overflow-x-auto rounded-xl border border-[#E5E7EB]">
                 <table className="w-full min-w-[700px]">
                   <thead>
-                    <tr className="border-b border-[#E2E2D1] bg-[#F7F6F1]">
+                    <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
                       <th className="py-3 pl-5 pr-3 text-left text-xs font-medium uppercase tracking-wider text-[#7C8A9E]">
                         Feature
                       </th>
@@ -356,8 +356,8 @@ export default function ComparePage() {
                     {section.rows.map((row, ri) => (
                       <tr
                         key={row.label}
-                        className={`border-b border-[#E2E2D1] ${
-                          ri % 2 === 0 ? "" : "bg-[#F7F6F1]"
+                        className={`border-b border-[#E5E7EB] ${
+                          ri % 2 === 0 ? "" : "bg-[#F9FAFB]"
                         }`}
                       >
                         <td className="py-3.5 pl-5 pr-3">
@@ -391,7 +391,7 @@ export default function ComparePage() {
 
         {/* Sources */}
         <Reveal>
-          <div className="mt-8 rounded-xl bg-[#F7F6F1] p-6">
+          <div className="mt-8 rounded-xl bg-[#F9FAFB] p-6">
             <h3 className="mb-3 text-sm font-semibold text-[#7C8A9E]">
               Sources &amp; methodology
             </h3>
@@ -487,7 +487,7 @@ export default function ComparePage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="border-t border-[#E2E2D1] bg-gradient-to-b from-[#F7F6F1] to-transparent">
+      <section className="border-t border-[#E5E7EB] bg-gradient-to-b from-[#F9FAFB] to-transparent">
         <div className="mx-auto max-w-3xl px-6 py-24 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight text-[#0C1829] md:text-4xl">
@@ -515,7 +515,7 @@ export default function ComparePage() {
               </Link>
               <Link
                 href="/docs"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E2E2D1] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] transition-colors hover:bg-[#F5F5F5] hover:text-[#0C1829]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] transition-colors hover:bg-[#F5F5F5] hover:text-[#0C1829]"
               >
                 Read the docs
               </Link>

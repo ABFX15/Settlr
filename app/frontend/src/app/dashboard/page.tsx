@@ -132,7 +132,7 @@ export default function DashboardPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5"
+          className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-5"
         >
           <div className="flex items-center gap-2 text-sm text-[#7C8A9E] mb-1">
             <DollarSign className="h-4 w-4" />
@@ -151,7 +151,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5"
+          className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-5"
         >
           <div className="flex items-center gap-2 text-sm text-[#7C8A9E] mb-1">
             <Receipt className="h-4 w-4" />
@@ -167,7 +167,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5"
+          className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-5"
         >
           <div className="flex items-center gap-2 text-sm text-[#7C8A9E] mb-1">
             <ArrowLeftRight className="h-4 w-4" />
@@ -183,7 +183,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-5"
+          className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-5"
         >
           <div className="flex items-center gap-2 text-sm text-[#7C8A9E] mb-1">
             <Clock className="h-4 w-4" />
@@ -233,7 +233,7 @@ export default function DashboardPage() {
           <Link
             key={action.label}
             href={action.href}
-            className="group rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4 hover:bg-[#F3F2ED] transition-colors"
+            className="group rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-4 hover:bg-[#F3F4F6] transition-colors"
           >
             <div className={`p-2.5 rounded-lg ${action.bg} w-fit mb-3`}>
               <action.icon className={`h-5 w-5 ${action.color}`} />
@@ -251,9 +251,9 @@ export default function DashboardPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="rounded-xl border border-[#E2DFD5] bg-white/[0.02]"
+        className="rounded-xl border border-[#E5E7EB] bg-white/[0.02]"
       >
-        <div className="flex items-center justify-between border-b border-[#E2DFD5] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] px-6 py-4">
           <h3 className="text-sm font-medium text-[#0C1829]">
             Recent Activity
           </h3>

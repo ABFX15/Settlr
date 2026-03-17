@@ -21,14 +21,14 @@ import {
 } from "lucide-react";
 
 /* ─── Palette ─── */
-const CREAM = "#FDFBF7";
+const CREAM = "#FFFFFF";
 const NAVY = "#0C1829";
 const SLATE = "#3B4963";
 const MUTED = "#7C8A9E";
 const GREEN = "#1B6B4A";
 const ACCENT = "#2A9D6A";
 const TOPO = "#E8E4DA";
-const CARD_BORDER = "#E2DFD5";
+const CARD_BORDER = "#E5E7EB";
 
 /* ─── Types ─── */
 interface InvoiceSummary {
@@ -359,7 +359,7 @@ export default function InvoicesPage() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: i * 0.03 }}
-                      className="group cursor-pointer transition-colors hover:bg-[#FDFBF7]"
+                      className="group cursor-pointer transition-colors hover:bg-[#FFFFFF]"
                       style={{
                         borderBottom:
                           i < filteredInvoices.length - 1

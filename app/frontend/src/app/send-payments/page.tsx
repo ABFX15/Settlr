@@ -46,7 +46,7 @@ function Reveal({
 export default function SendPaymentsPage() {
   return (
     <main
-      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       {/* JSON-LD */}
@@ -108,7 +108,7 @@ export default function SendPaymentsPage() {
               </Link>
               <Link
                 href="/docs?tab=settlement"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E5E7EB] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
               >
                 Read the docs
               </Link>
@@ -118,7 +118,7 @@ export default function SendPaymentsPage() {
       </section>
 
       {/* ─── How it works ─── */}
-      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E5E7EB]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
             <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
@@ -158,7 +158,7 @@ export default function SendPaymentsPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.step} delay={i * 0.08}>
-                <div className="relative rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+                <div className="relative rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
                   <span className="mb-4 block text-xs font-bold text-[#1B6B4A]/60">
                     STEP {item.step}
                   </span>
@@ -172,7 +172,7 @@ export default function SendPaymentsPage() {
                     {item.text}
                   </p>
                   {item.code && (
-                    <pre className="mt-4 overflow-x-auto rounded-xl bg-[#08080d] border border-[#E2DFD5] p-4 font-mono text-[12px] leading-relaxed text-[#7C8A9E]">
+                    <pre className="mt-4 overflow-x-auto rounded-xl bg-[#08080d] border border-[#E5E7EB] p-4 font-mono text-[12px] leading-relaxed text-[#7C8A9E]">
                       {item.code}
                     </pre>
                   )}
@@ -256,7 +256,7 @@ export default function SendPaymentsPage() {
       </section>
 
       {/* ─── Features ─── */}
-      <section className="border-y border-[#E2DFD5]/[0.04]">
+      <section className="border-y border-[#E5E7EB]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
@@ -303,7 +303,7 @@ export default function SendPaymentsPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.06}>
-                <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+                <div className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
                   <div className="mb-4 inline-flex rounded-xl bg-[#1B6B4A]/10 p-2.5">
                     <item.icon className="h-5 w-5 text-[#1B6B4A]" />
                   </div>
@@ -329,10 +329,10 @@ export default function SendPaymentsPage() {
         </Reveal>
 
         <Reveal delay={0.08}>
-          <div className="mt-12 overflow-x-auto rounded-2xl border border-[#E2DFD5]">
+          <div className="mt-12 overflow-x-auto rounded-2xl border border-[#E5E7EB]">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#E2DFD5] bg-white/[0.02]">
+                <tr className="border-b border-[#E5E7EB] bg-white/[0.02]">
                   <th className="px-6 py-4 text-left font-medium text-[#7C8A9E]">
                     &nbsp;
                   </th>
@@ -405,7 +405,7 @@ export default function SendPaymentsPage() {
       </section>
 
       {/* ─── Use cases ─── */}
-      <section className="border-y border-[#E2DFD5]/[0.04]">
+      <section className="border-y border-[#E5E7EB]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
@@ -442,7 +442,7 @@ export default function SendPaymentsPage() {
               <Reveal key={item.label} delay={i * 0.04}>
                 <Link
                   href={item.link}
-                  className="flex items-center gap-3 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4 transition-colors hover:bg-[#F3F2ED]"
+                  className="flex items-center gap-3 rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-4 transition-colors hover:bg-[#F3F4F6]"
                 >
                   <Check className="h-4 w-4 flex-shrink-0 text-[#1B6B4A]" />
                   <span className="text-sm text-[#3B4963]">{item.label}</span>
@@ -482,7 +482,7 @@ export default function SendPaymentsPage() {
               </Link>
               <Link
                 href="/docs"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
               >
                 View API docs →
               </Link>

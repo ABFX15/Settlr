@@ -109,7 +109,7 @@ const faqs = [
 
 export default function PricingPage() {
   return (
-    <main className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased">
+    <main className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased">
       <Navbar />
 
       {/* ── Hero ── */}
@@ -118,7 +118,7 @@ export default function PricingPage() {
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
           <Reveal>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-1.5 text-[13px] text-[#3B4963]">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-1.5 text-[13px] text-[#3B4963]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#1B6B4A]" />
               No hidden fees
             </div>
@@ -149,7 +149,7 @@ export default function PricingPage() {
                   className={`relative flex h-full flex-col rounded-2xl border p-8 transition-colors ${
                     plan.popular
                       ? "border-[#3B82F6]/30 bg-[#1B6B4A]/[0.04]"
-                      : "border-[#E2DFD5] bg-white/[0.02] hover:border-[#E2DFD5]"
+                      : "border-[#E5E7EB] bg-white/[0.02] hover:border-[#E5E7EB]"
                   }`}
                 >
                   {plan.popular && (
@@ -197,8 +197,8 @@ export default function PricingPage() {
                     href={plan.href}
                     className={`group flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-[15px] font-semibold transition-all ${
                       plan.popular
-                        ? "bg-white text-[#0C1829] hover:bg-[#F3F2ED]"
-                        : "border border-[#E2DFD5] text-[#3B4963] hover:bg-[#F3F2ED] hover:text-[#0C1829]"
+                        ? "bg-white text-[#0C1829] hover:bg-[#F3F4F6]"
+                        : "border border-[#E5E7EB] text-[#3B4963] hover:bg-[#F3F4F6] hover:text-[#0C1829]"
                     }`}
                   >
                     {plan.cta}
@@ -212,7 +212,7 @@ export default function PricingPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E5E7EB]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-3xl px-6 py-28">
           <Reveal>
             <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
@@ -228,7 +228,7 @@ export default function PricingPage() {
           <div className="mt-12 space-y-4">
             {faqs.map((faq, i) => (
               <Reveal key={faq.q} delay={i * 0.06}>
-                <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+                <div className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
                   <h4 className="text-[15px] font-semibold text-[#0C1829]">
                     {faq.q}
                   </h4>
@@ -271,7 +271,7 @@ export default function PricingPage() {
               </Link>
               <Link
                 href="/demo"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-8 py-4 text-[15px] font-medium text-[#3B4963] transition-colors hover:bg-[#F3F4F6] hover:text-[#0C1829]"
               >
                 Try demo
               </Link>

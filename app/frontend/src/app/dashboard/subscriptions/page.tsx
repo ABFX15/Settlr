@@ -216,7 +216,7 @@ export default function SubscriptionsPage() {
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#F3F2ED] transition-all "
+              className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#F3F4F6] transition-all "
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -235,7 +235,7 @@ export default function SubscriptionsPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/dashboard"
-              className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-[#F3F2ED] transition-colors"
+              className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-[#F3F4F6] transition-colors"
             >
               <ArrowLeft className="w-5 h-5 text-[#7C8A9E]" />
             </Link>
@@ -251,14 +251,14 @@ export default function SubscriptionsPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard/subscriptions/subscribers"
-              className="flex items-center gap-2 bg-[#F3F2ED] border border-[#E2DFD5] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F2ED] transition-all text-sm"
+              className="flex items-center gap-2 bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F4F6] transition-all text-sm"
             >
               <Users className="w-4 h-4" />
               View Subscribers
             </Link>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F2ED] transition-all"
+              className="flex items-center gap-2 bg-[#FFFFFF] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F4F6] transition-all"
             >
               <Plus className="w-4 h-4" />
               Create Plan
@@ -271,7 +271,7 @@ export default function SubscriptionsPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-[#1B6B4A]/10">
@@ -288,7 +288,7 @@ export default function SubscriptionsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-cyan-500/10">
@@ -305,7 +305,7 @@ export default function SubscriptionsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-[#1B6B4A]/10">
@@ -326,9 +326,9 @@ export default function SubscriptionsPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-12 text-center"
+            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-12 text-center"
           >
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#F3F2ED] flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#F3F4F6] flex items-center justify-center">
               <RefreshCw className="w-8 h-8 text-[#7C8A9E]" />
             </div>
             <h3 className="text-xl font-semibold text-[#0C1829] mb-2">
@@ -340,7 +340,7 @@ export default function SubscriptionsPage() {
             </p>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-6 py-3 rounded-xl font-medium hover:bg-[#F3F2ED] transition-colors"
+              className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#0C1829] px-6 py-3 rounded-xl font-medium hover:bg-[#F3F4F6] transition-colors"
             >
               <Plus className="w-4 h-4" />
               Create Your First Plan
@@ -356,8 +356,8 @@ export default function SubscriptionsPage() {
                 transition={{ delay: index * 0.1 }}
                 className={`bg-white/[0.02] border rounded-2xl p-6 ${
                   plan.active
-                    ? "border-[#E2DFD5]"
-                    : "border-[#E2DFD5]/[0.04] opacity-60"
+                    ? "border-[#E5E7EB]"
+                    : "border-[#E5E7EB]/[0.04] opacity-60"
                 }`}
               >
                 <div className="flex items-start justify-between mb-4">
@@ -430,7 +430,7 @@ export default function SubscriptionsPage() {
                     onClick={() =>
                       copyToClipboard(getCheckoutLink(plan), plan.id)
                     }
-                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#F3F2ED] hover:bg-[#F3F2ED] rounded-lg text-sm text-[#3B4963] transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#F3F4F6] hover:bg-[#F3F4F6] rounded-lg text-sm text-[#3B4963] transition-colors"
                   >
                     {copied === plan.id ? (
                       <>
@@ -446,7 +446,7 @@ export default function SubscriptionsPage() {
                   </button>
                   <button
                     onClick={() => deletePlan(plan.id)}
-                    className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-red-500/20 transition-colors"
+                    className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-red-500/20 transition-colors"
                     title="Delete plan"
                   >
                     <Trash2 className="w-4 h-4 text-[#7C8A9E] hover:text-red-400" />
@@ -459,11 +459,11 @@ export default function SubscriptionsPage() {
 
         {/* Create Modal */}
         {showCreateModal && (
-          <div className="fixed inset-0 bg-[#FDFBF7]/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-[#FFFFFF]/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+              className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
             >
               <h2 className="text-xl font-semibold text-[#0C1829] mb-6">
                 Create Subscription Plan
@@ -482,7 +482,7 @@ export default function SubscriptionsPage() {
                       setNewPlan({ ...newPlan, name: e.target.value })
                     }
                     placeholder="e.g., Pro Monthly"
-                    className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                    className="w-full bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                   />
                 </div>
 
@@ -498,7 +498,7 @@ export default function SubscriptionsPage() {
                     }
                     placeholder="Describe what's included..."
                     rows={2}
-                    className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa] resize-none"
+                    className="w-full bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa] resize-none"
                   />
                 </div>
 
@@ -516,7 +516,7 @@ export default function SubscriptionsPage() {
                         setNewPlan({ ...newPlan, amount: e.target.value })
                       }
                       placeholder="9.99"
-                      className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                      className="w-full bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                     />
                   </div>
                   <div>
@@ -531,7 +531,7 @@ export default function SubscriptionsPage() {
                           interval: e.target.value as typeof newPlan.interval,
                         })
                       }
-                      className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                      className="w-full bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl px-4 py-3 text-[#0C1829] focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                     >
                       <option value="daily">Daily</option>
                       <option value="weekly">Weekly</option>
@@ -556,7 +556,7 @@ export default function SubscriptionsPage() {
                       })
                     }
                     placeholder="0"
-                    className="w-full bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                    className="w-full bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl px-4 py-3 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                   />
                 </div>
 
@@ -573,7 +573,7 @@ export default function SubscriptionsPage() {
                           value={feature}
                           onChange={(e) => updateFeature(index, e.target.value)}
                           placeholder="e.g., Unlimited access"
-                          className="flex-1 bg-[#F3F2ED] border border-[#E2DFD5] rounded-xl px-4 py-2 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
+                          className="flex-1 bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl px-4 py-2 text-[#0C1829] placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#a78bfa]"
                         />
                         {newPlan.features.length > 1 && (
                           <button
@@ -598,14 +598,14 @@ export default function SubscriptionsPage() {
               <div className="flex gap-3 mt-8">
                 <button
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-3 rounded-xl bg-[#F3F2ED] text-[#3B4963] hover:bg-[#F3F2ED] transition-colors"
+                  className="flex-1 px-4 py-3 rounded-xl bg-[#F3F4F6] text-[#3B4963] hover:bg-[#F3F4F6] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={createPlan}
                   disabled={creating || !newPlan.name || !newPlan.amount}
-                  className="flex-1 px-4 py-3 rounded-xl bg-[#FDFBF7] text-[#0C1829] font-medium hover:bg-[#F3F2ED] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 rounded-xl bg-[#FFFFFF] text-[#0C1829] font-medium hover:bg-[#F3F4F6] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {creating ? (
                     <>

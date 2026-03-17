@@ -101,7 +101,7 @@ export default function CheckoutSessionPage() {
   // Loading state
   if (status === "loading" || status === "redirecting") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FDFBF7]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF]">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -121,11 +121,11 @@ export default function CheckoutSessionPage() {
   // Error state
   if (status === "error") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FDFBF7] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF] p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8 max-w-md w-full text-center"
+          className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 max-w-md w-full text-center"
         >
           <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <XCircle className="w-8 h-8 text-red-500" />
@@ -147,11 +147,11 @@ export default function CheckoutSessionPage() {
   // Expired state
   if (status === "expired") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FDFBF7] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF] p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8 max-w-md w-full text-center"
+          className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 max-w-md w-full text-center"
         >
           <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <Clock className="w-8 h-8 text-amber-500" />
@@ -166,7 +166,7 @@ export default function CheckoutSessionPage() {
           {session?.cancelUrl ? (
             <a
               href={session.cancelUrl}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-[#0C1829] font-semibold rounded-xl border border-[#E2DFD5]"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-[#0C1829] font-semibold rounded-xl border border-[#E5E7EB]"
             >
               <ArrowLeft className="w-4 h-4" />
               Go Back
@@ -174,7 +174,7 @@ export default function CheckoutSessionPage() {
           ) : (
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-[#0C1829] font-semibold rounded-xl border border-[#E2DFD5]"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-[#0C1829] font-semibold rounded-xl border border-[#E5E7EB]"
             >
               <ArrowLeft className="w-4 h-4" />
               Return Home
@@ -188,11 +188,11 @@ export default function CheckoutSessionPage() {
   // Completed state
   if (status === "completed") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FDFBF7] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF] p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-[#F3F2ED] border border-[#E2DFD5] rounded-2xl p-8 max-w-md w-full text-center"
+          className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 max-w-md w-full text-center"
         >
           <motion.div
             initial={{ scale: 0 }}

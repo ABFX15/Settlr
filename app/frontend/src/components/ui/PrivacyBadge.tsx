@@ -116,7 +116,7 @@ export function PrivacyBadge({
             )}
 
             {canDecrypt && (
-              <div className="pt-2 border-t border-[#E2E2D1]">
+              <div className="pt-2 border-t border-[#E5E7EB]">
                 {revealed ? (
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#7C8A9E]">
@@ -158,7 +158,7 @@ export function PrivacyBadge({
             )}
 
             {!canDecrypt && (
-              <div className="flex items-center gap-2 text-xs text-[#7C8A9E] pt-2 border-t border-[#E2E2D1]">
+              <div className="flex items-center gap-2 text-xs text-[#7C8A9E] pt-2 border-t border-[#E5E7EB]">
                 <EyeOff size={12} />
                 You don&apos;t have decryption access
               </div>
@@ -196,7 +196,7 @@ export function PrivacyComparison({
   return (
     <div className="grid md:grid-cols-2 gap-4">
       {/* Public Transaction */}
-      <div className="p-4 rounded-lg bg-[#F5F5F5] border border-[#E2E2D1]">
+      <div className="p-4 rounded-lg bg-[#F5F5F5] border border-[#E5E7EB]">
         <div className="flex items-center gap-2 mb-3 text-[#3B4963] font-medium">
           <Eye size={16} />
           Regular Payment
@@ -211,7 +211,7 @@ export function PrivacyComparison({
             <span className="text-yellow-400">Anyone on explorer</span>
           </div>
         </div>
-        <div className="mt-3 pt-3 border-t border-[#E2E2D1] text-xs text-[#7C8A9E]">
+        <div className="mt-3 pt-3 border-t border-[#E5E7EB] text-xs text-[#7C8A9E]">
           ⚠️ Amount visible to everyone on Solscan/Explorer
         </div>
       </div>
@@ -267,9 +267,9 @@ export function ExplorerPreview({
   encryptedHandle?: string;
 }) {
   return (
-    <div className="rounded-lg bg-[#0d0d14] border border-[#E2E2D1] overflow-hidden">
+    <div className="rounded-lg bg-[#0d0d14] border border-[#E5E7EB] overflow-hidden">
       {/* Mock explorer header */}
-      <div className="px-4 py-2 bg-[#F5F5F5] border-b border-[#E2E2D1] flex items-center gap-2">
+      <div className="px-4 py-2 bg-[#F5F5F5] border-b border-[#E5E7EB] flex items-center gap-2">
         <div className="flex gap-1.5">
           <div className="w-3 h-3 rounded-full bg-red-500/80" />
           <div className="w-3 h-3 rounded-full bg-yellow-500/80" />

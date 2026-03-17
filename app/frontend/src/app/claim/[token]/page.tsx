@@ -818,7 +818,7 @@ export default function ClaimPage({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowCashOut(false)}
-              className="fixed inset-0 z-40 bg-[#FDFBF7]/40 backdrop-blur-sm"
+              className="fixed inset-0 z-40 bg-[#FFFFFF]/40 backdrop-blur-sm"
             />
 
             {/* Modal — bottom sheet on mobile, centered on desktop */}

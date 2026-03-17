@@ -320,11 +320,11 @@ function statusColor(status: string) {
     case "processing":
       return "text-amber-600 bg-amber-500/10";
     case "pending":
-      return "text-[#7C8A9E] bg-[#F3F2ED]";
+      return "text-[#7C8A9E] bg-[#F3F4F6]";
     case "failed":
       return "text-red-500 bg-red-500/10";
     default:
-      return "text-[#7C8A9E] bg-[#F3F2ED]";
+      return "text-[#7C8A9E] bg-[#F3F4F6]";
   }
 }
 
@@ -481,7 +481,7 @@ export default function OfframpPage() {
 
           <motion.div
             {...fadeInProps}
-            className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-12 text-center"
+            className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-12 text-center"
           >
             <ArrowDownToLine className="mx-auto h-8 w-8 text-[#7C8A9E]/60 mb-4" />
             <p className="text-sm text-[#7C8A9E] mb-4">
@@ -529,7 +529,7 @@ export default function OfframpPage() {
         {/* Balance card */}
         <motion.div
           {...fadeInProps}
-          className="mb-8 rounded-xl border border-[#E2DFD5] bg-gradient-to-br from-[#1B6B4A]/5 to-transparent p-6"
+          className="mb-8 rounded-xl border border-[#E5E7EB] bg-gradient-to-br from-[#1B6B4A]/5 to-transparent p-6"
         >
           <div className="flex items-center justify-between">
             <div>
@@ -546,7 +546,7 @@ export default function OfframpPage() {
             </div>
             <button
               onClick={fetchBalance}
-              className="rounded-lg border border-[#E2DFD5] p-2.5 text-[#7C8A9E] hover:text-[#3B4963] hover:bg-[#F3F2ED] transition-colors"
+              className="rounded-lg border border-[#E5E7EB] p-2.5 text-[#7C8A9E] hover:text-[#3B4963] hover:bg-[#F3F4F6] transition-colors"
             >
               <RefreshCw className="h-4 w-4" />
             </button>
@@ -580,10 +580,10 @@ export default function OfframpPage() {
             <motion.div
               {...fadeInProps}
               transition={{ delay: 0.05 }}
-              className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] overflow-hidden"
+              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] overflow-hidden"
             >
               {/* Step indicators */}
-              <div className="border-b border-[#E2DFD5] px-6 py-4">
+              <div className="border-b border-[#E5E7EB] px-6 py-4">
                 <div className="flex items-center gap-4">
                   {[
                     { num: 1, label: "Select Region" },
@@ -603,7 +603,7 @@ export default function OfframpPage() {
                         className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium transition-colors ${
                           step >= s.num
                             ? "bg-[#1B6B4A] text-white"
-                            : "bg-[#F3F2ED] text-[#7C8A9E]"
+                            : "bg-[#F3F4F6] text-[#7C8A9E]"
                         }`}
                       >
                         {step > s.num ? (
@@ -620,7 +620,7 @@ export default function OfframpPage() {
                         {s.label}
                       </span>
                       {i < 2 && (
-                        <ArrowRight className="h-3 w-3 text-[#E2DFD5] mx-1" />
+                        <ArrowRight className="h-3 w-3 text-[#E5E7EB] mx-1" />
                       )}
                     </button>
                   ))}
@@ -639,7 +639,7 @@ export default function OfframpPage() {
                       <div className="relative">
                         <button
                           onClick={() => setRegionOpen(!regionOpen)}
-                          className="w-full flex items-center justify-between rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-3 text-sm text-[#0C1829] hover:border-[#3B4963]/30 transition-colors"
+                          className="w-full flex items-center justify-between rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-3 text-sm text-[#0C1829] hover:border-[#3B4963]/30 transition-colors"
                         >
                           <span className="flex items-center gap-2">
                             <Globe className="h-4 w-4 text-[#7C8A9E]" />
@@ -657,7 +657,7 @@ export default function OfframpPage() {
                               initial={{ opacity: 0, y: -4 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -4 }}
-                              className="absolute z-20 mt-1 w-full rounded-lg border border-[#E2DFD5] bg-[#FDFBF7] shadow-lg max-h-60 overflow-y-auto"
+                              className="absolute z-20 mt-1 w-full rounded-lg border border-[#E5E7EB] bg-[#FFFFFF] shadow-lg max-h-60 overflow-y-auto"
                             >
                               {REGION_LIST.map((r) => (
                                 <button
@@ -666,7 +666,7 @@ export default function OfframpPage() {
                                     setSelectedRegion(r.code);
                                     setRegionOpen(false);
                                   }}
-                                  className={`w-full text-left px-4 py-2.5 text-sm hover:bg-[#F3F2ED] transition-colors flex items-center justify-between ${
+                                  className={`w-full text-left px-4 py-2.5 text-sm hover:bg-[#F3F4F6] transition-colors flex items-center justify-between ${
                                     r.code === selectedRegion
                                       ? "text-[#1B6B4A] font-medium bg-[#1B6B4A]/5"
                                       : "text-[#3B4963]"
@@ -701,14 +701,14 @@ export default function OfframpPage() {
                               className={`w-full flex items-center gap-4 rounded-lg border px-4 py-3.5 text-left transition-all ${
                                 isSelected
                                   ? "border-[#1B6B4A]/40 bg-[#1B6B4A]/5 ring-1 ring-[#1B6B4A]/20"
-                                  : "border-[#E2DFD5] bg-white/[0.02] hover:border-[#3B4963]/30"
+                                  : "border-[#E5E7EB] bg-white/[0.02] hover:border-[#3B4963]/30"
                               }`}
                             >
                               <div
                                 className={`rounded-lg p-2.5 ${
                                   isSelected
                                     ? "bg-[#1B6B4A]/15"
-                                    : "bg-[#F3F2ED]"
+                                    : "bg-[#F3F4F6]"
                                 }`}
                               >
                                 <Icon
@@ -762,7 +762,7 @@ export default function OfframpPage() {
                 {step === 2 && selectedMethod && (
                   <motion.div {...fadeInProps} className="space-y-5">
                     {/* Selected method summary */}
-                    <div className="flex items-center gap-3 rounded-lg bg-[#F3F2ED] px-4 py-3">
+                    <div className="flex items-center gap-3 rounded-lg bg-[#F3F4F6] px-4 py-3">
                       {(() => {
                         const Icon = getMethodIcon(selectedMethod.type);
                         return <Icon className="h-4 w-4 text-[#1B6B4A]" />;
@@ -798,7 +798,7 @@ export default function OfframpPage() {
                           min="1"
                           max={balance}
                           step="0.01"
-                          className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] pl-9 pr-4 py-3 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#1B6B4A]/50 focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
+                          className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] pl-9 pr-4 py-3 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#1B6B4A]/50 focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
                         />
                       </div>
                       <div className="flex items-center justify-between mt-2">
@@ -821,7 +821,7 @@ export default function OfframpPage() {
                               setAmount(Math.min(q, balance).toString())
                             }
                             disabled={balance < q}
-                            className="flex-1 rounded-lg border border-[#E2DFD5] px-3 py-1.5 text-xs font-medium text-[#3B4963] hover:bg-[#F3F2ED] hover:border-[#3B4963]/30 disabled:opacity-30 transition-colors"
+                            className="flex-1 rounded-lg border border-[#E5E7EB] px-3 py-1.5 text-xs font-medium text-[#3B4963] hover:bg-[#F3F4F6] hover:border-[#3B4963]/30 disabled:opacity-30 transition-colors"
                           >
                             ${q}
                           </button>
@@ -856,12 +856,12 @@ export default function OfframpPage() {
                             ? "+254 7XX XXX XXX"
                             : "your@email.com or account ID"
                         }
-                        className="w-full rounded-lg border border-[#E2DFD5] bg-[#F3F2ED] px-4 py-3 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#1B6B4A]/50 focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
+                        className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-3 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#1B6B4A]/50 focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
                       />
                     </div>
 
                     {/* Exchange rate */}
-                    <div className="rounded-lg border border-[#E2DFD5] bg-[#FDFBF7] p-4">
+                    <div className="rounded-lg border border-[#E5E7EB] bg-[#FFFFFF] p-4">
                       <div className="flex items-center justify-between text-xs">
                         <span className="text-[#7C8A9E]">Exchange Rate</span>
                         <span className="text-[#3B4963] font-medium">
@@ -884,7 +884,7 @@ export default function OfframpPage() {
                     <div className="flex gap-3">
                       <button
                         onClick={() => setStep(1)}
-                        className="rounded-lg border border-[#E2DFD5] px-4 py-3 text-sm font-medium text-[#3B4963] hover:bg-[#F3F2ED] transition-colors"
+                        className="rounded-lg border border-[#E5E7EB] px-4 py-3 text-sm font-medium text-[#3B4963] hover:bg-[#F3F4F6] transition-colors"
                       >
                         Back
                       </button>
@@ -925,7 +925,7 @@ export default function OfframpPage() {
                       </div>
                     </div>
 
-                    <div className="rounded-lg border border-[#E2DFD5] divide-y divide-[#E2DFD5]">
+                    <div className="rounded-lg border border-[#E5E7EB] divide-y divide-[#E5E7EB]">
                       <div className="flex items-center justify-between px-4 py-3">
                         <span className="text-xs text-[#7C8A9E]">Method</span>
                         <span className="text-sm font-medium text-[#0C1829]">
@@ -970,7 +970,7 @@ export default function OfframpPage() {
                     <div className="flex gap-3">
                       <button
                         onClick={() => setStep(2)}
-                        className="rounded-lg border border-[#E2DFD5] px-4 py-3 text-sm font-medium text-[#3B4963] hover:bg-[#F3F2ED] transition-colors"
+                        className="rounded-lg border border-[#E5E7EB] px-4 py-3 text-sm font-medium text-[#3B4963] hover:bg-[#F3F4F6] transition-colors"
                       >
                         Back
                       </button>
@@ -1004,7 +1004,7 @@ export default function OfframpPage() {
             <motion.div
               {...fadeInProps}
               transition={{ delay: 0.1 }}
-              className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6"
+              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
             >
               <h3 className="text-sm font-medium text-[#0C1829] mb-4">
                 How It Works
@@ -1048,7 +1048,7 @@ export default function OfframpPage() {
             <motion.div
               {...fadeInProps}
               transition={{ delay: 0.15 }}
-              className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-6"
+              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
             >
               <div className="flex items-center gap-2 text-sm font-medium text-[#0C1829] mb-3">
                 <Shield className="h-4 w-4 text-[#1B6B4A]" />
@@ -1077,14 +1077,14 @@ export default function OfframpPage() {
               <motion.div
                 {...fadeInProps}
                 transition={{ delay: 0.2 }}
-                className="rounded-xl border border-[#E2DFD5] bg-white/[0.02] overflow-hidden"
+                className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] overflow-hidden"
               >
-                <div className="border-b border-[#E2DFD5] px-6 py-4">
+                <div className="border-b border-[#E5E7EB] px-6 py-4">
                   <h3 className="text-sm font-medium text-[#0C1829]">
                     Recent Requests
                   </h3>
                 </div>
-                <div className="divide-y divide-[#E2DFD5]">
+                <div className="divide-y divide-[#E5E7EB]">
                   {requests.slice(0, 5).map((req) => (
                     <div
                       key={req.id}

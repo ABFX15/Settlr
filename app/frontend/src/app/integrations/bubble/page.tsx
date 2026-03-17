@@ -43,7 +43,7 @@ export default function BubblePage() {
 
   return (
     <main
-      className="relative min-h-screen bg-[#FDFBF7] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <script
@@ -121,7 +121,7 @@ export default function BubblePage() {
               </a>
               <Link
                 href="/docs"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E2DFD5] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E5E7EB] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
               >
                 Setup docs
               </Link>
@@ -131,7 +131,7 @@ export default function BubblePage() {
       </section>
 
       {/* Why no-code + stablecoins */}
-      <section className="border-y border-[#E2DFD5]/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#E5E7EB]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
             <p
@@ -233,7 +233,7 @@ export default function BubblePage() {
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.08}>
-              <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+              <div className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
                 <h3 className="text-[15px] font-semibold text-[#0C1829]">
                   {item.title}
                 </h3>
@@ -247,7 +247,7 @@ export default function BubblePage() {
       </section>
 
       {/* How it works */}
-      <section className="border-y border-[#E2DFD5]/[0.04]">
+      <section className="border-y border-[#E5E7EB]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <p
@@ -282,7 +282,7 @@ export default function BubblePage() {
               },
             ].map((item, i) => (
               <Reveal key={item.step} delay={i * 0.08}>
-                <div className="rounded-2xl border border-[#E2DFD5] bg-white/[0.02] p-6">
+                <div className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
                   <span
                     className="mb-4 block text-xs font-bold"
                     style={{ color: `${color}90` }}
@@ -322,7 +322,7 @@ export default function BubblePage() {
             "Zero blockchain knowledge required",
           ].map((feature, i) => (
             <Reveal key={feature} delay={i * 0.04}>
-              <div className="flex items-center gap-3 rounded-xl border border-[#E2DFD5] bg-white/[0.02] p-4">
+              <div className="flex items-center gap-3 rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-4">
                 <Check className="h-4 w-4 flex-shrink-0" style={{ color }} />
                 <span className="text-sm text-[#3B4963]">{feature}</span>
               </div>
@@ -369,7 +369,7 @@ export default function BubblePage() {
               </a>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E2DFD5] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F2ED]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
               >
                 Get API key
               </Link>

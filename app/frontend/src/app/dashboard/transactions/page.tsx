@@ -113,7 +113,7 @@ export default function TransactionsPage() {
               className={`rounded-lg px-4 py-2 text-xs font-medium transition-colors ${
                 filter === f
                   ? "bg-[#1B6B4A] text-[#0C1829]"
-                  : "bg-[#F3F2ED] text-[#7C8A9E] hover:text-[#0C1829]"
+                  : "bg-[#F3F4F6] text-[#7C8A9E] hover:text-[#0C1829]"
               }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -125,7 +125,7 @@ export default function TransactionsPage() {
           <a
             href={`/api/merchants/${publicKey}/export`}
             download
-            className="flex items-center gap-2 rounded-lg bg-[#F3F2ED] px-4 py-2 text-xs font-medium text-[#3B4963] transition-colors hover:bg-[#F3F2ED] hover:text-[#0C1829]"
+            className="flex items-center gap-2 rounded-lg bg-[#F3F4F6] px-4 py-2 text-xs font-medium text-[#3B4963] transition-colors hover:bg-[#F3F4F6] hover:text-[#0C1829]"
           >
             <Download className="h-3.5 w-3.5" />
             Export CSV
@@ -134,7 +134,7 @@ export default function TransactionsPage() {
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-[#E2DFD5] bg-[#0d0d14] overflow-hidden">
+      <div className="rounded-2xl border border-[#E5E7EB] bg-[#0d0d14] overflow-hidden">
         {loading ? (
           <div className="flex h-40 items-center justify-center">
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#a78bfa] border-t-transparent" />
@@ -151,7 +151,7 @@ export default function TransactionsPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[#E2DFD5]">
+                <tr className="border-b border-[#E5E7EB]">
                   <th className="px-6 py-4 text-left text-xs font-medium text-[#7C8A9E]">
                     Date
                   </th>
@@ -179,7 +179,7 @@ export default function TransactionsPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.03 }}
-                    className="border-b border-[#E2DFD5]/[0.04] transition-colors hover:bg-white/[0.02]"
+                    className="border-b border-[#E5E7EB]/[0.04] transition-colors hover:bg-white/[0.02]"
                   >
                     <td className="px-6 py-4">
                       <span className="text-sm text-[#3B4963]">
@@ -236,7 +236,7 @@ export default function TransactionsPage() {
                         href={`https://solscan.io/tx/${payment.txSignature}?cluster=devnet`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="rounded-lg p-1.5 text-[#7C8A9E] transition-colors hover:bg-[#F3F2ED] hover:text-[#1B6B4A]"
+                        className="rounded-lg p-1.5 text-[#7C8A9E] transition-colors hover:bg-[#F3F4F6] hover:text-[#1B6B4A]"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
                       </a>

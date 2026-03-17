@@ -45,8 +45,8 @@ export function TokenSelector({
                     px-4 py-3 rounded-xl border transition-all
                     ${
                       disabled
-                        ? "bg-white/50 border-[#E2E2D1] cursor-not-allowed opacity-60"
-                        : "bg-white border-[#E2E2D1] hover:border-[#a78bfa]/50 cursor-pointer"
+                        ? "bg-white/50 border-[#E5E7EB] cursor-not-allowed opacity-60"
+                        : "bg-white border-[#E5E7EB] hover:border-[#a78bfa]/50 cursor-pointer"
                     }
                 `}
       >
@@ -148,7 +148,7 @@ export function TokenSelector({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute z-50 w-full mt-2 bg-white border border-[#E2E2D1] rounded-xl shadow-xl overflow-hidden"
+              className="absolute z-50 w-full mt-2 bg-white border border-[#E5E7EB] rounded-xl shadow-xl overflow-hidden"
             >
               <div className="py-2 max-h-64 overflow-y-auto">
                 {availableTokens.map((token) => {
@@ -211,7 +211,7 @@ export function TokenSelector({
               </div>
 
               {/* Footer note */}
-              <div className="px-4 py-2 border-t border-[#E2E2D1] text-xs text-[#7C8A9E] text-center">
+              <div className="px-4 py-2 border-t border-[#E5E7EB] text-xs text-[#7C8A9E] text-center">
                 Swap powered by Jupiter
               </div>
             </motion.div>

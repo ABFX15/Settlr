@@ -19,12 +19,12 @@ export const metadata: Metadata = {
 
 /* ──── Design tokens ──── */
 const p = {
-  bg: "#FDFBF7",
+  bg: "#FFFFFF",
   navy: "#0C1829",
   slate: "#3B4963",
   muted: "#7C8A9E",
-  border: "#E2DFD5",
-  card: "#F3F2ED",
+  border: "#E5E7EB",
+  card: "#F3F4F6",
   green: "#1B6B4A",
   greenBg: "rgba(27,107,74,0.06)",
 };

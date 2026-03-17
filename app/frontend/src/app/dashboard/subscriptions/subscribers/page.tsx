@@ -89,7 +89,7 @@ const STATUS_CONFIG: Record<
   },
   paused: {
     color: "text-[#7C8A9E]",
-    bg: "bg-[#F3F2ED]",
+    bg: "bg-[#F3F4F6]",
     label: "Paused",
     icon: Pause,
   },
@@ -230,7 +230,7 @@ export default function SubscribersPage() {
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#F3F2ED] transition-all "
+              className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#F3F4F6] transition-all "
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -249,7 +249,7 @@ export default function SubscribersPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/dashboard"
-              className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-[#F3F2ED] transition-colors"
+              className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-[#F3F4F6] transition-colors"
             >
               <ArrowLeft className="w-5 h-5 text-[#7C8A9E]" />
             </Link>
@@ -262,7 +262,7 @@ export default function SubscribersPage() {
           </div>
           <Link
             href="/dashboard/subscriptions"
-            className="flex items-center gap-2 bg-[#F3F2ED] border border-[#E2DFD5] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F2ED] transition-all text-sm"
+            className="flex items-center gap-2 bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F4F6] transition-all text-sm"
           >
             <RefreshCw className="w-4 h-4" />
             Manage Plans
@@ -274,7 +274,7 @@ export default function SubscribersPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-emerald-500/10">
@@ -289,7 +289,7 @@ export default function SubscribersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-[#1B6B4A]/10">
@@ -304,7 +304,7 @@ export default function SubscribersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-amber-500/10">
@@ -319,7 +319,7 @@ export default function SubscribersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-cyan-500/10">
@@ -346,7 +346,7 @@ export default function SubscribersPage() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === filter
                     ? "bg-white text-[#0C1829]"
-                    : "bg-[#F3F2ED] text-[#7C8A9E] hover:text-[#0C1829] hover:bg-[#F3F2ED]"
+                    : "bg-[#F3F4F6] text-[#7C8A9E] hover:text-[#0C1829] hover:bg-[#F3F4F6]"
                 }`}
               >
                 {filter === "all"
@@ -368,9 +368,9 @@ export default function SubscribersPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl p-12 text-center"
+            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-12 text-center"
           >
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#F3F2ED] flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#F3F4F6] flex items-center justify-center">
               <Users className="w-8 h-8 text-[#7C8A9E]" />
             </div>
             <h3 className="text-xl font-semibold text-[#0C1829] mb-2">
@@ -381,7 +381,7 @@ export default function SubscribersPage() {
             </p>
             <Link
               href="/dashboard/subscriptions"
-              className="inline-flex items-center gap-2 bg-[#FDFBF7] text-[#0C1829] px-6 py-3 rounded-xl font-medium hover:bg-[#F3F2ED] transition-colors"
+              className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#0C1829] px-6 py-3 rounded-xl font-medium hover:bg-[#F3F4F6] transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
               View Plans
@@ -401,7 +401,7 @@ export default function SubscribersPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-white/[0.02] border border-[#E2DFD5] rounded-2xl overflow-hidden"
+                  className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl overflow-hidden"
                 >
                   {/* Main Row */}
                   <div
@@ -468,7 +468,7 @@ export default function SubscribersPage() {
                                 handleAction(sub.id, "pause");
                               }}
                               disabled={actionLoading === sub.id}
-                              className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-[#F3F2ED] transition-colors"
+                              className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-[#F3F4F6] transition-colors"
                               title="Pause subscription"
                             >
                               <Pause className="w-4 h-4 text-[#7C8A9E]" />
@@ -479,7 +479,7 @@ export default function SubscribersPage() {
                                 handleAction(sub.id, "cancel");
                               }}
                               disabled={actionLoading === sub.id}
-                              className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-red-500/20 transition-colors"
+                              className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-red-500/20 transition-colors"
                               title="Cancel at period end"
                             >
                               <XCircle className="w-4 h-4 text-[#7C8A9E] hover:text-red-400" />
@@ -527,9 +527,9 @@ export default function SubscribersPage() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       transition={{ duration: 0.2 }}
-                      className="border-t border-[#E2DFD5]"
+                      className="border-t border-[#E5E7EB]"
                     >
-                      <div className="p-6 bg-[#FDFBF7]/50">
+                      <div className="p-6 bg-[#FFFFFF]/50">
                         <div className="flex items-center gap-2 mb-4">
                           <Receipt className="w-4 h-4 text-[#7C8A9E]" />
                           <h4 className="text-sm font-medium text-[#3B4963]">
@@ -598,7 +598,7 @@ export default function SubscribersPage() {
                         )}
 
                         {/* Subscription metadata */}
-                        <div className="mt-4 pt-4 border-t border-[#E2DFD5] grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                        <div className="mt-4 pt-4 border-t border-[#E5E7EB] grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
                           <div>
                             <span className="text-[#7C8A9E]">Created</span>
                             <p className="text-[#3B4963]">

@@ -1,24 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  /* Infrastructure Authority — Light theme */
-  --background: #fdfbf7;
+  /* Clean neutral — Finex-style */
+  --background: #ffffff;
   --foreground: #0c1829;
   --card: #ffffff;
-  --card-hover: #f7f6f1;
-  --border: #e2dfd5;
-  --border-hover: #c9c5ba;
-  --border-sharp: #e2e2d1;
+  --card-hover: #f9fafb;
+  --border: #e5e7eb;
+  --border-hover: #d1d5db;
+  --border-sharp: #e5e7eb;
 
   /* Inset card */
-  --card-inset: #f5f4ef;
+  --card-inset: #f3f4f6;
   --card-inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04),
     inset 0 0 0 1px rgba(0, 0, 0, 0.02);
 
   /* Pop card style */
-  --card-pop: #fffef5;
-  --card-pop-header: #f5f4eb;
-  --card-pop-border: #e2dfd5;
+  --card-pop: #ffffff;
+  --card-pop-header: #f9fafb;
+  --card-pop-border: #e5e7eb;
   --card-pop-text: #0c1829;
   --card-pop-text-secondary: #3b4963;
   --card-pop-accent-red: #ff5252;
@@ -39,7 +39,7 @@
 
   /* Card backgrounds */
   --card-bg: #ffffff;
-  --border-color: #e2dfd5;
+  --border-color: #e5e7eb;
 
   /* Status colors */
   --success: #1b6b4a;
@@ -51,10 +51,6 @@
   --text-primary: #0c1829;
   --text-secondary: #3b4963;
   --text-muted: #7c8a9e;
-
-  /* Glass (light version) */
-  --glass: rgba(253, 251, 247, 0.85);
-  --glass-border: rgba(226, 223, 213, 0.6);
 
   /* Serif heading font */
   --font-heading: var(--font-fraunces), Georgia, "Times New Roman", serif;
@@ -72,7 +68,7 @@
 }
 
 html {
-  background: #fdfbf7;
+  background: #ffffff;
 }
 
 body {
@@ -170,45 +166,7 @@ pre,
   border-bottom: 1px solid var(--border-sharp);
 }
 
-/* Animated gradient background */
-.gradient-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(
-      ellipse 80% 50% at 50% -20%,
-      rgba(139, 92, 246, 0.15),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 60% 40% at 100% 100%,
-      rgba(6, 182, 212, 0.1),
-      transparent
-    ),
-    var(--background);
-}
-
-/* Glass card effect */
-.glass-card {
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--glass-border);
-  border-radius: 12px;
-}
-
-/* Glass card with pop style border */
-.glass-card-pop {
-  background: rgba(255, 254, 245, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2.5px solid var(--card-pop-border);
-  border-radius: 12px;
-  color: var(--card-pop-text);
-  box-shadow: 0 3px 0 var(--card-pop-border);
-}
-
-/* POP CARD - Cream card with dark border (Mission Control style) */
+/* POP CARD - Clean card with border */
 .card-pop {
   background: var(--card-pop);
   border: 2.5px solid var(--card-pop-border);
@@ -510,27 +468,6 @@ pre,
   color: var(--text-muted);
 }
 
-/* Shimmer loading effect */
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--card) 25%,
-    var(--card-hover) 50%,
-    var(--card) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
 /* Pulse animation for success */
 @keyframes pulse-success {
   0%,
@@ -649,13 +586,13 @@ pre,
 }
 
 .wallet-adapter-modal-wrapper {
-  background: var(--glass) !important;
-  backdrop-filter: blur(20px) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
 }
 
 .wallet-adapter-modal-container {
   background: var(--card) !important;
-  border: 1px solid var(--glass-border) !important;
+  border: 1px solid var(--border) !important;
   border-radius: 24px !important;
 }
 

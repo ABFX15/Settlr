@@ -356,7 +356,7 @@ export default function DemoStorePage() {
       {isCartOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div
-            className="absolute inset-0 bg-[#FDFBF7]/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#FFFFFF]/50 backdrop-blur-sm"
             onClick={() => setIsCartOpen(false)}
           />
           <div className="relative w-full max-w-md bg-[var(--card-bg)] h-full overflow-auto animate-slide-in-right">

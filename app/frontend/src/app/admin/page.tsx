@@ -192,7 +192,7 @@ export default function AdminDashboardPage() {
   // ── Loading / not ready ───────────────────────────────────────────────
   if (!ready) {
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-[#1B6B4A]" />
       </div>
     );
@@ -201,7 +201,7 @@ export default function AdminDashboardPage() {
   // ── Not authenticated — show connect prompt ──────────────────────────
   if (!authenticated) {
     return (
-      <div className="min-h-screen bg-[#FDFBF7]">
+      <div className="min-h-screen bg-[#FFFFFF]">
         <div className="max-w-4xl mx-auto px-6 py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -234,7 +234,7 @@ export default function AdminDashboardPage() {
   // ── Authenticated but wallet still loading ───────────────────────────
   if (!publicKey) {
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-[#1B6B4A] mx-auto mb-4" />
           <p className="text-[#7C8A9E]">Loading wallet...</p>
@@ -245,9 +245,9 @@ export default function AdminDashboardPage() {
 
   // ── Main dashboard ───────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div className="min-h-screen bg-[#FFFFFF]">
       {/* Header */}
-      <header className="border-b border-[#E2DFD5] bg-[#FDFBF7]/20 backdrop-blur-xl sticky top-0 z-50">
+      <header className="border-b border-[#E5E7EB] bg-[#FFFFFF]/20 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2">
@@ -263,7 +263,7 @@ export default function AdminDashboardPage() {
             <button
               onClick={fetchTreasuryData}
               disabled={loading}
-              className="p-2 rounded-lg bg-[#F3F2ED] hover:bg-[#F3F2ED] border border-[#E2DFD5] transition-all"
+              className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-[#F3F4F6] border border-[#E5E7EB] transition-all"
               title="Refresh"
             >
               <RefreshCw
@@ -272,7 +272,7 @@ export default function AdminDashboardPage() {
                 }`}
               />
             </button>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F3F2ED] border border-[#E2DFD5]">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB]">
               <Wallet className="w-4 h-4 text-[#1B6B4A]" />
               <span className="text-sm text-[#3B4963]">
                 {shortenAddress(publicKey!)}
@@ -403,7 +403,7 @@ export default function AdminDashboardPage() {
                 className={`w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${
                   isAuthority && (data?.treasuryBalance ?? 0) > 0
                     ? "bg-[#1B6B4A] text-[#0C1829] hover:bg-[#9371e8] cursor-pointer"
-                    : "bg-[#F3F2ED] text-[#7C8A9E] cursor-not-allowed"
+                    : "bg-[#F3F4F6] text-[#7C8A9E] cursor-not-allowed"
                 }`}
               >
                 {claiming ? (
@@ -436,7 +436,7 @@ export default function AdminDashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-2xl bg-[#F3F2ED] border border-[#E2DFD5] p-6"
+            className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6"
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
@@ -465,7 +465,7 @@ export default function AdminDashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-2xl bg-[#F3F2ED] border border-[#E2DFD5] p-6"
+            className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6"
           >
             <div className="flex items-center gap-3 mb-4">
               <div
@@ -517,7 +517,7 @@ export default function AdminDashboardPage() {
             transition={{ delay: 0.25 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
           >
-            <div className="rounded-2xl bg-[#F3F2ED] border border-[#E2DFD5] p-6">
+            <div className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6">
               <div className="flex items-center gap-3 mb-2">
                 <BarChart3 className="w-5 h-5 text-[#1B6B4A]" />
                 <span className="text-sm text-[#7C8A9E]">
@@ -528,7 +528,7 @@ export default function AdminDashboardPage() {
                 {formatLamports(data.platformConfig.totalVolume)}
               </p>
             </div>
-            <div className="rounded-2xl bg-[#F3F2ED] border border-[#E2DFD5] p-6">
+            <div className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6">
               <div className="flex items-center gap-3 mb-2">
                 <Download className="w-5 h-5 text-cyan-400" />
                 <span className="text-sm text-[#7C8A9E]">
@@ -547,7 +547,7 @@ export default function AdminDashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="rounded-2xl bg-[#F3F2ED] border border-[#E2DFD5] p-6 mb-8"
+          className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6 mb-8"
         >
           <h2 className="text-xl font-bold text-[#0C1829] mb-6 flex items-center gap-2">
             <Wallet className="w-5 h-5 text-[#1B6B4A]" />
@@ -579,7 +579,7 @@ export default function AdminDashboardPage() {
             ].map((item) => (
               <div
                 key={item.id}
-                className="p-4 rounded-xl bg-[#FDFBF7]/30 border border-[#E2DFD5]"
+                className="p-4 rounded-xl bg-[#FFFFFF]/30 border border-[#E5E7EB]"
               >
                 <span className="text-sm text-[#7C8A9E] block mb-2">
                   {item.label}
@@ -590,7 +590,7 @@ export default function AdminDashboardPage() {
                   </code>
                   <button
                     onClick={() => copyToClipboard(item.value, item.id)}
-                    className="p-2 rounded-lg hover:bg-[#F3F2ED] transition-colors shrink-0"
+                    className="p-2 rounded-lg hover:bg-[#F3F4F6] transition-colors shrink-0"
                     title="Copy"
                   >
                     {copied === item.id ? (
@@ -603,7 +603,7 @@ export default function AdminDashboardPage() {
                     href={`${explorerBase}/address/${item.value}${clusterParam}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-lg hover:bg-[#F3F2ED] transition-colors shrink-0"
+                    className="p-2 rounded-lg hover:bg-[#F3F4F6] transition-colors shrink-0"
                     title="View on Explorer"
                   >
                     <ExternalLink className="w-4 h-4 text-[#7C8A9E]" />
@@ -623,7 +623,7 @@ export default function AdminDashboardPage() {
         >
           <Link
             href="/dashboard"
-            className="p-4 rounded-xl bg-[#F3F2ED] border border-[#E2DFD5] hover:bg-[#F3F2ED] transition-all flex items-center justify-between group"
+            className="p-4 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB] hover:bg-[#F3F4F6] transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
               <Wallet className="w-5 h-5 text-[#7C8A9E]" />
@@ -633,7 +633,7 @@ export default function AdminDashboardPage() {
           </Link>
           <Link
             href="/docs"
-            className="p-4 rounded-xl bg-[#F3F2ED] border border-[#E2DFD5] hover:bg-[#F3F2ED] transition-all flex items-center justify-between group"
+            className="p-4 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB] hover:bg-[#F3F4F6] transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
               <Key className="w-5 h-5 text-[#7C8A9E]" />
@@ -647,7 +647,7 @@ export default function AdminDashboardPage() {
             }${clusterParam}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-4 rounded-xl bg-[#F3F2ED] border border-[#E2DFD5] hover:bg-[#F3F2ED] transition-all flex items-center justify-between group"
+            className="p-4 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB] hover:bg-[#F3F4F6] transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
               <ExternalLink className="w-5 h-5 text-[#7C8A9E]" />

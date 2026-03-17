@@ -59,7 +59,7 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#E2E2D1] bg-[#FDFBF7]">
+    <footer className="border-t border-[#E5E7EB] bg-white">
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-6">
           {/* Brand Column */}
@@ -79,7 +79,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F7F6F1] hover:text-[#0C1829]"
+                  className="rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F9FAFB] hover:text-[#0C1829]"
                   aria-label={social.label}
                 >
                   <social.icon className="h-5 w-5" />
@@ -193,7 +193,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#E2E2D1] pt-8 md:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#E5E7EB] pt-8 md:flex-row">
           <p className="text-sm text-[#7C8A9E]">
             © {new Date().getFullYear()} Settlr. Built on Solana.
           </p>

@@ -23,7 +23,7 @@ export default async function Image() {
           display: "flex",
           position: "relative",
           overflow: "hidden",
-          backgroundColor: "#FDFBF7",
+          backgroundColor: "#FFFFFF",
         }}
       >
         {/* Subtle topo-style background pattern */}
@@ -181,7 +181,7 @@ export default async function Image() {
               flexDirection: "column",
               width: 340,
               borderRadius: 16,
-              border: "1px solid #E2DFD5",
+              border: "1px solid #E5E7EB",
               background: "#0C1829",
               padding: "24px 28px",
               boxShadow: "0 24px 48px rgba(12,24,41,0.15)",
