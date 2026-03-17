@@ -1,0 +1,11 @@
+export { Hero } from "./Hero";
+export { LogoBar } from "./LogoBar";
+export { BentoCards } from "./BentoCards";
+export { SocialProof } from "./SocialProof";
+export { Features } from "./Features";
+export { TabSection } from "./TabSection";
+export { Pricing } from "./Pricing";
+export { Testimonials } from "./Testimonials";
+export { Steps } from "./Steps";
+export { FAQ } from "./FAQ";
+export { CTA } from "./CTA";
