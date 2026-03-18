@@ -2,33 +2,43 @@
 
 import { motion } from "framer-motion";
 import { FileCheck, Send, Zap } from "lucide-react";
-import { t, spring, staggerContainer, fadeUpScale } from "./shared";
+import { t, spring } from "./shared";
 
 const steps = [
   {
-    step: "Step 1",
-    title: "Connect Your Business",
-    desc: "Complete KYB verification — state licences, cannabis permits, beneficial owners.",
+    num: 1,
+    title: "Connect your business",
+    desc: "Complete KYB verification in minutes. No bank account required.",
     icon: FileCheck,
   },
   {
-    step: "Step 2",
-    title: "Create an Invoice",
-    desc: "Send to any supplier or buyer. They get a simple email with a payment link.",
+    num: 2,
+    title: "Create an invoice or payment link",
+    desc: "Send to any supplier or buyer by email. Set the amount, add a note, hit send.",
     icon: Send,
   },
   {
-    step: "Step 3",
-    title: "Settlement in Seconds",
-    desc: "Recipient clicks, claims USDC, done. You both get a cryptographic receipt.",
+    num: 3,
+    title: "Settlement in seconds",
+    desc: "Recipient clicks the link, claims USDC via email. No wallet needed. Done.",
     icon: Zap,
   },
 ];
 
+const cardVariant = (i: number) => ({
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { ...spring, delay: 0.15 + i * 0.15 },
+  },
+});
+
 export function Steps() {
   return (
-    <section className="py-20 sm:py-28" style={{ background: t.bgOff }}>
-      <div className="mx-auto max-w-6xl px-6">
+    <section className="bg-white py-[120px]">
+      <div className="mx-auto max-w-[1200px] px-6">
+        {/* heading */}
         <motion.div
           className="mx-auto max-w-2xl text-center"
           initial={{ opacity: 0, y: 24 }}
@@ -37,86 +47,97 @@ export function Steps() {
           transition={spring}
         >
           <h2
-            className="text-[32px] leading-[1.1] tracking-tight sm:text-[40px]"
-            style={{ color: t.navy, fontFamily: t.serif, fontWeight: 800 }}
+            className="text-[32px] leading-[1.15] tracking-tight font-extrabold sm:text-[44px]"
+            style={{ color: t.navy, fontFamily: t.sans }}
           >
-            Get started with Settlr in three simple steps
+            How It Works
           </h2>
           <p
-            className="mx-auto mt-4 max-w-lg text-base"
-            style={{ color: t.slate }}
+            className="mx-auto mt-4 max-w-md text-base"
+            style={{ color: "#6B7280" }}
           >
-            In just a few minutes, start settling invoices and taking control.
+            From invoice to settlement in under 5 seconds
           </p>
         </motion.div>
 
-        <motion.div
-          className="mt-14 grid gap-6 md:grid-cols-3"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-        >
-          {steps.map((s) => (
-            <motion.div
-              key={s.step}
-              variants={fadeUpScale}
-              whileHover={{ y: -8, transition: { duration: 0.25 } }}
-              className="group overflow-hidden rounded-3xl border bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl"
-              style={{ borderColor: t.border }}
-            >
-              {/* mockup area */}
-              <div
-                className="flex items-center justify-center py-10 transition-colors duration-300 group-hover:bg-[#DCF0E4]"
-                style={{ background: t.greenLight }}
-              >
-                <motion.div
-                  className="w-48 rounded-2xl bg-white p-5 shadow-md"
-                  whileHover={{ scale: 1.04, transition: { duration: 0.2 } }}
-                >
-                  <s.icon className="h-8 w-8" style={{ color: t.green }} />
-                  <p
-                    className="mt-3 text-sm font-bold"
-                    style={{ color: t.navy }}
-                  >
-                    {s.title}
-                  </p>
-                  <p className="mt-1 text-[11px]" style={{ color: t.muted }}>
-                    {s.desc.slice(0, 60)}...
-                  </p>
-                </motion.div>
-              </div>
-              {/* label */}
-              <div className="px-6 py-5">
-                <p className="text-xs font-bold" style={{ color: t.green }}>
-                  {s.step}
-                </p>
-                <h3
-                  className="mt-1 text-base font-bold"
-                  style={{ color: t.navy, fontFamily: t.serif }}
-                >
-                  {s.title}
-                </h3>
-                <p className="mt-1 text-sm" style={{ color: t.slate }}>
-                  {s.desc}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+        {/* steps row */}
+        <div className="relative mt-16 grid gap-8 md:grid-cols-3">
+          {/* animated dashed connector line (desktop only) — draws on scroll */}
+          <motion.div
+            className="pointer-events-none absolute top-[52px] left-[16.66%] right-[16.66%] hidden h-px md:block origin-left"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(to right, #D1D5DB 0, #D1D5DB 8px, transparent 8px, transparent 16px)",
+            }}
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
+          />
 
-        {/* dots */}
-        <div className="mt-8 flex justify-center gap-2">
-          {[0, 1, 2].map((i) => (
+          {steps.map((s, i) => (
             <motion.div
-              key={i}
-              className="h-2.5 w-2.5 rounded-full"
-              style={{ background: i === 0 ? t.green : "#D1D5DB" }}
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ ...spring, delay: 0.3 + i * 0.08 }}
-            />
+              key={s.num}
+              variants={cardVariant(i)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-40px" }}
+              className="relative flex flex-col items-center text-center"
+            >
+              {/* numbered circle with pulse ring */}
+              <motion.div
+                className="relative z-10"
+                whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+              >
+                {/* pulse ring */}
+                <motion.div
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: t.green }}
+                  animate={{
+                    scale: [1, 1.6],
+                    opacity: [0.3, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeOut",
+                    delay: i * 0.5,
+                  }}
+                />
+                <div
+                  className="relative flex h-[56px] w-[56px] items-center justify-center rounded-full text-[20px] font-bold text-white shadow-md"
+                  style={{ background: t.green }}
+                >
+                  {s.num}
+                </div>
+              </motion.div>
+
+              {/* icon */}
+              <motion.div
+                className="mt-6 flex h-12 w-12 items-center justify-center rounded-xl bg-[#F0F0F0]"
+                whileHover={{
+                  rotate: 8,
+                  scale: 1.05,
+                  transition: { duration: 0.2 },
+                }}
+              >
+                <s.icon className="h-6 w-6" style={{ color: t.green }} />
+              </motion.div>
+
+              {/* text */}
+              <h3
+                className="mt-5 text-[18px] font-bold leading-snug"
+                style={{ color: t.navy, fontFamily: t.sans }}
+              >
+                {s.title}
+              </h3>
+              <p
+                className="mt-2 max-w-[280px] text-[14px] leading-relaxed"
+                style={{ color: "#6B7280" }}
+              >
+                {s.desc}
+              </p>
+            </motion.div>
           ))}
         </div>
       </div>

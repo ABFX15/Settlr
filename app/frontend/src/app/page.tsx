@@ -33,7 +33,12 @@ export default function HomePage() {
         }}
       />
 
-      <div className="min-h-screen bg-white text-[#475569]">
+      <div
+        className="min-h-screen bg-white text-[#6B7280]"
+        style={{
+          fontFamily: "var(--font-inter), Inter, system-ui, sans-serif",
+        }}
+      >
         <Navbar />
         <Hero />
         <LogoBar />

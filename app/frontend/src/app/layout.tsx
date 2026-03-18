@@ -60,10 +60,10 @@ export const metadata: Metadata = {
   authors: [{ name: "Settlr" }],
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/new-logo-no-bg.png", sizes: "any" },
+      { url: "/new-logo-no-bg.png", type: "image/png" },
     ],
-    apple: "/apple-touch-icon.png",
+    apple: "/new-logo-no-bg.png",
   },
   manifest: "/manifest.webmanifest",
   creator: "Settlr",
@@ -133,9 +133,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.googletagmanager.com" />
 
         {/* Favicons & app icons */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/new-logo-no-bg.png" sizes="any" />
+        <link rel="icon" href="/new-logo-no-bg.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/new-logo-no-bg.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
 
         {/* Mobile viewport with safe area support */}

@@ -17,8 +17,8 @@ export function TabSection() {
   const [active, setActive] = useState<Tab>("problem");
 
   return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto max-w-5xl px-6">
+    <section className="py-[120px]">
+      <div className="mx-auto max-w-[1200px] px-6">
         <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 24 }}
@@ -27,14 +27,14 @@ export function TabSection() {
           transition={spring}
         >
           <h2
-            className="text-[32px] leading-[1.1] tracking-tight sm:text-[40px]"
-            style={{ color: t.navy, fontFamily: t.serif, fontWeight: 800 }}
+            className="text-[32px] leading-[1.15] tracking-tight font-extrabold sm:text-[40px]"
+            style={{ color: t.navy, fontFamily: t.sans }}
           >
             Boosting your settlement success
           </h2>
           <p
-            className="mx-auto mt-4 max-w-lg text-base"
-            style={{ color: t.slate }}
+            className="mx-auto mt-4 max-w-lg text-base font-normal"
+            style={{ color: t.bodyLight }}
           >
             Unlock smarter ways to move money, reduce costs, and achieve lasting
             financial freedom for your business.
@@ -103,14 +103,14 @@ function ProblemTab() {
       >
         <div>
           <h3
-            className="text-2xl font-bold"
-            style={{ color: t.navy, fontFamily: t.serif }}
+            className="text-2xl font-extrabold"
+            style={{ color: t.navy, fontFamily: t.sans }}
           >
             Cannabis is legal. Banking isn&apos;t.
           </h3>
           <p
-            className="mt-3 text-[15px] leading-relaxed"
-            style={{ color: t.slate }}
+            className="mt-3 text-[15px] font-normal leading-relaxed"
+            style={{ color: t.bodyLight }}
           >
             State-legal businesses still can&apos;t access basic financial
             infrastructure.
@@ -173,14 +173,14 @@ function SolutionTab() {
       >
         <div>
           <h3
-            className="text-2xl font-bold"
-            style={{ color: t.navy, fontFamily: t.serif }}
+            className="text-2xl font-extrabold"
+            style={{ color: t.navy, fontFamily: t.sans }}
           >
             USDC rails that don&apos;t need permission.
           </h3>
           <p
-            className="mt-3 text-[15px] leading-relaxed"
-            style={{ color: t.slate }}
+            className="mt-3 text-[15px] font-normal leading-relaxed"
+            style={{ color: t.bodyLight }}
           >
             Non-custodial settlement on Solana. No intermediary, no custody, no
             freeze risk.
@@ -248,14 +248,14 @@ function HowTab() {
       >
         <div>
           <h3
-            className="text-2xl font-bold"
-            style={{ color: t.navy, fontFamily: t.serif }}
+            className="text-2xl font-extrabold"
+            style={{ color: t.navy, fontFamily: t.sans }}
           >
             Three steps. No crypto required.
           </h3>
           <p
-            className="mt-3 text-[15px] leading-relaxed"
-            style={{ color: t.slate }}
+            className="mt-3 text-[15px] font-normal leading-relaxed"
+            style={{ color: t.bodyLight }}
           >
             Connect, send, settle. Your counterparty claims via email.
           </p>

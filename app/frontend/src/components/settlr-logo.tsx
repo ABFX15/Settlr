@@ -2,76 +2,67 @@
 
 import Image from "next/image";
 
-const LOGO_SRC = "/settlr-logo-nobg.png";
+const LOGO_SRC = "/new-logo-no-bg.png";
 
-/* ─── SettlrLogo — standalone wordmark ─── */
+/* ─── SettlrLogo — logo icon + "Settlr" text ─── */
 export function SettlrLogo({
   size = "lg",
+  variant = "dark",
 }: {
   size?: "sm" | "md" | "lg" | "xl";
   variant?: "default" | "light" | "dark";
 }) {
-  const heights = { sm: 120, md: 180, lg: 240, xl: 300 };
-  const h = heights[size];
+  const dims = { sm: 72, md: 84, lg: 96, xl: 112 };
+  const textSizes = {
+    sm: "text-[18px]",
+    md: "text-[22px]",
+    lg: "text-[26px]",
+    xl: "text-[30px]",
+  };
+  const d = dims[size];
+  const textColor = variant === "light" ? "#FFFFFF" : "#0A0A0A";
 
   return (
-    <div className="select-none">
+    <div className="flex items-center gap-2 select-none">
       <Image
         src={LOGO_SRC}
         alt="Settlr"
-        height={h}
-        width={h}
+        height={d}
+        width={d}
         className="object-contain"
         priority
       />
+      <span
+        className={`${textSizes[size]} font-bold leading-none tracking-tight`}
+        style={{
+          color: textColor,
+          fontFamily: "var(--font-inter), Inter, system-ui, sans-serif",
+        }}
+      >
+        Settlr
+      </span>
     </div>
   );
 }
 
-/* ─── SettlrLogoWithIcon — used in navbar / footer / pages ─── */
+/* ─── SettlrLogoWithIcon — alias for SettlrLogo ─── */
 export function SettlrLogoWithIcon({
   size = "lg",
+  variant = "dark",
 }: {
   size?: "sm" | "md" | "lg" | "xl";
   variant?: "default" | "light" | "dark";
 }) {
-  const heights = { sm: 120, md: 150, lg: 180, xl: 210 };
-  const h = heights[size];
-
-  return (
-    <div className="flex items-center select-none">
-      <Image
-        src={LOGO_SRC}
-        alt="Settlr"
-        height={h}
-        width={h}
-        className="object-contain"
-        priority
-      />
-    </div>
-  );
+  return <SettlrLogo size={size} variant={variant} />;
 }
 
 /* ─── SettlrLogoMono — monochrome variant ─── */
 export function SettlrLogoMono({
   size = "lg",
+  variant = "dark",
 }: {
   size?: "sm" | "md" | "lg" | "xl";
   variant?: "light" | "dark";
 }) {
-  const heights = { sm: 120, md: 180, lg: 240, xl: 300 };
-  const h = heights[size];
-
-  return (
-    <div className="select-none">
-      <Image
-        src={LOGO_SRC}
-        alt="Settlr"
-        height={h}
-        width={h}
-        className="object-contain"
-        priority
-      />
-    </div>
-  );
+  return <SettlrLogo size={size} variant={variant} />;
 }

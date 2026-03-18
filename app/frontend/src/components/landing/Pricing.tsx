@@ -54,8 +54,8 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section className="py-20 sm:py-28" style={{ background: t.bgOff }}>
-      <div className="mx-auto max-w-5xl px-6">
+    <section className="py-[120px]" style={{ background: t.bgOff }}>
+      <div className="mx-auto max-w-[1200px] px-6">
         <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 24 }}
@@ -64,14 +64,14 @@ export function Pricing() {
           transition={spring}
         >
           <h2
-            className="text-[32px] leading-[1.1] tracking-tight sm:text-[40px]"
-            style={{ color: t.navy, fontFamily: t.serif, fontWeight: 800 }}
+            className="text-[32px] leading-[1.15] tracking-tight font-extrabold sm:text-[40px]"
+            style={{ color: t.navy, fontFamily: t.sans }}
           >
             Simple and transparent pricing
           </h2>
           <p
-            className="mx-auto mt-4 max-w-lg text-base"
-            style={{ color: t.slate }}
+            className="mx-auto mt-4 max-w-lg text-base font-normal"
+            style={{ color: t.bodyLight }}
           >
             Choose the plan that fits your goals — simple, transparent pricing
             with no hidden fees.

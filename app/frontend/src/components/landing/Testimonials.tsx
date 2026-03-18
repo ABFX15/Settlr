@@ -27,8 +27,8 @@ const smallCards = [
 
 export function Testimonials() {
   return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto max-w-6xl px-6">
+    <section className="py-[120px]">
+      <div className="mx-auto max-w-[1200px] px-6">
         <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 24 }}
@@ -37,14 +37,14 @@ export function Testimonials() {
           transition={spring}
         >
           <h2
-            className="text-[32px] leading-[1.1] tracking-tight sm:text-[40px]"
-            style={{ color: t.navy, fontFamily: t.serif, fontWeight: 800 }}
+            className="text-[32px] leading-[1.15] tracking-tight font-extrabold sm:text-[40px]"
+            style={{ color: t.navy, fontFamily: t.sans }}
           >
             Trusted by cannabis operators
           </h2>
           <p
-            className="mx-auto mt-4 max-w-md text-base"
-            style={{ color: t.slate }}
+            className="mx-auto mt-4 max-w-md text-base font-normal"
+            style={{ color: t.bodyLight }}
           >
             Real operators, real results — see how Settlr is helping businesses
             take control of their payments every day.
@@ -76,8 +76,8 @@ export function Testimonials() {
                 &#x201C;
               </motion.span>
               <p
-                className="mt-3 text-[22px] font-bold italic leading-snug sm:text-[26px]"
-                style={{ color: t.navy, fontFamily: t.serif }}
+                className="mt-3 text-[22px] font-extrabold italic leading-snug sm:text-[26px]"
+                style={{ color: t.navy, fontFamily: t.sans }}
               >
                 Settlr changed the way we move money. It&apos;s fast,
                 transparent, and finally free from bank interference.

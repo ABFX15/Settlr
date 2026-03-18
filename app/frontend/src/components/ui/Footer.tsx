@@ -1,208 +1,136 @@
 import Link from "next/link";
-import { Twitter, Github, Mail } from "lucide-react";
 import { SettlrLogo } from "@/components/settlr-logo";
 
-const footerLinks = {
-  product: [
-    { href: "/products/payment-links", label: "Payment Links" },
-    { href: "/products/invoices", label: "Invoices" },
-    { href: "/demo", label: "Demo" },
-    { href: "/compare", label: "Compare Providers" },
-    { href: "/learn", label: "Knowledge Hub" },
-  ],
-  developers: [
-    { href: "/docs", label: "Docs" },
-    { href: "/docs?tab=api", label: "API Reference" },
-    {
-      href: "https://www.npmjs.com/package/@settlr/sdk",
-      label: "npm Package",
-      external: true,
-    },
-    {
-      href: "https://github.com/ABFX15/x402-hack-payment",
-      label: "GitHub",
-      external: true,
-    },
-  ],
-  industries: [
-    { href: "/industries/cannabis", label: "Cannabis & Wholesalers" },
-    {
-      href: "/industries/cannabis-b2b-payments",
-      label: "Cannabis B2B Payments",
-    },
-    { href: "/industries/adult-content", label: "Adult Content Platforms" },
-  ],
-  compliance: [
-    { href: "/compliance", label: "2026 Whitepaper" },
-    { href: "/compliance#genius-act", label: "GENIUS Act 2025" },
-    { href: "/compliance#bsa-aml", label: "BSA/AML Framework" },
-    { href: "/compliance#kyb", label: "KYB Process" },
-    { href: "/privacy", label: "Privacy Policy" },
-  ],
-  company: [
-    { href: "/help", label: "Support" },
-    { href: "/blog", label: "Blog" },
-    { href: "/waitlist", label: "Request Access" },
-    { href: "mailto:adam@settlr.dev", label: "Contact Us" },
-  ],
-};
-
-const socialLinks = [
-  { href: "https://x.com/settlrp", icon: Twitter, label: "Twitter" },
+const columns = [
   {
-    href: "https://github.com/ABFX15/x402-hack-payment",
-    icon: Github,
-    label: "GitHub",
+    title: "Products",
+    links: [
+      { href: "/products/payment-links", label: "Payment Links" },
+      { href: "/products/invoices", label: "Invoicing" },
+      { href: "/docs?tab=api", label: "Payout API" },
+      { href: "/docs", label: "Checkout SDK" },
+    ],
   },
-  { href: "mailto:adam@settlr.dev", icon: Mail, label: "Email" },
+  {
+    title: "Industries",
+    links: [
+      { href: "/industries/cannabis", label: "Cannabis" },
+      { href: "/industries/adult-content", label: "Adult Content" },
+      { href: "/industries/cannabis-b2b-payments", label: "High-Risk B2B" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { href: "/blog", label: "Blog" },
+      { href: "/docs", label: "Documentation" },
+      { href: "/help", label: "Support" },
+      { href: "/learn", label: "Knowledge Hub" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { href: "/about", label: "About" },
+      { href: "mailto:adam@settlr.dev", label: "Contact" },
+      { href: "/terms", label: "Terms" },
+      { href: "/privacy", label: "Privacy" },
+    ],
+  },
+];
+
+const socials = [
+  {
+    href: "https://x.com/settlrp",
+    label: "X / Twitter",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+      </svg>
+    ),
+  },
+  {
+    href: "https://linkedin.com/company/settlr",
+    label: "LinkedIn",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    ),
+  },
 ];
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#E5E7EB] bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-6">
-          {/* Brand Column */}
-          <div className="lg:col-span-2">
+    <footer style={{ background: "#0A0A0A" }}>
+      <div className="mx-auto max-w-[1200px] px-6 pt-16 pb-10">
+        <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] lg:gap-8">
+          {/* brand */}
+          <div>
             <Link href="/" className="inline-block">
-              <SettlrLogo size="sm" variant="dark" />
+              <SettlrLogo size="sm" variant="light" />
             </Link>
-            <p className="mt-4 max-w-xs text-sm text-[#7C8A9E]">
-              The settlement layer for restricted commerce. Non-custodial B2B
-              stablecoin rails for industries abandoned by traditional finance.
-              Built on Solana.
+            <p
+              className="mt-4 max-w-[240px] text-sm leading-relaxed"
+              style={{ color: "#6B7280" }}
+            >
+              Non-custodial stablecoin settlement for B2B cannabis supply
+              chains. Built on Solana.
             </p>
-            <div className="mt-6 flex gap-4">
-              {socialLinks.map((social) => (
+            <div className="mt-6 flex gap-3">
+              {socials.map((s) => (
                 <a
-                  key={social.label}
-                  href={social.href}
+                  key={s.label}
+                  href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg p-2 text-[#7C8A9E] transition-colors hover:bg-[#F9FAFB] hover:text-[#0C1829]"
-                  aria-label={social.label}
+                  aria-label={s.label}
+                  className="text-[#6B7280] transition-colors hover:text-white"
                 >
-                  <social.icon className="h-5 w-5" />
+                  {s.icon}
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Product Links */}
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
-              Product
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.product.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Industries Links */}
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
-              Industries
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.industries.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <h4 className="mb-4 mt-8 text-sm font-semibold text-[#0C1829]">
-              Compliance
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.compliance.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Developer Links */}
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
-              Developers
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.developers.map((link) => (
-                <li key={link.href}>
-                  {link.external ? (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
+          {/* link columns */}
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h4
+                className="mb-4 text-sm font-semibold"
+                style={{ color: "#FFFFFF" }}
+              >
+                {col.title}
+              </h4>
+              <ul className="space-y-3">
+                {col.links.map((link) => (
+                  <li key={link.href + link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                      className="text-sm transition-colors hover:text-white"
+                      style={{ color: "#6B7280" }}
                     >
                       {link.label}
                     </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company Links */}
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-[#0C1829]">
-              Company
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#E5E7EB] pt-8 md:flex-row">
-          <p className="text-sm text-[#7C8A9E]">
-            © {new Date().getFullYear()} Settlr. Built on Solana.
+        {/* bottom bar */}
+        <div
+          className="mt-14 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row"
+          style={{ borderColor: "#1F1F1F" }}
+        >
+          <p className="text-sm" style={{ color: "#6B7280" }}>
+            &copy; {new Date().getFullYear()} Settlr. All rights reserved.
           </p>
-          <div className="flex items-center gap-2 text-sm text-[#7C8A9E]">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#1B6B4A]/30 bg-[#1B6B4A]/10 px-2 py-1 text-xs text-[#155939]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#1B6B4A]" />
-              All systems operational
-            </span>
-          </div>
+          <p className="text-xs" style={{ color: "#4B5563" }}>
+            Settlr is not a bank or money transmitter. Settlement is
+            peer-to-peer via USDC on Solana.
+          </p>
         </div>
       </div>
     </footer>

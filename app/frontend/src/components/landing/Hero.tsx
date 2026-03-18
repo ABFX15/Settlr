@@ -1,34 +1,11 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, DollarSign } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { t, spring, fadeUp, staggerContainer } from "./shared";
-
-/* ── animated counter ──────────────────────────────────── */
-function AnimatedValue({
-  value,
-  prefix = "",
-}: {
-  value: string;
-  prefix?: string;
-}) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
-
-  return (
-    <motion.span
-      ref={ref}
-      initial={{ opacity: 0, y: 8 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ ...spring, delay: 0.2 }}
-    >
-      {prefix}
-      {value}
-    </motion.span>
-  );
-}
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -36,300 +13,196 @@ export function Hero() {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
-  const dashY = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const dashY = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden pt-28 pb-16 sm:pt-40 sm:pb-24"
-      style={{ background: t.green }}
-    >
-      {/* parallax bg shapes */}
+    <section ref={sectionRef} className="relative min-h-screen overflow-hidden">
+      {/* ── background image with parallax ─────────────── */}
       <motion.div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{ y: bgY }}
       >
-        <div
-          className="absolute -top-32 -right-32 h-[500px] w-[500px] rounded-full opacity-[0.08]"
-          style={{
-            background: "radial-gradient(circle, #fff 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full opacity-[0.06]"
-          style={{
-            background: "radial-gradient(circle, #fff 0%, transparent 70%)",
-          }}
+        <Image
+          src="/hero-bg.png"
+          alt="Dark atmospheric hero background with green lighting"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
         />
       </motion.div>
 
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          {/* left copy */}
-          <motion.div
-            style={{ y: contentY }}
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.h1
-              variants={fadeUp}
-              className="text-[44px] leading-[1.05] tracking-tight text-white sm:text-[56px] lg:text-[64px]"
-              style={{ fontFamily: t.serif, fontWeight: 800 }}
-            >
-              Take charge of your payments with Settlr!
-            </motion.h1>
+      {/* ── dark overlay ───────────────────────────────── */}
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-black/50" />
 
-            <motion.p
-              variants={fadeUp}
-              className="mt-5 max-w-lg text-[17px] leading-relaxed text-white/75"
-            >
-              Settlr helps you settle invoices in seconds with powerful tools
-              designed for cannabis wholesalers.
-            </motion.p>
+      {/* ── volumetric green glow — edges ──────────────── */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[2]"
+        style={{
+          background: [
+            "radial-gradient(ellipse 60% 50% at 0% 50%, rgba(45,106,79,0.25) 0%, transparent 60%)",
+            "radial-gradient(ellipse 60% 50% at 100% 50%, rgba(45,106,79,0.18) 0%, transparent 60%)",
+            "radial-gradient(ellipse 80% 30% at 50% 100%, rgba(45,106,79,0.22) 0%, transparent 50%)",
+          ].join(", "),
+        }}
+      />
 
-            <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/waitlist"
-                className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
-                style={{ color: t.green }}
+      {/* ── content ────────────────────────────────────── */}
+      <div className="relative z-10 flex min-h-screen items-center">
+        <div className="mx-auto w-full max-w-[1400px] px-6 pt-20 pb-16 sm:pt-24 sm:pb-20">
+          <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-12">
+            {/* ── left: copy ─────────────────────────────── */}
+            <motion.div
+              style={{ y: contentY }}
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.h1
+                variants={fadeUp}
+                className="text-[44px] leading-[1.08] tracking-tight drop-shadow-lg sm:text-[58px] lg:text-[68px]"
+                style={{
+                  fontFamily: t.sans,
+                  fontWeight: 900,
+                  color: "#FFFFFF",
+                  textShadow: "0 2px 30px rgba(0,0,0,0.7)",
+                }}
               >
-                Request Access
-                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                href="/demo"
-                className="inline-flex items-center gap-2 rounded-full border border-white/30 px-7 py-3 text-sm font-bold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-white/10"
+                Payment rails for cannabis wholesalers.
+              </motion.h1>
+
+              <motion.p
+                variants={fadeUp}
+                className="mt-7 max-w-lg text-[18px] font-normal leading-[1.7]"
+                style={{
+                  color: "#D1D5DB",
+                  textShadow: "0 1px 8px rgba(0,0,0,0.4)",
+                }}
               >
-                Watch Demo
-              </Link>
-            </motion.div>
+                Settle invoices in seconds, not days. No bank needed. No account
+                freezes. Just USDC moving directly between you and your
+                suppliers. 1% flat.
+              </motion.p>
 
-            {/* Social proof */}
-            <motion.div
-              variants={fadeUp}
-              className="mt-10 flex items-center gap-3"
-            >
-              <div className="flex -space-x-2.5">
-                {["GF", "ME", "SC", "PD"].map((init, i) => (
-                  <motion.div
-                    key={init}
-                    initial={{ opacity: 0, scale: 0, x: -10 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    transition={{ ...spring, delay: 0.5 + i * 0.08 }}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border-[2.5px] border-white/30 text-[10px] font-bold text-white shadow-md"
-                    style={{
-                      background: `hsl(${150 + i * 25}, 40%, ${32 + i * 6}%)`,
-                    }}
-                  >
-                    {init}
-                  </motion.div>
-                ))}
-              </div>
-              <div>
-                <p className="text-sm font-bold text-white">
-                  <AnimatedValue value="$67K+" /> Settled
-                </p>
-                <p className="text-xs text-white/50">
-                  Trusted by cannabis operators nationwide
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* right — dashboard */}
-          <motion.div
-            style={{ y: dashY }}
-            initial={{ opacity: 0, x: 40, rotateY: -4 }}
-            animate={{ opacity: 1, x: 0, rotateY: 0 }}
-            transition={{ ...spring, delay: 0.3 }}
-            className="relative [perspective:1200px]"
-          >
-            {/* floating card 1 */}
-            <motion.div
-              className="absolute -left-3 top-6 z-10 rounded-2xl bg-white/95 px-5 py-3 shadow-xl backdrop-blur-sm sm:-left-6"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-            >
-              <p className="text-[10px] font-medium" style={{ color: t.muted }}>
-                Savings
-              </p>
-              <p className="text-lg font-bold" style={{ color: t.navy }}>
-                $47,500
-              </p>
-              <div className="mt-1 flex items-end gap-0.5">
-                {[30, 50, 40, 70, 55, 80, 65].map((h, i) => (
-                  <motion.div
-                    key={i}
-                    className="w-3 rounded-sm"
-                    initial={{ height: 0 }}
-                    animate={{ height: h * 0.35 }}
-                    transition={{ ...spring, delay: 0.8 + i * 0.06 }}
-                    style={{ background: i === 5 ? t.green : t.greenLight }}
-                  />
-                ))}
-              </div>
-            </motion.div>
-
-            {/* floating card 2 */}
-            <motion.div
-              className="absolute -right-2 bottom-16 z-10 rounded-2xl bg-white/95 px-5 py-3 shadow-xl backdrop-blur-sm sm:-right-5"
-              animate={{ y: [0, -10, 0] }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 2,
-              }}
-              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-            >
-              <div className="flex items-center gap-2">
-                <div
-                  className="flex h-8 w-8 items-center justify-center rounded-full"
-                  style={{ background: t.greenLight }}
+              {/* ── CTAs ───────────────────────────────────── */}
+              <motion.div
+                variants={fadeUp}
+                className="mt-10 flex flex-wrap items-center gap-4"
+              >
+                <Link
+                  href="/waitlist"
+                  className="group inline-flex items-center gap-2.5 rounded-full px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:brightness-110"
+                  style={{ background: t.green }}
                 >
-                  <DollarSign className="h-5 w-5" style={{ color: t.green }} />
-                </div>
-                <div>
-                  <p className="text-[10px]" style={{ color: t.muted }}>
-                    Volume · 30 Days
-                  </p>
-                  <p className="text-base font-bold" style={{ color: t.navy }}>
-                    $67,200
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+                  Request Access
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+                <Link
+                  href="/demo"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/25 px-8 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-white/[0.06]"
+                >
+                  Watch Demo
+                </Link>
+              </motion.div>
 
-            {/* main dashboard */}
-            <motion.div
-              className="overflow-hidden rounded-3xl bg-white shadow-2xl"
-              whileHover={{
-                rotateY: 2,
-                rotateX: -1,
-                transition: { duration: 0.4 },
-              }}
-              style={{ transformStyle: "preserve-3d" }}
-            >
-              {/* stat cards row */}
-              <div
-                className="grid grid-cols-3 divide-x"
-                style={{ borderColor: t.border }}
+              {/* ── compliance badges ───────────────────────── */}
+              <motion.div
+                variants={fadeUp}
+                className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2"
               >
-                {[
-                  { label: "Volume (30d)", val: "$2.4M", delta: "+18%" },
-                  { label: "Avg. Settlement", val: "3.2s", delta: "-0.4s" },
-                  { label: "Transactions", val: "1,847", delta: "+124" },
-                ].map((s, i) => (
-                  <motion.div
-                    key={s.label}
-                    className="px-5 py-4"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ ...spring, delay: 0.6 + i * 0.1 }}
-                  >
-                    <p
-                      className="text-[10px] font-medium"
-                      style={{ color: t.muted }}
-                    >
-                      {s.label}
-                    </p>
-                    <p
-                      className="mt-0.5 text-xl font-bold"
-                      style={{ color: t.navy }}
-                    >
-                      {s.val}
-                    </p>
-                    <p
-                      className="text-[10px] font-semibold"
+                {["GENIUS Act Compliant", "Non-Custodial", "BSA/AML"].map(
+                  (badge) => (
+                    <span
+                      key={badge}
+                      className="inline-flex items-center gap-1.5 text-[13px] font-medium"
                       style={{ color: t.green }}
                     >
-                      {s.delta}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* chart */}
-              <div
-                className="flex items-end gap-1 border-t px-5 py-4"
-                style={{ borderColor: t.border }}
-              >
-                {[35, 55, 40, 70, 50, 85, 60, 75, 45, 90, 65, 80].map(
-                  (h, i) => (
-                    <motion.div
-                      key={i}
-                      className="flex-1 rounded-t"
-                      initial={{ height: 0 }}
-                      animate={{ height: h * 0.7 }}
-                      transition={{ ...spring, delay: 0.8 + i * 0.04 }}
-                      style={{ background: i >= 9 ? t.green : t.greenLight }}
-                    />
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      {badge}
+                    </span>
                   ),
                 )}
+              </motion.div>
+            </motion.div>
+
+            {/* ── right: dashboard mockup ────────────────── */}
+            <motion.div
+              style={{ y: dashY }}
+              initial={{ opacity: 0, x: 50, scale: 0.97 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ ...spring, delay: 0.35 }}
+              className="relative"
+            >
+              {/* main dashboard image */}
+              <div className="relative overflow-hidden rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
+                <Image
+                  src="/dashboard-mock.png"
+                  alt="Settlr settlement dashboard showing volumes, transactions, and real-time settlement data"
+                  width={960}
+                  height={640}
+                  priority
+                  className="block w-full"
+                />
               </div>
 
-              {/* settlement rows */}
-              {[
-                {
-                  from: "GreenLeaf Farms",
-                  to: "Pacific Dist.",
-                  amt: "$47,500",
-                  time: "0.6s",
-                },
-                {
-                  from: "Mountain Extracts",
-                  to: "Valley Wholesale",
-                  amt: "$14,250",
-                  time: "0.8s",
-                },
-              ].map((r, i) => (
-                <motion.div
-                  key={r.from}
-                  className="flex items-center justify-between border-t px-5 py-3"
-                  style={{ borderColor: t.border }}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ ...spring, delay: 1.2 + i * 0.1 }}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div
-                      className="flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold"
-                      style={{ background: t.greenLight, color: t.green }}
-                    >
-                      {r.from[0]}
-                    </div>
-                    <span
-                      className="text-xs font-medium"
-                      style={{ color: t.navy }}
-                    >
-                      {r.from} → {r.to}
-                    </span>
+              {/* ── floating card 1: settlement complete ──── */}
+              <motion.div
+                className="absolute -left-4 top-6 z-20 rounded-2xl border border-white/15 bg-black/60 px-5 py-4 shadow-2xl backdrop-blur-2xl sm:-left-10"
+                animate={{ y: [0, -8, 0] }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/20">
+                    <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="text-xs font-bold"
-                      style={{ color: t.navy }}
-                    >
-                      {r.amt}
-                    </span>
-                    <span
-                      className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                      style={{ background: t.greenLight, color: t.green }}
-                    >
-                      {r.time}
-                    </span>
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      Settlement Complete
+                    </p>
+                    <p className="text-xs text-white/60">
+                      $47,500 · GreenLeaf → Pacific Dist. · 0.6s
+                    </p>
                   </div>
-                </motion.div>
-              ))}
+                </div>
+              </motion.div>
+
+              {/* ── floating card 2: invoice paid ─────────── */}
+              <motion.div
+                className="absolute -right-3 bottom-10 z-20 rounded-2xl border border-white/15 bg-black/60 px-5 py-4 shadow-2xl backdrop-blur-2xl sm:-right-8"
+                animate={{ y: [0, -8, 0] }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 2.5,
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/20">
+                    <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      Invoice Paid
+                    </p>
+                    <p className="text-xs text-white/60">
+                      $14,250 · Mountain Extracts · 0.8s
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
+      {/* ── sr-only for SEO ─────────────────────────────── */}
       <p className="sr-only">
         Settlr is a non-custodial stablecoin settlement platform for B2B
         cannabis distributors at 1% flat fee, built on Solana.

@@ -4,15 +4,27 @@ import { type Variants } from "framer-motion";
 
 /* ── design tokens ─────────────────────────────────────── */
 export const t = {
-    green: "#1B6B4A",
-    greenLight: "#E8F5EE",
-    greenPale: "#D1FAE5",
-    navy: "#0C1829",
-    slate: "#475569",
-    muted: "#94A3B8",
-    border: "#E2E8F0",
-    bgOff: "#F8FAFB",
-    serif: "var(--font-fraunces), Georgia, serif",
+    green: "#2D6A4F",
+    greenLight: "#D8F3DC",
+    greenPale: "#B7E4C7",
+    dark: "#0A0A0A",
+    navy: "#0A0A0A",
+    bodyLight: "#6B7280",
+    bodyDark: "#9CA3AF",
+    muted: "#9CA3AF",
+    border: "#E5E7EB",
+    cardBg: "#F5F5F5",
+    bgOff: "#F5F5F5",
+    /** Inter clean sans-serif for all text */
+    sans: "var(--font-inter), Inter, system-ui, -apple-system, sans-serif",
+    /** @deprecated – kept for compat, maps to sans now */
+    serif: "var(--font-inter), Inter, system-ui, -apple-system, sans-serif",
+    /** alias for body text on light bg — matches bodyLight */
+    slate: "#6B7280",
+    /** max content width */
+    maxW: "1200px",
+    /** section vertical padding */
+    sectionPy: "py-[120px]",
 } as const;
 
 /* ── spring configs ────────────────────────────────────── */
@@ -66,6 +78,16 @@ export const cardHover = {
 export const cardTap = {
     scale: 0.98,
     transition: springFast,
+};
+
+/* ── section-level scroll fade-in ──────────────────────── */
+export const sectionFade: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { ...spring, duration: 0.8 },
+    },
 };
 
 /* ── counter utility (for animated stats) ──────────────── */
