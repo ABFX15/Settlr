@@ -6,9 +6,9 @@ import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 
 /**
  * Invisible component that auto-redirects authenticated users who haven't
- * completed onboarding to /onboarding.
+ * completed onboarding to /waitlist (gated access).
  *
- * Skips redirect when the user is already on /onboarding or on public pages
+ * Skips redirect when the user is already on /waitlist or on public pages
  * that don't require onboarding (marketing, docs, etc.).
  */
 
@@ -51,7 +51,7 @@ export function PostLoginRouter() {
 
     if (status === "needs-onboarding" && !isPublicPath(pathname)) {
       hasRedirected.current = true;
-      router.replace("/onboarding");
+      router.replace("/waitlist");
     }
   }, [status, pathname, router]);
 
@@ -64,7 +64,7 @@ export function PostLoginRouter() {
         pathname === "/create" ||
         pathname.startsWith("/api-keys"))
     ) {
-      router.replace("/onboarding");
+      router.replace("/waitlist");
     }
   }, [status, pathname, router]);
 

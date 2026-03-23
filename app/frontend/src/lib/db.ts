@@ -1201,8 +1201,10 @@ export async function revokeApiKey(keyId: string): Promise<boolean> {
 export interface WaitlistEntry {
     id: string;
     email: string;
+    name?: string;
     company?: string;
     useCase?: string;
+    walletAddress?: string;
     position: number;
     createdAt: Date;
     status: "pending" | "invited" | "active";
@@ -1214,20 +1216,41 @@ const memoryWaitlist: WaitlistEntry[] = [];
 export async function addToWaitlist(
     email: string,
     company?: string,
-    useCase?: string
+    useCase?: string,
+    name?: string,
+    walletAddress?: string
 ): Promise<WaitlistEntry> {
     const normalizedEmail = email.toLowerCase().trim();
 
     if (isSupabaseConfigured()) {
-        // Check if already exists
-        const { data: existing } = await supabase
+        // Check if already exists by email or wallet
+        const { data: existingByEmail } = await supabase
             .from("waitlist")
             .select("*")
             .eq("email", normalizedEmail)
             .single();
 
-        if (existing) {
+        if (existingByEmail) {
+            // If they're re-submitting with a wallet, update the record
+            if (walletAddress && !existingByEmail.wallet_address) {
+                await supabase
+                    .from("waitlist")
+                    .update({ wallet_address: walletAddress, name: name || existingByEmail.name })
+                    .eq("id", existingByEmail.id);
+            }
             throw new Error("This email is already on the waitlist");
+        }
+
+        if (walletAddress) {
+            const { data: existingByWallet } = await supabase
+                .from("waitlist")
+                .select("*")
+                .eq("wallet_address", walletAddress)
+                .single();
+
+            if (existingByWallet) {
+                throw new Error("This wallet is already on the waitlist");
+            }
         }
 
         // Get current count for position
@@ -1239,8 +1262,10 @@ export async function addToWaitlist(
             .from("waitlist")
             .insert({
                 email: normalizedEmail,
+                name,
                 company,
                 use_case: useCase,
+                wallet_address: walletAddress || null,
                 position: (count || 0) + 1,
                 status: "pending",
             })
@@ -1252,24 +1277,30 @@ export async function addToWaitlist(
         return {
             id: data.id,
             email: data.email,
+            name: data.name,
             company: data.company,
             useCase: data.use_case,
+            walletAddress: data.wallet_address,
             position: data.position,
             createdAt: new Date(data.created_at),
             status: data.status,
         };
     } else {
         // Check if already exists
-        const existing = memoryWaitlist.find(e => e.email === normalizedEmail);
+        const existing = memoryWaitlist.find(
+            e => e.email === normalizedEmail || (walletAddress && e.walletAddress === walletAddress)
+        );
         if (existing) {
-            throw new Error("This email is already on the waitlist");
+            throw new Error("This email or wallet is already on the waitlist");
         }
 
         const entry: WaitlistEntry = {
             id: `wl_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             email: normalizedEmail,
+            name,
             company,
             useCase,
+            walletAddress,
             position: memoryWaitlist.length + 1,
             createdAt: new Date(),
             status: "pending",
@@ -1277,6 +1308,65 @@ export async function addToWaitlist(
 
         memoryWaitlist.push(entry);
         return entry;
+    }
+}
+
+export async function checkWaitlistAccess(wallet: string): Promise<{ approved: boolean; entry: WaitlistEntry | null }> {
+    if (isSupabaseConfigured()) {
+        const { data } = await supabase
+            .from("waitlist")
+            .select("*")
+            .eq("wallet_address", wallet)
+            .in("status", ["invited", "active"])
+            .single();
+
+        if (data) {
+            return {
+                approved: true,
+                entry: {
+                    id: data.id,
+                    email: data.email,
+                    name: data.name,
+                    company: data.company,
+                    useCase: data.use_case,
+                    walletAddress: data.wallet_address,
+                    position: data.position,
+                    createdAt: new Date(data.created_at),
+                    status: data.status,
+                },
+            };
+        }
+        return { approved: false, entry: null };
+    } else {
+        const entry = memoryWaitlist.find(
+            e => e.walletAddress === wallet && (e.status === "invited" || e.status === "active")
+        );
+        return { approved: !!entry, entry: entry || null };
+    }
+}
+
+export async function getWaitlistByWallet(wallet: string): Promise<WaitlistEntry | null> {
+    if (isSupabaseConfigured()) {
+        const { data } = await supabase
+            .from("waitlist")
+            .select("*")
+            .eq("wallet_address", wallet)
+            .single();
+
+        if (!data) return null;
+        return {
+            id: data.id,
+            email: data.email,
+            name: data.name,
+            company: data.company,
+            useCase: data.use_case,
+            walletAddress: data.wallet_address,
+            position: data.position,
+            createdAt: new Date(data.created_at),
+            status: data.status,
+        };
+    } else {
+        return memoryWaitlist.find(e => e.walletAddress === wallet) || null;
     }
 }
 

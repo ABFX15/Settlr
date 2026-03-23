@@ -129,10 +129,9 @@ export function Navbar() {
 
   // Determine where the primary CTA should link to
   const { status: onboardingStatus } = useOnboardingStatus();
-  const ctaHref =
-    onboardingStatus === "onboarded" ? "/dashboard" : "/onboarding";
+  const ctaHref = onboardingStatus === "onboarded" ? "/dashboard" : "/waitlist";
   const ctaLabel =
-    onboardingStatus === "onboarded" ? "Dashboard" : "Get Started";
+    onboardingStatus === "onboarded" ? "Dashboard" : "Request Access";
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -424,28 +423,15 @@ export function Navbar() {
               </button>
             </>
           ) : (
-            <>
-              <button
-                onClick={login}
-                className={`text-sm font-medium transition-colors ${
-                  transparent
-                    ? "text-white/90 hover:text-white"
-                    : "text-[#7C8A9E] hover:text-[#0C1829]"
-                }`}
-              >
-                Sign In
-              </button>
-              <Link
-                href="/waitlist"
-                className="rounded-full px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
-                }}
-              >
-                Request Access
-              </Link>
-            </>
+            <Link
+              href="/waitlist"
+              className="rounded-full px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
+              style={{
+                background: "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+              }}
+            >
+              Request Access
+            </Link>
           )}
         </div>
 
@@ -578,28 +564,17 @@ export function Navbar() {
                     </button>
                   </>
                 ) : (
-                  <>
-                    <button
-                      onClick={() => {
-                        login();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="rounded-full border border-[#E5E7EB] px-4 py-3 text-sm font-medium text-[#7C8A9E]"
-                    >
-                      Sign In
-                    </button>
-                    <Link
-                      href="/waitlist"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-full px-4 py-3 text-center text-sm font-semibold text-white"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
-                      }}
-                    >
-                      Request Access
-                    </Link>
-                  </>
+                  <Link
+                    href="/waitlist"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-full px-4 py-3 text-center text-sm font-semibold text-white"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                    }}
+                  >
+                    Request Access
+                  </Link>
                 )}
               </div>
             </div>

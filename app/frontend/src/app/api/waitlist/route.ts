@@ -5,7 +5,7 @@ import { addToWaitlist, getWaitlist, type WaitlistEntry } from "@/lib/db";
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { email, company, useCase } = body;
+        const { email, name, company, useCase, walletAddress } = body;
 
         if (!email) {
             return NextResponse.json(
@@ -23,7 +23,18 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const entry = await addToWaitlist(email, company, useCase);
+        // Validate wallet address format if provided
+        if (walletAddress) {
+            const solanaAddressRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+            if (!solanaAddressRegex.test(walletAddress)) {
+                return NextResponse.json(
+                    { error: "Invalid wallet address" },
+                    { status: 400 }
+                );
+            }
+        }
+
+        const entry = await addToWaitlist(email, company, useCase, name, walletAddress);
 
         return NextResponse.json({
             success: true,

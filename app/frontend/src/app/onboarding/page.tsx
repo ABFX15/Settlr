@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePrivy } from "@privy-io/react-auth";
 import { useSignTransaction } from "@privy-io/react-auth/solana";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useWaitlistAccess } from "@/hooks/useWaitlistAccess";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import { buildCreateVaultTransaction, shortenAddress } from "@/lib/squads";
 import {
@@ -25,6 +26,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 // ─── Design tokens ────────────────────────────────────────
@@ -62,6 +64,8 @@ export default function OnboardingPage() {
   const { authenticated, login, ready } = usePrivy();
   const { publicKey, connected, wallet } = useActiveWallet();
   const { signTransaction: privySignTransaction } = useSignTransaction();
+  const { access } = useWaitlistAccess();
+  const router = useRouter();
 
   const [state, setState] = useState<OnboardingState>({
     step: 1,
@@ -78,6 +82,14 @@ export default function OnboardingPage() {
 
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+
+  // ─── Waitlist gate: redirect unapproved users ──────────
+  useEffect(() => {
+    if (access === "loading" || access === "unauthenticated") return;
+    if (access !== "approved") {
+      router.replace("/waitlist");
+    }
+  }, [access, router]);
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
