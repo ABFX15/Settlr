@@ -6,7 +6,7 @@
  */
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = process.env.PAYOUT_FROM_EMAIL || "payouts@settlr.dev";
+const FROM_EMAIL = process.env.PAYOUT_FROM_EMAIL || "adam@settlr.dev";
 const APP_NAME = "Settlr";
 
 interface SendEmailOptions {
