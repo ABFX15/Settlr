@@ -8,7 +8,6 @@ import {
     createInvoice,
     getInvoicesByMerchant,
     getInvoiceStats,
-    validateApiKey,
     updateInvoiceStatus,
     getInvoice,
     getOrCreateMerchantByWallet,
@@ -16,20 +15,8 @@ import {
 import { sendInvoiceEmail } from "@/lib/email";
 
 // ─── Auth helper ───
-// Supports two modes:
-//  1. API key (x-api-key header) — for programmatic / SDK access
-//  2. Wallet address (x-merchant-wallet header) — for dashboard use
+// Authenticates via wallet address (x-merchant-wallet header) from dashboard
 async function authenticate(request: NextRequest) {
-    // Mode 1: API key
-    const apiKey =
-        request.headers.get("x-api-key") ||
-        request.headers.get("authorization")?.replace("Bearer ", "");
-    if (apiKey) {
-        const v = await validateApiKey(apiKey);
-        if (v.valid && v.merchantId && v.merchantWallet) return v;
-    }
-
-    // Mode 2: Connected wallet from dashboard
     const walletAddress = request.headers.get("x-merchant-wallet");
     if (walletAddress && walletAddress.length >= 32) {
         try {
@@ -39,8 +26,6 @@ async function authenticate(request: NextRequest) {
                 merchantId: merchant.id,
                 merchantWallet: merchant.walletAddress,
                 merchantName: merchant.name,
-                tier: "free" as const,
-                rateLimit: 60,
             };
         } catch {
             return null;

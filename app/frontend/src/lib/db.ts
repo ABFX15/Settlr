@@ -83,21 +83,6 @@ export interface Payment {
     refundSignature?: string;
 }
 
-export interface ApiKey {
-    id: string;
-    merchantId: string;
-    key: string;  // hashed
-    keyPrefix: string;  // first 8 chars for display
-    name: string;
-    tier: "free" | "pro" | "enterprise";
-    rateLimit: number;  // requests per minute
-    requestCount: number;
-    lastUsedAt?: Date;
-    createdAt: Date;
-    expiresAt?: Date;
-    active: boolean;
-}
-
 // Subscription types
 export type SubscriptionInterval = "daily" | "weekly" | "monthly" | "yearly";
 export type SubscriptionStatus = "active" | "paused" | "cancelled" | "past_due" | "expired";
@@ -309,7 +294,6 @@ export interface TreasuryTransaction {
 const memoryMerchants = new Map<string, Merchant>();
 const memorySessions = new Map<string, CheckoutSession>();
 const memoryPayments = new Map<string, Payment>();
-const memoryApiKeys = new Map<string, ApiKey>();
 const memorySubscriptionPlans = new Map<string, SubscriptionPlan>();
 const memorySubscriptions = new Map<string, Subscription>();
 const memoryPayouts = new Map<string, Payout>();
@@ -320,7 +304,6 @@ const memoryBalanceTxs: BalanceTransaction[] = [];
 const memoryMerchantBalances = new Map<string, MerchantBalance>(); // keyed by merchantId:currency
 const memoryTreasuryTxs: TreasuryTransaction[] = [];
 const memoryInvoices = new Map<string, Invoice>();
-const memoryRateLimits = new Map<string, { count: number; resetAt: number }>();
 
 // ID generators
 function generateSessionId(): string {
@@ -927,20 +910,10 @@ export async function createMerchant(
 }
 
 // ============================================
-// API KEYS
+// API KEY VALIDATION (legacy — used by payout/integration routes)
 // ============================================
 
-function generateApiKey(prefix: "sk_live" | "sk_test" = "sk_live"): string {
-    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let key = `${prefix}_`;
-    for (let i = 0; i < 32; i++) {
-        key += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return key;
-}
-
 function hashApiKey(key: string): string {
-    // Simple hash for demo - in production use bcrypt or similar
     let hash = 0;
     for (let i = 0; i < key.length; i++) {
         const char = key.charCodeAt(i);
@@ -950,64 +923,10 @@ function hashApiKey(key: string): string {
     return Math.abs(hash).toString(16).padStart(16, '0');
 }
 
-export async function createApiKey(
-    merchantId: string,
-    name: string = "Default",
-    tier: "free" | "pro" | "enterprise" = "free",
-    isTest: boolean = false
-): Promise<{ apiKey: ApiKey; rawKey: string }> {
-    const rawKey = generateApiKey(isTest ? "sk_test" : "sk_live");
-    const keyHash = hashApiKey(rawKey);
-
-    const rateLimits = {
-        free: 60,
-        pro: 300,
-        enterprise: 1000,
-    };
-
-    const apiKey: ApiKey = {
-        id: crypto.randomUUID(),
-        merchantId,
-        key: keyHash,
-        keyPrefix: rawKey.slice(0, 12) + "...",
-        name,
-        tier,
-        rateLimit: rateLimits[tier],
-        requestCount: 0,
-        createdAt: new Date(),
-        active: true,
-    };
-
-    if (isSupabaseConfigured()) {
-        const { error } = await supabase.from("api_keys").insert({
-            id: apiKey.id,
-            merchant_id: merchantId,
-            key_hash: keyHash,
-            key_prefix: apiKey.keyPrefix,
-            name,
-            tier,
-            rate_limit: apiKey.rateLimit,
-            active: true,
-        });
-
-        if (error) {
-            console.error("Supabase error creating API key:", error);
-            throw new Error("Failed to create API key");
-        }
-    } else {
-        // Store with raw key for in-memory lookup (demo only)
-        memoryApiKeys.set(rawKey, apiKey);
-    }
-
-    return { apiKey, rawKey };
-}
-
-// Demo API key for documentation examples - works out of the box
 const DEMO_API_KEY = "sk_test_demo_xxxxxxxxxxxx";
-const DEMO_MERCHANT = {
+const DEMO_MERCHANT_STUB = {
     id: "demo_merchant",
     name: "Demo Store",
-    // Real devnet wallet - payments actually work for testing
     walletAddress: "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV",
 };
 
@@ -1020,33 +939,22 @@ export async function validateApiKey(rawKey: string): Promise<{
     rateLimit?: number;
     error?: string;
 }> {
-    // Handle demo API key - allows copy-paste from docs to work immediately
     if (rawKey === DEMO_API_KEY) {
         return {
             valid: true,
-            merchantId: DEMO_MERCHANT.id,
-            merchantWallet: DEMO_MERCHANT.walletAddress,
-            merchantName: DEMO_MERCHANT.name,
+            merchantId: DEMO_MERCHANT_STUB.id,
+            merchantWallet: DEMO_MERCHANT_STUB.walletAddress,
+            merchantName: DEMO_MERCHANT_STUB.name,
             tier: "free",
             rateLimit: 60,
         };
     }
 
-    // All API keys (test and live) should be looked up in the database
     if (isSupabaseConfigured()) {
         const keyHash = hashApiKey(rawKey);
-
-        // Join with merchants to get wallet address
         const { data, error } = await supabase
             .from("api_keys")
-            .select(`
-                *,
-                merchants (
-                    id,
-                    name,
-                    wallet_address
-                )
-            `)
+            .select(`*, merchants ( id, name, wallet_address )`)
             .eq("key_hash", keyHash)
             .eq("active", true)
             .single();
@@ -1055,23 +963,16 @@ export async function validateApiKey(rawKey: string): Promise<{
             return { valid: false, error: "Invalid API key" };
         }
 
-        // Check expiration
         if (data.expires_at && new Date(data.expires_at) < new Date()) {
             return { valid: false, error: "API key expired" };
         }
 
-        // Update last used
         await supabase
             .from("api_keys")
-            .update({
-                last_used_at: new Date().toISOString(),
-                request_count: (data.request_count || 0) + 1,
-            })
+            .update({ last_used_at: new Date().toISOString(), request_count: (data.request_count || 0) + 1 })
             .eq("id", data.id);
 
-        // Extract merchant data from join
         const merchant = data.merchants as { id: string; name: string; wallet_address: string } | null;
-
         return {
             valid: true,
             merchantId: data.merchant_id,
@@ -1080,118 +981,9 @@ export async function validateApiKey(rawKey: string): Promise<{
             tier: data.tier,
             rateLimit: data.rate_limit,
         };
-    } else {
-        // In-memory lookup
-        const apiKey = memoryApiKeys.get(rawKey);
-
-        if (!apiKey || !apiKey.active) {
-            return { valid: false, error: "Invalid API key" };
-        }
-
-        apiKey.lastUsedAt = new Date();
-        apiKey.requestCount++;
-
-        // Look up merchant for wallet address
-        const merchant = memoryMerchants.get(apiKey.merchantId);
-
-        return {
-            valid: true,
-            merchantId: apiKey.merchantId,
-            merchantWallet: merchant?.walletAddress,
-            merchantName: merchant?.name,
-            tier: apiKey.tier,
-            rateLimit: apiKey.rateLimit,
-        };
-    }
-}
-
-export async function checkRateLimit(apiKey: string): Promise<{
-    allowed: boolean;
-    remaining: number;
-    resetAt: number;
-}> {
-    const now = Date.now();
-    const windowMs = 60 * 1000; // 1 minute window
-
-    let rateData = memoryRateLimits.get(apiKey);
-
-    // Reset if window expired
-    if (!rateData || rateData.resetAt < now) {
-        rateData = { count: 0, resetAt: now + windowMs };
-        memoryRateLimits.set(apiKey, rateData);
     }
 
-    // Get rate limit for this key
-    const validation = await validateApiKey(apiKey);
-    const limit = validation.rateLimit || 60;
-
-    rateData.count++;
-
-    return {
-        allowed: rateData.count <= limit,
-        remaining: Math.max(0, limit - rateData.count),
-        resetAt: rateData.resetAt,
-    };
-}
-
-export async function getApiKeysByMerchant(merchantId: string): Promise<ApiKey[]> {
-    console.log("[DB] getApiKeysByMerchant called with:", merchantId);
-
-    if (isSupabaseConfigured()) {
-        console.log("[DB] Using Supabase, querying for merchant_id:", merchantId);
-        const { data, error } = await supabase
-            .from("api_keys")
-            .select("*")
-            .eq("merchant_id", merchantId)
-            .order("created_at", { ascending: false });
-
-        if (error) {
-            console.error("[DB] Supabase error:", error);
-            return [];
-        }
-
-        if (!data) {
-            console.log("[DB] No data returned from Supabase");
-            return [];
-        }
-
-        console.log("[DB] Supabase returned", data.length, "keys");
-        return data.map((row: Record<string, unknown>) => ({
-            id: row.id as string,
-            merchantId: row.merchant_id as string,
-            key: row.key_hash as string,
-            keyPrefix: row.key_prefix as string,
-            name: row.name as string,
-            tier: row.tier as "free" | "pro" | "enterprise",
-            rateLimit: row.rate_limit as number,
-            requestCount: (row.request_count as number) || 0,
-            lastUsedAt: row.last_used_at ? new Date(row.last_used_at as string) : undefined,
-            createdAt: new Date(row.created_at as string),
-            expiresAt: row.expires_at ? new Date(row.expires_at as string) : undefined,
-            active: row.active as boolean,
-        }));
-    } else {
-        return Array.from(memoryApiKeys.values()).filter(k => k.merchantId === merchantId);
-    }
-}
-
-export async function revokeApiKey(keyId: string): Promise<boolean> {
-    if (isSupabaseConfigured()) {
-        const { error } = await supabase
-            .from("api_keys")
-            .update({ active: false })
-            .eq("id", keyId);
-
-        return !error;
-    } else {
-        for (const [rawKey, apiKey] of memoryApiKeys.entries()) {
-            if (apiKey.id === keyId) {
-                apiKey.active = false;
-                return true;
-            }
-        }
-        return false;
-    }
+    return { valid: false, error: "Invalid API key" };
 }
 
 // ============================================================================

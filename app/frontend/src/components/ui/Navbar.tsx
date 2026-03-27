@@ -21,8 +21,6 @@ import {
   GraduationCap,
   Scale,
 } from "lucide-react";
-import { usePrivy } from "@privy-io/react-auth";
-import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -108,7 +106,6 @@ export function Navbar() {
   const productsRef = useRef<HTMLDivElement>(null);
   const industriesRef = useRef<HTMLDivElement>(null);
   const resourcesRef = useRef<HTMLDivElement>(null);
-  const { ready, authenticated, login, logout } = usePrivy();
 
   const isHome = pathname === "/";
 
@@ -126,12 +123,6 @@ export function Navbar() {
 
   // When transparent (top of homepage): white text, no bg
   const transparent = isHome && !scrolled;
-
-  // Determine where the primary CTA should link to
-  const { status: onboardingStatus } = useOnboardingStatus();
-  const ctaHref = onboardingStatus === "onboarded" ? "/dashboard" : "/waitlist";
-  const ctaLabel =
-    onboardingStatus === "onboarded" ? "Dashboard" : "Request Access";
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -405,34 +396,17 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Right Side - Auth */}
+        {/* Right Side - CTA */}
         <div className="hidden items-center gap-3 md:flex">
-          {ready && authenticated ? (
-            <>
-              <Link
-                href={ctaHref}
-                className="rounded-full border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-2 text-sm font-medium text-[#0C1829] transition-all hover:bg-[#F0F0F0]"
-              >
-                {ctaLabel}
-              </Link>
-              <button
-                onClick={logout}
-                className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
-              >
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <Link
-              href="/waitlist"
-              className="rounded-full px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
-              style={{
-                background: "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
-              }}
-            >
-              Request Access
-            </Link>
-          )}
+          <Link
+            href="/waitlist"
+            className="rounded-full px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
+            style={{
+              background: "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+            }}
+          >
+            Request Access
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -545,38 +519,17 @@ export function Navbar() {
               </div>
 
               <div className="mt-4 flex flex-col gap-2 border-t border-[#E5E7EB] pt-4">
-                {ready && authenticated ? (
-                  <>
-                    <Link
-                      href={ctaHref}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-full border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-center text-sm font-medium text-[#0C1829]"
-                    >
-                      {ctaLabel}
-                    </Link>
-                    <button
-                      onClick={() => {
-                        logout();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="rounded-full px-4 py-3 text-sm font-medium text-[#7C8A9E]"
-                    >
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <Link
-                    href="/waitlist"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-full px-4 py-3 text-center text-sm font-semibold text-white"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
-                    }}
-                  >
-                    Request Access
-                  </Link>
-                )}
+                <Link
+                  href="/waitlist"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-full px-4 py-3 text-center text-sm font-semibold text-white"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                  }}
+                >
+                  Request Access
+                </Link>
               </div>
             </div>
           </motion.div>

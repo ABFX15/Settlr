@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AuthLayout from "@/components/AuthLayout";
 
 export const metadata: Metadata = {
   title: "Create Settlement Link",
@@ -12,5 +13,5 @@ export default function CreateLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <AuthLayout>{children}</AuthLayout>;
 }

@@ -61,8 +61,7 @@ export function PostLoginRouter() {
       status === "needs-onboarding" &&
       (pathname === "/dashboard" ||
         pathname.startsWith("/dashboard/") ||
-        pathname === "/create" ||
-        pathname.startsWith("/api-keys"))
+        pathname === "/create")
     ) {
       router.replace("/waitlist");
     }

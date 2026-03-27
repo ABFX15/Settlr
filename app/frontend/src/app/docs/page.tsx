@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/ui/Navbar";
@@ -42,6 +42,14 @@ type TabId =
   | "troubleshooting";
 
 export default function DocsPage() {
+  return (
+    <Suspense>
+      <DocsPageInner />
+    </Suspense>
+  );
+}
+
+function DocsPageInner() {
   const searchParams = useSearchParams();
   const initialTab: TabId = (searchParams.get("tab") as TabId) || "quickstart";
   const [activeTab, setActiveTab] = useState<TabId>(initialTab);

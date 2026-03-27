@@ -37,10 +37,12 @@ export const metadata: Metadata = {
   },
 };
 
+import AuthLayout from "@/components/AuthLayout";
+
 export default function OnboardingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <AuthLayout>{children}</AuthLayout>;
 }

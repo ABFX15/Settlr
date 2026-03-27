@@ -56,7 +56,6 @@ interface OnboardingState {
   multisigPda: string | null;
   // Registration
   merchantId: string | null;
-  apiKey: string | null;
   error: string | null;
 }
 
@@ -76,7 +75,6 @@ export default function OnboardingPage() {
     vaultPda: null,
     multisigPda: null,
     merchantId: null,
-    apiKey: null,
     error: null,
   });
 
@@ -247,7 +245,6 @@ export default function OnboardingPage() {
         ...s,
         step: 5,
         merchantId: data.merchant.id,
-        apiKey: data.apiKey,
       }));
     } catch (err) {
       setState((s) => ({
@@ -1027,83 +1024,6 @@ export default function OnboardingPage() {
                 All USDC settlements go to this vault. Add signers anytime from
                 the dashboard.
               </p>
-            </div>
-
-            {/* API Key */}
-            <div
-              className="rounded-xl p-5 mb-4 border"
-              style={{ background: c.bg, borderColor: c.border }}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span
-                  className="text-xs font-semibold uppercase tracking-wider"
-                  style={{ color: c.muted }}
-                >
-                  API Key
-                </span>
-                <span
-                  className="text-[10px] px-2 py-0.5 rounded-full font-medium"
-                  style={{
-                    background: "rgba(245,158,11,0.1)",
-                    color: "#f59e0b",
-                  }}
-                >
-                  Save now — shown once
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <code
-                  className="flex-1 text-xs font-mono break-all"
-                  style={{ color: c.green }}
-                >
-                  {state.apiKey}
-                </code>
-                <button
-                  onClick={() =>
-                    state.apiKey && copyToClipboard(state.apiKey, "apiKey")
-                  }
-                  className="p-2 rounded-lg hover:opacity-70 transition-opacity"
-                >
-                  {copied === "apiKey" ? (
-                    <Check className="w-4 h-4" style={{ color: c.green }} />
-                  ) : (
-                    <Copy className="w-4 h-4" style={{ color: c.muted }} />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Quick Start Code */}
-            <div
-              className="rounded-xl p-5 mb-6 border"
-              style={{ background: c.bg, borderColor: c.border }}
-            >
-              <h3
-                className="text-xs font-semibold uppercase tracking-wider mb-3"
-                style={{ color: c.muted }}
-              >
-                Quick Start
-              </h3>
-              <pre
-                className="rounded-lg p-4 text-xs overflow-x-auto"
-                style={{ background: c.card, color: c.slate }}
-              >
-                <code>{`npm install @settlr/sdk
-
-import { Settlr } from '@settlr/sdk';
-
-const settlr = new Settlr({
-  apiKey: '${state.apiKey?.slice(0, 12)}...',
-});
-
-// Create an invoice (B2B cannabis)
-const invoice = await settlr.createInvoice({
-  amount: 12500.00,
-  currency: 'USDC',
-  description: 'PO #4521 — Flower delivery',
-  // Settles to your Squads vault automatically
-});`}</code>
-              </pre>
             </div>
 
             {/* Next Steps */}

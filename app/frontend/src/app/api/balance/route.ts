@@ -1,19 +1,18 @@
 /**
  * GET /api/balance — Shorthand for /api/treasury/balance
  *
- * Returns the merchant's USDC balance. Used by integrations (Slack bot, etc.)
- * for quick balance checks.
+ * Returns the merchant's USDC balance.
  *
- * Authentication: X-API-Key header
+ * Authentication: x-merchant-wallet header (wallet address)
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { validateApiKey, getOrCreateMerchantBalance, calculatePayoutFee } from "@/lib/db";
+import { getOrCreateMerchantByWallet, getOrCreateMerchantBalance, calculatePayoutFee } from "@/lib/db";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, X-API-Key, Authorization",
+    "Access-Control-Allow-Headers": "Content-Type, X-Merchant-Wallet",
 };
 
 export async function OPTIONS() {
@@ -22,30 +21,28 @@ export async function OPTIONS() {
 
 export async function GET(request: NextRequest) {
     try {
-        const apiKey =
-            request.headers.get("x-api-key") ||
-            request.headers.get("authorization")?.replace("Bearer ", "");
+        const walletAddress = request.headers.get("x-merchant-wallet");
 
-        if (!apiKey) {
+        if (!walletAddress || walletAddress.length < 32) {
             return NextResponse.json(
-                { error: "Missing API key" },
+                { error: "Missing wallet address" },
                 { status: 401, headers: corsHeaders }
             );
         }
 
-        const validation = await validateApiKey(apiKey);
-        if (!validation.valid || !validation.merchantId) {
+        const merchant = await getOrCreateMerchantByWallet(walletAddress);
+        if (!merchant) {
             return NextResponse.json(
-                { error: validation.error || "Invalid API key" },
+                { error: "Merchant not found" },
                 { status: 401, headers: corsHeaders }
             );
         }
 
-        const balance = await getOrCreateMerchantBalance(validation.merchantId);
+        const balance = await getOrCreateMerchantBalance(merchant.id);
 
         return NextResponse.json(
             {
-                wallet: validation.merchantWallet || null,
+                wallet: merchant.walletAddress || null,
                 usdc: balance.available,
                 pending: balance.pending,
                 reserved: balance.reserved,

@@ -11,7 +11,6 @@ import {
   ArrowLeftRight,
   Wallet,
   Webhook,
-  Key,
   RefreshCw,
   Shield,
   HelpCircle,
@@ -60,10 +59,7 @@ const navSections = [
   },
   {
     label: "Developer",
-    items: [
-      { href: "/dashboard/api-keys", icon: Key, label: "API Keys" },
-      { href: "/dashboard/webhooks", icon: Webhook, label: "Webhooks" },
-    ],
+    items: [{ href: "/dashboard/webhooks", icon: Webhook, label: "Webhooks" }],
   },
   {
     label: "Account",

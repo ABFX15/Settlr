@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createMerchant, createApiKey, getMerchantByWallet, getMerchantBySignerWallet } from "@/lib/db";
+import { createMerchant, getMerchantByWallet, getMerchantBySignerWallet } from "@/lib/db";
 
 /**
  * POST /api/merchants/register
- * Register a new merchant and generate an API key.
+ * Register a new merchant.
  * 
  * Accepts:
  *   - name: Business name (required)
@@ -66,14 +66,6 @@ export async function POST(request: NextRequest) {
             licenseNumber: licenseNumber || null,
         });
 
-        // Generate API key (test key for now, can be upgraded later)
-        const { apiKey, rawKey } = await createApiKey(
-            merchant.id,
-            "Default",
-            "free",
-            true // isTest = true for devnet
-        );
-
         return NextResponse.json({
             success: true,
             merchant: {
@@ -84,8 +76,6 @@ export async function POST(request: NextRequest) {
                 multisigPda: merchant.multisigPda,
                 createdAt: merchant.createdAt,
             },
-            apiKey: rawKey, // Return raw key only once
-            apiKeyPrefix: apiKey.keyPrefix,
         });
     } catch (error) {
         console.error("Merchant registration error:", error);
