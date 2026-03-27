@@ -17,6 +17,7 @@ import { useWaitlistAccess } from "@/hooks/useWaitlistAccess";
 const PUBLIC_PATHS = [
   "/onboarding",
   "/waitlist",
+  "/admin",
   "/docs",
   "/learn",
   "/compare",
