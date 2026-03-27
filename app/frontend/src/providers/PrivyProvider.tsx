@@ -1,8 +1,15 @@
 "use client";
 
 import { PrivyProvider as BasePrivyProvider } from "@privy-io/react-auth";
+import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 import { useEffect, useState, useMemo } from "react";
 import { createSolanaRpc, createSolanaRpcSubscriptions } from "@solana/kit";
+
+// Solana connectors — needed for useWallets() to return any wallets (including embedded).
+// shouldAutoConnect: false prevents Phantom from auto-linking on email login.
+const solanaConnectors = toSolanaWalletConnectors({
+  shouldAutoConnect: false,
+});
 
 // Solana RPC configuration for devnet
 const SOLANA_DEVNET_RPC = "https://api.devnet.solana.com";
@@ -59,6 +66,11 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
         embeddedWallets: {
           solana: {
             createOnLogin: "users-without-wallets",
+          },
+        },
+        externalWallets: {
+          solana: {
+            connectors: solanaConnectors,
           },
         },
         solana: {
