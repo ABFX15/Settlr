@@ -18,6 +18,7 @@ const PUBLIC_PATHS = [
   "/onboarding",
   "/waitlist",
   "/admin",
+  "/logout",
   "/docs",
   "/learn",
   "/compare",

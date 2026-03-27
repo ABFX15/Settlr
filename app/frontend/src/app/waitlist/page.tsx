@@ -6,12 +6,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
-import { Clock } from "lucide-react";
+import { Clock, LogOut } from "lucide-react";
 import { useWaitlistAccess } from "@/hooks/useWaitlistAccess";
+import { usePrivy } from "@privy-io/react-auth";
 
 export default function WaitlistPage() {
   const router = useRouter();
   const { access } = useWaitlistAccess();
+  const { authenticated, logout } = usePrivy();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
@@ -122,6 +124,15 @@ export default function WaitlistPage() {
             >
               Try Demo
             </Link>
+            {authenticated && (
+              <button
+                onClick={() => logout().then(() => window.location.reload())}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-500/20 text-red-300 text-sm font-medium hover:bg-red-500/30 transition-colors"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                Sign Out
+              </button>
+            )}
           </nav>
         </div>
       </header>
