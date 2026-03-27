@@ -57,7 +57,7 @@ export async function PATCH(request: NextRequest) {
 
         // Send invite email when approving
         if (status === "invited" || status === "active") {
-            const loginUrl = `${APP_URL}/dashboard`;
+            const loginUrl = `${APP_URL}/onboarding`;
             await sendEmail({
                 to: email,
                 subject: "You're approved — welcome to Settlr",
