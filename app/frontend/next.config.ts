@@ -6,8 +6,7 @@ const nextConfig: NextConfig = {
     root: ".",
     resolveAlias: {
       // Prevent Turbopack from bundling Node-only logging packages.
-      // The chain is: @privy-io/react-auth/solana → @walletconnect/logger
-      //   → pino → thread-stream (has test files with intentional syntax errors).
+      // @walletconnect/logger → pino → thread-stream (has test files with intentional syntax errors).
       // Turbopack doesn't support `false` as a value, so we alias to stub files.
       pino: "./src/lib/stubs/pino.js",
       "pino-pretty": "./src/lib/stubs/empty.js",
@@ -30,8 +29,6 @@ const nextConfig: NextConfig = {
     "privacycash",
     "@lightprotocol/hasher.rs",
   ],
-  // Transpile Privy packages
-  transpilePackages: ["@privy-io/react-auth"],
   // Solana Actions / Blinks CORS headers
   async headers() {
     return [

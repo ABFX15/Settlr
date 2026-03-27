@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import Link from "next/link";
 import {
@@ -35,8 +36,10 @@ function formatUSD(amount: number): string {
 }
 
 export default function DashboardPage() {
-  const { ready, authenticated, login } = usePrivy();
+  const { connected: authenticated } = useWallet();
+  const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
+  const ready = true;
 
   const [payments, setPayments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -89,7 +92,7 @@ export default function DashboardPage() {
             Connect your wallet to access your merchant dashboard.
           </p>
           <button
-            onClick={login}
+            onClick={() => openWalletModal(true)}
             className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-6 py-3 text-sm font-semibold text-[#0C1829] hover:bg-[#2A9D6A]/90 transition-colors"
           >
             <LogIn className="h-4 w-4" />

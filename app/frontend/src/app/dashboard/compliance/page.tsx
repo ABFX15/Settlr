@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   Shield,
@@ -44,7 +45,9 @@ const KYC_LEVELS = [
 ];
 
 export default function ComplianceSettingsPage() {
-  const { authenticated, login, ready } = usePrivy();
+  const { connected: authenticated } = useWallet();
+  const { setVisible: openWalletModal } = useWalletModal();
+  const ready = true;
   const { publicKey, connected } = useActiveWallet();
 
   const [settings, setSettings] = useState<MerchantSettings>({
@@ -135,7 +138,7 @@ export default function ComplianceSettingsPage() {
             Sign in to manage KYC/AML settings for your merchant account.
           </p>
           <button
-            onClick={login}
+            onClick={() => openWalletModal(true)}
             className="inline-flex items-center gap-2 rounded-xl bg-[#FFFFFF] px-6 py-3 font-semibold text-[#0C1829]"
           >
             <LogIn className="h-4 w-4" />

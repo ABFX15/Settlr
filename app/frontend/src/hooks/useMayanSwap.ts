@@ -76,7 +76,8 @@ export type MayanStatus = "idle" | "quoting" | "approving" | "swapping" | "track
  * Bridges EVM USDC to Solana USDC using Mayan's intent-based protocol.
  */
 export function useMayanSwap() {
-    const { evmWallet } = useMultichainWallet();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { evmWallet } = useMultichainWallet() as { evmWallet: any };
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<MayanStatus>("idle");
     const [error, setError] = useState<string | null>(null);

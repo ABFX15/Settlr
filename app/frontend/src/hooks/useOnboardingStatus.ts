@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { usePrivy } from "@privy-io/react-auth";
 import { useActiveWallet } from "./useActiveWallet";
 
 export type OnboardingStatus = "loading" | "onboarded" | "needs-onboarding" | "unauthenticated";
@@ -15,18 +14,11 @@ interface OnboardingResult {
 }
 
 /**
- * Hook to check whether the current authenticated wallet has completed
+ * Hook to check whether the current connected wallet has completed
  * merchant onboarding (registered + has a Squads vault).
- *
- * Returns:
- *  - "loading" while checking
- *  - "onboarded" if merchant exists in DB with a vault PDA
- *  - "needs-onboarding" if authenticated but no merchant record / no vault
- *  - "unauthenticated" if not logged in
  */
 export function useOnboardingStatus(): OnboardingResult {
-    const { authenticated, ready } = usePrivy();
-    const { publicKey, connected } = useActiveWallet();
+    const { publicKey, connected, ready } = useActiveWallet();
 
     const [status, setStatus] = useState<OnboardingStatus>("loading");
     const [merchantId, setMerchantId] = useState<string | null>(null);
@@ -39,7 +31,7 @@ export function useOnboardingStatus(): OnboardingResult {
     useEffect(() => {
         if (!ready) return;
 
-        if (!authenticated || !connected || !publicKey) {
+        if (!connected || !publicKey) {
             setStatus("unauthenticated");
             setMerchantId(null);
             setMerchantName(null);
@@ -96,7 +88,7 @@ export function useOnboardingStatus(): OnboardingResult {
 
         check();
         return () => { cancelled = true; };
-    }, [ready, authenticated, connected, publicKey, checkCount]);
+    }, [ready, connected, publicKey, checkCount]);
 
     return { status, merchantId, merchantName, hasVault, refresh };
 }

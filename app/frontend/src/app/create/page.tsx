@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
-import { usePrivy } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   ArrowLeft,
@@ -23,7 +24,9 @@ import {
 } from "lucide-react";
 
 export default function CreatePaymentPage() {
-  const { ready, authenticated, login } = usePrivy();
+  const { connected: authenticated } = useWallet();
+  const { setVisible: openWalletModal } = useWalletModal();
+  const ready = true;
   const { publicKey, connected } = useActiveWallet();
 
   const [amount, setAmount] = useState<string>("");
@@ -158,11 +161,11 @@ export default function CreatePaymentPage() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={login}
+            onClick={() => openWalletModal(true)}
             className="w-full py-4 bg-white text-[#0C1829] font-semibold rounded-xl flex items-center justify-center gap-2"
           >
             <LogIn className="w-5 h-5" />
-            Sign In to Continue
+            Connect Wallet to Continue
           </motion.button>
           <Link
             href="/"

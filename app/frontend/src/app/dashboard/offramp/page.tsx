@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { usePrivy } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -338,7 +338,7 @@ const fadeInProps = {
 // ---------------------------------------------------------------------------
 
 export default function OfframpPage() {
-  const { authenticated } = usePrivy();
+  const { connected: authenticated } = useWallet();
   const { publicKey, connected } = useActiveWallet();
 
   // State

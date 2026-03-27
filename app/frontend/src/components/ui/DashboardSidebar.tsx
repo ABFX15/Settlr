@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
-import { usePrivy } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   LayoutDashboard,
@@ -72,7 +73,8 @@ const navSections = [
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const { authenticated, login, logout } = usePrivy();
+  const { connected: walletConnected, disconnect } = useWallet();
+  const { setVisible } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -162,7 +164,7 @@ export function DashboardSidebar() {
 
       {/* Wallet + Logout */}
       <div className="border-t border-[#E5E7EB] p-3">
-        {authenticated && connected && publicKey ? (
+        {connected && publicKey ? (
           <div className="space-y-2">
             {!collapsed && (
               <div className="flex items-center gap-2 rounded-xl bg-[#F5F5F5] px-3 py-2.5">
@@ -187,18 +189,18 @@ export function DashboardSidebar() {
               </div>
             )}
             <button
-              onClick={logout}
+              onClick={disconnect}
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#7C8A9E] transition-colors hover:bg-red-500/10 hover:text-red-400 ${
                 collapsed ? "justify-center" : ""
               }`}
             >
               <LogOut className="h-[18px] w-[18px]" />
-              {!collapsed && <span>Sign Out</span>}
+              {!collapsed && <span>Disconnect</span>}
             </button>
           </div>
         ) : (
           <button
-            onClick={login}
+            onClick={() => setVisible(true)}
             className={`flex w-full items-center gap-3 rounded-xl bg-[#1B6B4A] px-3 py-2.5 text-sm font-semibold text-[#0C1829] transition-colors hover:bg-[#1B6B4A]/80 ${
               collapsed ? "justify-center" : ""
             }`}

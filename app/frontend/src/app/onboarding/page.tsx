@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
-import { useSignTransaction } from "@privy-io/react-auth/solana";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useWaitlistAccess } from "@/hooks/useWaitlistAccess";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
@@ -60,9 +60,10 @@ interface OnboardingState {
 }
 
 export default function OnboardingPage() {
-  const { authenticated, login, ready } = usePrivy();
+  const { connected: walletConnected, signTransaction: walletSignTransaction } =
+    useWallet();
+  const { setVisible } = useWalletModal();
   const { publicKey, connected, wallet } = useActiveWallet();
-  const { signTransaction: privySignTransaction } = useSignTransaction();
   const { access } = useWaitlistAccess();
   const router = useRouter();
 
@@ -83,17 +84,14 @@ export default function OnboardingPage() {
 
   // ─── Waitlist gate: redirect unapproved users ──────────
   useEffect(() => {
-    // Wait for both auth and waitlist check to complete
-    if (!ready) return;
     if (access === "loading" || access === "unauthenticated") return;
     if (access !== "approved") {
-      // Small delay to allow auto-linking to complete on first load
       const timer = setTimeout(() => {
         router.replace("/waitlist");
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [access, ready, router]);
+  }, [access, router]);
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -135,16 +133,14 @@ export default function OnboardingPage() {
       const { multisigPda, vaultPda, transaction } =
         await buildCreateVaultTransaction(creatorPubkey, connection);
 
-      // Serialize the partially-signed transaction (createKey already signed)
-      // and use Privy's useSignTransaction hook which works with all wallet types
-      const txBytes = new Uint8Array(
-        transaction.serialize({ requireAllSignatures: false }),
+      // Sign the partially-signed transaction using wallet-adapter
+      if (!walletSignTransaction) {
+        throw new Error("Wallet does not support transaction signing");
+      }
+      const signedTx = await walletSignTransaction(transaction);
+      const signature = await connection.sendRawTransaction(
+        signedTx.serialize(),
       );
-      const { signedTransaction } = await privySignTransaction({
-        transaction: txBytes,
-        wallet: wallet as any,
-      });
-      const signature = await connection.sendRawTransaction(signedTransaction);
 
       // Confirm
       await connection.confirmTransaction(
@@ -177,26 +173,11 @@ export default function OnboardingPage() {
   };
 
   /**
-   * Sign a transaction using the connected wallet.
-   * Works with both Privy embedded wallets and external wallets (Phantom/Solflare).
+   * Sign a transaction using the connected wallet via wallet-adapter.
    */
   const signTransaction = async (tx: Transaction): Promise<Transaction> => {
-    if (!wallet) throw new Error("No wallet connected");
-
-    // Privy wallet adapter approach
-    const provider = await (wallet as any).getProvider?.();
-    if (provider && provider.signTransaction) {
-      return provider.signTransaction(tx);
-    }
-
-    // Fallback: try standard wallet adapter
-    if ((wallet as any).signTransaction) {
-      return (wallet as any).signTransaction(tx);
-    }
-
-    throw new Error(
-      "Wallet does not support transaction signing. Please use Phantom or Solflare.",
-    );
+    if (!walletSignTransaction) throw new Error("No wallet connected");
+    return walletSignTransaction(tx);
   };
 
   // ─── Register Merchant (API + on-chain) ────────────────
@@ -262,8 +243,8 @@ export default function OnboardingPage() {
     }
   };
 
-  // ─── Not authenticated ─────────────────────────────────
-  if (ready && !authenticated) {
+  // ─── Not connected ─────────────────────────────────
+  if (!connected) {
     return (
       <div
         className="min-h-screen flex items-center justify-center p-4"
@@ -315,7 +296,7 @@ export default function OnboardingPage() {
           </div>
 
           <button
-            onClick={login}
+            onClick={() => setVisible(true)}
             className="inline-flex items-center gap-3 px-8 py-4 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
             style={{ background: c.green }}
           >
@@ -331,16 +312,7 @@ export default function OnboardingPage() {
   }
 
   // ─── Loading ───────────────────────────────────────────
-  if (!ready) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ background: c.bg }}
-      >
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: c.green }} />
-      </div>
-    );
-  }
+  // Wallet adapter is always ready; no loading gate needed.
 
   // ─── Step definitions ──────────────────────────────────
   const steps = [
@@ -529,7 +501,7 @@ export default function OnboardingPage() {
                   Solana wallet.
                 </p>
                 <button
-                  onClick={login}
+                  onClick={() => setVisible(true)}
                   className="inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
                   style={{ background: c.green }}
                 >

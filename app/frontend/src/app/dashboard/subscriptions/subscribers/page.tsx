@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   ArrowLeft,
@@ -108,7 +109,8 @@ const STATUS_CONFIG: Record<
 };
 
 export default function SubscribersPage() {
-  const { authenticated, login } = usePrivy();
+  const { connected: authenticated } = useWallet();
+  const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
 
   const [subscriptions, setSubscriptions] = useState<SubscriptionSub[]>([]);
@@ -224,12 +226,14 @@ export default function SubscribersPage() {
             <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#1B6B4A]/10 flex items-center justify-center border border-[#a78bfa]/20">
               <Users className="w-10 h-10 text-[#1B6B4A]" />
             </div>
-            <h1 className="text-3xl font-bold text-[#0C1829] mb-4">Subscribers</h1>
+            <h1 className="text-3xl font-bold text-[#0C1829] mb-4">
+              Subscribers
+            </h1>
             <p className="text-[#7C8A9E] mb-8 max-w-md mx-auto">
               Connect your wallet to manage your subscribers and billing.
             </p>
             <button
-              onClick={login}
+              onClick={() => openWalletModal(true)}
               className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#F3F4F6] transition-all "
             >
               <LogIn className="w-5 h-5" />
@@ -282,7 +286,9 @@ export default function SubscribersPage() {
               </div>
               <span className="text-[#7C8A9E] text-sm">Active</span>
             </div>
-            <p className="text-2xl font-bold text-[#0C1829]">{activeSubs.length}</p>
+            <p className="text-2xl font-bold text-[#0C1829]">
+              {activeSubs.length}
+            </p>
           </motion.div>
 
           <motion.div
@@ -297,7 +303,9 @@ export default function SubscribersPage() {
               </div>
               <span className="text-[#7C8A9E] text-sm">MRR</span>
             </div>
-            <p className="text-2xl font-bold text-[#0C1829]">${mrr.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-[#0C1829]">
+              ${mrr.toFixed(2)}
+            </p>
           </motion.div>
 
           <motion.div

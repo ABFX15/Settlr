@@ -1,7 +1,6 @@
 "use client";
 
-import { useWallets as useSolanaWallets } from "@privy-io/react-auth/solana";
-import { usePrivy, useWallets as useEvmWallets } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useMemo } from "react";
 
 export type ChainType = "solana" | "ethereum" | "base" | "arbitrum" | "polygon" | "optimism";
@@ -34,93 +33,40 @@ export const CHAIN_IDS: Record<Exclude<ChainType, "solana">, number> = {
 
 /**
  * Hook to get all connected wallets across chains.
- * Returns both Solana and EVM wallets with chain type info.
+ * Currently Solana-only (EVM support removed with Privy).
  */
 export function useMultichainWallet() {
-    const { wallets: solanaWallets, ready: solanaReady } = useSolanaWallets();
-    const { wallets: evmWallets, ready: evmReady } = useEvmWallets();
-    const { authenticated, user } = usePrivy();
+    const { publicKey, connected, wallet } = useWallet();
 
-    // Get the active Solana wallet
-    const activeSolanaWallet = useMemo(() => {
-        if (!solanaWallets || solanaWallets.length === 0) return undefined;
+    const solanaAddress = publicKey?.toBase58();
 
-        // Prefer external wallets over embedded
-        const externalWallet = solanaWallets.find(
-            (w) => (w as { walletClientType?: string }).walletClientType !== "privy"
-        );
-        return externalWallet || solanaWallets[0];
-    }, [solanaWallets]);
-
-    // Get the active EVM wallet
-    const activeEvmWallet = useMemo(() => {
-        if (!evmWallets || evmWallets.length === 0) return undefined;
-
-        // Prefer external wallets over embedded
-        const externalWallet = evmWallets.find(
-            (w) => w.walletClientType !== "privy"
-        );
-        return externalWallet || evmWallets[0];
-    }, [evmWallets]);
-
-    // Get current chain from EVM wallet
-    const evmChainId = activeEvmWallet?.chainId;
-    const evmChainType = useMemo((): ChainType | undefined => {
-        if (!evmChainId) return undefined;
-        const chainIdNum = typeof evmChainId === "string"
-            ? parseInt(evmChainId.replace("eip155:", ""), 10)
-            : evmChainId;
-
-        const entry = Object.entries(CHAIN_IDS).find(([, id]) => id === chainIdNum);
-        return entry ? (entry[0] as ChainType) : undefined;
-    }, [evmChainId]);
-
-    // All connected wallets with chain info
     const allWallets = useMemo((): WalletInfo[] => {
-        const wallets: WalletInfo[] = [];
-
-        if (activeSolanaWallet) {
-            wallets.push({
-                address: activeSolanaWallet.address,
-                chainType: "solana",
-                isEvm: false,
-                walletClientType: (activeSolanaWallet as { walletClientType?: string }).walletClientType,
-            });
-        }
-
-        if (activeEvmWallet) {
-            wallets.push({
-                address: activeEvmWallet.address,
-                chainType: evmChainType || "ethereum",
-                isEvm: true,
-                walletClientType: activeEvmWallet.walletClientType,
-            });
-        }
-
-        return wallets;
-    }, [activeSolanaWallet, activeEvmWallet, evmChainType]);
-
-    // Check if user has any wallet connected
-    const connected = authenticated && allWallets.length > 0;
-    const ready = solanaReady && evmReady;
+        if (!solanaAddress) return [];
+        return [{
+            address: solanaAddress,
+            chainType: "solana" as ChainType,
+            isEvm: false,
+            walletClientType: wallet?.adapter?.name,
+        }];
+    }, [solanaAddress, wallet?.adapter?.name]);
 
     return {
         // Solana
-        solanaWallet: activeSolanaWallet,
-        solanaAddress: activeSolanaWallet?.address,
-        hasSolana: !!activeSolanaWallet,
+        solanaWallet: publicKey ? { address: solanaAddress } : undefined,
+        solanaAddress,
+        hasSolana: !!publicKey,
 
-        // EVM
-        evmWallet: activeEvmWallet,
-        evmAddress: activeEvmWallet?.address,
-        evmChainType,
-        evmChainId,
-        hasEvm: !!activeEvmWallet,
+        // EVM (disabled — no Privy)
+        evmWallet: undefined,
+        evmAddress: undefined,
+        evmChainType: undefined,
+        evmChainId: undefined,
+        hasEvm: false,
 
         // All wallets
         allWallets,
         connected,
-        ready,
+        ready: true,
 
         // Helpers
         getUsdcAddress: (chain: ChainType) => USDC_ADDRESSES[chain],

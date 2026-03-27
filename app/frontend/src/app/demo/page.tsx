@@ -28,8 +28,8 @@ import {
   QrCode,
 } from "lucide-react";
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { usePrivy } from "@privy-io/react-auth";
-import { useWallets, useSignTransaction } from "@privy-io/react-auth/solana";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import {
   Connection,
   PublicKey,
@@ -1288,18 +1288,18 @@ export default function DemoPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [realSignature, setRealSignature] = useState<string | null>(null);
 
-  /* ── Privy hooks ── */
-  const { authenticated, login } = usePrivy();
-  const { wallets } = useWallets();
-  const { signTransaction } = useSignTransaction();
+  /* ── Wallet hooks ── */
+  const {
+    connected: authenticated,
+    publicKey: walletPubkey,
+    signTransaction,
+  } = useWallet();
+  const { setVisible } = useWalletModal();
 
   const activeWallet = useMemo(() => {
-    if (!wallets?.length) return undefined;
-    // Prefer external wallet, fall back to embedded
-    return (
-      wallets.find((w) => (w as any).walletClientType !== "privy") ?? wallets[0]
-    );
-  }, [wallets]);
+    if (!walletPubkey) return undefined;
+    return { address: walletPubkey.toBase58() };
+  }, [walletPubkey]);
 
   const [form, setForm] = useState<DemoForm>({
     businessName: "",
@@ -1355,14 +1355,9 @@ export default function DemoPage() {
             }),
           );
 
-          const { signedTransaction } = await signTransaction({
-            transaction: txBytes,
-            wallet: activeWallet,
-            chain: "solana:devnet",
-          });
+          if (!signTransaction) throw new Error("Wallet cannot sign");
+          const signedTx = await signTransaction(tx);
 
-          // Extract the signature from the signed tx
-          const signedTx = Transaction.from(signedTransaction);
           if (signedTx.signature) {
             const bs58 = await import("bs58");
             setRealSignature(bs58.default.encode(signedTx.signature));
@@ -1500,15 +1495,15 @@ export default function DemoPage() {
                               Simulation Mode
                             </p>
                             <p className="text-xs text-[#7C8A9E]">
-                              Log in to sign with a real embedded wallet
+                              Connect a wallet to sign with a real transaction
                             </p>
                           </div>
                         </div>
                         <button
-                          onClick={() => login()}
+                          onClick={() => setVisible(true)}
                           className="rounded-lg border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.06] px-4 py-2 text-xs font-semibold text-[#155939] transition-colors hover:bg-[#1B6B4A]/[0.12]"
                         >
-                          Log in
+                          Connect Wallet
                         </button>
                       </div>
                     )}

@@ -2,11 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
-import {
-  useWallets,
-  useSignAndSendTransaction,
-} from "@privy-io/react-auth/solana";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import {
   Check,
   Loader2,
@@ -47,33 +44,6 @@ const USDC_MINT_ADDRESS = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
 const USDC_MINT = new PublicKey(USDC_MINT_ADDRESS);
 const USDC_DECIMALS = 6;
 const IS_DEVNET = RPC_ENDPOINT.includes("devnet");
-
-/* ─── Base58 encoder ─── */
-const BASE58_ALPHABET =
-  "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-function encodeBase58(bytes: Uint8Array): string {
-  const digits = [0];
-  for (const byte of bytes) {
-    let carry = byte;
-    for (let j = 0; j < digits.length; j++) {
-      carry += digits[j] << 8;
-      digits[j] = carry % 58;
-      carry = (carry / 58) | 0;
-    }
-    while (carry > 0) {
-      digits.push(carry % 58);
-      carry = (carry / 58) | 0;
-    }
-  }
-  let result = "";
-  for (let i = 0; i < bytes.length && bytes[i] === 0; i++) {
-    result += BASE58_ALPHABET[0];
-  }
-  for (let i = digits.length - 1; i >= 0; i--) {
-    result += BASE58_ALPHABET[digits[i]];
-  }
-  return result;
-}
 
 /* ─── Types ─── */
 interface LineItem {
@@ -128,9 +98,13 @@ export default function InvoicePayClient({
   token: string;
 }) {
   const [token] = useState<string | null>(tokenProp);
-  const { ready, authenticated, login, user } = usePrivy();
-  const { wallets, ready: walletsReady } = useWallets();
-  const { signAndSendTransaction } = useSignAndSendTransaction();
+  const {
+    publicKey,
+    connected,
+    connecting,
+    signTransaction: walletSignTransaction,
+  } = useWallet();
+  const { setVisible: openWalletModal } = useWalletModal();
 
   const [state, setState] = useState<PageState>("loading");
   const [invoice, setInvoice] = useState<InvoiceData | null>(null);
@@ -169,30 +143,18 @@ export default function InvoicePayClient({
     fetchInvoice();
   }, [fetchInvoice]);
 
-  // Active Solana wallet — walletClientType isn't on the SDK type,
-  // so cast through an intermediate type (same pattern as CheckoutClient).
-  type WalletWithClientType = {
-    walletClientType?: string;
-    connected?: boolean;
-    address: string;
-  };
-  const activeWallet = wallets.find(
-    (w) => (w as unknown as WalletWithClientType).walletClientType !== "privy",
-  );
-  const embeddedWallet = wallets.find(
-    (w) => (w as unknown as WalletWithClientType).walletClientType === "privy",
-  );
-  const payerWallet = activeWallet || embeddedWallet;
+  const payerAddress = publicKey?.toBase58() ?? null;
 
   // Handle payment
   const handlePay = async () => {
-    if (!invoice || !payerWallet) return;
+    if (!invoice || !payerAddress || !walletSignTransaction || !publicKey)
+      return;
     setState("paying");
     setError(null);
 
     try {
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
-      const userPubkey = new PublicKey(payerWallet.address);
+      const userPubkey = publicKey;
       const merchantPubkey = new PublicKey(invoice.merchantWallet);
 
       // Get associated token accounts
@@ -256,19 +218,12 @@ export default function InvoicePayClient({
       transaction.recentBlockhash = blockhash;
       transaction.feePayer = userPubkey;
 
-      const serializedTx = transaction.serialize({
-        requireAllSignatures: false,
-        verifySignatures: false,
+      const signedTx = await walletSignTransaction(transaction);
+      const sig = await connection.sendRawTransaction(signedTx.serialize(), {
+        skipPreflight: true,
       });
+      await connection.confirmTransaction(sig, "confirmed");
 
-      const result = await signAndSendTransaction({
-        transaction: serializedTx,
-        wallet: payerWallet,
-        chain: IS_DEVNET ? "solana:devnet" : "solana:mainnet",
-        options: { skipPreflight: true, commitment: "confirmed" },
-      });
-
-      const sig = encodeBase58(result.signature);
       setTxSignature(sig);
 
       // Record payment on backend
@@ -277,7 +232,7 @@ export default function InvoicePayClient({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           paymentSignature: sig,
-          payerWallet: payerWallet.address,
+          payerWallet: payerAddress,
         }),
       });
 
@@ -783,7 +738,7 @@ export default function InvoicePayClient({
                         </div>
                       )}
 
-                      {!ready || !walletsReady ? (
+                      {connecting ? (
                         <div className="flex items-center justify-center gap-2 py-4">
                           <Loader2
                             className="h-5 w-5 animate-spin"
@@ -793,22 +748,22 @@ export default function InvoicePayClient({
                             Initializing wallet…
                           </span>
                         </div>
-                      ) : !authenticated ? (
+                      ) : !connected ? (
                         <button
-                          onClick={login}
+                          onClick={() => openWalletModal(true)}
                           className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
                           style={{ background: GREEN }}
                         >
                           <Wallet className="h-4 w-4" />
                           Connect Wallet to Pay
                         </button>
-                      ) : !payerWallet ? (
+                      ) : !payerAddress ? (
                         <div className="text-center">
                           <p className="text-sm" style={{ color: MUTED }}>
                             No Solana wallet found.
                           </p>
                           <button
-                            onClick={login}
+                            onClick={() => openWalletModal(true)}
                             className="mt-2 text-sm font-medium underline"
                             style={{ color: GREEN }}
                           >
@@ -833,17 +788,12 @@ export default function InvoicePayClient({
                                   fontFamily: "var(--font-jetbrains)",
                                 }}
                               >
-                                {payerWallet.address.slice(0, 4)}…
-                                {payerWallet.address.slice(-4)}
+                                {payerAddress!.slice(0, 4)}…
+                                {payerAddress!.slice(-4)}
                               </span>
                             </div>
                             <span className="text-xs" style={{ color: MUTED }}>
-                              {(payerWallet as unknown as WalletWithClientType)
-                                .walletClientType === "privy"
-                                ? "Embedded"
-                                : (
-                                    payerWallet as unknown as WalletWithClientType
-                                  ).walletClientType || "Wallet"}
+                              Wallet
                             </span>
                           </div>
                           <button

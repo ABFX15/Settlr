@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { usePrivy } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   Wallet,
@@ -101,7 +102,8 @@ const TX_TYPE_LABELS: Record<
 };
 
 export default function TreasuryPage() {
-  const { authenticated, login } = usePrivy();
+  const { connected: authenticated } = useWallet();
+  const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
 
   const [balance, setBalance] = useState<Balance | null>(null);
@@ -229,7 +231,7 @@ export default function TreasuryPage() {
               Connect your wallet to view your treasury balance.
             </p>
             <button
-              onClick={login}
+              onClick={() => openWalletModal(true)}
               className="inline-flex items-center gap-2 rounded-lg bg-[#1B6B4A] px-6 py-3 text-sm font-medium text-[#0C1829] hover:bg-[#1B6B4A]/90 transition-colors"
             >
               <LogIn className="h-4 w-4" />

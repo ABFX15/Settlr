@@ -2,15 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
-import {
-  useWallets,
-  useSignAndSendTransaction,
-  useSignTransaction,
-  useCreateWallet,
-  useFundWallet,
-} from "@privy-io/react-auth/solana";
-import { useWallets as useEvmWallets } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import {
   Check,
   Loader2,
@@ -112,13 +105,16 @@ interface CheckoutClientProps {
 
 export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const router = useRouter();
-  const { ready, authenticated, login, user, logout, connectWallet } =
-    usePrivy();
-  const { wallets, ready: walletsReady } = useWallets();
-  const { signAndSendTransaction } = useSignAndSendTransaction();
-  const { signTransaction } = useSignTransaction();
-  const { createWallet } = useCreateWallet();
-  const { fundWallet } = useFundWallet();
+  const {
+    connected: authenticated,
+    publicKey: walletPubkey,
+    signTransaction: walletAdapterSignTransaction,
+    sendTransaction: walletAdapterSendTransaction,
+    disconnect,
+  } = useWallet();
+  const { setVisible: openWalletModal } = useWalletModal();
+  const ready = true;
+  const walletsReady = true;
 
   // Payment params from URL
   const amount = parseFloat(searchParams.get("amount") || "0");
@@ -167,9 +163,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const [gaslessAvailable, setGaslessAvailable] = useState(false);
   const [checkingGasless, setCheckingGasless] = useState(true);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false); // Prevent double submissions
-  const [privyFeePayerAddress, setPrivyFeePayerAddress] = useState<
-    string | null
-  >(null); // For embedded wallet gasless
+  const privyFeePayerAddress: string | null = null; // Legacy: no longer used
 
   // KYC state
   const [merchantKycEnabled, setMerchantKycEnabled] = useState(false);
@@ -209,8 +203,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     eta: string;
   } | null>(null);
 
-  // EVM wallet and payment hooks
-  const { wallets: evmWalletsList, ready: evmWalletsReady } = useEvmWallets();
+  // EVM wallet and payment hooks — disabled (wallet-adapter is Solana-only)
+  const evmWalletsList: any[] = [];
+  const evmWalletsReady = true;
   const {
     sendPayment: sendEvmPayment,
     getBalance: getEvmBalance,
@@ -229,12 +224,12 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Get active EVM wallet
   const activeEvmWallet =
-    evmWalletsList?.find((w) => w.walletClientType !== "privy") ||
+    evmWalletsList?.find((w) => w.walletClientType !== "embedded") ||
     evmWalletsList?.[0];
   const hasEvmWallet = !!activeEvmWallet;
 
-  // Get a simple wallet reference for Jupiter (full activeWallet logic below)
-  const jupiterWalletAddress = wallets?.[0]?.address || null;
+  // Get a simple wallet reference for Jupiter
+  const jupiterWalletAddress = walletPubkey?.toBase58() || null;
 
   // Jupiter swap hook (for paying with SOL/BONK/etc on Solana)
   const {
@@ -282,26 +277,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       }
     }
     checkGasless();
-  }, []);
-
-  // Check if Privy fee payer is available (for embedded wallet gasless)
-  useEffect(() => {
-    async function checkPrivyFeePayer() {
-      try {
-        const response = await fetch("/api/sponsor-transaction");
-        const data = await response.json();
-        if (data.enabled && data.feePayerAddress) {
-          setPrivyFeePayerAddress(data.feePayerAddress);
-          console.log(
-            "[Privy Gasless] Fee payer available:",
-            data.feePayerAddress,
-          );
-        }
-      } catch (err) {
-        console.log("[Privy Gasless] Fee payer not available:", err);
-      }
-    }
-    checkPrivyFeePayer();
   }, []);
 
   // Check merchant KYC settings
@@ -355,55 +330,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
   }, [needsJupiterSwap, amount, selectedToken, getJupiterQuote]);
 
-  // Get active wallet - prefer the wallet that's actually connected
-  // Privy may detect multiple wallet extensions, but only one is actively connected
-  const activeWallet = (() => {
-    if (!wallets || wallets.length === 0) return undefined;
+  // Get active wallet from wallet-adapter
+  const activeWallet = walletPubkey
+    ? { address: walletPubkey.toBase58(), connected: authenticated }
+    : undefined;
 
-    // Type helper for wallet client type check
-    type WalletWithClientType = {
-      walletClientType?: string;
-      connected?: boolean;
-      address: string;
-    };
-
-    // First, try to find an external wallet that's explicitly connected
-    const connectedExternal = wallets.find(
-      (w) =>
-        (w as WalletWithClientType).walletClientType !== "privy" &&
-        (w as WalletWithClientType).connected === true,
-    );
-    if (connectedExternal) return connectedExternal;
-
-    // Next, check the user's linked accounts to see which wallet they authenticated with
-    const linkedWalletAddress = user?.linkedAccounts?.find(
-      (account) =>
-        account.type === "wallet" && account.walletClientType !== "privy",
-    );
-    if (linkedWalletAddress && "address" in linkedWalletAddress) {
-      const matchingWallet = wallets.find(
-        (w) => w.address === linkedWalletAddress.address,
-      );
-      if (matchingWallet) return matchingWallet;
-    }
-
-    // Fall back to any external wallet
-    const externalWallet = wallets.find(
-      (w) => (w as WalletWithClientType).walletClientType !== "privy",
-    );
-    if (externalWallet) return externalWallet;
-
-    // Last resort: embedded wallet
-    return wallets[0];
-  })();
-
-  // Check if user has an external wallet linked (Phantom, Solflare, etc.)
-  // If they logged in via wallet, they have an external wallet
-  const hasExternalWallet = user?.linkedAccounts?.some(
-    (account) =>
-      account.type === "wallet" && account.walletClientType !== "privy",
-  );
-  const isExternalWallet = hasExternalWallet ?? false;
+  // With wallet-adapter, user always has external wallet
+  const hasExternalWallet = authenticated;
+  const isExternalWallet = true;
 
   // Check for existing one-click approval
   useEffect(() => {
@@ -602,22 +536,21 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     checkingKyc,
   ]);
 
-  // Create embedded wallet
+  // Connect wallet via wallet-adapter
   const handleCreateWallet = async () => {
     setError("");
     setCreatingWallet(true);
     try {
-      await createWallet();
+      openWalletModal(true);
     } catch (err) {
-      console.error("Error creating wallet:", err);
-      setError("Failed to create wallet");
+      console.error("Error connecting wallet:", err);
+      setError("Failed to connect wallet");
     } finally {
       setCreatingWallet(false);
     }
   };
 
-  // Process sponsored payment for embedded wallets (Privy + Helius pattern)
-  // Server creates tx (with its blockhash), user signs, server submits
+  // Process sponsored payment (server creates tx, user signs, server submits)
   // Note: Privacy receipts are issued at the end of this flow if enabled
   const processSponsoredPayment = async () => {
     if (!activeWallet?.address || !merchantWallet || !privyFeePayerAddress) {
@@ -664,7 +597,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       );
 
       // Step 1: Server creates the transaction (with its own blockhash)
-      // This ensures blockhash is from the same RPC Privy uses
+      // This ensures blockhash is from the same RPC the server uses
       console.log("[Sponsored] Step 1: Server creating transaction...");
       const createResponse = await fetch("/api/sponsor-transaction", {
         method: "POST",
@@ -689,18 +622,16 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       console.log("[Sponsored] Step 2: Requesting user signature...");
       const txBytes = Buffer.from(txBase64, "base64");
 
-      const signedResult = await signTransaction({
-        transaction: txBytes,
-        wallet: activeWallet,
-        chain: "solana:devnet",
-      });
+      if (!walletAdapterSignTransaction) throw new Error("Wallet cannot sign");
+      const txToSign = Transaction.from(txBytes);
+      const signedTx = await walletAdapterSignTransaction(txToSign);
 
       console.log("[Sponsored] User signed");
 
       // Step 3: Send user-signed tx back to server for fee payer signature + broadcast
       console.log("[Sponsored] Step 3: Server signing and submitting...");
       const signedTxBase64 = Buffer.from(
-        signedResult.signedTransaction,
+        signedTx.serialize({ requireAllSignatures: false }),
       ).toString("base64");
 
       const submitResponse = await fetch("/api/sponsor-transaction", {
@@ -969,22 +900,18 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       // Step 2: Sign with user's wallet (sign only, don't send - Kora will send)
       const txBytes = Buffer.from(txBase64, "base64");
-      const wallet = activeWallet;
 
       console.log("[Gasless] Requesting user signature...");
-      const signedResult = await signTransaction({
-        transaction: txBytes,
-        wallet: wallet,
-        chain: "solana:devnet",
-      });
+      if (!walletAdapterSignTransaction) throw new Error("Wallet cannot sign");
+      const txToSign = Transaction.from(txBytes);
+      const signedTx = await walletAdapterSignTransaction(txToSign);
+      const signedTxBytes = signedTx.serialize({ requireAllSignatures: false });
 
       console.log("[Gasless] User signed, submitting via Kora...");
 
       // Step 3: Submit the transaction via Kora's signAndSendTransaction
       // Kora will add its fee payer signature and broadcast to Solana
-      const signedTxBase64 = Buffer.from(
-        signedResult.signedTransaction,
-      ).toString("base64");
+      const signedTxBase64 = Buffer.from(signedTxBytes).toString("base64");
 
       // Try to extract the signature from the signed transaction before sending
       // This helps us get the signature even if something goes wrong
@@ -992,7 +919,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         const { Transaction, VersionedTransaction } = await import(
           "@solana/web3.js"
         );
-        const txBytes = signedResult.signedTransaction;
         // Try parsing as versioned transaction first
         try {
           const vtx = VersionedTransaction.deserialize(txBytes);
@@ -1304,16 +1230,18 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       // Step 1: Execute Jupiter swap (token → USDC)
       // The swap result gives user USDC in their wallet
       const swapSignature = await executeJupiterSwap(async (tx) => {
-        // Sign the VersionedTransaction using Privy
-        const serialized = tx.serialize();
-        const signedResult = await signTransaction({
-          transaction: serialized,
-          wallet: activeWallet,
-          chain: IS_DEVNET ? "solana:devnet" : "solana:mainnet",
-        });
-        // Deserialize back to VersionedTransaction
-        const { VersionedTransaction } = await import("@solana/web3.js");
-        return VersionedTransaction.deserialize(signedResult.signedTransaction);
+        // Sign the VersionedTransaction using wallet-adapter
+        // wallet-adapter doesn't support VersionedTransaction signing directly,
+        // but we can use the wallet provider's signTransaction
+        if (!walletAdapterSignTransaction)
+          throw new Error("Wallet cannot sign");
+        // For VersionedTransaction, we need to use the wallet provider directly
+        const provider =
+          (window as any).phantom?.solana || (window as any).solflare;
+        if (provider?.signTransaction) {
+          return provider.signTransaction(tx);
+        }
+        throw new Error("Wallet does not support VersionedTransaction signing");
       });
 
       if (!swapSignature) {
@@ -1411,14 +1339,16 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         verifySignatures: false,
       });
 
-      const result = await signAndSendTransaction({
-        transaction: serializedTx,
-        wallet: activeWallet,
-        chain: IS_DEVNET ? "solana:devnet" : "solana:mainnet",
-        options: { skipPreflight: true, commitment: "confirmed" },
+      if (!walletAdapterSignTransaction) throw new Error("Wallet cannot sign");
+      const signedTx = await walletAdapterSignTransaction(transaction);
+      const connection2 = new Connection(RPC_ENDPOINT, "confirmed");
+      const rawTx = signedTx.serialize();
+      const sig = await connection2.sendRawTransaction(rawTx, {
+        skipPreflight: true,
       });
+      await connection2.confirmTransaction(sig, "confirmed");
 
-      const transferSignature = encodeBase58(result.signature);
+      const transferSignature = sig;
       console.log(`[Jupiter] Transfer complete: ${transferSignature}`);
 
       setTxSignature(transferSignature);
@@ -1662,21 +1592,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       if (isExternalWallet && gaslessAvailable) {
         return processGaslessPayment();
       }
-      // Embedded wallets use Privy-sponsored flow
-      if (!isExternalWallet && privyFeePayerAddress) {
-        console.log(
-          "[Payment] Using Privy-sponsored gasless for embedded wallet",
-        );
-        return processSponsoredPayment();
-      }
-    }
-
-    // Fallback: For embedded wallets with no SOL, always use Privy-sponsored flow
-    if (!isExternalWallet && privyFeePayerAddress) {
-      console.log(
-        "[Payment] Using Privy-sponsored flow for embedded wallet (fallback)",
-      );
-      return processSponsoredPayment();
     }
 
     if (!activeWallet?.address || !merchantWallet) {
@@ -1796,28 +1711,24 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       transaction.recentBlockhash = blockhash;
       transaction.feePayer = userPubkey;
 
-      // Serialize transaction for Privy (as Uint8Array)
+      // Serialize transaction
       const serializedTx = transaction.serialize({
         requireAllSignatures: false,
         verifySignatures: false,
       });
 
-      // Sign and send via Privy
-      // Note: Embedded wallets use processSponsoredPayment() instead
-      // This path is for external wallets (Phantom, etc.) that have their own SOL
-      const result = await signAndSendTransaction({
-        transaction: serializedTx,
-        wallet: activeWallet,
-        chain: "solana:devnet",
-        options: {
-          skipPreflight: true,
-          commitment: "confirmed",
-        },
+      // Sign and send via wallet-adapter
+      if (!walletAdapterSignTransaction) throw new Error("Wallet cannot sign");
+      const signedTx = await walletAdapterSignTransaction(transaction);
+      const connForSend = new Connection(RPC_ENDPOINT, "confirmed");
+      const rawTx = signedTx.serialize();
+      const txSig = await connForSend.sendRawTransaction(rawTx, {
+        skipPreflight: true,
       });
+      await connForSend.confirmTransaction(txSig, "confirmed");
 
-      console.log("Transaction result:", result);
-      // Convert signature Uint8Array to base58 string
-      const signatureBase58 = encodeBase58(result.signature);
+      console.log("Transaction result:", txSig);
+      const signatureBase58 = txSig;
       setTxSignature(signatureBase58);
 
       // If this is a session-based checkout, complete it (triggers webhooks)
@@ -1981,34 +1892,19 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {/* Connect existing wallet - Using login with wallet */}
+                  {/* Connect existing wallet */}
                   <button
-                    onClick={() => login({ loginMethods: ["wallet"] })}
+                    onClick={() => openWalletModal(true)}
                     className="w-full py-4 bg-white text-[#0C1829] font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
                   >
                     <Wallet className="w-5 h-5" />
                     Connect Wallet (Phantom/Solflare)
                   </button>
-
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 h-px bg-[#F3F4F6]" />
-                    <span className="text-[#7C8A9E] text-xs">or</span>
-                    <div className="flex-1 h-px bg-[#F3F4F6]" />
-                  </div>
-
-                  {/* Email login - Creates embedded wallet */}
-                  <button
-                    onClick={() => login({ loginMethods: ["email"] })}
-                    className="w-full py-4 bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-[#F3F4F6] transition-colors"
-                  >
-                    <Mail className="w-5 h-5" />
-                    Continue with Email
-                  </button>
                 </div>
               )}
 
               <p className="text-center text-[#7C8A9E] text-xs mt-4">
-                Use Phantom, Solflare, or create a new wallet with email
+                Use Phantom, Solflare, or any Solana wallet
               </p>
             </div>
           </div>
@@ -2046,7 +1942,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         {/* Close/Back button */}
         <button
           onClick={() => {
-            logout();
+            disconnect();
             setStep("auth");
           }}
           className="absolute top-4 right-4 p-2 bg-[#F3F4F6] hover:bg-[#F3F4F6] rounded-full transition-colors z-10"
@@ -2316,20 +2212,25 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             <div className="flex items-center justify-between mb-4 sm:mb-6 p-3 bg-[#F3F4F6] rounded-xl">
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#1B6B4A] flex items-center justify-center">
-                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#0C1829]" />
+                  <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-[#0C1829]" />
                 </div>
                 <div>
                   <p className="text-[#0C1829] text-sm font-medium">
-                    {user?.email?.address || user?.google?.email || "User"}
+                    {activeWallet?.address
+                      ? `${activeWallet.address.slice(
+                          0,
+                          4,
+                        )}…${activeWallet.address.slice(-4)}`
+                      : "Wallet"}
                   </p>
-                  <p className="text-[#7C8A9E] text-xs">Signed in</p>
+                  <p className="text-[#7C8A9E] text-xs">Connected</p>
                 </div>
               </div>
               <button
-                onClick={logout}
+                onClick={disconnect}
                 className="text-[#7C8A9E] text-xs hover:text-[#3B4963]"
               >
-                Sign out
+                Disconnect
               </button>
             </div>
 
@@ -2367,7 +2268,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             <div className="mb-4 p-3 bg-[#F3F4F6] rounded-xl">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#7C8A9E] text-xs mb-1">Pay with USDC on</p>
+                  <p className="text-[#7C8A9E] text-xs mb-1">
+                    Pay with USDC on
+                  </p>
                   <ChainSelector
                     selectedChain={selectedChain}
                     onSelect={(chain) => {
@@ -2529,47 +2432,44 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               </div>
             )}
 
-            {/* Gasless Toggle (Solana only) */}
-            {/* External wallets use Kora, embedded wallets use Privy fee payer */}
-            {!isEvmChain &&
-              !checkingGasless &&
-              (gaslessAvailable || privyFeePayerAddress) && (
-                <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 rounded-xl p-4 mb-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                        <Fuel className="w-5 h-5 text-[#1B6B4A]" />
-                      </div>
-                      <div>
-                        <p className="text-[#0C1829] font-medium">
-                          Gasless Payment
-                        </p>
-                        <p className="text-[#7C8A9E] text-xs">
-                          No SOL needed for gas fees
-                        </p>
-                      </div>
+            {/* Gasless Toggle (Solana only, uses Kora) */}
+            {!isEvmChain && !checkingGasless && gaslessAvailable && (
+              <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 rounded-xl p-4 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                      <Fuel className="w-5 h-5 text-[#1B6B4A]" />
                     </div>
-                    <button
-                      onClick={() => setUseGasless(!useGasless)}
-                      className={`relative w-12 h-6 rounded-full transition-colors ${
-                        useGasless ? "bg-emerald-500" : "bg-white/20"
-                      }`}
-                    >
-                      <span
-                        className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
-                          useGasless ? "translate-x-6" : "translate-x-0.5"
-                        }`}
-                      />
-                    </button>
+                    <div>
+                      <p className="text-[#0C1829] font-medium">
+                        Gasless Payment
+                      </p>
+                      <p className="text-[#7C8A9E] text-xs">
+                        No SOL needed for gas fees
+                      </p>
+                    </div>
                   </div>
-                  {useGasless && (
-                    <p className="text-[#1B6B4A] text-xs mt-2 flex items-center gap-1">
-                      <Check className="w-3 h-3" />
-                      Gas fees covered by Settlr
-                    </p>
-                  )}
+                  <button
+                    onClick={() => setUseGasless(!useGasless)}
+                    className={`relative w-12 h-6 rounded-full transition-colors ${
+                      useGasless ? "bg-emerald-500" : "bg-white/20"
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
+                        useGasless ? "translate-x-6" : "translate-x-0.5"
+                      }`}
+                    />
+                  </button>
                 </div>
-              )}
+                {useGasless && (
+                  <p className="text-[#1B6B4A] text-xs mt-2 flex items-center gap-1">
+                    <Check className="w-3 h-3" />
+                    Gas fees covered by Settlr
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Privacy Toggle (Always visible on Solana) */}
             {!isEvmChain && (
@@ -2635,21 +2535,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   </p>
                 </div>
 
-                {/* Privy Fund Wallet - Primary CTA */}
-                {!isExternalWallet && (
-                  <button
-                    onClick={() => {
-                      fundWallet({
-                        address: activeWallet.address,
-                      });
-                    }}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white text-[#0C1829] font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-[#0C1829]/5 mb-3"
-                  >
-                    <CreditCard className="w-5 h-5" />
-                    Add Funds
-                  </button>
-                )}
-
                 {/* Devnet: Get test USDC from faucet */}
                 {IS_DEVNET && (
                   <>
@@ -2670,7 +2555,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
                 {/* Or send from another wallet */}
                 <div className="text-center">
-                  <p className="text-[#7C8A9E] text-xs mb-2">Or send USDC to:</p>
+                  <p className="text-[#7C8A9E] text-xs mb-2">
+                    Or send USDC to:
+                  </p>
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(activeWallet.address);
@@ -2689,8 +2576,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               </div>
             )}
 
-            {/* Low SOL balance warning for gas (only for external wallets on Solana, not using Kora gasless) */}
-            {/* Embedded wallets get Privy gas sponsorship, so they don't need SOL */}
+            {/* Low SOL balance warning for gas (Solana, not using Kora gasless) */}
             {!isEvmChain &&
               !useGasless &&
               isExternalWallet &&
@@ -2707,25 +2593,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                     You need a small amount of SOL (~0.001) to pay for
                     transaction fees.
                   </p>
-                  {/* Privy Fund SOL - for embedded wallets */}
-                  {!isExternalWallet && (
-                    <button
-                      onClick={() => {
-                        fundWallet({
-                          address: activeWallet.address,
-                          options: {
-                            asset: "native-currency", // Fund with SOL
-                            amount: "0.01", // Small amount for gas
-                          },
-                        });
-                      }}
-                      className="w-full py-2 bg-orange-500 text-white text-sm font-medium rounded-lg flex items-center justify-center gap-2 hover:bg-orange-600 transition-colors mb-2"
-                    >
-                      <CreditCard className="w-4 h-4" />
-                      Add SOL for Gas
-                    </button>
-                  )}
-                  {/* Fallback: Devnet faucet */}
+                  {/* Devnet faucet */}
                   {IS_DEVNET && (
                     <a
                       href="https://faucet.solana.com/"
@@ -2777,7 +2645,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 loadingBalance ||
                 !hasCorrectWallet ||
                 evmLoading ||
-                // Only check SOL balance for external wallets (embedded wallets have Privy gas sponsorship)
+                // Only check SOL balance for gas
                 (!isEvmChain &&
                   !useGasless &&
                   isExternalWallet &&
@@ -2790,7 +2658,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 hasCorrectWallet &&
                 (isEvmChain ||
                   useGasless ||
-                  !isExternalWallet || // Embedded wallets always enabled (Privy sponsors gas)
                   (solBalance !== null && solBalance >= 0.001))
                   ? isEvmChain
                     ? "bg-[#38bdf8] text-[#0C1829] hover:opacity-90"
@@ -2874,7 +2741,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mx-auto mb-6">
             <Loader2 className="w-10 h-10 text-[#0C1829] animate-spin" />
           </div>
-          <h2 className="text-2xl font-bold text-[#0C1829] mb-2">{statusTitle}</h2>
+          <h2 className="text-2xl font-bold text-[#0C1829] mb-2">
+            {statusTitle}
+          </h2>
           <p className="text-[#7C8A9E]">{statusMessage}</p>
           {isEvmChain && (
             <p className="text-xs text-[#7C8A9E] mt-4">
@@ -3080,7 +2949,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           <div className="w-20 h-20 rounded-full bg-red-500 flex items-center justify-center mx-auto mb-6">
             <AlertCircle className="w-10 h-10 text-[#0C1829]" />
           </div>
-          <h2 className="text-2xl font-bold text-[#0C1829] mb-2">Payment Failed</h2>
+          <h2 className="text-2xl font-bold text-[#0C1829] mb-2">
+            Payment Failed
+          </h2>
           <p className="text-[#7C8A9E] mb-2">Something went wrong</p>
           {error && (
             <p className="text-red-400 text-sm mb-6 p-3 bg-red-500/10 rounded-xl">

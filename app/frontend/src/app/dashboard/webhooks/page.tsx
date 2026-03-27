@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   Webhook,
@@ -75,7 +76,8 @@ const WEBHOOK_EVENTS = [
 ];
 
 export default function WebhooksPage() {
-  const { authenticated, login } = usePrivy();
+  const { connected: authenticated } = useWallet();
+  const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
 
   const [webhooks, setWebhooks] = useState<WebhookConfig[]>([]);
@@ -214,7 +216,7 @@ export default function WebhooksPage() {
               notifications.
             </p>
             <button
-              onClick={login}
+              onClick={() => openWalletModal(true)}
               className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#F3F4F6] transition-all "
             >
               <LogIn className="w-5 h-5" />
