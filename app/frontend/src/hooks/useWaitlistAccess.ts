@@ -15,6 +15,9 @@ interface WaitlistAccessResult {
  * Check whether the current authenticated wallet has been approved
  * on the waitlist (status = "invited" or "active").
  *
+ * Also sends the user's Privy email so the backend can auto-link
+ * the wallet to an existing email-based waitlist entry.
+ *
  * Returns:
  *  - "loading" while checking
  *  - "approved" if wallet is on waitlist with invited/active status
@@ -23,7 +26,7 @@ interface WaitlistAccessResult {
  *  - "unauthenticated" if not logged in
  */
 export function useWaitlistAccess(): WaitlistAccessResult {
-    const { authenticated, ready } = usePrivy();
+    const { authenticated, ready, user } = usePrivy();
     const { publicKey, connected } = useActiveWallet();
 
     const [access, setAccess] = useState<WaitlistAccess>("loading");
@@ -44,7 +47,12 @@ export function useWaitlistAccess(): WaitlistAccessResult {
         async function check() {
             setAccess("loading");
             try {
-                const res = await fetch(`/api/waitlist/check?wallet=${publicKey}`);
+                // Include email so the backend can auto-link wallet to email-based waitlist entry
+                const email = user?.email?.address;
+                const params = new URLSearchParams({ wallet: publicKey! });
+                if (email) params.set("email", email);
+
+                const res = await fetch(`/api/waitlist/check?${params}`);
                 if (!res.ok) throw new Error("API error");
                 const data = await res.json();
 
@@ -66,7 +74,7 @@ export function useWaitlistAccess(): WaitlistAccessResult {
 
         check();
         return () => { cancelled = true; };
-    }, [ready, authenticated, connected, publicKey, checkCount]);
+    }, [ready, authenticated, connected, publicKey, user, checkCount]);
 
     return { access, refresh };
 }

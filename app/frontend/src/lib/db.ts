@@ -1225,6 +1225,64 @@ export async function updateWaitlistStatus(
     }
 }
 
+export async function checkWaitlistByEmail(email: string): Promise<{ approved: boolean; entry: WaitlistEntry | null }> {
+    const normalizedEmail = email.toLowerCase().trim();
+
+    if (isSupabaseConfigured()) {
+        const { data } = await supabase
+            .from("waitlist")
+            .select("*")
+            .eq("email", normalizedEmail)
+            .single();
+
+        if (!data) return { approved: false, entry: null };
+
+        const entry: WaitlistEntry = {
+            id: data.id,
+            email: data.email,
+            name: data.name,
+            company: data.company,
+            useCase: data.use_case,
+            walletAddress: data.wallet_address,
+            position: data.position,
+            createdAt: new Date(data.created_at),
+            status: data.status,
+        };
+
+        return {
+            approved: data.status === "invited" || data.status === "active",
+            entry,
+        };
+    } else {
+        const entry = memoryWaitlist.find(e => e.email === normalizedEmail) || null;
+        return {
+            approved: !!entry && (entry.status === "invited" || entry.status === "active"),
+            entry,
+        };
+    }
+}
+
+export async function linkWalletToWaitlist(email: string, wallet: string): Promise<boolean> {
+    const normalizedEmail = email.toLowerCase().trim();
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("waitlist")
+            .update({ wallet_address: wallet })
+            .eq("email", normalizedEmail)
+            .is("wallet_address", null);
+
+        return !error;
+    } else {
+        const entry = memoryWaitlist.find(e => e.email === normalizedEmail && !e.walletAddress);
+        if (entry) {
+            entry.walletAddress = wallet;
+            return true;
+        }
+        return false;
+    }
+}
+
 // ============================================
 // PAYOUTS
 // ============================================
