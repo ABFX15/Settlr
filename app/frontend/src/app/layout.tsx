@@ -123,13 +123,9 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ background: "#FFFFFF" }}>
       <head>
-        {/* Preconnect to external domains */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
+        {/* Preconnect to external domains loaded at runtime */}
+        <link rel="preconnect" href="https://auth.privy.io" />
+        <link rel="preconnect" href="https://explorer-api.walletconnect.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
 
         {/* Favicons & app icons */}

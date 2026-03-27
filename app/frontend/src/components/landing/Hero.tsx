@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { t, spring, fadeUp, staggerContainer } from "./shared";
+import { t, spring } from "./shared";
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -54,14 +54,8 @@ export function Hero() {
         <div className="mx-auto w-full max-w-[1400px] px-6 pt-20 pb-16 sm:pt-24 sm:pb-20">
           <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-12">
             {/* ── left: copy ─────────────────────────────── */}
-            <motion.div
-              style={{ y: contentY }}
-              variants={staggerContainer}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.h1
-                variants={fadeUp}
+            <motion.div style={{ y: contentY }}>
+              <h1
                 className="text-[44px] leading-[1.08] tracking-tight drop-shadow-lg sm:text-[58px] lg:text-[68px]"
                 style={{
                   fontFamily: t.sans,
@@ -71,10 +65,9 @@ export function Hero() {
                 }}
               >
                 Payment rails for cannabis wholesalers.
-              </motion.h1>
+              </h1>
 
-              <motion.p
-                variants={fadeUp}
+              <p
                 className="mt-7 max-w-lg text-[18px] font-normal leading-[1.7]"
                 style={{
                   color: "#D1D5DB",
@@ -84,11 +77,13 @@ export function Hero() {
                 Settle invoices in seconds, not days. No bank needed. No account
                 freezes. Just USDC moving directly between you and your
                 suppliers. 1% flat.
-              </motion.p>
+              </p>
 
               {/* ── CTAs ───────────────────────────────────── */}
               <motion.div
-                variants={fadeUp}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...spring, delay: 0.2 }}
                 className="mt-10 flex flex-wrap items-center gap-4"
               >
                 <Link
@@ -109,7 +104,9 @@ export function Hero() {
 
               {/* ── compliance badges ───────────────────────── */}
               <motion.div
-                variants={fadeUp}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...spring, delay: 0.35 }}
                 className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2"
               >
                 {["GENIUS Act Compliant", "Non-Custodial", "BSA/AML"].map(
@@ -143,6 +140,8 @@ export function Hero() {
                   width={960}
                   height={640}
                   priority
+                  fetchPriority="high"
+                  sizes="(max-width: 768px) 100vw, 55vw"
                   className="block w-full"
                 />
               </div>

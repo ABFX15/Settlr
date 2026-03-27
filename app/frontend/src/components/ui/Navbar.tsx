@@ -438,6 +438,7 @@ export function Navbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           className={`rounded-lg p-2 transition-colors md:hidden ${
             transparent
               ? "text-white hover:bg-white/10"

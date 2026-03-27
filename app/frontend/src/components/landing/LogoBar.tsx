@@ -1,12 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { t } from "./shared";
 
 const logos = [
-  { name: "Solana", src: "/solana-logo.png" },
-  { name: "Circle USDC", src: "/usdc-logo.png" },
-  { name: "Squads Protocol", src: "/squads-logo.png" },
+  { name: "Solana", src: "/solana-logo.png", w: 93, h: 40 },
+  { name: "Circle USDC", src: "/usdc-logo.png", w: 77, h: 40 },
+  { name: "Squads Protocol", src: "/squads-logo.png", w: 120, h: 40 },
 ];
 
 /* double the set for seamless infinite scroll */
@@ -15,17 +15,11 @@ const marqueeLogos = [...logos, ...logos, ...logos, ...logos];
 export function LogoBar() {
   return (
     <section className="bg-white py-14 overflow-hidden">
-      <motion.div
-        className="mx-auto max-w-[1200px] px-6 text-center"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
+      <div className="mx-auto max-w-[1200px] px-6 text-center">
         <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
           Powered by
         </p>
-      </motion.div>
+      </div>
 
       {/* marquee track */}
       <div className="relative">
@@ -46,11 +40,12 @@ export function LogoBar() {
           }}
         >
           {marqueeLogos.map((l, i) => (
-            <img
+            <Image
               key={`${l.name}-${i}`}
               src={l.src}
               alt={`${l.name} logo`}
-              loading="lazy"
+              width={l.w}
+              height={l.h}
               className="h-8 w-auto shrink-0 object-contain opacity-40 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 sm:h-10"
             />
           ))}

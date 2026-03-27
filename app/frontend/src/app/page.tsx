@@ -1,18 +1,59 @@
+import dynamic from "next/dynamic";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
-import {
-  Hero,
-  LogoBar,
-  BentoCards,
-  SocialProof,
-  Features,
-  TabSection,
-  Pricing,
-  Testimonials,
-  Steps,
-  FAQ,
-  CTA,
-} from "@/components/landing";
+import { Hero, LogoBar, BentoCards } from "@/components/landing";
+
+/* Below-fold sections — lazy loaded to reduce initial JS bundle */
+const SocialProof = dynamic(
+  () =>
+    import("@/components/landing/SocialProof").then((m) => ({
+      default: m.SocialProof,
+    })),
+  { ssr: false },
+);
+const Features = dynamic(
+  () =>
+    import("@/components/landing/Features").then((m) => ({
+      default: m.Features,
+    })),
+  { ssr: false },
+);
+const TabSection = dynamic(
+  () =>
+    import("@/components/landing/TabSection").then((m) => ({
+      default: m.TabSection,
+    })),
+  { ssr: false },
+);
+const Pricing = dynamic(
+  () =>
+    import("@/components/landing/Pricing").then((m) => ({
+      default: m.Pricing,
+    })),
+  { ssr: false },
+);
+const Testimonials = dynamic(
+  () =>
+    import("@/components/landing/Testimonials").then((m) => ({
+      default: m.Testimonials,
+    })),
+  { ssr: false },
+);
+const Steps = dynamic(
+  () =>
+    import("@/components/landing/Steps").then((m) => ({
+      default: m.Steps,
+    })),
+  { ssr: false },
+);
+const FAQ = dynamic(
+  () => import("@/components/landing/FAQ").then((m) => ({ default: m.FAQ })),
+  { ssr: false },
+);
+const CTA = dynamic(
+  () => import("@/components/landing/CTA").then((m) => ({ default: m.CTA })),
+  { ssr: false },
+);
 
 export default function HomePage() {
   return (

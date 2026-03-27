@@ -72,7 +72,7 @@ export function Footer() {
             </Link>
             <p
               className="mt-4 max-w-[240px] text-sm leading-relaxed"
-              style={{ color: "#6B7280" }}
+              style={{ color: "#9CA3AF" }}
             >
               Non-custodial stablecoin settlement for B2B cannabis supply
               chains. Built on Solana.
@@ -85,7 +85,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="text-[#6B7280] transition-colors hover:text-white"
+                  className="text-[#9CA3AF] transition-colors hover:text-white"
                 >
                   {s.icon}
                 </a>
@@ -96,19 +96,19 @@ export function Footer() {
           {/* link columns */}
           {columns.map((col) => (
             <div key={col.title}>
-              <h4
+              <p
                 className="mb-4 text-sm font-semibold"
                 style={{ color: "#FFFFFF" }}
               >
                 {col.title}
-              </h4>
+              </p>
               <ul className="space-y-3">
                 {col.links.map((link) => (
                   <li key={link.href + link.label}>
                     <Link
                       href={link.href}
                       className="text-sm transition-colors hover:text-white"
-                      style={{ color: "#6B7280" }}
+                      style={{ color: "#9CA3AF" }}
                     >
                       {link.label}
                     </Link>
@@ -124,10 +124,10 @@ export function Footer() {
           className="mt-14 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row"
           style={{ borderColor: "#1F1F1F" }}
         >
-          <p className="text-sm" style={{ color: "#6B7280" }}>
+          <p className="text-sm" style={{ color: "#9CA3AF" }}>
             &copy; {new Date().getFullYear()} Settlr. All rights reserved.
           </p>
-          <p className="text-xs" style={{ color: "#4B5563" }}>
+          <p className="text-xs" style={{ color: "#9CA3AF" }}>
             Settlr is not a bank or money transmitter. Settlement is
             peer-to-peer via USDC on Solana.
           </p>

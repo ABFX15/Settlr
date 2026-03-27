@@ -153,7 +153,7 @@ function ProblemTab() {
               transition={{ ...spring, delay: 0.1 + i * 0.06 }}
             >
               <p className="text-2xl font-bold text-red-600">{s.stat}</p>
-              <p className="mt-1 text-[11px]" style={{ color: t.muted }}>
+              <p className="mt-1 text-xs" style={{ color: "#6B7280" }}>
                 {s.label}
               </p>
             </motion.div>
@@ -228,7 +228,7 @@ function SolutionTab() {
               <p className="text-2xl font-bold" style={{ color: t.green }}>
                 {s.stat}
               </p>
-              <p className="mt-1 text-[11px]" style={{ color: t.muted }}>
+              <p className="mt-1 text-xs" style={{ color: "#6B7280" }}>
                 {s.label}
               </p>
             </motion.div>
