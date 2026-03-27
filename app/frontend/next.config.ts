@@ -87,6 +87,15 @@ const nextConfig: NextConfig = {
       };
     }
 
+    if (isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        pino: require.resolve("./src/lib/stubs/pino.js"),
+        "pino-pretty": require.resolve("./src/lib/stubs/empty.js"),
+        "thread-stream": require.resolve("./src/lib/stubs/empty.js"),
+      };
+    }
+
     // Ignore problematic test files from node_modules
     config.module.rules.push({
       test: /node_modules[/\\](thread-stream|pino)[/\\].*\.(js|ts)$/,

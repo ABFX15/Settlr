@@ -124,8 +124,16 @@ export default function RootLayout({
     <html lang="en" style={{ background: "#FFFFFF" }}>
       <head>
         {/* Preconnect to external domains loaded at runtime */}
-        <link rel="preconnect" href="https://auth.privy.io" />
-        <link rel="preconnect" href="https://explorer-api.walletconnect.com" />
+        <link
+          rel="preconnect"
+          href="https://auth.privy.io"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://explorer-api.walletconnect.com"
+          crossOrigin="anonymous"
+        />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
 
         {/* Favicons & app icons */}
@@ -143,12 +151,12 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
-        {/* Google Ads Tag (gtag.js) */}
+        {/* Google Ads Tag (gtag.js) — lazyOnload to avoid competing for bandwidth */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17871897491"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-ads" strategy="afterInteractive">
+        <Script id="google-ads" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
