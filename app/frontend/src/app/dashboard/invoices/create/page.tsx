@@ -18,6 +18,10 @@ import {
   Building2,
   Mail,
   AlertCircle,
+  Check,
+  Copy,
+  Link2,
+  ExternalLink,
 } from "lucide-react";
 
 /* ─── Palette ─── */
@@ -70,6 +74,15 @@ export default function CreateInvoicePage() {
   const { publicKey, connected } = useActiveWallet();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Success state — shown after invoice is created
+  const [createdInvoice, setCreatedInvoice] = useState<{
+    invoiceNumber: string;
+    total: number;
+    invoiceUrl: string;
+    blinkUrl: string;
+  } | null>(null);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
   // Buyer info
   const [buyerName, setBuyerName] = useState("");
@@ -187,13 +200,208 @@ export default function CreateInvoicePage() {
         throw new Error(data.error || "Failed to create invoice");
       }
 
-      router.push("/dashboard/invoices");
+      const data = await res.json();
+      setCreatedInvoice({
+        invoiceNumber: data.invoiceNumber,
+        total: data.total,
+        invoiceUrl: data.invoiceUrl,
+        blinkUrl: data.blinkUrl,
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create invoice");
     } finally {
       setSaving(false);
     }
   };
+
+  const copyToClipboard = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  /* ─── Success screen after invoice creation ─── */
+  if (createdInvoice) {
+    const dialtoUrl = `https://dial.to/?action=solana-action:${encodeURIComponent(
+      createdInvoice.blinkUrl,
+    )}`;
+    return (
+      <div className="mx-auto max-w-lg space-y-6 py-12 text-center">
+        <div
+          className="mx-auto flex h-16 w-16 items-center justify-center rounded-full"
+          style={{ background: "rgba(27,107,74,0.1)" }}
+        >
+          <Check className="h-8 w-8" style={{ color: GREEN }} />
+        </div>
+
+        <div>
+          <h1
+            className="text-2xl font-bold"
+            style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
+          >
+            Invoice Sent
+          </h1>
+          <p className="mt-2 text-sm" style={{ color: MUTED }}>
+            <span className="font-mono font-medium" style={{ color: NAVY }}>
+              {createdInvoice.invoiceNumber}
+            </span>{" "}
+            for{" "}
+            <span className="font-mono font-semibold" style={{ color: GREEN }}>
+              $
+              {createdInvoice.total.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}{" "}
+              USDC
+            </span>
+          </p>
+        </div>
+
+        {/* Blink URL — the main event */}
+        <div
+          className="rounded-2xl border p-6 text-left"
+          style={{ borderColor: CARD_BORDER, background: "white" }}
+        >
+          <div className="mb-3 flex items-center gap-2">
+            <Link2 className="h-4 w-4" style={{ color: GREEN }} />
+            <h2
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ color: MUTED }}
+            >
+              Pay Link (Blink)
+            </h2>
+          </div>
+          <p className="mb-4 text-xs" style={{ color: MUTED }}>
+            Share this link anywhere — Twitter, WhatsApp, email. Recipients with
+            a Solana wallet can pay instantly.
+          </p>
+          <div
+            className="flex items-center gap-2 rounded-xl border p-3"
+            style={{ borderColor: CARD_BORDER, background: "#F8F7F3" }}
+          >
+            <code className="flex-1 truncate text-xs" style={{ color: NAVY }}>
+              {createdInvoice.blinkUrl}
+            </code>
+            <button
+              onClick={() => copyToClipboard(createdInvoice.blinkUrl, "blink")}
+              className="shrink-0 rounded-lg p-2 transition-colors hover:bg-green-100"
+              title="Copy Blink URL"
+            >
+              {copiedField === "blink" ? (
+                <Check className="h-4 w-4" style={{ color: GREEN }} />
+              ) : (
+                <Copy className="h-4 w-4" style={{ color: GREEN }} />
+              )}
+            </button>
+          </div>
+
+          {/* Dial.to unfurl link (for Twitter/X) */}
+          <div className="mt-3">
+            <p className="mb-2 text-xs font-medium" style={{ color: SLATE }}>
+              For Twitter / X unfurl:
+            </p>
+            <div
+              className="flex items-center gap-2 rounded-xl border p-3"
+              style={{ borderColor: CARD_BORDER, background: "#F8F7F3" }}
+            >
+              <code className="flex-1 truncate text-xs" style={{ color: NAVY }}>
+                {dialtoUrl}
+              </code>
+              <button
+                onClick={() => copyToClipboard(dialtoUrl, "dialto")}
+                className="shrink-0 rounded-lg p-2 transition-colors hover:bg-green-100"
+                title="Copy Dial.to URL"
+              >
+                {copiedField === "dialto" ? (
+                  <Check className="h-4 w-4" style={{ color: GREEN }} />
+                ) : (
+                  <Copy className="h-4 w-4" style={{ color: GREEN }} />
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Standard invoice link */}
+        <div
+          className="rounded-2xl border p-6 text-left"
+          style={{ borderColor: CARD_BORDER, background: "white" }}
+        >
+          <div className="mb-3 flex items-center gap-2">
+            <FileText className="h-4 w-4" style={{ color: GREEN }} />
+            <h2
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ color: MUTED }}
+            >
+              Invoice Link
+            </h2>
+          </div>
+          <p className="mb-4 text-xs" style={{ color: MUTED }}>
+            For recipients without a wallet — they can connect or create one on
+            the payment page.
+          </p>
+          <div
+            className="flex items-center gap-2 rounded-xl border p-3"
+            style={{ borderColor: CARD_BORDER, background: "#F8F7F3" }}
+          >
+            <code className="flex-1 truncate text-xs" style={{ color: NAVY }}>
+              {createdInvoice.invoiceUrl}
+            </code>
+            <button
+              onClick={() =>
+                copyToClipboard(createdInvoice.invoiceUrl, "invoice")
+              }
+              className="shrink-0 rounded-lg p-2 transition-colors hover:bg-green-100"
+              title="Copy invoice URL"
+            >
+              {copiedField === "invoice" ? (
+                <Check className="h-4 w-4" style={{ color: GREEN }} />
+              ) : (
+                <Copy className="h-4 w-4" style={{ color: GREEN }} />
+              )}
+            </button>
+            <a
+              href={createdInvoice.invoiceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 rounded-lg p-2 transition-colors hover:bg-green-100"
+              title="Open invoice"
+            >
+              <ExternalLink className="h-4 w-4" style={{ color: GREEN }} />
+            </a>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center justify-center gap-4 pt-2">
+          <Link
+            href="/dashboard/invoices"
+            className="rounded-xl border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-[#F3F4F6]"
+            style={{ borderColor: CARD_BORDER, color: NAVY }}
+          >
+            View All Invoices
+          </Link>
+          <button
+            onClick={() => {
+              setCreatedInvoice(null);
+              setBuyerName("");
+              setBuyerEmail("");
+              setBuyerCompany("");
+              setLineItems([{ description: "", quantity: 1, unitPrice: 0 }]);
+              setTerms("Net 30");
+              setCustomDueDate("");
+              setTaxRate("");
+              setMemo("");
+              setInvoiceNumber("");
+            }}
+            className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90"
+            style={{ background: GREEN }}
+          >
+            Create Another
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">

@@ -128,8 +128,11 @@ export async function POST(request: NextRequest) {
         });
 
         // Optionally send email immediately
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+        const invoiceUrl = `${appUrl}/invoice/${invoice.viewToken}`;
+        const blinkUrl = `${appUrl}/api/actions/pay?invoice=${invoice.viewToken}`;
+
         if (sendEmail !== false) {
-            const invoiceUrl = `${process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev"}/invoice/${invoice.viewToken}`;
             await updateInvoiceStatus(invoice.id, "sent", {
                 sentAt: new Date(),
             });
@@ -158,7 +161,8 @@ export async function POST(request: NextRequest) {
                 total: invoice.total,
                 buyerEmail: invoice.buyerEmail,
                 viewToken: invoice.viewToken,
-                invoiceUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev"}/invoice/${invoice.viewToken}`,
+                invoiceUrl,
+                blinkUrl,
                 createdAt: invoice.createdAt.toISOString(),
             },
             { status: 201 }
@@ -216,6 +220,7 @@ export async function GET(request: NextRequest) {
                 dueDate: inv.dueDate.toISOString(),
                 paidAt: inv.paidAt?.toISOString(),
                 createdAt: inv.createdAt.toISOString(),
+                viewToken: inv.viewToken,
             })),
             count: invoices.length,
         });

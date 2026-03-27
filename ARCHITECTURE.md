@@ -7,7 +7,7 @@
 
 ## Overview
 
-Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2B USDC rails on Solana that replace cash drops and high-risk processors. The primary product is automated settlement for LeafLink purchase orders. Secondary paths include direct invoices, payment links, and an embeddable SDK for external developers.
+Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2B USDC rails on Solana that replace cash drops and high-risk processors. The primary product is automated settlement for LeafLink purchase orders. Secondary paths include direct invoices, Solana Actions pay links (Blinks), and an embeddable SDK for external developers.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -27,6 +27,7 @@ Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2
 │                                                                 │
 │  Core Settlement:                                               │
 │  • Direct invoices & payment links                              │
+│  • Solana Actions / Blinks (shareable pay links)                │
 │  • Privy embedded wallets (no wallet setup required)            │
 │  • Gasless transactions (Kora-sponsored)                        │
 │  • Range Security wallet risk screening                         │
@@ -57,6 +58,7 @@ Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2
 | Privacy     | MagicBlock Private Ephemeral Rollups | ✅ Implemented              |
 | Security    | Range (wallet risk screening)        | ✅ Implemented              |
 | One-Click   | Saved payment methods                | ✅ Implemented              |
+| Blinks      | Solana Actions (shareable pay links) | ✅ Implemented              |
 | Database    | Supabase (with in-memory fallback)   | ✅ Implemented              |
 | SDK         | @settlr/sdk (npm)                    | ✅ v0.6.0 published         |
 | KYC         | Sumsub                               | ⚠️ Scaffolded, not enforced |
@@ -73,6 +75,8 @@ x402-hack-payment/
 │   ├── src/
 │   │   ├── app/
 │   │   │   ├── api/           # API routes
+│   │   │   │   ├── actions/   # Solana Actions / Blinks
+│   │   │   │   │   └── pay/   # Invoice pay-via-Blink endpoint
 │   │   │   │   ├── checkout/  # Checkout session management
 │   │   │   │   ├── payments/  # Payment processing
 │   │   │   │   ├── kyc/       # Sumsub KYC integration
@@ -87,6 +91,7 @@ x402-hack-payment/
 │   │   │   │   │       ├── syncs/     # List sync records
 │   │   │   │   │       └── retry/     # Retry failed syncs
 │   │   │   │   └── subscriptions/
+│   │   │   ├── .well-known/   # Solana Actions manifest (actions.json)
 │   │   │   └── checkout/[id]/ # Hosted checkout page
 │   │   ├── components/        # React components
 │   │   ├── lib/               # Core utilities
@@ -406,6 +411,15 @@ pub struct Payment {
 | `/api/integrations/leaflink/syncs`    | GET      | List sync records (filterable by status)                 |
 | `/api/integrations/leaflink/retry`    | POST     | Retry failed sync-backs to LeafLink API                  |
 
+### Solana Actions / Blinks
+
+| Endpoint                    | Method  | Description                                                |
+| --------------------------- | ------- | ---------------------------------------------------------- |
+| `/api/actions/pay`          | GET     | Returns Solana Action card (title, icon, amount, merchant) |
+| `/api/actions/pay`          | POST    | Accepts payer wallet, returns unsigned USDC transfer tx    |
+| `/api/actions/pay`          | OPTIONS | CORS preflight (required by Solana Actions spec)           |
+| `/.well-known/actions.json` | GET     | Actions manifest — maps URL patterns to action endpoints   |
+
 ---
 
 ## Integration Details
@@ -641,6 +655,60 @@ GET / api / privacy / gaming; // API info and endpoint details
 **Database Tables:** `leaflink_syncs`, `leaflink_configs` (see Database Schema section)
 
 **Migration:** `supabase/migrations/20260227_leaflink_integration.sql`
+
+**Status:** ✅ Fully implemented
+
+---
+
+### Solana Actions / Blinks (Shareable Pay Links)
+
+**Purpose:** Generate universal payment links for invoices that work in any Solana-compatible wallet, browser, or social platform. Implements the [Solana Actions](https://solana.com/docs/advanced/actions) specification.
+
+**Locations:**
+
+- `app/frontend/src/app/api/actions/pay/route.ts` — GET/POST/OPTIONS endpoint
+- `app/frontend/src/app/api/actions/pay/helpers.ts` — CORS response helpers
+- `app/frontend/src/app/.well-known/actions.json/route.ts` — Actions manifest
+
+**Endpoints:**
+
+```typescript
+GET  /api/actions/pay?invoice=<viewToken>   // Returns Action card metadata
+POST /api/actions/pay?invoice=<viewToken>   // Returns unsigned USDC transfer tx
+OPTIONS /api/actions/pay                     // CORS preflight
+GET  /.well-known/actions.json              // URL pattern → action mapping
+```
+
+**Flow:**
+
+1. Invoice is created → Blink URL generated automatically (`/api/actions/pay?invoice=<viewToken>`)
+2. Merchant copies Blink URL from dashboard and shares it anywhere (Twitter/X, Discord, SMS, email)
+3. Payer opens the link → wallet renders an Action card showing amount, merchant name, and icon
+4. Payer clicks "Pay" → `POST` returns an unsigned USDC transfer transaction
+5. Payer signs once → settlement in <5 seconds
+6. Transaction memo encodes `settlr:<invoiceNumber>:<id>` for on-chain traceability
+
+**CORS Headers (required by spec):**
+
+```
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS
+Access-Control-Allow-Headers: Content-Type, Authorization, Accept, x-action-version, x-blockchain-ids
+Access-Control-Expose-Headers: x-action-version, x-blockchain-ids
+```
+
+**Actions Manifest (`/.well-known/actions.json`):**
+
+```json
+{
+  "rules": [
+    { "pathPattern": "/api/actions/pay**", "apiPath": "/api/actions/pay**" },
+    { "pathPattern": "/pay/**", "apiPath": "/api/actions/pay**" }
+  ]
+}
+```
+
+**CORS config:** Also set in `next.config.ts` `headers()` for `/api/actions/:path*` and `/.well-known/actions.json`.
 
 **Status:** ✅ Fully implemented
 

@@ -8,7 +8,7 @@
 
 ## The Problem
 
-Cannabis operators move **$30B+ annually** through cash or predatory payment processors:
+Cannabis operators move **$34B+ annually** through cash or predatory payment processors:
 
 | Today                                                | With Settlr                                     |
 | ---------------------------------------------------- | ----------------------------------------------- |
@@ -49,13 +49,13 @@ On-chain proof synced back to LeafLink order
 
 **LeafLink API Endpoints:**
 
-| Endpoint                                      | Method   | Purpose                                |
-| --------------------------------------------- | -------- | -------------------------------------- |
-| `/api/integrations/leaflink/webhook`          | POST     | Receives LeafLink order webhooks       |
-| `/api/integrations/leaflink/callback`         | POST     | Internal callback when invoice is paid |
-| `/api/integrations/leaflink/config`           | GET/POST | Merchant integration settings          |
-| `/api/integrations/leaflink/syncs`            | GET      | List sync records (filterable)         |
-| `/api/integrations/leaflink/retry`            | POST     | Retry failed sync-backs                |
+| Endpoint                              | Method   | Purpose                                |
+| ------------------------------------- | -------- | -------------------------------------- |
+| `/api/integrations/leaflink/webhook`  | POST     | Receives LeafLink order webhooks       |
+| `/api/integrations/leaflink/callback` | POST     | Internal callback when invoice is paid |
+| `/api/integrations/leaflink/config`   | GET/POST | Merchant integration settings          |
+| `/api/integrations/leaflink/syncs`    | GET      | List sync records (filterable)         |
+| `/api/integrations/leaflink/retry`    | POST     | Retry failed sync-backs                |
 
 ### 2. Direct Invoices & Payment Links
 
@@ -79,7 +79,33 @@ curl -X POST https://settlr.dev/api/payment-links \
   -d '{ "amount": 12500.00, "memo": "Equipment deposit", "expiresIn": "7d" }'
 ```
 
-### 3. Operator Dashboard
+### 3. Solana Pay Links (Blinks)
+
+Every invoice automatically generates a [Solana Actions](https://solana.com/docs/advanced/actions) URL — a universal payment link that works in any wallet, browser, or social platform that supports Blinks.
+
+```
+Invoice created
+        |
+Blink URL generated automatically
+        |
+Share via Twitter/X, Discord, Telegram, SMS — anywhere
+        |
+Recipient clicks → wallet prompts unsigned USDC transfer
+        |
+One signature → settlement in <5 seconds
+```
+
+**How it works:**
+
+- `GET /api/actions/pay?invoice=<token>` returns a Solana Action card (title, icon, amount, merchant name)
+- `POST /api/actions/pay?invoice=<token>` accepts the payer's wallet address and returns an unsigned USDC transfer transaction
+- The payer signs in their wallet — no account needed, no login required
+- Settlement memo encodes `settlr:<invoiceNumber>:<id>` for on-chain traceability
+- Works with [dial.to](https://dial.to) for rich link previews on Twitter/X
+
+Blink URLs are displayed in the dashboard after invoice creation and can be copied from the invoice list.
+
+### 4. Operator Dashboard
 
 Full visibility at [settlr.dev/dashboard](https://settlr.dev/dashboard):
 
@@ -107,19 +133,20 @@ Built for the 2026 regulatory landscape:
 
 ## Tech Stack
 
-| Layer              | Technology                        |
-| ------------------ | --------------------------------- |
-| Settlement         | Solana, USDC (SPL Token)          |
-| Smart contract     | Anchor v0.31.1                    |
-| Backend            | Next.js 16 (App Router)           |
-| Database           | Supabase                          |
-| Email              | Resend                            |
-| Gasless            | Kora (Solana Foundation)          |
-| Embedded wallets   | Privy                             |
-| Treasury security  | Squads multisig                   |
-| Privacy            | MagicBlock PER (TEE)              |
-| Risk screening     | Range Security                    |
-| Cannabis wholesale | LeafLink REST API v2              |
+| Layer              | Technology               |
+| ------------------ | ------------------------ |
+| Settlement         | Solana, USDC (SPL Token) |
+| Smart contract     | Anchor v0.31.1           |
+| Backend            | Next.js 16 (App Router)  |
+| Database           | Supabase                 |
+| Email              | Resend                   |
+| Gasless            | Kora (Solana Foundation) |
+| Embedded wallets   | Privy                    |
+| Treasury security  | Squads multisig          |
+| Privacy            | MagicBlock PER (TEE)     |
+| Risk screening     | Range Security           |
+| Cannabis wholesale | LeafLink REST API v2     |
+| Pay links          | Solana Actions / Blinks  |
 
 ### On-Chain Program
 
@@ -148,10 +175,12 @@ x402-hack-payment/
 |       |   |       +-- config/      # Merchant config CRUD
 |       |   |       +-- syncs/       # Sync record listing
 |       |   |       +-- retry/       # Retry failed syncs
+|       |   +-- api/actions/pay/     # Solana Actions / Blinks endpoint
 |       |   +-- api/checkout/        # Checkout sessions
 |       |   +-- api/gasless/         # Kora gasless endpoints
 |       |   +-- api/kyc/             # Sumsub KYC
 |       |   +-- api/webhooks/        # Webhook management
+|       |   +-- .well-known/         # actions.json manifest
 |       |   +-- dashboard/           # Operator dashboard
 |       |   +-- compliance/          # Compliance docs
 |       |   +-- blog/                # SEO content

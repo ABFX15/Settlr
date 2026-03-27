@@ -187,7 +187,7 @@ export function Features() {
                   <motion.div
                     initial={{ opacity: 0, y: 30, scale: 0.9 }}
                     whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: "200px" }}
                     transition={{ ...spring, delay: 0.15 + i * 0.08 }}
                     className="flex items-end justify-center px-6 pb-0 pt-4 transition-transform duration-300 group-hover:scale-105"
                   >
@@ -196,7 +196,6 @@ export function Features() {
                       alt={f.title.replace("\n", " ")}
                       width={280}
                       height={280}
-                      loading="lazy"
                       className="h-52 w-52 object-contain sm:h-56 sm:w-56"
                     />
                   </motion.div>

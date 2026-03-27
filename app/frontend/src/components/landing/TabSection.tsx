@@ -30,14 +30,14 @@ export function TabSection() {
             className="text-[32px] leading-[1.15] tracking-tight font-extrabold sm:text-[40px]"
             style={{ color: t.navy, fontFamily: t.sans }}
           >
-            Boosting your settlement success
+            From invoice to settlement in seconds
           </h2>
           <p
             className="mx-auto mt-4 max-w-lg text-base font-normal"
             style={{ color: t.bodyLight }}
           >
-            Unlock smarter ways to move money, reduce costs, and achieve lasting
-            financial freedom for your business.
+            No banks, no holds, no middlemen. See how Settlr replaces your
+            entire payment stack with one USDC rail.
           </p>
         </motion.div>
 

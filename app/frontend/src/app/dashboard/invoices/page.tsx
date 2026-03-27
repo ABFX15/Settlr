@@ -18,6 +18,9 @@ import {
   MoreHorizontal,
   Search,
   Filter,
+  Link2,
+  Copy,
+  Check,
 } from "lucide-react";
 
 /* ─── Palette ─── */
@@ -43,6 +46,7 @@ interface InvoiceSummary {
   dueDate: string;
   paidAt?: string;
   createdAt: string;
+  viewToken?: string;
 }
 
 interface InvoiceStats {
@@ -88,6 +92,20 @@ export default function InvoicesPage() {
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const appUrl =
+    typeof window !== "undefined"
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+
+  const copyBlinkUrl = (inv: InvoiceSummary) => {
+    if (!inv.viewToken) return;
+    const url = `${appUrl}/api/actions/pay?invoice=${inv.viewToken}`;
+    navigator.clipboard.writeText(url);
+    setCopiedId(inv.id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   const fetchInvoices = useCallback(async () => {
     if (!publicKey) return;
@@ -339,6 +357,12 @@ export default function InvoicesPage() {
                   >
                     Due Date
                   </th>
+                  <th
+                    className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider"
+                    style={{ color: MUTED }}
+                  >
+                    Pay Link
+                  </th>
                   <th className="w-10 px-4 py-3" />
                 </tr>
               </thead>
@@ -419,6 +443,36 @@ export default function InvoicesPage() {
                             year: "numeric",
                           })}
                         </span>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {inv.viewToken &&
+                        !["paid", "cancelled"].includes(inv.status) ? (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              copyBlinkUrl(inv);
+                            }}
+                            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors hover:bg-green-50"
+                            style={{ color: GREEN }}
+                            title="Copy Blink pay link"
+                          >
+                            {copiedId === inv.id ? (
+                              <>
+                                <Check className="h-3 w-3" />
+                                Copied
+                              </>
+                            ) : (
+                              <>
+                                <Link2 className="h-3 w-3" />
+                                Copy
+                              </>
+                            )}
+                          </button>
+                        ) : inv.status === "paid" ? (
+                          <span className="text-xs" style={{ color: MUTED }}>
+                            Paid
+                          </span>
+                        ) : null}
                       </td>
                       <td className="px-4 py-3">
                         <Link

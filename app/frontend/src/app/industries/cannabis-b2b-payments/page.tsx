@@ -399,7 +399,7 @@ export default function CannabisB2BPaymentsPage() {
           <R>
             <div className="grid grid-cols-2 gap-y-10 sm:grid-cols-4">
               {[
-                { value: "$30B+", label: "US cannabis annual revenue" },
+                { value: "$34B+", label: "US cannabis annual revenue" },
                 { value: "30–50%", label: "Transacted in cash" },
                 { value: "38", label: "States with legal programs" },
                 { value: "62%", label: "Had bank accounts closed" },

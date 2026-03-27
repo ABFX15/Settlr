@@ -32,6 +32,29 @@ const nextConfig: NextConfig = {
   ],
   // Transpile Privy packages
   transpilePackages: ["@privy-io/react-auth"],
+  // Solana Actions / Blinks CORS headers
+  async headers() {
+    return [
+      {
+        source: "/api/actions/:path*",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET, POST, PUT, OPTIONS" },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Content-Type, Authorization, Content-Encoding, Accept-Encoding, X-Accept-Action-Version, X-Accept-Blockchain-Ids",
+          },
+        ],
+      },
+      {
+        source: "/.well-known/actions.json",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET, OPTIONS" },
+        ],
+      },
+    ];
+  },
   webpack: (config, { isServer }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,

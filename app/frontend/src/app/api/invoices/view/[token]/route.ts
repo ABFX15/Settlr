@@ -32,6 +32,8 @@ export async function GET(
             await updateInvoiceStatus(invoice.id, "viewed");
         }
 
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+
         return NextResponse.json({
             id: invoice.id,
             invoiceNumber: invoice.invoiceNumber,
@@ -52,6 +54,7 @@ export async function GET(
             paymentSignature: invoice.paymentSignature,
             paidAt: invoice.paidAt?.toISOString(),
             createdAt: invoice.createdAt.toISOString(),
+            blinkUrl: `${appUrl}/api/actions/pay?invoice=${token}`,
         });
     } catch (error) {
         console.error("[invoices/view] Error fetching invoice:", error);

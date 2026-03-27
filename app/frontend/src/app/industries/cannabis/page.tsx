@@ -165,7 +165,7 @@ const painPoints = [
 ];
 
 const stats = [
-  { value: "$30B+", label: "US Legal Cannabis Market" },
+  { value: "$34B+", label: "US Legal Cannabis Market" },
   { value: "70%+", label: "Still Cash-Dependent" },
   { value: "$0", label: "Debanking Risk with Settlr" },
   { value: "1%", label: "Flat Processing Fee" },
