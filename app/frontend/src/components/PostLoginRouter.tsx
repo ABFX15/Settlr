@@ -3,13 +3,14 @@
 import { useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
+import { useWaitlistAccess } from "@/hooks/useWaitlistAccess";
 
 /**
- * Invisible component that auto-redirects authenticated users who haven't
- * completed onboarding to /waitlist (gated access).
+ * Invisible component that auto-redirects authenticated users:
+ *  - Approved on waitlist but not onboarded → /onboarding
+ *  - Not approved / no entry → /waitlist (the form)
  *
- * Skips redirect when the user is already on /waitlist or on public pages
- * that don't require onboarding (marketing, docs, etc.).
+ * Skips redirect on public pages.
  */
 
 // Pages that should NOT trigger a redirect even when logged in
@@ -41,21 +42,28 @@ function isPublicPath(pathname: string): boolean {
 
 export function PostLoginRouter() {
   const { status } = useOnboardingStatus();
+  const { access } = useWaitlistAccess();
   const router = useRouter();
   const pathname = usePathname();
   const hasRedirected = useRef(false);
 
   useEffect(() => {
-    // Only redirect once per session to avoid loops
     if (hasRedirected.current) return;
+    if (status === "loading" || access === "loading") return;
 
     if (status === "needs-onboarding" && !isPublicPath(pathname)) {
       hasRedirected.current = true;
-      router.replace("/waitlist");
+      if (access === "approved") {
+        // Approved but not onboarded — send to onboarding
+        router.replace("/onboarding");
+      } else {
+        // Not approved — send to waitlist form
+        router.replace("/waitlist");
+      }
     }
-  }, [status, pathname, router]);
+  }, [status, access, pathname, router]);
 
-  // Also redirect if they try to access protected pages directly
+  // Block direct access to protected pages
   useEffect(() => {
     if (
       status === "needs-onboarding" &&
@@ -63,9 +71,13 @@ export function PostLoginRouter() {
         pathname.startsWith("/dashboard/") ||
         pathname === "/create")
     ) {
-      router.replace("/waitlist");
+      if (access === "approved") {
+        router.replace("/onboarding");
+      } else if (access !== "loading") {
+        router.replace("/waitlist");
+      }
     }
-  }, [status, pathname, router]);
+  }, [status, access, pathname, router]);
 
   return null;
 }
