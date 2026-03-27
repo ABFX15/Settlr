@@ -38,27 +38,26 @@ export default function WaitlistPage() {
         }),
       });
 
-      // 2. Also save to our internal waitlist DB
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          name,
-          company: company || undefined,
-          useCase: useCase || undefined,
-        }),
-      });
+      // 2. Also save to our internal waitlist DB (best-effort — email is primary)
+      try {
+        const res = await fetch("/api/waitlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            name,
+            company: company || undefined,
+            useCase: useCase || undefined,
+          }),
+        });
 
-      if (!res.ok) {
-        const data = await res.json();
-        // If already on waitlist, that's fine - show submitted state
-        if (res.status === 409) {
-          setSubmitted(true);
-          setLoading(false);
-          return;
+        if (!res.ok && res.status !== 409) {
+          console.warn(
+            "Waitlist DB save failed, but email was sent successfully",
+          );
         }
-        throw new Error(data.error || "Failed to submit");
+      } catch (dbErr) {
+        console.warn("Waitlist DB save failed:", dbErr);
       }
 
       setSubmitted(true);

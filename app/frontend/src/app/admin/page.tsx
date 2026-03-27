@@ -87,6 +87,12 @@ export default function AdminDashboardPage() {
   const [success, setSuccess] = useState<string | null>(null);
   const [claimTxSig, setClaimTxSig] = useState<string | null>(null);
 
+  // Waitlist management state
+  const [waitlistEntries, setWaitlistEntries] = useState<any[]>([]);
+  const [waitlistLoading, setWaitlistLoading] = useState(false);
+  const [approvingEmail, setApprovingEmail] = useState<string | null>(null);
+  const [adminSecret, setAdminSecret] = useState("");
+
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopied(id);
@@ -116,6 +122,50 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     fetchTreasuryData();
   }, [fetchTreasuryData]);
+
+  // ── Waitlist management ──────────────────────────────────────────────
+  const fetchWaitlist = useCallback(async () => {
+    if (!adminSecret) return;
+    setWaitlistLoading(true);
+    try {
+      const res = await fetch("/api/admin/waitlist", {
+        headers: { Authorization: `Bearer ${adminSecret}` },
+      });
+      if (!res.ok) throw new Error("Unauthorized or failed");
+      const json = await res.json();
+      setWaitlistEntries(json.entries || []);
+    } catch (err: any) {
+      console.error("Failed to fetch waitlist:", err);
+      setError("Failed to load waitlist. Check your admin secret.");
+    } finally {
+      setWaitlistLoading(false);
+    }
+  }, [adminSecret]);
+
+  const handleApprove = async (email: string) => {
+    setApprovingEmail(email);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/waitlist", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${adminSecret}`,
+        },
+        body: JSON.stringify({ email, status: "invited" }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "Failed to approve");
+      }
+      setSuccess(`Approved ${email} — invite email sent!`);
+      fetchWaitlist();
+    } catch (err: any) {
+      setError(err.message || "Failed to approve entry");
+    } finally {
+      setApprovingEmail(null);
+    }
+  };
 
   // ── Claim fees ───────────────────────────────────────────────────────
   const handleClaimFees = async () => {
@@ -655,6 +705,118 @@ export default function AdminDashboardPage() {
             </div>
             <ChevronRight className="w-4 h-4 text-[#7C8A9E] group-hover:translate-x-1 transition-transform" />
           </a>
+        </motion.div>
+
+        {/* ── Waitlist Management ──────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mt-12 rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6"
+        >
+          <h2 className="text-xl font-bold text-[#0C1829] mb-6 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-[#1B6B4A]" />
+            Waitlist Management
+          </h2>
+
+          {/* Auth for waitlist admin */}
+          {waitlistEntries.length === 0 && !waitlistLoading && (
+            <div className="flex items-center gap-3 mb-4">
+              <input
+                type="password"
+                placeholder="Admin secret"
+                value={adminSecret}
+                onChange={(e) => setAdminSecret(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && fetchWaitlist()}
+                className="flex-1 px-4 py-2.5 rounded-xl bg-[#FFFFFF] border border-[#E5E7EB] text-[#0C1829] text-sm placeholder:text-[#7C8A9E] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
+              />
+              <button
+                onClick={fetchWaitlist}
+                disabled={!adminSecret}
+                className="px-5 py-2.5 rounded-xl bg-[#1B6B4A] text-white text-sm font-semibold hover:bg-[#155a3e] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Load Waitlist
+              </button>
+            </div>
+          )}
+
+          {waitlistLoading && (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="w-6 h-6 animate-spin text-[#1B6B4A]" />
+            </div>
+          )}
+
+          {waitlistEntries.length > 0 && (
+            <>
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm text-[#7C8A9E]">
+                  {waitlistEntries.length}{" "}
+                  {waitlistEntries.length === 1 ? "entry" : "entries"}
+                </p>
+                <button
+                  onClick={fetchWaitlist}
+                  className="text-sm text-[#1B6B4A] hover:underline flex items-center gap-1"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" /> Refresh
+                </button>
+              </div>
+              <div className="space-y-3">
+                {waitlistEntries.map((entry: any) => (
+                  <div
+                    key={entry.id || entry.email}
+                    className="flex items-center justify-between p-4 rounded-xl bg-[#FFFFFF] border border-[#E5E7EB]"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-[#0C1829] truncate">
+                          {entry.name || entry.email}
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            entry.status === "invited" ||
+                            entry.status === "active"
+                              ? "bg-[#1B6B4A]/15 text-[#1B6B4A]"
+                              : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          {entry.status}
+                        </span>
+                      </div>
+                      <p className="text-xs text-[#7C8A9E] truncate">
+                        {entry.email}
+                        {entry.company ? ` · ${entry.company}` : ""}
+                      </p>
+                      {entry.useCase && (
+                        <p className="text-xs text-[#7C8A9E] mt-1 truncate">
+                          {entry.useCase}
+                        </p>
+                      )}
+                    </div>
+                    <div className="ml-4 shrink-0">
+                      {entry.status === "pending" ? (
+                        <button
+                          onClick={() => handleApprove(entry.email)}
+                          disabled={approvingEmail === entry.email}
+                          className="px-4 py-2 rounded-lg bg-[#1B6B4A] text-white text-sm font-medium hover:bg-[#155a3e] transition-all disabled:opacity-50 flex items-center gap-2"
+                        >
+                          {approvingEmail === entry.email ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <Check className="w-3.5 h-3.5" />
+                          )}
+                          Approve
+                        </button>
+                      ) : (
+                        <span className="text-xs text-[#1B6B4A] font-medium flex items-center gap-1">
+                          <Check className="w-3.5 h-3.5" /> Approved
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </motion.div>
       </main>
     </div>
