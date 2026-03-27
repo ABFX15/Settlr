@@ -4,55 +4,41 @@ import { Footer } from "@/components/ui/Footer";
 import { Hero, LogoBar, BentoCards } from "@/components/landing";
 
 /* Below-fold sections — lazy loaded to reduce initial JS bundle */
-const SocialProof = dynamic(
-  () =>
-    import("@/components/landing/SocialProof").then((m) => ({
-      default: m.SocialProof,
-    })),
-  { ssr: false },
+const SocialProof = dynamic(() =>
+  import("@/components/landing/SocialProof").then((m) => ({
+    default: m.SocialProof,
+  })),
 );
-const Features = dynamic(
-  () =>
-    import("@/components/landing/Features").then((m) => ({
-      default: m.Features,
-    })),
-  { ssr: false },
+const Features = dynamic(() =>
+  import("@/components/landing/Features").then((m) => ({
+    default: m.Features,
+  })),
 );
-const TabSection = dynamic(
-  () =>
-    import("@/components/landing/TabSection").then((m) => ({
-      default: m.TabSection,
-    })),
-  { ssr: false },
+const TabSection = dynamic(() =>
+  import("@/components/landing/TabSection").then((m) => ({
+    default: m.TabSection,
+  })),
 );
-const Pricing = dynamic(
-  () =>
-    import("@/components/landing/Pricing").then((m) => ({
-      default: m.Pricing,
-    })),
-  { ssr: false },
+const Pricing = dynamic(() =>
+  import("@/components/landing/Pricing").then((m) => ({
+    default: m.Pricing,
+  })),
 );
-const Testimonials = dynamic(
-  () =>
-    import("@/components/landing/Testimonials").then((m) => ({
-      default: m.Testimonials,
-    })),
-  { ssr: false },
+const Testimonials = dynamic(() =>
+  import("@/components/landing/Testimonials").then((m) => ({
+    default: m.Testimonials,
+  })),
 );
-const Steps = dynamic(
-  () =>
-    import("@/components/landing/Steps").then((m) => ({
-      default: m.Steps,
-    })),
-  { ssr: false },
+const Steps = dynamic(() =>
+  import("@/components/landing/Steps").then((m) => ({
+    default: m.Steps,
+  })),
 );
-const FAQ = dynamic(
-  () => import("@/components/landing/FAQ").then((m) => ({ default: m.FAQ })),
-  { ssr: false },
+const FAQ = dynamic(() =>
+  import("@/components/landing/FAQ").then((m) => ({ default: m.FAQ })),
 );
-const CTA = dynamic(
-  () => import("@/components/landing/CTA").then((m) => ({ default: m.CTA })),
-  { ssr: false },
+const CTA = dynamic(() =>
+  import("@/components/landing/CTA").then((m) => ({ default: m.CTA })),
 );
 
 export default function HomePage() {
