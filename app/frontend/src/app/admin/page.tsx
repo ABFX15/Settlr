@@ -71,13 +71,22 @@ function shortenAddress(addr: string): string {
 }
 
 // ---------------------------------------------------------------------------
+// Admin allow-list — only these emails can access the admin dashboard
+// ---------------------------------------------------------------------------
+const ADMIN_EMAILS = ["adam@settlr.dev"];
+
+// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
 export default function AdminDashboardPage() {
-  const { ready, authenticated, login } = usePrivy();
+  const { ready, authenticated, login, user, logout } = usePrivy();
   const { solanaWallet, publicKey, connected } = useActiveWallet();
   const { connection } = useConnection();
+
+  // Check if the logged-in user's email is in the admin allow-list
+  const userEmail = user?.email?.address?.toLowerCase();
+  const isAdmin = userEmail ? ADMIN_EMAILS.includes(userEmail) : false;
 
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
@@ -248,7 +257,7 @@ export default function AdminDashboardPage() {
     );
   }
 
-  // ── Not authenticated — show connect prompt ──────────────────────────
+  // ── Not authenticated — show login prompt ─────────────────────────
   if (!authenticated) {
     return (
       <div className="min-h-screen bg-[#FFFFFF]">
@@ -265,15 +274,14 @@ export default function AdminDashboardPage() {
               Platform Owner Dashboard
             </h1>
             <p className="text-[#7C8A9E] mb-8 max-w-md mx-auto">
-              Connect the platform authority wallet to view treasury balance and
-              claim accumulated fees.
+              Sign in with your admin email to manage the platform.
             </p>
             <button
               onClick={login}
-              className="inline-flex items-center gap-2 bg-[#1B6B4A] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#9371e8] transition-all"
+              className="inline-flex items-center gap-2 bg-[#1B6B4A] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#155a3e] transition-all"
             >
               <LogIn className="w-5 h-5" />
-              Connect Wallet
+              Sign In
             </button>
           </motion.div>
         </div>
@@ -281,13 +289,36 @@ export default function AdminDashboardPage() {
     );
   }
 
-  // ── Authenticated but wallet still loading ───────────────────────────
-  if (!publicKey) {
+  // ── Authenticated but not an admin ───────────────────────────────────
+  if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-[#1B6B4A] mx-auto mb-4" />
-          <p className="text-[#7C8A9E]">Loading wallet...</p>
+      <div className="min-h-screen bg-[#FFFFFF]">
+        <div className="max-w-4xl mx-auto px-6 py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-red-50 flex items-center justify-center border border-red-200">
+              <Shield className="w-10 h-10 text-red-500" />
+            </div>
+            <h1 className="text-3xl font-bold text-[#0C1829] mb-4">
+              Access Denied
+            </h1>
+            <p className="text-[#7C8A9E] mb-2">
+              {userEmail || "Unknown email"} is not authorized to access the
+              admin dashboard.
+            </p>
+            <p className="text-[#7C8A9E] mb-8 text-sm">
+              Only the platform owner can view this page.
+            </p>
+            <button
+              onClick={logout}
+              className="inline-flex items-center gap-2 bg-[#0C1829] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#1a2d47] transition-all"
+            >
+              Sign Out
+            </button>
+          </motion.div>
         </div>
       </div>
     );

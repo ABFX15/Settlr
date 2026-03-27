@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AuthLayout from "@/components/AuthLayout";
+import ClientProviders from "./ClientProviders";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -11,5 +11,5 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <AuthLayout>{children}</AuthLayout>;
+  return <ClientProviders>{children}</ClientProviders>;
 }
