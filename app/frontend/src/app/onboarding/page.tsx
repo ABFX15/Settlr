@@ -83,11 +83,17 @@ export default function OnboardingPage() {
 
   // ─── Waitlist gate: redirect unapproved users ──────────
   useEffect(() => {
+    // Wait for both auth and waitlist check to complete
+    if (!ready) return;
     if (access === "loading" || access === "unauthenticated") return;
     if (access !== "approved") {
-      router.replace("/waitlist");
+      // Small delay to allow auto-linking to complete on first load
+      const timer = setTimeout(() => {
+        router.replace("/waitlist");
+      }, 500);
+      return () => clearTimeout(timer);
     }
-  }, [access, router]);
+  }, [access, ready, router]);
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
