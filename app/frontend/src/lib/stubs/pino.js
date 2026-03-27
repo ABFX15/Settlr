@@ -51,8 +51,11 @@ pino.stdTimeFunctions = { epochTime: () => `,"time":${Date.now()}`, unixTime: ()
 pino.symbols = {};
 pino.version = "0.0.0-stub";
 
+const levels = pino.levels;
+
 export default pino;
-export { pino };
+export { pino, levels };
 module.exports = pino;
 module.exports.default = pino;
 module.exports.pino = pino;
+module.exports.levels = levels;

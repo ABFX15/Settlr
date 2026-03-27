@@ -35,7 +35,7 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
         blockExplorerUrl: "https://explorer.solana.com/?cluster=devnet",
       },
     }),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
 
   if (!appId) {
     console.warn(
-      "[Settlr] Privy not configured. Set NEXT_PUBLIC_PRIVY_APP_ID to enable embedded wallets."
+      "[Settlr] Privy not configured. Set NEXT_PUBLIC_PRIVY_APP_ID to enable embedded wallets.",
     );
     return <>{children}</>;
   }
@@ -60,21 +60,13 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
       config={{
         appearance: {
           theme: "dark",
-          accentColor: "#f472b6",
+          accentColor: "#1B6B4A",
           logo: "/logo-new.png",
-          showWalletLoginFirst: true,
-          walletChainType: "ethereum-and-solana",
-          walletList: [
-            "detected_wallets",
-            "metamask",
-            "coinbase_wallet",
-            "rainbow",
-            "phantom",
-            "solflare",
-            "backpack",
-          ],
+          showWalletLoginFirst: false,
+          walletChainType: "solana-only",
+          walletList: ["phantom", "solflare", "backpack"],
         },
-        loginMethods: ["wallet", "email"],
+        loginMethods: ["email"],
         supportedChains: supportedEvmChains,
         embeddedWallets: {
           ethereum: {
