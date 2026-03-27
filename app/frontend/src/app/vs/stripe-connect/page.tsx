@@ -118,7 +118,7 @@ const painPoints = [
     icon: Globe,
     title: "Debanked? Stripe won't serve you.",
     description:
-      "Stripe Connect won't touch cannabis, adult content, or other high-risk verticals. Settlr is built for the debanked — non-custodial USDC, no bank interference.",
+      "Stripe Connect won't touch cannabis or other high-risk verticals. Settlr is built for the debanked — non-custodial USDC, no bank interference.",
   },
   {
     icon: DollarSign,

@@ -21,6 +21,11 @@ import {
   Receipt,
   Loader2,
   Wallet,
+  Link2,
+  MessageSquare,
+  Smartphone,
+  Share2,
+  QrCode,
 } from "lucide-react";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { usePrivy } from "@privy-io/react-auth";
@@ -41,6 +46,7 @@ const STEPS = [
   { id: 2, label: "Invoice", icon: FileText },
   { id: 3, label: "Settlement", icon: Zap },
   { id: 4, label: "Receipt", icon: Receipt },
+  { id: 5, label: "Blinks", icon: Link2 },
 ] as const;
 
 /* --- Settlr Verified Seal --- */
@@ -1024,6 +1030,251 @@ function StepReceipt({
 }
 
 /* =================================================================
+   STEP 5 - Blinks (Shareable Pay Links)
+   ================================================================= */
+function StepBlinks({ form }: { form: DemoForm }) {
+  const amount = parseFloat(form.amount) || 45000;
+  const [copied, setCopied] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(false);
+
+  const demoBlinkUrl = `https://settlr.dev/api/actions/pay?invoice=demo_${
+    form.businessName?.replace(/\s+/g, "_").toLowerCase() || "pacific_growers"
+  }`;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowAnimation(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(demoBlinkUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <motion.div
+      key="step-5"
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -40 }}
+      transition={spring}
+    >
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+          5
+        </div>
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          Solana Blinks
+        </span>
+      </div>
+
+      <h2
+        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+      >
+        Share a Link. Get Paid.
+      </h2>
+      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+        Every Settlr invoice generates a{" "}
+        <strong className="text-[#0C1829]">Solana Blink</strong> {"\u2014"} a
+        shareable pay link that renders a native payment card in any compatible
+        wallet. No app download. No login. Just tap &amp; pay.
+      </p>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Left: Blink Preview Card */}
+        <div>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+            Blink Preview
+          </p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, ...spring }}
+            className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-lg"
+          >
+            {/* Card header — simulates wallet rendering */}
+            <div className="relative h-40 bg-gradient-to-br from-[#0C1829] to-[#1a2940] p-5">
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="mb-1 flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A]">
+                      <Shield className="h-4 w-4 text-white" />
+                    </div>
+                    <span className="text-sm font-bold text-white">Settlr</span>
+                  </div>
+                  <p className="mt-3 text-xs text-white/60">settlr.dev</p>
+                </div>
+                <div className="rounded-md bg-white/10 px-2 py-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-white/70">
+                    Solana Action
+                  </span>
+                </div>
+              </div>
+              <p className="absolute bottom-5 left-5 text-lg font-bold text-white">
+                Pay Invoice {"\u2014"} $
+                {amount.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                })}
+              </p>
+            </div>
+
+            {/* Card body */}
+            <div className="p-5">
+              <p className="mb-4 text-sm text-[#7C8A9E]">
+                {form.businessName || "Pacific Growers Collective"} is
+                requesting{" "}
+                <span
+                  className="font-semibold text-[#0C1829]"
+                  style={{ fontFamily: "var(--font-jetbrains), monospace" }}
+                >
+                  {amount.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}{" "}
+                  USDC
+                </span>{" "}
+                for {form.description || "Bulk Flower - Indoor Premium"}.
+              </p>
+
+              <AnimatePresence>
+                {showAnimation ? (
+                  <motion.button
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1, ...spring }}
+                    className="w-full rounded-xl py-3 text-sm font-bold text-white transition-all hover:brightness-110"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                    }}
+                  >
+                    Pay $
+                    {amount.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}{" "}
+                    USDC
+                  </motion.button>
+                ) : (
+                  <div className="h-11 w-full animate-pulse rounded-xl bg-[#E5E7EB]" />
+                )}
+              </AnimatePresence>
+
+              <p className="mt-3 text-center text-[10px] text-[#7C8A9E]">
+                Powered by Solana Actions {"\u00B7"} Non-custodial settlement
+              </p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Right: How it works */}
+        <div>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+            How Blinks Work
+          </p>
+
+          <div className="space-y-4">
+            {[
+              {
+                icon: FileText,
+                title: "Invoice creates a Blink",
+                desc: "Every Settlr invoice auto-generates a Blink URL using the Solana Actions spec. No extra setup needed.",
+              },
+              {
+                icon: Share2,
+                title: "Share anywhere",
+                desc: "Send the link via text, email, Slack, or embed in your ERP. Any Blinks-compatible client renders it.",
+              },
+              {
+                icon: Smartphone,
+                title: "Buyer taps & pays",
+                desc: "Phantom, Backpack, or any Solana wallet renders the payment card. One tap to sign.",
+              },
+              {
+                icon: Zap,
+                title: "Instant settlement",
+                desc: "USDC transfers atomically. No intermediary holds funds. T+0 finality.",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.15 * (i + 1), ...spring }}
+                className="flex gap-4 rounded-xl border border-[#E5E7EB] bg-white p-4"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#1B6B4A]/[0.08]">
+                  <item.icon className="h-5 w-5 text-[#155939]" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#0C1829]">
+                    {item.title}
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-[#7C8A9E]">
+                    {item.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Blink URL */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, ...spring }}
+            className="mt-5 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4"
+          >
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              Blink URL
+            </p>
+            <div className="flex items-center gap-2">
+              <code
+                className="flex-1 truncate rounded-md bg-[#0C1829]/[0.04] px-3 py-2 text-xs text-[#3B4963]"
+                style={{ fontFamily: "var(--font-jetbrains), monospace" }}
+              >
+                {demoBlinkUrl}
+              </code>
+              <button
+                onClick={handleCopy}
+                className="shrink-0 rounded-md border border-[#E5E7EB] bg-white p-2 text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+              >
+                {copied ? (
+                  <Check className="h-4 w-4 text-[#155939]" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Compatible wallets */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85, ...spring }}
+            className="mt-4 flex flex-wrap gap-2"
+          >
+            {["Phantom", "Backpack", "Dialect", "Solflare"].map((wallet) => (
+              <div
+                key={wallet}
+                className="flex items-center gap-1.5 rounded-full border border-[#E5E7EB] bg-white px-3 py-1.5"
+              >
+                <CheckCircle2 className="h-3 w-3 text-[#155939]" />
+                <span className="text-xs font-medium text-[#3B4963]">
+                  {wallet}
+                </span>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* =================================================================
    MAIN PAGE
    ================================================================= */
 /* Solana Memo Program */
@@ -1068,7 +1319,7 @@ export default function DemoPage() {
 
   /* ── Sign (real) or simulate ── */
   const handleNext = useCallback(async () => {
-    if (step >= 4) return;
+    if (step >= 5) return;
 
     if (step === 2) {
       setIsProcessing(true);
@@ -1194,9 +1445,9 @@ export default function DemoPage() {
               transition={{ delay: 0.2 }}
               className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-[#7C8A9E]"
             >
-              Walk through a real B2B cannabis settlement in 4 steps. Enter your
-              details, generate an invoice, watch it settle, and get your
-              receipt.
+              Walk through a real B2B cannabis settlement in 5 steps. Enter your
+              details, generate an invoice, watch it settle, get your receipt,
+              and share a Blink.
             </motion.p>
 
             {/* Stepper */}
@@ -1270,6 +1521,7 @@ export default function DemoPage() {
               {step === 4 && (
                 <StepReceipt form={form} realSignature={realSignature} />
               )}
+              {step === 5 && <StepBlinks form={form} />}
             </AnimatePresence>
           </div>
         </section>
@@ -1301,7 +1553,7 @@ export default function DemoPage() {
               ))}
             </div>
 
-            {step < 4 ? (
+            {step < 5 ? (
               <button
                 onClick={handleNext}
                 disabled={!canAdvance || isProcessing}
@@ -1327,6 +1579,11 @@ export default function DemoPage() {
                   <>
                     Settling...
                     <Loader2 className="h-4 w-4 animate-spin" />
+                  </>
+                ) : step === 4 ? (
+                  <>
+                    See Blink
+                    <Link2 className="h-4 w-4" />
                   </>
                 ) : (
                   <>

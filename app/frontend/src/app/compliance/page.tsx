@@ -764,9 +764,9 @@ export default function CompliancePage() {
               Program modeled on FinCEN&apos;s five-pillar framework. Even
               though our non-custodial architecture likely exempts us from MSB
               registration, we hold ourselves to MSB-grade standards because our
-              customers — cannabis operators, adult content platforms, and other
-              restricted businesses — need a payment provider they can hand to
-              an auditor without hesitation.
+              customers — cannabis operators and other restricted businesses —
+              need a payment provider they can hand to an auditor without
+              hesitation.
             </p>
           </Reveal>
 
@@ -995,7 +995,7 @@ export default function CompliancePage() {
                 step: "3",
                 title: "Industry-Specific Compliance",
                 description:
-                  "For cannabis businesses: state license verification, Metrc/BioTrack integration capability, and confirmation of operation within legal state boundaries. For adult content platforms: age verification systems audit and content moderation policy review.",
+                  "For cannabis businesses: state license verification, Metrc/BioTrack integration capability, and confirmation of operation within legal state boundaries.",
               },
               {
                 step: "4",
@@ -1834,7 +1834,7 @@ export default function CompliancePage() {
               },
               {
                 q: "Why do you implement BSA/AML controls if you're not an MSB?",
-                a: "Because our customers need it. Cannabis operators, adult content platforms, and other restricted businesses have been burned by payment providers that lacked compliance infrastructure and got shut down. By voluntarily maintaining MSB-grade AML controls — OFAC screening, transaction monitoring, SAR filing, KYB verification — we give our merchants a compliance layer they can present to auditors, banking partners, and regulators. It also protects us from regulatory risk as the stablecoin landscape evolves.",
+                a: "Because our customers need it. Cannabis operators and other restricted businesses have been burned by payment providers that lacked compliance infrastructure and got shut down. By voluntarily maintaining MSB-grade AML controls — OFAC screening, transaction monitoring, SAR filing, KYB verification — we give our merchants a compliance layer they can present to auditors, banking partners, and regulators. It also protects us from regulatory risk as the stablecoin landscape evolves.",
               },
               {
                 q: "How do you screen wallets against OFAC sanctions?",

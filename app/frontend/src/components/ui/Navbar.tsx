@@ -14,7 +14,6 @@ import {
   Play,
   BookOpen,
   Leaf,
-  Film,
   LinkIcon,
   FileText,
   Truck,
@@ -87,12 +86,6 @@ const industryLinks = [
     label: "Cannabis B2B Payments",
     icon: Truck,
     description: "Supply-chain settlement without cash or banks",
-  },
-  {
-    href: "/industries/adult-content",
-    label: "Adult Content Platforms",
-    icon: Film,
-    description: "Non-custodial settlement without deplatforming risk",
   },
 ];
 

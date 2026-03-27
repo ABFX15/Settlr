@@ -15,7 +15,6 @@ export default function robots(): MetadataRoute.Robots {
                     '/analytics/',
                     '/history/',
                     '/offramp/',
-                    '/igaming/',
                     '/checkout/',
                     '/me/',
                     '/merchant/',
@@ -27,7 +26,6 @@ export default function robots(): MetadataRoute.Robots {
             {
                 userAgent: 'Googlebot',
                 allow: '/',
-                disallow: ['/igaming/'],
             },
             // Explicitly allow AI search engine bots
             { userAgent: 'GPTBot', allow: '/' },

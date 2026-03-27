@@ -92,22 +92,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
         {
-            url: `${baseUrl}/industries/igaming`,
+            url: `${baseUrl}/industries/cannabis-b2b-payments`,
             lastModified,
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/industries/ai-saas`,
-            lastModified,
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/industries/b2b`,
-            lastModified,
-            changeFrequency: 'monthly',
-            priority: 0.7,
+            changeFrequency: 'weekly',
+            priority: 0.8,
         },
 
         // ── Integrations ──

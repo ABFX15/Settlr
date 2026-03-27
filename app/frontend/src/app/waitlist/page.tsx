@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { Clock } from "lucide-react";
@@ -85,23 +86,39 @@ export default function WaitlistPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FFFFFF] text-[#0C1829]">
+    <main
+      className="min-h-screen relative text-white"
+      style={{ color: "white" }}
+    >
+      {/* Blockchain background image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/blockchain.png"
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/70" />
+      </div>
+
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#FFFFFF]/80 backdrop-blur-md border-b border-[#E5E7EB]">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-md border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
-            <SettlrLogoWithIcon size="sm" variant="dark" />
+            <SettlrLogoWithIcon size="sm" variant="light" />
           </Link>
           <nav className="flex items-center gap-6">
             <Link
               href="/docs"
-              className="text-sm text-[#3B4963] hover:text-[#0C1829] transition-colors"
+              className="text-sm text-white/70 hover:text-white transition-colors"
             >
               Docs
             </Link>
             <Link
               href="/demo/store"
-              className="px-4 py-2 rounded-lg bg-[#FFFFFF] text-[#0C1829] text-sm font-medium"
+              className="px-4 py-2 rounded-lg bg-white/10 text-white text-sm font-medium hover:bg-white/20 transition-colors"
             >
               Try Demo
             </Link>
@@ -110,17 +127,17 @@ export default function WaitlistPage() {
       </header>
 
       {/* Main Content */}
-      <section className="pt-32 pb-20 px-4 md:px-8">
+      <section className="relative z-10 pt-32 pb-20 px-4 md:px-8">
         <div className="max-w-xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 !text-white">
               {submitted ? "You\u2019re on the list" : "Request Early Access"}
             </h1>
-            <p className="text-lg text-[#3B4963]">
+            <p className="text-lg text-white/70">
               {submitted
                 ? "We\u2019ll review your application and get back to you shortly."
                 : "Settlr is currently invite-only. Tell us about your business and we\u2019ll get you set up."}
@@ -131,13 +148,15 @@ export default function WaitlistPage() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 text-center"
+              className="bg-white/10 backdrop-blur-lg border border-white/15 rounded-2xl p-8 text-center"
             >
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#1B6B4A]/15 flex items-center justify-center">
-                <Clock className="w-8 h-8 text-[#1B6B4A]" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#1B6B4A]/30 flex items-center justify-center">
+                <Clock className="w-8 h-8 text-[#4ADE80]" />
               </div>
-              <h2 className="text-2xl font-bold mb-2">Application Received</h2>
-              <p className="text-[#3B4963] mb-3">
+              <h2 className="text-2xl font-bold mb-2 !text-white">
+                Application Received
+              </h2>
+              <p className="text-white/70 mb-3">
                 Thanks for your interest in Settlr. Our team reviews every
                 application and will reach out when your account is ready.
               </p>
@@ -155,7 +174,7 @@ export default function WaitlistPage() {
                 </Link>
                 <Link
                   href="/"
-                  className="inline-block px-6 py-3 rounded-lg border border-[#E5E7EB] text-sm font-medium text-[#3B4963] hover:bg-[#F9FAFB]"
+                  className="inline-block px-6 py-3 rounded-lg border border-white/20 text-sm font-medium text-white/80 hover:bg-white/10"
                 >
                   Back to Home
                 </Link>
@@ -168,10 +187,10 @@ export default function WaitlistPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
                 onSubmit={handleSubmit}
-                className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 space-y-6"
+                className="bg-white/10 backdrop-blur-lg border border-white/15 rounded-2xl p-8 space-y-6"
               >
                 <div>
-                  <label className="block text-sm font-medium text-[#0C1829] mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Name *
                   </label>
                   <input
@@ -180,12 +199,12 @@ export default function WaitlistPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your name"
-                    className="w-full px-4 py-3 rounded-lg bg-white border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#1B6B4A]/50 focus:ring-1 focus:ring-[#1B6B4A]/20"
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#1B6B4A]/70 focus:ring-1 focus:ring-[#1B6B4A]/30"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#0C1829] mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Work Email *
                   </label>
                   <input
@@ -194,12 +213,12 @@ export default function WaitlistPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
-                    className="w-full px-4 py-3 rounded-lg bg-white border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#1B6B4A]/50 focus:ring-1 focus:ring-[#1B6B4A]/20"
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#1B6B4A]/70 focus:ring-1 focus:ring-[#1B6B4A]/30"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#0C1829] mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Company
                   </label>
                   <input
@@ -207,12 +226,12 @@ export default function WaitlistPage() {
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Your company name"
-                    className="w-full px-4 py-3 rounded-lg bg-white border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#1B6B4A]/50 focus:ring-1 focus:ring-[#1B6B4A]/20"
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#1B6B4A]/70 focus:ring-1 focus:ring-[#1B6B4A]/30"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#0C1829] mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Tell us about your business
                   </label>
                   <textarea
@@ -220,12 +239,12 @@ export default function WaitlistPage() {
                     onChange={(e) => setUseCase(e.target.value)}
                     placeholder="What do you distribute? How are you currently handling payments? What volume do you process monthly?"
                     rows={4}
-                    className="w-full px-4 py-3 rounded-lg bg-white border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:border-[#1B6B4A]/50 focus:ring-1 focus:ring-[#1B6B4A]/20 resize-none"
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#1B6B4A]/70 focus:ring-1 focus:ring-[#1B6B4A]/30 resize-none"
                   />
                 </div>
 
                 {error && (
-                  <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                  <div className="rounded-lg bg-red-500/20 border border-red-500/30 px-4 py-3 text-sm text-red-300">
                     {error}
                   </div>
                 )}
@@ -242,11 +261,11 @@ export default function WaitlistPage() {
                   {loading ? "Submitting..." : "Request Access"}
                 </button>
 
-                <p className="text-center text-sm text-[#7C8A9E]">
+                <p className="text-center text-sm text-white/50">
                   Want to see it first?{" "}
                   <Link
                     href="/demo/store"
-                    className="text-[#1B6B4A] hover:underline font-medium"
+                    className="text-[#4ADE80] hover:underline font-medium"
                   >
                     Try the live demo
                   </Link>

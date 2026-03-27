@@ -32,7 +32,7 @@ const KYC_LEVELS = [
     id: "gaming-kyc-level",
     name: "Gaming",
     description:
-      "ID + selfie + age verification. Required for iGaming operators.",
+      "ID + selfie + age verification. Required for licensed cannabis operators.",
     recommended: true,
   },
   {
@@ -199,7 +199,7 @@ export default function ComplianceSettingsPage() {
             <p className="font-medium">Why enable KYC?</p>
             <p className="mt-1 text-[#1B6B4A]/80">
               KYC (Know Your Customer) verification is required for licensed
-              iGaming operators and helps prevent fraud. Customers complete a
+              cannabis operators and helps prevent fraud. Customers complete a
               quick ID verification before their first payment.
             </p>
           </div>
@@ -278,7 +278,7 @@ export default function ComplianceSettingsPage() {
                         </span>
                         {level.recommended && (
                           <span className="rounded bg-[#1B6B4A]/15 px-2 py-0.5 text-xs text-[#1B6B4A]">
-                            Recommended for iGaming
+                            Recommended for cannabis
                           </span>
                         )}
                       </div>

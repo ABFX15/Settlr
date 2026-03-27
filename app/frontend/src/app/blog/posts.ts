@@ -199,7 +199,7 @@ export const posts: BlogPost[] = [
 
       <h2>How Does This Impact High-Risk Industries Specifically?</h2>
 
-      <p>Cannabis, CBD, firearms, adult content, and international trade businesses have historically been "debanked" — unable to maintain stable banking relationships. The GENIUS Act helps in three specific ways:</p>
+      <p>Cannabis, CBD, firearms, and international trade businesses have historically been "debanked" — unable to maintain stable banking relationships. The GENIUS Act helps in three specific ways:</p>
 
       <h3>1. Removes the "Crypto" Objection</h3>
       <p>When compliance officers or banking partners ask "why are you using crypto?", the answer is now: "We're using a federally regulated payment stablecoin, not speculative crypto. USDC is backed 1:1 by US Treasuries and audited monthly under the GENIUS Act."</p>

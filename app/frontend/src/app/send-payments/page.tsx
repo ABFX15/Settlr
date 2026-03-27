@@ -423,20 +423,8 @@ export default function SendPaymentsPage() {
                 link: "/industries/cannabis",
               },
               {
-                label: "Adult content",
-                link: "/industries/adult-content",
-              },
-              {
-                label: "iGaming operators",
-                link: "/industries/igaming",
-              },
-              {
-                label: "AI SaaS platforms",
-                link: "/industries/ai-saas",
-              },
-              {
-                label: "B2B supply chains",
-                link: "/industries/b2b",
+                label: "Cannabis B2B payments",
+                link: "/industries/cannabis-b2b-payments",
               },
             ].map((item, i) => (
               <Reveal key={item.label} delay={i * 0.04}>

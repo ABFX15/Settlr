@@ -196,9 +196,6 @@ export default function RootLayout({
           <a href="/industries/cannabis-b2b-payments">
             Cannabis B2B Supply Chain Payments
           </a>
-          <a href="/industries/adult-content">Adult Content</a>
-          <a href="/industries/igaming">iGaming</a>
-          <a href="/industries/b2b">B2B Settlement</a>
           <a href="/blog">Blog</a>
           <a href="/help">Help Center</a>
           <a href="/waitlist">Apply for the Private Rail</a>

@@ -7,16 +7,15 @@ const columns = [
     links: [
       { href: "/products/payment-links", label: "Payment Links" },
       { href: "/products/invoices", label: "Invoicing" },
-      { href: "/docs?tab=api", label: "Payout API" },
-      { href: "/docs", label: "Checkout SDK" },
+      { href: "/docs?tab=api", label: "REST API" },
+      { href: "/docs?tab=webhooks", label: "Webhooks" },
     ],
   },
   {
     title: "Industries",
     links: [
       { href: "/industries/cannabis", label: "Cannabis" },
-      { href: "/industries/adult-content", label: "Adult Content" },
-      { href: "/industries/cannabis-b2b-payments", label: "High-Risk B2B" },
+      { href: "/industries/cannabis-b2b-payments", label: "Cannabis B2B" },
     ],
   },
   {
