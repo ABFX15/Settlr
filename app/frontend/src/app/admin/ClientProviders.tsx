@@ -1,17 +1,13 @@
 "use client";
 
 import { ReactNode } from "react";
-import { PrivyProvider } from "@/providers/PrivyProvider";
 import { WalletProvider } from "@/providers/WalletProvider";
 
 /**
- * Admin-only client providers — no PostLoginRouter redirect.
- * Admin page handles its own auth state.
+ * Admin-only client providers — NO Privy at all.
+ * Admin uses admin-secret auth + direct Phantom connection.
+ * This keeps admin completely isolated from the user auth flow.
  */
 export default function ClientProviders({ children }: { children: ReactNode }) {
-  return (
-    <PrivyProvider>
-      <WalletProvider>{children}</WalletProvider>
-    </PrivyProvider>
-  );
+  return <WalletProvider>{children}</WalletProvider>;
 }

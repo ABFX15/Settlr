@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useConnection } from "@solana/wallet-adapter-react";
 import {
   Wallet,
@@ -23,9 +21,10 @@ import {
   Activity,
   BarChart3,
   ArrowDownToLine,
+  LogOut,
 } from "lucide-react";
 import Link from "next/link";
-import { Transaction } from "@solana/web3.js";
+import { Transaction, PublicKey } from "@solana/web3.js";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -71,22 +70,20 @@ function shortenAddress(addr: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// Admin allow-list — only these emails can access the admin dashboard
-// ---------------------------------------------------------------------------
-const ADMIN_EMAILS = ["adam@settlr.dev"];
-
-// ---------------------------------------------------------------------------
-// Component
+// Component — Completely standalone, NO Privy. Uses admin secret + direct Phantom.
 // ---------------------------------------------------------------------------
 
 export default function AdminDashboardPage() {
-  const { ready, authenticated, login, user, logout } = usePrivy();
-  const { solanaWallet, publicKey, connected } = useActiveWallet();
   const { connection } = useConnection();
 
-  // Check if the logged-in user's email is in the admin allow-list
-  const userEmail = user?.email?.address?.toLowerCase();
-  const isAdmin = userEmail ? ADMIN_EMAILS.includes(userEmail) : false;
+  // Admin auth — simple secret, no Privy session
+  const [adminSecret, setAdminSecret] = useState("");
+  const [isAuthed, setIsAuthed] = useState(false);
+  const [authError, setAuthError] = useState("");
+
+  // Phantom wallet — direct browser extension, no Privy
+  const [phantomWallet, setPhantomWallet] = useState<any>(null);
+  const [publicKey, setPublicKey] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
@@ -100,7 +97,71 @@ export default function AdminDashboardPage() {
   const [waitlistEntries, setWaitlistEntries] = useState<any[]>([]);
   const [waitlistLoading, setWaitlistLoading] = useState(false);
   const [approvingEmail, setApprovingEmail] = useState<string | null>(null);
-  const [adminSecret, setAdminSecret] = useState("");
+
+  // ── Admin secret auth ────────────────────────────────────────────────
+  const handleAdminLogin = async () => {
+    setAuthError("");
+    try {
+      // Verify secret by trying to load waitlist
+      const res = await fetch("/api/admin/waitlist", {
+        headers: { Authorization: `Bearer ${adminSecret}` },
+      });
+      if (!res.ok) {
+        setAuthError("Invalid admin secret");
+        return;
+      }
+      setIsAuthed(true);
+      // Store in sessionStorage so it survives page refreshes but not new tabs
+      sessionStorage.setItem("adminSecret", adminSecret);
+    } catch {
+      setAuthError("Failed to verify admin secret");
+    }
+  };
+
+  // Restore admin secret from sessionStorage
+  useEffect(() => {
+    const stored = sessionStorage.getItem("adminSecret");
+    if (stored) {
+      setAdminSecret(stored);
+      setIsAuthed(true);
+    }
+  }, []);
+
+  const handleAdminLogout = () => {
+    setIsAuthed(false);
+    setAdminSecret("");
+    setPublicKey(null);
+    setPhantomWallet(null);
+    sessionStorage.removeItem("adminSecret");
+  };
+
+  // ── Direct Phantom wallet connection ─────────────────────────────────
+  const connectPhantom = async () => {
+    try {
+      const provider =
+        (window as any)?.phantom?.solana || (window as any)?.solana;
+      if (!provider?.isPhantom) {
+        setError("Phantom wallet not found. Please install Phantom.");
+        return;
+      }
+      const resp = await provider.connect();
+      setPhantomWallet(provider);
+      setPublicKey(resp.publicKey.toString());
+    } catch (err: any) {
+      if (err.code !== 4001) {
+        // user rejected
+        setError("Failed to connect Phantom: " + (err.message || ""));
+      }
+    }
+  };
+
+  const disconnectPhantom = async () => {
+    try {
+      await phantomWallet?.disconnect();
+    } catch {}
+    setPhantomWallet(null);
+    setPublicKey(null);
+  };
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -145,11 +206,18 @@ export default function AdminDashboardPage() {
       setWaitlistEntries(json.entries || []);
     } catch (err: any) {
       console.error("Failed to fetch waitlist:", err);
-      setError("Failed to load waitlist. Check your admin secret.");
+      setError("Failed to load waitlist.");
     } finally {
       setWaitlistLoading(false);
     }
   }, [adminSecret]);
+
+  // Auto-load waitlist once authenticated
+  useEffect(() => {
+    if (isAuthed && adminSecret) {
+      fetchWaitlist();
+    }
+  }, [isAuthed, adminSecret, fetchWaitlist]);
 
   const handleApprove = async (email: string) => {
     setApprovingEmail(email);
@@ -178,8 +246,8 @@ export default function AdminDashboardPage() {
 
   // ── Claim fees ───────────────────────────────────────────────────────
   const handleClaimFees = async () => {
-    if (!publicKey || !solanaWallet) {
-      setError("Connect your wallet first");
+    if (!publicKey || !phantomWallet) {
+      setError("Connect Phantom wallet first");
       return;
     }
 
@@ -203,8 +271,8 @@ export default function AdminDashboardPage() {
       const txBuffer = Buffer.from(body.transaction, "base64");
       const tx = Transaction.from(txBuffer);
 
-      // 3. Sign with connected wallet via Privy
-      const signedTx = await (solanaWallet as any).signTransaction(tx);
+      // 3. Sign with Phantom directly (not Privy)
+      const signedTx = await phantomWallet.signTransaction(tx);
 
       // 4. Send the signed transaction
       const sig = await connection.sendRawTransaction(signedTx.serialize(), {
@@ -249,75 +317,43 @@ export default function AdminDashboardPage() {
       : `?cluster=${data?.cluster || "devnet"}`;
 
   // ── Loading / not ready ───────────────────────────────────────────────
-  if (!ready) {
-    return (
-      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#1B6B4A]" />
-      </div>
-    );
-  }
-
-  // ── Not authenticated — show login prompt ─────────────────────────
-  if (!authenticated) {
+  if (!isAuthed) {
     return (
       <div className="min-h-screen bg-[#FFFFFF]">
-        <div className="max-w-4xl mx-auto px-6 py-20">
+        <div className="max-w-md mx-auto px-6 py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#1B6B4A]/10 flex items-center justify-center border border-[#a78bfa]/20">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#1B6B4A]/10 flex items-center justify-center border border-[#1B6B4A]/20">
               <Key className="w-10 h-10 text-[#1B6B4A]" />
             </div>
             <h1 className="text-3xl font-bold text-[#0C1829] mb-4">
-              Platform Owner Dashboard
+              Platform Admin
             </h1>
-            <p className="text-[#7C8A9E] mb-8 max-w-md mx-auto">
-              Sign in with your admin email to manage the platform.
+            <p className="text-[#7C8A9E] mb-8">
+              Enter your admin secret to access the dashboard.
             </p>
-            <button
-              onClick={login}
-              className="inline-flex items-center gap-2 bg-[#1B6B4A] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#155a3e] transition-all"
-            >
-              <LogIn className="w-5 h-5" />
-              Sign In
-            </button>
-          </motion.div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Authenticated but not an admin ───────────────────────────────────
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen bg-[#FFFFFF]">
-        <div className="max-w-4xl mx-auto px-6 py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center"
-          >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-red-50 flex items-center justify-center border border-red-200">
-              <Shield className="w-10 h-10 text-red-500" />
+            <div className="space-y-4">
+              <input
+                type="password"
+                placeholder="Admin secret"
+                value={adminSecret}
+                onChange={(e) => setAdminSecret(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleAdminLogin()}
+                className="w-full px-4 py-3 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
+              />
+              {authError && <p className="text-sm text-red-500">{authError}</p>}
+              <button
+                onClick={handleAdminLogin}
+                disabled={!adminSecret}
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#1B6B4A] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#155a3e] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <LogIn className="w-5 h-5" />
+                Sign In
+              </button>
             </div>
-            <h1 className="text-3xl font-bold text-[#0C1829] mb-4">
-              Access Denied
-            </h1>
-            <p className="text-[#7C8A9E] mb-2">
-              {userEmail || "Unknown email"} is not authorized to access the
-              admin dashboard.
-            </p>
-            <p className="text-[#7C8A9E] mb-8 text-sm">
-              Only the platform owner can view this page.
-            </p>
-            <button
-              onClick={logout}
-              className="inline-flex items-center gap-2 bg-[#0C1829] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#1a2d47] transition-all"
-            >
-              Sign Out
-            </button>
           </motion.div>
         </div>
       </div>
@@ -353,17 +389,41 @@ export default function AdminDashboardPage() {
                 }`}
               />
             </button>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB]">
-              <Wallet className="w-4 h-4 text-[#1B6B4A]" />
-              <span className="text-sm text-[#3B4963]">
-                {shortenAddress(publicKey!)}
-              </span>
-              {isAuthority && (
-                <span className="ml-1 px-2 py-0.5 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] text-xs font-medium">
-                  Authority
+            {publicKey ? (
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB]">
+                <Wallet className="w-4 h-4 text-[#1B6B4A]" />
+                <span className="text-sm text-[#3B4963]">
+                  {shortenAddress(publicKey)}
                 </span>
-              )}
-            </div>
+                {isAuthority && (
+                  <span className="ml-1 px-2 py-0.5 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] text-xs font-medium">
+                    Authority
+                  </span>
+                )}
+                <button
+                  onClick={disconnectPhantom}
+                  className="ml-1 p-1 rounded hover:bg-[#E5E7EB] transition-colors"
+                  title="Disconnect wallet"
+                >
+                  <X className="w-3.5 h-3.5 text-[#7C8A9E]" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={connectPhantom}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1B6B4A] text-white text-sm font-medium hover:bg-[#155a3e] transition-all"
+              >
+                <Wallet className="w-4 h-4" />
+                Connect Phantom
+              </button>
+            )}
+            <button
+              onClick={handleAdminLogout}
+              className="p-2 rounded-lg hover:bg-[#F3F4F6] border border-[#E5E7EB] transition-all"
+              title="Sign out"
+            >
+              <LogOut className="w-5 h-5 text-[#7C8A9E]" />
+            </button>
           </div>
         </div>
       </header>
@@ -750,21 +810,12 @@ export default function AdminDashboardPage() {
             Waitlist Management
           </h2>
 
-          {/* Auth for waitlist admin */}
+          {/* Auth for waitlist admin — already authenticated */}
           {waitlistEntries.length === 0 && !waitlistLoading && (
-            <div className="flex items-center gap-3 mb-4">
-              <input
-                type="password"
-                placeholder="Admin secret"
-                value={adminSecret}
-                onChange={(e) => setAdminSecret(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && fetchWaitlist()}
-                className="flex-1 px-4 py-2.5 rounded-xl bg-[#FFFFFF] border border-[#E5E7EB] text-[#0C1829] text-sm placeholder:text-[#7C8A9E] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
-              />
+            <div className="text-center py-4">
               <button
                 onClick={fetchWaitlist}
-                disabled={!adminSecret}
-                className="px-5 py-2.5 rounded-xl bg-[#1B6B4A] text-white text-sm font-semibold hover:bg-[#155a3e] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-5 py-2.5 rounded-xl bg-[#1B6B4A] text-white text-sm font-semibold hover:bg-[#155a3e] transition-all"
               >
                 Load Waitlist
               </button>
