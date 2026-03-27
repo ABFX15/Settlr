@@ -1,18 +1,8 @@
 "use client";
 
 import { PrivyProvider as BasePrivyProvider } from "@privy-io/react-auth";
-import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 import { useEffect, useState, useMemo } from "react";
-import { base, mainnet, arbitrum, polygon, optimism } from "viem/chains";
 import { createSolanaRpc, createSolanaRpcSubscriptions } from "@solana/kit";
-
-// Create Solana wallet connectors for Phantom, Solflare, etc.
-const solanaConnectors = toSolanaWalletConnectors({
-  shouldAutoConnect: false,
-});
-
-// Supported EVM chains for USDC payments
-const supportedEvmChains = [mainnet, base, arbitrum, polygon, optimism];
 
 // Solana RPC configuration for devnet
 const SOLANA_DEVNET_RPC = "https://api.devnet.solana.com";
@@ -64,21 +54,11 @@ export function PrivyProvider({ children }: PrivyProviderProps) {
           logo: "/logo-new.png",
           showWalletLoginFirst: false,
           walletChainType: "solana-only",
-          walletList: ["phantom", "solflare", "backpack"],
         },
         loginMethods: ["email"],
-        supportedChains: supportedEvmChains,
         embeddedWallets: {
-          ethereum: {
-            createOnLogin: "users-without-wallets",
-          },
           solana: {
             createOnLogin: "users-without-wallets",
-          },
-        },
-        externalWallets: {
-          solana: {
-            connectors: solanaConnectors,
           },
         },
         solana: {
