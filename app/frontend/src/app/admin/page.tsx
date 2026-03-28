@@ -131,9 +131,25 @@ export default function AdminDashboardPage() {
     setIsAuthed(false);
     setAdminSecret("");
     setPublicKey(null);
+    // Disconnect Phantom globally so it doesn't leak into user flow
+    try {
+      phantomWallet?.disconnect();
+    } catch {}
     setPhantomWallet(null);
     sessionStorage.removeItem("adminSecret");
   };
+
+  // Disconnect Phantom when leaving admin page to prevent wallet leaking
+  // into user routes via wallet-adapter autoConnect
+  useEffect(() => {
+    return () => {
+      try {
+        const provider =
+          (window as any)?.phantom?.solana || (window as any)?.solana;
+        provider?.disconnect();
+      } catch {}
+    };
+  }, []);
 
   // ── Direct Phantom wallet connection ─────────────────────────────────
   const connectPhantom = async () => {
