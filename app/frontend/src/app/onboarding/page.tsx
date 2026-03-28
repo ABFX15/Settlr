@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { useWaitlistAccess } from "@/hooks/useWaitlistAccess";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import { buildCreateVaultTransaction, shortenAddress } from "@/lib/squads";
 import {
@@ -26,7 +25,6 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 // ─── Design tokens ────────────────────────────────────────
@@ -64,8 +62,6 @@ export default function OnboardingPage() {
     useWallet();
   const { setVisible } = useWalletModal();
   const { publicKey, connected, wallet } = useActiveWallet();
-  const { access } = useWaitlistAccess();
-  const router = useRouter();
 
   const [state, setState] = useState<OnboardingState>({
     step: 1,
@@ -81,12 +77,6 @@ export default function OnboardingPage() {
 
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
-
-  // ─── Waitlist gate: show message if not approved ──────
-  const showWaitlistGate =
-    access !== "loading" &&
-    access !== "unauthenticated" &&
-    access !== "approved";
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -321,578 +311,129 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen py-12 px-4 pt-32" style={{ background: c.bg }}>
       <div className="max-w-2xl mx-auto">
-        {showWaitlistGate ? (
-          <div className="text-center py-20">
-            <h1 className="text-2xl font-bold mb-4" style={{ color: c.navy }}>
-              Access Required
-            </h1>
-            <p className="mb-6" style={{ color: c.muted }}>
-              You need waitlist approval before onboarding.
-            </p>
-            <a
-              href="/waitlist"
-              className="underline"
-              style={{ color: c.green }}
-            >
-              Request Access
-            </a>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-10"
+        >
+          <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
+            style={{ background: c.greenBg }}
+          >
+            <Shield className="w-8 h-8" style={{ color: c.green }} />
           </div>
-        ) : (
-          <>
-            {/* Header */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center mb-10"
-            >
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-                style={{ background: c.greenBg }}
-              >
-                <Shield className="w-8 h-8" style={{ color: c.green }} />
-              </div>
-              <h1 className="text-3xl font-bold mb-2" style={{ color: c.navy }}>
-                Merchant Onboarding
-              </h1>
-              <p className="text-base" style={{ color: c.muted }}>
-                Set up your Squads vault and start accepting non-custodial
-                payments.
-              </p>
-            </motion.div>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: c.navy }}>
+            Merchant Onboarding
+          </h1>
+          <p className="text-base" style={{ color: c.muted }}>
+            Set up your Squads vault and start accepting non-custodial payments.
+          </p>
+        </motion.div>
 
-            {/* Progress Steps */}
-            <div className="flex items-center justify-center mb-10">
-              {steps.map((step, i) => (
-                <div key={step.num} className="flex items-center">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all"
-                      style={{
-                        background: state.step >= step.num ? c.green : c.card,
-                        color: state.step >= step.num ? "#fff" : c.muted,
-                        border: `2px solid ${
-                          state.step >= step.num ? c.green : c.border
-                        }`,
-                      }}
-                    >
-                      {state.step > step.num ? (
-                        <Check className="w-4 h-4" />
-                      ) : (
-                        <step.icon className="w-4 h-4" />
-                      )}
-                    </div>
-                    <span
-                      className="text-[10px] mt-1 font-medium"
-                      style={{
-                        color: state.step >= step.num ? c.green : c.muted,
-                      }}
-                    >
-                      {step.label}
-                    </span>
-                  </div>
-                  {i < steps.length - 1 && (
-                    <div
-                      className="w-10 h-0.5 mx-1.5 rounded"
-                      style={{
-                        background: state.step > step.num ? c.green : c.border,
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Error Message */}
-            <AnimatePresence>
-              {state.error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="mb-6 p-4 rounded-xl flex items-start gap-3 border"
+        {/* Progress Steps */}
+        <div className="flex items-center justify-center mb-10">
+          {steps.map((step, i) => (
+            <div key={step.num} className="flex items-center">
+              <div className="flex flex-col items-center">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all"
                   style={{
-                    background: "rgba(220,38,38,0.05)",
-                    borderColor: "rgba(220,38,38,0.2)",
+                    background: state.step >= step.num ? c.green : c.card,
+                    color: state.step >= step.num ? "#fff" : c.muted,
+                    border: `2px solid ${
+                      state.step >= step.num ? c.green : c.border
+                    }`,
                   }}
                 >
-                  <AlertCircle
-                    className="w-5 h-5 flex-shrink-0 mt-0.5"
-                    style={{ color: c.red }}
-                  />
-                  <div>
-                    <p className="text-sm font-medium" style={{ color: c.red }}>
-                      {state.error}
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* ═══════════════════════════════════════ */}
-            {/*  STEP 1 — Connect Wallet              */}
-            {/* ═══════════════════════════════════════ */}
-            {state.step === 1 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="rounded-2xl border p-8"
-                style={{ background: c.card, borderColor: c.border }}
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: c.greenBg }}
-                  >
-                    <Wallet className="w-5 h-5" style={{ color: c.green }} />
-                  </div>
-                  <div>
-                    <h2
-                      className="text-xl font-semibold"
-                      style={{ color: c.navy }}
-                    >
-                      Connect Your Wallet
-                    </h2>
-                    <p className="text-sm" style={{ color: c.muted }}>
-                      This wallet becomes the primary signer on your vault
-                    </p>
-                  </div>
-                </div>
-
-                {connected && publicKey ? (
-                  <div className="space-y-4">
-                    <div
-                      className="rounded-xl border p-4 flex items-center gap-4"
-                      style={{ borderColor: c.green, background: c.greenBg }}
-                    >
-                      <CheckCircle2
-                        className="w-6 h-6 flex-shrink-0"
-                        style={{ color: c.green }}
-                      />
-                      <div className="flex-1 min-w-0">
-                        <p
-                          className="text-sm font-medium"
-                          style={{ color: c.green }}
-                        >
-                          Wallet Connected
-                        </p>
-                        <p
-                          className="text-xs font-mono truncate mt-0.5"
-                          style={{ color: c.slate }}
-                        >
-                          {publicKey}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => copyToClipboard(publicKey, "wallet")}
-                        className="p-2 rounded-lg hover:opacity-70 transition-opacity"
-                      >
-                        {copied === "wallet" ? (
-                          <Check
-                            className="w-4 h-4"
-                            style={{ color: c.green }}
-                          />
-                        ) : (
-                          <Copy
-                            className="w-4 h-4"
-                            style={{ color: c.muted }}
-                          />
-                        )}
-                      </button>
-                    </div>
-
-                    {/* Security note */}
-                    <div
-                      className="rounded-lg p-4 text-sm"
-                      style={{ background: c.bg, color: c.muted }}
-                    >
-                      <p
-                        className="font-medium mb-1"
-                        style={{ color: c.slate }}
-                      >
-                        <Lock className="w-3.5 h-3.5 inline mr-1" />
-                        Why wallet-first?
-                      </p>
-                      <p className="text-xs leading-relaxed">
-                        Your wallet is your identity on Solana — no
-                        email/password to phish, no database to hack. We&apos;ll
-                        create a Squads multisig vault secured by this wallet so
-                        no single key can access your funds without
-                        authorization.
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <p className="text-sm mb-4" style={{ color: c.muted }}>
-                      No wallet detected. Connect Phantom, Solflare, or another
-                      Solana wallet.
-                    </p>
-                    <button
-                      onClick={() => setVisible(true)}
-                      className="inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
-                      style={{ background: c.green }}
-                    >
-                      <Wallet className="w-4 h-4" />
-                      Connect Wallet
-                    </button>
-                  </div>
-                )}
-
-                <div className="mt-8 flex justify-end">
-                  <button
-                    onClick={() =>
-                      validateStep(1) &&
-                      setState((s) => ({ ...s, step: 2, error: null }))
-                    }
-                    disabled={!validateStep(1)}
-                    className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-opacity hover:opacity-90 text-white"
-                    style={{ background: validateStep(1) ? c.green : c.muted }}
-                  >
-                    Continue
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </motion.div>
-            )}
-
-            {/* ═══════════════════════════════════════ */}
-            {/*  STEP 2 — Business Information         */}
-            {/* ═══════════════════════════════════════ */}
-            {state.step === 2 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="rounded-2xl border p-8"
-                style={{ background: c.card, borderColor: c.border }}
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: c.greenBg }}
-                  >
-                    <Building2 className="w-5 h-5" style={{ color: c.green }} />
-                  </div>
-                  <div>
-                    <h2
-                      className="text-xl font-semibold"
-                      style={{ color: c.navy }}
-                    >
-                      Business Information
-                    </h2>
-                    <p className="text-sm" style={{ color: c.muted }}>
-                      Tell us about your operation
-                    </p>
-                  </div>
-                </div>
-
-                <div className="space-y-5">
-                  <div>
-                    <label
-                      className="block text-sm font-medium mb-2"
-                      style={{ color: c.slate }}
-                    >
-                      Business Name *
-                    </label>
-                    <input
-                      type="text"
-                      value={state.businessName}
-                      onChange={(e) =>
-                        setState((s) => ({
-                          ...s,
-                          businessName: e.target.value,
-                        }))
-                      }
-                      placeholder="Your Company Name"
-                      className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
-                      style={{
-                        background: c.bg,
-                        border: `1px solid ${c.border}`,
-                        color: c.navy,
-                      }}
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      className="block text-sm font-medium mb-2"
-                      style={{ color: c.slate }}
-                    >
-                      Cannabis License Number
-                    </label>
-                    <input
-                      type="text"
-                      value={state.licenseNumber}
-                      onChange={(e) =>
-                        setState((s) => ({
-                          ...s,
-                          licenseNumber: e.target.value,
-                        }))
-                      }
-                      placeholder="e.g., 404-00123 (METRC/BioTrack)"
-                      className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
-                      style={{
-                        background: c.bg,
-                        border: `1px solid ${c.border}`,
-                        color: c.navy,
-                      }}
-                    />
-                    <p className="text-xs mt-1" style={{ color: c.muted }}>
-                      Optional now. Required for production settlement.
-                    </p>
-                  </div>
-
-                  <div>
-                    <label
-                      className="block text-sm font-medium mb-2"
-                      style={{ color: c.slate }}
-                    >
-                      Website
-                    </label>
-                    <input
-                      type="url"
-                      value={state.websiteUrl}
-                      onChange={(e) =>
-                        setState((s) => ({ ...s, websiteUrl: e.target.value }))
-                      }
-                      placeholder="https://yourcompany.com"
-                      className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
-                      style={{
-                        background: c.bg,
-                        border: `1px solid ${c.border}`,
-                        color: c.navy,
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-8 flex justify-between">
-                  <button
-                    onClick={() =>
-                      setState((s) => ({ ...s, step: 1, error: null }))
-                    }
-                    className="flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:opacity-70"
-                    style={{ color: c.muted }}
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back
-                  </button>
-                  <button
-                    onClick={() =>
-                      validateStep(2) &&
-                      setState((s) => ({ ...s, step: 3, error: null }))
-                    }
-                    disabled={!validateStep(2)}
-                    className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-opacity hover:opacity-90 text-white"
-                    style={{ background: validateStep(2) ? c.green : c.muted }}
-                  >
-                    Continue
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </motion.div>
-            )}
-
-            {/* ═══════════════════════════════════════ */}
-            {/*  STEP 3 — Create Squads Vault          */}
-            {/* ═══════════════════════════════════════ */}
-            {state.step === 3 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="rounded-2xl border p-8"
-                style={{ background: c.card, borderColor: c.border }}
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: c.greenBg }}
-                  >
-                    <Shield className="w-5 h-5" style={{ color: c.green }} />
-                  </div>
-                  <div>
-                    <h2
-                      className="text-xl font-semibold"
-                      style={{ color: c.navy }}
-                    >
-                      Create Your Vault
-                    </h2>
-                    <p className="text-sm" style={{ color: c.muted }}>
-                      Squads multisig — institutional treasury security
-                    </p>
-                  </div>
-                </div>
-
-                {/* Vault explainer */}
-                <div className="space-y-4 mb-8">
-                  <div
-                    className="rounded-xl border p-5"
-                    style={{ background: c.bg, borderColor: c.border }}
-                  >
-                    <h3
-                      className="text-sm font-semibold mb-3"
-                      style={{ color: c.navy }}
-                    >
-                      What is a Squads Vault?
-                    </h3>
-                    <p
-                      className="text-sm leading-relaxed mb-4"
-                      style={{ color: c.slate }}
-                    >
-                      A Squads Smart Account is an on-chain multisig vault that
-                      holds your USDC. Instead of funds sitting in a single
-                      wallet (one key = total control), your vault requires
-                      authorized signatures before any funds move.
-                    </p>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {[
-                        {
-                          icon: Lock,
-                          title: "1-of-1 to Start",
-                          desc: "You're the sole signer. Same UX as a normal wallet.",
-                        },
-                        {
-                          icon: Users,
-                          title: "Add Signers Later",
-                          desc: "Invite a CFO or partner for 2-of-2 approval on payouts.",
-                        },
-                        {
-                          icon: Shield,
-                          title: "Full Audit Trail",
-                          desc: "Every transaction is on-chain. Immutable compliance proof.",
-                        },
-                      ].map(({ icon: Icon, title, desc }) => (
-                        <div
-                          key={title}
-                          className="rounded-lg border p-3"
-                          style={{ borderColor: c.border }}
-                        >
-                          <Icon
-                            className="w-4 h-4 mb-2"
-                            style={{ color: c.green }}
-                          />
-                          <p
-                            className="text-xs font-semibold mb-1"
-                            style={{ color: c.navy }}
-                          >
-                            {title}
-                          </p>
-                          <p
-                            className="text-[11px] leading-relaxed"
-                            style={{ color: c.muted }}
-                          >
-                            {desc}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Signer info */}
-                  <div
-                    className="rounded-lg border p-4 flex items-center gap-3"
-                    style={{ borderColor: c.border, background: c.bg }}
-                  >
-                    <Wallet
-                      className="w-5 h-5 flex-shrink-0"
-                      style={{ color: c.green }}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p
-                        className="text-xs font-medium"
-                        style={{ color: c.slate }}
-                      >
-                        Primary signer
-                      </p>
-                      <p
-                        className="text-xs font-mono truncate"
-                        style={{ color: c.muted }}
-                      >
-                        {publicKey}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Create button */}
-                <button
-                  onClick={handleCreateVault}
-                  disabled={loading}
-                  className="w-full flex items-center justify-center gap-3 px-6 py-4 font-semibold rounded-xl text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                  style={{ background: c.green }}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Creating Vault on Solana...
-                    </>
+                  {state.step > step.num ? (
+                    <Check className="w-4 h-4" />
                   ) : (
-                    <>
-                      <Shield className="w-5 h-5" />
-                      Create Squads Vault
-                    </>
+                    <step.icon className="w-4 h-4" />
                   )}
-                </button>
-                <p
-                  className="text-center text-xs mt-3"
-                  style={{ color: c.muted }}
+                </div>
+                <span
+                  className="text-[10px] mt-1 font-medium"
+                  style={{
+                    color: state.step >= step.num ? c.green : c.muted,
+                  }}
                 >
-                  This costs ~0.01 SOL in rent (one-time). You&apos;ll sign one
-                  transaction.
-                </p>
-
-                <div className="mt-6 flex justify-start">
-                  <button
-                    onClick={() =>
-                      setState((s) => ({ ...s, step: 2, error: null }))
-                    }
-                    className="flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:opacity-70"
-                    style={{ color: c.muted }}
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back
-                  </button>
-                </div>
-              </motion.div>
-            )}
-
-            {/* ═══════════════════════════════════════ */}
-            {/*  STEP 4 — Webhook + Finalize           */}
-            {/* ═══════════════════════════════════════ */}
-            {state.step === 4 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="rounded-2xl border p-8"
-                style={{ background: c.card, borderColor: c.border }}
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: c.greenBg }}
-                  >
-                    <Key className="w-5 h-5" style={{ color: c.green }} />
-                  </div>
-                  <div>
-                    <h2
-                      className="text-xl font-semibold"
-                      style={{ color: c.navy }}
-                    >
-                      Integration Settings
-                    </h2>
-                    <p className="text-sm" style={{ color: c.muted }}>
-                      Configure webhooks (optional)
-                    </p>
-                  </div>
-                </div>
-
-                {/* Vault created confirmation */}
+                  {step.label}
+                </span>
+              </div>
+              {i < steps.length - 1 && (
                 <div
-                  className="rounded-xl border p-4 mb-6 flex items-center gap-3"
+                  className="w-10 h-0.5 mx-1.5 rounded"
+                  style={{
+                    background: state.step > step.num ? c.green : c.border,
+                  }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Error Message */}
+        <AnimatePresence>
+          {state.error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="mb-6 p-4 rounded-xl flex items-start gap-3 border"
+              style={{
+                background: "rgba(220,38,38,0.05)",
+                borderColor: "rgba(220,38,38,0.2)",
+              }}
+            >
+              <AlertCircle
+                className="w-5 h-5 flex-shrink-0 mt-0.5"
+                style={{ color: c.red }}
+              />
+              <div>
+                <p className="text-sm font-medium" style={{ color: c.red }}>
+                  {state.error}
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ═══════════════════════════════════════ */}
+        {/*  STEP 1 — Connect Wallet              */}
+        {/* ═══════════════════════════════════════ */}
+        {state.step === 1 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="rounded-2xl border p-8"
+            style={{ background: c.card, borderColor: c.border }}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: c.greenBg }}
+              >
+                <Wallet className="w-5 h-5" style={{ color: c.green }} />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold" style={{ color: c.navy }}>
+                  Connect Your Wallet
+                </h2>
+                <p className="text-sm" style={{ color: c.muted }}>
+                  This wallet becomes the primary signer on your vault
+                </p>
+              </div>
+            </div>
+
+            {connected && publicKey ? (
+              <div className="space-y-4">
+                <div
+                  className="rounded-xl border p-4 flex items-center gap-4"
                   style={{ borderColor: c.green, background: c.greenBg }}
                 >
                   <CheckCircle2
-                    className="w-5 h-5 flex-shrink-0"
+                    className="w-6 h-6 flex-shrink-0"
                     style={{ color: c.green }}
                   />
                   <div className="flex-1 min-w-0">
@@ -900,22 +441,20 @@ export default function OnboardingPage() {
                       className="text-sm font-medium"
                       style={{ color: c.green }}
                     >
-                      Vault Created
+                      Wallet Connected
                     </p>
                     <p
                       className="text-xs font-mono truncate mt-0.5"
                       style={{ color: c.slate }}
                     >
-                      {state.vaultPda}
+                      {publicKey}
                     </p>
                   </div>
                   <button
-                    onClick={() =>
-                      state.vaultPda && copyToClipboard(state.vaultPda, "vault")
-                    }
+                    onClick={() => copyToClipboard(publicKey, "wallet")}
                     className="p-2 rounded-lg hover:opacity-70 transition-opacity"
                   >
-                    {copied === "vault" ? (
+                    {copied === "wallet" ? (
                       <Check className="w-4 h-4" style={{ color: c.green }} />
                     ) : (
                       <Copy className="w-4 h-4" style={{ color: c.muted }} />
@@ -923,163 +462,559 @@ export default function OnboardingPage() {
                   </button>
                 </div>
 
-                <div>
-                  <label
-                    className="block text-sm font-medium mb-2"
-                    style={{ color: c.slate }}
-                  >
-                    Webhook Endpoint (Optional)
-                  </label>
-                  <input
-                    type="url"
-                    value={state.webhookUrl}
-                    onChange={(e) =>
-                      setState((s) => ({ ...s, webhookUrl: e.target.value }))
-                    }
-                    placeholder="https://yoursite.com/api/webhooks/settlr"
-                    className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
-                    style={{
-                      background: c.bg,
-                      border: `1px solid ${c.border}`,
-                      color: c.navy,
-                    }}
-                  />
-                  <p className="text-xs mt-2" style={{ color: c.muted }}>
-                    We&apos;ll POST payment events to this URL. You can
-                    configure this later from the dashboard.
+                {/* Security note */}
+                <div
+                  className="rounded-lg p-4 text-sm"
+                  style={{ background: c.bg, color: c.muted }}
+                >
+                  <p className="font-medium mb-1" style={{ color: c.slate }}>
+                    <Lock className="w-3.5 h-3.5 inline mr-1" />
+                    Why wallet-first?
+                  </p>
+                  <p className="text-xs leading-relaxed">
+                    Your wallet is your identity on Solana — no email/password
+                    to phish, no database to hack. We&apos;ll create a Squads
+                    multisig vault secured by this wallet so no single key can
+                    access your funds without authorization.
                   </p>
                 </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-sm mb-4" style={{ color: c.muted }}>
+                  No wallet detected. Connect Phantom, Solflare, or another
+                  Solana wallet.
+                </p>
+                <button
+                  onClick={() => setVisible(true)}
+                  className="inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
+                  style={{ background: c.green }}
+                >
+                  <Wallet className="w-4 h-4" />
+                  Connect Wallet
+                </button>
+              </div>
+            )}
 
-                <div className="mt-8 flex justify-between">
-                  <button
-                    onClick={() =>
-                      setState((s) => ({ ...s, step: 3, error: null }))
-                    }
-                    className="flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:opacity-70"
+            <div className="mt-8 flex justify-end">
+              <button
+                onClick={() =>
+                  validateStep(1) &&
+                  setState((s) => ({ ...s, step: 2, error: null }))
+                }
+                disabled={!validateStep(1)}
+                className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-opacity hover:opacity-90 text-white"
+                style={{ background: validateStep(1) ? c.green : c.muted }}
+              >
+                Continue
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ═══════════════════════════════════════ */}
+        {/*  STEP 2 — Business Information         */}
+        {/* ═══════════════════════════════════════ */}
+        {state.step === 2 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="rounded-2xl border p-8"
+            style={{ background: c.card, borderColor: c.border }}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: c.greenBg }}
+              >
+                <Building2 className="w-5 h-5" style={{ color: c.green }} />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold" style={{ color: c.navy }}>
+                  Business Information
+                </h2>
+                <p className="text-sm" style={{ color: c.muted }}>
+                  Tell us about your operation
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              <div>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: c.slate }}
+                >
+                  Business Name *
+                </label>
+                <input
+                  type="text"
+                  value={state.businessName}
+                  onChange={(e) =>
+                    setState((s) => ({
+                      ...s,
+                      businessName: e.target.value,
+                    }))
+                  }
+                  placeholder="Your Company Name"
+                  className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
+                  style={{
+                    background: c.bg,
+                    border: `1px solid ${c.border}`,
+                    color: c.navy,
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: c.slate }}
+                >
+                  Cannabis License Number
+                </label>
+                <input
+                  type="text"
+                  value={state.licenseNumber}
+                  onChange={(e) =>
+                    setState((s) => ({
+                      ...s,
+                      licenseNumber: e.target.value,
+                    }))
+                  }
+                  placeholder="e.g., 404-00123 (METRC/BioTrack)"
+                  className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
+                  style={{
+                    background: c.bg,
+                    border: `1px solid ${c.border}`,
+                    color: c.navy,
+                  }}
+                />
+                <p className="text-xs mt-1" style={{ color: c.muted }}>
+                  Optional now. Required for production settlement.
+                </p>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: c.slate }}
+                >
+                  Website
+                </label>
+                <input
+                  type="url"
+                  value={state.websiteUrl}
+                  onChange={(e) =>
+                    setState((s) => ({ ...s, websiteUrl: e.target.value }))
+                  }
+                  placeholder="https://yourcompany.com"
+                  className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
+                  style={{
+                    background: c.bg,
+                    border: `1px solid ${c.border}`,
+                    color: c.navy,
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="mt-8 flex justify-between">
+              <button
+                onClick={() =>
+                  setState((s) => ({ ...s, step: 1, error: null }))
+                }
+                className="flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:opacity-70"
+                style={{ color: c.muted }}
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </button>
+              <button
+                onClick={() =>
+                  validateStep(2) &&
+                  setState((s) => ({ ...s, step: 3, error: null }))
+                }
+                disabled={!validateStep(2)}
+                className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-opacity hover:opacity-90 text-white"
+                style={{ background: validateStep(2) ? c.green : c.muted }}
+              >
+                Continue
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ═══════════════════════════════════════ */}
+        {/*  STEP 3 — Create Squads Vault          */}
+        {/* ═══════════════════════════════════════ */}
+        {state.step === 3 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="rounded-2xl border p-8"
+            style={{ background: c.card, borderColor: c.border }}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: c.greenBg }}
+              >
+                <Shield className="w-5 h-5" style={{ color: c.green }} />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold" style={{ color: c.navy }}>
+                  Create Your Vault
+                </h2>
+                <p className="text-sm" style={{ color: c.muted }}>
+                  Squads multisig — institutional treasury security
+                </p>
+              </div>
+            </div>
+
+            {/* Vault explainer */}
+            <div className="space-y-4 mb-8">
+              <div
+                className="rounded-xl border p-5"
+                style={{ background: c.bg, borderColor: c.border }}
+              >
+                <h3
+                  className="text-sm font-semibold mb-3"
+                  style={{ color: c.navy }}
+                >
+                  What is a Squads Vault?
+                </h3>
+                <p
+                  className="text-sm leading-relaxed mb-4"
+                  style={{ color: c.slate }}
+                >
+                  A Squads Smart Account is an on-chain multisig vault that
+                  holds your USDC. Instead of funds sitting in a single wallet
+                  (one key = total control), your vault requires authorized
+                  signatures before any funds move.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {[
+                    {
+                      icon: Lock,
+                      title: "1-of-1 to Start",
+                      desc: "You're the sole signer. Same UX as a normal wallet.",
+                    },
+                    {
+                      icon: Users,
+                      title: "Add Signers Later",
+                      desc: "Invite a CFO or partner for 2-of-2 approval on payouts.",
+                    },
+                    {
+                      icon: Shield,
+                      title: "Full Audit Trail",
+                      desc: "Every transaction is on-chain. Immutable compliance proof.",
+                    },
+                  ].map(({ icon: Icon, title, desc }) => (
+                    <div
+                      key={title}
+                      className="rounded-lg border p-3"
+                      style={{ borderColor: c.border }}
+                    >
+                      <Icon
+                        className="w-4 h-4 mb-2"
+                        style={{ color: c.green }}
+                      />
+                      <p
+                        className="text-xs font-semibold mb-1"
+                        style={{ color: c.navy }}
+                      >
+                        {title}
+                      </p>
+                      <p
+                        className="text-[11px] leading-relaxed"
+                        style={{ color: c.muted }}
+                      >
+                        {desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Signer info */}
+              <div
+                className="rounded-lg border p-4 flex items-center gap-3"
+                style={{ borderColor: c.border, background: c.bg }}
+              >
+                <Wallet
+                  className="w-5 h-5 flex-shrink-0"
+                  style={{ color: c.green }}
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-medium" style={{ color: c.slate }}>
+                    Primary signer
+                  </p>
+                  <p
+                    className="text-xs font-mono truncate"
                     style={{ color: c.muted }}
                   >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back
-                  </button>
-                  <button
-                    onClick={handleRegister}
-                    disabled={loading}
-                    className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl disabled:opacity-50 transition-opacity hover:opacity-90 text-white"
-                    style={{ background: c.green }}
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Registering...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 className="w-4 h-4" />
-                        Complete Setup
-                      </>
-                    )}
-                  </button>
+                    {publicKey}
+                  </p>
                 </div>
-              </motion.div>
-            )}
+              </div>
+            </div>
 
-            {/* ═══════════════════════════════════════ */}
-            {/*  STEP 5 — Success                      */}
-            {/* ═══════════════════════════════════════ */}
-            {state.step === 5 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="rounded-2xl border p-8"
-                style={{ background: c.card, borderColor: c.border }}
+            {/* Create button */}
+            <button
+              onClick={handleCreateVault}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 font-semibold rounded-xl text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+              style={{ background: c.green }}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Creating Vault on Solana...
+                </>
+              ) : (
+                <>
+                  <Shield className="w-5 h-5" />
+                  Create Squads Vault
+                </>
+              )}
+            </button>
+            <p className="text-center text-xs mt-3" style={{ color: c.muted }}>
+              This costs ~0.01 SOL in rent (one-time). You&apos;ll sign one
+              transaction.
+            </p>
+
+            <div className="mt-6 flex justify-start">
+              <button
+                onClick={() =>
+                  setState((s) => ({ ...s, step: 2, error: null }))
+                }
+                className="flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:opacity-70"
+                style={{ color: c.muted }}
               >
-                <div className="text-center mb-8">
-                  <div
-                    className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-                    style={{ background: c.greenBg }}
-                  >
-                    <Check className="w-10 h-10" style={{ color: c.green }} />
-                  </div>
-                  <h2
-                    className="text-2xl font-bold mb-2"
-                    style={{ color: c.navy }}
-                  >
-                    You&apos;re All Set
-                  </h2>
-                  <p style={{ color: c.muted }}>
-                    Your Squads vault is live and your merchant account is
-                    registered.
-                  </p>
-                </div>
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </button>
+            </div>
+          </motion.div>
+        )}
 
-                {/* Vault Address */}
-                <div
-                  className="rounded-xl p-5 mb-4 border"
-                  style={{ background: c.bg, borderColor: c.border }}
+        {/* ═══════════════════════════════════════ */}
+        {/*  STEP 4 — Webhook + Finalize           */}
+        {/* ═══════════════════════════════════════ */}
+        {state.step === 4 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="rounded-2xl border p-8"
+            style={{ background: c.card, borderColor: c.border }}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: c.greenBg }}
+              >
+                <Key className="w-5 h-5" style={{ color: c.green }} />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold" style={{ color: c.navy }}>
+                  Integration Settings
+                </h2>
+                <p className="text-sm" style={{ color: c.muted }}>
+                  Configure webhooks (optional)
+                </p>
+              </div>
+            </div>
+
+            {/* Vault created confirmation */}
+            <div
+              className="rounded-xl border p-4 mb-6 flex items-center gap-3"
+              style={{ borderColor: c.green, background: c.greenBg }}
+            >
+              <CheckCircle2
+                className="w-5 h-5 flex-shrink-0"
+                style={{ color: c.green }}
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium" style={{ color: c.green }}>
+                  Vault Created
+                </p>
+                <p
+                  className="text-xs font-mono truncate mt-0.5"
+                  style={{ color: c.slate }}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span
-                      className="text-xs font-semibold uppercase tracking-wider"
-                      style={{ color: c.muted }}
-                    >
-                      Settlement Vault
-                    </span>
-                    <span
-                      className="text-[10px] px-2 py-0.5 rounded-full font-medium"
-                      style={{ background: c.greenBg, color: c.green }}
-                    >
-                      1-of-1 Multisig
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <code
-                      className="flex-1 text-xs font-mono break-all"
-                      style={{ color: c.slate }}
-                    >
-                      {state.vaultPda}
-                    </code>
-                    <button
-                      onClick={() =>
-                        state.vaultPda &&
-                        copyToClipboard(state.vaultPda, "vaultFinal")
-                      }
-                      className="p-2 rounded-lg hover:opacity-70 transition-opacity"
-                    >
-                      {copied === "vaultFinal" ? (
-                        <Check className="w-4 h-4" style={{ color: c.green }} />
-                      ) : (
-                        <Copy className="w-4 h-4" style={{ color: c.muted }} />
-                      )}
-                    </button>
-                  </div>
-                  <p className="text-[11px] mt-2" style={{ color: c.muted }}>
-                    All USDC settlements go to this vault. Add signers anytime
-                    from the dashboard.
-                  </p>
-                </div>
+                  {state.vaultPda}
+                </p>
+              </div>
+              <button
+                onClick={() =>
+                  state.vaultPda && copyToClipboard(state.vaultPda, "vault")
+                }
+                className="p-2 rounded-lg hover:opacity-70 transition-opacity"
+              >
+                {copied === "vault" ? (
+                  <Check className="w-4 h-4" style={{ color: c.green }} />
+                ) : (
+                  <Copy className="w-4 h-4" style={{ color: c.muted }} />
+                )}
+              </button>
+            </div>
 
-                {/* Next Steps */}
-                <div className="grid grid-cols-2 gap-4">
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center justify-center gap-2 p-4 rounded-xl border font-medium text-sm transition-all hover:opacity-80"
-                    style={{ borderColor: c.green, color: c.green }}
-                  >
-                    <Store className="w-4 h-4" />
-                    Dashboard
-                  </Link>
-                  <Link
-                    href="/docs"
-                    className="flex items-center justify-center gap-2 p-4 rounded-xl border font-medium text-sm transition-all hover:opacity-80"
-                    style={{ borderColor: c.border, color: c.slate }}
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Documentation
-                  </Link>
-                </div>
-              </motion.div>
-            )}
-          </>
+            <div>
+              <label
+                className="block text-sm font-medium mb-2"
+                style={{ color: c.slate }}
+              >
+                Webhook Endpoint (Optional)
+              </label>
+              <input
+                type="url"
+                value={state.webhookUrl}
+                onChange={(e) =>
+                  setState((s) => ({ ...s, webhookUrl: e.target.value }))
+                }
+                placeholder="https://yoursite.com/api/webhooks/settlr"
+                className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
+                style={{
+                  background: c.bg,
+                  border: `1px solid ${c.border}`,
+                  color: c.navy,
+                }}
+              />
+              <p className="text-xs mt-2" style={{ color: c.muted }}>
+                We&apos;ll POST payment events to this URL. You can configure
+                this later from the dashboard.
+              </p>
+            </div>
+
+            <div className="mt-8 flex justify-between">
+              <button
+                onClick={() =>
+                  setState((s) => ({ ...s, step: 3, error: null }))
+                }
+                className="flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:opacity-70"
+                style={{ color: c.muted }}
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </button>
+              <button
+                onClick={handleRegister}
+                disabled={loading}
+                className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl disabled:opacity-50 transition-opacity hover:opacity-90 text-white"
+                style={{ background: c.green }}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Registering...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    Complete Setup
+                  </>
+                )}
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ═══════════════════════════════════════ */}
+        {/*  STEP 5 — Success                      */}
+        {/* ═══════════════════════════════════════ */}
+        {state.step === 5 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="rounded-2xl border p-8"
+            style={{ background: c.card, borderColor: c.border }}
+          >
+            <div className="text-center mb-8">
+              <div
+                className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                style={{ background: c.greenBg }}
+              >
+                <Check className="w-10 h-10" style={{ color: c.green }} />
+              </div>
+              <h2 className="text-2xl font-bold mb-2" style={{ color: c.navy }}>
+                You&apos;re All Set
+              </h2>
+              <p style={{ color: c.muted }}>
+                Your Squads vault is live and your merchant account is
+                registered.
+              </p>
+            </div>
+
+            {/* Vault Address */}
+            <div
+              className="rounded-xl p-5 mb-4 border"
+              style={{ background: c.bg, borderColor: c.border }}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span
+                  className="text-xs font-semibold uppercase tracking-wider"
+                  style={{ color: c.muted }}
+                >
+                  Settlement Vault
+                </span>
+                <span
+                  className="text-[10px] px-2 py-0.5 rounded-full font-medium"
+                  style={{ background: c.greenBg, color: c.green }}
+                >
+                  1-of-1 Multisig
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <code
+                  className="flex-1 text-xs font-mono break-all"
+                  style={{ color: c.slate }}
+                >
+                  {state.vaultPda}
+                </code>
+                <button
+                  onClick={() =>
+                    state.vaultPda &&
+                    copyToClipboard(state.vaultPda, "vaultFinal")
+                  }
+                  className="p-2 rounded-lg hover:opacity-70 transition-opacity"
+                >
+                  {copied === "vaultFinal" ? (
+                    <Check className="w-4 h-4" style={{ color: c.green }} />
+                  ) : (
+                    <Copy className="w-4 h-4" style={{ color: c.muted }} />
+                  )}
+                </button>
+              </div>
+              <p className="text-[11px] mt-2" style={{ color: c.muted }}>
+                All USDC settlements go to this vault. Add signers anytime from
+                the dashboard.
+              </p>
+            </div>
+
+            {/* Next Steps */}
+            <div className="grid grid-cols-2 gap-4">
+              <Link
+                href="/dashboard"
+                className="flex items-center justify-center gap-2 p-4 rounded-xl border font-medium text-sm transition-all hover:opacity-80"
+                style={{ borderColor: c.green, color: c.green }}
+              >
+                <Store className="w-4 h-4" />
+                Dashboard
+              </Link>
+              <Link
+                href="/docs"
+                className="flex items-center justify-center gap-2 p-4 rounded-xl border font-medium text-sm transition-all hover:opacity-80"
+                style={{ borderColor: c.border, color: c.slate }}
+              >
+                <ExternalLink className="w-4 h-4" />
+                Documentation
+              </Link>
+            </div>
+          </motion.div>
         )}
       </div>
     </div>
