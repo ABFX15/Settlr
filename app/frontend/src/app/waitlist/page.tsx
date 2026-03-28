@@ -1,17 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { Clock } from "lucide-react";
 import { useWaitlistAccess } from "@/hooks/useWaitlistAccess";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function WaitlistPage() {
-  const router = useRouter();
   const { access } = useWaitlistAccess();
   const { connected, disconnect } = useWallet();
   const [email, setEmail] = useState("");
@@ -22,12 +20,8 @@ export default function WaitlistPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // If user is already approved, redirect straight to onboarding
-  useEffect(() => {
-    if (access === "approved") {
-      router.replace("/onboarding");
-    }
-  }, [access, router]);
+  // Show onboarding link if already approved
+  const isApproved = access === "approved";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
