@@ -10,34 +10,15 @@ import { useWaitlistAccess } from "@/hooks/useWaitlistAccess";
  *  - Approved on waitlist but not onboarded → /onboarding
  *  - Not approved / no entry → /waitlist (the form)
  *
- * Skips redirect on public pages.
+ * Only redirects from protected merchant pages (dashboard, create).
+ * Customer-facing pages (checkout, invoice, demo, etc.) never redirect.
  */
 
-// Pages that should NOT trigger a redirect even when logged in
-const PUBLIC_PATHS = [
-  "/onboarding",
-  "/waitlist",
-  "/admin",
-  "/logout",
-  "/docs",
-  "/learn",
-  "/compare",
-  "/demo",
-  "/compliance",
-  "/help",
-  "/industries",
-  "/products",
-  "/pricing",
-  "/integrations",
-  "/send-payments",
-  "/privacy",
-  "/terms",
-];
+// Pages that require merchant onboarding — redirect fires here
+const PROTECTED_PATHS = ["/dashboard", "/create"];
 
-function isPublicPath(pathname: string): boolean {
-  // Home page is always public
-  if (pathname === "/") return true;
-  return PUBLIC_PATHS.some(
+function isProtectedPath(pathname: string): boolean {
+  return PROTECTED_PATHS.some(
     (p) => pathname === p || pathname.startsWith(p + "/"),
   );
 }
@@ -53,26 +34,20 @@ export function PostLoginRouter() {
     if (hasRedirected.current) return;
     if (status === "loading" || access === "loading") return;
 
-    if (status === "needs-onboarding" && !isPublicPath(pathname)) {
+    // Only redirect from protected merchant pages
+    if (status === "needs-onboarding" && isProtectedPath(pathname)) {
       hasRedirected.current = true;
       if (access === "approved") {
-        // Approved but not onboarded — send to onboarding
         router.replace("/onboarding");
       } else {
-        // Not approved — send to waitlist form
         router.replace("/waitlist");
       }
     }
   }, [status, access, pathname, router]);
 
-  // Block direct access to protected pages
+  // Block direct access to protected pages (same logic, no hasRedirected guard)
   useEffect(() => {
-    if (
-      status === "needs-onboarding" &&
-      (pathname === "/dashboard" ||
-        pathname.startsWith("/dashboard/") ||
-        pathname === "/create")
-    ) {
+    if (status === "needs-onboarding" && isProtectedPath(pathname)) {
       if (access === "approved") {
         router.replace("/onboarding");
       } else if (access !== "loading") {
