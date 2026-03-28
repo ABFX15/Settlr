@@ -58,7 +58,7 @@ export async function PATCH(request: NextRequest) {
         // Send invite email when approving
         if (status === "invited" || status === "active") {
             const loginUrl = `${APP_URL}/onboarding`;
-            await sendEmail({
+            const emailSent = await sendEmail({
                 to: email,
                 subject: "You're approved — welcome to Settlr",
                 html: `
@@ -85,6 +85,10 @@ export async function PATCH(request: NextRequest) {
                 </div>`,
                 text: `You're approved for Settlr! Sign in at ${loginUrl} using the same email you applied with.`,
             });
+            if (!emailSent) {
+                console.error(`[admin] Email failed for ${email}. RESEND_API_KEY set: ${!!process.env.RESEND_API_KEY}`);
+            }
+            return NextResponse.json({ success: true, email, status, emailSent });
         }
 
         return NextResponse.json({ success: true, email, status });

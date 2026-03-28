@@ -251,7 +251,14 @@ export default function AdminDashboardPage() {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "Failed to approve");
       }
-      setSuccess(`Approved ${email} — invite email sent!`);
+      const result = await res.json();
+      if (result.emailSent === false) {
+        setError(
+          `Approved ${email} but email failed to send. Check RESEND_API_KEY on Vercel.`,
+        );
+      } else {
+        setSuccess(`Approved ${email} — invite email sent!`);
+      }
       fetchWaitlist();
     } catch (err: any) {
       setError(err.message || "Failed to approve entry");

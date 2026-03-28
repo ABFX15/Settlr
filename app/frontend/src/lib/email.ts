@@ -5,9 +5,12 @@
  * Falls back to console.log for development / when no key is set.
  */
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = process.env.PAYOUT_FROM_EMAIL || "adam@settlr.dev";
 const APP_NAME = "Settlr";
+
+function getResendKey(): string | undefined {
+    return process.env.RESEND_API_KEY;
+}
 
 interface SendEmailOptions {
     to: string;
@@ -17,12 +20,17 @@ interface SendEmailOptions {
 }
 
 async function sendViaResend(options: SendEmailOptions): Promise<boolean> {
+    const apiKey = getResendKey();
+    if (!apiKey) {
+        console.error("[email] RESEND_API_KEY is not set");
+        return false;
+    }
     try {
         const res = await fetch("https://api.resend.com/emails", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${RESEND_API_KEY}`,
+                Authorization: `Bearer ${apiKey}`,
             },
             body: JSON.stringify({
                 from: `${APP_NAME} <${FROM_EMAIL}>`,
@@ -57,9 +65,10 @@ function logToConsole(options: SendEmailOptions): boolean {
 }
 
 export async function sendEmail(options: SendEmailOptions): Promise<boolean> {
-    if (RESEND_API_KEY) {
+    if (getResendKey()) {
         return sendViaResend(options);
     }
+    console.warn("[email] No RESEND_API_KEY — falling back to console log");
     return logToConsole(options);
 }
 
