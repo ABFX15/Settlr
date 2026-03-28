@@ -135,19 +135,36 @@ export default function AdminDashboardPage() {
     try {
       phantomWallet?.disconnect();
     } catch {}
+    try {
+      const provider =
+        (window as any)?.phantom?.solana || (window as any)?.solana;
+      provider?.disconnect();
+    } catch {}
     setPhantomWallet(null);
     sessionStorage.removeItem("adminSecret");
+    // Also clear wallet-adapter localStorage
+    try {
+      localStorage.removeItem("walletName");
+    } catch {}
   };
 
-  // Disconnect Phantom when leaving admin page to prevent wallet leaking
-  // into user routes via wallet-adapter autoConnect
+  // Disconnect Phantom on unmount AND on beforeunload to prevent wallet leaking
   useEffect(() => {
-    return () => {
+    function disconnectPhantomGlobal() {
       try {
         const provider =
           (window as any)?.phantom?.solana || (window as any)?.solana;
         provider?.disconnect();
       } catch {}
+      try {
+        localStorage.removeItem("walletName");
+      } catch {}
+    }
+
+    window.addEventListener("beforeunload", disconnectPhantomGlobal);
+    return () => {
+      window.removeEventListener("beforeunload", disconnectPhantomGlobal);
+      disconnectPhantomGlobal();
     };
   }, []);
 
