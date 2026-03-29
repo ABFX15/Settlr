@@ -392,6 +392,13 @@ export function Navbar() {
         {/* Right Side - CTA */}
         <div className="hidden items-center gap-3 md:flex">
           <Link
+            href="/login"
+            className="rounded-full px-5 py-2 text-sm font-semibold transition-all hover:opacity-80"
+            style={{ color: "#1B6B4A" }}
+          >
+            Sign In
+          </Link>
+          <Link
             href="/waitlist"
             className="rounded-full px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
             style={{
@@ -512,6 +519,14 @@ export function Navbar() {
               </div>
 
               <div className="mt-4 flex flex-col gap-2 border-t border-[#E5E7EB] pt-4">
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-full px-4 py-3 text-center text-sm font-semibold transition-all"
+                  style={{ color: "#1B6B4A" }}
+                >
+                  Sign In
+                </Link>
                 <Link
                   href="/waitlist"
                   onClick={() => setMobileMenuOpen(false)}
