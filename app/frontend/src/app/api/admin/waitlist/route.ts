@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getWaitlist, updateWaitlistStatus } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
+import crypto from "crypto";
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
@@ -57,7 +58,11 @@ export async function PATCH(request: NextRequest) {
 
         // Send invite email when approving
         if (status === "invited" || status === "active") {
-            const loginUrl = `${APP_URL}/onboarding`;
+            // Generate a unique invite token for the magic link
+            const inviteToken = crypto.randomBytes(32).toString("hex");
+            await updateWaitlistStatus(email, status, inviteToken);
+
+            const loginUrl = `${APP_URL}/onboarding?token=${inviteToken}`;
             const emailSent = await sendEmail({
                 to: email,
                 subject: "You're approved — welcome to Settlr",
@@ -68,7 +73,7 @@ export async function PATCH(request: NextRequest) {
                         <h1 style="color: #0C1829; font-size: 24px; margin: 0;">You're in.</h1>
                     </div>
                     <p style="color: #3B4963; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
-                        Your access to Settlr has been approved. You can now sign in and set up your non-custodial settlement account.
+                        Your access to Settlr has been approved. Click below to set up your non-custodial settlement account.
                     </p>
                     <div style="text-align: center; margin-bottom: 24px;">
                         <a href="${loginUrl}" style="display: inline-block; background: #1B6B4A; color: #ffffff; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px;">
@@ -76,14 +81,14 @@ export async function PATCH(request: NextRequest) {
                         </a>
                     </div>
                     <p style="color: #7C8A9E; font-size: 13px; line-height: 1.5;">
-                        Use the same email you applied with to sign in. We'll walk you through connecting a wallet and creating your settlement vault.
+                        This link is unique to you. You'll connect a Solana wallet (Phantom or Solflare) and create your settlement vault.
                     </p>
                     <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
                     <p style="color: #7C8A9E; font-size: 12px; text-align: center;">
                         Settlr — Non-custodial USDC settlement for high-risk industries
                     </p>
                 </div>`,
-                text: `You're approved for Settlr! Sign in at ${loginUrl} using the same email you applied with.`,
+                text: `You're approved for Settlr! Sign in at ${loginUrl} — this link is unique to you.`,
             });
             if (!emailSent) {
                 console.error(`[admin] Email failed for ${email}. RESEND_API_KEY set: ${!!process.env.RESEND_API_KEY}`);

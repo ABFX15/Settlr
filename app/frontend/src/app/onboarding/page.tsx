@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import { buildCreateVaultTransaction, shortenAddress } from "@/lib/squads";
+import { useSearchParams } from "next/navigation";
 import {
   Store,
   Check,
@@ -57,11 +58,54 @@ interface OnboardingState {
   error: string | null;
 }
 
-export default function OnboardingPage() {
+export default function OnboardingPageWrapper() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2
+            className="w-8 h-8 animate-spin"
+            style={{ color: "#1B6B4A" }}
+          />
+        </div>
+      }
+    >
+      <OnboardingPageInner />
+    </Suspense>
+  );
+}
+
+function OnboardingPageInner() {
   const { connected: walletConnected, signTransaction: walletSignTransaction } =
     useWallet();
   const { setVisible } = useWalletModal();
   const { publicKey, connected, wallet } = useActiveWallet();
+  const searchParams = useSearchParams();
+
+  // ─── Invite token verification ─────────────────────
+  const [tokenStatus, setTokenStatus] = useState<
+    "checking" | "valid" | "invalid"
+  >("checking");
+  const [inviteEmail, setInviteEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (!token) {
+      setTokenStatus("invalid");
+      return;
+    }
+    fetch(`/api/waitlist/verify-token?token=${encodeURIComponent(token)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.valid) {
+          setTokenStatus("valid");
+          setInviteEmail(data.email || null);
+        } else {
+          setTokenStatus("invalid");
+        }
+      })
+      .catch(() => setTokenStatus("invalid"));
+  }, [searchParams]);
 
   const [state, setState] = useState<OnboardingState>({
     step: 1,
@@ -227,6 +271,69 @@ export default function OnboardingPage() {
       setLoading(false);
     }
   };
+
+  // ─── Token verification gates ───────────────────────
+  if (tokenStatus === "checking") {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center p-4"
+        style={{ background: c.bg }}
+      >
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center"
+        >
+          <Loader2
+            className="w-8 h-8 animate-spin mx-auto mb-4"
+            style={{ color: c.green }}
+          />
+          <p style={{ color: c.muted }}>Verifying your invite...</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (tokenStatus === "invalid") {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center p-4"
+        style={{ background: c.bg }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl border p-10 text-center max-w-lg"
+          style={{ background: c.card, borderColor: c.border }}
+        >
+          <div
+            className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8"
+            style={{ background: "rgba(220,38,38,0.06)" }}
+          >
+            <Lock className="w-10 h-10" style={{ color: c.red }} />
+          </div>
+          <h2 className="text-3xl font-bold mb-3" style={{ color: c.navy }}>
+            Invite Required
+          </h2>
+          <p className="mb-6 text-lg" style={{ color: c.slate }}>
+            Settlr is invite-only during early access. Request access and
+            we&apos;ll email you a unique sign-in link when approved.
+          </p>
+          <Link
+            href="/waitlist"
+            className="inline-flex items-center gap-3 px-8 py-4 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
+            style={{ background: c.green }}
+          >
+            <Shield className="w-5 h-5" />
+            Request Access
+          </Link>
+          <p className="mt-4 text-xs" style={{ color: c.muted }}>
+            Already approved? Check your email for the invite link.
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
 
   // ─── Not connected ─────────────────────────────────
   if (!connected) {

@@ -1204,14 +1204,18 @@ export async function getWaitlistPosition(email: string): Promise<number | null>
 
 export async function updateWaitlistStatus(
     email: string,
-    status: "pending" | "invited" | "active"
+    status: "pending" | "invited" | "active",
+    inviteToken?: string
 ): Promise<boolean> {
     const normalizedEmail = email.toLowerCase().trim();
 
     if (isSupabaseConfigured()) {
+        const update: Record<string, unknown> = { status };
+        if (inviteToken) update.invite_token = inviteToken;
+
         const { error } = await supabase
             .from("waitlist")
-            .update({ status })
+            .update(update)
             .eq("email", normalizedEmail);
 
         return !error;
@@ -1219,9 +1223,31 @@ export async function updateWaitlistStatus(
         const entry = memoryWaitlist.find(e => e.email === normalizedEmail);
         if (entry) {
             entry.status = status;
+            if (inviteToken) (entry as any).inviteToken = inviteToken;
             return true;
         }
         return false;
+    }
+}
+
+export async function verifyInviteToken(token: string): Promise<{ valid: boolean; email: string | null }> {
+    if (isSupabaseConfigured()) {
+        const { data } = await supabase
+            .from("waitlist")
+            .select("email, status")
+            .eq("invite_token", token)
+            .in("status", ["invited", "active"])
+            .single();
+
+        if (data) {
+            return { valid: true, email: data.email };
+        }
+        return { valid: false, email: null };
+    } else {
+        const entry = memoryWaitlist.find(
+            (e: any) => e.inviteToken === token && (e.status === "invited" || e.status === "active")
+        );
+        return { valid: !!entry, email: entry?.email || null };
     }
 }
 
