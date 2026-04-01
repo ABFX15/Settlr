@@ -133,6 +133,8 @@ export async function POST(request: NextRequest) {
                 dueDate: new Date(dueDate),
                 invoiceUrl,
                 memo,
+            }).then((sent) => {
+                if (!sent) console.error("[invoices] Email send returned false for", buyerEmail);
             }).catch((err) =>
                 console.error("[invoices] Failed to send email:", err)
             );

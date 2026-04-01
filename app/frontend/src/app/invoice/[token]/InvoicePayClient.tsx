@@ -103,6 +103,7 @@ export default function InvoicePayClient({
     connected,
     connecting,
     signTransaction: walletSignTransaction,
+    sendTransaction,
   } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
 
@@ -147,8 +148,17 @@ export default function InvoicePayClient({
 
   // Handle payment
   const handlePay = async () => {
-    if (!invoice || !payerAddress || !walletSignTransaction || !publicKey)
+    if (!invoice) return;
+    if (!publicKey || !payerAddress) {
+      openWalletModal(true);
       return;
+    }
+    if (!walletSignTransaction && !sendTransaction) {
+      setError(
+        "Your wallet does not support transaction signing. Please try a different wallet.",
+      );
+      return;
+    }
     setState("paying");
     setError(null);
 
@@ -214,15 +224,26 @@ export default function InvoicePayClient({
         ),
       );
 
-      const { blockhash } = await connection.getLatestBlockhash();
+      const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash();
       transaction.recentBlockhash = blockhash;
       transaction.feePayer = userPubkey;
 
-      const signedTx = await walletSignTransaction(transaction);
-      const sig = await connection.sendRawTransaction(signedTx.serialize(), {
-        skipPreflight: true,
-      });
-      await connection.confirmTransaction(sig, "confirmed");
+      let sig: string;
+      if (walletSignTransaction) {
+        const signedTx = await walletSignTransaction(transaction);
+        sig = await connection.sendRawTransaction(signedTx.serialize(), {
+          skipPreflight: true,
+        });
+      } else {
+        sig = await sendTransaction!(transaction, connection, {
+          skipPreflight: true,
+        });
+      }
+      await connection.confirmTransaction(
+        { signature: sig, blockhash, lastValidBlockHeight },
+        "confirmed",
+      );
 
       setTxSignature(sig);
 
