@@ -91,6 +91,10 @@ function OnboardingPageInner() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (!token) {
+      if (process.env.NODE_ENV === "development") {
+        setTokenStatus("valid");
+        return;
+      }
       setTokenStatus("invalid");
       return;
     }
