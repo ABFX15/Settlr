@@ -168,10 +168,12 @@ export default function InvoicePayClient({
       const merchantPubkey = new PublicKey(invoice.merchantWallet);
 
       // Get associated token accounts
+      // allowOwnerOffCurve for merchant because it may be a Squads vault PDA
       const userAta = await getAssociatedTokenAddress(USDC_MINT, userPubkey);
       const merchantAta = await getAssociatedTokenAddress(
         USDC_MINT,
         merchantPubkey,
+        true,
       );
 
       // Check balance
