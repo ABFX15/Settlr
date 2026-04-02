@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { useWalletModal } from "@/components/WalletModal";
 import {
   Connection,
   PublicKey,

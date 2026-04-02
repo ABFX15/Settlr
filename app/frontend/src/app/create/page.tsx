@@ -6,7 +6,7 @@ import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   ArrowLeft,

@@ -566,36 +566,6 @@ pre,
   background: var(--border-hover);
 }
 
-/* Wallet adapter overrides for consistent styling */
-.wallet-adapter-button {
-  background: linear-gradient(
-    135deg,
-    var(--primary),
-    var(--secondary)
-  ) !important;
-  border-radius: 12px !important;
-  font-weight: 600 !important;
-  height: 48px !important;
-  padding: 0 24px !important;
-  transition: all 0.3s ease !important;
-}
-
-.wallet-adapter-button:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 30px var(--primary-glow) !important;
-}
-
-.wallet-adapter-modal-wrapper {
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(12px) !important;
-}
-
-.wallet-adapter-modal-container {
-  background: var(--card) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 24px !important;
-}
-
 /* ── Blog prose styles ── */
 .prose-settlr {
   color: rgba(255, 255, 255, 0.7);

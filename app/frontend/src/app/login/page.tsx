@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { useWalletModal } from "@/components/WalletModal";
 import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 import { useRouter } from "next/navigation";
 import { Shield, Wallet, Loader2, ArrowRight } from "lucide-react";
