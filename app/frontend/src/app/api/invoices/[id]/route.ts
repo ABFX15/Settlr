@@ -106,13 +106,13 @@ export async function PATCH(
         const body = await request.json();
         const { action, paymentSignature, payerWallet } = body;
 
-        if (action === "send") {
+        if (action === "send" || action === "resend") {
             const invoiceUrl = `${process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev"}/invoice/${invoice.viewToken}`;
-            const updated = await updateInvoiceStatus(id, "sent", {
+            await updateInvoiceStatus(id, "sent", {
                 sentAt: new Date(),
             });
 
-            sendInvoiceEmail({
+            const sent = await sendInvoiceEmail({
                 to: invoice.buyerEmail,
                 invoiceNumber: invoice.invoiceNumber,
                 amount: invoice.total,
@@ -122,11 +122,14 @@ export async function PATCH(
                 dueDate: invoice.dueDate,
                 invoiceUrl,
                 memo: invoice.memo,
-            }).catch((err) =>
-                console.error("[invoices] Failed to send email:", err)
-            );
+            });
 
-            return NextResponse.json({ status: updated?.status || "sent" });
+            if (!sent) {
+                console.error("[invoices] Email send failed for", invoice.buyerEmail);
+                return NextResponse.json({ status: "sent", emailSent: false });
+            }
+
+            return NextResponse.json({ status: "sent", emailSent: true });
         }
 
         if (action === "cancel") {

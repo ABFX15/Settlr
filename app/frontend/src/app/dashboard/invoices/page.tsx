@@ -93,18 +93,47 @@ export default function InvoicesPage() {
   const [filterStatus, setFilterStatus] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [resendingId, setResendingId] = useState<string | null>(null);
+  const [resendResult, setResendResult] = useState<{
+    id: string;
+    success: boolean;
+  } | null>(null);
 
   const appUrl =
     typeof window !== "undefined"
       ? window.location.origin
       : process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
 
-  const copyBlinkUrl = (inv: InvoiceSummary) => {
+  const copyPayLink = (inv: InvoiceSummary) => {
     if (!inv.viewToken) return;
-    const url = `${appUrl}/api/actions/pay?invoice=${inv.viewToken}`;
+    const url = `${appUrl}/invoice/${inv.viewToken}`;
     navigator.clipboard.writeText(url);
     setCopiedId(inv.id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const resendInvoice = async (inv: InvoiceSummary) => {
+    if (!publicKey || resendingId) return;
+    setResendingId(inv.id);
+    setResendResult(null);
+    try {
+      const res = await fetch(`/api/invoices/${inv.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-merchant-wallet": publicKey,
+        },
+        body: JSON.stringify({ action: "resend" }),
+      });
+      const data = await res.json();
+      setResendResult({ id: inv.id, success: data.emailSent !== false });
+      setTimeout(() => setResendResult(null), 3000);
+    } catch {
+      setResendResult({ id: inv.id, success: false });
+      setTimeout(() => setResendResult(null), 3000);
+    } finally {
+      setResendingId(null);
+    }
   };
 
   const fetchInvoices = useCallback(async () => {
@@ -363,6 +392,12 @@ export default function InvoicesPage() {
                   >
                     Pay Link
                   </th>
+                  <th
+                    className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider"
+                    style={{ color: MUTED }}
+                  >
+                    Email
+                  </th>
                   <th className="w-10 px-4 py-3" />
                 </tr>
               </thead>
@@ -450,11 +485,11 @@ export default function InvoicesPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              copyBlinkUrl(inv);
+                              copyPayLink(inv);
                             }}
                             className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors hover:bg-green-50"
                             style={{ color: GREEN }}
-                            title="Copy Blink pay link"
+                            title="Copy invoice pay link"
                           >
                             {copiedId === inv.id ? (
                               <>
@@ -472,6 +507,76 @@ export default function InvoicesPage() {
                           <span className="text-xs" style={{ color: MUTED }}>
                             Paid
                           </span>
+                        ) : null}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {!["paid", "cancelled", "draft"].includes(
+                          inv.status,
+                        ) ? (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              resendInvoice(inv);
+                            }}
+                            disabled={resendingId === inv.id}
+                            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors hover:bg-blue-50 disabled:opacity-50"
+                            style={{ color: "#2563eb" }}
+                            title={`Resend invoice to ${inv.buyerEmail}`}
+                          >
+                            {resendingId === inv.id ? (
+                              <>
+                                <Clock className="h-3 w-3 animate-spin" />
+                                Sending…
+                              </>
+                            ) : resendResult?.id === inv.id ? (
+                              resendResult.success ? (
+                                <>
+                                  <Check
+                                    className="h-3 w-3"
+                                    style={{ color: GREEN }}
+                                  />
+                                  <span style={{ color: GREEN }}>Sent!</span>
+                                </>
+                              ) : (
+                                <>
+                                  <AlertTriangle
+                                    className="h-3 w-3"
+                                    style={{ color: "#dc2626" }}
+                                  />
+                                  <span style={{ color: "#dc2626" }}>
+                                    Failed
+                                  </span>
+                                </>
+                              )
+                            ) : (
+                              <>
+                                <Send className="h-3 w-3" />
+                                Resend
+                              </>
+                            )}
+                          </button>
+                        ) : inv.status === "draft" ? (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              resendInvoice(inv);
+                            }}
+                            disabled={resendingId === inv.id}
+                            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors hover:bg-green-50 disabled:opacity-50"
+                            style={{ color: GREEN }}
+                          >
+                            {resendingId === inv.id ? (
+                              <>
+                                <Clock className="h-3 w-3 animate-spin" />
+                                Sending…
+                              </>
+                            ) : (
+                              <>
+                                <Send className="h-3 w-3" />
+                                Send
+                              </>
+                            )}
+                          </button>
                         ) : null}
                       </td>
                       <td className="px-4 py-3">
