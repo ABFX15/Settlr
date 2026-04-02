@@ -225,14 +225,16 @@ export default function TreasuryPage() {
             Fund your settlement balance and track deposits.
           </p>
 
-          <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-8 text-center">
-            <Wallet className="mx-auto h-10 w-10 text-[#7C8A9E]/60 mb-4" />
-            <p className="text-sm text-[#7C8A9E] mb-6">
+          <div className="rounded-xl border border-[#E2E8F0] bg-white p-8 text-center">
+            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F8FAFC]">
+              <Wallet className="h-6 w-6 text-[#94A3B8]" />
+            </div>
+            <p className="text-sm text-[#64748B] mb-6">
               Connect your wallet to view your treasury balance.
             </p>
             <button
               onClick={() => openWalletModal(true)}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#1B6B4A] px-6 py-3 text-sm font-medium text-[#0C1829] hover:bg-[#1B6B4A]/90 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#0C1829] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1a2d47] transition-colors"
             >
               <LogIn className="h-4 w-4" />
               Connect Wallet
@@ -267,22 +269,22 @@ export default function TreasuryPage() {
             Fund your settlement balance and track deposits.
           </p>
 
-          <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-8 text-center">
+          <div className="rounded-xl border border-[#E2E8F0] bg-white p-8 text-center">
             {loading ? (
               <>
-                <RefreshCw className="mx-auto h-8 w-8 text-[#7C8A9E]/60 mb-4 animate-spin" />
-                <p className="text-sm text-[#7C8A9E]">Loading treasury...</p>
+                <RefreshCw className="mx-auto h-8 w-8 text-[#94A3B8] mb-4 animate-spin" />
+                <p className="text-sm text-[#64748B]">Loading treasury...</p>
               </>
             ) : (
               <>
-                <Wallet className="mx-auto h-8 w-8 text-[#7C8A9E]/60 mb-4" />
-                <p className="text-sm text-[#7C8A9E]">
+                <Wallet className="mx-auto h-8 w-8 text-[#94A3B8] mb-4" />
+                <p className="text-sm text-[#64748B]">
                   Waiting for wallet connection...
                 </p>
               </>
             )}
             {error && (
-              <p className="mt-4 text-sm text-red-400 flex items-center justify-center gap-1.5">
+              <p className="mt-4 text-sm text-red-500 flex items-center justify-center gap-1.5">
                 <AlertCircle className="h-3.5 w-3.5" />
                 {error}
               </p>
@@ -311,15 +313,15 @@ export default function TreasuryPage() {
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight">Treasury</h1>
-            <p className="text-[#7C8A9E] mt-1">
+            <h1 className="text-2xl font-bold text-[#0C1829]">Treasury</h1>
+            <p className="text-sm text-[#94A3B8] mt-0.5">
               Manage your settlement balance
             </p>
           </div>
           <button
             onClick={fetchBalance}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-2 text-sm text-[#3B4963] hover:bg-[#F3F4F6] transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-sm text-[#64748B] hover:text-[#0C1829] transition-colors"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
@@ -331,16 +333,16 @@ export default function TreasuryPage() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.05] p-6"
+            className="rounded-xl border border-[#E2E8F0] bg-white p-5"
           >
-            <div className="flex items-center gap-2 text-sm text-[#1B6B4A]/70 mb-1">
+            <div className="flex items-center gap-2 text-[13px] text-[#94A3B8] mb-2">
               <Wallet className="h-4 w-4" />
               Available
             </div>
-            <div className="text-2xl font-semibold text-[#1B6B4A]">
+            <div className="text-2xl font-semibold text-[#0C1829]">
               {formatUSD(balance.available)}
             </div>
-            <div className="text-xs text-[#7C8A9E] mt-1">
+            <div className="text-xs text-[#94A3B8] mt-1">
               Ready for settlements
             </div>
           </motion.div>
@@ -349,16 +351,16 @@ export default function TreasuryPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="rounded-xl border border-yellow-500/20 bg-yellow-500/[0.05] p-6"
+            className="rounded-xl border border-[#E2E8F0] bg-white p-5"
           >
-            <div className="flex items-center gap-2 text-sm text-yellow-400/70 mb-1">
+            <div className="flex items-center gap-2 text-[13px] text-[#94A3B8] mb-2">
               <Clock className="h-4 w-4" />
               Reserved
             </div>
-            <div className="text-2xl font-semibold text-yellow-400">
+            <div className="text-2xl font-semibold text-[#0C1829]">
               {formatUSD(balance.reserved)}
             </div>
-            <div className="text-xs text-[#7C8A9E] mt-1">
+            <div className="text-xs text-[#94A3B8] mt-1">
               In-flight settlements
             </div>
           </motion.div>
@@ -367,32 +369,32 @@ export default function TreasuryPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-xl border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.05] p-6"
+            className="rounded-xl border border-[#E2E8F0] bg-white p-5"
           >
-            <div className="flex items-center gap-2 text-sm text-[#1B6B4A]/70 mb-1">
+            <div className="flex items-center gap-2 text-[13px] text-[#94A3B8] mb-2">
               <TrendingUp className="h-4 w-4" />
               Total Deposited
             </div>
-            <div className="text-2xl font-semibold text-[#1B6B4A]">
+            <div className="text-2xl font-semibold text-[#0C1829]">
               {formatUSD(lifetime?.totalDeposited || 0)}
             </div>
-            <div className="text-xs text-[#7C8A9E] mt-1">Lifetime deposits</div>
+            <div className="text-xs text-[#94A3B8] mt-1">Lifetime deposits</div>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="rounded-xl border border-purple-500/20 bg-purple-500/[0.05] p-6"
+            className="rounded-xl border border-[#E2E8F0] bg-white p-5"
           >
-            <div className="flex items-center gap-2 text-sm text-[#1B6B4A]/70 mb-1">
+            <div className="flex items-center gap-2 text-[13px] text-[#94A3B8] mb-2">
               <DollarSign className="h-4 w-4" />
               Total Fees
             </div>
-            <div className="text-2xl font-semibold text-[#1B6B4A]">
+            <div className="text-2xl font-semibold text-[#0C1829]">
               {formatUSD(lifetime?.totalFees || 0)}
             </div>
-            <div className="text-xs text-[#7C8A9E] mt-1">1% platform fee</div>
+            <div className="text-xs text-[#94A3B8] mt-1">1% platform fee</div>
           </motion.div>
         </div>
 
@@ -404,30 +406,30 @@ export default function TreasuryPage() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
+                className="rounded-xl border border-[#E2E8F0] bg-white p-6"
               >
-                <h3 className="text-sm font-medium text-[#0C1829] mb-4">
+                <h3 className="text-sm font-semibold text-[#0C1829] mb-4">
                   Fund Your Balance
                 </h3>
-                <p className="text-xs text-[#7C8A9E] mb-3">
+                <p className="text-xs text-[#94A3B8] mb-3">
                   Send USDC to this address on Solana {depositInfo.cluster}:
                 </p>
-                <div className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2.5">
-                  <code className="flex-1 text-xs text-[#3B4963] break-all font-mono">
+                <div className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
+                  <code className="flex-1 text-xs text-[#0C1829] break-all font-mono">
                     {depositInfo.depositAddress}
                   </code>
                   <button
                     onClick={copyAddress}
-                    className="shrink-0 text-[#7C8A9E] hover:text-[#3B4963] transition-colors"
+                    className="shrink-0 text-[#94A3B8] hover:text-[#0C1829] transition-colors"
                   >
                     {copied ? (
-                      <Check className="h-4 w-4 text-[#1B6B4A]" />
+                      <Check className="h-4 w-4 text-emerald-600" />
                     ) : (
                       <Copy className="h-4 w-4" />
                     )}
                   </button>
                 </div>
-                <div className="mt-2 text-xs text-[#7C8A9E]">
+                <div className="mt-2 text-xs text-[#94A3B8]">
                   Network: Solana • Token: USDC
                 </div>
               </motion.div>
@@ -438,18 +440,18 @@ export default function TreasuryPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
+              className="rounded-xl border border-[#E2E8F0] bg-white p-6"
             >
-              <h3 className="text-sm font-medium text-[#0C1829] mb-4">
+              <h3 className="text-sm font-semibold text-[#0C1829] mb-4">
                 Confirm Deposit
               </h3>
-              <p className="text-xs text-[#7C8A9E] mb-4">
+              <p className="text-xs text-[#94A3B8] mb-4">
                 After sending USDC, enter the transaction signature to credit
                 your balance.
               </p>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs text-[#7C8A9E] mb-1">
+                  <label className="block text-xs text-[#94A3B8] mb-1">
                     Amount (USDC)
                   </label>
                   <input
@@ -457,11 +459,11 @@ export default function TreasuryPage() {
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value)}
                     placeholder="100.00"
-                    className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none"
+                    className="w-full rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#94A3B8] focus:border-[#0C1829] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-[#7C8A9E] mb-1">
+                  <label className="block text-xs text-[#94A3B8] mb-1">
                     Transaction Signature
                   </label>
                   <input
@@ -469,24 +471,24 @@ export default function TreasuryPage() {
                     value={depositTx}
                     onChange={(e) => setDepositTx(e.target.value)}
                     placeholder="5Uh8..."
-                    className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#94A3B8] focus:border-[#0C1829] focus:outline-none font-mono"
                   />
                 </div>
                 <button
                   onClick={handleDeposit}
                   disabled={depositing || !depositAmount || !depositTx}
-                  className="w-full rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-emerald-500/90 disabled:opacity-40 transition-colors"
+                  className="w-full rounded-lg bg-[#0C1829] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#1a2d47] disabled:opacity-40 transition-colors"
                 >
                   {depositing ? "Verifying..." : "Confirm Deposit"}
                 </button>
                 {depositSuccess && (
-                  <p className="text-xs text-[#1B6B4A] flex items-center gap-1.5">
+                  <p className="text-xs text-emerald-600 flex items-center gap-1.5">
                     <Check className="h-3.5 w-3.5" />
                     {depositSuccess}
                   </p>
                 )}
                 {error && (
-                  <p className="text-xs text-red-400 flex items-center gap-1.5">
+                  <p className="text-xs text-red-500 flex items-center gap-1.5">
                     <AlertCircle className="h-3.5 w-3.5" />
                     {error}
                   </p>
@@ -501,24 +503,24 @@ export default function TreasuryPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02]"
+              className="rounded-xl border border-[#E2E8F0] bg-white"
             >
-              <div className="border-b border-[#E5E7EB] px-6 py-4">
-                <h3 className="text-sm font-medium text-[#0C1829]">
+              <div className="border-b border-[#F1F5F9] px-6 py-4">
+                <h3 className="text-sm font-semibold text-[#0C1829]">
                   Transaction History
                 </h3>
               </div>
 
               {transactions.length === 0 ? (
                 <div className="px-6 py-16 text-center">
-                  <Wallet className="mx-auto h-8 w-8 text-[#7C8A9E]/60 mb-3" />
-                  <p className="text-sm text-[#7C8A9E]">No transactions yet</p>
-                  <p className="text-xs text-[#7C8A9E]/70 mt-1">
+                  <Wallet className="mx-auto h-8 w-8 text-[#CBD5E1] mb-3" />
+                  <p className="text-sm text-[#64748B]">No transactions yet</p>
+                  <p className="text-xs text-[#94A3B8] mt-1">
                     Fund your balance to start sending settlements
                   </p>
                 </div>
               ) : (
-                <div className="divide-y divide-white/5">
+                <div className="divide-y divide-[#F1F5F9]">
                   {transactions.map((tx) => {
                     const meta = TX_TYPE_LABELS[tx.type] || {
                       label: tx.type,
@@ -533,11 +535,11 @@ export default function TreasuryPage() {
                     return (
                       <div
                         key={tx.id}
-                        className="flex items-center gap-4 px-6 py-3.5 hover:bg-white/[0.02] transition-colors"
+                        className="flex items-center gap-4 px-6 py-3.5 hover:bg-[#F8FAFC] transition-colors"
                       >
                         <div
                           className={`rounded-lg p-2 ${
-                            isCredit ? "bg-emerald-500/10" : "bg-[#F3F4F6]"
+                            isCredit ? "bg-emerald-50" : "bg-[#F8FAFC]"
                           }`}
                         >
                           <Icon className={`h-4 w-4 ${meta.color}`} />
@@ -550,25 +552,25 @@ export default function TreasuryPage() {
                               {meta.label}
                             </span>
                             {tx.payoutId && (
-                              <span className="text-xs text-[#7C8A9E]/70 truncate">
+                              <span className="text-xs text-[#94A3B8] truncate">
                                 {tx.payoutId}
                               </span>
                             )}
                           </div>
-                          <div className="text-xs text-[#7C8A9E] mt-0.5">
+                          <div className="text-xs text-[#94A3B8] mt-0.5">
                             {tx.description || tx.type}
                           </div>
                         </div>
                         <div className="text-right shrink-0">
                           <div
                             className={`text-sm font-medium ${
-                              isCredit ? "text-[#1B6B4A]" : "text-[#3B4963]"
+                              isCredit ? "text-emerald-600" : "text-[#0C1829]"
                             }`}
                           >
                             {isCredit ? "+" : "-"}
                             {formatUSD(tx.amount)}
                           </div>
-                          <div className="text-xs text-[#7C8A9E]/70">
+                          <div className="text-xs text-[#94A3B8]">
                             {new Date(tx.createdAt).toLocaleDateString()}{" "}
                             {new Date(tx.createdAt).toLocaleTimeString([], {
                               hour: "2-digit",
@@ -581,7 +583,7 @@ export default function TreasuryPage() {
                             href={`https://explorer.solana.com/tx/${tx.txSignature}?cluster=devnet`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[#7C8A9E]/60 hover:text-[#7C8A9E] transition-colors"
+                            className="text-[#CBD5E1] hover:text-[#64748B] transition-colors"
                           >
                             <ExternalLink className="h-3.5 w-3.5" />
                           </a>

@@ -26,12 +26,12 @@ import {
 /* ─── Palette ─── */
 const CREAM = "#FFFFFF";
 const NAVY = "#0C1829";
-const SLATE = "#3B4963";
-const MUTED = "#7C8A9E";
+const SLATE = "#64748B";
+const MUTED = "#94A3B8";
 const GREEN = "#1B6B4A";
 const ACCENT = "#2A9D6A";
-const TOPO = "#E8E4DA";
-const CARD_BORDER = "#E5E7EB";
+const TOPO = "#CBD5E1";
+const CARD_BORDER = "#E2E8F0";
 
 /* ─── Types ─── */
 interface InvoiceSummary {
@@ -184,20 +184,17 @@ export default function InvoicesPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1
-            className="text-2xl font-bold"
-            style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
-          >
+          <h1 className="text-2xl font-bold" style={{ color: NAVY }}>
             Invoices
           </h1>
-          <p className="mt-1 text-sm" style={{ color: MUTED }}>
+          <p className="mt-0.5 text-sm" style={{ color: MUTED }}>
             Create and manage invoices for your buyers
           </p>
         </div>
         <Link
           href="/dashboard/invoices/create"
-          className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90"
-          style={{ background: GREEN }}
+          className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-all hover:opacity-90"
+          style={{ background: NAVY }}
         >
           <Plus className="h-4 w-4" />
           New Invoice
@@ -279,7 +276,7 @@ export default function InvoicesPage() {
             placeholder="Search invoices..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-xl border py-2.5 pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#1B6B4A]"
+            className="w-full rounded-lg border py-2.5 pl-10 pr-4 text-sm outline-none transition-colors focus:border-[#0C1829]"
             style={{
               borderColor: CARD_BORDER,
               color: NAVY,
@@ -292,7 +289,7 @@ export default function InvoicesPage() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="rounded-xl border py-2.5 pl-3 pr-8 text-sm outline-none"
+            className="rounded-lg border py-2.5 pl-3 pr-8 text-sm outline-none"
             style={{
               borderColor: CARD_BORDER,
               color: SLATE,
@@ -312,7 +309,7 @@ export default function InvoicesPage() {
 
       {/* Invoice table */}
       <div
-        className="overflow-hidden rounded-2xl border"
+        className="overflow-hidden rounded-xl border"
         style={{ borderColor: CARD_BORDER, background: "white" }}
       >
         {loading ? (
@@ -353,7 +350,7 @@ export default function InvoicesPage() {
                 <tr
                   style={{
                     borderBottom: `1px solid ${CARD_BORDER}`,
-                    background: "#F8F7F3",
+                    background: "#F8FAFC",
                   }}
                 >
                   <th

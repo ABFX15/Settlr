@@ -7,11 +7,11 @@ import {
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-[#FFFFFF] text-[#0C1829]">
+    <div className="flex min-h-screen bg-[#F8FAFC] text-[#0C1829]">
       <DashboardSidebar />
       <main className="flex-1 pt-14 lg:pt-0">
         <DashboardTopBar />
-        <div className="p-4 md:p-8">{children}</div>
+        <div className="mx-auto max-w-6xl p-4 md:p-8">{children}</div>
       </main>
     </div>
   );
