@@ -580,13 +580,24 @@ export default function InvoicesPage() {
                         ) : null}
                       </td>
                       <td className="px-4 py-3">
-                        <Link
-                          href={`/dashboard/invoices/${inv.id}`}
-                          className="opacity-0 transition-opacity group-hover:opacity-100"
-                          style={{ color: GREEN }}
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </Link>
+                        {inv.viewToken ? (
+                          <Link
+                            href={`/invoice/${inv.viewToken}`}
+                            target="_blank"
+                            className="opacity-0 transition-opacity group-hover:opacity-100"
+                            style={{ color: GREEN }}
+                            title="Open invoice"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </Link>
+                        ) : (
+                          <span
+                            className="opacity-0 transition-opacity group-hover:opacity-100"
+                            style={{ color: MUTED }}
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </span>
+                        )}
                       </td>
                     </motion.tr>
                   );
