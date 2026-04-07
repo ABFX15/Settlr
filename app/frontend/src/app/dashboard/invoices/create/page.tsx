@@ -22,15 +22,10 @@ import {
   Copy,
   Link2,
   ExternalLink,
+  Eye,
+  QrCode,
+  ChevronDown,
 } from "lucide-react";
-
-/* ─── Palette ─── */
-const NAVY = "#0C1829";
-const SLATE = "#3B4963";
-const MUTED = "#7C8A9E";
-const GREEN = "#1B6B4A";
-const TOPO = "#E8E4DA";
-const CARD_BORDER = "#E5E7EB";
 
 /* ─── Types ─── */
 interface LineItem {
@@ -40,7 +35,7 @@ interface LineItem {
 }
 
 const TERMS_OPTIONS = [
-  "Due on receipt",
+  "Due on Receipt",
   "Net 7",
   "Net 15",
   "Net 30",
@@ -49,10 +44,18 @@ const TERMS_OPTIONS = [
   "Custom",
 ];
 
+const ASSET_OPTIONS = [
+  "USDC (Ethereum Mainnet)",
+  "USDC (Solana)",
+  "USDC (Polygon)",
+  "USDT",
+  "DAI",
+];
+
 function getDueDateFromTerms(terms: string): Date {
   const now = new Date();
   switch (terms) {
-    case "Due on receipt":
+    case "Due on Receipt":
       return now;
     case "Net 7":
       return new Date(now.getTime() + 7 * 86400000);
@@ -75,7 +78,7 @@ export default function CreateInvoicePage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Success state — shown after invoice is created
+  // Success state
   const [createdInvoice, setCreatedInvoice] = useState<{
     invoiceNumber: string;
     total: number;
@@ -87,7 +90,7 @@ export default function CreateInvoicePage() {
   // Buyer info
   const [buyerName, setBuyerName] = useState("");
   const [buyerEmail, setBuyerEmail] = useState("");
-  const [buyerCompany, setBuyerCompany] = useState("");
+  const [buyerWallet, setBuyerWallet] = useState("");
 
   // Line items
   const [lineItems, setLineItems] = useState<LineItem[]>([
@@ -95,7 +98,8 @@ export default function CreateInvoicePage() {
   ]);
 
   // Invoice details
-  const [terms, setTerms] = useState("Net 30");
+  const [terms, setTerms] = useState("Due on Receipt");
+  const [requestedAsset, setRequestedAsset] = useState("USDC (Ethereum Mainnet)");
   const [customDueDate, setCustomDueDate] = useState("");
   const [taxRate, setTaxRate] = useState("");
   const [memo, setMemo] = useState("");
@@ -107,7 +111,8 @@ export default function CreateInvoicePage() {
     0,
   );
   const tax = taxRate ? subtotal * (parseFloat(taxRate) / 100) : 0;
-  const total = subtotal + tax;
+  const networkFee = subtotal > 0 ? 12.5 : 0;
+  const total = subtotal + tax + networkFee;
 
   const addLineItem = () => {
     setLineItems((prev) => [
@@ -138,19 +143,15 @@ export default function CreateInvoicePage() {
     setError(null);
 
     if (!publicKey) {
-      setError(
-        "Connect your wallet to create invoices — payments will be sent to your wallet address.",
-      );
+      setError("Connect your wallet to create invoices.");
       return;
     }
-
-    // Validation
     if (!buyerName.trim()) {
-      setError("Buyer name is required");
+      setError("Client name is required");
       return;
     }
     if (!buyerEmail.trim() || !buyerEmail.includes("@")) {
-      setError("Valid buyer email is required");
+      setError("Valid email is required");
       return;
     }
     if (lineItems.some((li) => !li.description.trim())) {
@@ -179,7 +180,8 @@ export default function CreateInvoicePage() {
         body: JSON.stringify({
           buyerName: buyerName.trim(),
           buyerEmail: buyerEmail.trim(),
-          buyerCompany: buyerCompany.trim() || undefined,
+          buyerCompany: "",
+          buyerWallet: buyerWallet.trim() || undefined,
           lineItems: lineItems.map((li) => ({
             description: li.description,
             quantity: li.quantity,
@@ -220,163 +222,93 @@ export default function CreateInvoicePage() {
     setTimeout(() => setCopiedField(null), 2000);
   };
 
-  /* ─── Success screen after invoice creation ─── */
+  /* ─── Success screen ─── */
   if (createdInvoice) {
-    const dialtoUrl = `https://dial.to/?action=solana-action:${encodeURIComponent(
-      createdInvoice.blinkUrl,
-    )}`;
+    const dialtoUrl = `https://dial.to/?action=solana-action:${encodeURIComponent(createdInvoice.blinkUrl)}`;
     return (
       <div className="mx-auto max-w-lg space-y-6 py-12 text-center">
-        <div
-          className="mx-auto flex h-16 w-16 items-center justify-center rounded-full"
-          style={{ background: "rgba(27,107,74,0.1)" }}
-        >
-          <Check className="h-8 w-8" style={{ color: GREEN }} />
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#00ff41]/10">
+          <Check className="h-8 w-8 text-[#00ff41]" />
         </div>
-
         <div>
-          <h1
-            className="text-2xl font-bold"
-            style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
-          >
-            Invoice Sent
-          </h1>
-          <p className="mt-2 text-sm" style={{ color: MUTED }}>
-            <span className="font-mono font-medium" style={{ color: NAVY }}>
+          <h1 className="text-2xl font-bold text-white">Invoice Sent</h1>
+          <p className="mt-2 text-sm text-[#888]">
+            <span className="font-mono font-medium text-white">
               {createdInvoice.invoiceNumber}
             </span>{" "}
             for{" "}
-            <span className="font-mono font-semibold" style={{ color: GREEN }}>
-              $
-              {createdInvoice.total.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-              })}{" "}
-              USDC
+            <span className="font-mono font-semibold text-[#00ff41]">
+              ${createdInvoice.total.toLocaleString("en-US", { minimumFractionDigits: 2 })} USDC
             </span>
           </p>
         </div>
 
-        {/* Blink URL — the main event */}
-        <div
-          className="rounded-2xl border p-6 text-left"
-          style={{ borderColor: CARD_BORDER, background: "white" }}
-        >
+        {/* Blink URL */}
+        <div className="rounded-xl border border-[#1f1f1f] bg-[#141414] p-6 text-left">
           <div className="mb-3 flex items-center gap-2">
-            <Link2 className="h-4 w-4" style={{ color: GREEN }} />
-            <h2
-              className="text-sm font-semibold uppercase tracking-wider"
-              style={{ color: MUTED }}
-            >
+            <Link2 className="h-4 w-4 text-[#00ff41]" />
+            <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#666]">
               Pay Link (Blink)
             </h2>
           </div>
-          <p className="mb-4 text-xs" style={{ color: MUTED }}>
-            Share this link anywhere — Twitter, WhatsApp, email. Recipients with
-            a Solana wallet can pay instantly.
-          </p>
-          <div
-            className="flex items-center gap-2 rounded-xl border p-3"
-            style={{ borderColor: CARD_BORDER, background: "#F8F7F3" }}
-          >
-            <code className="flex-1 truncate text-xs" style={{ color: NAVY }}>
+          <div className="flex items-center gap-2 rounded-lg border border-[#333] bg-[#1a1a1a] p-3">
+            <code className="flex-1 truncate text-xs text-[#aaa]">
               {createdInvoice.blinkUrl}
             </code>
             <button
               onClick={() => copyToClipboard(createdInvoice.blinkUrl, "blink")}
-              className="shrink-0 rounded-lg p-2 transition-colors hover:bg-green-100"
-              title="Copy Blink URL"
+              className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
             >
-              {copiedField === "blink" ? (
-                <Check className="h-4 w-4" style={{ color: GREEN }} />
-              ) : (
-                <Copy className="h-4 w-4" style={{ color: GREEN }} />
-              )}
+              {copiedField === "blink" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             </button>
           </div>
-
-          {/* Dial.to unfurl link (for Twitter/X) */}
           <div className="mt-3">
-            <p className="mb-2 text-xs font-medium" style={{ color: SLATE }}>
-              For Twitter / X unfurl:
-            </p>
-            <div
-              className="flex items-center gap-2 rounded-xl border p-3"
-              style={{ borderColor: CARD_BORDER, background: "#F8F7F3" }}
-            >
-              <code className="flex-1 truncate text-xs" style={{ color: NAVY }}>
-                {dialtoUrl}
-              </code>
+            <p className="mb-2 text-xs font-medium text-[#666]">For Twitter / X unfurl:</p>
+            <div className="flex items-center gap-2 rounded-lg border border-[#333] bg-[#1a1a1a] p-3">
+              <code className="flex-1 truncate text-xs text-[#aaa]">{dialtoUrl}</code>
               <button
                 onClick={() => copyToClipboard(dialtoUrl, "dialto")}
-                className="shrink-0 rounded-lg p-2 transition-colors hover:bg-green-100"
-                title="Copy Dial.to URL"
+                className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
               >
-                {copiedField === "dialto" ? (
-                  <Check className="h-4 w-4" style={{ color: GREEN }} />
-                ) : (
-                  <Copy className="h-4 w-4" style={{ color: GREEN }} />
-                )}
+                {copiedField === "dialto" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Standard invoice link */}
-        <div
-          className="rounded-2xl border p-6 text-left"
-          style={{ borderColor: CARD_BORDER, background: "white" }}
-        >
+        {/* Invoice Link */}
+        <div className="rounded-xl border border-[#1f1f1f] bg-[#141414] p-6 text-left">
           <div className="mb-3 flex items-center gap-2">
-            <FileText className="h-4 w-4" style={{ color: GREEN }} />
-            <h2
-              className="text-sm font-semibold uppercase tracking-wider"
-              style={{ color: MUTED }}
-            >
+            <FileText className="h-4 w-4 text-[#00ff41]" />
+            <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#666]">
               Invoice Link
             </h2>
           </div>
-          <p className="mb-4 text-xs" style={{ color: MUTED }}>
-            For recipients without a wallet — they can connect or create one on
-            the payment page.
-          </p>
-          <div
-            className="flex items-center gap-2 rounded-xl border p-3"
-            style={{ borderColor: CARD_BORDER, background: "#F8F7F3" }}
-          >
-            <code className="flex-1 truncate text-xs" style={{ color: NAVY }}>
+          <div className="flex items-center gap-2 rounded-lg border border-[#333] bg-[#1a1a1a] p-3">
+            <code className="flex-1 truncate text-xs text-[#aaa]">
               {createdInvoice.invoiceUrl}
             </code>
             <button
-              onClick={() =>
-                copyToClipboard(createdInvoice.invoiceUrl, "invoice")
-              }
-              className="shrink-0 rounded-lg p-2 transition-colors hover:bg-green-100"
-              title="Copy invoice URL"
+              onClick={() => copyToClipboard(createdInvoice.invoiceUrl, "invoice")}
+              className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
             >
-              {copiedField === "invoice" ? (
-                <Check className="h-4 w-4" style={{ color: GREEN }} />
-              ) : (
-                <Copy className="h-4 w-4" style={{ color: GREEN }} />
-              )}
+              {copiedField === "invoice" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             </button>
             <a
               href={createdInvoice.invoiceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 rounded-lg p-2 transition-colors hover:bg-green-100"
-              title="Open invoice"
+              className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
             >
-              <ExternalLink className="h-4 w-4" style={{ color: GREEN }} />
+              <ExternalLink className="h-4 w-4" />
             </a>
           </div>
         </div>
 
-        {/* Actions */}
         <div className="flex items-center justify-center gap-4 pt-2">
           <Link
             href="/dashboard/invoices"
-            className="rounded-xl border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-[#F3F4F6]"
-            style={{ borderColor: CARD_BORDER, color: NAVY }}
+            className="rounded-lg border border-[#333] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors"
           >
             View All Invoices
           </Link>
@@ -385,16 +317,15 @@ export default function CreateInvoicePage() {
               setCreatedInvoice(null);
               setBuyerName("");
               setBuyerEmail("");
-              setBuyerCompany("");
+              setBuyerWallet("");
               setLineItems([{ description: "", quantity: 1, unitPrice: 0 }]);
-              setTerms("Net 30");
+              setTerms("Due on Receipt");
               setCustomDueDate("");
               setTaxRate("");
               setMemo("");
               setInvoiceNumber("");
             }}
-            className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90"
-            style={{ background: GREEN }}
+            className="rounded-lg bg-[#00ff41] px-6 py-2.5 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors"
           >
             Create Another
           </button>
@@ -404,395 +335,287 @@ export default function CreateInvoicePage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div>
-        <Link
-          href="/dashboard/invoices"
-          className="mb-4 inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-          style={{ color: MUTED }}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Invoices
-        </Link>
-        <h1
-          className="text-2xl font-bold"
-          style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
-        >
-          Create Invoice
-        </h1>
-        <p className="mt-1 text-sm" style={{ color: MUTED }}>
-          Send a professional invoice — your buyer pays with USDC via a
-          one-click link
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <span className="text-[11px] text-[#00ff41] uppercase tracking-[0.15em] font-semibold">
+            New Transaction
+          </span>
+          <h1 className="text-3xl font-bold text-white tracking-tight mt-1">
+            Create Invoice
+          </h1>
+        </div>
+        <div className="text-right">
+          <span className="text-[10px] text-[#666] uppercase tracking-wider block">Draft Status</span>
+          <span className="text-sm text-[#aaa]">Unsaved Progress</span>
+        </div>
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 rounded-xl bg-red-50 p-4 text-sm text-red-600">
+        <div className="flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-400">
           <AlertCircle className="h-4 w-4 shrink-0" />
           {error}
         </div>
       )}
 
-      {/* Buyer info */}
-      <div
-        className="rounded-2xl border p-6"
-        style={{ borderColor: CARD_BORDER, background: "white" }}
-      >
-        <div className="mb-4 flex items-center gap-2">
-          <User className="h-4 w-4" style={{ color: GREEN }} />
-          <h2
-            className="text-sm font-semibold uppercase tracking-wider"
-            style={{ color: MUTED }}
-          >
-            Bill To
-          </h2>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label
-              className="mb-1.5 block text-sm font-medium"
-              style={{ color: SLATE }}
-            >
-              Contact Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={buyerName}
-              onChange={(e) => setBuyerName(e.target.value)}
-              placeholder="Jane Smith"
-              className="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-[#1B6B4A]"
-              style={{ borderColor: CARD_BORDER, color: NAVY }}
-            />
-          </div>
-          <div>
-            <label
-              className="mb-1.5 block text-sm font-medium"
-              style={{ color: SLATE }}
-            >
-              Email <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="email"
-              value={buyerEmail}
-              onChange={(e) => setBuyerEmail(e.target.value)}
-              placeholder="jane@dispensary.com"
-              className="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-[#1B6B4A]"
-              style={{ borderColor: CARD_BORDER, color: NAVY }}
-            />
-          </div>
-          <div className="sm:col-span-2">
-            <label
-              className="mb-1.5 block text-sm font-medium"
-              style={{ color: SLATE }}
-            >
-              Company Name
-            </label>
-            <input
-              type="text"
-              value={buyerCompany}
-              onChange={(e) => setBuyerCompany(e.target.value)}
-              placeholder="Green Valley Dispensary"
-              className="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-[#1B6B4A]"
-              style={{ borderColor: CARD_BORDER, color: NAVY }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Line items */}
-      <div
-        className="rounded-2xl border p-6"
-        style={{ borderColor: CARD_BORDER, background: "white" }}
-      >
-        <div className="mb-4 flex items-center gap-2">
-          <FileText className="h-4 w-4" style={{ color: GREEN }} />
-          <h2
-            className="text-sm font-semibold uppercase tracking-wider"
-            style={{ color: MUTED }}
-          >
-            Line Items
-          </h2>
-        </div>
-
-        <div className="space-y-3">
-          {/* Header */}
-          <div
-            className="hidden grid-cols-12 gap-3 text-xs font-semibold uppercase tracking-wider sm:grid"
-            style={{ color: MUTED }}
-          >
-            <div className="col-span-5">Description</div>
-            <div className="col-span-2 text-right">Qty</div>
-            <div className="col-span-2 text-right">Unit Price</div>
-            <div className="col-span-2 text-right">Amount</div>
-            <div className="col-span-1" />
-          </div>
-
-          {lineItems.map((li, i) => (
-            <div key={i} className="grid grid-cols-12 items-center gap-3">
-              <div className="col-span-12 sm:col-span-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column — Form */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Recipient Information */}
+          <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6">
+            <div className="mb-5 flex items-center gap-2">
+              <User className="h-4 w-4 text-[#00ff41]" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#888]">
+                Recipient Information
+              </h2>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#666]">
+                  Client Name / Business
+                </label>
                 <input
                   type="text"
-                  value={li.description}
-                  onChange={(e) =>
-                    updateLineItem(i, "description", e.target.value)
-                  }
-                  placeholder="Product or service description"
-                  className="w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-[#1B6B4A]"
-                  style={{ borderColor: CARD_BORDER, color: NAVY }}
+                  value={buyerName}
+                  onChange={(e) => setBuyerName(e.target.value)}
+                  placeholder="e.g. Ether Distribution Ltd"
+                  className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white placeholder-[#555] outline-none transition-colors focus:border-[#00ff41]/50"
                 />
               </div>
-              <div className="col-span-4 sm:col-span-2">
+              <div>
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#666]">
+                  Email Address
+                </label>
                 <input
-                  type="number"
-                  value={li.quantity || ""}
-                  onChange={(e) =>
-                    updateLineItem(i, "quantity", parseInt(e.target.value) || 0)
-                  }
-                  min={1}
-                  className="w-full rounded-lg border px-3 py-2 text-right text-sm outline-none transition-colors focus:border-[#1B6B4A]"
-                  style={{ borderColor: CARD_BORDER, color: NAVY }}
+                  type="email"
+                  value={buyerEmail}
+                  onChange={(e) => setBuyerEmail(e.target.value)}
+                  placeholder="billing@retailer.io"
+                  className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white placeholder-[#555] outline-none transition-colors focus:border-[#00ff41]/50"
                 />
               </div>
-              <div className="col-span-4 sm:col-span-2">
-                <input
-                  type="number"
-                  value={li.unitPrice || ""}
-                  onChange={(e) =>
-                    updateLineItem(
-                      i,
-                      "unitPrice",
-                      parseFloat(e.target.value) || 0,
-                    )
-                  }
-                  min={0}
-                  step={0.01}
-                  placeholder="0.00"
-                  className="w-full rounded-lg border px-3 py-2 text-right text-sm outline-none transition-colors focus:border-[#1B6B4A]"
-                  style={{ borderColor: CARD_BORDER, color: NAVY }}
-                />
-              </div>
-              <div
-                className="col-span-3 text-right font-mono text-sm font-semibold sm:col-span-2"
-                style={{ color: NAVY }}
-              >
-                $
-                {(li.quantity * li.unitPrice).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                })}
-              </div>
-              <div className="col-span-1 text-center">
-                <button
-                  onClick={() => removeLineItem(i)}
-                  disabled={lineItems.length === 1}
-                  className="transition-colors disabled:opacity-30"
-                  style={{ color: MUTED }}
-                >
-                  <Trash2 className="h-4 w-4 hover:text-red-500" />
-                </button>
+              <div className="sm:col-span-2">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#666]">
+                  Recipient Wallet Address (Optional)
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={buyerWallet}
+                    onChange={(e) => setBuyerWallet(e.target.value)}
+                    placeholder="0x..."
+                    className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 pr-10 text-sm text-white placeholder-[#555] outline-none transition-colors focus:border-[#00ff41]/50 font-mono"
+                  />
+                  <QrCode className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#555]" />
+                </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        <button
-          onClick={addLineItem}
-          className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:opacity-80"
-          style={{ color: GREEN }}
-        >
-          <Plus className="h-4 w-4" />
-          Add Line Item
-        </button>
-
-        {/* Totals */}
-        <div
-          className="mt-6 border-t pt-4"
-          style={{ borderColor: CARD_BORDER }}
-        >
-          <div className="ml-auto max-w-xs space-y-2">
-            <div className="flex justify-between text-sm">
-              <span style={{ color: MUTED }}>Subtotal</span>
-              <span className="font-mono font-medium" style={{ color: NAVY }}>
-                $
-                {subtotal.toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                })}
-              </span>
-            </div>
-            <div className="flex items-center justify-between gap-3 text-sm">
-              <span style={{ color: MUTED }}>Tax</span>
+          {/* Product Details */}
+          <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6">
+            <div className="mb-5 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  value={taxRate}
-                  onChange={(e) => setTaxRate(e.target.value)}
-                  placeholder="0"
-                  min={0}
-                  max={100}
-                  step={0.1}
-                  className="w-16 rounded-lg border px-2 py-1 text-right text-xs outline-none"
-                  style={{ borderColor: CARD_BORDER, color: NAVY }}
-                />
-                <span className="text-xs" style={{ color: MUTED }}>
-                  %
-                </span>
-                <span
-                  className="ml-2 font-mono font-medium"
-                  style={{ color: NAVY }}
+                <FileText className="h-4 w-4 text-[#00ff41]" />
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#888]">
+                  Product Details
+                </h2>
+              </div>
+              <button
+                onClick={addLineItem}
+                className="text-[11px] font-semibold text-[#00ff41] hover:text-[#00dd38] transition-colors flex items-center gap-1"
+              >
+                + Add Item
+              </button>
+            </div>
+
+            {/* Table header */}
+            <div className="hidden grid-cols-12 gap-3 text-[10px] font-semibold uppercase tracking-wider text-[#555] mb-3 sm:grid">
+              <div className="col-span-5">Description</div>
+              <div className="col-span-2 text-center">Qty</div>
+              <div className="col-span-3 text-center">Unit Price (USD)</div>
+              <div className="col-span-2" />
+            </div>
+
+            <div className="space-y-3">
+              {lineItems.map((li, i) => (
+                <div key={i} className="grid grid-cols-12 items-center gap-3">
+                  <div className="col-span-12 sm:col-span-5">
+                    <input
+                      type="text"
+                      value={li.description}
+                      onChange={(e) => updateLineItem(i, "description", e.target.value)}
+                      placeholder="Product or service description"
+                      className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2.5 text-sm text-white placeholder-[#555] outline-none focus:border-[#00ff41]/50"
+                    />
+                  </div>
+                  <div className="col-span-4 sm:col-span-2">
+                    <input
+                      type="number"
+                      value={li.quantity || ""}
+                      onChange={(e) => updateLineItem(i, "quantity", parseInt(e.target.value) || 0)}
+                      min={1}
+                      className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2.5 text-center text-sm text-white outline-none focus:border-[#00ff41]/50"
+                    />
+                  </div>
+                  <div className="col-span-4 sm:col-span-3">
+                    <input
+                      type="number"
+                      value={li.unitPrice || ""}
+                      onChange={(e) => updateLineItem(i, "unitPrice", parseFloat(e.target.value) || 0)}
+                      min={0}
+                      step={0.01}
+                      placeholder="0.00"
+                      className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2.5 text-center text-sm text-white placeholder-[#555] outline-none focus:border-[#00ff41]/50"
+                    />
+                  </div>
+                  <div className="col-span-4 sm:col-span-2 flex items-center justify-end">
+                    <button
+                      onClick={() => removeLineItem(i)}
+                      disabled={lineItems.length === 1}
+                      className="rounded-lg p-2 text-[#555] hover:text-red-400 hover:bg-red-400/10 transition-colors disabled:opacity-30"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Settlement Options */}
+          <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6">
+            <div className="mb-5 flex items-center gap-2">
+              <DollarSign className="h-4 w-4 text-[#00ff41]" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#888]">
+                Settlement Options
+              </h2>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                  Requested Asset
+                </label>
+                <select
+                  value={requestedAsset}
+                  onChange={(e) => setRequestedAsset(e.target.value)}
+                  className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white outline-none appearance-none cursor-pointer focus:border-[#00ff41]/50"
                 >
-                  $
-                  {tax.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                  })}
-                </span>
+                  {ASSET_OPTIONS.map((a) => (
+                    <option key={a} value={a}>{a}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                  Payment Terms
+                </label>
+                <select
+                  value={terms}
+                  onChange={(e) => setTerms(e.target.value)}
+                  className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white outline-none appearance-none cursor-pointer focus:border-[#00ff41]/50"
+                >
+                  {TERMS_OPTIONS.map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
               </div>
             </div>
-            <div
-              className="flex justify-between border-t pt-2 text-lg font-bold"
-              style={{ borderColor: CARD_BORDER }}
-            >
-              <span style={{ color: NAVY }}>Total</span>
-              <span className="font-mono" style={{ color: GREEN }}>
-                $
-                {total.toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                })}{" "}
-                <span className="text-sm font-normal" style={{ color: MUTED }}>
-                  USDC
+          </div>
+        </div>
+
+        {/* Right Column — Invoice Summary */}
+        <div className="space-y-4">
+          <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6 sticky top-20">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#666] mb-5">
+              Invoice Summary
+            </h3>
+
+            <div className="space-y-3">
+              <div className="flex justify-between text-sm">
+                <span className="text-[#888]">Subtotal</span>
+                <span className="text-white font-mono">
+                  ${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                 </span>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-[#888]">Network Fee Est.</span>
+                <span className="text-white font-mono">
+                  ${networkFee.toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-[#888]">Tax ({taxRate || "0"}%)</span>
+                <span className="text-white font-mono">
+                  ${tax.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                </span>
+              </div>
 
-      {/* Invoice details */}
-      <div
-        className="rounded-2xl border p-6"
-        style={{ borderColor: CARD_BORDER, background: "white" }}
-      >
-        <div className="mb-4 flex items-center gap-2">
-          <Calendar className="h-4 w-4" style={{ color: GREEN }} />
-          <h2
-            className="text-sm font-semibold uppercase tracking-wider"
-            style={{ color: MUTED }}
-          >
-            Details
-          </h2>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label
-              className="mb-1.5 block text-sm font-medium"
-              style={{ color: SLATE }}
-            >
-              Invoice Number
-            </label>
-            <input
-              type="text"
-              value={invoiceNumber}
-              onChange={(e) => setInvoiceNumber(e.target.value)}
-              placeholder="Auto-generated"
-              className="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-[#1B6B4A]"
-              style={{ borderColor: CARD_BORDER, color: NAVY }}
-            />
-          </div>
-          <div>
-            <label
-              className="mb-1.5 block text-sm font-medium"
-              style={{ color: SLATE }}
-            >
-              Payment Terms
-            </label>
-            <select
-              value={terms}
-              onChange={(e) => setTerms(e.target.value)}
-              className="w-full rounded-xl border px-4 py-2.5 text-sm outline-none"
-              style={{
-                borderColor: CARD_BORDER,
-                color: NAVY,
-                background: "white",
-              }}
-            >
-              {TERMS_OPTIONS.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          </div>
-          {terms === "Custom" && (
-            <div>
-              <label
-                className="mb-1.5 block text-sm font-medium"
-                style={{ color: SLATE }}
+              <div className="border-t border-[#1f1f1f] pt-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-[#666] uppercase tracking-wider">Total Due</span>
+                </div>
+                <div className="text-right mt-1">
+                  <span className="text-3xl font-bold text-[#00ff41]">
+                    ${total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                  </span>
+                  <div className="text-[11px] text-[#666] mt-0.5">
+                    ~{total.toLocaleString("en-US", { minimumFractionDigits: 2 })} USDC
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="mt-6 space-y-3">
+              <button
+                onClick={() => handleSubmit(true)}
+                disabled={saving}
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#00ff41] px-5 py-3 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors disabled:opacity-50"
               >
-                Due Date
-              </label>
-              <input
-                type="date"
-                value={customDueDate}
-                onChange={(e) => setCustomDueDate(e.target.value)}
-                className="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-[#1B6B4A]"
-                style={{ borderColor: CARD_BORDER, color: NAVY }}
-              />
+                {saving ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+                Generate & Send
+              </button>
+              <button
+                onClick={() => handleSubmit(false)}
+                disabled={saving}
+                className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#333] px-5 py-3 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors disabled:opacity-50"
+              >
+                <Eye className="h-4 w-4" />
+                Preview PDF
+              </button>
+              <button className="w-full text-center text-[11px] text-[#666] uppercase tracking-wider hover:text-[#888] transition-colors py-2">
+                Save as Template
+              </button>
             </div>
-          )}
-          <div className={terms === "Custom" ? "" : "sm:col-span-2"}>
-            <label
-              className="mb-1.5 block text-sm font-medium"
-              style={{ color: SLATE }}
-            >
-              Memo / Notes
-            </label>
-            <textarea
-              value={memo}
-              onChange={(e) => setMemo(e.target.value)}
-              placeholder="Additional notes for the buyer..."
-              rows={2}
-              className="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-[#1B6B4A]"
-              style={{ borderColor: CARD_BORDER, color: NAVY }}
-            />
+
+            {/* Trust note */}
+            <div className="mt-4 rounded-lg bg-[#1a1a1a] border border-[#1f1f1f] p-3">
+              <p className="text-[11px] text-[#555] italic leading-relaxed">
+                Invoices generated by Settlr are cryptographically signed. Payments are settled directly via smart contract to ensure atomic swaps.
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-8">
-        <Link
-          href="/dashboard/invoices"
-          className="text-sm font-medium transition-colors hover:opacity-80"
-          style={{ color: MUTED }}
-        >
-          Cancel
-        </Link>
-        <div className="flex gap-3">
-          <button
-            onClick={() => handleSubmit(false)}
-            disabled={saving}
-            className="inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-[#F3F4F6] disabled:opacity-50"
-            style={{ borderColor: CARD_BORDER, color: NAVY }}
-          >
-            {saving ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="h-4 w-4" />
-            )}
-            Save as Draft
-          </button>
-          <button
-            onClick={() => handleSubmit(true)}
-            disabled={saving}
-            className="inline-flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50"
-            style={{ background: GREEN }}
-          >
-            {saving ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
-            Send Invoice
-          </button>
+      {/* Wholesale Tip */}
+      <div className="rounded-xl bg-[#00ff41]/5 border border-[#00ff41]/10 p-5">
+        <div className="flex items-start gap-3">
+          <div>
+            <span className="text-[11px] font-bold text-[#00ff41] uppercase tracking-wider">
+              Wholesale Tip
+            </span>
+            <p className="text-sm text-[#888] mt-1 leading-relaxed">
+              Retailers on the Polygon network typically settle invoices 40% faster due to lower gas overhead.
+              Consider offering a 1% discount for MATIC-based settlements.
+            </p>
+          </div>
         </div>
       </div>
     </div>
