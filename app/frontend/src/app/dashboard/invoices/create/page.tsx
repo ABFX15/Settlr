@@ -45,11 +45,10 @@ const TERMS_OPTIONS = [
 ];
 
 const ASSET_OPTIONS = [
-  "USDC (Ethereum Mainnet)",
   "USDC (Solana)",
-  "USDC (Polygon)",
-  "USDT",
-  "DAI",
+  "SOL (Native)",
+  "PYUSD (Solana)",
+  "USDT (Solana)",
 ];
 
 function getDueDateFromTerms(terms: string): Date {
@@ -99,7 +98,7 @@ export default function CreateInvoicePage() {
 
   // Invoice details
   const [terms, setTerms] = useState("Due on Receipt");
-  const [requestedAsset, setRequestedAsset] = useState("USDC (Ethereum Mainnet)");
+  const [requestedAsset, setRequestedAsset] = useState("USDC (Solana)");
   const [customDueDate, setCustomDueDate] = useState("");
   const [taxRate, setTaxRate] = useState("");
   const [memo, setMemo] = useState("");
@@ -224,7 +223,9 @@ export default function CreateInvoicePage() {
 
   /* ─── Success screen ─── */
   if (createdInvoice) {
-    const dialtoUrl = `https://dial.to/?action=solana-action:${encodeURIComponent(createdInvoice.blinkUrl)}`;
+    const dialtoUrl = `https://dial.to/?action=solana-action:${encodeURIComponent(
+      createdInvoice.blinkUrl,
+    )}`;
     return (
       <div className="mx-auto max-w-lg space-y-6 py-12 text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#00ff41]/10">
@@ -238,7 +239,11 @@ export default function CreateInvoicePage() {
             </span>{" "}
             for{" "}
             <span className="font-mono font-semibold text-[#00ff41]">
-              ${createdInvoice.total.toLocaleString("en-US", { minimumFractionDigits: 2 })} USDC
+              $
+              {createdInvoice.total.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}{" "}
+              USDC
             </span>
           </p>
         </div>
@@ -259,18 +264,30 @@ export default function CreateInvoicePage() {
               onClick={() => copyToClipboard(createdInvoice.blinkUrl, "blink")}
               className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
             >
-              {copiedField === "blink" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copiedField === "blink" ? (
+                <Check className="h-4 w-4" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
             </button>
           </div>
           <div className="mt-3">
-            <p className="mb-2 text-xs font-medium text-[#666]">For Twitter / X unfurl:</p>
+            <p className="mb-2 text-xs font-medium text-[#666]">
+              For Twitter / X unfurl:
+            </p>
             <div className="flex items-center gap-2 rounded-lg border border-[#333] bg-[#1a1a1a] p-3">
-              <code className="flex-1 truncate text-xs text-[#aaa]">{dialtoUrl}</code>
+              <code className="flex-1 truncate text-xs text-[#aaa]">
+                {dialtoUrl}
+              </code>
               <button
                 onClick={() => copyToClipboard(dialtoUrl, "dialto")}
                 className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
               >
-                {copiedField === "dialto" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copiedField === "dialto" ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>
@@ -289,10 +306,16 @@ export default function CreateInvoicePage() {
               {createdInvoice.invoiceUrl}
             </code>
             <button
-              onClick={() => copyToClipboard(createdInvoice.invoiceUrl, "invoice")}
+              onClick={() =>
+                copyToClipboard(createdInvoice.invoiceUrl, "invoice")
+              }
               className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
             >
-              {copiedField === "invoice" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copiedField === "invoice" ? (
+                <Check className="h-4 w-4" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
             </button>
             <a
               href={createdInvoice.invoiceUrl}
@@ -347,7 +370,9 @@ export default function CreateInvoicePage() {
           </h1>
         </div>
         <div className="text-right">
-          <span className="text-[10px] text-[#666] uppercase tracking-wider block">Draft Status</span>
+          <span className="text-[10px] text-[#666] uppercase tracking-wider block">
+            Draft Status
+          </span>
           <span className="text-sm text-[#aaa]">Unsaved Progress</span>
         </div>
       </div>
@@ -404,7 +429,7 @@ export default function CreateInvoicePage() {
                     type="text"
                     value={buyerWallet}
                     onChange={(e) => setBuyerWallet(e.target.value)}
-                    placeholder="0x..."
+                    placeholder="So1ana..."
                     className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 pr-10 text-sm text-white placeholder-[#555] outline-none transition-colors focus:border-[#00ff41]/50 font-mono"
                   />
                   <QrCode className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#555]" />
@@ -445,7 +470,9 @@ export default function CreateInvoicePage() {
                     <input
                       type="text"
                       value={li.description}
-                      onChange={(e) => updateLineItem(i, "description", e.target.value)}
+                      onChange={(e) =>
+                        updateLineItem(i, "description", e.target.value)
+                      }
                       placeholder="Product or service description"
                       className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2.5 text-sm text-white placeholder-[#555] outline-none focus:border-[#00ff41]/50"
                     />
@@ -454,7 +481,13 @@ export default function CreateInvoicePage() {
                     <input
                       type="number"
                       value={li.quantity || ""}
-                      onChange={(e) => updateLineItem(i, "quantity", parseInt(e.target.value) || 0)}
+                      onChange={(e) =>
+                        updateLineItem(
+                          i,
+                          "quantity",
+                          parseInt(e.target.value) || 0,
+                        )
+                      }
                       min={1}
                       className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2.5 text-center text-sm text-white outline-none focus:border-[#00ff41]/50"
                     />
@@ -463,7 +496,13 @@ export default function CreateInvoicePage() {
                     <input
                       type="number"
                       value={li.unitPrice || ""}
-                      onChange={(e) => updateLineItem(i, "unitPrice", parseFloat(e.target.value) || 0)}
+                      onChange={(e) =>
+                        updateLineItem(
+                          i,
+                          "unitPrice",
+                          parseFloat(e.target.value) || 0,
+                        )
+                      }
                       min={0}
                       step={0.01}
                       placeholder="0.00"
@@ -503,7 +542,9 @@ export default function CreateInvoicePage() {
                   className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white outline-none appearance-none cursor-pointer focus:border-[#00ff41]/50"
                 >
                   {ASSET_OPTIONS.map((a) => (
-                    <option key={a} value={a}>{a}</option>
+                    <option key={a} value={a}>
+                      {a}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -517,7 +558,9 @@ export default function CreateInvoicePage() {
                   className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white outline-none appearance-none cursor-pointer focus:border-[#00ff41]/50"
                 >
                   {TERMS_OPTIONS.map((t) => (
-                    <option key={t} value={t}>{t}</option>
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -536,7 +579,10 @@ export default function CreateInvoicePage() {
               <div className="flex justify-between text-sm">
                 <span className="text-[#888]">Subtotal</span>
                 <span className="text-white font-mono">
-                  ${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                  $
+                  {subtotal.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
@@ -554,14 +600,23 @@ export default function CreateInvoicePage() {
 
               <div className="border-t border-[#1f1f1f] pt-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-[#666] uppercase tracking-wider">Total Due</span>
+                  <span className="text-[10px] text-[#666] uppercase tracking-wider">
+                    Total Due
+                  </span>
                 </div>
                 <div className="text-right mt-1">
                   <span className="text-3xl font-bold text-[#00ff41]">
-                    ${total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                    $
+                    {total.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}
                   </span>
                   <div className="text-[11px] text-[#666] mt-0.5">
-                    ~{total.toLocaleString("en-US", { minimumFractionDigits: 2 })} USDC
+                    ~
+                    {total.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}{" "}
+                    USDC
                   </div>
                 </div>
               </div>
@@ -597,7 +652,9 @@ export default function CreateInvoicePage() {
             {/* Trust note */}
             <div className="mt-4 rounded-lg bg-[#1a1a1a] border border-[#1f1f1f] p-3">
               <p className="text-[11px] text-[#555] italic leading-relaxed">
-                Invoices generated by Settlr are cryptographically signed. Payments are settled directly via smart contract to ensure atomic swaps.
+                Invoices generated by Settlr are cryptographically signed.
+                Payments are settled directly via smart contract to ensure
+                atomic swaps.
               </p>
             </div>
           </div>
@@ -612,8 +669,9 @@ export default function CreateInvoicePage() {
               Wholesale Tip
             </span>
             <p className="text-sm text-[#888] mt-1 leading-relaxed">
-              Retailers on the Polygon network typically settle invoices 40% faster due to lower gas overhead.
-              Consider offering a 1% discount for MATIC-based settlements.
+              Retailers on the Polygon network typically settle invoices 40%
+              faster due to lower gas overhead. Consider offering a 1% discount
+              for MATIC-based settlements.
             </p>
           </div>
         </div>

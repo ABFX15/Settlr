@@ -88,9 +88,14 @@ const fadeIn = {
 };
 
 const ASSETS = [
-  { symbol: "USDC", network: "Ethereum Mainnet", icon: "$", selected: true },
-  { symbol: "SOL", network: "Solana Network", icon: "S", selected: false },
-  { symbol: "BTC", network: "Bitcoin Layer 1", icon: "B", selected: false },
+  { symbol: "USDC", network: "Solana (SPL Token)", icon: "$", selected: true },
+  { symbol: "SOL", network: "Solana Native", icon: "S", selected: false },
+  {
+    symbol: "PYUSD",
+    network: "Solana (SPL Token)",
+    icon: "P",
+    selected: false,
+  },
 ];
 
 export default function InvoicePayClient({

@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@/components/WalletModal";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -11,375 +14,568 @@ import {
   ExternalLink,
   Download,
   Shield,
-  Activity,
   Clock,
-  Building2,
+  Wallet,
+  LogIn,
+  Search,
+  Filter,
+  RefreshCw,
+  ArrowUpRight,
+  ArrowDownLeft,
+  ChevronRight,
+  X,
+  Loader2,
 } from "lucide-react";
 
-/* ─── Mock Settlement Data ─── */
-const SETTLEMENT = {
-  id: "ST-9482",
-  status: "confirmed",
-  amount: 142500.0,
-  currency: "USDC",
-  completedAt: "October 24, 2023 at 14:22:01 UTC",
-  network: "Ethereum Mainnet",
-  method: "Layer 2 Rollup",
-  confirmations: 1248,
-  blockNumber: 18422901,
-  txHash:
-    "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0fb893db30a3abc0cfc608aacf...",
-  from: {
-    name: "Settlr Treasury Vault",
-    address: "0xZA8...F99L",
-  },
-  to: {
-    name: "Goldman Global Partners",
-    address: "0x8B1d...44Z1",
-  },
-  gasFee: { eth: 0.0042, usd: 8.12 },
-  gasPrice: 12.5,
-  executionTime: 14.2,
-  priorityStatus: "HIGH",
-  liquidityRoute: { protocol: 88, direct: 12 },
-  compliance: {
-    provider: "Chainalysis Oracle",
-    status: "No high-risk entities identified in transaction path.",
-    ofac: "CLEAN",
-    score: 98,
-  },
-  auditHistory: [
-    {
-      time: "Oct 24, 14:18:45",
-      title: "Settlement Initialized",
-      description:
-        "Triggered by Smart Contract Auto-Release (Invoice #INV-290)",
-    },
-    {
-      time: "Oct 24, 14:20:12",
-      title: "Vault Unlocked & Gas Optimized",
-      description:
-        "Multi-sig validation complete. Dynamic gas pricing applied at 12.5 Gwei.",
-    },
-    {
-      time: "Oct 24, 14:22:01",
-      title: "Broadcast Successful",
-      description:
-        "Transaction confirmed by network and moved to Immutable Storage.",
-      success: true,
-    },
-  ],
-};
+/* ─── Types ─── */
+interface PaymentRecord {
+  id: string;
+  sessionId?: string;
+  merchantId: string;
+  merchantName: string;
+  merchantWallet: string;
+  customerWallet: string;
+  amount: number;
+  currency: string;
+  description?: string;
+  txSignature: string;
+  status: string;
+  completedAt: number;
+  isPrivate?: boolean;
+}
+
+function shortenAddress(addr: string): string {
+  if (!addr || addr.length < 10) return addr || "—";
+  return `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+}
+
+function formatDate(epoch: number): string {
+  return new Date(epoch).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatTime(epoch: number): string {
+  return new Date(epoch).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+}
+
+function formatFullDate(epoch: number): string {
+  return (
+    new Date(epoch).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }) +
+    " at " +
+    formatTime(epoch) +
+    " UTC"
+  );
+}
+
+function explorerUrl(sig: string): string {
+  return `https://explorer.solana.com/tx/${sig}?cluster=devnet`;
+}
 
 export default function SettlementsPage() {
-  const [copied, setCopied] = useState(false);
+  const { connected: authenticated } = useWallet();
+  const { setVisible: openWalletModal } = useWalletModal();
+  const { publicKey, connected } = useActiveWallet();
 
-  const copyHash = () => {
-    navigator.clipboard.writeText(SETTLEMENT.txHash);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const [payments, setPayments] = useState<PaymentRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState<string>("");
+  const [selected, setSelected] = useState<PaymentRecord | null>(null);
+  const [copiedSig, setCopiedSig] = useState(false);
+
+  const fetchPayments = useCallback(async () => {
+    if (!publicKey) {
+      setLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`/api/payments?wallet=${publicKey}`);
+      if (res.ok) {
+        const data = await res.json();
+        setPayments(data.payments || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch settlements:", err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, [publicKey]);
+
+  useEffect(() => {
+    fetchPayments();
+    const interval = setInterval(fetchPayments, 30000);
+    return () => clearInterval(interval);
+  }, [fetchPayments]);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchPayments();
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Back link */}
-      <Link
-        href="/dashboard"
-        className="inline-flex items-center gap-2 text-sm text-[#666] hover:text-white transition-colors"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Settlements
-      </Link>
+  const copySig = (sig: string) => {
+    navigator.clipboard.writeText(sig);
+    setCopiedSig(true);
+    setTimeout(() => setCopiedSig(false), 2000);
+  };
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-        <div>
-          <span className="text-[11px] text-[#00ff41] uppercase tracking-[0.15em] font-semibold">
-            Transaction Verified
-          </span>
-          <h1 className="text-3xl font-bold text-white tracking-tight mt-1">
-            Settlement <span className="text-[#00ff41]">#{SETTLEMENT.id}</span>
-          </h1>
-          <p className="text-sm text-[#666] mt-1">
-            Completed on {SETTLEMENT.completedAt}. Fully settled on{" "}
-            {SETTLEMENT.network} via {SETTLEMENT.method}.
+  const filtered = payments.filter((p) => {
+    if (filterStatus && p.status !== filterStatus) return false;
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      p.txSignature.toLowerCase().includes(q) ||
+      p.customerWallet.toLowerCase().includes(q) ||
+      (p.description || "").toLowerCase().includes(q) ||
+      p.merchantName.toLowerCase().includes(q)
+    );
+  });
+
+  const totalSettled = payments
+    .filter((p) => p.status === "completed")
+    .reduce((sum, p) => sum + p.amount, 0);
+
+  // Not connected
+  if (!authenticated) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1a1a1a] border border-[#333]">
+            <Wallet className="h-6 w-6 text-[#666]" />
+          </div>
+          <h2 className="text-xl font-semibold text-white mb-2">
+            Connect Wallet
+          </h2>
+          <p className="text-[#888] mb-6 max-w-sm text-sm">
+            Connect your wallet to view settlement history.
           </p>
-        </div>
-        <div className="rounded-xl bg-[#00ff41] px-6 py-4 text-center shrink-0">
-          <div className="text-[10px] text-black/60 uppercase tracking-wider font-semibold mb-1">
-            Settled Amount
-          </div>
-          <div className="text-2xl font-bold text-black">
-            {SETTLEMENT.amount.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-            })}{" "}
-            USDC
-          </div>
-        </div>
-      </div>
-
-      {/* Confirmation + Technical Signature */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Confirmation Status */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6"
-        >
-          <span className="text-[10px] text-[#555] uppercase tracking-wider font-semibold">
-            Confirmation Status
-          </span>
-          <div className="flex items-center gap-3 mt-4 mb-6">
-            <div className="h-10 w-10 rounded-full bg-[#00ff41]/10 flex items-center justify-center">
-              <CheckCircle2 className="h-5 w-5 text-[#00ff41]" />
-            </div>
-            <div>
-              <span className="text-xl font-bold text-white">Confirmed</span>
-              <div className="text-xs text-[#666]">
-                {SETTLEMENT.confirmations.toLocaleString()} Network
-                Confirmations
-              </div>
-            </div>
-          </div>
-          <div className="space-y-3 border-t border-[#1f1f1f] pt-4">
-            <div className="flex justify-between">
-              <span className="text-sm text-[#666]">Block Number</span>
-              <span className="text-sm font-mono text-white">
-                {SETTLEMENT.blockNumber.toLocaleString()}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-[#666]">Network</span>
-              <span className="text-sm text-white">{SETTLEMENT.network}</span>
-            </div>
-          </div>
+          <button
+            onClick={() => openWalletModal(true)}
+            className="inline-flex items-center gap-2 rounded-lg bg-[#00ff41] px-5 py-2.5 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors"
+          >
+            <LogIn className="h-4 w-4" />
+            Connect Wallet
+          </button>
         </motion.div>
+      </div>
+    );
+  }
 
-        {/* Technical Signature */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6"
+  // Detail panel
+  if (selected) {
+    const p = selected;
+    return (
+      <div className="space-y-6">
+        <button
+          onClick={() => setSelected(null)}
+          className="inline-flex items-center gap-2 text-sm text-[#666] hover:text-white transition-colors"
         >
-          <span className="text-[10px] text-[#555] uppercase tracking-wider font-semibold">
-            Technical Signature
-          </span>
+          <ArrowLeft className="h-4 w-4" />
+          Back to Settlements
+        </button>
 
-          <div className="mt-4 space-y-4">
-            {/* TX Hash */}
-            <div>
-              <span className="text-[10px] text-[#555] uppercase tracking-wider">
-                Transaction Hash
-              </span>
-              <div className="flex items-center gap-2 mt-1.5 rounded-lg bg-[#1a1a1a] border border-[#333] px-3 py-2">
-                <code className="flex-1 truncate text-xs text-[#aaa] font-mono">
-                  {SETTLEMENT.txHash}
-                </code>
-                <button
-                  onClick={copyHash}
-                  className="shrink-0 text-[#666] hover:text-[#00ff41] transition-colors"
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div>
+            <span className="text-[11px] text-[#00ff41] uppercase tracking-[0.15em] font-semibold">
+              {p.status === "completed"
+                ? "Transaction Verified"
+                : "Pending Settlement"}
+            </span>
+            <h1 className="text-3xl font-bold text-white tracking-tight mt-1">
+              Settlement Detail
+            </h1>
+            <p className="text-sm text-[#666] mt-1">
+              {p.completedAt
+                ? `Completed on ${formatFullDate(p.completedAt)}`
+                : "Awaiting confirmation"}{" "}
+              on Solana Devnet.
+            </p>
+          </div>
+          <div className="rounded-xl bg-[#00ff41] px-6 py-4 text-center shrink-0">
+            <div className="text-[10px] text-black/60 uppercase tracking-wider font-semibold mb-1">
+              Settled Amount
+            </div>
+            <div className="text-2xl font-bold text-black">
+              {p.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}{" "}
+              {p.currency}
+            </div>
+          </div>
+        </div>
+
+        {/* Confirmation + Signature */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6"
+          >
+            <span className="text-[10px] text-[#555] uppercase tracking-wider font-semibold">
+              Status
+            </span>
+            <div className="flex items-center gap-3 mt-4 mb-6">
+              <div
+                className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                  p.status === "completed"
+                    ? "bg-[#00ff41]/10"
+                    : "bg-amber-400/10"
+                }`}
+              >
+                {p.status === "completed" ? (
+                  <CheckCircle2 className="h-5 w-5 text-[#00ff41]" />
+                ) : (
+                  <Clock className="h-5 w-5 text-amber-400" />
+                )}
+              </div>
+              <div>
+                <span
+                  className={`text-xl font-bold ${
+                    p.status === "completed"
+                      ? "text-[#00ff41]"
+                      : "text-amber-400"
+                  }`}
                 >
-                  {copied ? (
-                    <Check className="h-3.5 w-3.5" />
-                  ) : (
-                    <Copy className="h-3.5 w-3.5" />
-                  )}
-                </button>
+                  {p.status === "completed" ? "Confirmed" : "Pending"}
+                </span>
+                <div className="text-xs text-[#666]">Solana Devnet</div>
               </div>
             </div>
+            <div className="space-y-3 border-t border-[#1f1f1f] pt-4">
+              <div className="flex justify-between">
+                <span className="text-sm text-[#666]">Network</span>
+                <span className="text-sm text-white">Solana Devnet</span>
+              </div>
+              {p.description && (
+                <div className="flex justify-between">
+                  <span className="text-sm text-[#666]">Description</span>
+                  <span className="text-sm text-white">{p.description}</span>
+                </div>
+              )}
+              {p.isPrivate && (
+                <div className="flex justify-between">
+                  <span className="text-sm text-[#666]">Privacy</span>
+                  <span className="text-sm text-[#00ff41] flex items-center gap-1">
+                    <Shield className="h-3 w-3" /> Private Transaction
+                  </span>
+                </div>
+              )}
+            </div>
+          </motion.div>
 
-            {/* From / To */}
-            <div className="grid grid-cols-2 gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6"
+          >
+            <span className="text-[10px] text-[#555] uppercase tracking-wider font-semibold">
+              Transaction Signature
+            </span>
+            <div className="mt-4 space-y-4">
               <div>
                 <span className="text-[10px] text-[#555] uppercase tracking-wider">
-                  From (Sender)
+                  Tx Signature
                 </span>
-                <div className="text-sm font-medium text-white mt-1">
-                  {SETTLEMENT.from.name}
-                </div>
-                <div className="text-xs text-[#666] font-mono">
-                  {SETTLEMENT.from.address}
+                <div className="flex items-center gap-2 mt-1.5 rounded-lg bg-[#1a1a1a] border border-[#333] px-3 py-2">
+                  <code className="flex-1 truncate text-xs text-[#aaa] font-mono">
+                    {p.txSignature}
+                  </code>
+                  <button
+                    onClick={() => copySig(p.txSignature)}
+                    className="shrink-0 text-[#666] hover:text-[#00ff41] transition-colors"
+                  >
+                    {copiedSig ? (
+                      <Check className="h-3.5 w-3.5" />
+                    ) : (
+                      <Copy className="h-3.5 w-3.5" />
+                    )}
+                  </button>
                 </div>
               </div>
-              <div>
-                <span className="text-[10px] text-[#555] uppercase tracking-wider">
-                  To (Recipient)
-                </span>
-                <div className="text-sm font-medium text-white mt-1">
-                  {SETTLEMENT.to.name}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <span className="text-[10px] text-[#555] uppercase tracking-wider">
+                    From (Payer)
+                  </span>
+                  <div className="text-xs text-[#666] font-mono mt-1">
+                    {shortenAddress(p.customerWallet)}
+                  </div>
                 </div>
-                <div className="text-xs text-[#666] font-mono">
-                  {SETTLEMENT.to.address}
+                <div>
+                  <span className="text-[10px] text-[#555] uppercase tracking-wider">
+                    To (Merchant)
+                  </span>
+                  <div className="text-sm font-medium text-white mt-1">
+                    {p.merchantName}
+                  </div>
+                  <div className="text-xs text-[#666] font-mono">
+                    {shortenAddress(p.merchantWallet)}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Gas Info + Priority */}
-      <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-          <div>
-            <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
-              Gas Fee Paid
-            </span>
-            <span className="text-sm font-semibold text-white">
-              {SETTLEMENT.gasFee.eth} ETH (${SETTLEMENT.gasFee.usd})
-            </span>
-          </div>
-          <div>
-            <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
-              Gas Price
-            </span>
-            <span className="text-sm font-semibold text-white">
-              {SETTLEMENT.gasPrice} Gwei
-            </span>
-          </div>
-          <div>
-            <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
-              Execution Time
-            </span>
-            <span className="text-sm font-semibold text-white">
-              {SETTLEMENT.executionTime} Seconds
-            </span>
-          </div>
-          <div>
-            <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
-              Priority Status
-            </span>
-            <span className="text-sm font-bold text-[#00ff41]">
-              {SETTLEMENT.priorityStatus}
-            </span>
-          </div>
+          </motion.div>
         </div>
-      </div>
-
-      {/* Liquidity Route + KYC/AML + Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Liquidity Route */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <Activity className="h-4 w-4 text-[#00ff41]" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#888]">
-              Liquidity Route
-            </span>
-          </div>
-          {/* Progress bar */}
-          <div className="h-2 bg-[#1a1a1a] rounded-full overflow-hidden mb-3">
-            <div
-              className="h-full bg-[#00ff41] rounded-full"
-              style={{ width: `${SETTLEMENT.liquidityRoute.protocol}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-[11px] text-[#666]">
-            <span>Settlr Pool ({SETTLEMENT.liquidityRoute.protocol}%)</span>
-            <span>Direct LP ({SETTLEMENT.liquidityRoute.direct}%)</span>
-          </div>
-        </motion.div>
-
-        {/* KYC/AML */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.12 }}
-          className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <Shield className="h-4 w-4 text-[#00ff41]" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#888]">
-              KYC/AML Checked
-            </span>
-          </div>
-          <p className="text-xs text-[#888] mb-3 leading-relaxed">
-            Validated via {SETTLEMENT.compliance.provider}.{" "}
-            {SETTLEMENT.compliance.status}
-          </p>
-          <div className="flex items-center gap-2">
-            <span className="rounded-md bg-[#00ff41]/10 border border-[#00ff41]/20 px-2 py-1 text-[10px] font-bold text-[#00ff41] uppercase">
-              OFAC {SETTLEMENT.compliance.ofac}
-            </span>
-            <span className="rounded-md bg-[#00ff41]/10 border border-[#00ff41]/20 px-2 py-1 text-[10px] font-bold text-[#00ff41] uppercase">
-              Score: {SETTLEMENT.compliance.score}/100
-            </span>
-          </div>
-        </motion.div>
 
         {/* Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.14 }}
-          className="rounded-xl bg-[#00ff41] p-6 flex flex-col justify-center gap-3"
-        >
-          <button className="flex items-center justify-center gap-2 rounded-lg bg-black/20 px-4 py-3 text-sm font-bold text-black hover:bg-black/30 transition-colors">
-            <Download className="h-4 w-4" />
-            Download Receipt
-          </button>
-          <button className="flex items-center justify-center gap-2 rounded-lg border border-black/20 px-4 py-3 text-sm font-medium text-black hover:bg-black/10 transition-colors">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <a
+            href={explorerUrl(p.txSignature)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-xl bg-[#00ff41] p-4 flex items-center justify-center gap-2 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors"
+          >
             <ExternalLink className="h-4 w-4" />
-            View on Etherscan
+            View on Solana Explorer
+          </a>
+          <button
+            onClick={() => copySig(p.txSignature)}
+            className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-4 flex items-center justify-center gap-2 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors"
+          >
+            <Copy className="h-4 w-4" />
+            {copiedSig ? "Copied!" : "Copy Signature"}
           </button>
-        </motion.div>
+        </div>
+      </div>
+    );
+  }
+
+  // List view
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Settlements</h1>
+          <p className="mt-0.5 text-sm text-[#666]">
+            All on-chain payments received by your wallet
+          </p>
+        </div>
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="inline-flex items-center gap-2 rounded-lg border border-[#333] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors disabled:opacity-50"
+        >
+          <RefreshCw
+            className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
+          />
+          Refresh
+        </button>
       </div>
 
-      {/* Internal Audit History */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <h2 className="text-lg font-bold text-white mb-6">
-          Internal Audit History
-        </h2>
-        <div className="relative pl-6">
-          {/* Timeline line */}
-          <div className="absolute left-[7px] top-2 bottom-2 w-px bg-[#1f1f1f]" />
-
-          <div className="space-y-8">
-            {SETTLEMENT.auditHistory.map((event, i) => (
-              <div key={i} className="relative">
-                {/* Dot */}
-                <div
-                  className={`absolute -left-6 top-1.5 h-3.5 w-3.5 rounded-full border-2 ${
-                    event.success
-                      ? "bg-[#00ff41] border-[#00ff41]/30"
-                      : "bg-[#00ff41] border-[#00ff41]/30"
-                  }`}
-                />
-                <div className="text-xs text-[#555] mb-1">{event.time}</div>
-                <h3
-                  className={`text-sm font-semibold ${
-                    event.success ? "text-[#00ff41]" : "text-white"
-                  }`}
-                >
-                  {event.title}
-                </h3>
-                <p className="text-xs text-[#666] mt-0.5">
-                  {event.description}
-                </p>
-              </div>
-            ))}
+      {/* Stats */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {[
+          {
+            label: "Total Settled",
+            value: `$${totalSettled.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+            })}`,
+            color: "#00ff41",
+          },
+          {
+            label: "Transactions",
+            value: payments.length.toString(),
+            color: "#00ff41",
+          },
+          {
+            label: "Completed",
+            value: payments
+              .filter((p) => p.status === "completed")
+              .length.toString(),
+            color: "#00ff41",
+          },
+          {
+            label: "Pending",
+            value: payments
+              .filter((p) => p.status === "pending")
+              .length.toString(),
+            color: payments.some((p) => p.status === "pending")
+              ? "#f59e0b"
+              : "#888",
+          },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-4"
+          >
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#666]">
+              {stat.label}
+            </span>
+            <p className="mt-1 text-xl font-bold text-white">{stat.value}</p>
           </div>
-        </div>
-      </motion.div>
+        ))}
+      </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between py-6 border-t border-[#1f1f1f] text-[10px] text-[#444] uppercase tracking-wider">
-        <span>
-          &copy; 2023 Settlr Finance. All Transactions are Cryptographically
-          Signed
-        </span>
-        <div className="flex items-center gap-6">
-          <span>Privacy Protocol</span>
-          <span>Node Status: Healthy</span>
+      {/* Filters */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#555]" />
+          <input
+            type="text"
+            placeholder="Search by signature, wallet, or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] py-2.5 pl-10 pr-4 text-sm text-white placeholder-[#555] outline-none focus:border-[#00ff41]/50"
+          />
         </div>
+        <div className="flex items-center gap-2">
+          <Filter className="h-4 w-4 text-[#666]" />
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="rounded-lg border border-[#333] bg-[#1a1a1a] py-2.5 pl-3 pr-8 text-sm text-white outline-none appearance-none cursor-pointer"
+          >
+            <option value="">All statuses</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-hidden rounded-xl bg-[#141414] border border-[#1f1f1f]">
+        {loading ? (
+          <div className="flex items-center justify-center gap-2 p-12 text-[#666]">
+            <Loader2 className="h-5 w-5 animate-spin" />
+            Loading settlements...
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="p-12 text-center">
+            <Shield className="mx-auto mb-4 h-12 w-12 text-[#333]" />
+            <h3 className="mb-2 font-semibold text-white">
+              {payments.length === 0
+                ? "No settlements yet"
+                : "No matching settlements"}
+            </h3>
+            <p className="text-sm text-[#666]">
+              {payments.length === 0
+                ? "Settlements will appear here when payments are received on-chain."
+                : "Try adjusting your search or filter."}
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-[#1f1f1f] bg-[#111]">
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                    Date
+                  </th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                    From
+                  </th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                    Description
+                  </th>
+                  <th className="px-4 py-3 text-right text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                    Amount
+                  </th>
+                  <th className="px-4 py-3 text-center text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-center text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                    Tx
+                  </th>
+                  <th className="w-10 px-4 py-3" />
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((p, i) => (
+                  <motion.tr
+                    key={p.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: i * 0.02 }}
+                    onClick={() => setSelected(p)}
+                    className="group cursor-pointer transition-colors hover:bg-[#1a1a1a] border-b border-[#1f1f1f] last:border-0"
+                  >
+                    <td className="px-4 py-3">
+                      <div className="text-sm text-white">
+                        {formatDate(p.completedAt)}
+                      </div>
+                      <div className="text-[11px] text-[#555]">
+                        {formatTime(p.completedAt)}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="text-sm font-mono text-[#aaa]">
+                        {shortenAddress(p.customerWallet)}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="text-sm text-white">
+                        {p.description || "Payment"}
+                      </span>
+                      {p.isPrivate && (
+                        <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-[#00ff41]/10 border border-[#00ff41]/20 px-1.5 py-0.5 text-[9px] font-bold text-[#00ff41] uppercase">
+                          <Shield className="h-2.5 w-2.5" />
+                          Private
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <span className="text-sm font-mono font-semibold text-white">
+                        $
+                        {p.amount.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                        })}
+                      </span>
+                      <div className="text-[11px] text-[#555]">
+                        {p.currency}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <span
+                        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${
+                          p.status === "completed"
+                            ? "text-[#00ff41] bg-[#00ff41]/5 border-[#00ff41]/20"
+                            : "text-amber-400 bg-amber-400/5 border-amber-400/20"
+                        }`}
+                      >
+                        {p.status === "completed" ? (
+                          <CheckCircle2 className="h-3 w-3" />
+                        ) : (
+                          <Clock className="h-3 w-3" />
+                        )}
+                        {p.status === "completed" ? "Settled" : "Pending"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <a
+                        href={explorerUrl(p.txSignature)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-[#00ff41] hover:text-[#00dd38] transition-colors"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    </td>
+                    <td className="px-4 py-3">
+                      <ChevronRight className="h-4 w-4 text-[#555] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
