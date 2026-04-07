@@ -66,7 +66,7 @@ const cards = [
     countTo: 4,
     prefix: "$",
     suffix: "B",
-    desc: "Delinquent B2B receivables in cannabis wholesale",
+    desc: "Unpaid B2B receivables in cannabis wholesale",
     img: "/nobg-dollar.png",
     span: "",
     bg: "#111111",
@@ -126,7 +126,7 @@ export function BentoCards() {
             className="text-[32px] leading-[1.15] tracking-tight font-extrabold sm:text-[44px]"
             style={{ color: t.navy, fontFamily: t.sans }}
           >
-            The Cannabis Payment Crisis
+            Cannabis wholesalers wait 30–60 days to get paid.
           </h2>
         </motion.div>
 

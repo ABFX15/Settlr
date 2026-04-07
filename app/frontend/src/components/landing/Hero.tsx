@@ -64,7 +64,7 @@ export function Hero() {
                   textShadow: "0 2px 30px rgba(0,0,0,0.7)",
                 }}
               >
-                Payment rails for cannabis wholesalers.
+                Get paid instantly on wholesale orders.
               </h1>
 
               <p
@@ -91,7 +91,7 @@ export function Hero() {
                   className="group inline-flex items-center gap-2.5 rounded-full px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:brightness-110"
                   style={{ background: t.green }}
                 >
-                  Request Access
+                  Start Getting Paid Instantly
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <Link

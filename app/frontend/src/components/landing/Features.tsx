@@ -7,8 +7,8 @@ import { t, spring } from "./shared";
 
 const features = [
   {
-    title: "Invoice\n& Pay",
-    desc: "Create invoices, send payment links, settle instantly.",
+    title: "Send Invoice\n→ Get Paid",
+    desc: "Send invoice → get paid instantly. No banks, no delays.",
     img: "/nobg-document.png",
   },
   {
