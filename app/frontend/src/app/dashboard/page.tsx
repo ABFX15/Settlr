@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
@@ -17,10 +17,49 @@ import {
   Plus,
   Filter,
   Download,
-  Building2,
-  Cloud,
-  Package,
+  CheckCircle2,
+  Clock,
+  Loader2,
+  ArrowUpRight,
 } from "lucide-react";
+
+/* ─── Types ─── */
+interface TreasuryBalance {
+  balance: {
+    available: number;
+    pending: number;
+    reserved: number;
+    total: number;
+  };
+  lifetime: {
+    totalDeposited: number;
+    totalPayouts: number;
+    totalFees: number;
+    totalWithdrawn: number;
+  };
+}
+
+interface InvoiceStats {
+  total: number;
+  paid: number;
+  outstanding: number;
+  overdue: number;
+  totalRevenue: number;
+  outstandingAmount: number;
+}
+
+interface PaymentRecord {
+  id: string;
+  merchantName: string;
+  merchantWallet: string;
+  customerWallet: string;
+  amount: number;
+  currency: string;
+  description?: string;
+  txSignature: string;
+  status: string;
+  completedAt: number;
+}
 
 function formatUSD(amount: number): string {
   return new Intl.NumberFormat("en-US", {
@@ -29,86 +68,106 @@ function formatUSD(amount: number): string {
   }).format(amount);
 }
 
-/* ─── Mock data for demo ─── */
-const MOCK_BALANCE = 4892104.2;
-const MOCK_AVAILABLE = 1204500.0;
-const MOCK_ESCROWED = 3687604.2;
-const MOCK_CHANGE = 12.4;
-const MOCK_PENDING_INVOICES = 14;
+function shortenAddress(addr: string): string {
+  if (!addr || addr.length < 10) return addr || "—";
+  return `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+}
 
-const VOLUME_DATA = [
-  { day: "MON", value: 420000, height: 35 },
-  { day: "TUE", value: 580000, height: 48 },
-  { day: "WED", value: 650000, height: 54 },
-  { day: "THU", value: 520000, height: 43 },
-  { day: "FRI (PEAK)", value: 912000, height: 76, peak: true },
-  { day: "SAT", value: 380000, height: 32 },
-  { day: "SUN", value: 350000, height: 29 },
-];
+function timeAgo(epoch: number): string {
+  const diff = Date.now() - epoch;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+}
 
-const SETTLEMENT_QUEUE = [
-  {
-    id: "SET-88219",
-    name: "Global Logistics Inc.",
-    amount: 450000.0,
-    fee: 12.5,
-    status: "FINALIZING",
-    statusColor: "#00ff41",
-    time: "2 mins ago",
-    icon: Building2,
-  },
-  {
-    id: "SET-88220",
-    name: "Aether Cloud Services",
-    amount: 128400.0,
-    fee: 8.2,
-    status: "IN QUEUE",
-    statusColor: "#888",
-    time: "15 mins ago",
-    icon: Cloud,
-  },
-  {
-    id: "SET-88221",
-    name: "Prime Wholesale Dist.",
-    amount: 2100000.0,
-    fee: 45.0,
-    status: "CONFIRMED",
-    statusColor: "#00ff41",
-    time: "1 hour ago",
-    icon: Package,
-  },
-];
+const DAY_LABELS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 export default function DashboardPage() {
   const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
 
-  const [payments, setPayments] = useState<any[]>([]);
+  const [treasury, setTreasury] = useState<TreasuryBalance | null>(null);
+  const [invoiceStats, setInvoiceStats] = useState<InvoiceStats | null>(null);
+  const [payments, setPayments] = useState<PaymentRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [volumeView, setVolumeView] = useState<"daily" | "weekly">("daily");
 
-  useEffect(() => {
-    async function fetchPayments() {
-      if (!publicKey) return;
-      try {
-        const res = await fetch(`/api/payments?wallet=${publicKey}&limit=10`);
-        if (res.ok) {
-          const data = await res.json();
-          setPayments(data.payments || []);
-        }
-      } catch (e) {
-        console.error("Failed to fetch payments:", e);
-      } finally {
-        setLoading(false);
-      }
+  const fetchData = useCallback(async () => {
+    if (!publicKey) {
+      setLoading(false);
+      return;
     }
-    if (connected && publicKey) {
-      fetchPayments();
-    } else {
+    try {
+      const [treasuryRes, statsRes, paymentsRes] = await Promise.all([
+        fetch(`/api/treasury/balance?wallet=${publicKey}`),
+        fetch("/api/invoices?stats=true", {
+          headers: { "x-merchant-wallet": publicKey },
+        }),
+        fetch(`/api/payments?wallet=${publicKey}`),
+      ]);
+      if (treasuryRes.ok) setTreasury(await treasuryRes.json());
+      if (statsRes.ok) setInvoiceStats(await statsRes.json());
+      if (paymentsRes.ok) {
+        const data = await paymentsRes.json();
+        setPayments(data.payments || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch dashboard data:", err);
+    } finally {
       setLoading(false);
     }
-  }, [connected, publicKey]);
+  }, [publicKey]);
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, [fetchData]);
+
+  // Compute 7-day volume bars from payment data
+  const volumeBars = useMemo(() => {
+    const now = Date.now();
+    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+    const dailyTotals: Record<number, number> = {};
+
+    // Initialize last 7 days
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now - i * 24 * 60 * 60 * 1000);
+      dailyTotals[d.getDay()] = 0;
+    }
+
+    payments
+      .filter((p) => p.completedAt >= sevenDaysAgo && p.status === "completed")
+      .forEach((p) => {
+        const day = new Date(p.completedAt).getDay();
+        dailyTotals[day] = (dailyTotals[day] || 0) + p.amount;
+      });
+
+    const maxVal = Math.max(...Object.values(dailyTotals), 1);
+    const today = new Date(now);
+
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(now - (6 - i) * 24 * 60 * 60 * 1000);
+      const dayIndex = d.getDay();
+      const value = dailyTotals[dayIndex] || 0;
+      const isToday = d.toDateString() === today.toDateString();
+      return {
+        day: isToday ? `${DAY_LABELS[dayIndex]} (TODAY)` : DAY_LABELS[dayIndex],
+        value,
+        height: maxVal > 0 ? Math.max((value / maxVal) * 100, 4) : 4,
+        peak: value === maxVal && value > 0,
+      };
+    });
+  }, [payments]);
+
+  const recentPayments = payments.slice(0, 5);
+
+  const balance = treasury?.balance;
+  const lifetime = treasury?.lifetime;
 
   if (!authenticated) {
     return (
@@ -139,21 +198,39 @@ export default function DashboardPage() {
     );
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <Loader2 className="h-6 w-6 animate-spin text-[#00ff41]" />
+        <span className="ml-2 text-sm text-[#666]">Loading dashboard...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-white tracking-tight">
-          Vault Overview
-        </h1>
-        <p className="text-sm text-[#666] mt-1 uppercase tracking-wider">
-          Institutional Settlement Portal
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white tracking-tight">
+            Vault Overview
+          </h1>
+          <p className="text-sm text-[#666] mt-1 uppercase tracking-wider">
+            Settlement Portal
+          </p>
+        </div>
+        <button
+          onClick={fetchData}
+          className="inline-flex items-center gap-2 rounded-lg border border-[#333] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors"
+        >
+          <RefreshCw className="h-4 w-4" />
+          Refresh
+        </button>
       </div>
 
       {/* Balance + Pending Invoices Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Total Liquid Balance */}
+        {/* Total Balance */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -161,7 +238,7 @@ export default function DashboardPage() {
         >
           <div className="flex items-center justify-between mb-4">
             <span className="text-[11px] text-[#666] uppercase tracking-[0.15em] font-semibold">
-              Total Liquid Balance
+              Treasury Balance
             </span>
             <div className="h-8 w-8 rounded-lg bg-[#00ff41]/10 flex items-center justify-center">
               <TrendingUp className="h-4 w-4 text-[#00ff41]" />
@@ -169,39 +246,39 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-baseline gap-3 mb-6">
             <span className="text-4xl font-bold text-white tracking-tight">
-              {formatUSD(MOCK_BALANCE)}
+              {formatUSD(balance?.total ?? 0)}
             </span>
             <span className="text-lg font-semibold text-[#00ff41]">USDC</span>
           </div>
           <div className="grid grid-cols-3 gap-6 pt-4 border-t border-[#1f1f1f]">
             <div>
               <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
-                Available to Settle
+                Available
               </span>
               <span className="text-lg font-semibold text-white">
-                {formatUSD(MOCK_AVAILABLE)}
+                {formatUSD(balance?.available ?? 0)}
               </span>
             </div>
             <div>
               <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
-                Escrowed Funds
+                Pending
               </span>
               <span className="text-lg font-semibold text-white">
-                {formatUSD(MOCK_ESCROWED)}
+                {formatUSD(balance?.pending ?? 0)}
               </span>
             </div>
             <div>
               <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
-                24h Change
+                Total Deposited
               </span>
               <span className="text-lg font-semibold text-[#00ff41]">
-                +{MOCK_CHANGE}%
+                {formatUSD(lifetime?.totalDeposited ?? 0)}
               </span>
             </div>
           </div>
         </motion.div>
 
-        {/* Pending Invoices */}
+        {/* Invoice Stats */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -210,26 +287,36 @@ export default function DashboardPage() {
         >
           <div>
             <span className="text-[11px] text-[#666] uppercase tracking-[0.15em] font-semibold">
-              Pending Invoices
+              Invoices
             </span>
-            <div className="flex items-center justify-between mt-4">
-              <span className="text-sm text-[#aaa]">Awaiting Payment</span>
-              <span className="text-2xl font-bold text-white">
-                {MOCK_PENDING_INVOICES}
-              </span>
-            </div>
-
-            {/* Progress bar */}
-            <div className="mt-4">
-              <div className="flex items-center justify-between text-[11px] text-[#666] mb-2">
-                <span>Target: 20 Invoices</span>
-                <span>65% Volume</span>
+            <div className="mt-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-[#aaa]">Outstanding</span>
+                <span className="text-2xl font-bold text-white">
+                  {invoiceStats?.outstanding ?? 0}
+                </span>
               </div>
-              <div className="h-1.5 bg-[#1f1f1f] rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-[#00ff41] rounded-full transition-all"
-                  style={{ width: "65%" }}
-                />
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-[#666]">Paid</span>
+                <span className="text-sm font-semibold text-[#00ff41]">
+                  {invoiceStats?.paid ?? 0}
+                </span>
+              </div>
+              {(invoiceStats?.overdue ?? 0) > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-red-400">Overdue</span>
+                  <span className="text-sm font-semibold text-red-400">
+                    {invoiceStats?.overdue}
+                  </span>
+                </div>
+              )}
+              <div className="flex items-center justify-between border-t border-[#1f1f1f] pt-3">
+                <span className="text-[10px] text-[#555] uppercase tracking-wider">
+                  Revenue
+                </span>
+                <span className="text-sm font-bold text-[#00ff41]">
+                  ${formatUSD(invoiceStats?.totalRevenue ?? 0)}
+                </span>
               </div>
             </div>
           </div>
@@ -238,13 +325,15 @@ export default function DashboardPage() {
             href="/dashboard/invoices"
             className="mt-6 flex items-center justify-between rounded-lg border border-[#333] px-4 py-3 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors group"
           >
-            <span className="uppercase tracking-wider text-[12px]">View Ledger</span>
+            <span className="uppercase tracking-wider text-[12px]">
+              View Invoices
+            </span>
             <ArrowRight className="h-4 w-4 text-[#666] group-hover:text-[#00ff41] transition-colors" />
           </Link>
         </motion.div>
       </div>
 
-      {/* Payment Volume Analysis */}
+      {/* Payment Volume (7D) */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -253,60 +342,50 @@ export default function DashboardPage() {
       >
         <div className="flex items-center justify-between mb-6">
           <span className="text-[11px] text-[#666] uppercase tracking-[0.15em] font-semibold">
-            Payment Volume Analysis (7D)
+            Payment Volume (7D)
           </span>
-          <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1">
-            <button
-              onClick={() => setVolumeView("daily")}
-              className={`px-3 py-1 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-colors ${
-                volumeView === "daily"
-                  ? "bg-[#00ff41] text-black"
-                  : "text-[#888] hover:text-white"
-              }`}
-            >
-              Daily
-            </button>
-            <button
-              onClick={() => setVolumeView("weekly")}
-              className={`px-3 py-1 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-colors ${
-                volumeView === "weekly"
-                  ? "bg-[#00ff41] text-black"
-                  : "text-[#888] hover:text-white"
-              }`}
-            >
-              Weekly
-            </button>
-          </div>
+          <span className="text-xs text-[#555]">
+            {payments.filter((p) => p.status === "completed").length} total
+            payments
+          </span>
         </div>
 
-        {/* Bar chart */}
-        <div className="flex items-end justify-between gap-3 h-48 px-2">
-          {VOLUME_DATA.map((bar) => (
-            <div key={bar.day} className="flex-1 flex flex-col items-center gap-2">
-              {bar.peak && (
-                <div className="bg-[#1a1a1a] border border-[#333] rounded px-2 py-1 text-[10px] text-[#00ff41] font-mono mb-1">
-                  912K USDC
-                </div>
-              )}
+        {payments.length === 0 ? (
+          <div className="flex items-center justify-center h-48 text-[#555] text-sm">
+            No payment data yet
+          </div>
+        ) : (
+          <div className="flex items-end justify-between gap-3 h-48 px-2">
+            {volumeBars.map((bar) => (
               <div
-                className={`w-full rounded-t-md transition-all ${
-                  bar.peak ? "bg-[#00ff41]" : "bg-[#2a2a2a]"
-                }`}
-                style={{ height: `${bar.height}%` }}
-              />
-              <span
-                className={`text-[10px] font-semibold tracking-wider ${
-                  bar.peak ? "text-[#00ff41]" : "text-[#555]"
-                }`}
+                key={bar.day}
+                className="flex-1 flex flex-col items-center gap-2"
               >
-                {bar.day}
-              </span>
-            </div>
-          ))}
-        </div>
+                {bar.peak && bar.value > 0 && (
+                  <div className="bg-[#1a1a1a] border border-[#333] rounded px-2 py-1 text-[10px] text-[#00ff41] font-mono mb-1">
+                    ${formatUSD(bar.value)}
+                  </div>
+                )}
+                <div
+                  className={`w-full rounded-t-md transition-all ${
+                    bar.peak ? "bg-[#00ff41]" : "bg-[#2a2a2a]"
+                  }`}
+                  style={{ height: `${bar.height}%` }}
+                />
+                <span
+                  className={`text-[10px] font-semibold tracking-wider ${
+                    bar.peak ? "text-[#00ff41]" : "text-[#555]"
+                  }`}
+                >
+                  {bar.day}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </motion.div>
 
-      {/* Active Settlement Queue */}
+      {/* Recent Payments */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -315,84 +394,81 @@ export default function DashboardPage() {
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#1f1f1f]">
           <span className="text-[11px] text-[#666] uppercase tracking-[0.15em] font-semibold">
-            Active Settlement Queue
+            Recent Payments
           </span>
-          <div className="flex items-center gap-2">
-            <button className="rounded-lg p-2 text-[#666] hover:text-white hover:bg-[#1a1a1a] transition-colors">
-              <Filter className="h-4 w-4" />
-            </button>
-            <button className="rounded-full h-8 w-8 bg-[#00ff41] flex items-center justify-center text-black hover:bg-[#00dd38] transition-colors">
-              <Plus className="h-4 w-4" />
-            </button>
+          <Link
+            href="/dashboard/settlements"
+            className="text-[11px] text-[#00ff41] uppercase tracking-wider font-semibold hover:text-[#00dd38] transition-colors flex items-center gap-1"
+          >
+            View All <ChevronRight className="h-3 w-3" />
+          </Link>
+        </div>
+
+        {recentPayments.length === 0 ? (
+          <div className="p-12 text-center">
+            <Wallet className="mx-auto mb-4 h-10 w-10 text-[#333]" />
+            <h3 className="mb-1 font-semibold text-white text-sm">
+              No payments yet
+            </h3>
+            <p className="text-xs text-[#666]">
+              Payments will appear here as they are received.
+            </p>
           </div>
-        </div>
-
-        <div className="divide-y divide-[#1f1f1f]">
-          {SETTLEMENT_QUEUE.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center gap-4 px-6 py-4 hover:bg-[#1a1a1a] transition-colors cursor-pointer"
-            >
-              <div className="h-10 w-10 rounded-lg bg-[#1a1a1a] border border-[#333] flex items-center justify-center">
-                <item.icon className="h-4 w-4 text-[#888]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-white">{item.name}</div>
-                <div className="text-[11px] text-[#555] font-mono">
-                  ID: {item.id}
+        ) : (
+          <div className="divide-y divide-[#1f1f1f]">
+            {recentPayments.map((p) => (
+              <div
+                key={p.id}
+                className="flex items-center gap-4 px-6 py-4 hover:bg-[#1a1a1a] transition-colors"
+              >
+                <div className="h-10 w-10 rounded-lg bg-[#1a1a1a] border border-[#333] flex items-center justify-center">
+                  <ArrowUpRight className="h-4 w-4 text-[#00ff41]" />
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-semibold text-white">
-                  {formatUSD(item.amount)} USDC
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-white">
+                    {p.description || "Payment"}
+                  </div>
+                  <div className="text-[11px] text-[#555] font-mono">
+                    From {shortenAddress(p.customerWallet)}
+                  </div>
                 </div>
-                <div className="text-[11px] text-[#555]">
-                  Network Fee: {item.fee.toFixed(2)}
+                <div className="text-right">
+                  <div className="text-sm font-semibold text-white">
+                    {formatUSD(p.amount)} {p.currency}
+                  </div>
                 </div>
-              </div>
-              <div className="w-24 text-center">
-                <span
-                  className="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border"
-                  style={{
-                    color: item.statusColor,
-                    borderColor:
-                      item.statusColor === "#00ff41"
-                        ? "rgba(0,255,65,0.2)"
-                        : "rgba(136,136,136,0.2)",
-                    backgroundColor:
-                      item.statusColor === "#00ff41"
-                        ? "rgba(0,255,65,0.05)"
-                        : "rgba(136,136,136,0.05)",
-                  }}
+                <div className="w-24 text-center">
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border ${
+                      p.status === "completed"
+                        ? "text-[#00ff41] bg-[#00ff41]/5 border-[#00ff41]/20"
+                        : "text-amber-400 bg-amber-400/5 border-amber-400/20"
+                    }`}
+                  >
+                    {p.status === "completed" ? (
+                      <CheckCircle2 className="h-3 w-3" />
+                    ) : (
+                      <Clock className="h-3 w-3" />
+                    )}
+                    {p.status === "completed" ? "Settled" : "Pending"}
+                  </span>
+                </div>
+                <div className="text-[11px] text-[#555] w-20 text-right">
+                  {timeAgo(p.completedAt)}
+                </div>
+                <a
+                  href={`https://explorer.solana.com/tx/${p.txSignature}?cluster=devnet`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#00ff41] hover:text-[#00dd38] transition-colors"
                 >
-                  {item.status}
-                </span>
+                  <ExternalLink className="h-4 w-4" />
+                </a>
               </div>
-              <div className="text-[11px] text-[#555] w-20 text-right">
-                {item.time}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-[#1f1f1f] px-6 py-4 text-center">
-          <button className="text-[11px] text-[#666] uppercase tracking-wider font-semibold hover:text-[#00ff41] transition-colors flex items-center gap-2 mx-auto">
-            <Download className="h-3.5 w-3.5" />
-            Download Transaction History (CSV)
-          </button>
-        </div>
+            ))}
+          </div>
+        )}
       </motion.div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between py-6 border-t border-[#1f1f1f] text-[10px] text-[#444] uppercase tracking-wider">
-        <span>&copy; 2024 Settlr Protocol. Institutional Grade Infrastructure.</span>
-        <div className="flex items-center gap-6">
-          <Link href="/docs" className="hover:text-[#888] transition-colors">API Docs</Link>
-          <Link href="/compliance" className="hover:text-[#888] transition-colors">Security Audit</Link>
-          <Link href="/privacy" className="hover:text-[#888] transition-colors">Privacy</Link>
-        </div>
-      </div>
     </div>
   );
 }
