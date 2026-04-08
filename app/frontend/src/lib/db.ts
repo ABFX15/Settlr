@@ -3145,3 +3145,260 @@ function mapSupabaseMerchantBalance(data: Record<string, unknown>): MerchantBala
         updatedAt: new Date(data.updated_at as string),
     };
 }
+
+/* ═══════════════════════════════════════════════════════════════════════ */
+/*  COLLECTIONS / REMINDERS                                               */
+/* ═══════════════════════════════════════════════════════════════════════ */
+
+export type ReminderType = "pre_due_nudge" | "due_today" | "overdue_gentle" | "overdue_firm" | "overdue_final";
+export type ReminderStatus = "scheduled" | "sent" | "failed" | "skipped";
+
+export interface CollectionReminder {
+    id: string;
+    merchantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    buyerEmail: string;
+    buyerName: string;
+    type: ReminderType;
+    status: ReminderStatus;
+    scheduledFor: Date;
+    sentAt?: Date;
+    failedReason?: string;
+    createdAt: Date;
+}
+
+/** Default reminder schedule relative to due date (days offset, negative = before due) */
+export const REMINDER_SCHEDULE: { type: ReminderType; daysOffset: number; label: string }[] = [
+    { type: "pre_due_nudge", daysOffset: -3, label: "3 days before due" },
+    { type: "due_today", daysOffset: 0, label: "Due today" },
+    { type: "overdue_gentle", daysOffset: 3, label: "3 days overdue" },
+    { type: "overdue_firm", daysOffset: 7, label: "7 days overdue" },
+    { type: "overdue_final", daysOffset: 14, label: "14 days overdue" },
+];
+
+const memoryReminders = new Map<string, CollectionReminder>();
+
+export async function createRemindersForInvoice(
+    invoice: Invoice,
+    merchantId: string
+): Promise<CollectionReminder[]> {
+    const created: CollectionReminder[] = [];
+    const now = new Date();
+
+    for (const step of REMINDER_SCHEDULE) {
+        const scheduledFor = new Date(invoice.dueDate);
+        scheduledFor.setDate(scheduledFor.getDate() + step.daysOffset);
+
+        // Skip reminders in the past (already missed window)
+        if (scheduledFor < now) continue;
+
+        const reminder: CollectionReminder = {
+            id: `rem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+            merchantId,
+            invoiceId: invoice.id,
+            invoiceNumber: invoice.invoiceNumber,
+            buyerEmail: invoice.buyerEmail,
+            buyerName: invoice.buyerName,
+            type: step.type,
+            status: "scheduled",
+            scheduledFor,
+            createdAt: now,
+        };
+
+        if (isSupabaseConfigured()) {
+            await supabase.from("collection_reminders").insert({
+                id: reminder.id,
+                merchant_id: reminder.merchantId,
+                invoice_id: reminder.invoiceId,
+                invoice_number: reminder.invoiceNumber,
+                buyer_email: reminder.buyerEmail,
+                buyer_name: reminder.buyerName,
+                type: reminder.type,
+                status: reminder.status,
+                scheduled_for: reminder.scheduledFor.toISOString(),
+                created_at: reminder.createdAt.toISOString(),
+            });
+        } else {
+            memoryReminders.set(reminder.id, reminder);
+        }
+        created.push(reminder);
+    }
+
+    return created;
+}
+
+export async function getRemindersByMerchant(
+    merchantId: string,
+    options?: { status?: ReminderStatus; invoiceId?: string; limit?: number }
+): Promise<CollectionReminder[]> {
+    if (isSupabaseConfigured()) {
+        let query = supabase
+            .from("collection_reminders")
+            .select("*")
+            .eq("merchant_id", merchantId)
+            .order("scheduled_for", { ascending: true });
+        if (options?.status) query = query.eq("status", options.status);
+        if (options?.invoiceId) query = query.eq("invoice_id", options.invoiceId);
+        if (options?.limit) query = query.limit(options.limit);
+        const { data } = await query;
+        if (!data) return [];
+        return data.map(mapSupabaseReminder);
+    }
+
+    let reminders = Array.from(memoryReminders.values()).filter(
+        (r) => r.merchantId === merchantId
+    );
+    if (options?.status) reminders = reminders.filter((r) => r.status === options.status);
+    if (options?.invoiceId) reminders = reminders.filter((r) => r.invoiceId === options.invoiceId);
+    reminders.sort((a, b) => a.scheduledFor.getTime() - b.scheduledFor.getTime());
+    if (options?.limit) reminders = reminders.slice(0, options.limit);
+    return reminders;
+}
+
+export async function getDueReminders(merchantId: string): Promise<CollectionReminder[]> {
+    const now = new Date();
+    if (isSupabaseConfigured()) {
+        const { data } = await supabase
+            .from("collection_reminders")
+            .select("*")
+            .eq("merchant_id", merchantId)
+            .eq("status", "scheduled")
+            .lte("scheduled_for", now.toISOString())
+            .order("scheduled_for", { ascending: true });
+        if (!data) return [];
+        return data.map(mapSupabaseReminder);
+    }
+    return Array.from(memoryReminders.values())
+        .filter((r) => r.merchantId === merchantId && r.status === "scheduled" && r.scheduledFor <= now)
+        .sort((a, b) => a.scheduledFor.getTime() - b.scheduledFor.getTime());
+}
+
+export async function updateReminderStatus(
+    id: string,
+    status: ReminderStatus,
+    extra?: { sentAt?: Date; failedReason?: string }
+): Promise<CollectionReminder | null> {
+    if (isSupabaseConfigured()) {
+        const update: Record<string, unknown> = { status };
+        if (extra?.sentAt) update.sent_at = extra.sentAt.toISOString();
+        if (extra?.failedReason) update.failed_reason = extra.failedReason;
+        const { data } = await supabase
+            .from("collection_reminders")
+            .update(update)
+            .eq("id", id)
+            .select()
+            .single();
+        if (!data) return null;
+        return mapSupabaseReminder(data);
+    }
+    const rem = memoryReminders.get(id);
+    if (!rem) return null;
+    rem.status = status;
+    if (extra?.sentAt) rem.sentAt = extra.sentAt;
+    if (extra?.failedReason) rem.failedReason = extra.failedReason;
+    return rem;
+}
+
+export async function cancelRemindersForInvoice(invoiceId: string): Promise<number> {
+    if (isSupabaseConfigured()) {
+        const { data } = await supabase
+            .from("collection_reminders")
+            .update({ status: "skipped" })
+            .eq("invoice_id", invoiceId)
+            .eq("status", "scheduled")
+            .select("id");
+        return data?.length || 0;
+    }
+    let cancelled = 0;
+    for (const rem of memoryReminders.values()) {
+        if (rem.invoiceId === invoiceId && rem.status === "scheduled") {
+            rem.status = "skipped";
+            cancelled++;
+        }
+    }
+    return cancelled;
+}
+
+export async function getCollectionStats(merchantId: string): Promise<{
+    totalReminders: number;
+    sent: number;
+    scheduled: number;
+    skipped: number;
+    failed: number;
+    overdueInvoices: number;
+    overdueAmount: number;
+    collectedAfterReminder: number;
+    collectedAmount: number;
+    avgDaysToCollect: number;
+}> {
+    const reminders = await getRemindersByMerchant(merchantId, { limit: 100000 });
+    const invoices = await getInvoicesByMerchant(merchantId, { limit: 100000 });
+    const now = new Date();
+
+    let sent = 0, scheduled = 0, skipped = 0, failed = 0;
+    for (const r of reminders) {
+        if (r.status === "sent") sent++;
+        else if (r.status === "scheduled") scheduled++;
+        else if (r.status === "skipped") skipped++;
+        else if (r.status === "failed") failed++;
+    }
+
+    let overdueInvoices = 0, overdueAmount = 0;
+    let collectedAfterReminder = 0, collectedAmount = 0;
+    const daysList: number[] = [];
+
+    // Invoices that had reminders sent and later got paid
+    const invoiceIdsWithReminders = new Set(
+        reminders.filter((r) => r.status === "sent").map((r) => r.invoiceId)
+    );
+
+    for (const inv of invoices) {
+        if (inv.status !== "paid" && inv.status !== "cancelled" && inv.status !== "draft" && inv.dueDate < now) {
+            overdueInvoices++;
+            overdueAmount += inv.total;
+        }
+        if (inv.status === "paid" && invoiceIdsWithReminders.has(inv.id) && inv.paidAt) {
+            collectedAfterReminder++;
+            collectedAmount += inv.total;
+            const daysToCollect = Math.ceil(
+                (inv.paidAt.getTime() - inv.dueDate.getTime()) / (1000 * 60 * 60 * 24)
+            );
+            daysList.push(Math.max(0, daysToCollect));
+        }
+    }
+
+    const avgDaysToCollect = daysList.length > 0
+        ? Math.round(daysList.reduce((a, b) => a + b, 0) / daysList.length)
+        : 0;
+
+    return {
+        totalReminders: reminders.length,
+        sent,
+        scheduled,
+        skipped,
+        failed,
+        overdueInvoices,
+        overdueAmount,
+        collectedAfterReminder,
+        collectedAmount,
+        avgDaysToCollect,
+    };
+}
+
+function mapSupabaseReminder(data: Record<string, unknown>): CollectionReminder {
+    return {
+        id: data.id as string,
+        merchantId: data.merchant_id as string,
+        invoiceId: data.invoice_id as string,
+        invoiceNumber: data.invoice_number as string,
+        buyerEmail: data.buyer_email as string,
+        buyerName: data.buyer_name as string,
+        type: data.type as ReminderType,
+        status: data.status as ReminderStatus,
+        scheduledFor: new Date(data.scheduled_for as string),
+        sentAt: data.sent_at ? new Date(data.sent_at as string) : undefined,
+        failedReason: data.failed_reason as string | undefined,
+        createdAt: new Date(data.created_at as string),
+    };
+}

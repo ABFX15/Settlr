@@ -20,6 +20,8 @@ import {
   ArrowRightLeft,
   Bell,
   Package,
+  ClipboardList,
+  BellRing,
 } from "lucide-react";
 
 const navItems = [
@@ -37,6 +39,8 @@ const navItems = [
     label: "Settlements",
   },
   { href: "/dashboard/receivables", icon: BarChart3, label: "Receivables" },
+  { href: "/dashboard/collections", icon: BellRing, label: "Collections" },
+  { href: "/dashboard/reports", icon: ClipboardList, label: "Reports" },
 ];
 
 export function DashboardSidebar() {
