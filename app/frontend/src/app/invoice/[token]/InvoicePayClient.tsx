@@ -19,11 +19,9 @@ import {
   XCircle,
   Clock,
   ArrowRight,
-  QrCode,
   HelpCircle,
   Settings,
   Bell,
-  Info,
 } from "lucide-react";
 import Link from "next/link";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
@@ -87,15 +85,10 @@ const fadeIn = {
   exit: { opacity: 0, y: -8 },
 };
 
-const ASSETS = [
-  { symbol: "USDC", network: "Solana (SPL Token)", icon: "$", selected: true },
-  { symbol: "SOL", network: "Solana Native", icon: "S", selected: false },
-  {
-    symbol: "PYUSD",
-    network: "Solana (SPL Token)",
-    icon: "P",
-    selected: false,
-  },
+const PAYMENT_METHODS = [
+  { symbol: "USDC", label: "US Dollar (USDC)", icon: "$", selected: true },
+  { symbol: "SOL", label: "SOL Balance", icon: "S", selected: false },
+  { symbol: "PYUSD", label: "PayPal USD", icon: "P", selected: false },
 ];
 
 export default function InvoicePayClient({
@@ -158,7 +151,9 @@ export default function InvoicePayClient({
       return;
     }
     if (!walletSignTransaction && !sendTransaction) {
-      setError("Your wallet does not support transaction signing.");
+      setError(
+        "Your account does not support payments. Please try a different sign-in method.",
+      );
       return;
     }
     setState("paying");
@@ -181,7 +176,7 @@ export default function InvoicePayClient({
         const balance = Number(account.amount) / Math.pow(10, USDC_DECIMALS);
         if (balance < invoice.total) {
           throw new Error(
-            `Insufficient USDC balance. You have $${balance.toFixed(
+            `Insufficient balance. You have $${balance.toFixed(
               2,
             )} but need $${invoice.total.toFixed(2)}`,
           );
@@ -190,7 +185,7 @@ export default function InvoicePayClient({
         if (err instanceof Error && err.message.includes("Insufficient"))
           throw err;
         throw new Error(
-          "USDC token account not found. Please fund your wallet.",
+          "Payment account not found. Please ensure your account is funded.",
         );
       }
 
@@ -515,7 +510,7 @@ export default function InvoicePayClient({
                     {/* Trust footer */}
                     <div className="flex items-center gap-2 text-xs text-[#555]">
                       <Shield className="h-3.5 w-3.5 text-[#00ff41]" />
-                      Secured by Settlr Decentralized Clearing Protocol
+                      Secured by Settlr · Payments settle instantly
                     </div>
 
                     {/* Success / Already paid TX info */}
@@ -568,15 +563,15 @@ export default function InvoicePayClient({
                   <div className="lg:col-span-2 space-y-4">
                     {(state === "ready" || state === "paying") && (
                       <>
-                        {/* Select Asset */}
+                        {/* Payment Method */}
                         <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-5">
                           <h3 className="text-sm font-semibold text-white mb-4">
-                            Select Asset
+                            Payment Method
                           </h3>
                           <div className="space-y-2">
-                            {ASSETS.map((asset, i) => (
+                            {PAYMENT_METHODS.map((method, i) => (
                               <button
-                                key={asset.symbol}
+                                key={method.symbol}
                                 onClick={() => setSelectedAsset(i)}
                                 className={`w-full flex items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors ${
                                   selectedAsset === i
@@ -591,27 +586,25 @@ export default function InvoicePayClient({
                                       : "bg-[#333] text-[#888]"
                                   }`}
                                 >
-                                  {asset.icon}
+                                  {method.icon}
                                 </div>
                                 <div className="flex-1">
                                   <div className="text-sm font-semibold text-white">
-                                    {asset.symbol}
-                                  </div>
-                                  <div className="text-[11px] text-[#666]">
-                                    {asset.network}
+                                    {method.label}
                                   </div>
                                 </div>
                                 <div className="text-right">
                                   <div className="text-sm font-mono text-white">
+                                    $
                                     {i === 0
                                       ? invoice.total.toLocaleString("en-US", {
                                           minimumFractionDigits: 2,
                                         })
                                       : i === 1
                                       ? `~${(invoice.total / 170).toFixed(2)}`
-                                      : `~${(invoice.total / 67000).toFixed(
-                                          3,
-                                        )}`}
+                                      : invoice.total.toLocaleString("en-US", {
+                                          minimumFractionDigits: 2,
+                                        })}
                                   </div>
                                 </div>
                                 {selectedAsset === i && (
@@ -635,7 +628,7 @@ export default function InvoicePayClient({
                             <div className="flex items-center justify-center gap-2 py-4">
                               <Loader2 className="h-5 w-5 animate-spin text-[#00ff41]" />
                               <span className="text-sm text-[#666]">
-                                Initializing wallet...
+                                Connecting...
                               </span>
                             </div>
                           ) : !connected ? (
@@ -644,7 +637,7 @@ export default function InvoicePayClient({
                               className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#00ff41] py-4 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors"
                             >
                               <Wallet className="h-4 w-4" />
-                              Connect Wallet to Pay
+                              Sign In to Pay
                             </button>
                           ) : (
                             <button
@@ -670,30 +663,35 @@ export default function InvoicePayClient({
                           )}
                         </div>
 
-                        {/* Copy Address / QR */}
+                        {/* Share options */}
                         <div className="flex items-center justify-center gap-4">
-                          <button className="flex items-center gap-1.5 text-xs text-[#666] hover:text-white transition-colors">
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(
+                                window.location.href,
+                              );
+                              setCopied(true);
+                              setTimeout(() => setCopied(false), 2000);
+                            }}
+                            className="flex items-center gap-1.5 text-xs text-[#666] hover:text-white transition-colors"
+                          >
                             <Copy className="h-3.5 w-3.5" />
-                            Copy Address
-                          </button>
-                          <button className="flex items-center gap-1.5 text-xs text-[#666] hover:text-white transition-colors">
-                            <QrCode className="h-3.5 w-3.5" />
-                            View QR
+                            {copied ? "Copied!" : "Copy Payment Link"}
                           </button>
                         </div>
 
-                        {/* Network Fees Info */}
+                        {/* Payment info */}
                         <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-5">
                           <div className="flex items-center gap-2 mb-2">
-                            <Info className="h-4 w-4 text-[#00ff41]" />
+                            <Shield className="h-4 w-4 text-[#00ff41]" />
                             <span className="text-sm font-semibold text-white">
-                              Network Fees
+                              Instant Settlement
                             </span>
                           </div>
                           <p className="text-xs text-[#666] leading-relaxed">
-                            Payments are processed instantly on-chain. Gas fees
-                            are calculated at execution. Ensure your wallet has
-                            sufficient balance for network overhead.
+                            Your payment settles in seconds — no hold periods,
+                            no processing delays. A small network fee (typically
+                            &lt;$0.01) applies.
                           </p>
                         </div>
                       </>
@@ -701,18 +699,17 @@ export default function InvoicePayClient({
                   </div>
                 </div>
 
-                {/* SETTLR watermark */}
-                <div className="mt-16 text-[80px] font-bold text-[#141414] tracking-tight leading-none select-none">
-                  SETTLR
-                </div>
-
                 {/* Footer */}
-                <div className="flex items-center justify-between py-6 border-t border-[#1f1f1f] mt-4 text-[10px] text-[#444] uppercase tracking-wider">
-                  <span>Clearing Node: US-WEST-B1 // 8.192.12.4</span>
+                <div className="flex items-center justify-center py-8 border-t border-[#1f1f1f] mt-8 text-[10px] text-[#444] uppercase tracking-wider">
                   <span>
-                    System Time:{" "}
-                    {new Date().toISOString().replace("T", " ").slice(0, 19)}{" "}
-                    UTC
+                    Powered by{" "}
+                    <Link
+                      href="/"
+                      className="text-[#555] hover:text-white transition-colors"
+                    >
+                      Settlr
+                    </Link>{" "}
+                    · Instant business payments
                   </span>
                 </div>
               </motion.div>

@@ -19,13 +19,24 @@ import {
   BarChart3,
   ArrowRightLeft,
   Bell,
+  Package,
 } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", exact: true },
+  {
+    href: "/dashboard",
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    exact: true,
+  },
+  { href: "/dashboard/orders", icon: Package, label: "Orders" },
   { href: "/dashboard/invoices", icon: FileText, label: "Invoices" },
-  { href: "/dashboard/settlements", icon: ArrowRightLeft, label: "Settlements" },
-  { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics" },
+  {
+    href: "/dashboard/settlements",
+    icon: ArrowRightLeft,
+    label: "Settlements",
+  },
+  { href: "/dashboard/receivables", icon: BarChart3, label: "Receivables" },
 ];
 
 export function DashboardSidebar() {
@@ -65,7 +76,10 @@ export function DashboardSidebar() {
       {/* Navigation */}
       <nav className="flex-1 space-y-1 px-3 py-1">
         {navItems.map((item) => {
-          const active = isActive(item.href, (item as { exact?: boolean }).exact);
+          const active = isActive(
+            item.href,
+            (item as { exact?: boolean }).exact,
+          );
           return (
             <Link
               key={item.href}
@@ -78,7 +92,9 @@ export function DashboardSidebar() {
               }`}
             >
               <item.icon className="h-4 w-4 flex-shrink-0" />
-              <span className="uppercase tracking-wide text-[12px]">{item.label}</span>
+              <span className="uppercase tracking-wide text-[12px]">
+                {item.label}
+              </span>
             </Link>
           );
         })}
@@ -179,7 +195,9 @@ export function DashboardTopBar() {
     <div className="hidden h-14 items-center justify-end gap-3 border-b border-[#1f1f1f] px-8 lg:flex">
       {/* Network Status */}
       <div className="flex items-center gap-2 mr-auto">
-        <span className="text-xs text-[#666] uppercase tracking-wider">Network Status</span>
+        <span className="text-xs text-[#666] uppercase tracking-wider">
+          Network Status
+        </span>
         <span className="flex items-center gap-1.5 text-xs text-[#00ff41]">
           <span className="h-1.5 w-1.5 rounded-full bg-[#00ff41] animate-pulse" />
           Synchronized

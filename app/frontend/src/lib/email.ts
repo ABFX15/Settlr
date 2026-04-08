@@ -267,11 +267,11 @@ export async function sendInvoiceEmail(params: {
             </a>
         </div>
         <p style="color: #7C8A9E; font-size: 12px; text-align: center;">
-            Pay with USDC — no bank account needed. Funds settle instantly on Solana.
+            Pay online — no bank transfers, no delays. Funds settle instantly.
         </p>
         <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
         <p style="color: #7C8A9E; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #1B6B4A; text-decoration: none;">Settlr</a> — stablecoin payment infrastructure
+            Powered by <a href="https://settlr.dev" style="color: #1B6B4A; text-decoration: none;">Settlr</a> — instant business payments
         </p>
     </div>`;
 

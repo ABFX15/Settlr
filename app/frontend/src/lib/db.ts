@@ -305,6 +305,269 @@ const memoryMerchantBalances = new Map<string, MerchantBalance>(); // keyed by m
 const memoryTreasuryTxs: TreasuryTransaction[] = [];
 const memoryInvoices = new Map<string, Invoice>();
 
+// ---------------------------------------------------------------------------
+// Purchase Order types
+// ---------------------------------------------------------------------------
+
+export type OrderStatus = "draft" | "submitted" | "accepted" | "invoiced" | "paid" | "cancelled";
+
+export interface OrderLineItem {
+    description: string;
+    sku?: string;
+    quantity: number;
+    unitPrice: number;
+    amount: number;
+}
+
+export interface PurchaseOrder {
+    id: string;
+    merchantId: string;
+    merchantWallet: string;
+    orderNumber: string;
+    // Buyer info
+    buyerName: string;
+    buyerEmail: string;
+    buyerCompany?: string;
+    buyerWallet?: string;
+    // Items
+    lineItems: OrderLineItem[];
+    subtotal: number;
+    taxRate?: number;
+    taxAmount: number;
+    total: number;
+    currency: string;
+    // Terms
+    notes?: string;
+    terms?: string;
+    expectedDate?: Date;
+    // Lifecycle
+    status: OrderStatus;
+    invoiceId?: string;
+    paymentId?: string;
+    txSignature?: string;
+    paidAt?: Date;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const memoryOrders = new Map<string, PurchaseOrder>();
+
+function generateOrderId(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "po_";
+    for (let i = 0; i < 16; i++) {
+        id += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return id;
+}
+
+function generateOrderNumber(): string {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const seq = Math.floor(Math.random() * 9000) + 1000;
+    return `PO-${y}${m}-${seq}`;
+}
+
+// ============================================
+// PURCHASE ORDERS
+// ============================================
+
+export async function createPurchaseOrder(data: {
+    merchantId: string;
+    merchantWallet: string;
+    buyerName: string;
+    buyerEmail: string;
+    buyerCompany?: string;
+    buyerWallet?: string;
+    lineItems: OrderLineItem[];
+    taxRate?: number;
+    notes?: string;
+    terms?: string;
+    expectedDate?: Date;
+    currency?: string;
+}): Promise<PurchaseOrder> {
+    const subtotal = data.lineItems.reduce((sum, li) => sum + li.amount, 0);
+    const taxAmount = data.taxRate ? subtotal * (data.taxRate / 100) : 0;
+    const total = subtotal + taxAmount;
+    const now = new Date();
+
+    const order: PurchaseOrder = {
+        id: generateOrderId(),
+        merchantId: data.merchantId,
+        merchantWallet: data.merchantWallet,
+        orderNumber: generateOrderNumber(),
+        buyerName: data.buyerName,
+        buyerEmail: data.buyerEmail,
+        buyerCompany: data.buyerCompany,
+        buyerWallet: data.buyerWallet,
+        lineItems: data.lineItems,
+        subtotal,
+        taxRate: data.taxRate,
+        taxAmount,
+        total,
+        currency: data.currency || "USDC",
+        notes: data.notes,
+        terms: data.terms,
+        expectedDate: data.expectedDate,
+        status: "draft",
+        createdAt: now,
+        updatedAt: now,
+    };
+
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase.from("purchase_orders").insert({
+            id: order.id,
+            merchant_id: order.merchantId,
+            merchant_wallet: order.merchantWallet,
+            order_number: order.orderNumber,
+            buyer_name: order.buyerName,
+            buyer_email: order.buyerEmail,
+            buyer_company: order.buyerCompany,
+            buyer_wallet: order.buyerWallet,
+            line_items: order.lineItems,
+            subtotal: order.subtotal,
+            tax_rate: order.taxRate,
+            tax_amount: order.taxAmount,
+            total: order.total,
+            currency: order.currency,
+            notes: order.notes,
+            terms: order.terms,
+            expected_date: order.expectedDate?.toISOString(),
+            status: order.status,
+            created_at: order.createdAt.toISOString(),
+            updated_at: order.updatedAt.toISOString(),
+        });
+        if (error) {
+            console.error("[db] Error creating purchase order:", error);
+            throw new Error("Failed to create purchase order");
+        }
+    } else {
+        memoryOrders.set(order.id, order);
+    }
+
+    return order;
+}
+
+export async function getPurchaseOrder(id: string): Promise<PurchaseOrder | null> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("purchase_orders")
+            .select("*")
+            .eq("id", id)
+            .single();
+        if (error || !data) return null;
+        return mapSupabaseOrder(data);
+    }
+    return memoryOrders.get(id) || null;
+}
+
+export async function getPurchaseOrdersByMerchant(
+    merchantId: string,
+    opts?: { status?: string; limit?: number }
+): Promise<PurchaseOrder[]> {
+    if (isSupabaseConfigured()) {
+        let query = supabase
+            .from("purchase_orders")
+            .select("*")
+            .eq("merchant_id", merchantId)
+            .order("created_at", { ascending: false });
+        if (opts?.status) query = query.eq("status", opts.status);
+        if (opts?.limit) query = query.limit(opts.limit);
+        const { data, error } = await query;
+        if (error || !data) return [];
+        return data.map(mapSupabaseOrder);
+    }
+    const all = Array.from(memoryOrders.values())
+        .filter((o) => o.merchantId === merchantId)
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    if (opts?.status) return all.filter((o) => o.status === opts.status);
+    if (opts?.limit) return all.slice(0, opts.limit);
+    return all;
+}
+
+export async function updatePurchaseOrder(
+    id: string,
+    updates: Partial<Pick<PurchaseOrder, "status" | "invoiceId" | "paymentId" | "txSignature" | "paidAt">>
+): Promise<PurchaseOrder | null> {
+    const now = new Date();
+    if (isSupabaseConfigured()) {
+        const mapped: Record<string, unknown> = { updated_at: now.toISOString() };
+        if (updates.status !== undefined) mapped.status = updates.status;
+        if (updates.invoiceId !== undefined) mapped.invoice_id = updates.invoiceId;
+        if (updates.paymentId !== undefined) mapped.payment_id = updates.paymentId;
+        if (updates.txSignature !== undefined) mapped.tx_signature = updates.txSignature;
+        if (updates.paidAt !== undefined) mapped.paid_at = updates.paidAt.toISOString();
+        const { data, error } = await supabase
+            .from("purchase_orders")
+            .update(mapped)
+            .eq("id", id)
+            .select()
+            .single();
+        if (error || !data) return null;
+        return mapSupabaseOrder(data);
+    }
+    const order = memoryOrders.get(id);
+    if (!order) return null;
+    const updated = { ...order, ...updates, updatedAt: now };
+    memoryOrders.set(id, updated);
+    return updated;
+}
+
+export async function getOrderStats(merchantId: string): Promise<{
+    total: number;
+    draft: number;
+    submitted: number;
+    accepted: number;
+    invoiced: number;
+    paid: number;
+    cancelled: number;
+    totalValue: number;
+    paidValue: number;
+}> {
+    const orders = await getPurchaseOrdersByMerchant(merchantId);
+    return {
+        total: orders.length,
+        draft: orders.filter((o) => o.status === "draft").length,
+        submitted: orders.filter((o) => o.status === "submitted").length,
+        accepted: orders.filter((o) => o.status === "accepted").length,
+        invoiced: orders.filter((o) => o.status === "invoiced").length,
+        paid: orders.filter((o) => o.status === "paid").length,
+        cancelled: orders.filter((o) => o.status === "cancelled").length,
+        totalValue: orders.filter((o) => o.status !== "cancelled").reduce((s, o) => s + o.total, 0),
+        paidValue: orders.filter((o) => o.status === "paid").reduce((s, o) => s + o.total, 0),
+    };
+}
+
+function mapSupabaseOrder(data: Record<string, unknown>): PurchaseOrder {
+    return {
+        id: data.id as string,
+        merchantId: data.merchant_id as string,
+        merchantWallet: data.merchant_wallet as string,
+        orderNumber: data.order_number as string,
+        buyerName: data.buyer_name as string,
+        buyerEmail: data.buyer_email as string,
+        buyerCompany: data.buyer_company as string | undefined,
+        buyerWallet: data.buyer_wallet as string | undefined,
+        lineItems: (data.line_items as OrderLineItem[]) || [],
+        subtotal: Number(data.subtotal || 0),
+        taxRate: data.tax_rate as number | undefined,
+        taxAmount: Number(data.tax_amount || 0),
+        total: Number(data.total || 0),
+        currency: (data.currency as string) || "USDC",
+        notes: data.notes as string | undefined,
+        terms: data.terms as string | undefined,
+        expectedDate: data.expected_date ? new Date(data.expected_date as string) : undefined,
+        status: data.status as OrderStatus,
+        invoiceId: data.invoice_id as string | undefined,
+        paymentId: data.payment_id as string | undefined,
+        txSignature: data.tx_signature as string | undefined,
+        paidAt: data.paid_at ? new Date(data.paid_at as string) : undefined,
+        createdAt: new Date(data.created_at as string),
+        updatedAt: new Date(data.updated_at as string),
+    };
+}
+
 // ID generators
 function generateSessionId(): string {
     const chars = "abcdefghijklmnopqrstuvwxyz0123456789";

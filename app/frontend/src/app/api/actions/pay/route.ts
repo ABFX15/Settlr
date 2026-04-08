@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
             {
                 type: "action",
                 icon: `${APP_URL}/settlr-logo.png`,
-                title: "Settlr — Instant USDC Settlement",
+                title: "Settlr — Instant Business Payments",
                 description:
                     "This payment link is missing an invoice reference. Ask the sender for a valid link.",
                 label: "Invalid Link",
@@ -134,16 +134,16 @@ export async function GET(request: NextRequest) {
             `Invoice ${invoice.invoiceNumber}`,
             invoice.buyerCompany ? `for ${invoice.buyerCompany}` : "",
             invoice.memo ? `— ${invoice.memo}` : "",
-            "• Instant USDC settlement on Solana",
+            "• Settles instantly",
         ]
             .filter(Boolean)
             .join(" "),
-        label: `Pay ${amount} USDC`,
+        label: `Pay ${amount}`,
         links: {
             actions: [
                 {
                     type: "transaction",
-                    label: `Pay ${amount} USDC`,
+                    label: `Pay ${amount}`,
                     href: `${APP_URL}/api/actions/pay?invoice=${token}`,
                 },
             ],
