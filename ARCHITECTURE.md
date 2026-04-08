@@ -1,6 +1,6 @@
 # Settlr Architecture Documentation
 
-> **Last Updated:** February 2026  
+> **Last Updated:** April 2026  
 > **Program ID:** `339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5` (Devnet)
 
 ---
@@ -78,7 +78,17 @@ x402-hack-payment/
 │   │   │   │   ├── actions/   # Solana Actions / Blinks
 │   │   │   │   │   └── pay/   # Invoice pay-via-Blink endpoint
 │   │   │   │   ├── checkout/  # Checkout session management
+│   │   │   │   ├── collections/ # Collections & reminders
+│   │   │   │   │   ├── route.ts   # GET stats + overdue + reminders
+│   │   │   │   │   └── send/      # POST send/schedule/cancel reminders
+│   │   │   │   ├── invoices/  # Invoice CRUD
+│   │   │   │   ├── orders/    # Purchase order management
 │   │   │   │   ├── payments/  # Payment processing
+│   │   │   │   ├── receivables/ # AR analytics
+│   │   │   │   ├── reports/   # Reporting & exports
+│   │   │   │   │   ├── reconciliation/ # Invoice↔Payment matching
+│   │   │   │   │   ├── audit-log/      # Chronological event trail
+│   │   │   │   │   └── buyers/         # Per-buyer payment history
 │   │   │   │   ├── kyc/       # Sumsub KYC integration
 │   │   │   │   ├── gasless/   # Kora gasless endpoints
 │   │   │   │   ├── merchants/ # Merchant management
@@ -92,6 +102,13 @@ x402-hack-payment/
 │   │   │   │   │       └── retry/     # Retry failed syncs
 │   │   │   │   └── subscriptions/
 │   │   │   ├── .well-known/   # Solana Actions manifest (actions.json)
+│   │   │   ├── dashboard/     # Merchant dashboard
+│   │   │   │   ├── orders/    # Purchase order management
+│   │   │   │   ├── invoices/  # Invoice list + detail
+│   │   │   │   ├── settlements/ # Settlement history
+│   │   │   │   ├── receivables/ # AR aging + counterparty risk
+│   │   │   │   ├── collections/ # Reminders & overdue tracking
+│   │   │   │   └── reports/   # Reconciliation, exports, audit log
 │   │   │   └── checkout/[id]/ # Hosted checkout page
 │   │   ├── components/        # React components
 │   │   ├── lib/               # Core utilities
@@ -307,6 +324,23 @@ pub struct Payment {
 | status              | enum        | not_started/pending/verified/rejected |
 | verified_at         | timestamptz |                                       |
 
+#### collection_reminders
+
+| Column         | Type        | Description                                       |
+| -------------- | ----------- | ------------------------------------------------- |
+| id             | text        | Primary key (rem_xxx)                             |
+| merchant_id    | text        | FK to merchants                                   |
+| invoice_id     | text        | FK to invoices                                    |
+| invoice_number | text        | Human-readable invoice number                     |
+| buyer_email    | text        | Buyer contact                                     |
+| buyer_name     | text        | Buyer display name                                |
+| type           | text        | pre_due_nudge/due_today/overdue_gentle/firm/final |
+| status         | text        | scheduled/sent/failed/skipped                     |
+| scheduled_for  | timestamptz | When to send                                      |
+| sent_at        | timestamptz | When actually sent                                |
+| failed_reason  | text        | Error message if failed                           |
+| created_at     | timestamptz |                                                   |
+
 #### leaflink_syncs
 
 | Column                | Type          | Description                                    |
@@ -419,6 +453,39 @@ pub struct Payment {
 | `/api/actions/pay`          | POST    | Accepts payer wallet, returns unsigned USDC transfer tx    |
 | `/api/actions/pay`          | OPTIONS | CORS preflight (required by Solana Actions spec)           |
 | `/.well-known/actions.json` | GET     | Actions manifest — maps URL patterns to action endpoints   |
+
+### Purchase Orders
+
+| Endpoint           | Method | Description                                   |
+| ------------------ | ------ | --------------------------------------------- |
+| `/api/orders`      | GET    | List merchant POs                             |
+| `/api/orders`      | POST   | Create purchase order                         |
+| `/api/orders/[id]` | GET    | Get PO details                                |
+| `/api/orders/[id]` | PATCH  | Update PO status (accept, convert to invoice) |
+
+### Receivables
+
+| Endpoint           | Method | Description                                    |
+| ------------------ | ------ | ---------------------------------------------- |
+| `/api/receivables` | GET    | AR analytics: aging buckets, counterparty risk |
+
+### Collections & Reminders
+
+| Endpoint                                | Method | Description                                      |
+| --------------------------------------- | ------ | ------------------------------------------------ |
+| `/api/collections`                      | GET    | Stats, overdue invoices, due-soon, reminder list |
+| `/api/collections/send`                 | POST   | Process & send all due reminders                 |
+| `/api/collections/send?action=schedule` | POST   | Schedule reminder sequence for an invoice        |
+| `/api/collections/send?action=cancel`   | POST   | Cancel pending reminders (e.g. invoice paid)     |
+
+### Reports & Exports
+
+| Endpoint                      | Method | Description                             |
+| ----------------------------- | ------ | --------------------------------------- |
+| `/api/reports/reconciliation` | GET    | Invoice↔Payment matching (JSON or CSV)  |
+| `/api/reports/audit-log`      | GET    | Chronological event trail (JSON or CSV) |
+| `/api/reports/buyers`         | GET    | Per-buyer payment history (JSON or CSV) |
+| `/api/merchants/[id]/export`  | GET    | QuickBooks-compatible payment CSV       |
 
 ---
 
@@ -892,6 +959,8 @@ programs/x402-hack-payment/
 8. **Kora Local Server** - Requires running Kora locally for gasless (Privy works independently)
 9. **Dutchie Integration** - Content pages exist; no API integration (Dutchie building own payments)
 10. **Flowhub Integration** - Content pages exist; no API integration yet (receipt sync planned)
+11. **Collection Reminders Cron** - Reminders are sent on-demand via dashboard button; needs cron job or Vercel CRON for fully automated daily sends
+12. **Supabase Migration for Collections** - `collection_reminders` table migration not yet created (works via in-memory fallback)
 
 ---
 
@@ -936,6 +1005,9 @@ npm publish --access public
 | LeafLink library   | `app/frontend/src/lib/leaflink/`                                     |
 | LeafLink migration | `app/frontend/supabase/migrations/20260227_leaflink_integration.sql` |
 | Database types     | `app/frontend/src/lib/db.ts`                                         |
+| Email templates    | `app/frontend/src/lib/email.ts`                                      |
+| Collections        | `app/frontend/src/app/api/collections/`                              |
+| Reports            | `app/frontend/src/app/api/reports/`                                  |
 | Anchor IDL         | `target/idl/x402_hack_payment.json`                                  |
 | Generated types    | `target/types/x402_hack_payment.ts`                                  |
 

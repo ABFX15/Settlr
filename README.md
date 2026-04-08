@@ -109,10 +109,13 @@ Blink URLs are displayed in the dashboard after invoice creation and can be copi
 
 Full visibility at [settlr.dev/dashboard](https://settlr.dev/dashboard):
 
-- **Transactions** — Every settlement with on-chain proof (Solscan links)
-- **Analytics** — Volume, fees, settlement times
-- **Integrations** — Connect LeafLink, configure webhooks
-- **Settings** — API keys, team management, webhook URLs
+- **Dashboard** — Revenue overview, outstanding invoices, overdue alerts
+- **Orders** — Purchase order management with PO→Invoice conversion
+- **Invoices** — Create, send, and track invoice lifecycle
+- **Settlements** — Every settlement with on-chain proof (Solscan links)
+- **Receivables** — AR aging buckets, counterparty risk, cash flow analytics
+- **Collections** — Automated payment reminders (pre-due nudge → due today → 3/7/14 day escalation), overdue tracking, collection performance metrics
+- **Reports** — Invoice↔payment reconciliation, audit log, buyer payment history, CSV exports (QuickBooks/Xero ready)
 
 ---
 
