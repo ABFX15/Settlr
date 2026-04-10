@@ -122,7 +122,7 @@ export default function HomePage() {
       <div
         className="min-h-screen bg-white text-[#5c5c5c]"
         style={{
-          fontFamily: "var(--font-inter), Inter, system-ui, sans-serif",
+          fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif",
         }}
       >
         <Navbar />

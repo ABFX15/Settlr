@@ -134,7 +134,7 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
               <div>
                 <h2
                   className="text-lg font-bold"
-                  style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
+                  style={{ color: NAVY, fontFamily: "var(--font-heading)" }}
                 >
                   Connect Wallet
                 </h2>
@@ -259,7 +259,7 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
               <p className="text-[10px]" style={{ color: MUTED }}>
                 Powered by{" "}
                 <span
-                  style={{ color: GREEN, fontFamily: "var(--font-fraunces)" }}
+                  style={{ color: GREEN, fontFamily: "var(--font-heading)" }}
                 >
                   settlr
                 </span>{" "}

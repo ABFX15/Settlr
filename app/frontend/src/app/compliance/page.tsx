@@ -119,7 +119,7 @@ function TimelineItem({
         className="text-base font-semibold leading-snug"
         style={{
           color: palette.navy,
-          fontFamily: "var(--font-fraunces), serif",
+          fontFamily: "var(--font-heading)",
         }}
       >
         {title}
@@ -263,7 +263,7 @@ export default function CompliancePage() {
               className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               Compliance Without
@@ -330,7 +330,7 @@ export default function CompliancePage() {
                   className="text-xl font-bold"
                   style={{
                     color: palette.navy,
-                    fontFamily: "var(--font-fraunces), serif",
+                    fontFamily: "var(--font-heading)",
                   }}
                 >
                   Executive Summary
@@ -489,7 +489,7 @@ export default function CompliancePage() {
               className="text-3xl font-bold sm:text-4xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               GENIUS Act of 2025
@@ -561,7 +561,7 @@ export default function CompliancePage() {
                       className="text-lg font-bold"
                       style={{
                         color: palette.navy,
-                        fontFamily: "var(--font-fraunces), serif",
+                        fontFamily: "var(--font-heading)",
                       }}
                     >
                       {item.title}
@@ -610,7 +610,7 @@ export default function CompliancePage() {
               className="text-3xl font-bold sm:text-4xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               BSA/AML Framework
@@ -669,7 +669,7 @@ export default function CompliancePage() {
                     className="text-base font-bold"
                     style={{
                       color: palette.navy,
-                      fontFamily: "var(--font-fraunces), serif",
+                      fontFamily: "var(--font-heading)",
                     }}
                   >
                     {item.title}
@@ -698,7 +698,7 @@ export default function CompliancePage() {
                 className="mb-6 text-lg font-bold"
                 style={{
                   color: palette.navy,
-                  fontFamily: "var(--font-fraunces), serif",
+                  fontFamily: "var(--font-heading)",
                 }}
               >
                 Transaction Lifecycle — AML Controls
@@ -751,7 +751,7 @@ export default function CompliancePage() {
               className="text-3xl font-bold sm:text-4xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               AML Compliance Program
@@ -810,7 +810,7 @@ export default function CompliancePage() {
                     className="text-base font-bold"
                     style={{
                       color: palette.navy,
-                      fontFamily: "var(--font-fraunces), serif",
+                      fontFamily: "var(--font-heading)",
                     }}
                   >
                     {item.title}
@@ -843,7 +843,7 @@ export default function CompliancePage() {
                   className="text-base font-bold"
                   style={{
                     color: palette.navy,
-                    fontFamily: "var(--font-fraunces), serif",
+                    fontFamily: "var(--font-heading)",
                   }}
                 >
                   Merchant Risk Classification Matrix
@@ -962,7 +962,7 @@ export default function CompliancePage() {
               className="text-3xl font-bold sm:text-4xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               KYB Verification Process
@@ -1039,7 +1039,7 @@ export default function CompliancePage() {
                   className="text-base font-bold"
                   style={{
                     color: palette.navy,
-                    fontFamily: "var(--font-fraunces), serif",
+                    fontFamily: "var(--font-heading)",
                   }}
                 >
                   Required KYB Documentation
@@ -1172,7 +1172,7 @@ export default function CompliancePage() {
               className="text-3xl font-bold sm:text-4xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               What We Monitor &amp; How
@@ -1239,7 +1239,7 @@ export default function CompliancePage() {
                     className="text-base font-bold"
                     style={{
                       color: palette.navy,
-                      fontFamily: "var(--font-fraunces), serif",
+                      fontFamily: "var(--font-heading)",
                     }}
                   >
                     {item.title}
@@ -1313,7 +1313,7 @@ export default function CompliancePage() {
               className="text-3xl font-bold sm:text-4xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               Suspicious Activity Reporting
@@ -1341,7 +1341,7 @@ export default function CompliancePage() {
                 className="mb-6 text-lg font-bold"
                 style={{
                   color: palette.navy,
-                  fontFamily: "var(--font-fraunces), serif",
+                  fontFamily: "var(--font-heading)",
                 }}
               >
                 SAR Lifecycle
@@ -1429,7 +1429,7 @@ export default function CompliancePage() {
               className="text-3xl font-bold sm:text-4xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               Record Retention Policy
@@ -1567,7 +1567,7 @@ export default function CompliancePage() {
               className="text-3xl font-bold sm:text-4xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               Compliance Architecture
@@ -1665,7 +1665,7 @@ export default function CompliancePage() {
                     className="text-base font-bold"
                     style={{
                       color: palette.navy,
-                      fontFamily: "var(--font-fraunces), serif",
+                      fontFamily: "var(--font-heading)",
                     }}
                   >
                     {item.title}
@@ -1698,7 +1698,7 @@ export default function CompliancePage() {
                 className="mb-6 text-xl font-bold"
                 style={{
                   color: palette.navy,
-                  fontFamily: "var(--font-fraunces), serif",
+                  fontFamily: "var(--font-heading)",
                 }}
               >
                 Regulatory Landscape — 2026
@@ -1803,7 +1803,7 @@ export default function CompliancePage() {
               className="text-3xl font-bold sm:text-4xl"
               style={{
                 color: palette.navy,
-                fontFamily: "var(--font-fraunces), serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               Compliance Questions
@@ -1907,7 +1907,7 @@ export default function CompliancePage() {
               <h2
                 className="text-2xl font-bold text-white sm:text-3xl"
                 style={{
-                  fontFamily: "var(--font-fraunces), serif",
+                  fontFamily: "var(--font-heading)",
                   color: "#FFFFFF",
                 }}
               >

@@ -36,7 +36,7 @@ export function SettlrLogo({
         className={`${textSizes[size]} font-bold leading-none tracking-tight`}
         style={{
           color: textColor,
-          fontFamily: "var(--font-inter), Inter, system-ui, sans-serif",
+          fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif",
         }}
       >
         Settlr

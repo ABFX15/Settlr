@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import {
   Geist,
   Geist_Mono,
-  Fredoka,
   Inter,
   Fraunces,
   JetBrains_Mono,
@@ -20,13 +19,6 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-  display: "swap",
-});
-
-const fredoka = Fredoka({
-  variable: "--font-fredoka",
-  subsets: ["latin"],
-  weight: ["700"],
   display: "swap",
 });
 
@@ -166,7 +158,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} noise-global antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} noise-global antialiased`}
         style={{ background: "#FFFFFF" }}
       >
         <ClientLayout>{children}</ClientLayout>

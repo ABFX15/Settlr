@@ -215,7 +215,7 @@ export default function StripeConnectComparison() {
 
             <h1
               className="mb-6 text-4xl font-bold tracking-tight md:text-6xl"
-              style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
+              style={{ color: NAVY, fontFamily: "var(--font-heading)" }}
             >
               Stop waiting days.{" "}
               <span style={{ color: GREEN }}>Pay in seconds.</span>
@@ -267,7 +267,7 @@ export default function StripeConnectComparison() {
               custom={0}
               variants={fadeUp}
               className="mb-4 text-3xl font-bold tracking-tight md:text-4xl"
-              style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
+              style={{ color: NAVY, fontFamily: "var(--font-heading)" }}
             >
               Why platforms switch from Stripe Connect
             </motion.h2>
@@ -325,7 +325,7 @@ export default function StripeConnectComparison() {
               custom={0}
               variants={fadeUp}
               className="mb-4 text-3xl font-bold tracking-tight md:text-4xl"
-              style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
+              style={{ color: NAVY, fontFamily: "var(--font-heading)" }}
             >
               Settlr vs Stripe Connect
             </motion.h2>
@@ -410,7 +410,7 @@ export default function StripeConnectComparison() {
               custom={0}
               variants={fadeUp}
               className="mb-4 text-3xl font-bold tracking-tight md:text-4xl"
-              style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
+              style={{ color: NAVY, fontFamily: "var(--font-heading)" }}
             >
               Integrate in minutes, not weeks
             </motion.h2>
@@ -447,7 +447,7 @@ export default function StripeConnectComparison() {
             </div>
             <pre
               className="overflow-x-auto p-6 text-sm leading-relaxed"
-              style={{ fontFamily: "var(--font-jetbrains)" }}
+              style={{ fontFamily: "var(--font-jetbrains), monospace" }}
             >
               <code>
                 <span style={{ color: "#8a8a8a" }}>
@@ -513,7 +513,7 @@ export default function StripeConnectComparison() {
             variants={fadeUp}
             custom={0}
             className="mb-12 text-center text-3xl font-bold tracking-tight md:text-4xl"
-            style={{ color: NAVY, fontFamily: "var(--font-fraunces)" }}
+            style={{ color: NAVY, fontFamily: "var(--font-heading)" }}
           >
             Frequently asked questions
           </motion.h2>
@@ -569,7 +569,7 @@ export default function StripeConnectComparison() {
               custom={0}
               variants={fadeUp}
               className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl"
-              style={{ fontFamily: "var(--font-fraunces)", color: "#FFFFFF" }}
+              style={{ fontFamily: "var(--font-heading)", color: "#FFFFFF" }}
             >
               Ready to ditch the 5-day wait?
             </motion.h2>

@@ -422,7 +422,7 @@ function StepBusiness({
 
       <h1
         className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
-        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+        style={{ fontFamily: "var(--font-heading)" }}
       >
         Enter Your Details
       </h1>
@@ -568,7 +568,7 @@ function StepInvoice({ form }: { form: DemoForm }) {
 
       <h2
         className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
-        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+        style={{ fontFamily: "var(--font-heading)" }}
       >
         Cryptographically-Secured. Bank-Free.
       </h2>
@@ -603,7 +603,7 @@ function StepInvoice({ form }: { form: DemoForm }) {
                 <h3
                   className="text-lg font-bold text-[#212121]"
                   style={{
-                    fontFamily: "var(--font-fraunces), Georgia, serif",
+                    fontFamily: "var(--font-heading)",
                   }}
                 >
                   Invoice #{invId}
@@ -712,7 +712,7 @@ function StepInvoice({ form }: { form: DemoForm }) {
               <p
                 className="text-3xl font-bold text-[#212121] md:text-4xl"
                 style={{
-                  fontFamily: "var(--font-fraunces), Georgia, serif",
+                  fontFamily: "var(--font-heading)",
                 }}
               >
                 ${Math.floor(amount).toLocaleString("en-US")}
@@ -751,7 +751,7 @@ function StepSettlement({ onSettled }: { onSettled: () => void }) {
 
       <h2
         className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
-        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+        style={{ fontFamily: "var(--font-heading)" }}
       >
         Settled. Not Pending.
       </h2>
@@ -811,7 +811,7 @@ function StepReceipt({
 
       <h2
         className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
-        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+        style={{ fontFamily: "var(--font-heading)" }}
       >
         The Receipt Your CFO Actually Wants
       </h2>
@@ -838,7 +838,7 @@ function StepReceipt({
             <h3
               className="text-lg font-bold text-[#212121]"
               style={{
-                fontFamily: "var(--font-fraunces), Georgia, serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               #INV-2026-0891
@@ -872,7 +872,7 @@ function StepReceipt({
             <p
               className="text-xl font-bold text-[#212121]"
               style={{
-                fontFamily: "var(--font-fraunces), Georgia, serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               $
@@ -895,7 +895,7 @@ function StepReceipt({
             <p
               className="text-xl font-bold text-[#2ba048]"
               style={{
-                fontFamily: "var(--font-fraunces), Georgia, serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               4.0s
@@ -912,7 +912,7 @@ function StepReceipt({
             <p
               className="text-xl font-bold text-[#212121]"
               style={{
-                fontFamily: "var(--font-fraunces), Georgia, serif",
+                fontFamily: "var(--font-heading)",
               }}
             >
               $
@@ -1072,7 +1072,7 @@ function StepBlinks({ form }: { form: DemoForm }) {
 
       <h2
         className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
-        style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+        style={{ fontFamily: "var(--font-heading)" }}
       >
         Share a Link. Get Paid.
       </h2>
@@ -1429,7 +1429,7 @@ export default function DemoPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               className="mb-4 text-4xl font-bold leading-[1.08] text-[#212121] md:text-6xl"
-              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-heading)" }}
             >
               Try a Settlement
             </motion.h1>

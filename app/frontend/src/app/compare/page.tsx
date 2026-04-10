@@ -227,7 +227,7 @@ export default function ComparePage() {
   return (
     <main
       className="relative min-h-screen bg-[#FFFFFF] text-[#5c5c5c] antialiased"
-      style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
+      style={{ fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif" }}
     >
       {/* JSON-LD for comparison page */}
       <script

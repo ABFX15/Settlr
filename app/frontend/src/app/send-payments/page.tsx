@@ -47,7 +47,7 @@ export default function SendPaymentsPage() {
   return (
     <main
       className="relative min-h-screen bg-[#FFFFFF] text-[#212121] antialiased"
-      style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
+      style={{ fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif" }}
     >
       {/* JSON-LD */}
       <script

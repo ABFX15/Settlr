@@ -324,7 +324,7 @@ export default function CannabisPage() {
             <Reveal delay={0.05}>
               <h1
                 className="mb-6 text-5xl font-bold leading-[1.08] text-[#212121] md:text-7xl"
-                style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+                style={{ fontFamily: "var(--font-heading)" }}
               >
                 Stop getting <span className="text-[#34c759]">debanked.</span>
               </h1>
@@ -389,7 +389,7 @@ export default function CannabisPage() {
               <div className="text-center">
                 <div
                   className="mb-1 text-3xl font-bold text-[#212121] md:text-4xl"
-                  style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+                  style={{ fontFamily: "var(--font-heading)" }}
                 >
                   {stat.value}
                 </div>
@@ -406,7 +406,7 @@ export default function CannabisPage() {
           <Reveal>
             <h2
               className="mb-4 text-3xl font-bold text-[#212121] md:text-4xl"
-              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-heading)" }}
             >
               The cannabis banking{" "}
               <span className="text-[#B91C1C]">crisis is real</span>
@@ -443,7 +443,7 @@ export default function CannabisPage() {
           <Reveal>
             <h2
               className="mb-4 text-3xl font-bold text-[#212121] md:text-4xl"
-              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-heading)" }}
             >
               Payments that can&apos;t be shut down.
             </h2>
@@ -467,7 +467,7 @@ export default function CannabisPage() {
                         <span
                           className="text-2xl font-bold text-[#212121]"
                           style={{
-                            fontFamily: "var(--font-fraunces), Georgia, serif",
+                            fontFamily: "var(--font-heading)",
                           }}
                         >
                           {f.stat}
@@ -495,7 +495,7 @@ export default function CannabisPage() {
           <Reveal>
             <h2
               className="mb-4 text-3xl font-bold text-[#212121] md:text-4xl"
-              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-heading)" }}
             >
               How cannabis B2B settlements work
             </h2>
@@ -539,7 +539,7 @@ export default function CannabisPage() {
                     <div
                       className="mb-4 text-4xl font-bold text-[#34c759]/20"
                       style={{
-                        fontFamily: "var(--font-fraunces), Georgia, serif",
+                        fontFamily: "var(--font-heading)",
                       }}
                     >
                       {item.step}
@@ -565,7 +565,7 @@ export default function CannabisPage() {
           <Reveal>
             <h2
               className="mb-10 text-center text-3xl font-bold text-[#212121]"
-              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-heading)" }}
             >
               Built for every part of the supply chain
             </h2>
@@ -598,7 +598,7 @@ export default function CannabisPage() {
           <Reveal>
             <h2
               className="mb-10 text-center text-3xl font-bold text-[#212121] md:text-4xl"
-              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-heading)" }}
             >
               Traditional Banking vs.{" "}
               <span className="text-[#34c759]">Settlr</span>
@@ -649,7 +649,7 @@ export default function CannabisPage() {
           <Reveal>
             <h2
               className="mb-4 text-center text-3xl font-bold text-[#212121] md:text-4xl"
-              style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+              style={{ fontFamily: "var(--font-heading)" }}
             >
               Frequently Asked Questions
             </h2>
@@ -684,7 +684,7 @@ export default function CannabisPage() {
           <h2
             className="mb-6 text-3xl font-bold text-white md:text-4xl"
             style={{
-              fontFamily: "var(--font-fraunces), Georgia, serif",
+              fontFamily: "var(--font-heading)",
               color: "#FFFFFF",
             }}
           >

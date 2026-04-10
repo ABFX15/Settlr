@@ -16,9 +16,9 @@ export const t = {
     cardBg: "#f2f2f2",
     bgOff: "#f2f2f2",
     /** Inter clean sans-serif for all text */
-    sans: "var(--font-inter), Inter, system-ui, -apple-system, sans-serif",
-    /** @deprecated – kept for compat, maps to sans now */
-    serif: "var(--font-inter), Inter, system-ui, -apple-system, sans-serif",
+    sans: "var(--font-inter), system-ui, -apple-system, sans-serif",
+    /** Serif heading font */
+    serif: "var(--font-heading)",
     /** alias for body text on light bg — matches bodyLight */
     slate: "#5c5c5c",
     /** max content width */
