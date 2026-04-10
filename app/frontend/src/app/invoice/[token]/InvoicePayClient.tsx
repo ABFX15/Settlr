@@ -656,7 +656,7 @@ export default function InvoicePayClient({
                                 <Wallet className="h-4 w-4" />
                                 Sign In to Pay
                               </button>
-                              {!IS_DEVNET && (
+                              {
                                 <>
                                   <div className="flex items-center gap-3 text-[#8a8a8a] text-xs">
                                     <div className="flex-1 h-px bg-[#d3d3d3]" />
@@ -755,7 +755,7 @@ export default function InvoicePayClient({
                                     </p>
                                   )}
                                 </>
-                              )}
+                              }
                             </div>
                           ) : (
                             <button

@@ -439,8 +439,14 @@ export async function createPurchaseOrder(data: {
             updated_at: order.updatedAt.toISOString(),
         });
         if (error) {
-            console.error("[db] Error creating purchase order:", error);
-            throw new Error("Failed to create purchase order");
+            // Table might not exist yet — fall back to in-memory
+            if (error.message?.includes("purchase_orders")) {
+                console.warn("[db] purchase_orders table missing, using in-memory fallback");
+                memoryOrders.set(order.id, order);
+            } else {
+                console.error("[db] Error creating purchase order:", error);
+                throw new Error("Failed to create purchase order");
+            }
         }
     } else {
         memoryOrders.set(order.id, order);
@@ -456,6 +462,9 @@ export async function getPurchaseOrder(id: string): Promise<PurchaseOrder | null
             .select("*")
             .eq("id", id)
             .single();
+        if (error?.message?.includes("purchase_orders")) {
+            return memoryOrders.get(id) || null;
+        }
         if (error || !data) return null;
         return mapSupabaseOrder(data);
     }
@@ -475,6 +484,15 @@ export async function getPurchaseOrdersByMerchant(
         if (opts?.status) query = query.eq("status", opts.status);
         if (opts?.limit) query = query.limit(opts.limit);
         const { data, error } = await query;
+        // Fall back to in-memory if table doesn't exist yet
+        if (error?.message?.includes("purchase_orders")) {
+            const all = Array.from(memoryOrders.values())
+                .filter((o) => o.merchantId === merchantId)
+                .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+            if (opts?.status) return all.filter((o) => o.status === opts.status);
+            if (opts?.limit) return all.slice(0, opts.limit);
+            return all;
+        }
         if (error || !data) return [];
         return data.map(mapSupabaseOrder);
     }
@@ -504,6 +522,14 @@ export async function updatePurchaseOrder(
             .eq("id", id)
             .select()
             .single();
+        // Fall back to in-memory if table doesn't exist yet
+        if (error?.message?.includes("purchase_orders")) {
+            const memOrder = memoryOrders.get(id);
+            if (!memOrder) return null;
+            const updated = { ...memOrder, ...updates, updatedAt: now };
+            memoryOrders.set(id, updated);
+            return updated;
+        }
         if (error || !data) return null;
         return mapSupabaseOrder(data);
     }

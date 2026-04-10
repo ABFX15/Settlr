@@ -110,8 +110,9 @@ export default function CreateInvoicePage() {
     0,
   );
   const tax = taxRate ? subtotal * (parseFloat(taxRate) / 100) : 0;
-  const networkFee = subtotal > 0 ? 12.5 : 0;
-  const total = subtotal + tax + networkFee;
+  // Solana tx fee ~$0.00025, Settlr platform fee is 1% (deducted at settlement, not added)
+  const networkFee = subtotal > 0 ? 0.001 : 0;
+  const total = subtotal + tax;
 
   const addLineItem = () => {
     setLineItems((prev) => [
@@ -586,9 +587,19 @@ export default function CreateInvoicePage() {
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-[#8a8a8a]">Network Fee Est.</span>
-                <span className="text-[#212121] font-mono">
-                  ${networkFee.toFixed(2)}
+                <span className="text-[#8a8a8a]">Solana Network Fee</span>
+                <span className="text-[#34c759] font-mono">
+                  {subtotal > 0 ? "~$0.001" : "$0.00"}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-[#8a8a8a]">Settlr Fee (1%)</span>
+                <span className="text-[#8a8a8a] font-mono">
+                  $
+                  {(subtotal * 0.01).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}
+                  <span className="text-xs ml-1">(deducted at settlement)</span>
                 </span>
               </div>
               <div className="flex justify-between text-sm">

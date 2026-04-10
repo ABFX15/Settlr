@@ -1973,7 +1973,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   </button>
 
                   {/* Pay with card — fiat on-ramp for non-crypto users */}
-                  {!IS_DEVNET && (
+                  {
                     <>
                       <div className="flex items-center gap-3 text-[#8a8a8a] text-xs">
                         <div className="flex-1 h-px bg-[#d3d3d3]" />
@@ -2055,7 +2055,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                         </p>
                       )}
                     </>
-                  )}
+                  }
                 </div>
               )}
 
@@ -2694,78 +2694,77 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </div>
 
                 {/* Tiered on-ramp options based on needed amount */}
-                {!IS_DEVNET &&
-                  (() => {
-                    const needed = Math.ceil(amount - balance + 0.5);
-                    return (
-                      <div className="space-y-2 mb-3">
-                        {needed <= 5000 && (
-                          <button
-                            onClick={() =>
-                              openCardOnRamp({
-                                walletAddress: activeWallet.address,
-                                amount: needed,
-                              })
-                            }
-                            disabled={
-                              onRampStatus === "waiting" ||
-                              onRampStatus === "opening"
-                            }
-                            className="w-full py-3 bg-[#34c759] text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#2ba048] transition-colors disabled:opacity-60"
-                          >
-                            {onRampStatus === "waiting" ? (
-                              <>
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                                Complete purchase in MoonPay…
-                              </>
-                            ) : (
-                              <>
-                                <CreditCard className="w-4 h-4" />
-                                Buy ${needed} USDC with Card
-                              </>
-                            )}
-                          </button>
-                        )}
-                        {needed > 5000 && needed <= 100000 && (
-                          <button
-                            onClick={() =>
-                              openBankOnRamp({
-                                walletAddress: activeWallet.address,
-                                amount: needed,
-                              })
-                            }
-                            disabled={
-                              onRampStatus === "waiting" ||
-                              onRampStatus === "opening"
-                            }
-                            className="w-full py-3 bg-[#34c759] text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#2ba048] transition-colors disabled:opacity-60"
-                          >
-                            {onRampStatus === "waiting" ? (
-                              <>
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                                Complete bank transfer…
-                              </>
-                            ) : (
-                              <>
-                                <Building2 className="w-4 h-4" />
-                                Buy ${needed.toLocaleString()} USDC via Bank
-                                Transfer
-                              </>
-                            )}
-                          </button>
-                        )}
-                        {needed > 100000 && (
-                          <button
-                            onClick={() => setStep("otc-quote")}
-                            className="w-full py-3 bg-[#34c759] text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#2ba048] transition-colors"
-                          >
-                            <Landmark className="w-4 h-4" />
-                            Request OTC Quote — ${needed.toLocaleString()} USDC
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })()}
+                {(() => {
+                  const needed = Math.ceil(amount - balance + 0.5);
+                  return (
+                    <div className="space-y-2 mb-3">
+                      {needed <= 5000 && (
+                        <button
+                          onClick={() =>
+                            openCardOnRamp({
+                              walletAddress: activeWallet.address,
+                              amount: needed,
+                            })
+                          }
+                          disabled={
+                            onRampStatus === "waiting" ||
+                            onRampStatus === "opening"
+                          }
+                          className="w-full py-3 bg-[#34c759] text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#2ba048] transition-colors disabled:opacity-60"
+                        >
+                          {onRampStatus === "waiting" ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Complete purchase in MoonPay…
+                            </>
+                          ) : (
+                            <>
+                              <CreditCard className="w-4 h-4" />
+                              Buy ${needed} USDC with Card
+                            </>
+                          )}
+                        </button>
+                      )}
+                      {needed > 5000 && needed <= 100000 && (
+                        <button
+                          onClick={() =>
+                            openBankOnRamp({
+                              walletAddress: activeWallet.address,
+                              amount: needed,
+                            })
+                          }
+                          disabled={
+                            onRampStatus === "waiting" ||
+                            onRampStatus === "opening"
+                          }
+                          className="w-full py-3 bg-[#34c759] text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#2ba048] transition-colors disabled:opacity-60"
+                        >
+                          {onRampStatus === "waiting" ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Complete bank transfer…
+                            </>
+                          ) : (
+                            <>
+                              <Building2 className="w-4 h-4" />
+                              Buy ${needed.toLocaleString()} USDC via Bank
+                              Transfer
+                            </>
+                          )}
+                        </button>
+                      )}
+                      {needed > 100000 && (
+                        <button
+                          onClick={() => setStep("otc-quote")}
+                          className="w-full py-3 bg-[#34c759] text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#2ba048] transition-colors"
+                        >
+                          <Landmark className="w-4 h-4" />
+                          Request OTC Quote — ${needed.toLocaleString()} USDC
+                        </button>
+                      )}
+                    </div>
+                  );
+                })()}
                 {onRampError && (
                   <p className="text-[#e74c3c] text-xs mb-2">{onRampError}</p>
                 )}
