@@ -17,6 +17,8 @@ interface MerchantSettings {
         currency: string;
         accountLabel: string;
         minAmount: number;
+        batchMode: boolean;
+        batchThreshold: number;
     };
     notifications: {
         emailOnPayment: boolean;
@@ -49,6 +51,8 @@ export async function GET(request: NextRequest) {
                 currency: "USD",
                 accountLabel: "",
                 minAmount: 100,
+                batchMode: false,
+                batchThreshold: 5000,
             },
             notifications: {
                 emailOnPayment: true,
