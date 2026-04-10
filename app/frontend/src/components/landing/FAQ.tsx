@@ -62,7 +62,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
         >
           <ChevronDown
             className="h-4 w-4"
-            style={{ color: open ? "#fff" : "#6B7280" }}
+            style={{ color: open ? "#fff" : "#5c5c5c" }}
           />
         </motion.div>
       </button>
@@ -76,7 +76,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
           >
             <p
               className="pb-6 pr-12 text-[15px] leading-relaxed"
-              style={{ color: "#6B7280" }}
+              style={{ color: "#5c5c5c" }}
             >
               {a}
             </p>
@@ -106,7 +106,7 @@ export function FAQ() {
             >
               Frequently Asked Questions
             </h2>
-            <p className="mt-4 max-w-sm text-base" style={{ color: "#6B7280" }}>
+            <p className="mt-4 max-w-sm text-base" style={{ color: "#5c5c5c" }}>
               Get answers to common questions about Settlr
             </p>
           </motion.div>

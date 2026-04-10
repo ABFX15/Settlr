@@ -286,36 +286,36 @@ export default function InvoicePayClient({
     !["paid", "cancelled"].includes(invoice.status);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#f7f7f7] text-[#212121]">
       {/* Header */}
-      <header className="border-b border-[#1f1f1f] px-6 py-4">
+      <header className="border-b border-[#d3d3d3] px-6 py-4">
         <div className="mx-auto max-w-6xl flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link
               href="/"
-              className="text-lg font-bold text-[#00ff41] tracking-tight"
+              className="text-lg font-bold text-[#34c759] tracking-tight"
             >
               Settlr
             </Link>
-            <span className="text-sm font-medium text-white underline underline-offset-4">
+            <span className="text-sm font-medium text-[#212121] underline underline-offset-4">
               Payment
             </span>
             <Link
               href="/help"
-              className="text-sm text-[#666] hover:text-white transition-colors"
+              className="text-sm text-[#5c5c5c] hover:text-[#212121] transition-colors"
             >
               Help Center
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <button className="text-[#666] hover:text-white transition-colors">
+            <button className="text-[#5c5c5c] hover:text-[#212121] transition-colors">
               <Bell className="h-4 w-4" />
             </button>
-            <button className="text-[#666] hover:text-white transition-colors">
+            <button className="text-[#5c5c5c] hover:text-[#212121] transition-colors">
               <Settings className="h-4 w-4" />
             </button>
-            <div className="h-8 w-8 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center">
-              <span className="text-xs text-[#888]">
+            <div className="h-8 w-8 rounded-full bg-[#f2f2f2] border border-[#d3d3d3] flex items-center justify-center">
+              <span className="text-xs text-[#8a8a8a]">
                 {payerAddress ? payerAddress.slice(0, 2).toUpperCase() : "?"}
               </span>
             </div>
@@ -332,8 +332,8 @@ export default function InvoicePayClient({
               {...fadeIn}
               className="flex flex-col items-center gap-3 py-20"
             >
-              <Loader2 className="h-8 w-8 animate-spin text-[#00ff41]" />
-              <p className="text-sm text-[#666]">Loading invoice...</p>
+              <Loader2 className="h-8 w-8 animate-spin text-[#34c759]" />
+              <p className="text-sm text-[#5c5c5c]">Loading invoice...</p>
             </motion.div>
           )}
 
@@ -344,13 +344,13 @@ export default function InvoicePayClient({
               {...fadeIn}
               className="max-w-md mx-auto text-center py-20"
             >
-              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-[#1a1a1a]">
-                <FileText className="h-8 w-8 text-[#666]" />
+              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-[#f2f2f2]">
+                <FileText className="h-8 w-8 text-[#5c5c5c]" />
               </div>
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-[#212121]">
                 Invoice Not Found
               </h2>
-              <p className="mt-2 text-sm text-[#666]">
+              <p className="mt-2 text-sm text-[#5c5c5c]">
                 This invoice link is invalid or has expired.
               </p>
             </motion.div>
@@ -363,15 +363,15 @@ export default function InvoicePayClient({
               {...fadeIn}
               className="max-w-md mx-auto text-center py-20"
             >
-              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10">
-                <XCircle className="h-8 w-8 text-red-400" />
+              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-[#e74c3c]/10">
+                <XCircle className="h-8 w-8 text-[#e74c3c]" />
               </div>
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-[#212121]">
                 Invoice Cancelled
               </h2>
-              <p className="mt-2 text-sm text-[#666]">
+              <p className="mt-2 text-sm text-[#5c5c5c]">
                 Invoice #{invoice.invoiceNumber} from{" "}
-                <strong className="text-white">{invoice.merchantName}</strong>{" "}
+                <strong className="text-[#212121]">{invoice.merchantName}</strong>{" "}
                 has been cancelled.
               </p>
             </motion.div>
@@ -384,13 +384,13 @@ export default function InvoicePayClient({
               {...fadeIn}
               className="max-w-md mx-auto text-center py-20"
             >
-              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10">
-                <AlertCircle className="h-8 w-8 text-red-400" />
+              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-[#e74c3c]/10">
+                <AlertCircle className="h-8 w-8 text-[#e74c3c]" />
               </div>
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-[#212121]">
                 Something Went Wrong
               </h2>
-              <p className="mt-2 text-sm text-[#666]">
+              <p className="mt-2 text-sm text-[#5c5c5c]">
                 {error || "Please try again later."}
               </p>
             </motion.div>
@@ -405,15 +405,15 @@ export default function InvoicePayClient({
               <motion.div key="invoice" {...fadeIn}>
                 {/* Invoice Number + Title */}
                 <div className="mb-8">
-                  <div className="text-[11px] text-[#00ff41] uppercase tracking-[0.15em] font-semibold mb-2">
+                  <div className="text-[11px] text-[#34c759] uppercase tracking-[0.15em] font-semibold mb-2">
                     Invoice #{invoice.invoiceNumber}
                   </div>
-                  <h1 className="text-3xl font-bold text-white tracking-tight mb-2">
+                  <h1 className="text-3xl font-bold text-[#212121] tracking-tight mb-2">
                     {invoice.lineItems[0]?.description || "Invoice Payment"}
                   </h1>
-                  <p className="text-sm text-[#888]">
+                  <p className="text-sm text-[#8a8a8a]">
                     From{" "}
-                    <span className="text-white font-medium">
+                    <span className="text-[#212121] font-medium">
                       {invoice.merchantName}
                     </span>
                   </p>
@@ -423,51 +423,51 @@ export default function InvoicePayClient({
                   {/* Left — Invoice Details */}
                   <div className="lg:col-span-3 space-y-6">
                     {/* Amount Due Card */}
-                    <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6">
+                    <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-6">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-[10px] text-[#555] uppercase tracking-wider font-semibold">
+                        <span className="text-[10px] text-[#8a8a8a] uppercase tracking-wider font-semibold">
                           Amount Due
                         </span>
                       </div>
                       <div className="flex items-baseline gap-2 mb-6">
-                        <span className="text-4xl font-bold text-white tracking-tight">
+                        <span className="text-4xl font-bold text-[#212121] tracking-tight">
                           $
                           {invoice.total.toLocaleString("en-US", {
                             minimumFractionDigits: 2,
                           })}
                         </span>
-                        <span className="text-lg text-[#666]">USD</span>
+                        <span className="text-lg text-[#5c5c5c]">USD</span>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-6 pt-4 border-t border-[#1f1f1f]">
+                      <div className="grid grid-cols-2 gap-6 pt-4 border-t border-[#d3d3d3]">
                         <div>
-                          <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
+                          <span className="text-[10px] text-[#8a8a8a] uppercase tracking-wider block mb-1">
                             Due Date
                           </span>
-                          <span className="text-sm font-medium text-white">
+                          <span className="text-sm font-medium text-[#212121]">
                             {formatDate(invoice.dueDate)}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
+                          <span className="text-[10px] text-[#8a8a8a] uppercase tracking-wider block mb-1">
                             Status
                           </span>
                           <span
                             className={`text-sm font-medium flex items-center gap-1.5 ${
                               state === "success" || state === "already-paid"
-                                ? "text-[#00ff41]"
+                                ? "text-[#34c759]"
                                 : isOverdue
-                                ? "text-amber-400"
-                                : "text-[#00ff41]"
+                                ? "text-[#d29500]"
+                                : "text-[#34c759]"
                             }`}
                           >
                             <span
                               className={`h-1.5 w-1.5 rounded-full ${
                                 state === "success" || state === "already-paid"
-                                  ? "bg-[#00ff41]"
+                                  ? "bg-[#34c759]"
                                   : isOverdue
-                                  ? "bg-amber-400"
-                                  : "bg-[#00ff41]"
+                                  ? "bg-[#ffc107]"
+                                  : "bg-[#34c759]"
                               }`}
                             />
                             {state === "success"
@@ -483,8 +483,8 @@ export default function InvoicePayClient({
                     </div>
 
                     {/* Line Items */}
-                    <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6">
-                      <span className="text-[10px] text-[#555] uppercase tracking-wider font-semibold block mb-4">
+                    <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-6">
+                      <span className="text-[10px] text-[#8a8a8a] uppercase tracking-wider font-semibold block mb-4">
                         Line Items
                       </span>
                       <div className="space-y-3">
@@ -493,10 +493,10 @@ export default function InvoicePayClient({
                             key={i}
                             className="flex items-center justify-between py-2"
                           >
-                            <span className="text-sm text-white">
+                            <span className="text-sm text-[#212121]">
                               {li.description}
                             </span>
-                            <span className="text-sm font-mono text-white">
+                            <span className="text-sm font-mono text-[#212121]">
                               $
                               {li.amount.toLocaleString("en-US", {
                                 minimumFractionDigits: 2,
@@ -508,30 +508,30 @@ export default function InvoicePayClient({
                     </div>
 
                     {/* Trust footer */}
-                    <div className="flex items-center gap-2 text-xs text-[#555]">
-                      <Shield className="h-3.5 w-3.5 text-[#00ff41]" />
+                    <div className="flex items-center gap-2 text-xs text-[#8a8a8a]">
+                      <Shield className="h-3.5 w-3.5 text-[#34c759]" />
                       Secured by Settlr · Payments settle instantly
                     </div>
 
                     {/* Success / Already paid TX info */}
                     {(state === "success" || state === "already-paid") &&
                       txSignature && (
-                        <div className="rounded-xl bg-[#00ff41]/5 border border-[#00ff41]/20 p-4">
+                        <div className="rounded-xl bg-[#34c759]/5 border border-[#34c759]/20 p-4">
                           <div className="flex items-center gap-2 mb-2">
-                            <CheckCircle2 className="h-4 w-4 text-[#00ff41]" />
-                            <span className="text-sm font-semibold text-[#00ff41]">
+                            <CheckCircle2 className="h-4 w-4 text-[#34c759]" />
+                            <span className="text-sm font-semibold text-[#34c759]">
                               {state === "success"
                                 ? "Payment Successful!"
                                 : "This invoice has been paid"}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 rounded-lg bg-[#1a1a1a] border border-[#333] px-3 py-2">
-                            <code className="flex-1 truncate text-xs text-[#aaa] font-mono">
+                          <div className="flex items-center gap-2 rounded-lg bg-[#f2f2f2] border border-[#d3d3d3] px-3 py-2">
+                            <code className="flex-1 truncate text-xs text-[#5c5c5c] font-mono">
                               {txSignature}
                             </code>
                             <button
                               onClick={copySignature}
-                              className="text-[#00ff41] hover:text-[#00dd38] transition-colors"
+                              className="text-[#34c759] hover:text-[#2ba048] transition-colors"
                             >
                               {copied ? (
                                 <Check className="h-3.5 w-3.5" />
@@ -544,14 +544,14 @@ export default function InvoicePayClient({
                                 href={explorerUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-[#00ff41] hover:text-[#00dd38]"
+                                className="text-[#34c759] hover:text-[#2ba048]"
                               >
                                 <ExternalLink className="h-3.5 w-3.5" />
                               </a>
                             )}
                           </div>
                           {invoice.paidAt && (
-                            <p className="text-center text-xs text-[#666] mt-2">
+                            <p className="text-center text-xs text-[#5c5c5c] mt-2">
                               Paid on {formatDate(invoice.paidAt)}
                             </p>
                           )}
@@ -564,8 +564,8 @@ export default function InvoicePayClient({
                     {(state === "ready" || state === "paying") && (
                       <>
                         {/* Payment Method */}
-                        <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-5">
-                          <h3 className="text-sm font-semibold text-white mb-4">
+                        <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-5">
+                          <h3 className="text-sm font-semibold text-[#212121] mb-4">
                             Payment Method
                           </h3>
                           <div className="space-y-2">
@@ -575,26 +575,26 @@ export default function InvoicePayClient({
                                 onClick={() => setSelectedAsset(i)}
                                 className={`w-full flex items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors ${
                                   selectedAsset === i
-                                    ? "bg-[#00ff41]/5 border border-[#00ff41]/30"
-                                    : "bg-[#1a1a1a] border border-[#333] hover:border-[#555]"
+                                    ? "bg-[#34c759]/5 border border-[#34c759]/30"
+                                    : "bg-[#f2f2f2] border border-[#d3d3d3] hover:border-[#8a8a8a]"
                                 }`}
                               >
                                 <div
                                   className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-bold ${
                                     selectedAsset === i
-                                      ? "bg-[#00ff41] text-black"
-                                      : "bg-[#333] text-[#888]"
+                                      ? "bg-[#34c759] text-black"
+                                      : "bg-[#5c5c5c] text-[#8a8a8a]"
                                   }`}
                                 >
                                   {method.icon}
                                 </div>
                                 <div className="flex-1">
-                                  <div className="text-sm font-semibold text-white">
+                                  <div className="text-sm font-semibold text-[#212121]">
                                     {method.label}
                                   </div>
                                 </div>
                                 <div className="text-right">
-                                  <div className="text-sm font-mono text-white">
+                                  <div className="text-sm font-mono text-[#212121]">
                                     $
                                     {i === 0
                                       ? invoice.total.toLocaleString("en-US", {
@@ -608,7 +608,7 @@ export default function InvoicePayClient({
                                   </div>
                                 </div>
                                 {selectedAsset === i && (
-                                  <CheckCircle2 className="h-4 w-4 text-[#00ff41] shrink-0" />
+                                  <CheckCircle2 className="h-4 w-4 text-[#34c759] shrink-0" />
                                 )}
                               </button>
                             ))}
@@ -618,7 +618,7 @@ export default function InvoicePayClient({
                         {/* Pay Button */}
                         <div>
                           {error && (
-                            <div className="flex items-start gap-2 rounded-lg bg-red-500/10 border border-red-500/20 p-3 text-xs text-red-400 mb-3">
+                            <div className="flex items-start gap-2 rounded-lg bg-[#e74c3c]/10 border border-[#e74c3c]/20 p-3 text-xs text-[#e74c3c] mb-3">
                               <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                               {error}
                             </div>
@@ -626,15 +626,15 @@ export default function InvoicePayClient({
 
                           {connecting ? (
                             <div className="flex items-center justify-center gap-2 py-4">
-                              <Loader2 className="h-5 w-5 animate-spin text-[#00ff41]" />
-                              <span className="text-sm text-[#666]">
+                              <Loader2 className="h-5 w-5 animate-spin text-[#34c759]" />
+                              <span className="text-sm text-[#5c5c5c]">
                                 Connecting...
                               </span>
                             </div>
                           ) : !connected ? (
                             <button
                               onClick={() => openWalletModal(true)}
-                              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#00ff41] py-4 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors"
+                              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#34c759] py-4 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
                             >
                               <Wallet className="h-4 w-4" />
                               Sign In to Pay
@@ -643,7 +643,7 @@ export default function InvoicePayClient({
                             <button
                               onClick={handlePay}
                               disabled={state === "paying"}
-                              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#00ff41] py-4 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors disabled:opacity-50"
+                              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#34c759] py-4 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors disabled:opacity-50"
                             >
                               {state === "paying" ? (
                                 <>
@@ -673,7 +673,7 @@ export default function InvoicePayClient({
                               setCopied(true);
                               setTimeout(() => setCopied(false), 2000);
                             }}
-                            className="flex items-center gap-1.5 text-xs text-[#666] hover:text-white transition-colors"
+                            className="flex items-center gap-1.5 text-xs text-[#5c5c5c] hover:text-[#212121] transition-colors"
                           >
                             <Copy className="h-3.5 w-3.5" />
                             {copied ? "Copied!" : "Copy Payment Link"}
@@ -681,14 +681,14 @@ export default function InvoicePayClient({
                         </div>
 
                         {/* Payment info */}
-                        <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-5">
+                        <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-5">
                           <div className="flex items-center gap-2 mb-2">
-                            <Shield className="h-4 w-4 text-[#00ff41]" />
-                            <span className="text-sm font-semibold text-white">
+                            <Shield className="h-4 w-4 text-[#34c759]" />
+                            <span className="text-sm font-semibold text-[#212121]">
                               Instant Settlement
                             </span>
                           </div>
-                          <p className="text-xs text-[#666] leading-relaxed">
+                          <p className="text-xs text-[#5c5c5c] leading-relaxed">
                             Your payment settles in seconds — no hold periods,
                             no processing delays. A small network fee (typically
                             &lt;$0.01) applies.
@@ -700,12 +700,12 @@ export default function InvoicePayClient({
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-center py-8 border-t border-[#1f1f1f] mt-8 text-[10px] text-[#444] uppercase tracking-wider">
+                <div className="flex items-center justify-center py-8 border-t border-[#d3d3d3] mt-8 text-[10px] text-[#d3d3d3] uppercase tracking-wider">
                   <span>
                     Powered by{" "}
                     <Link
                       href="/"
-                      className="text-[#555] hover:text-white transition-colors"
+                      className="text-[#8a8a8a] hover:text-[#212121] transition-colors"
                     >
                       Settlr
                     </Link>{" "}

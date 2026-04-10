@@ -210,12 +210,12 @@ async function sendPaymentLinkEmail(
             <div style="background: #0A0F1E; padding: 32px; border-radius: 16px 16px 0 0; text-align: center;">
               <h1 style="color: #FFFFFF; font-size: 20px; margin: 0;">Payment Request</h1>
             </div>
-            <div style="background: #FFFFFF; padding: 32px; border: 1px solid #E5E7EB; border-top: none; border-radius: 0 0 16px 16px;">
+            <div style="background: #FFFFFF; padding: 32px; border: 1px solid #d3d3d3; border-top: none; border-radius: 0 0 16px 16px;">
               <p style="color: #4A5568; font-size: 15px; line-height: 1.6;">
                 <strong>${sellerCompany}</strong> has requested payment for LeafLink order
                 <strong>${orderNumber}</strong>.
               </p>
-              <div style="background: #FAFAFA; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; margin: 24px 0; text-align: center;">
+              <div style="background: #FAFAFA; border: 1px solid #d3d3d3; border-radius: 12px; padding: 20px; margin: 24px 0; text-align: center;">
                 <p style="color: #94A3B8; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 8px;">Amount Due</p>
                 <p style="color: #0A0F1E; font-size: 32px; font-weight: 700; margin: 0;">$${amount.toFixed(2)}</p>
                 <p style="color: #94A3B8; font-size: 13px; margin: 4px 0 0;">USDC · Settles instantly</p>

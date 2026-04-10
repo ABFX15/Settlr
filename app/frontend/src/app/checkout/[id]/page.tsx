@@ -108,7 +108,7 @@ export default function CheckoutSessionPage() {
           className="text-center"
         >
           <Loader2 className="w-12 h-12 text-[#f472b6] animate-spin mx-auto mb-4" />
-          <p className="text-[#7C8A9E]">
+          <p className="text-[#8a8a8a]">
             {status === "redirecting"
               ? "Redirecting to checkout..."
               : "Loading checkout..."}
@@ -125,13 +125,13 @@ export default function CheckoutSessionPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 max-w-md w-full text-center"
+          className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-2xl p-8 max-w-md w-full text-center"
         >
-          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <XCircle className="w-8 h-8 text-red-500" />
+          <div className="w-16 h-16 bg-[#e74c3c]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <XCircle className="w-8 h-8 text-[#e74c3c]" />
           </div>
-          <h1 className="text-2xl font-bold text-[#0C1829] mb-2">Checkout Error</h1>
-          <p className="text-[#7C8A9E] mb-6">{error}</p>
+          <h1 className="text-2xl font-bold text-[#212121] mb-2">Checkout Error</h1>
+          <p className="text-[#8a8a8a] mb-6">{error}</p>
           <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#f472b6] to-[#67e8f9] text-white font-semibold rounded-xl"
@@ -151,22 +151,22 @@ export default function CheckoutSessionPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 max-w-md w-full text-center"
+          className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-2xl p-8 max-w-md w-full text-center"
         >
-          <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Clock className="w-8 h-8 text-amber-500" />
+          <div className="w-16 h-16 bg-[#d29500]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Clock className="w-8 h-8 text-[#d29500]" />
           </div>
-          <h1 className="text-2xl font-bold text-[#0C1829] mb-2">
+          <h1 className="text-2xl font-bold text-[#212121] mb-2">
             Session Expired
           </h1>
-          <p className="text-[#7C8A9E] mb-6">
+          <p className="text-[#8a8a8a] mb-6">
             This checkout session has expired. Please request a new payment
             link.
           </p>
           {session?.cancelUrl ? (
             <a
               href={session.cancelUrl}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-[#0C1829] font-semibold rounded-xl border border-[#E5E7EB]"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-[#212121] font-semibold rounded-xl border border-[#d3d3d3]"
             >
               <ArrowLeft className="w-4 h-4" />
               Go Back
@@ -174,7 +174,7 @@ export default function CheckoutSessionPage() {
           ) : (
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-[#0C1829] font-semibold rounded-xl border border-[#E5E7EB]"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-[#212121] font-semibold rounded-xl border border-[#d3d3d3]"
             >
               <ArrowLeft className="w-4 h-4" />
               Return Home
@@ -192,35 +192,35 @@ export default function CheckoutSessionPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-2xl p-8 max-w-md w-full text-center"
+          className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-2xl p-8 max-w-md w-full text-center"
         >
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", delay: 0.2 }}
-            className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6"
+            className="w-20 h-20 bg-[#34c759]/20 rounded-full flex items-center justify-center mx-auto mb-6"
           >
-            <CheckCircle2 className="w-10 h-10 text-[#1B6B4A]" />
+            <CheckCircle2 className="w-10 h-10 text-[#34c759]" />
           </motion.div>
-          <h1 className="text-2xl font-bold text-[#0C1829] mb-2">
+          <h1 className="text-2xl font-bold text-[#212121] mb-2">
             Payment Complete!
           </h1>
 
           {/* Privacy indicator */}
           {session?.private && (
             <div className="flex items-center justify-center gap-2 mb-3">
-              <Shield className="w-4 h-4 text-[#1B6B4A]" />
-              <span className="text-[#1B6B4A] text-sm font-medium">
+              <Shield className="w-4 h-4 text-[#34c759]" />
+              <span className="text-[#34c759] text-sm font-medium">
                 Private Payment
               </span>
             </div>
           )}
 
-          <p className="text-[#7C8A9E] mb-4">
+          <p className="text-[#8a8a8a] mb-4">
             Your payment of ${session?.amount.toFixed(2)} USDC has been
             confirmed.
             {session?.private && (
-              <span className="block text-[#1B6B4A]/70 text-xs mt-1">
+              <span className="block text-[#34c759]/70 text-xs mt-1">
                 Amount private via TEE
               </span>
             )}

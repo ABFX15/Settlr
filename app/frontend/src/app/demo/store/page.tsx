@@ -177,7 +177,7 @@ export default function DemoStorePage() {
           >
             <span className="text-xl">🛒</span>
             {itemCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-6 h-6 bg-[var(--accent-primary)] text-[#0C1829] text-xs font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-6 h-6 bg-[var(--accent-primary)] text-[#212121] text-xs font-bold rounded-full flex items-center justify-center">
                 {itemCount}
               </span>
             )}
@@ -224,7 +224,7 @@ export default function DemoStorePage() {
                 }`}
               >
                 {plan.badge && (
-                  <div className="absolute top-3 right-3 px-2 py-0.5 bg-[var(--accent-primary)] text-[#0C1829] text-xs font-bold rounded-full">
+                  <div className="absolute top-3 right-3 px-2 py-0.5 bg-[var(--accent-primary)] text-[#212121] text-xs font-bold rounded-full">
                     {plan.badge}
                   </div>
                 )}
@@ -266,10 +266,10 @@ export default function DemoStorePage() {
                     }
                     className={`w-full px-4 py-2.5 rounded-lg font-medium transition-all text-sm ${
                       isSelected
-                        ? "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-red-500/20 hover:text-red-400"
+                        ? "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[#e74c3c]/20 hover:text-[#e74c3c]"
                         : plan.popular
-                        ? "bg-[var(--accent-primary)] text-[#0C1829] hover:opacity-90"
-                        : "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[var(--accent-primary)] hover:text-[#0C1829]"
+                        ? "bg-[var(--accent-primary)] text-[#212121] hover:opacity-90"
+                        : "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[var(--accent-primary)] hover:text-[#212121]"
                     }`}
                   >
                     {isSelected ? "✓ Selected" : "Select Plan"}
@@ -320,8 +320,8 @@ export default function DemoStorePage() {
                   }
                   className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
                     isSelected
-                      ? "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-red-500/20 hover:text-red-400"
-                      : "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[var(--accent-primary)] hover:text-[#0C1829]"
+                      ? "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[#e74c3c]/20 hover:text-[#e74c3c]"
+                      : "bg-[var(--accent-muted)] text-[var(--accent-primary)] hover:bg-[var(--accent-primary)] hover:text-[#212121]"
                   }`}
                 >
                   {isSelected ? "✓ Added" : "Add"}
@@ -402,7 +402,7 @@ export default function DemoStorePage() {
                       </div>
                       <button
                         onClick={() => removeItem(item.plan.id)}
-                        className="p-2 hover:bg-red-500/20 rounded-lg transition-colors text-red-400"
+                        className="p-2 hover:bg-[#e74c3c]/20 rounded-lg transition-colors text-[#e74c3c]"
                         title="Remove"
                       >
                         ✕
@@ -437,7 +437,7 @@ export default function DemoStorePage() {
 
                   <button
                     onClick={handleCheckout}
-                    className="w-full py-4 bg-[var(--accent-primary)] text-[#0C1829] rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+                    className="w-full py-4 bg-[var(--accent-primary)] text-[#212121] rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
                   >
                     Pay with USDC
                   </button>

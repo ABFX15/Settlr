@@ -44,7 +44,7 @@ export default function ZapierPage() {
 
   return (
     <main
-      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#212121] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <script
@@ -97,7 +97,7 @@ export default function ZapierPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#5c5c5c]">
               Trigger USDC settlements from any Zapier workflow. New Airtable
               row → pay a contractor. Typeform submission → send a bounty. CRM
               deal closed → pay affiliate commission. No code, no custom API
@@ -111,7 +111,7 @@ export default function ZapierPage() {
                 href="/docs"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-[#0C1829] shadow-lg transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-[#212121] shadow-lg transition-transform hover:scale-[1.02]"
                 style={{
                   background: color,
                   boxShadow: `0 10px 25px ${color}40`,
@@ -122,7 +122,7 @@ export default function ZapierPage() {
               </a>
               <Link
                 href="/docs"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E5E7EB] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d3d3d3] px-7 py-3.5 text-[15px] font-medium text-[#5c5c5c] hover:bg-[#f2f2f2]"
               >
                 Setup docs
               </Link>
@@ -132,7 +132,7 @@ export default function ZapierPage() {
       </section>
 
       {/* How it works */}
-      <section className="border-y border-[#E5E7EB]/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#d3d3d3]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
             <p
@@ -167,17 +167,17 @@ export default function ZapierPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.step} delay={i * 0.08}>
-                <div className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
+                <div className="rounded-2xl border border-[#d3d3d3] bg-white/[0.02] p-6">
                   <span
                     className="mb-4 block text-xs font-bold"
                     style={{ color: `${color}90` }}
                   >
                     STEP {item.step}
                   </span>
-                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
+                  <h3 className="text-[15px] font-semibold text-[#212121]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
+                  <p className="mt-2 text-sm leading-relaxed text-[#8a8a8a]">
                     {item.text}
                   </p>
                 </div>
@@ -231,16 +231,16 @@ export default function ZapierPage() {
             },
           ].map((zap, i) => (
             <Reveal key={zap.trigger} delay={i * 0.04}>
-              <div className="flex items-start gap-3 rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-4">
+              <div className="flex items-start gap-3 rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-4">
                 <Check
                   className="mt-0.5 h-4 w-4 flex-shrink-0"
                   style={{ color }}
                 />
                 <div>
-                  <span className="text-sm font-medium text-[#0C1829]">
+                  <span className="text-sm font-medium text-[#212121]">
                     {zap.trigger}
                   </span>
-                  <p className="text-xs text-[#7C8A9E]">{zap.action}</p>
+                  <p className="text-xs text-[#8a8a8a]">{zap.action}</p>
                 </div>
               </div>
             </Reveal>
@@ -249,7 +249,7 @@ export default function ZapierPage() {
       </section>
 
       {/* Why */}
-      <section className="border-y border-[#E5E7EB]/[0.04]">
+      <section className="border-y border-[#d3d3d3]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
@@ -291,17 +291,17 @@ export default function ZapierPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.06}>
-                <div className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
+                <div className="rounded-2xl border border-[#d3d3d3] bg-white/[0.02] p-6">
                   <div
                     className="mb-4 inline-flex rounded-xl p-2.5"
                     style={{ background: `${color}15` }}
                   >
                     <item.icon className="h-5 w-5" style={{ color }} />
                   </div>
-                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
+                  <h3 className="text-[15px] font-semibold text-[#212121]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
+                  <p className="mt-2 text-sm leading-relaxed text-[#8a8a8a]">
                     {item.text}
                   </p>
                 </div>
@@ -327,7 +327,7 @@ export default function ZapierPage() {
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#8a8a8a]">
               The first stablecoin settlement connector on Zapier. Connect to
               8,000+ apps in minutes.
             </p>
@@ -338,7 +338,7 @@ export default function ZapierPage() {
                 href="/docs"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-[15px] font-semibold text-[#0C1829] hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-[15px] font-semibold text-[#212121] hover:scale-[1.02]"
                 style={{
                   background: color,
                   boxShadow: `0 10px 25px ${color}40`,
@@ -349,7 +349,7 @@ export default function ZapierPage() {
               </a>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#d3d3d3] px-8 py-4 text-[15px] font-medium text-[#5c5c5c] hover:bg-[#f2f2f2]"
               >
                 Get API key
               </Link>

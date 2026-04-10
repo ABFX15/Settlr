@@ -120,7 +120,7 @@ export default function HomePage() {
       />
 
       <div
-        className="min-h-screen bg-white text-[#6B7280]"
+        className="min-h-screen bg-white text-[#5c5c5c]"
         style={{
           fontFamily: "var(--font-inter), Inter, system-ui, sans-serif",
         }}

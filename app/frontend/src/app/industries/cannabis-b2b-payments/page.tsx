@@ -28,14 +28,14 @@ import { Footer } from "@/components/ui/Footer";
 /* ── Design tokens ─────────────────────────────────────── */
 const p = {
   bg: "#FFFFFF",
-  bgSubtle: "#F9FAFB",
-  bgMuted: "#F5F5F5",
-  navy: "#0C1829",
-  slate: "#3B4963",
-  muted: "#7C8A9E",
-  green: "#1B6B4A",
-  greenDark: "#155939",
-  border: "#E5E7EB",
+  bgSubtle: "#f2f2f2",
+  bgMuted: "#f2f2f2",
+  navy: "#212121",
+  slate: "#5c5c5c",
+  muted: "#8a8a8a",
+  green: "#34c759",
+  greenDark: "#2ba048",
+  border: "#d3d3d3",
   white: "#FFFFFF",
 };
 
@@ -276,7 +276,7 @@ export default function CannabisB2BPaymentsPage() {
               <span
                 style={{
                   background:
-                    "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                    "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}
@@ -558,7 +558,7 @@ export default function CannabisB2BPaymentsPage() {
                         <div>
                           <p
                             className="mb-2 text-xs font-semibold uppercase tracking-widest"
-                            style={{ color: "#DC2626" }}
+                            style={{ color: "#e74c3c" }}
                           >
                             Current Pain
                           </p>
@@ -967,7 +967,7 @@ export default function CannabisB2BPaymentsPage() {
                   Your supply chain,{" "}
                   <span
                     style={{
-                      background: "linear-gradient(135deg, #1B6B4A, #2D9D6E)",
+                      background: "linear-gradient(135deg, #34c759, #2D9D6E)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                     }}
@@ -988,7 +988,7 @@ export default function CannabisB2BPaymentsPage() {
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:
-                        "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                        "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                       boxShadow: "0 4px 24px rgba(27,107,74,0.3)",
                     }}
                   >

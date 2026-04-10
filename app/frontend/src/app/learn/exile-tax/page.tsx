@@ -20,12 +20,12 @@ export const metadata: Metadata = {
 /* ──── Design tokens ──── */
 const p = {
   bg: "#FFFFFF",
-  navy: "#0C1829",
-  slate: "#3B4963",
-  muted: "#7C8A9E",
-  border: "#E5E7EB",
-  card: "#F3F4F6",
-  green: "#1B6B4A",
+  navy: "#212121",
+  slate: "#5c5c5c",
+  muted: "#8a8a8a",
+  border: "#d3d3d3",
+  card: "#f2f2f2",
+  green: "#34c759",
   greenBg: "rgba(27,107,74,0.06)",
 };
 
@@ -881,7 +881,7 @@ export default function ExileTaxWhitepaper() {
                       </td>
                       <td
                         className="px-4 py-3 text-xs"
-                        style={{ color: "#dc2626" }}
+                        style={{ color: "#e74c3c" }}
                       >
                         {before}
                       </td>

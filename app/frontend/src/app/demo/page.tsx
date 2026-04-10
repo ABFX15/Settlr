@@ -53,11 +53,11 @@ const STEPS = [
 function VerifiedSeal({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.08] px-3 py-1 ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-[#34c759]/20 bg-[#34c759]/[0.08] px-3 py-1 ${className}`}
     >
-      <Stamp className="h-3.5 w-3.5 text-[#155939]" />
+      <Stamp className="h-3.5 w-3.5 text-[#2ba048]" />
       <span
-        className="text-[11px] font-semibold uppercase tracking-wider text-[#155939]"
+        className="text-[11px] font-semibold uppercase tracking-wider text-[#2ba048]"
         style={{ fontFamily: "var(--font-jetbrains), monospace" }}
       >
         Settlr Verified
@@ -97,17 +97,17 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {/* Traditional Rail */}
-      <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6">
+      <div className="rounded-2xl border border-[#d3d3d3] bg-white p-6">
         <div className="mb-4 flex items-center gap-2">
-          <Clock className="h-5 w-5 text-[#B8860B]" />
-          <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          <Clock className="h-5 w-5 text-[#d29500]" />
+          <span className="text-sm font-semibold uppercase tracking-wider text-[#8a8a8a]">
             Traditional Wire
           </span>
         </div>
         <div className="mb-3 flex items-center gap-3">
-          <div className="h-2.5 w-full overflow-hidden rounded-full bg-[#F5F5F5]">
+          <div className="h-2.5 w-full overflow-hidden rounded-full bg-[#f2f2f2]">
             <motion.div
-              className="h-full rounded-full bg-[#B8860B]/40"
+              className="h-full rounded-full bg-[#d29500]/40"
               initial={{ width: "0%" }}
               animate={{ width: "12%" }}
               transition={{ duration: 3, ease: "easeOut" }}
@@ -116,12 +116,12 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
         </div>
         <div className="flex items-center justify-between">
           <span
-            className="text-sm font-medium text-[#B8860B]"
+            className="text-sm font-medium text-[#d29500]"
             style={{ fontFamily: "var(--font-jetbrains), monospace" }}
           >
             PENDING
           </span>
-          <span className="text-xs text-[#7C8A9E]">Est. 3-5 business days</span>
+          <span className="text-xs text-[#8a8a8a]">Est. 3-5 business days</span>
         </div>
         <div className="mt-4 rounded-lg bg-[#FFFBEB] p-3">
           <p className="text-xs text-[#92400E]">
@@ -135,7 +135,7 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
       <div
         className="relative overflow-hidden rounded-2xl border p-6 transition-all duration-500"
         style={{
-          borderColor: settled ? "#1B6B4A" : "#E5E7EB",
+          borderColor: settled ? "#34c759" : "#d3d3d3",
           background: settled
             ? "linear-gradient(135deg, rgba(27,107,74,0.04), rgba(27,107,74,0.01))"
             : "white",
@@ -147,22 +147,22 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: [0, 0.3, 0], scale: [0.8, 1.4, 1.8] }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="absolute inset-0 rounded-2xl border-2 border-[#1B6B4A]"
+              className="absolute inset-0 rounded-2xl border-2 border-[#34c759]"
             />
           )}
         </AnimatePresence>
 
         <div className="relative">
           <div className="mb-4 flex items-center gap-2">
-            <Shield className="h-5 w-5 text-[#155939]" />
-            <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+            <Shield className="h-5 w-5 text-[#2ba048]" />
+            <span className="text-sm font-semibold uppercase tracking-wider text-[#8a8a8a]">
               Settlr Private Rail
             </span>
           </div>
           <div className="mb-3 flex items-center gap-3">
-            <div className="h-2.5 w-full overflow-hidden rounded-full bg-[#1B6B4A]/10">
+            <div className="h-2.5 w-full overflow-hidden rounded-full bg-[#34c759]/10">
               <motion.div
-                className="h-full rounded-full bg-[#1B6B4A]"
+                className="h-full rounded-full bg-[#34c759]"
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}
                 transition={{ duration: 2.2, ease: "easeOut" }}
@@ -179,9 +179,9 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
                   transition={spring}
                   className="flex items-center gap-2"
                 >
-                  <CheckCircle2 className="h-5 w-5 text-[#155939]" />
+                  <CheckCircle2 className="h-5 w-5 text-[#2ba048]" />
                   <span
-                    className="text-sm font-bold text-[#155939]"
+                    className="text-sm font-bold text-[#2ba048]"
                     style={{ fontFamily: "var(--font-jetbrains), monospace" }}
                   >
                     SETTLED
@@ -193,7 +193,7 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="text-sm font-medium text-[#155939]"
+                  className="text-sm font-medium text-[#2ba048]"
                   style={{ fontFamily: "var(--font-jetbrains), monospace" }}
                 >
                   CONFIRMING...
@@ -201,7 +201,7 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
               )}
             </AnimatePresence>
             <span
-              className="text-xs text-[#7C8A9E]"
+              className="text-xs text-[#8a8a8a]"
               style={{ fontFamily: "var(--font-jetbrains), monospace" }}
             >
               T+{elapsed.toFixed(1)}s
@@ -214,9 +214,9 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 transition={{ delay: 0.3, ...spring }}
-                className="mt-4 rounded-lg bg-[#1B6B4A]/[0.08] p-3"
+                className="mt-4 rounded-lg bg-[#34c759]/[0.08] p-3"
               >
-                <p className="text-xs text-[#155939]">
+                <p className="text-xs text-[#2ba048]">
                   <strong>{"\u2713"} Final.</strong> Non-custodial settlement
                   complete. Funds cannot be frozen, reversed, or clawed back.
                 </p>
@@ -244,11 +244,11 @@ function Stepper({ current }: { current: number }) {
               <motion.div
                 animate={{
                   background: isDone
-                    ? "#1B6B4A"
+                    ? "#34c759"
                     : isActive
-                    ? "#0C1829"
-                    : "#F5F5F5",
-                  borderColor: isDone || isActive ? "transparent" : "#E5E7EB",
+                    ? "#212121"
+                    : "#f2f2f2",
+                  borderColor: isDone || isActive ? "transparent" : "#d3d3d3",
                 }}
                 className="flex h-9 w-9 items-center justify-center rounded-full border"
               >
@@ -257,7 +257,7 @@ function Stepper({ current }: { current: number }) {
                 ) : (
                   <Icon
                     className={`h-4 w-4 ${
-                      isActive ? "text-white" : "text-[#7C8A9E]"
+                      isActive ? "text-white" : "text-[#8a8a8a]"
                     }`}
                   />
                 )}
@@ -265,10 +265,10 @@ function Stepper({ current }: { current: number }) {
               <span
                 className={`hidden text-[10px] font-semibold uppercase tracking-wider sm:block ${
                   isActive
-                    ? "text-[#0C1829]"
+                    ? "text-[#212121]"
                     : isDone
-                    ? "text-[#155939]"
-                    : "text-[#7C8A9E]"
+                    ? "text-[#2ba048]"
+                    : "text-[#8a8a8a]"
                 }`}
               >
                 {step.label}
@@ -278,7 +278,7 @@ function Stepper({ current }: { current: number }) {
               <div
                 className="mb-5 hidden h-px w-8 sm:block md:w-16"
                 style={{
-                  background: step.id < current ? "#1B6B4A" : "#E5E7EB",
+                  background: step.id < current ? "#34c759" : "#d3d3d3",
                 }}
               />
             )}
@@ -307,12 +307,12 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
         {label}
       </label>
       <div className="relative">
         {prefix && (
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#7C8A9E]">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#8a8a8a]">
             {prefix}
           </span>
         )}
@@ -321,7 +321,7 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`w-full rounded-lg border border-[#E5E7EB] bg-white px-3 py-2.5 text-sm text-[#0C1829] placeholder:text-[#7C8A9E]/50 transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20 ${
+          className={`w-full rounded-lg border border-[#d3d3d3] bg-white px-3 py-2.5 text-sm text-[#212121] placeholder:text-[#8a8a8a]/50 transition-colors focus:border-[#34c759] focus:outline-none focus:ring-1 focus:ring-[#34c759]/20 ${
             prefix ? "pl-7" : ""
           }`}
         />
@@ -344,13 +344,13 @@ function SelectField({
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
         {label}
       </label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-[#E5E7EB] bg-white px-3 py-2.5 text-sm text-[#0C1829] transition-colors focus:border-[#1B6B4A] focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
+        className="w-full rounded-lg border border-[#d3d3d3] bg-white px-3 py-2.5 text-sm text-[#212121] transition-colors focus:border-[#34c759] focus:outline-none focus:ring-1 focus:ring-[#34c759]/20"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -412,28 +412,28 @@ function StepBusiness({
       transition={spring}
     >
       <div className="mb-3 flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#34c759] text-sm font-bold text-white">
           1
         </div>
-        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#8a8a8a]">
           Your Business
         </span>
       </div>
 
       <h1
-        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
         style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
       >
         Enter Your Details
       </h1>
-      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+      <p className="mb-8 max-w-xl text-[#8a8a8a]">
         Fill in your business details to generate a compliant,
         cryptographically-secured invoice. This is a demo {"\u2014"} no real
         data is stored.
       </p>
 
       <div
-        className="rounded-2xl border border-[#E5E7EB] bg-white p-6 md:p-8"
+        className="rounded-2xl border border-[#d3d3d3] bg-white p-6 md:p-8"
         style={{
           boxShadow:
             "0 4px 24px rgba(10,15,30,0.04), inset 0 1px 0 rgba(255,255,255,0.6)",
@@ -442,8 +442,8 @@ function StepBusiness({
         {/* Sender */}
         <div className="mb-8">
           <div className="mb-4 flex items-center gap-2">
-            <Building2 className="h-4 w-4 text-[#155939]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#155939]">
+            <Building2 className="h-4 w-4 text-[#2ba048]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#2ba048]">
               Your Company (Sender)
             </span>
           </div>
@@ -470,13 +470,13 @@ function StepBusiness({
         </div>
 
         {/* Divider */}
-        <div className="mb-8 border-t border-[#E5E7EB]" />
+        <div className="mb-8 border-t border-[#d3d3d3]" />
 
         {/* Recipient */}
         <div className="mb-8">
           <div className="mb-4 flex items-center gap-2">
-            <Building2 className="h-4 w-4 text-[#7C8A9E]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#7C8A9E]">
+            <Building2 className="h-4 w-4 text-[#8a8a8a]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#8a8a8a]">
               Recipient
             </span>
           </div>
@@ -503,13 +503,13 @@ function StepBusiness({
         </div>
 
         {/* Divider */}
-        <div className="mb-8 border-t border-[#E5E7EB]" />
+        <div className="mb-8 border-t border-[#d3d3d3]" />
 
         {/* Invoice details */}
         <div>
           <div className="mb-4 flex items-center gap-2">
-            <FileText className="h-4 w-4 text-[#7C8A9E]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#7C8A9E]">
+            <FileText className="h-4 w-4 text-[#8a8a8a]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#8a8a8a]">
               Invoice Details
             </span>
           </div>
@@ -558,21 +558,21 @@ function StepInvoice({ form }: { form: DemoForm }) {
       transition={spring}
     >
       <div className="mb-3 flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#34c759] text-sm font-bold text-white">
           2
         </div>
-        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#8a8a8a]">
           The Clean Invoice
         </span>
       </div>
 
       <h2
-        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
         style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
       >
         Cryptographically-Secured. Bank-Free.
       </h2>
-      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+      <p className="mb-8 max-w-xl text-[#8a8a8a]">
         Your invoice is ready. No bank routing numbers to leak, no wire
         instructions to mistype. Review and proceed to settlement.
       </p>
@@ -583,7 +583,7 @@ function StepInvoice({ form }: { form: DemoForm }) {
           className="absolute inset-0 rounded-2xl opacity-[0.03]"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(0deg, #0C1829 0px, #0C1829 1px, transparent 1px, transparent 32px)",
+              "repeating-linear-gradient(0deg, #212121 0px, #212121 1px, transparent 1px, transparent 32px)",
           }}
         />
 
@@ -601,7 +601,7 @@ function StepInvoice({ form }: { form: DemoForm }) {
             <div>
               <div className="mb-1 flex items-center gap-3">
                 <h3
-                  className="text-lg font-bold text-[#0C1829]"
+                  className="text-lg font-bold text-[#212121]"
                   style={{
                     fontFamily: "var(--font-fraunces), Georgia, serif",
                   }}
@@ -610,7 +610,7 @@ function StepInvoice({ form }: { form: DemoForm }) {
                 </h3>
                 <VerifiedSeal />
               </div>
-              <p className="text-sm text-[#7C8A9E]">
+              <p className="text-sm text-[#8a8a8a]">
                 Issued{" "}
                 {new Date().toLocaleDateString("en-US", {
                   month: "short",
@@ -620,9 +620,9 @@ function StepInvoice({ form }: { form: DemoForm }) {
                 {"\u00B7"} Due on receipt
               </p>
             </div>
-            <div className="flex items-center gap-2 rounded-lg border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.06] px-3 py-1.5">
-              <Shield className="h-3.5 w-3.5 text-[#155939]" />
-              <span className="text-xs font-medium text-[#155939]">
+            <div className="flex items-center gap-2 rounded-lg border border-[#34c759]/20 bg-[#34c759]/[0.06] px-3 py-1.5">
+              <Shield className="h-3.5 w-3.5 text-[#2ba048]" />
+              <span className="text-xs font-medium text-[#2ba048]">
                 Compliant with GENIUS Act (2025)
               </span>
             </div>
@@ -631,26 +631,26 @@ function StepInvoice({ form }: { form: DemoForm }) {
           {/* Parties */}
           <div className="mb-6 grid gap-6 sm:grid-cols-2">
             <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
                 From
               </p>
-              <p className="font-semibold text-[#0C1829]">
+              <p className="font-semibold text-[#212121]">
                 {form.businessName || "Pacific Growers Collective, LLC"}
               </p>
-              <p className="text-sm text-[#7C8A9E]">
+              <p className="text-sm text-[#8a8a8a]">
                 License #{form.licenseNumber || "C12-0004782-LIC"} {"\u00B7"}{" "}
                 {STATE_OPTIONS.find((s) => s.value === form.state)?.label ||
                   "Oregon"}
               </p>
             </div>
             <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
                 To
               </p>
-              <p className="font-semibold text-[#0C1829]">
+              <p className="font-semibold text-[#212121]">
                 {form.recipientName || "Emerald Distribution Partners"}
               </p>
-              <p className="text-sm text-[#7C8A9E]">
+              <p className="text-sm text-[#8a8a8a]">
                 License #{form.recipientLicense || "D09-0011294-LIC"} {"\u00B7"}{" "}
                 {STATE_OPTIONS.find((s) => s.value === form.recipientState)
                   ?.label || "Colorado"}
@@ -659,26 +659,26 @@ function StepInvoice({ form }: { form: DemoForm }) {
           </div>
 
           {/* Line items */}
-          <div className="mb-6 overflow-hidden rounded-xl border border-[#E5E7EB]">
+          <div className="mb-6 overflow-hidden rounded-xl border border-[#d3d3d3]">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[#E5E7EB] bg-[#F5F5F5]/60">
-                  <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+                <tr className="border-b border-[#d3d3d3] bg-[#f2f2f2]/60">
+                  <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
                     Description
                   </th>
-                  <th className="px-4 py-2.5 text-right text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+                  <th className="px-4 py-2.5 text-right text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
                     Amount
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E5E7EB]">
+              <tbody className="divide-y divide-[#d3d3d3]">
                 <tr>
-                  <td className="px-4 py-3 text-sm text-[#0C1829]">
+                  <td className="px-4 py-3 text-sm text-[#212121]">
                     {form.description ||
                       "Bulk Flower - Indoor Premium (Hybrid)"}
                   </td>
                   <td
-                    className="px-4 py-3 text-right text-sm font-medium text-[#0C1829]"
+                    className="px-4 py-3 text-right text-sm font-medium text-[#212121]"
                     style={{
                       fontFamily: "var(--font-jetbrains), monospace",
                     }}
@@ -696,27 +696,27 @@ function StepInvoice({ form }: { form: DemoForm }) {
           {/* Total & fee */}
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs text-[#7C8A9E]">
+              <p className="text-xs text-[#8a8a8a]">
                 Platform fee: $
                 {fee.toLocaleString("en-US", { minimumFractionDigits: 2 })}{" "}
                 (1.00%)
               </p>
-              <p className="text-xs text-[#7C8A9E]">
+              <p className="text-xs text-[#8a8a8a]">
                 Payment accepted in USDC or PYUSD
               </p>
             </div>
             <div className="text-right">
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
                 Total Due
               </p>
               <p
-                className="text-3xl font-bold text-[#0C1829] md:text-4xl"
+                className="text-3xl font-bold text-[#212121] md:text-4xl"
                 style={{
                   fontFamily: "var(--font-fraunces), Georgia, serif",
                 }}
               >
                 ${Math.floor(amount).toLocaleString("en-US")}
-                <span className="text-xl text-[#7C8A9E]">
+                <span className="text-xl text-[#8a8a8a]">
                   .{String(((amount % 1) * 100).toFixed(0)).padStart(2, "0")}
                 </span>
               </p>
@@ -741,21 +741,21 @@ function StepSettlement({ onSettled }: { onSettled: () => void }) {
       transition={spring}
     >
       <div className="mb-3 flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#34c759] text-sm font-bold text-white">
           3
         </div>
-        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#8a8a8a]">
           T+0 Settlement
         </span>
       </div>
 
       <h2
-        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
         style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
       >
         Settled. Not Pending.
       </h2>
-      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+      <p className="mb-8 max-w-xl text-[#8a8a8a]">
         In cannabis, &ldquo;settled&rdquo; means the money is safe {"\u2014"} it
         can&apos;t be frozen, reversed, or clawed back. Watch your settlement
         finalize in real time.
@@ -801,21 +801,21 @@ function StepReceipt({
       transition={spring}
     >
       <div className="mb-3 flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#34c759] text-sm font-bold text-white">
           4
         </div>
-        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#8a8a8a]">
           The Audit Trail
         </span>
       </div>
 
       <h2
-        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
         style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
       >
         The Receipt Your CFO Actually Wants
       </h2>
-      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+      <p className="mb-8 max-w-xl text-[#8a8a8a]">
         Instant reconciliation. Every dollar traced to a verified source on an
         immutable ledger your auditors will love.
       </p>
@@ -832,11 +832,11 @@ function StepReceipt({
         {/* Receipt header */}
         <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
           <div>
-            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
               Settlement Receipt
             </p>
             <h3
-              className="text-lg font-bold text-[#0C1829]"
+              className="text-lg font-bold text-[#212121]"
               style={{
                 fontFamily: "var(--font-fraunces), Georgia, serif",
               }}
@@ -847,15 +847,15 @@ function StepReceipt({
           <div className="flex flex-col items-end gap-2">
             <VerifiedSeal />
             {isReal ? (
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-[#155939]/20 bg-[#155939]/[0.08] px-3 py-1">
-                <Fingerprint className="h-3 w-3 text-[#155939]" />
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-[#155939]">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-[#2ba048]/20 bg-[#2ba048]/[0.08] px-3 py-1">
+                <Fingerprint className="h-3 w-3 text-[#2ba048]" />
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-[#2ba048]">
                   Signed with real wallet
                 </span>
               </div>
             ) : (
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-[#7C8A9E]/20 bg-[#7C8A9E]/[0.06] px-3 py-1">
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-[#8a8a8a]/20 bg-[#8a8a8a]/[0.06] px-3 py-1">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-[#8a8a8a]">
                   Simulated
                 </span>
               </div>
@@ -865,12 +865,12 @@ function StepReceipt({
 
         {/* Stats grid */}
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          <div className="rounded-xl border border-[#d3d3d3] bg-[#f2f2f2] p-4">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
               Amount
             </p>
             <p
-              className="text-xl font-bold text-[#0C1829]"
+              className="text-xl font-bold text-[#212121]"
               style={{
                 fontFamily: "var(--font-fraunces), Georgia, serif",
               }}
@@ -880,7 +880,7 @@ function StepReceipt({
                 minimumFractionDigits: 2,
               })}
             </p>
-            <p className="mt-0.5 text-xs text-[#7C8A9E]">
+            <p className="mt-0.5 text-xs text-[#8a8a8a]">
               {amount.toLocaleString("en-US", {
                 minimumFractionDigits: 6,
               })}{" "}
@@ -888,29 +888,29 @@ function StepReceipt({
             </p>
           </div>
 
-          <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          <div className="rounded-xl border border-[#d3d3d3] bg-[#f2f2f2] p-4">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
               Time to Finality
             </p>
             <p
-              className="text-xl font-bold text-[#155939]"
+              className="text-xl font-bold text-[#2ba048]"
               style={{
                 fontFamily: "var(--font-fraunces), Georgia, serif",
               }}
             >
               4.0s
             </p>
-            <p className="mt-0.5 text-xs text-[#7C8A9E]">
+            <p className="mt-0.5 text-xs text-[#8a8a8a]">
               vs. 3-5 days traditional
             </p>
           </div>
 
-          <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          <div className="rounded-xl border border-[#d3d3d3] bg-[#f2f2f2] p-4">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
               Platform Fee
             </p>
             <p
-              className="text-xl font-bold text-[#0C1829]"
+              className="text-xl font-bold text-[#212121]"
               style={{
                 fontFamily: "var(--font-fraunces), Georgia, serif",
               }}
@@ -920,16 +920,16 @@ function StepReceipt({
                 minimumFractionDigits: 2,
               })}
             </p>
-            <p className="mt-0.5 text-xs text-[#7C8A9E]">
+            <p className="mt-0.5 text-xs text-[#8a8a8a]">
               1.00% flat {"\u00B7"} No hidden fees
             </p>
           </div>
         </div>
 
         {/* On-chain details */}
-        <div className="space-y-4 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-5">
+        <div className="space-y-4 rounded-xl border border-[#d3d3d3] bg-[#f2f2f2] p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
               On-Chain Transaction
             </span>
             <a
@@ -940,7 +940,7 @@ function StepReceipt({
               }
               target={isReal ? "_blank" : undefined}
               rel={isReal ? "noopener noreferrer" : undefined}
-              className="inline-flex items-center gap-1 text-xs font-medium text-[#155939] hover:underline"
+              className="inline-flex items-center gap-1 text-xs font-medium text-[#2ba048] hover:underline"
             >
               {isReal ? "View on Solscan (Devnet)" : "View on Solscan"}
               <ExternalLink className="h-3 w-3" />
@@ -949,7 +949,7 @@ function StepReceipt({
 
           <div className="flex items-center gap-3">
             <code
-              className="flex-1 truncate rounded-md bg-[#0C1829]/[0.04] px-3 py-2 text-xs text-[#3B4963]"
+              className="flex-1 truncate rounded-md bg-[#212121]/[0.04] px-3 py-2 text-xs text-[#5c5c5c]"
               style={{
                 fontFamily: "var(--font-jetbrains), monospace",
               }}
@@ -958,10 +958,10 @@ function StepReceipt({
             </code>
             <button
               onClick={handleCopy}
-              className="shrink-0 rounded-md border border-[#E5E7EB] bg-white p-2 text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+              className="shrink-0 rounded-md border border-[#d3d3d3] bg-white p-2 text-[#8a8a8a] transition-colors hover:text-[#212121]"
             >
               {copied ? (
-                <Check className="h-4 w-4 text-[#155939]" />
+                <Check className="h-4 w-4 text-[#2ba048]" />
               ) : (
                 <Copy className="h-4 w-4" />
               )}
@@ -970,9 +970,9 @@ function StepReceipt({
 
           <div className="grid gap-3 sm:grid-cols-3">
             <div>
-              <p className="text-xs text-[#7C8A9E]">Block</p>
+              <p className="text-xs text-[#8a8a8a]">Block</p>
               <p
-                className="text-sm font-medium text-[#0C1829]"
+                className="text-sm font-medium text-[#212121]"
                 style={{
                   fontFamily: "var(--font-jetbrains), monospace",
                 }}
@@ -981,9 +981,9 @@ function StepReceipt({
               </p>
             </div>
             <div>
-              <p className="text-xs text-[#7C8A9E]">Timestamp</p>
+              <p className="text-xs text-[#8a8a8a]">Timestamp</p>
               <p
-                className="text-sm font-medium text-[#0C1829]"
+                className="text-sm font-medium text-[#212121]"
                 style={{
                   fontFamily: "var(--font-jetbrains), monospace",
                 }}
@@ -992,9 +992,9 @@ function StepReceipt({
               </p>
             </div>
             <div>
-              <p className="text-xs text-[#7C8A9E]">Network Fee</p>
+              <p className="text-xs text-[#8a8a8a]">Network Fee</p>
               <p
-                className="text-sm font-medium text-[#0C1829]"
+                className="text-sm font-medium text-[#212121]"
                 style={{
                   fontFamily: "var(--font-jetbrains), monospace",
                 }}
@@ -1015,10 +1015,10 @@ function StepReceipt({
           ].map((stamp) => (
             <div
               key={stamp}
-              className="flex items-center gap-1.5 rounded-full border border-[#1B6B4A]/15 bg-[#1B6B4A]/[0.05] px-3 py-1.5"
+              className="flex items-center gap-1.5 rounded-full border border-[#34c759]/15 bg-[#34c759]/[0.05] px-3 py-1.5"
             >
-              <Check className="h-3 w-3 text-[#155939]" />
-              <span className="text-xs font-medium text-[#155939]">
+              <Check className="h-3 w-3 text-[#2ba048]" />
+              <span className="text-xs font-medium text-[#2ba048]">
                 {stamp}
               </span>
             </div>
@@ -1062,23 +1062,23 @@ function StepBlinks({ form }: { form: DemoForm }) {
       transition={spring}
     >
       <div className="mb-3 flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A] text-sm font-bold text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#34c759] text-sm font-bold text-white">
           5
         </div>
-        <span className="text-sm font-semibold uppercase tracking-wider text-[#7C8A9E]">
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#8a8a8a]">
           Solana Blinks
         </span>
       </div>
 
       <h2
-        className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
+        className="mb-2 text-3xl font-bold text-[#212121] md:text-4xl"
         style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
       >
         Share a Link. Get Paid.
       </h2>
-      <p className="mb-8 max-w-xl text-[#7C8A9E]">
+      <p className="mb-8 max-w-xl text-[#8a8a8a]">
         Every Settlr invoice generates a{" "}
-        <strong className="text-[#0C1829]">Solana Blink</strong> {"\u2014"} a
+        <strong className="text-[#212121]">Solana Blink</strong> {"\u2014"} a
         shareable pay link that renders a native payment card in any compatible
         wallet. No app download. No login. Just tap &amp; pay.
       </p>
@@ -1086,21 +1086,21 @@ function StepBlinks({ form }: { form: DemoForm }) {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Left: Blink Preview Card */}
         <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
             Blink Preview
           </p>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, ...spring }}
-            className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-lg"
+            className="overflow-hidden rounded-2xl border border-[#d3d3d3] bg-white shadow-lg"
           >
             {/* Card header — simulates wallet rendering */}
-            <div className="relative h-40 bg-gradient-to-br from-[#0C1829] to-[#1a2940] p-5">
+            <div className="relative h-40 bg-gradient-to-br from-[#212121] to-[#1a2940] p-5">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="mb-1 flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1B6B4A]">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#34c759]">
                       <Shield className="h-4 w-4 text-white" />
                     </div>
                     <span className="text-sm font-bold text-white">Settlr</span>
@@ -1123,11 +1123,11 @@ function StepBlinks({ form }: { form: DemoForm }) {
 
             {/* Card body */}
             <div className="p-5">
-              <p className="mb-4 text-sm text-[#7C8A9E]">
+              <p className="mb-4 text-sm text-[#8a8a8a]">
                 {form.businessName || "Pacific Growers Collective"} is
                 requesting{" "}
                 <span
-                  className="font-semibold text-[#0C1829]"
+                  className="font-semibold text-[#212121]"
                   style={{ fontFamily: "var(--font-jetbrains), monospace" }}
                 >
                   {amount.toLocaleString("en-US", {
@@ -1147,7 +1147,7 @@ function StepBlinks({ form }: { form: DemoForm }) {
                     className="w-full rounded-xl py-3 text-sm font-bold text-white transition-all hover:brightness-110"
                     style={{
                       background:
-                        "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                        "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                     }}
                   >
                     Pay $
@@ -1157,11 +1157,11 @@ function StepBlinks({ form }: { form: DemoForm }) {
                     USDC
                   </motion.button>
                 ) : (
-                  <div className="h-11 w-full animate-pulse rounded-xl bg-[#E5E7EB]" />
+                  <div className="h-11 w-full animate-pulse rounded-xl bg-[#d3d3d3]" />
                 )}
               </AnimatePresence>
 
-              <p className="mt-3 text-center text-[10px] text-[#7C8A9E]">
+              <p className="mt-3 text-center text-[10px] text-[#8a8a8a]">
                 Powered by Solana Actions {"\u00B7"} Non-custodial settlement
               </p>
             </div>
@@ -1170,7 +1170,7 @@ function StepBlinks({ form }: { form: DemoForm }) {
 
         {/* Right: How it works */}
         <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
             How Blinks Work
           </p>
 
@@ -1202,16 +1202,16 @@ function StepBlinks({ form }: { form: DemoForm }) {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15 * (i + 1), ...spring }}
-                className="flex gap-4 rounded-xl border border-[#E5E7EB] bg-white p-4"
+                className="flex gap-4 rounded-xl border border-[#d3d3d3] bg-white p-4"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#1B6B4A]/[0.08]">
-                  <item.icon className="h-5 w-5 text-[#155939]" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#34c759]/[0.08]">
+                  <item.icon className="h-5 w-5 text-[#2ba048]" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-[#0C1829]">
+                  <p className="text-sm font-semibold text-[#212121]">
                     {item.title}
                   </p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-[#7C8A9E]">
+                  <p className="mt-0.5 text-xs leading-relaxed text-[#8a8a8a]">
                     {item.desc}
                   </p>
                 </div>
@@ -1224,24 +1224,24 @@ function StepBlinks({ form }: { form: DemoForm }) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, ...spring }}
-            className="mt-5 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4"
+            className="mt-5 rounded-xl border border-[#d3d3d3] bg-[#f2f2f2] p-4"
           >
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
               Blink URL
             </p>
             <div className="flex items-center gap-2">
               <code
-                className="flex-1 truncate rounded-md bg-[#0C1829]/[0.04] px-3 py-2 text-xs text-[#3B4963]"
+                className="flex-1 truncate rounded-md bg-[#212121]/[0.04] px-3 py-2 text-xs text-[#5c5c5c]"
                 style={{ fontFamily: "var(--font-jetbrains), monospace" }}
               >
                 {demoBlinkUrl}
               </code>
               <button
                 onClick={handleCopy}
-                className="shrink-0 rounded-md border border-[#E5E7EB] bg-white p-2 text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                className="shrink-0 rounded-md border border-[#d3d3d3] bg-white p-2 text-[#8a8a8a] transition-colors hover:text-[#212121]"
               >
                 {copied ? (
-                  <Check className="h-4 w-4 text-[#155939]" />
+                  <Check className="h-4 w-4 text-[#2ba048]" />
                 ) : (
                   <Copy className="h-4 w-4" />
                 )}
@@ -1259,10 +1259,10 @@ function StepBlinks({ form }: { form: DemoForm }) {
             {["Phantom", "Backpack", "Dialect", "Solflare"].map((wallet) => (
               <div
                 key={wallet}
-                className="flex items-center gap-1.5 rounded-full border border-[#E5E7EB] bg-white px-3 py-1.5"
+                className="flex items-center gap-1.5 rounded-full border border-[#d3d3d3] bg-white px-3 py-1.5"
               >
-                <CheckCircle2 className="h-3 w-3 text-[#155939]" />
-                <span className="text-xs font-medium text-[#3B4963]">
+                <CheckCircle2 className="h-3 w-3 text-[#2ba048]" />
+                <span className="text-xs font-medium text-[#5c5c5c]">
                   {wallet}
                 </span>
               </div>
@@ -1410,16 +1410,16 @@ export default function DemoPage() {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(27,107,74,0.10),transparent)]" />
           </div>
-          <div className="absolute right-[15%] top-[20%] h-72 w-72 rounded-full bg-[#1B6B4A]/[0.06] blur-[120px]" />
+          <div className="absolute right-[15%] top-[20%] h-72 w-72 rounded-full bg-[#34c759]/[0.06] blur-[120px]" />
 
           <div className="relative mx-auto max-w-4xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-[#F5F5F5] px-4 py-2"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2"
             >
-              <Fingerprint className="h-4 w-4 text-[#155939]" />
-              <span className="text-sm font-medium text-[#3B4963]">
+              <Fingerprint className="h-4 w-4 text-[#2ba048]" />
+              <span className="text-sm font-medium text-[#5c5c5c]">
                 Interactive Demo
               </span>
             </motion.div>
@@ -1428,7 +1428,7 @@ export default function DemoPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mb-4 text-4xl font-bold leading-[1.08] text-[#0C1829] md:text-6xl"
+              className="mb-4 text-4xl font-bold leading-[1.08] text-[#212121] md:text-6xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               Try a Settlement
@@ -1438,7 +1438,7 @@ export default function DemoPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-[#7C8A9E]"
+              className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-[#8a8a8a]"
             >
               Walk through a real B2B cannabis settlement in 5 steps. Enter your
               details, generate an invoice, watch it settle, get your receipt,
@@ -1470,16 +1470,16 @@ export default function DemoPage() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.25, ...spring }}
-                    className="mt-5 rounded-xl border border-[#E5E7EB] bg-white/80 p-4"
+                    className="mt-5 rounded-xl border border-[#d3d3d3] bg-white/80 p-4"
                   >
                     {authenticated && activeWallet ? (
                       <div className="flex items-center gap-3">
-                        <Wallet className="h-5 w-5 shrink-0 text-[#155939]" />
+                        <Wallet className="h-5 w-5 shrink-0 text-[#2ba048]" />
                         <div>
-                          <p className="text-sm font-semibold text-[#0C1829]">
+                          <p className="text-sm font-semibold text-[#212121]">
                             Live Signing Enabled
                           </p>
-                          <p className="text-xs text-[#7C8A9E]">
+                          <p className="text-xs text-[#8a8a8a]">
                             Your wallet ({activeWallet.address.slice(0, 4)}...
                             {activeWallet.address.slice(-4)}) will sign a real
                             Solana devnet transaction
@@ -1489,19 +1489,19 @@ export default function DemoPage() {
                     ) : (
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <Fingerprint className="h-5 w-5 shrink-0 text-[#7C8A9E]" />
+                          <Fingerprint className="h-5 w-5 shrink-0 text-[#8a8a8a]" />
                           <div>
-                            <p className="text-sm font-semibold text-[#0C1829]">
+                            <p className="text-sm font-semibold text-[#212121]">
                               Simulation Mode
                             </p>
-                            <p className="text-xs text-[#7C8A9E]">
+                            <p className="text-xs text-[#8a8a8a]">
                               Connect a wallet to sign with a real transaction
                             </p>
                           </div>
                         </div>
                         <button
                           onClick={() => setVisible(true)}
-                          className="rounded-lg border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.06] px-4 py-2 text-xs font-semibold text-[#155939] transition-colors hover:bg-[#1B6B4A]/[0.12]"
+                          className="rounded-lg border border-[#34c759]/20 bg-[#34c759]/[0.06] px-4 py-2 text-xs font-semibold text-[#2ba048] transition-colors hover:bg-[#34c759]/[0.12]"
                         >
                           Connect Wallet
                         </button>
@@ -1522,12 +1522,12 @@ export default function DemoPage() {
         </section>
 
         {/* Navigation buttons */}
-        <section className="sticky bottom-0 z-20 border-t border-[#E5E7EB] bg-[#FFFFFF]/90 backdrop-blur-md">
+        <section className="sticky bottom-0 z-20 border-t border-[#d3d3d3] bg-[#FFFFFF]/90 backdrop-blur-md">
           <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
             <button
               onClick={handleBack}
               disabled={step <= 1}
-              className="flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-[#7C8A9E] transition-colors hover:text-[#0C1829] disabled:cursor-not-allowed disabled:opacity-30"
+              className="flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-[#8a8a8a] transition-colors hover:text-[#212121] disabled:cursor-not-allowed disabled:opacity-30"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -1539,10 +1539,10 @@ export default function DemoPage() {
                   key={s.id}
                   className={`h-1.5 rounded-full transition-all ${
                     s.id === step
-                      ? "w-6 bg-[#1B6B4A]"
+                      ? "w-6 bg-[#34c759]"
                       : s.id < step
-                      ? "w-1.5 bg-[#1B6B4A]/40"
-                      : "w-1.5 bg-[#E5E7EB]"
+                      ? "w-1.5 bg-[#34c759]/40"
+                      : "w-1.5 bg-[#d3d3d3]"
                   }`}
                 />
               ))}
@@ -1556,8 +1556,8 @@ export default function DemoPage() {
                 style={{
                   background:
                     canAdvance && !isProcessing
-                      ? "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)"
-                      : "#7C8A9E",
+                      ? "linear-gradient(135deg, #34c759 0%, #2ba048 100%)"
+                      : "#8a8a8a",
                 }}
               >
                 {isProcessing ? (
@@ -1594,7 +1594,7 @@ export default function DemoPage() {
                   className="group flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
                   style={{
                     background:
-                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                      "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
                   Request Access
@@ -1605,7 +1605,7 @@ export default function DemoPage() {
                     setStep(1);
                     setSettlementDone(false);
                   }}
-                  className="rounded-lg border border-[#E5E7EB] px-5 py-2.5 text-sm font-semibold text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+                  className="rounded-lg border border-[#d3d3d3] px-5 py-2.5 text-sm font-semibold text-[#8a8a8a] transition-colors hover:text-[#212121]"
                 >
                   Try Again
                 </button>

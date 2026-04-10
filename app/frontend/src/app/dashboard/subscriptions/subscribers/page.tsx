@@ -71,8 +71,8 @@ const STATUS_CONFIG: Record<
   { color: string; bg: string; label: string; icon: React.ElementType }
 > = {
   active: {
-    color: "text-[#1B6B4A]",
-    bg: "bg-emerald-500/10",
+    color: "text-[#34c759]",
+    bg: "bg-[#34c759]/10",
     label: "Active",
     icon: CheckCircle,
   },
@@ -83,26 +83,26 @@ const STATUS_CONFIG: Record<
     icon: Clock,
   },
   past_due: {
-    color: "text-amber-400",
-    bg: "bg-amber-500/10",
+    color: "text-[#d29500]",
+    bg: "bg-[#d29500]/10",
     label: "Past Due",
     icon: AlertTriangle,
   },
   paused: {
-    color: "text-[#7C8A9E]",
-    bg: "bg-[#F3F4F6]",
+    color: "text-[#8a8a8a]",
+    bg: "bg-[#f2f2f2]",
     label: "Paused",
     icon: Pause,
   },
   cancelled: {
-    color: "text-red-400",
-    bg: "bg-red-500/10",
+    color: "text-[#e74c3c]",
+    bg: "bg-[#e74c3c]/10",
     label: "Cancelled",
     icon: XCircle,
   },
   expired: {
-    color: "text-red-400",
-    bg: "bg-red-500/10",
+    color: "text-[#e74c3c]",
+    bg: "bg-[#e74c3c]/10",
     label: "Expired",
     icon: XCircle,
   },
@@ -223,18 +223,18 @@ export default function SubscribersPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#1B6B4A]/10 flex items-center justify-center border border-[#a78bfa]/20">
-              <Users className="w-10 h-10 text-[#1B6B4A]" />
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#34c759]/10 flex items-center justify-center border border-[#8e24aa]/20">
+              <Users className="w-10 h-10 text-[#34c759]" />
             </div>
-            <h1 className="text-3xl font-bold text-[#0C1829] mb-4">
+            <h1 className="text-3xl font-bold text-[#212121] mb-4">
               Subscribers
             </h1>
-            <p className="text-[#7C8A9E] mb-8 max-w-md mx-auto">
+            <p className="text-[#8a8a8a] mb-8 max-w-md mx-auto">
               Connect your wallet to manage your subscribers and billing.
             </p>
             <button
               onClick={() => openWalletModal(true)}
-              className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#0C1829] px-8 py-4 rounded-xl font-semibold hover:bg-[#F3F4F6] transition-all "
+              className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#212121] px-8 py-4 rounded-xl font-semibold hover:bg-[#f2f2f2] transition-all "
             >
               <LogIn className="w-5 h-5" />
               Connect Wallet
@@ -253,20 +253,20 @@ export default function SubscribersPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/dashboard"
-              className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-[#F3F4F6] transition-colors"
+              className="p-2 rounded-lg bg-[#f2f2f2] hover:bg-[#f2f2f2] transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-[#7C8A9E]" />
+              <ArrowLeft className="w-5 h-5 text-[#8a8a8a]" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-[#0C1829]">Subscribers</h1>
-              <p className="text-[#7C8A9E] text-sm">
+              <h1 className="text-2xl font-bold text-[#212121]">Subscribers</h1>
+              <p className="text-[#8a8a8a] text-sm">
                 Manage active subscriptions and billing
               </p>
             </div>
           </div>
           <Link
             href="/dashboard/subscriptions"
-            className="flex items-center gap-2 bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] px-4 py-2 rounded-xl font-medium hover:bg-[#F3F4F6] transition-all text-sm"
+            className="flex items-center gap-2 bg-[#f2f2f2] border border-[#d3d3d3] text-[#212121] px-4 py-2 rounded-xl font-medium hover:bg-[#f2f2f2] transition-all text-sm"
           >
             <RefreshCw className="w-4 h-4" />
             Manage Plans
@@ -278,15 +278,15 @@ export default function SubscribersPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#d3d3d3] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg bg-emerald-500/10">
-                <Users className="w-5 h-5 text-[#1B6B4A]" />
+              <div className="p-2 rounded-lg bg-[#34c759]/10">
+                <Users className="w-5 h-5 text-[#34c759]" />
               </div>
-              <span className="text-[#7C8A9E] text-sm">Active</span>
+              <span className="text-[#8a8a8a] text-sm">Active</span>
             </div>
-            <p className="text-2xl font-bold text-[#0C1829]">
+            <p className="text-2xl font-bold text-[#212121]">
               {activeSubs.length}
             </p>
           </motion.div>
@@ -295,15 +295,15 @@ export default function SubscribersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#d3d3d3] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg bg-[#1B6B4A]/10">
-                <DollarSign className="w-5 h-5 text-[#1B6B4A]" />
+              <div className="p-2 rounded-lg bg-[#34c759]/10">
+                <DollarSign className="w-5 h-5 text-[#34c759]" />
               </div>
-              <span className="text-[#7C8A9E] text-sm">MRR</span>
+              <span className="text-[#8a8a8a] text-sm">MRR</span>
             </div>
-            <p className="text-2xl font-bold text-[#0C1829]">
+            <p className="text-2xl font-bold text-[#212121]">
               ${mrr.toFixed(2)}
             </p>
           </motion.div>
@@ -312,30 +312,30 @@ export default function SubscribersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#d3d3d3] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg bg-amber-500/10">
-                <AlertTriangle className="w-5 h-5 text-amber-400" />
+              <div className="p-2 rounded-lg bg-[#d29500]/10">
+                <AlertTriangle className="w-5 h-5 text-[#d29500]" />
               </div>
-              <span className="text-[#7C8A9E] text-sm">Past Due</span>
+              <span className="text-[#8a8a8a] text-sm">Past Due</span>
             </div>
-            <p className="text-2xl font-bold text-[#0C1829]">{pastDueCount}</p>
+            <p className="text-2xl font-bold text-[#212121]">{pastDueCount}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-6"
+            className="bg-white/[0.02] border border-[#d3d3d3] rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-lg bg-cyan-500/10">
                 <Calendar className="w-5 h-5 text-cyan-400" />
               </div>
-              <span className="text-[#7C8A9E] text-sm">Total</span>
+              <span className="text-[#8a8a8a] text-sm">Total</span>
             </div>
-            <p className="text-2xl font-bold text-[#0C1829]">
+            <p className="text-2xl font-bold text-[#212121]">
               {subscriptions.length}
             </p>
           </motion.div>
@@ -353,8 +353,8 @@ export default function SubscribersPage() {
                 }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === filter
-                    ? "bg-white text-[#0C1829]"
-                    : "bg-[#F3F4F6] text-[#7C8A9E] hover:text-[#0C1829] hover:bg-[#F3F4F6]"
+                    ? "bg-white text-[#212121]"
+                    : "bg-[#f2f2f2] text-[#8a8a8a] hover:text-[#212121] hover:bg-[#f2f2f2]"
                 }`}
               >
                 {filter === "all"
@@ -370,26 +370,26 @@ export default function SubscribersPage() {
         {/* Subscriptions List */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-[#1B6B4A]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#34c759]" />
           </div>
         ) : subscriptions.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl p-12 text-center"
+            className="bg-white/[0.02] border border-[#d3d3d3] rounded-2xl p-12 text-center"
           >
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#F3F4F6] flex items-center justify-center">
-              <Users className="w-8 h-8 text-[#7C8A9E]" />
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#f2f2f2] flex items-center justify-center">
+              <Users className="w-8 h-8 text-[#8a8a8a]" />
             </div>
-            <h3 className="text-xl font-semibold text-[#0C1829] mb-2">
+            <h3 className="text-xl font-semibold text-[#212121] mb-2">
               No subscribers yet
             </h3>
-            <p className="text-[#7C8A9E] mb-6">
+            <p className="text-[#8a8a8a] mb-6">
               Share your plan checkout links to start getting subscribers.
             </p>
             <Link
               href="/dashboard/subscriptions"
-              className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#0C1829] px-6 py-3 rounded-xl font-medium hover:bg-[#F3F4F6] transition-colors"
+              className="inline-flex items-center gap-2 bg-[#FFFFFF] text-[#212121] px-6 py-3 rounded-xl font-medium hover:bg-[#f2f2f2] transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
               View Plans
@@ -409,7 +409,7 @@ export default function SubscribersPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-white/[0.02] border border-[#E5E7EB] rounded-2xl overflow-hidden"
+                  className="bg-white/[0.02] border border-[#d3d3d3] rounded-2xl overflow-hidden"
                 >
                   {/* Main Row */}
                   <div
@@ -422,7 +422,7 @@ export default function SubscribersPage() {
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-3">
-                          <h3 className="text-[#0C1829] font-semibold truncate">
+                          <h3 className="text-[#212121] font-semibold truncate">
                             {sub.plan?.name || sub.planId}
                           </h3>
                           <span
@@ -431,16 +431,16 @@ export default function SubscribersPage() {
                             {config.label}
                           </span>
                           {sub.cancelAtPeriodEnd && (
-                            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400">
+                            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#d29500]/10 text-[#d29500]">
                               Cancels at period end
                             </span>
                           )}
                         </div>
-                        <p className="text-[#7C8A9E] text-sm truncate mt-1">
+                        <p className="text-[#8a8a8a] text-sm truncate mt-1">
                           {sub.customerWallet.slice(0, 8)}...
                           {sub.customerWallet.slice(-4)}
                           {sub.customerEmail && (
-                            <span className="ml-2 text-[#7C8A9E]">
+                            <span className="ml-2 text-[#8a8a8a]">
                               ({sub.customerEmail})
                             </span>
                           )}
@@ -450,17 +450,17 @@ export default function SubscribersPage() {
 
                     <div className="flex items-center gap-6">
                       <div className="text-right hidden sm:block">
-                        <p className="text-[#0C1829] font-semibold">
+                        <p className="text-[#212121] font-semibold">
                           ${sub.amount} {sub.currency}
                         </p>
-                        <p className="text-[#7C8A9E] text-xs">
+                        <p className="text-[#8a8a8a] text-xs">
                           per {sub.interval}
                         </p>
                       </div>
 
                       <div className="text-right hidden md:block">
-                        <p className="text-[#3B4963] text-sm">Next charge</p>
-                        <p className="text-[#7C8A9E] text-xs">
+                        <p className="text-[#5c5c5c] text-sm">Next charge</p>
+                        <p className="text-[#8a8a8a] text-xs">
                           {new Date(sub.currentPeriodEnd).toLocaleDateString()}
                         </p>
                       </div>
@@ -476,10 +476,10 @@ export default function SubscribersPage() {
                                 handleAction(sub.id, "pause");
                               }}
                               disabled={actionLoading === sub.id}
-                              className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-[#F3F4F6] transition-colors"
+                              className="p-2 rounded-lg bg-[#f2f2f2] hover:bg-[#f2f2f2] transition-colors"
                               title="Pause subscription"
                             >
-                              <Pause className="w-4 h-4 text-[#7C8A9E]" />
+                              <Pause className="w-4 h-4 text-[#8a8a8a]" />
                             </button>
                             <button
                               onClick={(e) => {
@@ -487,10 +487,10 @@ export default function SubscribersPage() {
                                 handleAction(sub.id, "cancel");
                               }}
                               disabled={actionLoading === sub.id}
-                              className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-red-500/20 transition-colors"
+                              className="p-2 rounded-lg bg-[#f2f2f2] hover:bg-[#e74c3c]/20 transition-colors"
                               title="Cancel at period end"
                             >
-                              <XCircle className="w-4 h-4 text-[#7C8A9E] hover:text-red-400" />
+                              <XCircle className="w-4 h-4 text-[#8a8a8a] hover:text-[#e74c3c]" />
                             </button>
                           </>
                         )}
@@ -501,10 +501,10 @@ export default function SubscribersPage() {
                               handleAction(sub.id, "resume");
                             }}
                             disabled={actionLoading === sub.id}
-                            className="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors"
+                            className="p-2 rounded-lg bg-[#34c759]/10 hover:bg-[#34c759]/20 transition-colors"
                             title="Resume subscription"
                           >
-                            <Play className="w-4 h-4 text-[#1B6B4A]" />
+                            <Play className="w-4 h-4 text-[#34c759]" />
                           </button>
                         )}
                         {sub.status === "past_due" && (
@@ -514,16 +514,16 @@ export default function SubscribersPage() {
                               handleAction(sub.id, "charge");
                             }}
                             disabled={actionLoading === sub.id}
-                            className="p-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 transition-colors"
+                            className="p-2 rounded-lg bg-[#d29500]/10 hover:bg-[#d29500]/20 transition-colors"
                             title="Retry charge"
                           >
-                            <RefreshCw className="w-4 h-4 text-amber-400" />
+                            <RefreshCw className="w-4 h-4 text-[#d29500]" />
                           </button>
                         )}
                         {isExpanded ? (
-                          <ChevronUp className="w-4 h-4 text-[#7C8A9E]" />
+                          <ChevronUp className="w-4 h-4 text-[#8a8a8a]" />
                         ) : (
-                          <ChevronDown className="w-4 h-4 text-[#7C8A9E]" />
+                          <ChevronDown className="w-4 h-4 text-[#8a8a8a]" />
                         )}
                       </div>
                     </div>
@@ -535,18 +535,18 @@ export default function SubscribersPage() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       transition={{ duration: 0.2 }}
-                      className="border-t border-[#E5E7EB]"
+                      className="border-t border-[#d3d3d3]"
                     >
                       <div className="p-6 bg-[#FFFFFF]/50">
                         <div className="flex items-center gap-2 mb-4">
-                          <Receipt className="w-4 h-4 text-[#7C8A9E]" />
-                          <h4 className="text-sm font-medium text-[#3B4963]">
+                          <Receipt className="w-4 h-4 text-[#8a8a8a]" />
+                          <h4 className="text-sm font-medium text-[#5c5c5c]">
                             Payment History
                           </h4>
                         </div>
 
                         {subPayments.length === 0 ? (
-                          <p className="text-[#7C8A9E] text-sm">
+                          <p className="text-[#8a8a8a] text-sm">
                             No payments yet.
                           </p>
                         ) : (
@@ -560,17 +560,17 @@ export default function SubscribersPage() {
                                   <div
                                     className={`w-2 h-2 rounded-full ${
                                       payment.status === "completed"
-                                        ? "bg-[#1B6B4A]"
+                                        ? "bg-[#34c759]"
                                         : payment.status === "failed"
-                                        ? "bg-red-400"
-                                        : "bg-amber-400"
+                                        ? "bg-[#e74c3c]/80"
+                                        : "bg-[#ffc107]"
                                     }`}
                                   />
                                   <div>
-                                    <span className="text-[#0C1829] text-sm font-medium">
+                                    <span className="text-[#212121] text-sm font-medium">
                                       ${payment.amount.toFixed(2)} USDC
                                     </span>
-                                    <span className="text-[#7C8A9E] text-xs ml-2">
+                                    <span className="text-[#8a8a8a] text-xs ml-2">
                                       {new Date(
                                         payment.createdAt,
                                       ).toLocaleDateString()}
@@ -581,10 +581,10 @@ export default function SubscribersPage() {
                                   <span
                                     className={`text-xs font-medium ${
                                       payment.status === "completed"
-                                        ? "text-[#1B6B4A]"
+                                        ? "text-[#34c759]"
                                         : payment.status === "failed"
-                                        ? "text-red-400"
-                                        : "text-amber-400"
+                                        ? "text-[#e74c3c]"
+                                        : "text-[#d29500]"
                                     }`}
                                   >
                                     {payment.status}
@@ -594,7 +594,7 @@ export default function SubscribersPage() {
                                       href={`https://explorer.solana.com/tx/${payment.txSignature}?cluster=devnet`}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="text-[#1B6B4A] hover:text-[#c4b5fd]"
+                                      className="text-[#34c759] hover:text-[#c4b5fd]"
                                     >
                                       <ExternalLink className="w-3.5 h-3.5" />
                                     </a>
@@ -606,34 +606,34 @@ export default function SubscribersPage() {
                         )}
 
                         {/* Subscription metadata */}
-                        <div className="mt-4 pt-4 border-t border-[#E5E7EB] grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                        <div className="mt-4 pt-4 border-t border-[#d3d3d3] grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
                           <div>
-                            <span className="text-[#7C8A9E]">Created</span>
-                            <p className="text-[#3B4963]">
+                            <span className="text-[#8a8a8a]">Created</span>
+                            <p className="text-[#5c5c5c]">
                               {new Date(sub.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
-                            <span className="text-[#7C8A9E]">Period Start</span>
-                            <p className="text-[#3B4963]">
+                            <span className="text-[#8a8a8a]">Period Start</span>
+                            <p className="text-[#5c5c5c]">
                               {new Date(
                                 sub.currentPeriodStart,
                               ).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
-                            <span className="text-[#7C8A9E]">Period End</span>
-                            <p className="text-[#3B4963]">
+                            <span className="text-[#8a8a8a]">Period End</span>
+                            <p className="text-[#5c5c5c]">
                               {new Date(
                                 sub.currentPeriodEnd,
                               ).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
-                            <span className="text-[#7C8A9E]">
+                            <span className="text-[#8a8a8a]">
                               Subscription ID
                             </span>
-                            <p className="text-[#3B4963] font-mono truncate">
+                            <p className="text-[#5c5c5c] font-mono truncate">
                               {sub.id}
                             </p>
                           </div>

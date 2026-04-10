@@ -316,15 +316,15 @@ function getMethodIcon(type: string) {
 function statusColor(status: string) {
   switch (status) {
     case "completed":
-      return "text-[#1B6B4A] bg-[#1B6B4A]/10";
+      return "text-[#34c759] bg-[#34c759]/10";
     case "processing":
-      return "text-amber-600 bg-amber-500/10";
+      return "text-[#d29500] bg-[#d29500]/10";
     case "pending":
-      return "text-[#7C8A9E] bg-[#F3F4F6]";
+      return "text-[#8a8a8a] bg-[#f2f2f2]";
     case "failed":
-      return "text-red-500 bg-red-500/10";
+      return "text-[#e74c3c] bg-[#e74c3c]/10";
     default:
-      return "text-[#7C8A9E] bg-[#F3F4F6]";
+      return "text-[#8a8a8a] bg-[#f2f2f2]";
   }
 }
 
@@ -463,28 +463,28 @@ export default function OfframpPage() {
           <div className="mb-8">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1 text-sm text-[#7C8A9E] hover:text-[#3B4963] transition-colors"
+              className="inline-flex items-center gap-1 text-sm text-[#8a8a8a] hover:text-[#5c5c5c] transition-colors"
             >
               <Home className="h-3.5 w-3.5" />
               Dashboard
               <ChevronRight className="h-3.5 w-3.5" />
-              <span className="text-[#3B4963]">Off-Ramp</span>
+              <span className="text-[#5c5c5c]">Off-Ramp</span>
             </Link>
           </div>
 
           <h1 className="text-3xl font-semibold tracking-tight mb-2">
             Off-Ramp
           </h1>
-          <p className="text-[#7C8A9E] mb-8">
+          <p className="text-[#8a8a8a] mb-8">
             Convert USDC to local currency and withdraw to your bank.
           </p>
 
           <motion.div
             {...fadeInProps}
-            className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-12 text-center"
+            className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-12 text-center"
           >
-            <ArrowDownToLine className="mx-auto h-8 w-8 text-[#7C8A9E]/60 mb-4" />
-            <p className="text-sm text-[#7C8A9E] mb-4">
+            <ArrowDownToLine className="mx-auto h-8 w-8 text-[#8a8a8a]/60 mb-4" />
+            <p className="text-sm text-[#8a8a8a] mb-4">
               Connect your wallet to access off-ramp
             </p>
           </motion.div>
@@ -500,26 +500,26 @@ export default function OfframpPage() {
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-1 text-sm text-[#7C8A9E] hover:text-[#3B4963] transition-colors"
+            className="inline-flex items-center gap-1 text-sm text-[#8a8a8a] hover:text-[#5c5c5c] transition-colors"
           >
             <Home className="h-3.5 w-3.5" />
             Dashboard
             <ChevronRight className="h-3.5 w-3.5" />
-            <span className="text-[#3B4963]">Off-Ramp</span>
+            <span className="text-[#5c5c5c]">Off-Ramp</span>
           </Link>
         </div>
 
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1B6B4A]/15">
-              <ArrowDownToLine className="h-5 w-5 text-[#1B6B4A]" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#34c759]/15">
+              <ArrowDownToLine className="h-5 w-5 text-[#34c759]" />
             </div>
             <div>
-              <h1 className="text-2xl font-semibold tracking-tight text-[#0C1829]">
+              <h1 className="text-2xl font-semibold tracking-tight text-[#212121]">
                 Off-Ramp
               </h1>
-              <p className="text-sm text-[#7C8A9E]">
+              <p className="text-sm text-[#8a8a8a]">
                 Convert USDC to local currency
               </p>
             </div>
@@ -529,24 +529,24 @@ export default function OfframpPage() {
         {/* Balance card */}
         <motion.div
           {...fadeInProps}
-          className="mb-8 rounded-xl border border-[#E5E7EB] bg-gradient-to-br from-[#1B6B4A]/5 to-transparent p-6"
+          className="mb-8 rounded-xl border border-[#d3d3d3] bg-gradient-to-br from-[#34c759]/5 to-transparent p-6"
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-[#7C8A9E] mb-1">
+              <p className="text-xs font-medium uppercase tracking-wider text-[#8a8a8a] mb-1">
                 Available Balance
               </p>
-              <p className="text-3xl font-semibold text-[#0C1829] tabular-nums">
+              <p className="text-3xl font-semibold text-[#212121] tabular-nums">
                 {formatUSD(balance)}
               </p>
-              <p className="text-xs text-[#7C8A9E] mt-1">
+              <p className="text-xs text-[#8a8a8a] mt-1">
                 USDC • Solana{" "}
                 {process.env.NEXT_PUBLIC_SOLANA_CLUSTER || "devnet"}
               </p>
             </div>
             <button
               onClick={fetchBalance}
-              className="rounded-lg border border-[#E5E7EB] p-2.5 text-[#7C8A9E] hover:text-[#3B4963] hover:bg-[#F3F4F6] transition-colors"
+              className="rounded-lg border border-[#d3d3d3] p-2.5 text-[#8a8a8a] hover:text-[#5c5c5c] hover:bg-[#f2f2f2] transition-colors"
             >
               <RefreshCw className="h-4 w-4" />
             </button>
@@ -560,13 +560,13 @@ export default function OfframpPage() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="mb-6 rounded-xl border border-[#1B6B4A]/30 bg-[#1B6B4A]/10 p-4 flex items-center gap-3"
+              className="mb-6 rounded-xl border border-[#34c759]/30 bg-[#34c759]/10 p-4 flex items-center gap-3"
             >
-              <Check className="h-5 w-5 text-[#1B6B4A] shrink-0" />
-              <p className="text-sm text-[#1B6B4A]">{success}</p>
+              <Check className="h-5 w-5 text-[#34c759] shrink-0" />
+              <p className="text-sm text-[#34c759]">{success}</p>
               <button
                 onClick={() => setSuccess("")}
-                className="ml-auto text-[#1B6B4A]/60 hover:text-[#1B6B4A] text-xs"
+                className="ml-auto text-[#34c759]/60 hover:text-[#34c759] text-xs"
               >
                 Dismiss
               </button>
@@ -580,10 +580,10 @@ export default function OfframpPage() {
             <motion.div
               {...fadeInProps}
               transition={{ delay: 0.05 }}
-              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] overflow-hidden"
+              className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] overflow-hidden"
             >
               {/* Step indicators */}
-              <div className="border-b border-[#E5E7EB] px-6 py-4">
+              <div className="border-b border-[#d3d3d3] px-6 py-4">
                 <div className="flex items-center gap-4">
                   {[
                     { num: 1, label: "Select Region" },
@@ -602,8 +602,8 @@ export default function OfframpPage() {
                       <div
                         className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium transition-colors ${
                           step >= s.num
-                            ? "bg-[#1B6B4A] text-white"
-                            : "bg-[#F3F4F6] text-[#7C8A9E]"
+                            ? "bg-[#34c759] text-[#212121]"
+                            : "bg-[#f2f2f2] text-[#8a8a8a]"
                         }`}
                       >
                         {step > s.num ? (
@@ -614,13 +614,13 @@ export default function OfframpPage() {
                       </div>
                       <span
                         className={`text-xs font-medium hidden sm:inline ${
-                          step >= s.num ? "text-[#0C1829]" : "text-[#7C8A9E]"
+                          step >= s.num ? "text-[#212121]" : "text-[#8a8a8a]"
                         }`}
                       >
                         {s.label}
                       </span>
                       {i < 2 && (
-                        <ArrowRight className="h-3 w-3 text-[#E5E7EB] mx-1" />
+                        <ArrowRight className="h-3 w-3 text-[#d3d3d3] mx-1" />
                       )}
                     </button>
                   ))}
@@ -633,20 +633,20 @@ export default function OfframpPage() {
                   <motion.div {...fadeInProps} className="space-y-5">
                     {/* Region selector */}
                     <div>
-                      <label className="block text-xs font-medium text-[#7C8A9E] uppercase tracking-wider mb-2">
+                      <label className="block text-xs font-medium text-[#8a8a8a] uppercase tracking-wider mb-2">
                         Your Region
                       </label>
                       <div className="relative">
                         <button
                           onClick={() => setRegionOpen(!regionOpen)}
-                          className="w-full flex items-center justify-between rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-3 text-sm text-[#0C1829] hover:border-[#3B4963]/30 transition-colors"
+                          className="w-full flex items-center justify-between rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-3 text-sm text-[#212121] hover:border-[#5c5c5c]/30 transition-colors"
                         >
                           <span className="flex items-center gap-2">
-                            <Globe className="h-4 w-4 text-[#7C8A9E]" />
+                            <Globe className="h-4 w-4 text-[#8a8a8a]" />
                             {region.country} ({region.currencyCode})
                           </span>
                           <ChevronDown
-                            className={`h-4 w-4 text-[#7C8A9E] transition-transform ${
+                            className={`h-4 w-4 text-[#8a8a8a] transition-transform ${
                               regionOpen ? "rotate-180" : ""
                             }`}
                           />
@@ -657,7 +657,7 @@ export default function OfframpPage() {
                               initial={{ opacity: 0, y: -4 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -4 }}
-                              className="absolute z-20 mt-1 w-full rounded-lg border border-[#E5E7EB] bg-[#FFFFFF] shadow-lg max-h-60 overflow-y-auto"
+                              className="absolute z-20 mt-1 w-full rounded-lg border border-[#d3d3d3] bg-[#FFFFFF] shadow-lg max-h-60 overflow-y-auto"
                             >
                               {REGION_LIST.map((r) => (
                                 <button
@@ -666,14 +666,14 @@ export default function OfframpPage() {
                                     setSelectedRegion(r.code);
                                     setRegionOpen(false);
                                   }}
-                                  className={`w-full text-left px-4 py-2.5 text-sm hover:bg-[#F3F4F6] transition-colors flex items-center justify-between ${
+                                  className={`w-full text-left px-4 py-2.5 text-sm hover:bg-[#f2f2f2] transition-colors flex items-center justify-between ${
                                     r.code === selectedRegion
-                                      ? "text-[#1B6B4A] font-medium bg-[#1B6B4A]/5"
-                                      : "text-[#3B4963]"
+                                      ? "text-[#34c759] font-medium bg-[#34c759]/5"
+                                      : "text-[#5c5c5c]"
                                   }`}
                                 >
                                   <span>{r.label}</span>
-                                  <span className="text-xs text-[#7C8A9E]">
+                                  <span className="text-xs text-[#8a8a8a]">
                                     {r.currency}
                                   </span>
                                 </button>
@@ -686,7 +686,7 @@ export default function OfframpPage() {
 
                     {/* Method selector */}
                     <div>
-                      <label className="block text-xs font-medium text-[#7C8A9E] uppercase tracking-wider mb-2">
+                      <label className="block text-xs font-medium text-[#8a8a8a] uppercase tracking-wider mb-2">
                         Withdrawal Method
                       </label>
                       <div className="space-y-2">
@@ -700,22 +700,22 @@ export default function OfframpPage() {
                               onClick={() => setSelectedMethod(option)}
                               className={`w-full flex items-center gap-4 rounded-lg border px-4 py-3.5 text-left transition-all ${
                                 isSelected
-                                  ? "border-[#1B6B4A]/40 bg-[#1B6B4A]/5 ring-1 ring-[#1B6B4A]/20"
-                                  : "border-[#E5E7EB] bg-white/[0.02] hover:border-[#3B4963]/30"
+                                  ? "border-[#34c759]/40 bg-[#34c759]/5 ring-1 ring-[#34c759]/20"
+                                  : "border-[#d3d3d3] bg-white/[0.02] hover:border-[#5c5c5c]/30"
                               }`}
                             >
                               <div
                                 className={`rounded-lg p-2.5 ${
                                   isSelected
-                                    ? "bg-[#1B6B4A]/15"
-                                    : "bg-[#F3F4F6]"
+                                    ? "bg-[#34c759]/15"
+                                    : "bg-[#f2f2f2]"
                                 }`}
                               >
                                 <Icon
                                   className={`h-4 w-4 ${
                                     isSelected
-                                      ? "text-[#1B6B4A]"
-                                      : "text-[#7C8A9E]"
+                                      ? "text-[#34c759]"
+                                      : "text-[#8a8a8a]"
                                   }`}
                                 />
                               </div>
@@ -724,23 +724,23 @@ export default function OfframpPage() {
                                   <span
                                     className={`text-sm font-medium ${
                                       isSelected
-                                        ? "text-[#1B6B4A]"
-                                        : "text-[#0C1829]"
+                                        ? "text-[#34c759]"
+                                        : "text-[#212121]"
                                     }`}
                                   >
                                     {option.name}
                                   </span>
-                                  <span className="flex items-center gap-1 text-xs text-[#7C8A9E]">
+                                  <span className="flex items-center gap-1 text-xs text-[#8a8a8a]">
                                     <Clock className="h-3 w-3" />
                                     {option.speed}
                                   </span>
                                 </div>
-                                <p className="text-xs text-[#7C8A9E] mt-0.5">
+                                <p className="text-xs text-[#8a8a8a] mt-0.5">
                                   {option.description}
                                 </p>
                               </div>
                               {isSelected && (
-                                <Check className="h-4 w-4 text-[#1B6B4A] shrink-0" />
+                                <Check className="h-4 w-4 text-[#34c759] shrink-0" />
                               )}
                             </button>
                           );
@@ -751,7 +751,7 @@ export default function OfframpPage() {
                     <button
                       onClick={() => selectedMethod && setStep(2)}
                       disabled={!selectedMethod}
-                      className="w-full rounded-lg bg-[#1B6B4A] px-4 py-3 text-sm font-semibold text-white hover:bg-[#1B6B4A]/90 disabled:opacity-40 transition-colors"
+                      className="w-full rounded-lg bg-[#34c759] px-4 py-3 text-sm font-semibold text-[#212121] hover:bg-[#34c759]/90 disabled:opacity-40 transition-colors"
                     >
                       Continue
                     </button>
@@ -762,22 +762,22 @@ export default function OfframpPage() {
                 {step === 2 && selectedMethod && (
                   <motion.div {...fadeInProps} className="space-y-5">
                     {/* Selected method summary */}
-                    <div className="flex items-center gap-3 rounded-lg bg-[#F3F4F6] px-4 py-3">
+                    <div className="flex items-center gap-3 rounded-lg bg-[#f2f2f2] px-4 py-3">
                       {(() => {
                         const Icon = getMethodIcon(selectedMethod.type);
-                        return <Icon className="h-4 w-4 text-[#1B6B4A]" />;
+                        return <Icon className="h-4 w-4 text-[#34c759]" />;
                       })()}
                       <div className="flex-1">
-                        <span className="text-sm font-medium text-[#0C1829]">
+                        <span className="text-sm font-medium text-[#212121]">
                           {selectedMethod.name}
                         </span>
-                        <span className="text-xs text-[#7C8A9E] ml-2">
+                        <span className="text-xs text-[#8a8a8a] ml-2">
                           {region.country} • {selectedMethod.speed}
                         </span>
                       </div>
                       <button
                         onClick={() => setStep(1)}
-                        className="text-xs text-[#1B6B4A] hover:underline"
+                        className="text-xs text-[#34c759] hover:underline"
                       >
                         Change
                       </button>
@@ -785,11 +785,11 @@ export default function OfframpPage() {
 
                     {/* Amount */}
                     <div>
-                      <label className="block text-xs font-medium text-[#7C8A9E] uppercase tracking-wider mb-2">
+                      <label className="block text-xs font-medium text-[#8a8a8a] uppercase tracking-wider mb-2">
                         Amount (USDC)
                       </label>
                       <div className="relative">
-                        <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7C8A9E]" />
+                        <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8a8a8a]" />
                         <input
                           type="number"
                           value={amount}
@@ -798,15 +798,15 @@ export default function OfframpPage() {
                           min="1"
                           max={balance}
                           step="0.01"
-                          className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] pl-9 pr-4 py-3 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#1B6B4A]/50 focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
+                          className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] pl-9 pr-4 py-3 text-sm text-[#212121] placeholder-[#8a8a8a] focus:border-[#34c759]/50 focus:outline-none focus:ring-1 focus:ring-[#34c759]/20"
                         />
                       </div>
                       <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs text-[#7C8A9E]">
+                        <p className="text-xs text-[#8a8a8a]">
                           Available: {formatUSD(balance)}
                         </p>
                         {amount && parseFloat(amount) > 0 && (
-                          <p className="text-xs text-[#1B6B4A] font-medium">
+                          <p className="text-xs text-[#34c759] font-medium">
                             ≈ {formatLocal(localAmount, region.currencySymbol)}{" "}
                             {region.currencyCode}
                           </p>
@@ -821,7 +821,7 @@ export default function OfframpPage() {
                               setAmount(Math.min(q, balance).toString())
                             }
                             disabled={balance < q}
-                            className="flex-1 rounded-lg border border-[#E5E7EB] px-3 py-1.5 text-xs font-medium text-[#3B4963] hover:bg-[#F3F4F6] hover:border-[#3B4963]/30 disabled:opacity-30 transition-colors"
+                            className="flex-1 rounded-lg border border-[#d3d3d3] px-3 py-1.5 text-xs font-medium text-[#5c5c5c] hover:bg-[#f2f2f2] hover:border-[#5c5c5c]/30 disabled:opacity-30 transition-colors"
                           >
                             ${q}
                           </button>
@@ -829,7 +829,7 @@ export default function OfframpPage() {
                         <button
                           onClick={() => setAmount(balance.toString())}
                           disabled={balance <= 0}
-                          className="flex-1 rounded-lg border border-[#1B6B4A]/30 px-3 py-1.5 text-xs font-medium text-[#1B6B4A] hover:bg-[#1B6B4A]/5 disabled:opacity-30 transition-colors"
+                          className="flex-1 rounded-lg border border-[#34c759]/30 px-3 py-1.5 text-xs font-medium text-[#34c759] hover:bg-[#34c759]/5 disabled:opacity-30 transition-colors"
                         >
                           Max
                         </button>
@@ -838,7 +838,7 @@ export default function OfframpPage() {
 
                     {/* Account info */}
                     <div>
-                      <label className="block text-xs font-medium text-[#7C8A9E] uppercase tracking-wider mb-2">
+                      <label className="block text-xs font-medium text-[#8a8a8a] uppercase tracking-wider mb-2">
                         {selectedMethod.type === "bank"
                           ? "Account Number / IBAN"
                           : selectedMethod.type === "mobile-money"
@@ -856,35 +856,35 @@ export default function OfframpPage() {
                             ? "+254 7XX XXX XXX"
                             : "your@email.com or account ID"
                         }
-                        className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-3 text-sm text-[#0C1829] placeholder-[#7C8A9E] focus:border-[#1B6B4A]/50 focus:outline-none focus:ring-1 focus:ring-[#1B6B4A]/20"
+                        className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-3 text-sm text-[#212121] placeholder-[#8a8a8a] focus:border-[#34c759]/50 focus:outline-none focus:ring-1 focus:ring-[#34c759]/20"
                       />
                     </div>
 
                     {/* Exchange rate */}
-                    <div className="rounded-lg border border-[#E5E7EB] bg-[#FFFFFF] p-4">
+                    <div className="rounded-lg border border-[#d3d3d3] bg-[#FFFFFF] p-4">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-[#7C8A9E]">Exchange Rate</span>
-                        <span className="text-[#3B4963] font-medium">
+                        <span className="text-[#8a8a8a]">Exchange Rate</span>
+                        <span className="text-[#5c5c5c] font-medium">
                           1 USDC = {region.currencySymbol}
                           {region.rate.toLocaleString()} {region.currencyCode}
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-xs mt-2">
-                        <span className="text-[#7C8A9E]">Network Fee</span>
-                        <span className="text-[#3B4963] font-medium">
+                        <span className="text-[#8a8a8a]">Network Fee</span>
+                        <span className="text-[#5c5c5c] font-medium">
                           ~$0.01
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-xs mt-2">
-                        <span className="text-[#7C8A9E]">Off-ramp Fee</span>
-                        <span className="text-[#1B6B4A] font-medium">Free</span>
+                        <span className="text-[#8a8a8a]">Off-ramp Fee</span>
+                        <span className="text-[#34c759] font-medium">Free</span>
                       </div>
                     </div>
 
                     <div className="flex gap-3">
                       <button
                         onClick={() => setStep(1)}
-                        className="rounded-lg border border-[#E5E7EB] px-4 py-3 text-sm font-medium text-[#3B4963] hover:bg-[#F3F4F6] transition-colors"
+                        className="rounded-lg border border-[#d3d3d3] px-4 py-3 text-sm font-medium text-[#5c5c5c] hover:bg-[#f2f2f2] transition-colors"
                       >
                         Back
                       </button>
@@ -898,7 +898,7 @@ export default function OfframpPage() {
                           parseFloat(amount) <= 0 ||
                           parseFloat(amount) > balance
                         }
-                        className="flex-1 rounded-lg bg-[#1B6B4A] px-4 py-3 text-sm font-semibold text-white hover:bg-[#1B6B4A]/90 disabled:opacity-40 transition-colors"
+                        className="flex-1 rounded-lg bg-[#34c759] px-4 py-3 text-sm font-semibold text-[#212121] hover:bg-[#34c759]/90 disabled:opacity-40 transition-colors"
                       >
                         Review
                       </button>
@@ -910,33 +910,33 @@ export default function OfframpPage() {
                 {step === 3 && selectedMethod && (
                   <motion.div {...fadeInProps} className="space-y-5">
                     <div className="text-center py-2">
-                      <p className="text-xs text-[#7C8A9E] uppercase tracking-wider mb-2">
+                      <p className="text-xs text-[#8a8a8a] uppercase tracking-wider mb-2">
                         You&apos;re converting
                       </p>
-                      <p className="text-3xl font-semibold text-[#0C1829] tabular-nums">
+                      <p className="text-3xl font-semibold text-[#212121] tabular-nums">
                         {formatUSD(parseFloat(amount || "0"))}
                       </p>
                       <div className="flex items-center justify-center gap-2 mt-2">
-                        <ArrowDownToLine className="h-4 w-4 text-[#1B6B4A]" />
-                        <p className="text-lg font-medium text-[#1B6B4A]">
+                        <ArrowDownToLine className="h-4 w-4 text-[#34c759]" />
+                        <p className="text-lg font-medium text-[#34c759]">
                           {formatLocal(localAmount, region.currencySymbol)}{" "}
                           {region.currencyCode}
                         </p>
                       </div>
                     </div>
 
-                    <div className="rounded-lg border border-[#E5E7EB] divide-y divide-[#E5E7EB]">
+                    <div className="rounded-lg border border-[#d3d3d3] divide-y divide-[#d3d3d3]">
                       <div className="flex items-center justify-between px-4 py-3">
-                        <span className="text-xs text-[#7C8A9E]">Method</span>
-                        <span className="text-sm font-medium text-[#0C1829]">
+                        <span className="text-xs text-[#8a8a8a]">Method</span>
+                        <span className="text-sm font-medium text-[#212121]">
                           {selectedMethod.name}
                         </span>
                       </div>
                       <div className="flex items-center justify-between px-4 py-3">
-                        <span className="text-xs text-[#7C8A9E]">
+                        <span className="text-xs text-[#8a8a8a]">
                           Destination
                         </span>
-                        <span className="text-sm font-medium text-[#0C1829]">
+                        <span className="text-sm font-medium text-[#212121]">
                           {accountInfo.length > 20
                             ? accountInfo.slice(0, 8) +
                               "..." +
@@ -945,15 +945,15 @@ export default function OfframpPage() {
                         </span>
                       </div>
                       <div className="flex items-center justify-between px-4 py-3">
-                        <span className="text-xs text-[#7C8A9E]">Speed</span>
-                        <span className="text-sm font-medium text-[#0C1829] flex items-center gap-1.5">
-                          <Zap className="h-3.5 w-3.5 text-[#1B6B4A]" />
+                        <span className="text-xs text-[#8a8a8a]">Speed</span>
+                        <span className="text-sm font-medium text-[#212121] flex items-center gap-1.5">
+                          <Zap className="h-3.5 w-3.5 text-[#34c759]" />
                           {selectedMethod.speed}
                         </span>
                       </div>
                       <div className="flex items-center justify-between px-4 py-3">
-                        <span className="text-xs text-[#7C8A9E]">Rate</span>
-                        <span className="text-sm font-medium text-[#0C1829]">
+                        <span className="text-xs text-[#8a8a8a]">Rate</span>
+                        <span className="text-sm font-medium text-[#212121]">
                           1 USDC = {region.currencySymbol}
                           {region.rate.toLocaleString()}
                         </span>
@@ -961,7 +961,7 @@ export default function OfframpPage() {
                     </div>
 
                     {error && (
-                      <div className="flex items-center gap-2 text-sm text-red-500">
+                      <div className="flex items-center gap-2 text-sm text-[#e74c3c]">
                         <AlertCircle className="h-4 w-4 shrink-0" />
                         {error}
                       </div>
@@ -970,14 +970,14 @@ export default function OfframpPage() {
                     <div className="flex gap-3">
                       <button
                         onClick={() => setStep(2)}
-                        className="rounded-lg border border-[#E5E7EB] px-4 py-3 text-sm font-medium text-[#3B4963] hover:bg-[#F3F4F6] transition-colors"
+                        className="rounded-lg border border-[#d3d3d3] px-4 py-3 text-sm font-medium text-[#5c5c5c] hover:bg-[#f2f2f2] transition-colors"
                       >
                         Back
                       </button>
                       <button
                         onClick={handleSubmit}
                         disabled={submitting}
-                        className="flex-1 rounded-lg bg-[#1B6B4A] px-4 py-3 text-sm font-semibold text-white hover:bg-[#1B6B4A]/90 disabled:opacity-60 transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 rounded-lg bg-[#34c759] px-4 py-3 text-sm font-semibold text-[#212121] hover:bg-[#34c759]/90 disabled:opacity-60 transition-colors flex items-center justify-center gap-2"
                       >
                         {submitting ? (
                           <>
@@ -1004,9 +1004,9 @@ export default function OfframpPage() {
             <motion.div
               {...fadeInProps}
               transition={{ delay: 0.1 }}
-              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
+              className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-6"
             >
-              <h3 className="text-sm font-medium text-[#0C1829] mb-4">
+              <h3 className="text-sm font-medium text-[#212121] mb-4">
                 How It Works
               </h3>
               <div className="space-y-4">
@@ -1028,14 +1028,14 @@ export default function OfframpPage() {
                   },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-3">
-                    <div className="rounded-lg bg-[#1B6B4A]/10 p-2 mt-0.5">
-                      <item.icon className="h-3.5 w-3.5 text-[#1B6B4A]" />
+                    <div className="rounded-lg bg-[#34c759]/10 p-2 mt-0.5">
+                      <item.icon className="h-3.5 w-3.5 text-[#34c759]" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-[#0C1829]">
+                      <p className="text-sm font-medium text-[#212121]">
                         {item.title}
                       </p>
-                      <p className="text-xs text-[#7C8A9E] mt-0.5">
+                      <p className="text-xs text-[#8a8a8a] mt-0.5">
                         {item.desc}
                       </p>
                     </div>
@@ -1048,10 +1048,10 @@ export default function OfframpPage() {
             <motion.div
               {...fadeInProps}
               transition={{ delay: 0.15 }}
-              className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
+              className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-6"
             >
-              <div className="flex items-center gap-2 text-sm font-medium text-[#0C1829] mb-3">
-                <Shield className="h-4 w-4 text-[#1B6B4A]" />
+              <div className="flex items-center gap-2 text-sm font-medium text-[#212121] mb-3">
+                <Shield className="h-4 w-4 text-[#34c759]" />
                 Security & Compliance
               </div>
               <div className="space-y-2">
@@ -1063,9 +1063,9 @@ export default function OfframpPage() {
                 ].map((text) => (
                   <div
                     key={text}
-                    className="flex items-center gap-2 text-xs text-[#7C8A9E]"
+                    className="flex items-center gap-2 text-xs text-[#8a8a8a]"
                   >
-                    <Check className="h-3 w-3 text-[#1B6B4A] shrink-0" />
+                    <Check className="h-3 w-3 text-[#34c759] shrink-0" />
                     {text}
                   </div>
                 ))}
@@ -1077,30 +1077,30 @@ export default function OfframpPage() {
               <motion.div
                 {...fadeInProps}
                 transition={{ delay: 0.2 }}
-                className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] overflow-hidden"
+                className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] overflow-hidden"
               >
-                <div className="border-b border-[#E5E7EB] px-6 py-4">
-                  <h3 className="text-sm font-medium text-[#0C1829]">
+                <div className="border-b border-[#d3d3d3] px-6 py-4">
+                  <h3 className="text-sm font-medium text-[#212121]">
                     Recent Requests
                   </h3>
                 </div>
-                <div className="divide-y divide-[#E5E7EB]">
+                <div className="divide-y divide-[#d3d3d3]">
                   {requests.slice(0, 5).map((req) => (
                     <div
                       key={req.id}
                       className="flex items-center gap-3 px-6 py-3.5"
                     >
-                      <ArrowDownToLine className="h-4 w-4 text-[#7C8A9E] shrink-0" />
+                      <ArrowDownToLine className="h-4 w-4 text-[#8a8a8a] shrink-0" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-[#0C1829]">
+                          <span className="text-sm font-medium text-[#212121]">
                             {formatUSD(req.amount)}
                           </span>
-                          <span className="text-xs text-[#7C8A9E]">
+                          <span className="text-xs text-[#8a8a8a]">
                             via {req.method}
                           </span>
                         </div>
-                        <p className="text-xs text-[#7C8A9E] mt-0.5">
+                        <p className="text-xs text-[#8a8a8a] mt-0.5">
                           {new Date(req.createdAt).toLocaleDateString()}
                         </p>
                       </div>

@@ -56,15 +56,15 @@ export function DashboardSidebar() {
   };
 
   const sidebarContent = (
-    <div className="flex h-full flex-col bg-[#111111]">
+    <div className="flex h-full flex-col bg-[#f7f7f7]">
       {/* Logo */}
-      <div className="flex h-16 items-center px-5 border-b border-[#1f1f1f]">
+      <div className="flex h-16 items-center px-5 border-b border-[#d3d3d3]">
         <Link href="/" className="flex items-center gap-2">
-          <SettlrLogoWithIcon size="sm" variant="light" />
+          <SettlrLogoWithIcon size="sm" variant="dark" />
         </Link>
         <button
           onClick={() => setMobileOpen(false)}
-          className="ml-auto rounded-md p-1.5 text-[#666] hover:text-white lg:hidden"
+          className="ml-auto rounded-md p-1.5 text-[#5c5c5c] hover:text-[#212121] lg:hidden"
         >
           <X className="h-4 w-4" />
         </button>
@@ -72,7 +72,7 @@ export function DashboardSidebar() {
 
       {/* Subtitle */}
       <div className="px-5 pt-3 pb-2">
-        <span className="text-[10px] font-semibold tracking-[0.15em] text-[#555] uppercase">
+        <span className="text-[10px] font-semibold tracking-[0.15em] text-[#8a8a8a] uppercase">
           Wholesale Crypto
         </span>
       </div>
@@ -91,8 +91,8 @@ export function DashboardSidebar() {
               onClick={() => setMobileOpen(false)}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-colors ${
                 active
-                  ? "bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/20"
-                  : "text-[#888] hover:bg-[#1a1a1a] hover:text-white border border-transparent"
+                  ? "bg-[#34c759]/10 text-[#34c759] border border-[#34c759]/20"
+                  : "text-[#8a8a8a] hover:bg-[#f2f2f2] hover:text-[#212121] border border-transparent"
               }`}
             >
               <item.icon className="h-4 w-4 flex-shrink-0" />
@@ -108,7 +108,7 @@ export function DashboardSidebar() {
       <div className="px-3 pb-3">
         <Link
           href="/dashboard/invoices/create"
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#00ff41] px-4 py-3 text-[13px] font-bold text-black uppercase tracking-wider transition-colors hover:bg-[#00dd38]"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#34c759] px-4 py-3 text-[13px] font-bold text-black uppercase tracking-wider transition-colors hover:bg-[#2ba048]"
         >
           <Plus className="h-4 w-4" />
           Create Invoice
@@ -116,10 +116,10 @@ export function DashboardSidebar() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-[#1f1f1f] p-3 space-y-1">
+      <div className="border-t border-[#d3d3d3] p-3 space-y-1">
         <Link
           href="/help"
-          className="flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-[#666] transition-colors hover:bg-[#1a1a1a] hover:text-white"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-[#5c5c5c] transition-colors hover:bg-[#f2f2f2] hover:text-[#212121]"
         >
           <HelpCircle className="h-4 w-4" />
           <span>Support</span>
@@ -128,7 +128,7 @@ export function DashboardSidebar() {
         {connected && publicKey ? (
           <button
             onClick={() => disconnect()}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-[#666] transition-colors hover:bg-[#1a1a1a] hover:text-red-400"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-[#5c5c5c] transition-colors hover:bg-[#f2f2f2] hover:text-[#e74c3c]"
           >
             <LogOut className="h-4 w-4" />
             <span>Sign Out</span>
@@ -136,7 +136,7 @@ export function DashboardSidebar() {
         ) : (
           <button
             onClick={() => setVisible(true)}
-            className="mt-2 flex w-full items-center gap-3 rounded-lg bg-[#00ff41] px-3 py-2.5 text-[13px] font-bold text-black transition-colors hover:bg-[#00dd38]"
+            className="mt-2 flex w-full items-center gap-3 rounded-lg bg-[#34c759] px-3 py-2.5 text-[13px] font-bold text-black transition-colors hover:bg-[#2ba048]"
           >
             <Wallet className="h-4 w-4" />
             <span>Connect Wallet</span>
@@ -149,17 +149,17 @@ export function DashboardSidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="fixed left-0 right-0 top-0 z-40 flex h-14 items-center justify-between bg-[#111111] border-b border-[#1f1f1f] px-4 lg:hidden">
+      <div className="fixed left-0 right-0 top-0 z-40 flex h-14 items-center justify-between bg-[#f7f7f7] border-b border-[#d3d3d3] px-4 lg:hidden">
         <button
           onClick={() => setMobileOpen(true)}
-          className="rounded-md p-1.5 text-[#888] hover:text-white"
+          className="rounded-md p-1.5 text-[#8a8a8a] hover:text-[#212121]"
         >
           <Menu className="h-5 w-5" />
         </button>
         <SettlrLogoWithIcon size="sm" variant="light" />
         <Link
           href="/dashboard/invoices/create"
-          className="flex items-center gap-1.5 rounded-lg bg-[#00ff41] px-3 py-1.5 text-xs font-bold text-black uppercase"
+          className="flex items-center gap-1.5 rounded-lg bg-[#34c759] px-3 py-1.5 text-xs font-bold text-black uppercase"
         >
           <Plus className="h-3.5 w-3.5" />
           New
@@ -182,7 +182,7 @@ export function DashboardSidebar() {
       )}
 
       {/* Desktop sidebar */}
-      <aside className="fixed left-0 top-0 z-30 hidden h-full w-[220px] border-r border-[#1f1f1f] bg-[#111111] lg:flex lg:flex-col">
+      <aside className="fixed left-0 top-0 z-30 hidden h-full w-[220px] border-r border-[#d3d3d3] bg-[#f7f7f7] lg:flex lg:flex-col">
         {sidebarContent}
       </aside>
 
@@ -196,26 +196,26 @@ export function DashboardTopBar() {
   const { publicKey } = useActiveWallet();
 
   return (
-    <div className="hidden h-14 items-center justify-end gap-3 border-b border-[#1f1f1f] px-8 lg:flex">
+    <div className="hidden h-14 items-center justify-end gap-3 border-b border-[#d3d3d3] px-8 lg:flex">
       {/* Network Status */}
       <div className="flex items-center gap-2 mr-auto">
-        <span className="text-xs text-[#666] uppercase tracking-wider">
+        <span className="text-xs text-[#5c5c5c] uppercase tracking-wider">
           Network Status
         </span>
-        <span className="flex items-center gap-1.5 text-xs text-[#00ff41]">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#00ff41] animate-pulse" />
+        <span className="flex items-center gap-1.5 text-xs text-[#34c759]">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#34c759] animate-pulse" />
           Synchronized
         </span>
       </div>
 
       {/* Notification bell */}
-      <button className="relative rounded-lg p-2 text-[#666] hover:text-white hover:bg-[#1a1a1a] transition-colors">
+      <button className="relative rounded-lg p-2 text-[#5c5c5c] hover:text-[#212121] hover:bg-[#f2f2f2] transition-colors">
         <Bell className="h-4 w-4" />
       </button>
 
       {/* User avatar */}
-      <div className="h-8 w-8 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center">
-        <span className="text-xs text-[#888]">
+      <div className="h-8 w-8 rounded-full bg-[#f2f2f2] border border-[#d3d3d3] flex items-center justify-center">
+        <span className="text-xs text-[#8a8a8a]">
           {publicKey ? publicKey.slice(0, 2).toUpperCase() : "??"}
         </span>
       </div>

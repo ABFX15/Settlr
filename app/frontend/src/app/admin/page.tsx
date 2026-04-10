@@ -366,13 +366,13 @@ export default function AdminDashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#1B6B4A]/10 flex items-center justify-center border border-[#1B6B4A]/20">
-              <Key className="w-10 h-10 text-[#1B6B4A]" />
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#34c759]/10 flex items-center justify-center border border-[#34c759]/20">
+              <Key className="w-10 h-10 text-[#34c759]" />
             </div>
-            <h1 className="text-3xl font-bold text-[#0C1829] mb-4">
+            <h1 className="text-3xl font-bold text-[#212121] mb-4">
               Platform Admin
             </h1>
-            <p className="text-[#7C8A9E] mb-8">
+            <p className="text-[#8a8a8a] mb-8">
               Enter your admin secret to access the dashboard.
             </p>
             <div className="space-y-4">
@@ -382,13 +382,13 @@ export default function AdminDashboardPage() {
                 value={adminSecret}
                 onChange={(e) => setAdminSecret(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleAdminLogin()}
-                className="w-full px-4 py-3 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB] text-[#0C1829] placeholder:text-[#7C8A9E] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
+                className="w-full px-4 py-3 rounded-xl bg-[#f2f2f2] border border-[#d3d3d3] text-[#212121] placeholder:text-[#8a8a8a] focus:outline-none focus:ring-2 focus:ring-[#34c759]/30"
               />
-              {authError && <p className="text-sm text-red-500">{authError}</p>}
+              {authError && <p className="text-sm text-[#e74c3c]">{authError}</p>}
               <button
                 onClick={handleAdminLogin}
                 disabled={!adminSecret}
-                className="w-full inline-flex items-center justify-center gap-2 bg-[#1B6B4A] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#155a3e] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#34c759] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#155a3e] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <LogIn className="w-5 h-5" />
                 Sign In
@@ -404,14 +404,14 @@ export default function AdminDashboardPage() {
   return (
     <div className="min-h-screen bg-[#FFFFFF]">
       {/* Header */}
-      <header className="border-b border-[#E5E7EB] bg-[#FFFFFF]/20 backdrop-blur-xl sticky top-0 z-50">
+      <header className="border-b border-[#d3d3d3] bg-[#FFFFFF]/20 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-[#1B6B4A] flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-[#0C1829]" />
+              <div className="w-10 h-10 rounded-xl bg-[#34c759] flex items-center justify-center">
+                <DollarSign className="w-5 h-5 text-[#212121]" />
               </div>
-              <span className="text-xl font-bold text-[#1B6B4A]">
+              <span className="text-xl font-bold text-[#34c759]">
                 Settlr Admin
               </span>
             </Link>
@@ -420,38 +420,38 @@ export default function AdminDashboardPage() {
             <button
               onClick={fetchTreasuryData}
               disabled={loading}
-              className="p-2 rounded-lg bg-[#F3F4F6] hover:bg-[#F3F4F6] border border-[#E5E7EB] transition-all"
+              className="p-2 rounded-lg bg-[#f2f2f2] hover:bg-[#f2f2f2] border border-[#d3d3d3] transition-all"
               title="Refresh"
             >
               <RefreshCw
-                className={`w-5 h-5 text-[#7C8A9E] ${
+                className={`w-5 h-5 text-[#8a8a8a] ${
                   loading ? "animate-spin" : ""
                 }`}
               />
             </button>
             {publicKey ? (
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB]">
-                <Wallet className="w-4 h-4 text-[#1B6B4A]" />
-                <span className="text-sm text-[#3B4963]">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#f2f2f2] border border-[#d3d3d3]">
+                <Wallet className="w-4 h-4 text-[#34c759]" />
+                <span className="text-sm text-[#5c5c5c]">
                   {shortenAddress(publicKey)}
                 </span>
                 {isAuthority && (
-                  <span className="ml-1 px-2 py-0.5 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] text-xs font-medium">
+                  <span className="ml-1 px-2 py-0.5 rounded-full bg-[#34c759]/15 text-[#34c759] text-xs font-medium">
                     Authority
                   </span>
                 )}
                 <button
                   onClick={disconnectPhantom}
-                  className="ml-1 p-1 rounded hover:bg-[#E5E7EB] transition-colors"
+                  className="ml-1 p-1 rounded hover:bg-[#d3d3d3] transition-colors"
                   title="Disconnect wallet"
                 >
-                  <X className="w-3.5 h-3.5 text-[#7C8A9E]" />
+                  <X className="w-3.5 h-3.5 text-[#8a8a8a]" />
                 </button>
               </div>
             ) : (
               <button
                 onClick={connectPhantom}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1B6B4A] text-white text-sm font-medium hover:bg-[#155a3e] transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#34c759] text-white text-sm font-medium hover:bg-[#155a3e] transition-all"
               >
                 <Wallet className="w-4 h-4" />
                 Connect Phantom
@@ -459,10 +459,10 @@ export default function AdminDashboardPage() {
             )}
             <button
               onClick={handleAdminLogout}
-              className="p-2 rounded-lg hover:bg-[#F3F4F6] border border-[#E5E7EB] transition-all"
+              className="p-2 rounded-lg hover:bg-[#f2f2f2] border border-[#d3d3d3] transition-all"
               title="Sign out"
             >
-              <LogOut className="w-5 h-5 text-[#7C8A9E]" />
+              <LogOut className="w-5 h-5 text-[#8a8a8a]" />
             </button>
           </div>
         </div>
@@ -476,12 +476,12 @@ export default function AdminDashboardPage() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-3"
+              className="mb-6 p-4 rounded-xl bg-[#e74c3c]/10 border border-[#e74c3c]/20 flex items-center gap-3"
             >
-              <X className="w-5 h-5 text-red-400 shrink-0" />
-              <span className="text-red-300 flex-1">{error}</span>
+              <X className="w-5 h-5 text-[#e74c3c] shrink-0" />
+              <span className="text-[#e74c3c]/70 flex-1">{error}</span>
               <button onClick={() => setError(null)} className="ml-auto">
-                <X className="w-4 h-4 text-red-400" />
+                <X className="w-4 h-4 text-[#e74c3c]" />
               </button>
             </motion.div>
           )}
@@ -490,13 +490,13 @@ export default function AdminDashboardPage() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="mb-6 p-4 rounded-xl bg-[#1B6B4A]/10 border border-[#1B6B4A]/20"
+              className="mb-6 p-4 rounded-xl bg-[#34c759]/10 border border-[#34c759]/20"
             >
               <div className="flex items-center gap-3">
-                <Check className="w-5 h-5 text-[#1B6B4A] shrink-0" />
-                <span className="text-green-300 flex-1">{success}</span>
+                <Check className="w-5 h-5 text-[#34c759] shrink-0" />
+                <span className="text-[#34c759] flex-1">{success}</span>
                 <button onClick={() => setSuccess(null)} className="ml-auto">
-                  <X className="w-4 h-4 text-[#1B6B4A]" />
+                  <X className="w-4 h-4 text-[#34c759]" />
                 </button>
               </div>
               {claimTxSig && (
@@ -504,7 +504,7 @@ export default function AdminDashboardPage() {
                   href={`${explorerBase}/tx/${claimTxSig}${clusterParam}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 mt-2 ml-8 text-sm text-[#1B6B4A] hover:underline"
+                  className="inline-flex items-center gap-1.5 mt-2 ml-8 text-sm text-[#34c759] hover:underline"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   View on Explorer
@@ -519,21 +519,21 @@ export default function AdminDashboardPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20"
+            className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-[#d29500]/20"
           >
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0">
-                <Shield className="w-6 h-6 text-amber-400" />
+              <div className="w-12 h-12 rounded-xl bg-[#d29500]/20 flex items-center justify-center shrink-0">
+                <Shield className="w-6 h-6 text-[#d29500]" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-[#0C1829] mb-1">
+                <h2 className="text-lg font-bold text-[#212121] mb-1">
                   Read-Only Mode
                 </h2>
-                <p className="text-sm text-[#7C8A9E] mb-2">
+                <p className="text-sm text-[#8a8a8a] mb-2">
                   Your wallet is not the platform authority. You can view
                   treasury data but cannot claim fees.
                 </p>
-                <p className="text-xs text-[#7C8A9E]">
+                <p className="text-xs text-[#8a8a8a]">
                   Authority:{" "}
                   <code className="bg-white/10 px-1.5 py-0.5 rounded">
                     {data.platformConfig.authority}
@@ -550,26 +550,26 @@ export default function AdminDashboardPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-2xl bg-[#1B6B4A]/[0.06] border border-[#a78bfa]/20 p-6 md:col-span-2"
+            className="relative overflow-hidden rounded-2xl bg-[#34c759]/[0.06] border border-[#8e24aa]/20 p-6 md:col-span-2"
           >
-            <div className="absolute top-0 right-0 w-40 h-40 bg-[#1B6B4A]/10 rounded-full blur-3xl" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-[#34c759]/10 rounded-full blur-3xl" />
             <div className="relative">
               <div className="flex items-center gap-3 mb-1">
-                <div className="w-12 h-12 rounded-xl bg-[#1B6B4A]/15 flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-[#1B6B4A]" />
+                <div className="w-12 h-12 rounded-xl bg-[#34c759]/15 flex items-center justify-center">
+                  <DollarSign className="w-6 h-6 text-[#34c759]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#7C8A9E]">Treasury Balance</p>
+                  <p className="text-sm text-[#8a8a8a]">Treasury Balance</p>
                   {loading ? (
                     <div className="h-8 w-32 bg-white/10 rounded animate-pulse mt-1" />
                   ) : (
-                    <p className="text-3xl font-bold text-[#0C1829]">
+                    <p className="text-3xl font-bold text-[#212121]">
                       {formatUSD(data?.treasuryBalance ?? 0)}
                     </p>
                   )}
                 </div>
               </div>
-              <p className="text-xs text-[#7C8A9E] mb-5 ml-15">
+              <p className="text-xs text-[#8a8a8a] mb-5 ml-15">
                 USDC accumulated from platform fees
               </p>
 
@@ -583,8 +583,8 @@ export default function AdminDashboardPage() {
                 }
                 className={`w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${
                   isAuthority && (data?.treasuryBalance ?? 0) > 0
-                    ? "bg-[#1B6B4A] text-[#0C1829] hover:bg-[#9371e8] cursor-pointer"
-                    : "bg-[#F3F4F6] text-[#7C8A9E] cursor-not-allowed"
+                    ? "bg-[#34c759] text-[#212121] hover:bg-[#9371e8] cursor-pointer"
+                    : "bg-[#f2f2f2] text-[#8a8a8a] cursor-not-allowed"
                 }`}
               >
                 {claiming ? (
@@ -604,7 +604,7 @@ export default function AdminDashboardPage() {
                 )}
               </button>
               {isAuthority && (data?.treasuryBalance ?? 0) > 0 && (
-                <p className="text-xs text-[#7C8A9E] mt-2 text-center">
+                <p className="text-xs text-[#8a8a8a] mt-2 text-center">
                   Signs a transaction to transfer USDC from treasury PDA to your
                   wallet
                 </p>
@@ -617,18 +617,18 @@ export default function AdminDashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6"
+            className="rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6"
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
                 <TrendingUp className="w-6 h-6 text-cyan-400" />
               </div>
               <div>
-                <p className="text-sm text-[#7C8A9E]">Platform Fee</p>
+                <p className="text-sm text-[#8a8a8a]">Platform Fee</p>
                 {loading ? (
                   <div className="h-8 w-16 bg-white/10 rounded animate-pulse mt-1" />
                 ) : (
-                  <p className="text-2xl font-bold text-[#0C1829]">
+                  <p className="text-2xl font-bold text-[#212121]">
                     {data?.platformConfig
                       ? `${(data.platformConfig.feeBps / 100).toFixed(1)}%`
                       : "—"}
@@ -636,7 +636,7 @@ export default function AdminDashboardPage() {
                 )}
               </div>
             </div>
-            <p className="text-sm text-[#7C8A9E]">
+            <p className="text-sm text-[#8a8a8a]">
               Fee collected from each payment
             </p>
           </motion.div>
@@ -646,30 +646,30 @@ export default function AdminDashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6"
+            className="rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6"
           >
             <div className="flex items-center gap-3 mb-4">
               <div
                 className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                   data?.platformConfig?.isActive
-                    ? "bg-[#1B6B4A]/15"
-                    : "bg-red-500/20"
+                    ? "bg-[#34c759]/15"
+                    : "bg-[#e74c3c]/20"
                 }`}
               >
                 <Activity
                   className={`w-6 h-6 ${
                     data?.platformConfig?.isActive
-                      ? "text-[#1B6B4A]"
-                      : "text-red-400"
+                      ? "text-[#34c759]"
+                      : "text-[#e74c3c]"
                   }`}
                 />
               </div>
               <div>
-                <p className="text-sm text-[#7C8A9E]">Status</p>
+                <p className="text-sm text-[#8a8a8a]">Status</p>
                 {loading ? (
                   <div className="h-8 w-20 bg-white/10 rounded animate-pulse mt-1" />
                 ) : (
-                  <p className="text-2xl font-bold text-[#0C1829]">
+                  <p className="text-2xl font-bold text-[#212121]">
                     {data?.platformConfig?.isActive ? "Active" : "Inactive"}
                   </p>
                 )}
@@ -678,10 +678,10 @@ export default function AdminDashboardPage() {
             <div className="flex items-center gap-2">
               <span
                 className={`w-2 h-2 rounded-full ${
-                  data?.platformConfig?.isActive ? "bg-green-400" : "bg-red-400"
+                  data?.platformConfig?.isActive ? "bg-[#34c759]" : "bg-[#e74c3c]/80"
                 } animate-pulse`}
               />
-              <span className="text-sm text-[#7C8A9E]">
+              <span className="text-sm text-[#8a8a8a]">
                 {data?.platformConfig?.isActive
                   ? "Processing payments"
                   : "Payments paused"}
@@ -698,25 +698,25 @@ export default function AdminDashboardPage() {
             transition={{ delay: 0.25 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
           >
-            <div className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6">
+            <div className="rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6">
               <div className="flex items-center gap-3 mb-2">
-                <BarChart3 className="w-5 h-5 text-[#1B6B4A]" />
-                <span className="text-sm text-[#7C8A9E]">
+                <BarChart3 className="w-5 h-5 text-[#34c759]" />
+                <span className="text-sm text-[#8a8a8a]">
                   Lifetime Volume (on-chain)
                 </span>
               </div>
-              <p className="text-2xl font-bold text-[#0C1829]">
+              <p className="text-2xl font-bold text-[#212121]">
                 {formatLamports(data.platformConfig.totalVolume)}
               </p>
             </div>
-            <div className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6">
+            <div className="rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6">
               <div className="flex items-center gap-3 mb-2">
                 <Download className="w-5 h-5 text-cyan-400" />
-                <span className="text-sm text-[#7C8A9E]">
+                <span className="text-sm text-[#8a8a8a]">
                   Lifetime Fees Collected (on-chain)
                 </span>
               </div>
-              <p className="text-2xl font-bold text-[#0C1829]">
+              <p className="text-2xl font-bold text-[#212121]">
                 {formatLamports(data.platformConfig.totalFees)}
               </p>
             </div>
@@ -728,10 +728,10 @@ export default function AdminDashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6 mb-8"
+          className="rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6 mb-8"
         >
-          <h2 className="text-xl font-bold text-[#0C1829] mb-6 flex items-center gap-2">
-            <Wallet className="w-5 h-5 text-[#1B6B4A]" />
+          <h2 className="text-xl font-bold text-[#212121] mb-6 flex items-center gap-2">
+            <Wallet className="w-5 h-5 text-[#34c759]" />
             On-Chain Details
           </h2>
 
@@ -760,34 +760,34 @@ export default function AdminDashboardPage() {
             ].map((item) => (
               <div
                 key={item.id}
-                className="p-4 rounded-xl bg-[#FFFFFF]/30 border border-[#E5E7EB]"
+                className="p-4 rounded-xl bg-[#FFFFFF]/30 border border-[#d3d3d3]"
               >
-                <span className="text-sm text-[#7C8A9E] block mb-2">
+                <span className="text-sm text-[#8a8a8a] block mb-2">
                   {item.label}
                 </span>
                 <div className="flex items-center gap-2">
-                  <code className="text-sm text-[#0C1829] font-mono flex-1 truncate">
+                  <code className="text-sm text-[#212121] font-mono flex-1 truncate">
                     {item.value}
                   </code>
                   <button
                     onClick={() => copyToClipboard(item.value, item.id)}
-                    className="p-2 rounded-lg hover:bg-[#F3F4F6] transition-colors shrink-0"
+                    className="p-2 rounded-lg hover:bg-[#f2f2f2] transition-colors shrink-0"
                     title="Copy"
                   >
                     {copied === item.id ? (
-                      <Check className="w-4 h-4 text-[#1B6B4A]" />
+                      <Check className="w-4 h-4 text-[#34c759]" />
                     ) : (
-                      <Copy className="w-4 h-4 text-[#7C8A9E]" />
+                      <Copy className="w-4 h-4 text-[#8a8a8a]" />
                     )}
                   </button>
                   <a
                     href={`${explorerBase}/address/${item.value}${clusterParam}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-lg hover:bg-[#F3F4F6] transition-colors shrink-0"
+                    className="p-2 rounded-lg hover:bg-[#f2f2f2] transition-colors shrink-0"
                     title="View on Explorer"
                   >
-                    <ExternalLink className="w-4 h-4 text-[#7C8A9E]" />
+                    <ExternalLink className="w-4 h-4 text-[#8a8a8a]" />
                   </a>
                 </div>
               </div>
@@ -804,23 +804,23 @@ export default function AdminDashboardPage() {
         >
           <Link
             href="/dashboard"
-            className="p-4 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB] hover:bg-[#F3F4F6] transition-all flex items-center justify-between group"
+            className="p-4 rounded-xl bg-[#f2f2f2] border border-[#d3d3d3] hover:bg-[#f2f2f2] transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
-              <Wallet className="w-5 h-5 text-[#7C8A9E]" />
-              <span className="text-[#0C1829]">Merchant Dashboard</span>
+              <Wallet className="w-5 h-5 text-[#8a8a8a]" />
+              <span className="text-[#212121]">Merchant Dashboard</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-[#7C8A9E] group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-[#8a8a8a] group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="/docs"
-            className="p-4 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB] hover:bg-[#F3F4F6] transition-all flex items-center justify-between group"
+            className="p-4 rounded-xl bg-[#f2f2f2] border border-[#d3d3d3] hover:bg-[#f2f2f2] transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
-              <Key className="w-5 h-5 text-[#7C8A9E]" />
-              <span className="text-[#0C1829]">API Documentation</span>
+              <Key className="w-5 h-5 text-[#8a8a8a]" />
+              <span className="text-[#212121]">API Documentation</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-[#7C8A9E] group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-[#8a8a8a] group-hover:translate-x-1 transition-transform" />
           </Link>
           <a
             href={`${explorerBase}/address/${
@@ -828,13 +828,13 @@ export default function AdminDashboardPage() {
             }${clusterParam}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-4 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB] hover:bg-[#F3F4F6] transition-all flex items-center justify-between group"
+            className="p-4 rounded-xl bg-[#f2f2f2] border border-[#d3d3d3] hover:bg-[#f2f2f2] transition-all flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">
-              <ExternalLink className="w-5 h-5 text-[#7C8A9E]" />
-              <span className="text-[#0C1829]">Program on Explorer</span>
+              <ExternalLink className="w-5 h-5 text-[#8a8a8a]" />
+              <span className="text-[#212121]">Program on Explorer</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-[#7C8A9E] group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-[#8a8a8a] group-hover:translate-x-1 transition-transform" />
           </a>
         </motion.div>
 
@@ -843,10 +843,10 @@ export default function AdminDashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-12 rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] p-6"
+          className="mt-12 rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6"
         >
-          <h2 className="text-xl font-bold text-[#0C1829] mb-6 flex items-center gap-2">
-            <Shield className="w-5 h-5 text-[#1B6B4A]" />
+          <h2 className="text-xl font-bold text-[#212121] mb-6 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-[#34c759]" />
             Waitlist Management
           </h2>
 
@@ -855,7 +855,7 @@ export default function AdminDashboardPage() {
             <div className="text-center py-4">
               <button
                 onClick={fetchWaitlist}
-                className="px-5 py-2.5 rounded-xl bg-[#1B6B4A] text-white text-sm font-semibold hover:bg-[#155a3e] transition-all"
+                className="px-5 py-2.5 rounded-xl bg-[#34c759] text-white text-sm font-semibold hover:bg-[#155a3e] transition-all"
               >
                 Load Waitlist
               </button>
@@ -864,20 +864,20 @@ export default function AdminDashboardPage() {
 
           {waitlistLoading && (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 animate-spin text-[#1B6B4A]" />
+              <Loader2 className="w-6 h-6 animate-spin text-[#34c759]" />
             </div>
           )}
 
           {waitlistEntries.length > 0 && (
             <>
               <div className="flex items-center justify-between mb-4">
-                <p className="text-sm text-[#7C8A9E]">
+                <p className="text-sm text-[#8a8a8a]">
                   {waitlistEntries.length}{" "}
                   {waitlistEntries.length === 1 ? "entry" : "entries"}
                 </p>
                 <button
                   onClick={fetchWaitlist}
-                  className="text-sm text-[#1B6B4A] hover:underline flex items-center gap-1"
+                  className="text-sm text-[#34c759] hover:underline flex items-center gap-1"
                 >
                   <RefreshCw className="w-3.5 h-3.5" /> Refresh
                 </button>
@@ -886,30 +886,30 @@ export default function AdminDashboardPage() {
                 {waitlistEntries.map((entry: any) => (
                   <div
                     key={entry.id || entry.email}
-                    className="flex items-center justify-between p-4 rounded-xl bg-[#FFFFFF] border border-[#E5E7EB]"
+                    className="flex items-center justify-between p-4 rounded-xl bg-[#FFFFFF] border border-[#d3d3d3]"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-[#0C1829] truncate">
+                        <span className="text-sm font-medium text-[#212121] truncate">
                           {entry.name || entry.email}
                         </span>
                         <span
                           className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                             entry.status === "invited" ||
                             entry.status === "active"
-                              ? "bg-[#1B6B4A]/15 text-[#1B6B4A]"
-                              : "bg-amber-100 text-amber-700"
+                              ? "bg-[#34c759]/15 text-[#34c759]"
+                              : "bg-[#d29500]/20 text-[#d29500]"
                           }`}
                         >
                           {entry.status}
                         </span>
                       </div>
-                      <p className="text-xs text-[#7C8A9E] truncate">
+                      <p className="text-xs text-[#8a8a8a] truncate">
                         {entry.email}
                         {entry.company ? ` · ${entry.company}` : ""}
                       </p>
                       {entry.useCase && (
-                        <p className="text-xs text-[#7C8A9E] mt-1 truncate">
+                        <p className="text-xs text-[#8a8a8a] mt-1 truncate">
                           {entry.useCase}
                         </p>
                       )}
@@ -919,7 +919,7 @@ export default function AdminDashboardPage() {
                         <button
                           onClick={() => handleApprove(entry.email)}
                           disabled={approvingEmail === entry.email}
-                          className="px-4 py-2 rounded-lg bg-[#1B6B4A] text-white text-sm font-medium hover:bg-[#155a3e] transition-all disabled:opacity-50 flex items-center gap-2"
+                          className="px-4 py-2 rounded-lg bg-[#34c759] text-white text-sm font-medium hover:bg-[#155a3e] transition-all disabled:opacity-50 flex items-center gap-2"
                         >
                           {approvingEmail === entry.email ? (
                             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -929,7 +929,7 @@ export default function AdminDashboardPage() {
                           Approve
                         </button>
                       ) : (
-                        <span className="text-xs text-[#1B6B4A] font-medium flex items-center gap-1">
+                        <span className="text-xs text-[#34c759] font-medium flex items-center gap-1">
                           <Check className="w-3.5 h-3.5" /> Approved
                         </span>
                       )}

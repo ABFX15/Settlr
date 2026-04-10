@@ -20,16 +20,16 @@ import { Footer } from "@/components/ui/Footer";
 /* ── Design tokens (matches homepage) ──────────────────── */
 const p = {
   bg: "#FFFFFF",
-  bgSubtle: "#F9FAFB",
-  bgMuted: "#F5F5F5",
-  navy: "#0C1829",
-  slate: "#3B4963",
-  muted: "#7C8A9E",
-  green: "#1B6B4A",
-  greenDark: "#155939",
-  border: "#E5E7EB",
-  red: "#DC2626",
-  amber: "#B8860B",
+  bgSubtle: "#f2f2f2",
+  bgMuted: "#f2f2f2",
+  navy: "#212121",
+  slate: "#5c5c5c",
+  muted: "#8a8a8a",
+  green: "#34c759",
+  greenDark: "#2ba048",
+  border: "#d3d3d3",
+  red: "#e74c3c",
+  amber: "#d29500",
   white: "#FFFFFF",
 };
 
@@ -105,7 +105,7 @@ export default function InvoicesPage() {
                 <span
                   style={{
                     background:
-                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                      "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -134,7 +134,7 @@ export default function InvoicesPage() {
                 className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                 style={{
                   background:
-                    "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                    "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   boxShadow: "0 4px 24px rgba(27,107,74,0.25)",
                 }}
               >
@@ -169,9 +169,9 @@ export default function InvoicesPage() {
                 }}
               >
                 <div className="flex gap-1.5">
-                  <div className="h-3 w-3 rounded-full bg-red-400/80" />
-                  <div className="h-3 w-3 rounded-full bg-amber-400/80" />
-                  <div className="h-3 w-3 rounded-full bg-green-400/80" />
+                  <div className="h-3 w-3 rounded-full bg-[#e74c3c]/80/80" />
+                  <div className="h-3 w-3 rounded-full bg-[#ffc107]/80" />
+                  <div className="h-3 w-3 rounded-full bg-[#34c759]/80" />
                 </div>
                 <div
                   className="flex-1 text-center text-xs font-medium"
@@ -806,7 +806,7 @@ export default function InvoicesPage() {
                   Send your first{" "}
                   <span
                     style={{
-                      background: "linear-gradient(135deg, #1B6B4A, #2D9D6E)",
+                      background: "linear-gradient(135deg, #34c759, #2D9D6E)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                     }}
@@ -827,7 +827,7 @@ export default function InvoicesPage() {
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:
-                        "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                        "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                       boxShadow: "0 4px 24px rgba(27,107,74,0.3)",
                     }}
                   >

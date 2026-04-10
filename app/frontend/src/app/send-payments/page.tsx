@@ -46,7 +46,7 @@ function Reveal({
 export default function SendPaymentsPage() {
   return (
     <main
-      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#212121] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       {/* JSON-LD */}
@@ -72,11 +72,11 @@ export default function SendPaymentsPage() {
 
       {/* ─── Hero ─── */}
       <section className="relative isolate pt-28 pb-20 md:pt-40 md:pb-28">
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-[#1B6B4A]/[0.06] blur-[120px]" />
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-[#34c759]/[0.06] blur-[120px]" />
 
         <div className="relative z-10 mx-auto max-w-5xl px-6">
           <Reveal>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#1B6B4A]/[0.1] px-4 py-1.5 text-[13px] text-[#1B6B4A] font-medium">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#34c759]/[0.1] px-4 py-1.5 text-[13px] text-[#34c759] font-medium">
               <ArrowUpRight className="h-3.5 w-3.5" />
               Settlement API
             </div>
@@ -85,12 +85,12 @@ export default function SendPaymentsPage() {
           <Reveal delay={0.05}>
             <h1 className="max-w-3xl text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.1] tracking-tight">
               Non-custodial B2B settlement{" "}
-              <span className="text-[#1B6B4A]">for the debanked</span>
+              <span className="text-[#34c759]">for the debanked</span>
             </h1>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#5c5c5c]">
               One API call. USDC settles to your vendor&apos;s wallet in under a
               second. Non-custodial multisig, no bank interference, no
               chargebacks. Built for cannabis and high-risk B2B.
@@ -101,14 +101,14 @@ export default function SendPaymentsPage() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1B6B4A] px-7 py-3.5 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#34c759] px-7 py-3.5 text-[15px] font-semibold text-[#212121] shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02]"
               >
                 Start sending payments
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/docs?tab=settlement"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E5E7EB] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d3d3d3] px-7 py-3.5 text-[15px] font-medium text-[#5c5c5c] hover:bg-[#f2f2f2]"
               >
                 Read the docs
               </Link>
@@ -118,10 +118,10 @@ export default function SendPaymentsPage() {
       </section>
 
       {/* ─── How it works ─── */}
-      <section className="border-y border-[#E5E7EB]/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#d3d3d3]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#34c759]">
               How it works
             </p>
           </Reveal>
@@ -158,21 +158,21 @@ export default function SendPaymentsPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.step} delay={i * 0.08}>
-                <div className="relative rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
-                  <span className="mb-4 block text-xs font-bold text-[#1B6B4A]/60">
+                <div className="relative rounded-2xl border border-[#d3d3d3] bg-white/[0.02] p-6">
+                  <span className="mb-4 block text-xs font-bold text-[#34c759]/60">
                     STEP {item.step}
                   </span>
-                  <div className="mb-4 inline-flex rounded-xl bg-[#1B6B4A]/10 p-2.5">
-                    <item.icon className="h-5 w-5 text-[#1B6B4A]" />
+                  <div className="mb-4 inline-flex rounded-xl bg-[#34c759]/10 p-2.5">
+                    <item.icon className="h-5 w-5 text-[#34c759]" />
                   </div>
-                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
+                  <h3 className="text-[15px] font-semibold text-[#212121]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
+                  <p className="mt-2 text-sm leading-relaxed text-[#8a8a8a]">
                     {item.text}
                   </p>
                   {item.code && (
-                    <pre className="mt-4 overflow-x-auto rounded-xl bg-[#08080d] border border-[#E5E7EB] p-4 font-mono text-[12px] leading-relaxed text-[#7C8A9E]">
+                    <pre className="mt-4 overflow-x-auto rounded-xl bg-[#212121] border border-[#d3d3d3] p-4 font-mono text-[12px] leading-relaxed text-[#8a8a8a]">
                       {item.code}
                     </pre>
                   )}
@@ -186,7 +186,7 @@ export default function SendPaymentsPage() {
       {/* ─── Why stablecoins ─── */}
       <section className="mx-auto max-w-5xl px-6 py-28">
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
+          <p className="text-sm font-medium uppercase tracking-widest text-[#34c759]">
             Why stablecoin payments
           </p>
         </Reveal>
@@ -194,7 +194,7 @@ export default function SendPaymentsPage() {
           <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight md:text-4xl">
             Traditional payments are expensive, slow, and limited
           </h2>
-          <p className="mt-4 max-w-xl text-[#7C8A9E] leading-relaxed">
+          <p className="mt-4 max-w-xl text-[#8a8a8a] leading-relaxed">
             Stablecoin payments remove the middlemen. No correspondent banks, no
             FX desks, no 3-day settlement windows. Just USDC moving from your
             platform to your recipient — instantly.
@@ -229,7 +229,7 @@ export default function SendPaymentsPage() {
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.06}>
-              <div className="group relative overflow-hidden rounded-2xl bg-[#08080d] p-6 transition-all duration-300 hover:bg-[#0c0c14]">
+              <div className="group relative overflow-hidden rounded-2xl bg-[#212121] p-6 transition-all duration-300 hover:bg-[#2a2a2a]">
                 <div
                   className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full"
                   style={{ background: item.color }}
@@ -243,10 +243,10 @@ export default function SendPaymentsPage() {
                     style={{ color: item.color }}
                   />
                 </div>
-                <h3 className="text-[15px] font-semibold text-[#0C1829]">
+                <h3 className="text-[15px] font-semibold text-[#212121]">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
+                <p className="mt-2 text-sm leading-relaxed text-[#8a8a8a]">
                   {item.text}
                 </p>
               </div>
@@ -256,10 +256,10 @@ export default function SendPaymentsPage() {
       </section>
 
       {/* ─── Features ─── */}
-      <section className="border-y border-[#E5E7EB]/[0.04]">
+      <section className="border-y border-[#d3d3d3]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-widest text-[#1B6B4A]">
+            <p className="text-sm font-medium uppercase tracking-widest text-[#34c759]">
               Built for scale
             </p>
           </Reveal>
@@ -303,14 +303,14 @@ export default function SendPaymentsPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.06}>
-                <div className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
-                  <div className="mb-4 inline-flex rounded-xl bg-[#1B6B4A]/10 p-2.5">
-                    <item.icon className="h-5 w-5 text-[#1B6B4A]" />
+                <div className="rounded-2xl border border-[#d3d3d3] bg-white/[0.02] p-6">
+                  <div className="mb-4 inline-flex rounded-xl bg-[#34c759]/10 p-2.5">
+                    <item.icon className="h-5 w-5 text-[#34c759]" />
                   </div>
-                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
+                  <h3 className="text-[15px] font-semibold text-[#212121]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
+                  <p className="mt-2 text-sm leading-relaxed text-[#8a8a8a]">
                     {item.text}
                   </p>
                 </div>
@@ -329,23 +329,23 @@ export default function SendPaymentsPage() {
         </Reveal>
 
         <Reveal delay={0.08}>
-          <div className="mt-12 overflow-x-auto rounded-2xl border border-[#E5E7EB]">
+          <div className="mt-12 overflow-x-auto rounded-2xl border border-[#d3d3d3]">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#E5E7EB] bg-white/[0.02]">
-                  <th className="px-6 py-4 text-left font-medium text-[#7C8A9E]">
+                <tr className="border-b border-[#d3d3d3] bg-white/[0.02]">
+                  <th className="px-6 py-4 text-left font-medium text-[#8a8a8a]">
                     &nbsp;
                   </th>
-                  <th className="px-6 py-4 text-left font-semibold text-[#1B6B4A]">
+                  <th className="px-6 py-4 text-left font-semibold text-[#34c759]">
                     Settlr
                   </th>
-                  <th className="px-6 py-4 text-left font-medium text-[#7C8A9E]">
+                  <th className="px-6 py-4 text-left font-medium text-[#8a8a8a]">
                     Wire Transfer
                   </th>
-                  <th className="px-6 py-4 text-left font-medium text-[#7C8A9E]">
+                  <th className="px-6 py-4 text-left font-medium text-[#8a8a8a]">
                     PayPal
                   </th>
-                  <th className="px-6 py-4 text-left font-medium text-[#7C8A9E]">
+                  <th className="px-6 py-4 text-left font-medium text-[#8a8a8a]">
                     Stripe Connect
                   </th>
                 </tr>
@@ -389,13 +389,13 @@ export default function SendPaymentsPage() {
                   },
                 ].map((row) => (
                   <tr key={row.label}>
-                    <td className="px-6 py-3 text-[#7C8A9E]">{row.label}</td>
-                    <td className="px-6 py-3 font-medium text-[#1B6B4A]">
+                    <td className="px-6 py-3 text-[#8a8a8a]">{row.label}</td>
+                    <td className="px-6 py-3 font-medium text-[#34c759]">
                       {row.settlr}
                     </td>
-                    <td className="px-6 py-3 text-[#7C8A9E]">{row.wire}</td>
-                    <td className="px-6 py-3 text-[#7C8A9E]">{row.paypal}</td>
-                    <td className="px-6 py-3 text-[#7C8A9E]">{row.stripe}</td>
+                    <td className="px-6 py-3 text-[#8a8a8a]">{row.wire}</td>
+                    <td className="px-6 py-3 text-[#8a8a8a]">{row.paypal}</td>
+                    <td className="px-6 py-3 text-[#8a8a8a]">{row.stripe}</td>
                   </tr>
                 ))}
               </tbody>
@@ -405,13 +405,13 @@ export default function SendPaymentsPage() {
       </section>
 
       {/* ─── Use cases ─── */}
-      <section className="border-y border-[#E5E7EB]/[0.04]">
+      <section className="border-y border-[#d3d3d3]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
               Who sends payments with Settlr
             </h2>
-            <p className="mt-4 text-center text-[#7C8A9E]">
+            <p className="mt-4 text-center text-[#8a8a8a]">
               Any business in a debanked or high-risk industry.
             </p>
           </Reveal>
@@ -430,11 +430,11 @@ export default function SendPaymentsPage() {
               <Reveal key={item.label} delay={i * 0.04}>
                 <Link
                   href={item.link}
-                  className="flex items-center gap-3 rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-4 transition-colors hover:bg-[#F3F4F6]"
+                  className="flex items-center gap-3 rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-4 transition-colors hover:bg-[#f2f2f2]"
                 >
-                  <Check className="h-4 w-4 flex-shrink-0 text-[#1B6B4A]" />
-                  <span className="text-sm text-[#3B4963]">{item.label}</span>
-                  <ArrowRight className="ml-auto h-3.5 w-3.5 text-[#7C8A9E]/60" />
+                  <Check className="h-4 w-4 flex-shrink-0 text-[#34c759]" />
+                  <span className="text-sm text-[#5c5c5c]">{item.label}</span>
+                  <ArrowRight className="ml-auto h-3.5 w-3.5 text-[#8a8a8a]/60" />
                 </Link>
               </Reveal>
             ))}
@@ -450,11 +450,11 @@ export default function SendPaymentsPage() {
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
               Start sending{" "}
-              <span className="text-[#1B6B4A]">stablecoin payments</span> today
+              <span className="text-[#34c759]">stablecoin payments</span> today
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#8a8a8a]">
               One SDK. One API call. Instant USDC payments to anyone with an
               email address. Go live in under 30 minutes.
             </p>
@@ -463,14 +463,14 @@ export default function SendPaymentsPage() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-8 py-4 text-[15px] font-semibold text-[#0C1829] shadow-lg shadow-[#3B82F6]/25 hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#34c759] px-8 py-4 text-[15px] font-semibold text-[#212121] shadow-lg shadow-[#3B82F6]/25 hover:scale-[1.02]"
               >
                 Start integrating
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/docs"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#d3d3d3] px-8 py-4 text-[15px] font-medium text-[#5c5c5c] hover:bg-[#f2f2f2]"
               >
                 View API docs →
               </Link>

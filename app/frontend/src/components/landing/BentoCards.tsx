@@ -58,7 +58,7 @@ const cards = [
     desc: "US cannabis market with no reliable payment rails",
     img: "/nobg-globe.png",
     span: "sm:col-span-2",
-    bg: "#111111",
+    bg: "#f7f7f7",
     accent: false,
   },
   {
@@ -69,7 +69,7 @@ const cards = [
     desc: "Unpaid B2B receivables in cannabis wholesale",
     img: "/nobg-dollar.png",
     span: "",
-    bg: "#111111",
+    bg: "#f7f7f7",
     accent: false,
   },
   {
@@ -80,7 +80,7 @@ const cards = [
     desc: "Average collection placement time",
     img: "/nobg-clock.png",
     span: "",
-    bg: "#111111",
+    bg: "#f7f7f7",
     accent: false,
   },
   {
@@ -91,7 +91,7 @@ const cards = [
     desc: "Zero stablecoin settlement providers serve cannabis B2B. Until now.",
     img: "/nobg-shield.png",
     span: "",
-    bg: "#2D6A4F",
+    bg: "#34c759",
     accent: true,
   },
   {
@@ -102,7 +102,7 @@ const cards = [
     desc: "What high-risk processors charge — because they can",
     img: "/nobg-document.png",
     span: "",
-    bg: "#111111",
+    bg: "#f7f7f7",
     accent: false,
   },
 ];
@@ -177,7 +177,10 @@ export function BentoCards() {
                       ? "text-[28px] sm:text-[32px]"
                       : "text-[48px] sm:text-[56px]"
                   }`}
-                  style={{ color: "#FFFFFF", fontFamily: t.sans }}
+                  style={{
+                    color: card.accent ? "#FFFFFF" : "#212121",
+                    fontFamily: t.sans,
+                  }}
                 >
                   {card.countTo != null ? (
                     <AnimatedCount
@@ -193,7 +196,7 @@ export function BentoCards() {
                 <p
                   className="mt-3 max-w-xs text-[15px] leading-relaxed"
                   style={{
-                    color: card.accent ? "rgba(255,255,255,0.8)" : "#9CA3AF",
+                    color: card.accent ? "rgba(255,255,255,0.8)" : "#5c5c5c",
                   }}
                 >
                   {card.desc}

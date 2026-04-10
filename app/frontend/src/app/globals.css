@@ -1,56 +1,60 @@
 @import "tailwindcss";
 
 :root {
-  /* Clean neutral — Finex-style */
-  --background: #ffffff;
-  --foreground: #0c1829;
+  /* ── New brand palette ── */
+  --background: #f7f7f7;
+  --foreground: #212121;
   --card: #ffffff;
-  --card-hover: #f9fafb;
-  --border: #e5e7eb;
-  --border-hover: #d1d5db;
-  --border-sharp: #e5e7eb;
+  --card-hover: #f2f2f2;
+  --border: #d3d3d3;
+  --border-hover: #bfbfbf;
+  --border-sharp: #d3d3d3;
 
   /* Inset card */
-  --card-inset: #f3f4f6;
+  --card-inset: #f2f2f2;
   --card-inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04),
     inset 0 0 0 1px rgba(0, 0, 0, 0.02);
 
   /* Pop card style */
   --card-pop: #ffffff;
-  --card-pop-header: #f9fafb;
-  --card-pop-border: #e5e7eb;
-  --card-pop-text: #0c1829;
-  --card-pop-text-secondary: #3b4963;
-  --card-pop-accent-red: #ff5252;
-  --card-pop-accent-green: #1b6b4a;
-  --card-pop-accent-blue: #2196f3;
-  --card-pop-accent-orange: #b8860b;
+  --card-pop-header: #f2f2f2;
+  --card-pop-border: #d3d3d3;
+  --card-pop-text: #212121;
+  --card-pop-text-secondary: #5c5c5c;
+  --card-pop-accent-red: #e74c3c;
+  --card-pop-accent-green: #34c759;
+  --card-pop-accent-blue: #7086f2;
+  --card-pop-accent-orange: #d29500;
 
-  /* Brand - money green */
-  --primary: #1b6b4a;
-  --primary-hover: #155939;
-  --primary-glow: rgba(27, 107, 74, 0.2);
-  --secondary: #1b6b4a;
-  --secondary-hover: #155939;
+  /* Brand - Emerald Green */
+  --primary: #34c759;
+  --primary-hover: #2ba048;
+  --primary-glow: rgba(52, 199, 89, 0.2);
+  --secondary: #8e24aa;
+  --secondary-hover: #7b1fa2;
 
   /* Accent colors for components */
-  --accent-primary: #1b6b4a;
-  --accent-muted: rgba(27, 107, 74, 0.1);
+  --accent-primary: #34c759;
+  --accent-muted: rgba(52, 199, 89, 0.1);
 
   /* Card backgrounds */
   --card-bg: #ffffff;
-  --border-color: #e5e7eb;
+  --border-color: #d3d3d3;
 
   /* Status colors */
-  --success: #1b6b4a;
-  --success-glow: rgba(27, 107, 74, 0.15);
-  --error: #dc2626;
-  --warning: #b8860b;
+  --success: #00d5b8;
+  --success-glow: rgba(0, 213, 184, 0.15);
+  --error: #e74c3c;
+  --warning: #d29500;
 
   /* Text hierarchy */
-  --text-primary: #0c1829;
-  --text-secondary: #3b4963;
-  --text-muted: #7c8a9e;
+  --text-primary: #212121;
+  --text-secondary: #5c5c5c;
+  --text-muted: #8a8a8a;
+
+  /* Accent */
+  --accent: #ffc107;
+  --info: #7086f2;
 
   /* Serif heading font */
   --font-heading: var(--font-fraunces), Georgia, "Times New Roman", serif;
@@ -68,7 +72,7 @@
 }
 
 html {
-  background: #ffffff;
+  background: #f7f7f7;
 }
 
 body {
@@ -85,7 +89,7 @@ h1,
 h2,
 h3 {
   font-family: var(--font-heading);
-  color: #0c1829;
+  color: #212121;
   letter-spacing: -0.02em;
 }
 

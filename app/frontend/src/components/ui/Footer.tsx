@@ -61,17 +61,17 @@ const socials = [
 
 export function Footer() {
   return (
-    <footer style={{ background: "#0A0A0A" }}>
+    <footer style={{ background: "#f7f7f7" }}>
       <div className="mx-auto max-w-[1200px] px-6 pt-16 pb-10">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] lg:gap-8">
           {/* brand */}
           <div>
             <Link href="/" className="inline-block">
-              <SettlrLogo size="sm" variant="light" />
+              <SettlrLogo size="sm" variant="dark" />
             </Link>
             <p
               className="mt-4 max-w-[240px] text-sm leading-relaxed"
-              style={{ color: "#9CA3AF" }}
+              style={{ color: "#8a8a8a" }}
             >
               Non-custodial stablecoin settlement for B2B cannabis supply
               chains. Built on Solana.
@@ -84,7 +84,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="text-[#9CA3AF] transition-colors hover:text-white"
+                  className="text-[#8a8a8a] transition-colors hover:text-[#212121]"
                 >
                   {s.icon}
                 </a>
@@ -97,7 +97,7 @@ export function Footer() {
             <div key={col.title}>
               <p
                 className="mb-4 text-sm font-semibold"
-                style={{ color: "#FFFFFF" }}
+                style={{ color: "#212121" }}
               >
                 {col.title}
               </p>
@@ -106,8 +106,8 @@ export function Footer() {
                   <li key={link.href + link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm transition-colors hover:text-white"
-                      style={{ color: "#9CA3AF" }}
+                      className="text-sm transition-colors hover:text-[#212121]"
+                      style={{ color: "#8a8a8a" }}
                     >
                       {link.label}
                     </Link>
@@ -121,12 +121,12 @@ export function Footer() {
         {/* bottom bar */}
         <div
           className="mt-14 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row"
-          style={{ borderColor: "#1F1F1F" }}
+          style={{ borderColor: "#d3d3d3" }}
         >
-          <p className="text-sm" style={{ color: "#9CA3AF" }}>
+          <p className="text-sm" style={{ color: "#8a8a8a" }}>
             &copy; {new Date().getFullYear()} Settlr. All rights reserved.
           </p>
-          <p className="text-xs" style={{ color: "#9CA3AF" }}>
+          <p className="text-xs" style={{ color: "#8a8a8a" }}>
             Settlr is not a bank or money transmitter. Settlement is
             peer-to-peer via USDC on Solana.
           </p>

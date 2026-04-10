@@ -9,8 +9,8 @@ const CheckoutClient = dynamic(() => import("./CheckoutClient"), {
   loading: () => (
     <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4">
       <div className="text-center">
-        <Loader2 className="w-12 h-12 text-[#1B6B4A] animate-spin mx-auto mb-4" />
-        <p className="text-[#7C8A9E]">Loading checkout...</p>
+        <Loader2 className="w-12 h-12 text-[#34c759] animate-spin mx-auto mb-4" />
+        <p className="text-[#8a8a8a]">Loading checkout...</p>
       </div>
     </div>
   ),

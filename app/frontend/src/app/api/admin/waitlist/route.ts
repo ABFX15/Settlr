@@ -69,22 +69,22 @@ export async function PATCH(request: NextRequest) {
                 html: `
                 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
                     <div style="text-align: center; margin-bottom: 32px;">
-                        <div style="background: #1B6B4A; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 16px;">✓</div>
-                        <h1 style="color: #0C1829; font-size: 24px; margin: 0;">You're in.</h1>
+                        <div style="background: #34c759; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 16px;">✓</div>
+                        <h1 style="color: #212121; font-size: 24px; margin: 0;">You're in.</h1>
                     </div>
-                    <p style="color: #3B4963; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+                    <p style="color: #5c5c5c; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
                         Your access to Settlr has been approved. Click below to set up your non-custodial settlement account.
                     </p>
                     <div style="text-align: center; margin-bottom: 24px;">
-                        <a href="${loginUrl}" style="display: inline-block; background: #1B6B4A; color: #ffffff; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px;">
+                        <a href="${loginUrl}" style="display: inline-block; background: #34c759; color: #ffffff; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px;">
                             Sign in to Settlr →
                         </a>
                     </div>
-                    <p style="color: #7C8A9E; font-size: 13px; line-height: 1.5;">
+                    <p style="color: #8a8a8a; font-size: 13px; line-height: 1.5;">
                         This link is unique to you. You'll connect a Solana wallet (Phantom or Solflare) and create your settlement vault.
                     </p>
-                    <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
-                    <p style="color: #7C8A9E; font-size: 12px; text-align: center;">
+                    <hr style="border: none; border-top: 1px solid #d3d3d3; margin: 32px 0;" />
+                    <p style="color: #8a8a8a; font-size: 12px; text-align: center;">
                         Settlr — Non-custodial USDC settlement for high-risk industries
                     </p>
                 </div>`,

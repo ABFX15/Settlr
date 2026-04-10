@@ -44,7 +44,7 @@ export default function SlackPage() {
 
   return (
     <main
-      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#212121] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <script
@@ -97,10 +97,10 @@ export default function SlackPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#3B4963]">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#5c5c5c]">
               Type{" "}
               <code
-                className="rounded bg-[#F3F4F6] px-2 py-0.5 text-sm font-mono"
+                className="rounded bg-[#f2f2f2] px-2 py-0.5 text-sm font-mono"
                 style={{ color: colorLight }}
               >
                 /pay alice@email.com 250
@@ -117,7 +117,7 @@ export default function SlackPage() {
                 href="/docs"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-[#0C1829] shadow-lg transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-[#212121] shadow-lg transition-transform hover:scale-[1.02]"
                 style={{
                   background: colorLight,
                   boxShadow: `0 10px 25px ${colorLight}40`,
@@ -128,7 +128,7 @@ export default function SlackPage() {
               </a>
               <Link
                 href="/docs"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E5E7EB] px-7 py-3.5 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d3d3d3] px-7 py-3.5 text-[15px] font-medium text-[#5c5c5c] hover:bg-[#f2f2f2]"
               >
                 Setup docs
               </Link>
@@ -138,7 +138,7 @@ export default function SlackPage() {
       </section>
 
       {/* Slash commands */}
-      <section className="border-y border-[#E5E7EB]/[0.04] bg-white/[0.01]">
+      <section className="border-y border-[#d3d3d3]/[0.04] bg-white/[0.01]">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <Reveal>
             <p
@@ -178,14 +178,14 @@ export default function SlackPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.command} delay={i * 0.06}>
-                <div className="rounded-2xl border border-[#E5E7EB] bg-[#08080d] p-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
+                <div className="rounded-2xl border border-[#d3d3d3] bg-[#212121] p-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
                   <code
-                    className="shrink-0 rounded-lg bg-[#F3F4F6] px-4 py-2 text-sm font-mono"
+                    className="shrink-0 rounded-lg bg-[#f2f2f2] px-4 py-2 text-sm font-mono"
                     style={{ color: colorLight }}
                   >
                     {item.command}
                   </code>
-                  <p className="text-sm text-[#7C8A9E]">{item.description}</p>
+                  <p className="text-sm text-[#8a8a8a]">{item.description}</p>
                 </div>
               </Reveal>
             ))}
@@ -233,7 +233,7 @@ export default function SlackPage() {
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.06}>
-              <div className="group relative overflow-hidden rounded-2xl bg-[#08080d] p-6 transition-all duration-300 hover:bg-[#0c0c14]">
+              <div className="group relative overflow-hidden rounded-2xl bg-[#212121] p-6 transition-all duration-300 hover:bg-[#2a2a2a]">
                 <div
                   className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full"
                   style={{ background: colorLight }}
@@ -247,10 +247,10 @@ export default function SlackPage() {
                     style={{ color: colorLight }}
                   />
                 </div>
-                <h3 className="text-[15px] font-semibold text-[#0C1829]">
+                <h3 className="text-[15px] font-semibold text-[#212121]">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
+                <p className="mt-2 text-sm leading-relaxed text-[#8a8a8a]">
                   {item.text}
                 </p>
               </div>
@@ -260,7 +260,7 @@ export default function SlackPage() {
       </section>
 
       {/* Use cases */}
-      <section className="border-y border-[#E5E7EB]/[0.04]">
+      <section className="border-y border-[#d3d3d3]/[0.04]">
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
@@ -284,11 +284,11 @@ export default function SlackPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.08}>
-                <div className="rounded-2xl border border-[#E5E7EB] bg-white/[0.02] p-6">
-                  <h3 className="text-[15px] font-semibold text-[#0C1829]">
+                <div className="rounded-2xl border border-[#d3d3d3] bg-white/[0.02] p-6">
+                  <h3 className="text-[15px] font-semibold text-[#212121]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#7C8A9E]">
+                  <p className="mt-2 text-sm leading-relaxed text-[#8a8a8a]">
                     {item.text}
                   </p>
                 </div>
@@ -318,12 +318,12 @@ export default function SlackPage() {
             "Full audit log visible in Slack threads",
           ].map((feature, i) => (
             <Reveal key={feature} delay={i * 0.04}>
-              <div className="flex items-center gap-3 rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-4">
+              <div className="flex items-center gap-3 rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-4">
                 <Check
                   className="h-4 w-4 flex-shrink-0"
                   style={{ color: colorLight }}
                 />
-                <span className="text-sm text-[#3B4963]">{feature}</span>
+                <span className="text-sm text-[#5c5c5c]">{feature}</span>
               </div>
             </Reveal>
           ))}
@@ -346,7 +346,7 @@ export default function SlackPage() {
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
-            <p className="mx-auto mt-5 max-w-md text-base text-[#7C8A9E]">
+            <p className="mx-auto mt-5 max-w-md text-base text-[#8a8a8a]">
               /pay email amount. That&apos;s it. Stablecoin settlement from the
               channel where your team already works.
             </p>
@@ -357,7 +357,7 @@ export default function SlackPage() {
                 href="/docs"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-[15px] font-semibold text-[#0C1829] hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-[15px] font-semibold text-[#212121] hover:scale-[1.02]"
                 style={{
                   background: colorLight,
                   boxShadow: `0 10px 25px ${colorLight}40`,
@@ -368,7 +368,7 @@ export default function SlackPage() {
               </a>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-8 py-4 text-[15px] font-medium text-[#3B4963] hover:bg-[#F3F4F6]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#d3d3d3] px-8 py-4 text-[15px] font-medium text-[#5c5c5c] hover:bg-[#f2f2f2]"
               >
                 Get API key
               </Link>

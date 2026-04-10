@@ -15,7 +15,7 @@ export default function AppleIcon() {
           justifyContent: "center",
           borderRadius: 40,
           background:
-            "linear-gradient(135deg, #c4b5fd 0%, #a78bfa 60%, #7c3aed 100%)",
+            "linear-gradient(135deg, #c4b5fd 0%, #8e24aa 60%, #7c3aed 100%)",
         }}
       >
         <span

@@ -212,17 +212,17 @@ export function VaultCard() {
       {/* ═══════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         {/* Vault Status */}
-        <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-5">
+        <div className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-emerald-500/10 p-2.5">
-                <Shield className="h-5 w-5 text-[#1B6B4A]" />
+              <div className="rounded-lg bg-[#34c759]/10 p-2.5">
+                <Shield className="h-5 w-5 text-[#34c759]" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-[#0C1829]">
+                <h3 className="text-sm font-medium text-[#212121]">
                   Squads Vault
                 </h3>
-                <p className="text-xs text-[#7C8A9E]">
+                <p className="text-xs text-[#8a8a8a]">
                   {vaultInfo
                     ? `${vaultInfo.threshold}-of-${vaultInfo.members.length} multisig`
                     : loadingVault
@@ -234,10 +234,10 @@ export function VaultCard() {
             <button
               onClick={fetchVault}
               disabled={loadingVault}
-              className="p-1.5 rounded-lg hover:bg-[#F3F4F6] transition-colors"
+              className="p-1.5 rounded-lg hover:bg-[#f2f2f2] transition-colors"
             >
               <RefreshCw
-                className={`h-3.5 w-3.5 text-[#7C8A9E] ${
+                className={`h-3.5 w-3.5 text-[#8a8a8a] ${
                   loadingVault ? "animate-spin" : ""
                 }`}
               />
@@ -247,12 +247,12 @@ export function VaultCard() {
           {vaultInfo ? (
             <div className="space-y-3">
               {/* Vault PDA */}
-              <div className="rounded-lg bg-[#FFFFFF] border border-[#E5E7EB] px-3 py-2">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-[#7C8A9E] mb-0.5">
+              <div className="rounded-lg bg-[#FFFFFF] border border-[#d3d3d3] px-3 py-2">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-[#8a8a8a] mb-0.5">
                   Settlement Address
                 </p>
                 <div className="flex items-center gap-2">
-                  <code className="flex-1 text-xs font-mono text-[#3B4963] truncate">
+                  <code className="flex-1 text-xs font-mono text-[#5c5c5c] truncate">
                     {vaultInfo.vaultPda.toBase58()}
                   </code>
                   <button
@@ -265,9 +265,9 @@ export function VaultCard() {
                     className="p-1 rounded hover:opacity-70"
                   >
                     {copied === "vaultAddr" ? (
-                      <Check className="h-3 w-3 text-[#1B6B4A]" />
+                      <Check className="h-3 w-3 text-[#34c759]" />
                     ) : (
-                      <Copy className="h-3 w-3 text-[#7C8A9E]" />
+                      <Copy className="h-3 w-3 text-[#8a8a8a]" />
                     )}
                   </button>
                 </div>
@@ -276,15 +276,15 @@ export function VaultCard() {
               {/* Signers row */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Users className="h-3.5 w-3.5 text-[#7C8A9E]" />
-                  <span className="text-xs text-[#7C8A9E]">
+                  <Users className="h-3.5 w-3.5 text-[#8a8a8a]" />
+                  <span className="text-xs text-[#8a8a8a]">
                     {vaultInfo.members.length} signer
                     {vaultInfo.members.length !== 1 ? "s" : ""}
                   </span>
                 </div>
                 <button
                   onClick={() => setShowAddSigner(true)}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-[#1B6B4A] hover:opacity-70 transition-opacity"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-[#34c759] hover:opacity-70 transition-opacity"
                 >
                   <Plus className="h-3 w-3" />
                   Add
@@ -298,17 +298,17 @@ export function VaultCard() {
                     key={member.key.toBase58()}
                     className="flex items-center gap-2 text-xs"
                   >
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/10 text-[#1B6B4A] flex items-center justify-center text-[10px] font-bold">
+                    <span className="w-5 h-5 rounded-full bg-[#34c759]/10 text-[#34c759] flex items-center justify-center text-[10px] font-bold">
                       {i + 1}
                     </span>
-                    <code className="font-mono text-[#3B4963] truncate flex-1">
+                    <code className="font-mono text-[#5c5c5c] truncate flex-1">
                       {shortenAddress(member.key.toBase58(), 6)}
                     </code>
-                    <span className="text-[10px] text-[#7C8A9E]">
+                    <span className="text-[10px] text-[#8a8a8a]">
                       {permissionsLabel(member.permissions)}
                     </span>
                     {member.key.toBase58() === publicKey && (
-                      <span className="text-[10px] font-medium text-[#1B6B4A]">
+                      <span className="text-[10px] font-medium text-[#34c759]">
                         (you)
                       </span>
                     )}
@@ -316,7 +316,7 @@ export function VaultCard() {
                 ))}
               </div>
 
-              <div className="flex items-center gap-1.5 text-[10px] text-[#7C8A9E] pt-1">
+              <div className="flex items-center gap-1.5 text-[10px] text-[#8a8a8a] pt-1">
                 <Lock className="h-3 w-3" />
                 {vaultInfo.threshold} of {vaultInfo.members.length} signatures
                 required
@@ -324,11 +324,11 @@ export function VaultCard() {
             </div>
           ) : !loadingVault ? (
             <div className="text-center py-4">
-              <Shield className="h-6 w-6 text-[#7C8A9E]/30 mx-auto mb-2" />
-              <p className="text-xs text-[#7C8A9E] mb-2">No vault found</p>
+              <Shield className="h-6 w-6 text-[#8a8a8a]/30 mx-auto mb-2" />
+              <p className="text-xs text-[#8a8a8a] mb-2">No vault found</p>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1B6B4A] hover:opacity-70"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#34c759] hover:opacity-70"
               >
                 <Shield className="h-3 w-3" />
                 Set Up Vault
@@ -336,32 +336,32 @@ export function VaultCard() {
             </div>
           ) : (
             <div className="flex justify-center py-6">
-              <Loader2 className="h-5 w-5 animate-spin text-[#7C8A9E]" />
+              <Loader2 className="h-5 w-5 animate-spin text-[#8a8a8a]" />
             </div>
           )}
         </div>
 
         {/* Balance */}
-        <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-5">
+        <div className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-emerald-500/10 p-2.5">
-                <Wallet className="h-5 w-5 text-[#1B6B4A]" />
+              <div className="rounded-lg bg-[#34c759]/10 p-2.5">
+                <Wallet className="h-5 w-5 text-[#34c759]" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-[#0C1829]">
+                <h3 className="text-sm font-medium text-[#212121]">
                   {vaultInfo ? "Vault Balance" : "Wallet Balance"}
                 </h3>
-                <p className="text-xs text-[#7C8A9E]">USDC on Devnet</p>
+                <p className="text-xs text-[#8a8a8a]">USDC on Devnet</p>
               </div>
             </div>
             <button
               onClick={fetchBalance}
               disabled={loadingBalance}
-              className="p-1.5 rounded-lg hover:bg-[#F3F4F6] transition-colors"
+              className="p-1.5 rounded-lg hover:bg-[#f2f2f2] transition-colors"
             >
               <RefreshCw
-                className={`h-3.5 w-3.5 text-[#7C8A9E] ${
+                className={`h-3.5 w-3.5 text-[#8a8a8a] ${
                   loadingBalance ? "animate-spin" : ""
                 }`}
               />
@@ -369,7 +369,7 @@ export function VaultCard() {
           </div>
 
           <div className="flex items-end gap-1.5 mb-1">
-            <span className="text-3xl font-bold text-[#0C1829]">
+            <span className="text-3xl font-bold text-[#212121]">
               {vaultInfo
                 ? vaultBalance !== null
                   ? vaultBalance.toFixed(2)
@@ -378,11 +378,11 @@ export function VaultCard() {
                 ? balance.toFixed(2)
                 : "—"}
             </span>
-            <span className="text-sm text-[#7C8A9E] mb-1">USDC</span>
+            <span className="text-sm text-[#8a8a8a] mb-1">USDC</span>
           </div>
 
           {vaultInfo && balance !== null && (
-            <p className="text-xs text-[#7C8A9E] mb-4">
+            <p className="text-xs text-[#8a8a8a] mb-4">
               Signer wallet: {balance.toFixed(2)} USDC
             </p>
           )}
@@ -394,7 +394,7 @@ export function VaultCard() {
             }`}
             className="block w-full"
           >
-            <button className="w-full py-2.5 text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity text-white bg-[#1B6B4A]">
+            <button className="w-full py-2.5 text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity text-white bg-[#34c759]">
               <Banknote className="h-4 w-4" />
               Cash Out to Bank
             </button>
@@ -419,19 +419,19 @@ export function VaultCard() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="rounded-2xl border border-[#E5E7EB] bg-[#F3F4F6] p-6 max-w-md w-full"
+              className="rounded-2xl border border-[#d3d3d3] bg-[#f2f2f2] p-6 max-w-md w-full"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-[#1B6B4A]" />
+                  <div className="w-10 h-10 rounded-xl bg-[#34c759]/10 flex items-center justify-center">
+                    <Users className="w-5 h-5 text-[#34c759]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-[#0C1829]">
+                    <h3 className="text-lg font-semibold text-[#212121]">
                       Add Signer
                     </h3>
-                    <p className="text-xs text-[#7C8A9E]">
+                    <p className="text-xs text-[#8a8a8a]">
                       Add a co-signer to protect your treasury
                     </p>
                   </div>
@@ -440,12 +440,12 @@ export function VaultCard() {
                   onClick={() => setShowAddSigner(false)}
                   className="p-2 rounded-lg hover:opacity-70"
                 >
-                  <X className="w-4 h-4 text-[#7C8A9E]" />
+                  <X className="w-4 h-4 text-[#8a8a8a]" />
                 </button>
               </div>
 
               {error && (
-                <div className="mb-4 p-3 rounded-lg flex items-center gap-2 text-xs bg-red-500/5 text-red-600">
+                <div className="mb-4 p-3 rounded-lg flex items-center gap-2 text-xs bg-[#e74c3c]/5 text-[#e74c3c]">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {error}
                 </div>
@@ -453,7 +453,7 @@ export function VaultCard() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-[#3B4963] mb-1.5">
+                  <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
                     New Signer Wallet Address
                   </label>
                   <input
@@ -461,18 +461,18 @@ export function VaultCard() {
                     value={newSignerAddress}
                     onChange={(e) => setNewSignerAddress(e.target.value)}
                     placeholder="Paste Solana address"
-                    className="w-full px-3 py-2.5 rounded-lg text-xs font-mono bg-[#FFFFFF] border border-[#E5E7EB] text-[#0C1829] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
+                    className="w-full px-3 py-2.5 rounded-lg text-xs font-mono bg-[#FFFFFF] border border-[#d3d3d3] text-[#212121] focus:outline-none focus:ring-2 focus:ring-[#34c759]/30"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-[#3B4963] mb-1.5">
+                  <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
                     New Threshold
                   </label>
                   <select
                     value={newThreshold}
                     onChange={(e) => setNewThreshold(Number(e.target.value))}
-                    className="w-full px-3 py-2.5 rounded-lg text-xs bg-[#FFFFFF] border border-[#E5E7EB] text-[#0C1829] focus:outline-none focus:ring-2 focus:ring-[#1B6B4A]/30"
+                    className="w-full px-3 py-2.5 rounded-lg text-xs bg-[#FFFFFF] border border-[#d3d3d3] text-[#212121] focus:outline-none focus:ring-2 focus:ring-[#34c759]/30"
                   >
                     {vaultInfo &&
                       Array.from(
@@ -485,7 +485,7 @@ export function VaultCard() {
                         </option>
                       ))}
                   </select>
-                  <p className="text-[10px] mt-1 text-[#7C8A9E]">
+                  <p className="text-[10px] mt-1 text-[#8a8a8a]">
                     Recommended: 2-of-2 for partners, 2-of-3 for boards.
                   </p>
                 </div>
@@ -496,7 +496,7 @@ export function VaultCard() {
                 disabled={
                   addingMember || !isValidSolanaAddress(newSignerAddress)
                 }
-                className="w-full mt-6 flex items-center justify-center gap-2 px-4 py-3 font-semibold rounded-xl text-white bg-[#1B6B4A] disabled:opacity-40 transition-opacity hover:opacity-90"
+                className="w-full mt-6 flex items-center justify-center gap-2 px-4 py-3 font-semibold rounded-xl text-white bg-[#34c759] disabled:opacity-40 transition-opacity hover:opacity-90"
               >
                 {addingMember ? (
                   <>

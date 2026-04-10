@@ -75,28 +75,28 @@ const TX_TYPE_LABELS: Record<
 > = {
   deposit: {
     label: "Deposit",
-    color: "text-[#1B6B4A]",
+    color: "text-[#34c759]",
     icon: ArrowDownRight,
   },
-  payout_reserved: { label: "Reserved", color: "text-yellow-400", icon: Clock },
+  payout_reserved: { label: "Reserved", color: "text-[#d29500]", icon: Clock },
   payout_released: {
     label: "Settlement Sent",
-    color: "text-[#1B6B4A]",
+    color: "text-[#34c759]",
     icon: ArrowUpRight,
   },
   payout_refund: {
     label: "Refund",
-    color: "text-[#1B6B4A]",
+    color: "text-[#34c759]",
     icon: ArrowDownRight,
   },
   fee_deducted: {
     label: "Platform Fee",
-    color: "text-red-400",
+    color: "text-[#e74c3c]",
     icon: DollarSign,
   },
   withdrawal: {
     label: "Withdrawal",
-    color: "text-orange-400",
+    color: "text-[#d29500]",
     icon: ArrowUpRight,
   },
 };
@@ -209,19 +209,19 @@ export default function TreasuryPage() {
           <div className="mb-8">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1 text-sm text-[#7C8A9E] hover:text-[#3B4963] transition-colors"
+              className="inline-flex items-center gap-1 text-sm text-[#8a8a8a] hover:text-[#5c5c5c] transition-colors"
             >
               <Home className="h-3.5 w-3.5" />
               Dashboard
               <ChevronRight className="h-3.5 w-3.5" />
-              <span className="text-[#3B4963]">Treasury</span>
+              <span className="text-[#5c5c5c]">Treasury</span>
             </Link>
           </div>
 
           <h1 className="text-3xl font-semibold tracking-tight mb-2">
             Treasury
           </h1>
-          <p className="text-[#7C8A9E] mb-8">
+          <p className="text-[#8a8a8a] mb-8">
             Fund your settlement balance and track deposits.
           </p>
 
@@ -234,7 +234,7 @@ export default function TreasuryPage() {
             </p>
             <button
               onClick={() => openWalletModal(true)}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#0C1829] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1a2d47] transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#212121] px-5 py-2.5 text-sm font-medium text-[#212121] hover:bg-[#1a2d47] transition-colors"
             >
               <LogIn className="h-4 w-4" />
               Connect Wallet
@@ -253,19 +253,19 @@ export default function TreasuryPage() {
           <div className="mb-8">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1 text-sm text-[#7C8A9E] hover:text-[#3B4963] transition-colors"
+              className="inline-flex items-center gap-1 text-sm text-[#8a8a8a] hover:text-[#5c5c5c] transition-colors"
             >
               <Home className="h-3.5 w-3.5" />
               Dashboard
               <ChevronRight className="h-3.5 w-3.5" />
-              <span className="text-[#3B4963]">Treasury</span>
+              <span className="text-[#5c5c5c]">Treasury</span>
             </Link>
           </div>
 
           <h1 className="text-3xl font-semibold tracking-tight mb-2">
             Treasury
           </h1>
-          <p className="text-[#7C8A9E] mb-8">
+          <p className="text-[#8a8a8a] mb-8">
             Fund your settlement balance and track deposits.
           </p>
 
@@ -284,7 +284,7 @@ export default function TreasuryPage() {
               </>
             )}
             {error && (
-              <p className="mt-4 text-sm text-red-500 flex items-center justify-center gap-1.5">
+              <p className="mt-4 text-sm text-[#e74c3c] flex items-center justify-center gap-1.5">
                 <AlertCircle className="h-3.5 w-3.5" />
                 {error}
               </p>
@@ -302,18 +302,18 @@ export default function TreasuryPage() {
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-1 text-sm text-[#7C8A9E] hover:text-[#3B4963] transition-colors"
+            className="inline-flex items-center gap-1 text-sm text-[#8a8a8a] hover:text-[#5c5c5c] transition-colors"
           >
             <Home className="h-3.5 w-3.5" />
             Dashboard
             <ChevronRight className="h-3.5 w-3.5" />
-            <span className="text-[#3B4963]">Treasury</span>
+            <span className="text-[#5c5c5c]">Treasury</span>
           </Link>
         </div>
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-[#0C1829]">Treasury</h1>
+            <h1 className="text-2xl font-bold text-[#212121]">Treasury</h1>
             <p className="text-sm text-[#94A3B8] mt-0.5">
               Manage your settlement balance
             </p>
@@ -321,7 +321,7 @@ export default function TreasuryPage() {
           <button
             onClick={fetchBalance}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-sm text-[#64748B] hover:text-[#0C1829] transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-sm text-[#64748B] hover:text-[#212121] transition-colors"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
@@ -339,7 +339,7 @@ export default function TreasuryPage() {
               <Wallet className="h-4 w-4" />
               Available
             </div>
-            <div className="text-2xl font-semibold text-[#0C1829]">
+            <div className="text-2xl font-semibold text-[#212121]">
               {formatUSD(balance.available)}
             </div>
             <div className="text-xs text-[#94A3B8] mt-1">
@@ -357,7 +357,7 @@ export default function TreasuryPage() {
               <Clock className="h-4 w-4" />
               Reserved
             </div>
-            <div className="text-2xl font-semibold text-[#0C1829]">
+            <div className="text-2xl font-semibold text-[#212121]">
               {formatUSD(balance.reserved)}
             </div>
             <div className="text-xs text-[#94A3B8] mt-1">
@@ -375,7 +375,7 @@ export default function TreasuryPage() {
               <TrendingUp className="h-4 w-4" />
               Total Deposited
             </div>
-            <div className="text-2xl font-semibold text-[#0C1829]">
+            <div className="text-2xl font-semibold text-[#212121]">
               {formatUSD(lifetime?.totalDeposited || 0)}
             </div>
             <div className="text-xs text-[#94A3B8] mt-1">Lifetime deposits</div>
@@ -391,7 +391,7 @@ export default function TreasuryPage() {
               <DollarSign className="h-4 w-4" />
               Total Fees
             </div>
-            <div className="text-2xl font-semibold text-[#0C1829]">
+            <div className="text-2xl font-semibold text-[#212121]">
               {formatUSD(lifetime?.totalFees || 0)}
             </div>
             <div className="text-xs text-[#94A3B8] mt-1">1% platform fee</div>
@@ -408,22 +408,22 @@ export default function TreasuryPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="rounded-xl border border-[#E2E8F0] bg-white p-6"
               >
-                <h3 className="text-sm font-semibold text-[#0C1829] mb-4">
+                <h3 className="text-sm font-semibold text-[#212121] mb-4">
                   Fund Your Balance
                 </h3>
                 <p className="text-xs text-[#94A3B8] mb-3">
                   Send USDC to this address on Solana {depositInfo.cluster}:
                 </p>
                 <div className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
-                  <code className="flex-1 text-xs text-[#0C1829] break-all font-mono">
+                  <code className="flex-1 text-xs text-[#212121] break-all font-mono">
                     {depositInfo.depositAddress}
                   </code>
                   <button
                     onClick={copyAddress}
-                    className="shrink-0 text-[#94A3B8] hover:text-[#0C1829] transition-colors"
+                    className="shrink-0 text-[#94A3B8] hover:text-[#212121] transition-colors"
                   >
                     {copied ? (
-                      <Check className="h-4 w-4 text-emerald-600" />
+                      <Check className="h-4 w-4 text-[#34c759]" />
                     ) : (
                       <Copy className="h-4 w-4" />
                     )}
@@ -442,7 +442,7 @@ export default function TreasuryPage() {
               transition={{ delay: 0.1 }}
               className="rounded-xl border border-[#E2E8F0] bg-white p-6"
             >
-              <h3 className="text-sm font-semibold text-[#0C1829] mb-4">
+              <h3 className="text-sm font-semibold text-[#212121] mb-4">
                 Confirm Deposit
               </h3>
               <p className="text-xs text-[#94A3B8] mb-4">
@@ -459,7 +459,7 @@ export default function TreasuryPage() {
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value)}
                     placeholder="100.00"
-                    className="w-full rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#94A3B8] focus:border-[#0C1829] focus:outline-none"
+                    className="w-full rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5 text-sm text-[#212121] placeholder-[#94A3B8] focus:border-[#212121] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -471,24 +471,24 @@ export default function TreasuryPage() {
                     value={depositTx}
                     onChange={(e) => setDepositTx(e.target.value)}
                     placeholder="5Uh8..."
-                    className="w-full rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5 text-sm text-[#0C1829] placeholder-[#94A3B8] focus:border-[#0C1829] focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5 text-sm text-[#212121] placeholder-[#94A3B8] focus:border-[#212121] focus:outline-none font-mono"
                   />
                 </div>
                 <button
                   onClick={handleDeposit}
                   disabled={depositing || !depositAmount || !depositTx}
-                  className="w-full rounded-lg bg-[#0C1829] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#1a2d47] disabled:opacity-40 transition-colors"
+                  className="w-full rounded-lg bg-[#212121] px-4 py-2.5 text-sm font-medium text-[#212121] hover:bg-[#1a2d47] disabled:opacity-40 transition-colors"
                 >
                   {depositing ? "Verifying..." : "Confirm Deposit"}
                 </button>
                 {depositSuccess && (
-                  <p className="text-xs text-emerald-600 flex items-center gap-1.5">
+                  <p className="text-xs text-[#34c759] flex items-center gap-1.5">
                     <Check className="h-3.5 w-3.5" />
                     {depositSuccess}
                   </p>
                 )}
                 {error && (
-                  <p className="text-xs text-red-500 flex items-center gap-1.5">
+                  <p className="text-xs text-[#e74c3c] flex items-center gap-1.5">
                     <AlertCircle className="h-3.5 w-3.5" />
                     {error}
                   </p>
@@ -506,7 +506,7 @@ export default function TreasuryPage() {
               className="rounded-xl border border-[#E2E8F0] bg-white"
             >
               <div className="border-b border-[#F1F5F9] px-6 py-4">
-                <h3 className="text-sm font-semibold text-[#0C1829]">
+                <h3 className="text-sm font-semibold text-[#212121]">
                   Transaction History
                 </h3>
               </div>
@@ -524,7 +524,7 @@ export default function TreasuryPage() {
                   {transactions.map((tx) => {
                     const meta = TX_TYPE_LABELS[tx.type] || {
                       label: tx.type,
-                      color: "text-[#3B4963]",
+                      color: "text-[#5c5c5c]",
                       icon: DollarSign,
                     };
                     const Icon = meta.icon;
@@ -539,7 +539,7 @@ export default function TreasuryPage() {
                       >
                         <div
                           className={`rounded-lg p-2 ${
-                            isCredit ? "bg-emerald-50" : "bg-[#F8FAFC]"
+                            isCredit ? "bg-[#34c759]/10" : "bg-[#F8FAFC]"
                           }`}
                         >
                           <Icon className={`h-4 w-4 ${meta.color}`} />
@@ -564,7 +564,7 @@ export default function TreasuryPage() {
                         <div className="text-right shrink-0">
                           <div
                             className={`text-sm font-medium ${
-                              isCredit ? "text-emerald-600" : "text-[#0C1829]"
+                              isCredit ? "text-[#34c759]" : "text-[#212121]"
                             }`}
                           >
                             {isCredit ? "+" : "-"}

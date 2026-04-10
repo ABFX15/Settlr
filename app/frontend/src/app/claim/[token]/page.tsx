@@ -302,23 +302,23 @@ function formatLocal(amount: number, symbol: string): string {
 
 function speedColor(speed: string): string {
   if (speed === "Instant")
-    return "bg-emerald-500/10 text-emerald-600 border-emerald-500/20";
+    return "bg-[#34c759]/10 text-[#34c759] border-[#34c759]/20";
   if (speed === "Minutes")
-    return "bg-[#1B6B4A]/10 text-blue-600 border-[#1B6B4A]/20";
-  return "bg-gray-100 text-gray-500 border-gray-200";
+    return "bg-[#34c759]/10 text-[#7086f2] border-[#34c759]/20";
+  return "bg-[#f2f2f2] text-[#8a8a8a] border-[#d3d3d3]";
 }
 
 function OptionIcon({ type }: { type: string }) {
   if (type === "e-wallet" || type === "mobile-money") {
     return (
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
-        <Send className="h-5 w-5 text-[#1B6B4A]" />
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#34c759]/10">
+        <Send className="h-5 w-5 text-[#34c759]" />
       </div>
     );
   }
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
-      <Building2 className="h-5 w-5 text-[#1B6B4A]" />
+    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#7086f2]/10">
+      <Building2 className="h-5 w-5 text-[#34c759]" />
     </div>
   );
 }
@@ -447,12 +447,12 @@ export default function ClaimPage({
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#1a1a2e] flex flex-col">
       {/* ── Top bar ── */}
-      <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200">
-        <button className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors">
+      <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-[#d3d3d3]">
+        <button className="inline-flex items-center gap-1.5 text-sm text-[#8a8a8a] hover:text-[#212121] transition-colors">
           <ArrowLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Back to {senderName}</span>
         </button>
-        <button className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors">
+        <button className="inline-flex items-center gap-1.5 text-sm text-[#8a8a8a] hover:text-[#212121] transition-colors">
           <HelpCircle className="h-4 w-4" />
           <span className="hidden sm:inline">Help &amp; FAQ</span>
         </button>
@@ -474,10 +474,10 @@ export default function ClaimPage({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="bg-white rounded-2xl shadow-sm border border-gray-200 p-10 text-center"
+                className="bg-white rounded-2xl shadow-sm border border-[#d3d3d3] p-10 text-center"
               >
-                <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                <p className="text-gray-400 text-sm">Loading your payment…</p>
+                <div className="w-8 h-8 border-2 border-[#7086f2] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-[#8a8a8a] text-sm">Loading your payment…</p>
               </motion.div>
             )}
 
@@ -491,42 +491,42 @@ export default function ClaimPage({
               >
                 {/* Sender branding */}
                 <div className="text-center mb-6">
-                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#1B6B4A] text-white text-xl font-bold mb-3">
+                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#34c759] text-white text-xl font-bold mb-3">
                     {senderName.charAt(0).toUpperCase()}
                   </div>
-                  <p className="text-sm text-gray-400">{senderName}</p>
+                  <p className="text-sm text-[#8a8a8a]">{senderName}</p>
                 </div>
 
                 {/* Main card */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-sm border border-[#d3d3d3] overflow-hidden">
                   {/* Status */}
                   <div className="px-6 pt-6 pb-2">
                     <h1 className="text-lg font-semibold text-[#1a1a2e]">
                       Payment Received
                     </h1>
-                    <div className="flex items-center gap-1.5 text-emerald-600 text-sm mt-1">
+                    <div className="flex items-center gap-1.5 text-[#34c759] text-sm mt-1">
                       <Check className="h-4 w-4" />
                       <span>Settled instantly.</span>
                     </div>
                   </div>
 
                   {/* Balance box */}
-                  <div className="mx-6 my-4 rounded-xl bg-gray-50 border border-gray-100 p-5">
-                    <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
+                  <div className="mx-6 my-4 rounded-xl bg-[#f7f7f7] border border-[#d3d3d3] p-5">
+                    <p className="text-xs font-medium text-[#8a8a8a] uppercase tracking-wider mb-2">
                       Your Available Balance
                     </p>
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-bold text-[#1a1a2e]">
                         {formatUSD(payout.amount)}
                       </span>
-                      <span className="text-sm font-medium text-gray-400">
+                      <span className="text-sm font-medium text-[#8a8a8a]">
                         USDC
                       </span>
                     </div>
 
                     {/* Local currency estimate */}
                     {region.rate !== 1 && (
-                      <p className="text-sm text-gray-400 mt-1">
+                      <p className="text-sm text-[#8a8a8a] mt-1">
                         Approx.{" "}
                         {formatLocal(localAmount, region.currencySymbol)}{" "}
                         {region.currencyCode}
@@ -537,7 +537,7 @@ export default function ClaimPage({
                     <div className="relative mt-3">
                       <button
                         onClick={() => setShowTooltip(!showTooltip)}
-                        className="inline-flex items-center gap-1.5 text-xs text-[#1B6B4A] hover:text-blue-600 transition-colors"
+                        className="inline-flex items-center gap-1.5 text-xs text-[#34c759] hover:text-[#7086f2] transition-colors"
                       >
                         <Info className="h-3.5 w-3.5" />
                         USDC is a digital currency pegged 1:1 to the US Dollar
@@ -548,7 +548,7 @@ export default function ClaimPage({
                             initial={{ opacity: 0, y: 4 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 4 }}
-                            className="absolute left-0 top-full mt-2 z-10 w-full rounded-lg bg-white text-[#0C1829] p-3 text-xs leading-relaxed shadow-lg"
+                            className="absolute left-0 top-full mt-2 z-10 w-full rounded-lg bg-white text-[#212121] p-3 text-xs leading-relaxed shadow-lg"
                           >
                             <p>
                               USDC (USD Coin) is a regulated digital dollar
@@ -558,7 +558,7 @@ export default function ClaimPage({
                             </p>
                             <button
                               onClick={() => setShowTooltip(false)}
-                              className="mt-2 text-[#1B6B4A] hover:text-blue-300 font-medium"
+                              className="mt-2 text-[#34c759] hover:text-[#7086f2] font-medium"
                             >
                               Got it
                             </button>
@@ -570,11 +570,11 @@ export default function ClaimPage({
 
                   {/* Memo */}
                   {payout.memo && (
-                    <div className="mx-6 mb-4 rounded-lg bg-blue-50 border border-blue-100 px-4 py-3">
-                      <p className="text-xs text-[#1B6B4A] font-medium mb-0.5">
+                    <div className="mx-6 mb-4 rounded-lg bg-[#7086f2]/10 border border-[#7086f2]/20 px-4 py-3">
+                      <p className="text-xs text-[#34c759] font-medium mb-0.5">
                         Note from sender
                       </p>
-                      <p className="text-sm text-blue-900">
+                      <p className="text-sm text-[#7086f2]">
                         &ldquo;{payout.memo}&rdquo;
                       </p>
                     </div>
@@ -582,56 +582,56 @@ export default function ClaimPage({
 
                   {/* Action buttons */}
                   <div className="px-6 pb-6 space-y-3">
-                    <p className="text-sm font-medium text-gray-700">
+                    <p className="text-sm font-medium text-[#212121]">
                       What would you like to do?
                     </p>
 
                     {/* Primary: Cash Out */}
                     <button
                       onClick={() => setShowCashOut(true)}
-                      className="w-full flex items-center gap-4 rounded-xl border-2 border-blue-500 bg-blue-50 p-4 text-left transition-all hover:bg-blue-100 hover:shadow-sm group"
+                      className="w-full flex items-center gap-4 rounded-xl border-2 border-[#7086f2] bg-[#7086f2]/10 p-4 text-left transition-all hover:bg-[#7086f2]/15 hover:shadow-sm group"
                     >
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#1B6B4A] text-white">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#34c759] text-white">
                         <Building2 className="h-5 w-5" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-[#1a1a2e]">
                           Cash Out to Bank / E-Wallet
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-[#8a8a8a] mt-0.5">
                           Send directly to your local bank, GCash, M-Pesa, Pix,
                           etc.
                         </p>
-                        <p className="text-[11px] text-gray-400 mt-0.5">
+                        <p className="text-[11px] text-[#8a8a8a] mt-0.5">
                           Fees may apply via local partners
                         </p>
                       </div>
-                      <ChevronRight className="h-5 w-5 text-[#1B6B4A] shrink-0 transition-transform group-hover:translate-x-0.5" />
+                      <ChevronRight className="h-5 w-5 text-[#34c759] shrink-0 transition-transform group-hover:translate-x-0.5" />
                     </button>
 
                     {/* Secondary: Keep in USD */}
                     <button
                       onClick={claimPayout}
-                      className="w-full flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 text-left transition-all hover:bg-gray-50 hover:border-gray-300 group"
+                      className="w-full flex items-center gap-4 rounded-xl border border-[#d3d3d3] bg-white p-4 text-left transition-all hover:bg-[#f7f7f7] hover:border-[#d3d3d3] group"
                     >
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-[#5c5c5c]">
                         <Lock className="h-5 w-5" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-[#1a1a2e]">
                           Keep in USD Balance
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-[#8a8a8a] mt-0.5">
                           Hold these funds securely here to protect against
                           inflation
                         </p>
                       </div>
-                      <ChevronRight className="h-5 w-5 text-gray-300 shrink-0 transition-transform group-hover:translate-x-0.5" />
+                      <ChevronRight className="h-5 w-5 text-[#8a8a8a] shrink-0 transition-transform group-hover:translate-x-0.5" />
                     </button>
 
                     {/* Tertiary: Advanced */}
                     <div className="text-center pt-2">
-                      <button className="text-xs text-gray-400 hover:text-gray-600 transition-colors underline underline-offset-2">
+                      <button className="text-xs text-[#8a8a8a] hover:text-[#5c5c5c] transition-colors underline underline-offset-2">
                         Advanced: Send to an external crypto address
                       </button>
                     </div>
@@ -640,7 +640,7 @@ export default function ClaimPage({
                   {/* Expiry */}
                   {expiresAt && (
                     <div className="px-6 pb-4">
-                      <p className="text-center text-[11px] text-gray-300">
+                      <p className="text-center text-[11px] text-[#8a8a8a]">
                         This payment link expires {expiresAt}
                       </p>
                     </div>
@@ -656,13 +656,13 @@ export default function ClaimPage({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="bg-white rounded-2xl shadow-sm border border-gray-200 p-10 text-center"
+                className="bg-white rounded-2xl shadow-sm border border-[#d3d3d3] p-10 text-center"
               >
-                <div className="w-10 h-10 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                <div className="w-10 h-10 border-2 border-[#7086f2] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                 <p className="text-[#1a1a2e] font-medium mb-1">
                   Processing your payment…
                 </p>
-                <p className="text-gray-400 text-sm">
+                <p className="text-[#8a8a8a] text-sm">
                   This will only take a moment.
                 </p>
               </motion.div>
@@ -675,21 +675,21 @@ export default function ClaimPage({
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
-                className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center"
+                className="bg-white rounded-2xl shadow-sm border border-[#d3d3d3] p-8 text-center"
               >
-                <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-5">
-                  <Check className="h-8 w-8 text-[#1B6B4A]" />
+                <div className="w-16 h-16 bg-[#34c759]/10 border border-[#34c759]/30 rounded-full flex items-center justify-center mx-auto mb-5">
+                  <Check className="h-8 w-8 text-[#34c759]" />
                 </div>
                 <h2 className="text-xl font-bold text-[#1a1a2e] mb-2">
                   Payment claimed!
                 </h2>
-                <p className="text-gray-500 text-sm mb-6">
+                <p className="text-[#8a8a8a] text-sm mb-6">
                   {formatUSD(payout.amount)} is now in your balance. You can
                   cash out anytime.
                 </p>
                 <button
                   onClick={() => setShowCashOut(true)}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1B6B4A]"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#34c759] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#34c759]"
                 >
                   <Building2 className="h-4 w-4" />
                   Cash Out Now
@@ -704,15 +704,15 @@ export default function ClaimPage({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center"
+                className="bg-white rounded-2xl shadow-sm border border-[#d3d3d3] p-8 text-center"
               >
-                <div className="w-16 h-16 bg-blue-50 border border-blue-200 rounded-full flex items-center justify-center mx-auto mb-5">
-                  <Check className="h-8 w-8 text-[#1B6B4A]" />
+                <div className="w-16 h-16 bg-[#7086f2]/10 border border-[#7086f2]/30 rounded-full flex items-center justify-center mx-auto mb-5">
+                  <Check className="h-8 w-8 text-[#34c759]" />
                 </div>
                 <h2 className="text-xl font-bold text-[#1a1a2e] mb-2">
                   Already Claimed
                 </h2>
-                <p className="text-gray-500 text-sm">
+                <p className="text-[#8a8a8a] text-sm">
                   This payment of {formatUSD(payout.amount)} has already been
                   claimed
                   {payout.claimedAt &&
@@ -736,11 +736,11 @@ export default function ClaimPage({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center"
+                className="bg-white rounded-2xl shadow-sm border border-[#d3d3d3] p-8 text-center"
               >
-                <div className="w-16 h-16 bg-amber-50 border border-amber-200 rounded-full flex items-center justify-center mx-auto mb-5">
+                <div className="w-16 h-16 bg-[#d29500]/10 border border-[#d29500]/30 rounded-full flex items-center justify-center mx-auto mb-5">
                   <svg
-                    className="w-8 h-8 text-amber-500"
+                    className="w-8 h-8 text-[#d29500]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -756,7 +756,7 @@ export default function ClaimPage({
                 <h2 className="text-xl font-bold text-[#1a1a2e] mb-2">
                   Payment Expired
                 </h2>
-                <p className="text-gray-500 text-sm">
+                <p className="text-[#8a8a8a] text-sm">
                   This payment link has expired. Please contact{" "}
                   {payout?.senderName || "the sender"} to request a new one.
                 </p>
@@ -770,18 +770,18 @@ export default function ClaimPage({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center"
+                className="bg-white rounded-2xl shadow-sm border border-[#d3d3d3] p-8 text-center"
               >
-                <div className="w-16 h-16 bg-red-50 border border-red-200 rounded-full flex items-center justify-center mx-auto mb-5">
-                  <X className="h-8 w-8 text-red-500" />
+                <div className="w-16 h-16 bg-[#e74c3c]/10 border border-[#e74c3c]/30 rounded-full flex items-center justify-center mx-auto mb-5">
+                  <X className="h-8 w-8 text-[#e74c3c]" />
                 </div>
                 <h2 className="text-xl font-bold text-[#1a1a2e] mb-2">
                   Something went wrong
                 </h2>
-                <p className="text-gray-500 text-sm mb-4">{errorMessage}</p>
+                <p className="text-[#8a8a8a] text-sm mb-4">{errorMessage}</p>
                 <button
                   onClick={() => window.location.reload()}
-                  className="text-[#1B6B4A] hover:text-blue-600 text-sm font-semibold transition"
+                  className="text-[#34c759] hover:text-[#7086f2] text-sm font-semibold transition"
                 >
                   Try again →
                 </button>
@@ -792,13 +792,13 @@ export default function ClaimPage({
       </main>
 
       {/* ── Footer ── */}
-      <footer className="text-center py-4 border-t border-gray-200 bg-white">
-        <p className="text-xs text-gray-400 flex items-center justify-center gap-1.5">
+      <footer className="text-center py-4 border-t border-[#d3d3d3] bg-white">
+        <p className="text-xs text-[#8a8a8a] flex items-center justify-center gap-1.5">
           <Shield className="h-3 w-3" />
           Powered by{" "}
           <a
             href="https://settlr.dev"
-            className="font-medium text-gray-500 hover:text-gray-700 transition-colors"
+            className="font-medium text-[#8a8a8a] hover:text-[#212121] transition-colors"
           >
             Settlr
           </a>
@@ -829,20 +829,20 @@ export default function ClaimPage({
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className="fixed inset-x-0 bottom-0 z-50 sm:inset-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 w-full sm:max-w-md"
             >
-              <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl border border-gray-200 max-h-[85vh] overflow-y-auto">
+              <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl border border-[#d3d3d3] max-h-[85vh] overflow-y-auto">
                 {/* Modal header */}
-                <div className="sticky top-0 z-10 flex items-center justify-between bg-white px-5 py-4 border-b border-gray-100 rounded-t-2xl">
+                <div className="sticky top-0 z-10 flex items-center justify-between bg-white px-5 py-4 border-b border-[#d3d3d3] rounded-t-2xl">
                   <div>
                     <h2 className="text-base font-semibold text-[#1a1a2e]">
                       Cash Out Options
                       {region.country !== "your country" && (
-                        <span className="text-gray-400 font-normal">
+                        <span className="text-[#8a8a8a] font-normal">
                           {" "}
                           ({region.country})
                         </span>
                       )}
                     </h2>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-[#8a8a8a] mt-0.5">
                       How do you want to receive your{" "}
                       {region.rate !== 1
                         ? `~${formatLocal(
@@ -855,7 +855,7 @@ export default function ClaimPage({
                   </div>
                   <button
                     onClick={() => setShowCashOut(false)}
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors"
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f2f2f2] text-[#8a8a8a] hover:bg-[#f2f2f2] transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -866,7 +866,7 @@ export default function ClaimPage({
                   {region.options.map((opt) => (
                     <button
                       key={opt.name}
-                      className="w-full flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 text-left transition-all hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm group"
+                      className="w-full flex items-center gap-4 rounded-xl border border-[#d3d3d3] bg-white p-4 text-left transition-all hover:bg-[#f7f7f7] hover:border-[#d3d3d3] hover:shadow-sm group"
                     >
                       <OptionIcon type={opt.type} />
                       <div className="flex-1 min-w-0">
@@ -882,18 +882,18 @@ export default function ClaimPage({
                             {opt.speed}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-500 leading-relaxed">
+                        <p className="text-xs text-[#8a8a8a] leading-relaxed">
                           {opt.description}
                         </p>
                       </div>
-                      <ChevronRight className="h-5 w-5 text-gray-300 shrink-0 transition-transform group-hover:translate-x-0.5" />
+                      <ChevronRight className="h-5 w-5 text-[#8a8a8a] shrink-0 transition-transform group-hover:translate-x-0.5" />
                     </button>
                   ))}
                 </div>
 
                 {/* Modal footer */}
-                <div className="px-5 py-4 border-t border-gray-100 bg-gray-50/50">
-                  <p className="text-[11px] text-gray-400 text-center leading-relaxed">
+                <div className="px-5 py-4 border-t border-[#d3d3d3] bg-[#f7f7f7]/50">
+                  <p className="text-[11px] text-[#8a8a8a] text-center leading-relaxed">
                     Cash-out is provided by regulated local partners. Exchange
                     rates and fees vary. Settlr does not hold your funds at any
                     point during this process.

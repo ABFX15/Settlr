@@ -31,14 +31,14 @@ import Image from "next/image";
 // ─── Design tokens ────────────────────────────────────────
 const c = {
   bg: "#FFFFFF",
-  card: "#F3F4F6",
-  navy: "#0C1829",
-  slate: "#3B4963",
-  muted: "#7C8A9E",
-  border: "#E5E7EB",
-  green: "#1B6B4A",
+  card: "#f2f2f2",
+  navy: "#212121",
+  slate: "#5c5c5c",
+  muted: "#8a8a8a",
+  border: "#d3d3d3",
+  green: "#34c759",
   greenBg: "rgba(27,107,74,0.06)",
-  red: "#dc2626",
+  red: "#e74c3c",
 };
 
 const RPC_ENDPOINT =
@@ -65,7 +65,7 @@ export default function OnboardingPageWrapper() {
         <div className="min-h-screen flex items-center justify-center">
           <Loader2
             className="w-8 h-8 animate-spin"
-            style={{ color: "#1B6B4A" }}
+            style={{ color: "#34c759" }}
           />
         </div>
       }

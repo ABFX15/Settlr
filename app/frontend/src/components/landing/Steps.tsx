@@ -54,7 +54,7 @@ export function Steps() {
           </h2>
           <p
             className="mx-auto mt-4 max-w-md text-base"
-            style={{ color: "#6B7280" }}
+            style={{ color: "#5c5c5c" }}
           >
             From invoice to settlement in under 5 seconds
           </p>
@@ -67,7 +67,7 @@ export function Steps() {
             className="pointer-events-none absolute top-[52px] left-[16.66%] right-[16.66%] hidden h-px md:block origin-left"
             style={{
               backgroundImage:
-                "repeating-linear-gradient(to right, #D1D5DB 0, #D1D5DB 8px, transparent 8px, transparent 16px)",
+                "repeating-linear-gradient(to right, #d3d3d3 0, #d3d3d3 8px, transparent 8px, transparent 16px)",
             }}
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
@@ -133,7 +133,7 @@ export function Steps() {
               </h3>
               <p
                 className="mt-2 max-w-[280px] text-[14px] leading-relaxed"
-                style={{ color: "#6B7280" }}
+                style={{ color: "#5c5c5c" }}
               >
                 {s.desc}
               </p>

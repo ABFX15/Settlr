@@ -121,7 +121,7 @@ export default function WaitlistPage() {
             {connected && (
               <button
                 onClick={() => disconnect()}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-500/20 text-red-300 text-sm font-medium hover:bg-red-500/30 transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#e74c3c]/20 text-[#e74c3c]/70 text-sm font-medium hover:bg-[#e74c3c]/30 transition-colors"
               >
                 Disconnect
               </button>
@@ -154,7 +154,7 @@ export default function WaitlistPage() {
               animate={{ opacity: 1, scale: 1 }}
               className="bg-white/10 backdrop-blur-lg border border-white/15 rounded-2xl p-8 text-center"
             >
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#1B6B4A]/30 flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#34c759]/30 flex items-center justify-center">
                 <Clock className="w-8 h-8 text-[#4ADE80]" />
               </div>
               <h2 className="text-2xl font-bold mb-2 !text-white">
@@ -171,7 +171,7 @@ export default function WaitlistPage() {
                   className="inline-block px-6 py-3 rounded-lg text-sm font-semibold text-white transition-all hover:shadow-lg"
                   style={{
                     background:
-                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                      "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
                   Try the Demo
@@ -203,7 +203,7 @@ export default function WaitlistPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your name"
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#1B6B4A]/70 focus:ring-1 focus:ring-[#1B6B4A]/30"
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#34c759]/70 focus:ring-1 focus:ring-[#34c759]/30"
                   />
                 </div>
 
@@ -217,7 +217,7 @@ export default function WaitlistPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#1B6B4A]/70 focus:ring-1 focus:ring-[#1B6B4A]/30"
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#34c759]/70 focus:ring-1 focus:ring-[#34c759]/30"
                   />
                 </div>
 
@@ -230,7 +230,7 @@ export default function WaitlistPage() {
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Your company name"
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#1B6B4A]/70 focus:ring-1 focus:ring-[#1B6B4A]/30"
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#34c759]/70 focus:ring-1 focus:ring-[#34c759]/30"
                   />
                 </div>
 
@@ -243,12 +243,12 @@ export default function WaitlistPage() {
                     onChange={(e) => setUseCase(e.target.value)}
                     placeholder="What do you distribute? How are you currently handling payments? What volume do you process monthly?"
                     rows={4}
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#1B6B4A]/70 focus:ring-1 focus:ring-[#1B6B4A]/30 resize-none"
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 focus:outline-none focus:border-[#34c759]/70 focus:ring-1 focus:ring-[#34c759]/30 resize-none"
                   />
                 </div>
 
                 {error && (
-                  <div className="rounded-lg bg-red-500/20 border border-red-500/30 px-4 py-3 text-sm text-red-300">
+                  <div className="rounded-lg bg-[#e74c3c]/20 border border-[#e74c3c]/30 px-4 py-3 text-sm text-[#e74c3c]/70">
                     {error}
                   </div>
                 )}
@@ -259,7 +259,7 @@ export default function WaitlistPage() {
                   className="w-full py-4 rounded-lg text-sm font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-50 disabled:hover:translate-y-0"
                   style={{
                     background:
-                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                      "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
                   {loading ? "Submitting..." : "Request Access"}

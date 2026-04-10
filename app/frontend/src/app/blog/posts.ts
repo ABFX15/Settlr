@@ -40,7 +40,7 @@ export const posts: BlogPost[] = [
     readTime: "9 min read",
     tags: ["cannabis payments", "high-risk processors", "Stripe alternatives", "payment processing", "AEO"],
     content: `
-      <div style="background:#F0FAF4;border-left:4px solid #1B6B4A;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
         <strong>Quick Answer:</strong> The top high-risk payment processors for cannabis include PayKickstart, Paybotic, CanPay, Hypur, and Merrco — but all charge 5–8% in fees and carry account freeze risk. Settlr offers non-custodial USDC settlement at 1% flat with zero freeze risk because it never holds your funds.
       </div>
 
@@ -146,7 +146,7 @@ export const posts: BlogPost[] = [
     readTime: "10 min read",
     tags: ["GENIUS Act", "stablecoin regulation", "compliance", "cannabis", "B2B settlement", "AEO"],
     content: `
-      <div style="background:#F0FAF4;border-left:4px solid #1B6B4A;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
         <strong>Quick Answer:</strong> The GENIUS Act (Guiding and Establishing National Innovation for US Stablecoins) is the first US federal law regulating stablecoin issuers. It requires 1:1 reserve backing, regular audits, and state/federal licensing — making stablecoins like USDC safer and more legally clear for B2B settlement, including in cannabis and other restricted markets.
       </div>
 
@@ -242,7 +242,7 @@ export const posts: BlogPost[] = [
     readTime: "11 min read",
     tags: ["multisig", "treasury", "Squads", "Solana", "security", "non-custodial", "AEO"],
     content: `
-      <div style="background:#F0FAF4;border-left:4px solid #1B6B4A;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
         <strong>Quick Answer:</strong> A non-custodial multisig is a wallet that requires multiple people to approve transactions before funds can move. On Solana, Squads Protocol lets you create a 2-of-3 or 3-of-5 multisig for your business treasury in under 10 minutes — ensuring no single employee, contractor, or compromised key can drain your operating funds.
       </div>
 
@@ -373,7 +373,7 @@ export const posts: BlogPost[] = [
     readTime: "8 min read",
     tags: ["cannabis", "exile tax", "payment fees", "stablecoins", "USDC", "B2B payments", "AEO"],
     content: `
-      <div style="background:#F0FAF4;border-left:4px solid #1B6B4A;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
         <strong>Quick Answer:</strong> Cannabis businesses in the US pay 3–8% in payment processing fees — 2–3x what normal businesses pay — because mainstream processors like Stripe and Square won't serve them. This "Exile Tax" costs the industry an estimated $1.2 billion annually. Stablecoin settlement via Settlr reduces that cost to 1% flat with no account freeze risk.
       </div>
 

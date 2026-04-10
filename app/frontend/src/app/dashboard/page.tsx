@@ -177,18 +177,18 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1a1a1a] border border-[#333]">
-            <Wallet className="h-6 w-6 text-[#666]" />
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3]">
+            <Wallet className="h-6 w-6 text-[#5c5c5c]" />
           </div>
-          <h2 className="text-xl font-semibold text-white mb-2">
+          <h2 className="text-xl font-semibold text-[#212121] mb-2">
             Welcome to Settlr
           </h2>
-          <p className="text-[#888] mb-6 max-w-sm text-sm">
+          <p className="text-[#8a8a8a] mb-6 max-w-sm text-sm">
             Connect your wallet to access your merchant dashboard.
           </p>
           <button
             onClick={() => openWalletModal(true)}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#00ff41] px-5 py-2.5 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#34c759] px-5 py-2.5 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
           >
             <LogIn className="h-4 w-4" />
             Connect Wallet
@@ -201,8 +201,8 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <Loader2 className="h-6 w-6 animate-spin text-[#00ff41]" />
-        <span className="ml-2 text-sm text-[#666]">Loading dashboard...</span>
+        <Loader2 className="h-6 w-6 animate-spin text-[#34c759]" />
+        <span className="ml-2 text-sm text-[#5c5c5c]">Loading dashboard...</span>
       </div>
     );
   }
@@ -212,16 +212,16 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">
+          <h1 className="text-3xl font-bold text-[#212121] tracking-tight">
             Vault Overview
           </h1>
-          <p className="text-sm text-[#666] mt-1 uppercase tracking-wider">
+          <p className="text-sm text-[#5c5c5c] mt-1 uppercase tracking-wider">
             Settlement Portal
           </p>
         </div>
         <button
           onClick={fetchData}
-          className="inline-flex items-center gap-2 rounded-lg border border-[#333] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg border border-[#d3d3d3] px-4 py-2.5 text-sm font-medium text-[#212121] hover:bg-[#f2f2f2] transition-colors"
         >
           <RefreshCw className="h-4 w-4" />
           Refresh
@@ -234,44 +234,44 @@ export default function DashboardPage() {
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-2 rounded-xl bg-[#141414] border border-[#1f1f1f] p-6"
+          className="lg:col-span-2 rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-6"
         >
           <div className="flex items-center justify-between mb-4">
-            <span className="text-[11px] text-[#666] uppercase tracking-[0.15em] font-semibold">
+            <span className="text-[11px] text-[#5c5c5c] uppercase tracking-[0.15em] font-semibold">
               Treasury Balance
             </span>
-            <div className="h-8 w-8 rounded-lg bg-[#00ff41]/10 flex items-center justify-center">
-              <TrendingUp className="h-4 w-4 text-[#00ff41]" />
+            <div className="h-8 w-8 rounded-lg bg-[#34c759]/10 flex items-center justify-center">
+              <TrendingUp className="h-4 w-4 text-[#34c759]" />
             </div>
           </div>
           <div className="flex items-baseline gap-3 mb-6">
-            <span className="text-4xl font-bold text-white tracking-tight">
+            <span className="text-4xl font-bold text-[#212121] tracking-tight">
               {formatUSD(balance?.total ?? 0)}
             </span>
-            <span className="text-lg font-semibold text-[#00ff41]">USDC</span>
+            <span className="text-lg font-semibold text-[#34c759]">USDC</span>
           </div>
-          <div className="grid grid-cols-3 gap-6 pt-4 border-t border-[#1f1f1f]">
+          <div className="grid grid-cols-3 gap-6 pt-4 border-t border-[#d3d3d3]">
             <div>
-              <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
+              <span className="text-[10px] text-[#8a8a8a] uppercase tracking-wider block mb-1">
                 Available
               </span>
-              <span className="text-lg font-semibold text-white">
+              <span className="text-lg font-semibold text-[#212121]">
                 {formatUSD(balance?.available ?? 0)}
               </span>
             </div>
             <div>
-              <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
+              <span className="text-[10px] text-[#8a8a8a] uppercase tracking-wider block mb-1">
                 Pending
               </span>
-              <span className="text-lg font-semibold text-white">
+              <span className="text-lg font-semibold text-[#212121]">
                 {formatUSD(balance?.pending ?? 0)}
               </span>
             </div>
             <div>
-              <span className="text-[10px] text-[#555] uppercase tracking-wider block mb-1">
+              <span className="text-[10px] text-[#8a8a8a] uppercase tracking-wider block mb-1">
                 Total Deposited
               </span>
-              <span className="text-lg font-semibold text-[#00ff41]">
+              <span className="text-lg font-semibold text-[#34c759]">
                 {formatUSD(lifetime?.totalDeposited ?? 0)}
               </span>
             </div>
@@ -283,38 +283,38 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6 flex flex-col justify-between"
+          className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-6 flex flex-col justify-between"
         >
           <div>
-            <span className="text-[11px] text-[#666] uppercase tracking-[0.15em] font-semibold">
+            <span className="text-[11px] text-[#5c5c5c] uppercase tracking-[0.15em] font-semibold">
               Invoices
             </span>
             <div className="mt-4 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[#aaa]">Outstanding</span>
-                <span className="text-2xl font-bold text-white">
+                <span className="text-sm text-[#5c5c5c]">Outstanding</span>
+                <span className="text-2xl font-bold text-[#212121]">
                   {invoiceStats?.outstanding ?? 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[#666]">Paid</span>
-                <span className="text-sm font-semibold text-[#00ff41]">
+                <span className="text-sm text-[#5c5c5c]">Paid</span>
+                <span className="text-sm font-semibold text-[#34c759]">
                   {invoiceStats?.paid ?? 0}
                 </span>
               </div>
               {(invoiceStats?.overdue ?? 0) > 0 && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-red-400">Overdue</span>
-                  <span className="text-sm font-semibold text-red-400">
+                  <span className="text-sm text-[#e74c3c]">Overdue</span>
+                  <span className="text-sm font-semibold text-[#e74c3c]">
                     {invoiceStats?.overdue}
                   </span>
                 </div>
               )}
-              <div className="flex items-center justify-between border-t border-[#1f1f1f] pt-3">
-                <span className="text-[10px] text-[#555] uppercase tracking-wider">
+              <div className="flex items-center justify-between border-t border-[#d3d3d3] pt-3">
+                <span className="text-[10px] text-[#8a8a8a] uppercase tracking-wider">
                   Revenue
                 </span>
-                <span className="text-sm font-bold text-[#00ff41]">
+                <span className="text-sm font-bold text-[#34c759]">
                   ${formatUSD(invoiceStats?.totalRevenue ?? 0)}
                 </span>
               </div>
@@ -323,12 +323,12 @@ export default function DashboardPage() {
 
           <Link
             href="/dashboard/invoices"
-            className="mt-6 flex items-center justify-between rounded-lg border border-[#333] px-4 py-3 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors group"
+            className="mt-6 flex items-center justify-between rounded-lg border border-[#d3d3d3] px-4 py-3 text-sm font-medium text-[#212121] hover:bg-[#f2f2f2] transition-colors group"
           >
             <span className="uppercase tracking-wider text-[12px]">
               View Invoices
             </span>
-            <ArrowRight className="h-4 w-4 text-[#666] group-hover:text-[#00ff41] transition-colors" />
+            <ArrowRight className="h-4 w-4 text-[#5c5c5c] group-hover:text-[#34c759] transition-colors" />
           </Link>
         </motion.div>
       </div>
@@ -338,20 +338,20 @@ export default function DashboardPage() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6"
+        className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-6"
       >
         <div className="flex items-center justify-between mb-6">
-          <span className="text-[11px] text-[#666] uppercase tracking-[0.15em] font-semibold">
+          <span className="text-[11px] text-[#5c5c5c] uppercase tracking-[0.15em] font-semibold">
             Payment Volume (7D)
           </span>
-          <span className="text-xs text-[#555]">
+          <span className="text-xs text-[#8a8a8a]">
             {payments.filter((p) => p.status === "completed").length} total
             payments
           </span>
         </div>
 
         {payments.length === 0 ? (
-          <div className="flex items-center justify-center h-48 text-[#555] text-sm">
+          <div className="flex items-center justify-center h-48 text-[#8a8a8a] text-sm">
             No payment data yet
           </div>
         ) : (
@@ -362,19 +362,19 @@ export default function DashboardPage() {
                 className="flex-1 flex flex-col items-center gap-2"
               >
                 {bar.peak && bar.value > 0 && (
-                  <div className="bg-[#1a1a1a] border border-[#333] rounded px-2 py-1 text-[10px] text-[#00ff41] font-mono mb-1">
+                  <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded px-2 py-1 text-[10px] text-[#34c759] font-mono mb-1">
                     ${formatUSD(bar.value)}
                   </div>
                 )}
                 <div
                   className={`w-full rounded-t-md transition-all ${
-                    bar.peak ? "bg-[#00ff41]" : "bg-[#2a2a2a]"
+                    bar.peak ? "bg-[#34c759]" : "bg-[#2a2a2a]"
                   }`}
                   style={{ height: `${bar.height}%` }}
                 />
                 <span
                   className={`text-[10px] font-semibold tracking-wider ${
-                    bar.peak ? "text-[#00ff41]" : "text-[#555]"
+                    bar.peak ? "text-[#34c759]" : "text-[#8a8a8a]"
                   }`}
                 >
                   {bar.day}
@@ -390,15 +390,15 @@ export default function DashboardPage() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="rounded-xl bg-[#141414] border border-[#1f1f1f]"
+        className="rounded-xl bg-[#ffffff] border border-[#d3d3d3]"
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#1f1f1f]">
-          <span className="text-[11px] text-[#666] uppercase tracking-[0.15em] font-semibold">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#d3d3d3]">
+          <span className="text-[11px] text-[#5c5c5c] uppercase tracking-[0.15em] font-semibold">
             Recent Payments
           </span>
           <Link
             href="/dashboard/settlements"
-            className="text-[11px] text-[#00ff41] uppercase tracking-wider font-semibold hover:text-[#00dd38] transition-colors flex items-center gap-1"
+            className="text-[11px] text-[#34c759] uppercase tracking-wider font-semibold hover:text-[#2ba048] transition-colors flex items-center gap-1"
           >
             View All <ChevronRight className="h-3 w-3" />
           </Link>
@@ -406,34 +406,34 @@ export default function DashboardPage() {
 
         {recentPayments.length === 0 ? (
           <div className="p-12 text-center">
-            <Wallet className="mx-auto mb-4 h-10 w-10 text-[#333]" />
-            <h3 className="mb-1 font-semibold text-white text-sm">
+            <Wallet className="mx-auto mb-4 h-10 w-10 text-[#5c5c5c]" />
+            <h3 className="mb-1 font-semibold text-[#212121] text-sm">
               No payments yet
             </h3>
-            <p className="text-xs text-[#666]">
+            <p className="text-xs text-[#5c5c5c]">
               Payments will appear here as they are received.
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-[#1f1f1f]">
+          <div className="divide-y divide-[#d3d3d3]">
             {recentPayments.map((p) => (
               <div
                 key={p.id}
-                className="flex items-center gap-4 px-6 py-4 hover:bg-[#1a1a1a] transition-colors"
+                className="flex items-center gap-4 px-6 py-4 hover:bg-[#f2f2f2] transition-colors"
               >
-                <div className="h-10 w-10 rounded-lg bg-[#1a1a1a] border border-[#333] flex items-center justify-center">
-                  <ArrowUpRight className="h-4 w-4 text-[#00ff41]" />
+                <div className="h-10 w-10 rounded-lg bg-[#f2f2f2] border border-[#d3d3d3] flex items-center justify-center">
+                  <ArrowUpRight className="h-4 w-4 text-[#34c759]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-white">
+                  <div className="text-sm font-medium text-[#212121]">
                     {p.description || "Payment"}
                   </div>
-                  <div className="text-[11px] text-[#555] font-mono">
+                  <div className="text-[11px] text-[#8a8a8a] font-mono">
                     From {shortenAddress(p.customerWallet)}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-semibold text-white">
+                  <div className="text-sm font-semibold text-[#212121]">
                     {formatUSD(p.amount)} {p.currency}
                   </div>
                 </div>
@@ -441,8 +441,8 @@ export default function DashboardPage() {
                   <span
                     className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border ${
                       p.status === "completed"
-                        ? "text-[#00ff41] bg-[#00ff41]/5 border-[#00ff41]/20"
-                        : "text-amber-400 bg-amber-400/5 border-amber-400/20"
+                        ? "text-[#34c759] bg-[#34c759]/5 border-[#34c759]/20"
+                        : "text-[#d29500] bg-[#ffc107]/5 border-[#ffc107]/20"
                     }`}
                   >
                     {p.status === "completed" ? (
@@ -453,14 +453,14 @@ export default function DashboardPage() {
                     {p.status === "completed" ? "Settled" : "Pending"}
                   </span>
                 </div>
-                <div className="text-[11px] text-[#555] w-20 text-right">
+                <div className="text-[11px] text-[#8a8a8a] w-20 text-right">
                   {timeAgo(p.completedAt)}
                 </div>
                 <a
                   href={`https://explorer.solana.com/tx/${p.txSignature}?cluster=devnet`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#00ff41] hover:text-[#00dd38] transition-colors"
+                  className="text-[#34c759] hover:text-[#2ba048] transition-colors"
                 >
                   <ExternalLink className="h-4 w-4" />
                 </a>

@@ -51,17 +51,17 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <main className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased">
+      <main className="relative min-h-screen bg-[#FFFFFF] text-[#212121] antialiased">
         <Navbar />
         <div className="flex min-h-[60vh] items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-semibold">Post not found</h1>
-            <p className="mt-2 text-[#7C8A9E]">
+            <p className="mt-2 text-[#8a8a8a]">
               The blog post you&apos;re looking for doesn&apos;t exist.
             </p>
             <Link
               href="/blog"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[#1B6B4A]"
+              className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[#34c759]"
             >
               <ArrowLeft className="h-4 w-4" /> Back to blog
             </Link>
@@ -74,7 +74,7 @@ export default function BlogPostPage() {
 
   return (
     <main
-      className="relative min-h-screen bg-[#FFFFFF] text-[#0C1829] antialiased"
+      className="relative min-h-screen bg-[#FFFFFF] text-[#212121] antialiased"
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       {/* JSON-LD for blog post */}
@@ -126,14 +126,14 @@ export default function BlogPostPage() {
       <Navbar />
 
       <article className="relative pt-32 pb-24 md:pt-40">
-        <div className="absolute left-1/2 top-32 -z-10 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-[#1B6B4A]/[0.03] blur-[120px]" />
+        <div className="absolute left-1/2 top-32 -z-10 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-[#34c759]/[0.03] blur-[120px]" />
 
         <div className="mx-auto max-w-3xl px-6">
           {/* Back link */}
           <Reveal>
             <Link
               href="/blog"
-              className="mb-8 inline-flex items-center gap-2 text-sm text-[#7C8A9E] transition-colors hover:text-[#3B4963]"
+              className="mb-8 inline-flex items-center gap-2 text-sm text-[#8a8a8a] transition-colors hover:text-[#5c5c5c]"
             >
               <ArrowLeft className="h-3.5 w-3.5" /> All posts
             </Link>
@@ -141,7 +141,7 @@ export default function BlogPostPage() {
 
           {/* Header */}
           <Reveal delay={0.05}>
-            <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-[#7C8A9E]">
+            <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-[#8a8a8a]">
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-3.5 w-3.5" />
                 {formatDate(post.date)}
@@ -164,7 +164,7 @@ export default function BlogPostPage() {
           </Reveal>
 
           <Reveal delay={0.15}>
-            <p className="mt-4 text-lg leading-relaxed text-[#7C8A9E]">
+            <p className="mt-4 text-lg leading-relaxed text-[#8a8a8a]">
               {post.excerpt}
             </p>
           </Reveal>
@@ -174,7 +174,7 @@ export default function BlogPostPage() {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 rounded-md bg-[#F3F4F6] px-2.5 py-1 text-xs font-medium text-[#7C8A9E]"
+                  className="inline-flex items-center gap-1 rounded-md bg-[#f2f2f2] px-2.5 py-1 text-xs font-medium text-[#8a8a8a]"
                 >
                   <Tag className="h-2.5 w-2.5" />
                   {tag}
@@ -184,7 +184,7 @@ export default function BlogPostPage() {
           </Reveal>
 
           {/* Divider */}
-          <div className="mt-10 mb-10 h-px bg-[#F3F4F6]" />
+          <div className="mt-10 mb-10 h-px bg-[#f2f2f2]" />
 
           {/* Content */}
           <Reveal delay={0.25}>
@@ -199,19 +199,19 @@ export default function BlogPostPage() {
             <Reveal delay={0.3}>
               <div className="mt-14">
                 <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold">
-                  <HelpCircle className="h-5 w-5 text-[#1B6B4A]" />
+                  <HelpCircle className="h-5 w-5 text-[#34c759]" />
                   Frequently Asked Questions
                 </h2>
                 <div className="space-y-5">
                   {post.faqs.map((faq, i) => (
                     <div
                       key={i}
-                      className="rounded-lg border border-[#E5E7EB] bg-[#FAFAF8] p-5"
+                      className="rounded-lg border border-[#d3d3d3] bg-[#FAFAF8] p-5"
                     >
-                      <h3 className="text-[15px] font-semibold text-[#0C1829]">
+                      <h3 className="text-[15px] font-semibold text-[#212121]">
                         {faq.question}
                       </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-[#3B4963]">
+                      <p className="mt-2 text-sm leading-relaxed text-[#5c5c5c]">
                         {faq.answer}
                       </p>
                     </div>
@@ -223,24 +223,24 @@ export default function BlogPostPage() {
 
           {/* Bottom CTA */}
           <Reveal delay={0.1}>
-            <div className="mt-16 rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-8 text-center">
+            <div className="mt-16 rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-8 text-center">
               <h3 className="text-xl font-semibold">
                 Ready to settle without bank interference?
               </h3>
-              <p className="mt-2 text-sm text-[#7C8A9E]">
+              <p className="mt-2 text-sm text-[#8a8a8a]">
                 Non-custodial, 1% flat fees, instant settlement. Integrate in
                 under 30 minutes.
               </p>
               <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <Link
                   href="/onboarding"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#1B6B4A] px-6 py-3 text-sm font-semibold text-[#0C1829] shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02]"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#34c759] px-6 py-3 text-sm font-semibold text-[#212121] shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02]"
                 >
                   Get started free
                 </Link>
                 <Link
                   href="/docs"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#E5E7EB] px-6 py-3 text-sm font-medium text-[#3B4963] transition-colors hover:text-[#0C1829]"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#d3d3d3] px-6 py-3 text-sm font-medium text-[#5c5c5c] transition-colors hover:text-[#212121]"
                 >
                   Read the docs
                 </Link>

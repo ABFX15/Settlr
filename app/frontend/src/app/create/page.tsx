@@ -134,7 +134,7 @@ export default function CreatePaymentPage() {
       <main className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-[#3B82F6] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-[#7C8A9E]">Loading...</p>
+          <p className="text-[#8a8a8a]">Loading...</p>
         </div>
       </main>
     );
@@ -148,13 +148,13 @@ export default function CreatePaymentPage() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md text-center"
         >
-          <div className="w-20 h-20 mx-auto rounded-2xl bg-[#1B6B4A] flex items-center justify-center mb-6">
-            <Wallet className="w-10 h-10 text-[#0C1829]" />
+          <div className="w-20 h-20 mx-auto rounded-2xl bg-[#34c759] flex items-center justify-center mb-6">
+            <Wallet className="w-10 h-10 text-[#212121]" />
           </div>
-          <h1 className="text-3xl font-bold text-[#0C1829] mb-4">
+          <h1 className="text-3xl font-bold text-[#212121] mb-4">
             Create Payment Links
           </h1>
-          <p className="text-[#7C8A9E] mb-8">
+          <p className="text-[#8a8a8a] mb-8">
             Sign in to create payment links that send USDC directly to your
             wallet.
           </p>
@@ -162,14 +162,14 @@ export default function CreatePaymentPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => openWalletModal(true)}
-            className="w-full py-4 bg-white text-[#0C1829] font-semibold rounded-xl flex items-center justify-center gap-2"
+            className="w-full py-4 bg-white text-[#212121] font-semibold rounded-xl flex items-center justify-center gap-2"
           >
             <LogIn className="w-5 h-5" />
             Connect Wallet to Continue
           </motion.button>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[#7C8A9E] hover:text-[#3B4963] transition-colors mt-6"
+            className="inline-flex items-center gap-2 text-[#8a8a8a] hover:text-[#5c5c5c] transition-colors mt-6"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -182,7 +182,7 @@ export default function CreatePaymentPage() {
   return (
     <>
       {/* Fixed Header */}
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#E5E7EB] bg-[#FFFFFF]/80 px-4 py-4 backdrop-blur-xl md:px-8">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#d3d3d3] bg-[#FFFFFF]/80 px-4 py-4 backdrop-blur-xl md:px-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <SettlrLogoWithIcon size="sm" variant="dark" />
@@ -190,32 +190,32 @@ export default function CreatePaymentPage() {
           <nav className="hidden items-center gap-6 md:flex">
             <Link
               href="/"
-              className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+              className="text-sm text-[#8a8a8a] transition-colors hover:text-[#212121]"
             >
               Home
             </Link>
             <Link
               href="/dashboard"
-              className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+              className="text-sm text-[#8a8a8a] transition-colors hover:text-[#212121]"
             >
               Dashboard
             </Link>
             <Link
               href="/docs"
-              className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+              className="text-sm text-[#8a8a8a] transition-colors hover:text-[#212121]"
             >
               Docs
             </Link>
             <Link
               href="/help"
-              className="text-sm text-[#7C8A9E] transition-colors hover:text-[#0C1829]"
+              className="text-sm text-[#8a8a8a] transition-colors hover:text-[#212121]"
             >
               Help
             </Link>
           </nav>
           <Link
             href="/dashboard"
-            className="rounded-lg border border-[#E5E7EB] bg-white/10 px-4 py-2 text-sm font-medium text-[#0C1829] transition-all hover:bg-white/20"
+            className="rounded-lg border border-[#d3d3d3] bg-white/10 px-4 py-2 text-sm font-medium text-[#212121] transition-all hover:bg-white/20"
           >
             Dashboard
           </Link>
@@ -238,12 +238,12 @@ export default function CreatePaymentPage() {
             </h1>
             <p className="text-[var(--text-muted)]">
               Payments go directly to:{" "}
-              <span className="font-mono text-[#1B6B4A]">
+              <span className="font-mono text-[#34c759]">
                 {(settlementAddress || publicKey)?.slice(0, 4)}...
                 {(settlementAddress || publicKey)?.slice(-4)}
               </span>
               {settlementAddress && settlementAddress !== publicKey && (
-                <span className="ml-1 text-xs text-[#7C8A9E]">(vault)</span>
+                <span className="ml-1 text-xs text-[#8a8a8a]">(vault)</span>
               )}
             </p>
           </div>
@@ -278,7 +278,7 @@ export default function CreatePaymentPage() {
                       onClick={() => setAmount(preset)}
                       className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all border-2 border-[var(--card-pop-border)] ${
                         amount === preset
-                          ? "bg-[var(--primary)] text-[#0C1829]"
+                          ? "bg-[var(--primary)] text-[#212121]"
                           : "bg-[var(--card-pop-header)] hover:bg-[var(--card-pop)]"
                       }`}
                     >
@@ -330,7 +330,7 @@ export default function CreatePaymentPage() {
                       onClick={() => setShowQR(false)}
                       className={`flex-1 py-3 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 border-2 border-[var(--card-pop-border)] ${
                         !showQR
-                          ? "bg-[var(--primary)] text-[#0C1829]"
+                          ? "bg-[var(--primary)] text-[#212121]"
                           : "bg-[var(--card-pop-header)]"
                       }`}
                     >
@@ -341,7 +341,7 @@ export default function CreatePaymentPage() {
                       onClick={() => setShowQR(true)}
                       className={`flex-1 py-3 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 border-2 border-[var(--card-pop-border)] ${
                         showQR
-                          ? "bg-[var(--primary)] text-[#0C1829]"
+                          ? "bg-[var(--primary)] text-[#212121]"
                           : "bg-[var(--card-pop-header)]"
                       }`}
                     >

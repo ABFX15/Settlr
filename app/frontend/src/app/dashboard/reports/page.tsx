@@ -102,27 +102,27 @@ const MATCH_COLORS: Record<
   { bg: string; text: string; border: string; label: string }
 > = {
   matched: {
-    bg: "bg-[#00ff41]/10",
-    text: "text-[#00ff41]",
-    border: "border-[#00ff41]/20",
+    bg: "bg-[#34c759]/10",
+    text: "text-[#34c759]",
+    border: "border-[#34c759]/20",
     label: "Matched",
   },
   unmatched_invoice: {
-    bg: "bg-yellow-500/10",
-    text: "text-yellow-400",
-    border: "border-yellow-500/20",
+    bg: "bg-[#d29500]/10",
+    text: "text-[#d29500]",
+    border: "border-[#d29500]/20",
     label: "Awaiting Payment",
   },
   unmatched_payment: {
-    bg: "bg-blue-500/10",
-    text: "text-blue-400",
-    border: "border-blue-500/20",
+    bg: "bg-[#7086f2]/10",
+    text: "text-[#7086f2]",
+    border: "border-[#7086f2]/20",
     label: "No Invoice",
   },
   overdue: {
-    bg: "bg-red-500/10",
-    text: "text-red-400",
-    border: "border-red-500/20",
+    bg: "bg-[#e74c3c]/10",
+    text: "text-[#e74c3c]",
+    border: "border-[#e74c3c]/20",
     label: "Overdue",
   },
 };
@@ -282,13 +282,13 @@ export default function ReportsPage() {
   if (!connected || !publicKey) {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center gap-4">
-        <Wallet className="h-10 w-10 text-[#333]" />
-        <p className="text-sm text-[#666]">
+        <Wallet className="h-10 w-10 text-[#5c5c5c]" />
+        <p className="text-sm text-[#5c5c5c]">
           Connect your wallet to view reports
         </p>
         <button
           onClick={() => setVisible(true)}
-          className="rounded-lg bg-[#00ff41] px-6 py-2.5 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors"
+          className="rounded-lg bg-[#34c759] px-6 py-2.5 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
         >
           Connect Wallet
         </button>
@@ -301,13 +301,13 @@ export default function ReportsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <span className="text-[11px] text-[#00ff41] uppercase tracking-[0.15em] font-semibold">
+          <span className="text-[11px] text-[#34c759] uppercase tracking-[0.15em] font-semibold">
             Payment Operations
           </span>
-          <h1 className="text-3xl font-bold text-white tracking-tight mt-1">
+          <h1 className="text-3xl font-bold text-[#212121] tracking-tight mt-1">
             Reports
           </h1>
-          <p className="text-sm text-[#555] mt-1">
+          <p className="text-sm text-[#8a8a8a] mt-1">
             Reconciliation, audit logs, and accounting exports
           </p>
         </div>
@@ -325,20 +325,20 @@ export default function ReportsPage() {
             )
           }
           disabled={!!exporting}
-          className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-5 text-left hover:border-[#333] transition-colors group"
+          className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-5 text-left hover:border-[#d3d3d3] transition-colors group"
         >
           <div className="flex items-center justify-between mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#00ff41]/10">
-              <CheckCircle2 className="h-4 w-4 text-[#00ff41]" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#34c759]/10">
+              <CheckCircle2 className="h-4 w-4 text-[#34c759]" />
             </div>
             <Download
-              className={`h-4 w-4 text-[#555] group-hover:text-[#00ff41] transition-colors ${
+              className={`h-4 w-4 text-[#8a8a8a] group-hover:text-[#34c759] transition-colors ${
                 exporting === "reconciliation" ? "animate-bounce" : ""
               }`}
             />
           </div>
-          <div className="text-sm font-semibold text-white">Reconciliation</div>
-          <div className="text-[11px] text-[#555] mt-0.5">
+          <div className="text-sm font-semibold text-[#212121]">Reconciliation</div>
+          <div className="text-[11px] text-[#8a8a8a] mt-0.5">
             Invoice↔Payment matching
           </div>
         </button>
@@ -346,20 +346,20 @@ export default function ReportsPage() {
         <button
           onClick={handlePaymentExport}
           disabled={!!exporting}
-          className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-5 text-left hover:border-[#333] transition-colors group"
+          className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-5 text-left hover:border-[#d3d3d3] transition-colors group"
         >
           <div className="flex items-center justify-between mb-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10">
               <FileText className="h-4 w-4 text-purple-400" />
             </div>
             <Download
-              className={`h-4 w-4 text-[#555] group-hover:text-[#00ff41] transition-colors ${
+              className={`h-4 w-4 text-[#8a8a8a] group-hover:text-[#34c759] transition-colors ${
                 exporting === "payments" ? "animate-bounce" : ""
               }`}
             />
           </div>
-          <div className="text-sm font-semibold text-white">Payments CSV</div>
-          <div className="text-[11px] text-[#555] mt-0.5">
+          <div className="text-sm font-semibold text-[#212121]">Payments CSV</div>
+          <div className="text-[11px] text-[#8a8a8a] mt-0.5">
             QuickBooks / Xero ready
           </div>
         </button>
@@ -372,20 +372,20 @@ export default function ReportsPage() {
             )
           }
           disabled={!!exporting}
-          className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-5 text-left hover:border-[#333] transition-colors group"
+          className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-5 text-left hover:border-[#d3d3d3] transition-colors group"
         >
           <div className="flex items-center justify-between mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
-              <Activity className="h-4 w-4 text-blue-400" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7086f2]/10">
+              <Activity className="h-4 w-4 text-[#7086f2]" />
             </div>
             <Download
-              className={`h-4 w-4 text-[#555] group-hover:text-[#00ff41] transition-colors ${
+              className={`h-4 w-4 text-[#8a8a8a] group-hover:text-[#34c759] transition-colors ${
                 exporting === "audit-log" ? "animate-bounce" : ""
               }`}
             />
           </div>
-          <div className="text-sm font-semibold text-white">Audit Log</div>
-          <div className="text-[11px] text-[#555] mt-0.5">Full event trail</div>
+          <div className="text-sm font-semibold text-[#212121]">Audit Log</div>
+          <div className="text-[11px] text-[#8a8a8a] mt-0.5">Full event trail</div>
         </button>
 
         <button
@@ -398,20 +398,20 @@ export default function ReportsPage() {
             )
           }
           disabled={!!exporting}
-          className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-5 text-left hover:border-[#333] transition-colors group"
+          className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-5 text-left hover:border-[#d3d3d3] transition-colors group"
         >
           <div className="flex items-center justify-between mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-500/10">
-              <Users className="h-4 w-4 text-yellow-400" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#d29500]/10">
+              <Users className="h-4 w-4 text-[#d29500]" />
             </div>
             <Download
-              className={`h-4 w-4 text-[#555] group-hover:text-[#00ff41] transition-colors ${
+              className={`h-4 w-4 text-[#8a8a8a] group-hover:text-[#34c759] transition-colors ${
                 exporting === "buyers" ? "animate-bounce" : ""
               }`}
             />
           </div>
-          <div className="text-sm font-semibold text-white">Buyer History</div>
-          <div className="text-[11px] text-[#555] mt-0.5">
+          <div className="text-sm font-semibold text-[#212121]">Buyer History</div>
+          <div className="text-[11px] text-[#8a8a8a] mt-0.5">
             Per-buyer payment data
           </div>
         </button>
@@ -419,7 +419,7 @@ export default function ReportsPage() {
 
       {/* Tab Bar + Date Filter */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex rounded-lg bg-[#141414] border border-[#1f1f1f] p-1">
+        <div className="flex rounded-lg bg-[#ffffff] border border-[#d3d3d3] p-1">
           {[
             {
               id: "reconciliation" as Tab,
@@ -434,8 +434,8 @@ export default function ReportsPage() {
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-2 rounded-md px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
                 tab === t.id
-                  ? "bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/20"
-                  : "text-[#666] hover:text-white border border-transparent"
+                  ? "bg-[#34c759]/10 text-[#34c759] border border-[#34c759]/20"
+                  : "text-[#5c5c5c] hover:text-[#212121] border border-transparent"
               }`}
             >
               <t.icon className="h-3.5 w-3.5" />
@@ -449,15 +449,15 @@ export default function ReportsPage() {
             type="date"
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
-            className="rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2 text-xs text-white outline-none focus:border-[#00ff41]/50"
+            className="rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-3 py-2 text-xs text-[#212121] outline-none focus:border-[#34c759]/50"
             placeholder="From"
           />
-          <span className="text-[#555] text-xs">→</span>
+          <span className="text-[#8a8a8a] text-xs">→</span>
           <input
             type="date"
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
-            className="rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2 text-xs text-white outline-none focus:border-[#00ff41]/50"
+            className="rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-3 py-2 text-xs text-[#212121] outline-none focus:border-[#34c759]/50"
             placeholder="To"
           />
         </div>
@@ -465,7 +465,7 @@ export default function ReportsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-6 w-6 animate-spin text-[#00ff41]" />
+          <Loader2 className="h-6 w-6 animate-spin text-[#34c759]" />
         </div>
       ) : (
         <>
@@ -475,53 +475,53 @@ export default function ReportsPage() {
               {/* Summary Cards */}
               {reconSummary && (
                 <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                  <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-4">
-                    <div className="text-2xl font-bold text-[#00ff41] font-mono">
+                  <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-4">
+                    <div className="text-2xl font-bold text-[#34c759] font-mono">
                       {reconSummary.matchRate}%
                     </div>
-                    <div className="text-[10px] text-[#555] uppercase tracking-wider mt-1">
+                    <div className="text-[10px] text-[#8a8a8a] uppercase tracking-wider mt-1">
                       Match Rate
                     </div>
                   </div>
-                  <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-4">
-                    <div className="text-2xl font-bold text-white font-mono">
+                  <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-4">
+                    <div className="text-2xl font-bold text-[#212121] font-mono">
                       {reconSummary.matched}
                     </div>
-                    <div className="text-[10px] text-[#555] uppercase tracking-wider mt-1">
+                    <div className="text-[10px] text-[#8a8a8a] uppercase tracking-wider mt-1">
                       Matched
                     </div>
-                    <div className="text-[11px] text-[#666] font-mono">
+                    <div className="text-[11px] text-[#5c5c5c] font-mono">
                       ${fmt(reconSummary.matchedAmount)}
                     </div>
                   </div>
-                  <div className="rounded-xl bg-[#141414] border border-yellow-500/10 p-4">
-                    <div className="text-2xl font-bold text-yellow-400 font-mono">
+                  <div className="rounded-xl bg-[#ffffff] border border-[#d29500]/10 p-4">
+                    <div className="text-2xl font-bold text-[#d29500] font-mono">
                       {reconSummary.unmatchedInvoices}
                     </div>
-                    <div className="text-[10px] text-[#555] uppercase tracking-wider mt-1">
+                    <div className="text-[10px] text-[#8a8a8a] uppercase tracking-wider mt-1">
                       Awaiting Payment
                     </div>
-                    <div className="text-[11px] text-[#666] font-mono">
+                    <div className="text-[11px] text-[#5c5c5c] font-mono">
                       ${fmt(reconSummary.unmatchedInvoiceAmount)}
                     </div>
                   </div>
-                  <div className="rounded-xl bg-[#141414] border border-red-500/10 p-4">
-                    <div className="text-2xl font-bold text-red-400 font-mono">
+                  <div className="rounded-xl bg-[#ffffff] border border-[#e74c3c]/10 p-4">
+                    <div className="text-2xl font-bold text-[#e74c3c] font-mono">
                       {reconSummary.overdue}
                     </div>
-                    <div className="text-[10px] text-[#555] uppercase tracking-wider mt-1">
+                    <div className="text-[10px] text-[#8a8a8a] uppercase tracking-wider mt-1">
                       Overdue
                     </div>
-                    <div className="text-[11px] text-[#666] font-mono">
+                    <div className="text-[11px] text-[#5c5c5c] font-mono">
                       ${fmt(reconSummary.overdueAmount)}
                     </div>
                   </div>
-                  <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-4">
-                    <div className="text-2xl font-bold text-white font-mono">
+                  <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-4">
+                    <div className="text-2xl font-bold text-[#212121] font-mono">
                       {reconSummary.avgDaysToPayment}
-                      <span className="text-sm text-[#666] ml-0.5">d</span>
+                      <span className="text-sm text-[#5c5c5c] ml-0.5">d</span>
                     </div>
-                    <div className="text-[10px] text-[#555] uppercase tracking-wider mt-1">
+                    <div className="text-[10px] text-[#8a8a8a] uppercase tracking-wider mt-1">
                       Avg Days to Pay
                     </div>
                   </div>
@@ -544,8 +544,8 @@ export default function ReportsPage() {
                     onClick={() => setReconFilter(f)}
                     className={`rounded-lg px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-colors ${
                       reconFilter === f
-                        ? "bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/20"
-                        : "text-[#666] border border-[#333] hover:text-white"
+                        ? "bg-[#34c759]/10 text-[#34c759] border border-[#34c759]/20"
+                        : "text-[#5c5c5c] border border-[#d3d3d3] hover:text-[#212121]"
                     }`}
                   >
                     {f === "all"
@@ -560,11 +560,11 @@ export default function ReportsPage() {
               </div>
 
               {/* Table */}
-              <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] overflow-hidden">
+              <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-[#1f1f1f] text-[10px] uppercase tracking-wider text-[#555]">
+                      <tr className="border-b border-[#d3d3d3] text-[10px] uppercase tracking-wider text-[#8a8a8a]">
                         <th className="px-4 py-3 text-left font-semibold">
                           Status
                         </th>
@@ -594,12 +594,12 @@ export default function ReportsPage() {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#1f1f1f]">
+                    <tbody className="divide-y divide-[#d3d3d3]">
                       {reconRows.length === 0 ? (
                         <tr>
                           <td
                             colSpan={9}
-                            className="px-4 py-12 text-center text-[#555]"
+                            className="px-4 py-12 text-center text-[#8a8a8a]"
                           >
                             No reconciliation data found
                           </td>
@@ -611,7 +611,7 @@ export default function ReportsPage() {
                           return (
                             <tr
                               key={i}
-                              className="hover:bg-[#1a1a1a] transition-colors"
+                              className="hover:bg-[#f2f2f2] transition-colors"
                             >
                               <td className="px-4 py-3">
                                 <span
@@ -620,36 +620,36 @@ export default function ReportsPage() {
                                   {mc.label}
                                 </span>
                               </td>
-                              <td className="px-4 py-3 font-mono text-xs text-white">
+                              <td className="px-4 py-3 font-mono text-xs text-[#212121]">
                                 {r.invoiceNumber || "—"}
                               </td>
                               <td className="px-4 py-3">
-                                <div className="text-xs text-white">
+                                <div className="text-xs text-[#212121]">
                                   {r.buyerName}
                                 </div>
                                 {r.buyerCompany && (
-                                  <div className="text-[11px] text-[#555]">
+                                  <div className="text-[11px] text-[#8a8a8a]">
                                     {r.buyerCompany}
                                   </div>
                                 )}
                               </td>
-                              <td className="px-4 py-3 text-right font-mono text-white">
+                              <td className="px-4 py-3 text-right font-mono text-[#212121]">
                                 {r.invoiceAmount !== null
                                   ? `$${fmt(r.invoiceAmount)}`
                                   : "—"}
                               </td>
-                              <td className="px-4 py-3 text-right font-mono text-[#00ff41]">
+                              <td className="px-4 py-3 text-right font-mono text-[#34c759]">
                                 {r.paymentAmount !== null
                                   ? `$${fmt(r.paymentAmount)}`
                                   : "—"}
                               </td>
-                              <td className="px-4 py-3 text-center text-xs text-[#666]">
+                              <td className="px-4 py-3 text-center text-xs text-[#5c5c5c]">
                                 {r.dueDate || "—"}
                               </td>
-                              <td className="px-4 py-3 text-center text-xs text-[#666]">
+                              <td className="px-4 py-3 text-center text-xs text-[#5c5c5c]">
                                 {r.paidDate || "—"}
                               </td>
-                              <td className="px-4 py-3 text-center text-xs text-[#888]">
+                              <td className="px-4 py-3 text-center text-xs text-[#8a8a8a]">
                                 {r.daysToPayment !== null
                                   ? `${r.daysToPayment}d`
                                   : "—"}
@@ -660,7 +660,7 @@ export default function ReportsPage() {
                                     href={`https://explorer.solana.com/tx/${r.paymentSignature}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-[#555] hover:text-[#00ff41] transition-colors"
+                                    className="text-[#8a8a8a] hover:text-[#34c759] transition-colors"
                                   >
                                     <ExternalLink className="h-3.5 w-3.5 inline" />
                                   </a>
@@ -681,11 +681,11 @@ export default function ReportsPage() {
 
           {/* ════ BUYERS TAB ════ */}
           {tab === "buyers" && (
-            <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] overflow-hidden">
+            <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-[#1f1f1f] text-[10px] uppercase tracking-wider text-[#555]">
+                    <tr className="border-b border-[#d3d3d3] text-[10px] uppercase tracking-wider text-[#8a8a8a]">
                       <th className="px-4 py-3 text-left font-semibold">
                         Buyer
                       </th>
@@ -712,12 +712,12 @@ export default function ReportsPage() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#1f1f1f]">
+                  <tbody className="divide-y divide-[#d3d3d3]">
                     {buyers.length === 0 ? (
                       <tr>
                         <td
                           colSpan={8}
-                          className="px-4 py-12 text-center text-[#555]"
+                          className="px-4 py-12 text-center text-[#8a8a8a]"
                         >
                           No buyer data yet
                         </td>
@@ -726,49 +726,49 @@ export default function ReportsPage() {
                       buyers.map((b, i) => (
                         <tr
                           key={i}
-                          className="hover:bg-[#1a1a1a] transition-colors"
+                          className="hover:bg-[#f2f2f2] transition-colors"
                         >
                           <td className="px-4 py-3">
-                            <div className="text-sm text-white font-medium">
+                            <div className="text-sm text-[#212121] font-medium">
                               {b.company || b.name}
                             </div>
-                            <div className="text-[11px] text-[#555]">
+                            <div className="text-[11px] text-[#8a8a8a]">
                               {b.email}
                             </div>
                           </td>
-                          <td className="px-4 py-3 text-right font-mono text-white">
+                          <td className="px-4 py-3 text-right font-mono text-[#212121]">
                             ${fmt(b.totalInvoiced)}
                           </td>
-                          <td className="px-4 py-3 text-right font-mono text-[#00ff41]">
+                          <td className="px-4 py-3 text-right font-mono text-[#34c759]">
                             ${fmt(b.totalPaid)}
                           </td>
                           <td className="px-4 py-3 text-right font-mono">
                             {b.outstanding > 0 ? (
-                              <span className="text-yellow-400">
+                              <span className="text-[#d29500]">
                                 ${fmt(b.outstanding)}
                               </span>
                             ) : (
-                              <span className="text-[#555]">$0.00</span>
+                              <span className="text-[#8a8a8a]">$0.00</span>
                             )}
                           </td>
-                          <td className="px-4 py-3 text-center text-[#888]">
+                          <td className="px-4 py-3 text-center text-[#8a8a8a]">
                             {b.invoiceCount}
                           </td>
                           <td className="px-4 py-3 text-center">
                             {b.overdueCount > 0 ? (
-                              <span className="text-red-400 font-semibold">
+                              <span className="text-[#e74c3c] font-semibold">
                                 {b.overdueCount}
                               </span>
                             ) : (
-                              <span className="text-[#555]">0</span>
+                              <span className="text-[#8a8a8a]">0</span>
                             )}
                           </td>
-                          <td className="px-4 py-3 text-center text-[#888]">
+                          <td className="px-4 py-3 text-center text-[#8a8a8a]">
                             {b.avgDaysToPay !== null
                               ? `${b.avgDaysToPay}d`
                               : "—"}
                           </td>
-                          <td className="px-4 py-3 text-center text-xs text-[#666]">
+                          <td className="px-4 py-3 text-center text-xs text-[#5c5c5c]">
                             {b.lastPayment
                               ? new Date(b.lastPayment).toLocaleDateString(
                                   "en-US",
@@ -796,8 +796,8 @@ export default function ReportsPage() {
                     onClick={() => setAuditTypeFilter(f)}
                     className={`rounded-lg px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-colors ${
                       auditTypeFilter === f
-                        ? "bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/20"
-                        : "text-[#666] border border-[#333] hover:text-white"
+                        ? "bg-[#34c759]/10 text-[#34c759] border border-[#34c759]/20"
+                        : "text-[#5c5c5c] border border-[#d3d3d3] hover:text-[#212121]"
                     }`}
                   >
                     {f === "all"
@@ -808,23 +808,23 @@ export default function ReportsPage() {
               </div>
 
               {/* Event List */}
-              <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] divide-y divide-[#1f1f1f]">
+              <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] divide-y divide-[#d3d3d3]">
                 {auditEvents.length === 0 ? (
-                  <div className="px-4 py-12 text-center text-[#555]">
+                  <div className="px-4 py-12 text-center text-[#8a8a8a]">
                     No audit events found
                   </div>
                 ) : (
                   auditEvents.slice(0, 100).map((e, i) => (
                     <div
                       key={i}
-                      className="flex items-center gap-4 px-5 py-3 hover:bg-[#1a1a1a] transition-colors"
+                      className="flex items-center gap-4 px-5 py-3 hover:bg-[#f2f2f2] transition-colors"
                     >
                       <span className="text-lg w-8 text-center">
                         {ACTION_ICONS[e.action] || "📋"}
                       </span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-mono text-[#00ff41]">
+                          <span className="text-xs font-mono text-[#34c759]">
                             {e.reference}
                           </span>
                           <span
@@ -832,27 +832,27 @@ export default function ReportsPage() {
                               e.type === "invoice"
                                 ? "bg-purple-500/10 text-purple-400"
                                 : e.type === "payment"
-                                ? "bg-[#00ff41]/10 text-[#00ff41]"
-                                : "bg-blue-500/10 text-blue-400"
+                                ? "bg-[#34c759]/10 text-[#34c759]"
+                                : "bg-[#7086f2]/10 text-[#7086f2]"
                             }`}
                           >
                             {e.type}
                           </span>
-                          <span className="text-[10px] text-[#555] uppercase">
+                          <span className="text-[10px] text-[#8a8a8a] uppercase">
                             {e.action}
                           </span>
                         </div>
-                        <div className="text-xs text-[#666] mt-0.5 truncate">
+                        <div className="text-xs text-[#5c5c5c] mt-0.5 truncate">
                           {e.details}
                         </div>
                       </div>
                       <div className="text-right shrink-0">
                         {e.amount !== null && (
-                          <div className="text-sm font-mono text-white">
+                          <div className="text-sm font-mono text-[#212121]">
                             ${fmt(e.amount)}
                           </div>
                         )}
-                        <div className="text-[10px] text-[#555]">
+                        <div className="text-[10px] text-[#8a8a8a]">
                           {new Date(e.timestamp).toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
@@ -868,7 +868,7 @@ export default function ReportsPage() {
                           href={`https://explorer.solana.com/tx/${e.txSignature}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[#555] hover:text-[#00ff41] transition-colors shrink-0"
+                          className="text-[#8a8a8a] hover:text-[#34c759] transition-colors shrink-0"
                         >
                           <ExternalLink className="h-3.5 w-3.5" />
                         </a>

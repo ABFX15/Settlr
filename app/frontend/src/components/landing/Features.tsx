@@ -127,7 +127,7 @@ export function Features() {
           </h2>
           <p
             className="mx-auto mt-4 max-w-lg text-base"
-            style={{ color: "#6B7280" }}
+            style={{ color: "#5c5c5c" }}
           >
             Discover how our platform streamlines B2B settlement for cannabis
             supply chains.
@@ -152,7 +152,7 @@ export function Features() {
                   </h3>
                   <p
                     className="mt-3 max-w-[240px] text-[14px] leading-[1.6]"
-                    style={{ color: "#6B7280" }}
+                    style={{ color: "#5c5c5c" }}
                   >
                     {f.desc}
                   </p>

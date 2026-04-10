@@ -99,12 +99,12 @@ export async function sendInstantPayoutEmail(params: {
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
         <div style="text-align: center; margin-bottom: 32px;">
             <div style="background: #34d399; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 16px;">✓</div>
-            <h1 style="color: #111; font-size: 24px; margin: 0;">Instant settlement received</h1>
+            <h1 style="color: #212121; font-size: 24px; margin: 0;">Instant settlement received</h1>
         </div>
         <div style="background: #f0fdf4; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #bbf7d0;">
             <p style="color: #666; font-size: 14px; margin: 0 0 8px;">Amount</p>
-            <p style="color: #111; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
-            ${memo ? `<p style="color: #888; font-size: 14px; margin: 8px 0 0;">${memo}</p>` : ""}
+            <p style="color: #212121; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
+            ${memo ? `<p style="color: #8a8a8a; font-size: 14px; margin: 8px 0 0;">${memo}</p>` : ""}
         </div>
         <p style="color: #444; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
             ${sender} sent you <strong>${formattedAmount}</strong> and it was <strong>delivered instantly</strong> to your saved wallet (<code>${shortWallet}</code>). No action needed.
@@ -141,7 +141,7 @@ export async function sendAuthLinkEmail(params: {
     const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
         <div style="text-align: center; margin-bottom: 32px;">
-            <h1 style="color: #111; font-size: 24px; margin: 0;">Sign in to Settlr</h1>
+            <h1 style="color: #212121; font-size: 24px; margin: 0;">Sign in to Settlr</h1>
         </div>
         <p style="color: #444; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
             Click the button below to access your recipient dashboard. This link expires in 15 minutes.
@@ -191,12 +191,12 @@ export async function sendPayoutClaimEmail(params: {
     const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
         <div style="text-align: center; margin-bottom: 32px;">
-            <h1 style="color: #111; font-size: 24px; margin: 0;">You've been paid</h1>
+            <h1 style="color: #212121; font-size: 24px; margin: 0;">You've been paid</h1>
         </div>
         <div style="background: #f8f9fa; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px;">
             <p style="color: #666; font-size: 14px; margin: 0 0 8px;">Amount</p>
-            <p style="color: #111; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
-            ${memo ? `<p style="color: #888; font-size: 14px; margin: 8px 0 0;">${memo}</p>` : ""}
+            <p style="color: #212121; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
+            ${memo ? `<p style="color: #8a8a8a; font-size: 14px; margin: 8px 0 0;">${memo}</p>` : ""}
         </div>
         <p style="color: #444; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
             ${sender} sent you <strong>${formattedAmount}</strong> via Settlr.
@@ -248,30 +248,30 @@ export async function sendInvoiceEmail(params: {
     const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 520px; margin: 0 auto; padding: 40px 20px;">
         <div style="text-align: center; margin-bottom: 32px;">
-            <h1 style="color: #0C1829; font-size: 24px; margin: 0 0 8px;">Invoice from ${merchantName}</h1>
-            <p style="color: #7C8A9E; font-size: 14px; margin: 0;">${invoiceNumber}</p>
+            <h1 style="color: #212121; font-size: 24px; margin: 0 0 8px;">Invoice from ${merchantName}</h1>
+            <p style="color: #8a8a8a; font-size: 14px; margin: 0;">${invoiceNumber}</p>
         </div>
-        <div style="background: #F8F7F3; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #E5E7EB;">
-            <p style="color: #7C8A9E; font-size: 14px; margin: 0 0 8px;">Amount Due</p>
-            <p style="color: #0C1829; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
-            <p style="color: #7C8A9E; font-size: 14px; margin: 8px 0 0;">Due by ${dueFormatted}</p>
+        <div style="background: #F8F7F3; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #d3d3d3;">
+            <p style="color: #8a8a8a; font-size: 14px; margin: 0 0 8px;">Amount Due</p>
+            <p style="color: #212121; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
+            <p style="color: #8a8a8a; font-size: 14px; margin: 8px 0 0;">Due by ${dueFormatted}</p>
         </div>
-        <p style="color: #3B4963; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+        <p style="color: #5c5c5c; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
             Hi ${buyerName},<br><br>
             ${merchantName} has sent you an invoice for <strong>${formattedAmount}</strong>.
-            ${memo ? `<br><em style="color: #7C8A9E;">${memo}</em>` : ""}
+            ${memo ? `<br><em style="color: #8a8a8a;">${memo}</em>` : ""}
         </p>
         <div style="text-align: center; margin-bottom: 24px;">
-            <a href="${invoiceUrl}" style="display: inline-block; background: #1B6B4A; color: #fff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 8px;">
+            <a href="${invoiceUrl}" style="display: inline-block; background: #34c759; color: #fff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 8px;">
                 View & Pay Invoice →
             </a>
         </div>
-        <p style="color: #7C8A9E; font-size: 12px; text-align: center;">
+        <p style="color: #8a8a8a; font-size: 12px; text-align: center;">
             Pay online — no bank transfers, no delays. Funds settle instantly.
         </p>
-        <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
-        <p style="color: #7C8A9E; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #1B6B4A; text-decoration: none;">Settlr</a> — instant business payments
+        <hr style="border: none; border-top: 1px solid #d3d3d3; margin: 32px 0;" />
+        <p style="color: #8a8a8a; font-size: 11px; text-align: center;">
+            Powered by <a href="https://settlr.dev" style="color: #34c759; text-decoration: none;">Settlr</a> — instant business payments
         </p>
     </div>`;
 
@@ -331,7 +331,7 @@ const REMINDER_COPY: Record<ReminderTone, {
         heading: "Final payment notice",
         body: (b, m, a, d) => `Hi ${b},<br><br>This is a final notice for your overdue invoice of <strong>${a}</strong> from ${m}, originally due <strong>${d}</strong>. Immediate payment is required. If you have already submitted payment, please disregard this notice.`,
         cta: "Pay Now →",
-        urgencyColor: "#DC2626",
+        urgencyColor: "#e74c3c",
         urgencyBg: "#FEF2F2",
     },
 };
@@ -364,16 +364,16 @@ export async function sendCollectionReminderEmail(params: {
     const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 520px; margin: 0 auto; padding: 40px 20px;">
         <div style="text-align: center; margin-bottom: 32px;">
-            <h1 style="color: #0C1829; font-size: 24px; margin: 0 0 8px;">${copy.heading}</h1>
-            <p style="color: #7C8A9E; font-size: 14px; margin: 0;">${invoiceNumber} · ${merchantName}</p>
+            <h1 style="color: #212121; font-size: 24px; margin: 0 0 8px;">${copy.heading}</h1>
+            <p style="color: #8a8a8a; font-size: 14px; margin: 0;">${invoiceNumber} · ${merchantName}</p>
         </div>
         ${overdueTag}
-        <div style="background: ${copy.urgencyBg}; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #E5E7EB;">
-            <p style="color: #7C8A9E; font-size: 14px; margin: 0 0 8px;">Amount Due</p>
-            <p style="color: #0C1829; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
+        <div style="background: ${copy.urgencyBg}; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #d3d3d3;">
+            <p style="color: #8a8a8a; font-size: 14px; margin: 0 0 8px;">Amount Due</p>
+            <p style="color: #212121; font-size: 36px; font-weight: 700; margin: 0;">${formattedAmount}</p>
             <p style="color: ${copy.urgencyColor}; font-size: 14px; margin: 8px 0 0; font-weight: 600;">Due ${dueFormatted}</p>
         </div>
-        <p style="color: #3B4963; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+        <p style="color: #5c5c5c; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
             ${copy.body(buyerName, merchantName, formattedAmount, dueFormatted)}
         </p>
         <div style="text-align: center; margin-bottom: 24px;">
@@ -381,12 +381,12 @@ export async function sendCollectionReminderEmail(params: {
                 ${copy.cta}
             </a>
         </div>
-        <p style="color: #7C8A9E; font-size: 12px; text-align: center;">
+        <p style="color: #8a8a8a; font-size: 12px; text-align: center;">
             If you've already submitted payment, please disregard this reminder.
         </p>
-        <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
-        <p style="color: #7C8A9E; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #1B6B4A; text-decoration: none;">Settlr</a> — instant business payments
+        <hr style="border: none; border-top: 1px solid #d3d3d3; margin: 32px 0;" />
+        <p style="color: #8a8a8a; font-size: 11px; text-align: center;">
+            Powered by <a href="https://settlr.dev" style="color: #34c759; text-decoration: none;">Settlr</a> — instant business payments
         </p>
     </div>`;
 

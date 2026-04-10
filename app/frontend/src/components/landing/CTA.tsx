@@ -20,7 +20,7 @@ export function CTA() {
   return (
     <section
       className="relative overflow-hidden py-[140px]"
-      style={{ background: "#0A0A0A" }}
+      style={{ background: "#f7f7f7" }}
     >
       {/* animated breathing green glows */}
       <motion.div
@@ -28,16 +28,16 @@ export function CTA() {
         animate={{
           background: [
             [
-              "radial-gradient(ellipse 50% 60% at 0% 50%, rgba(45,106,79,0.18) 0%, transparent 60%)",
-              "radial-gradient(ellipse 50% 60% at 100% 80%, rgba(45,106,79,0.12) 0%, transparent 60%)",
+              "radial-gradient(ellipse 50% 60% at 0% 50%, rgba(52,199,89,0.18) 0%, transparent 60%)",
+              "radial-gradient(ellipse 50% 60% at 100% 80%, rgba(52,199,89,0.12) 0%, transparent 60%)",
             ].join(", "),
             [
-              "radial-gradient(ellipse 60% 70% at 5% 45%, rgba(45,106,79,0.28) 0%, transparent 60%)",
-              "radial-gradient(ellipse 60% 70% at 95% 75%, rgba(45,106,79,0.22) 0%, transparent 60%)",
+              "radial-gradient(ellipse 60% 70% at 5% 45%, rgba(52,199,89,0.28) 0%, transparent 60%)",
+              "radial-gradient(ellipse 60% 70% at 95% 75%, rgba(52,199,89,0.22) 0%, transparent 60%)",
             ].join(", "),
             [
-              "radial-gradient(ellipse 50% 60% at 0% 50%, rgba(45,106,79,0.18) 0%, transparent 60%)",
-              "radial-gradient(ellipse 50% 60% at 100% 80%, rgba(45,106,79,0.12) 0%, transparent 60%)",
+              "radial-gradient(ellipse 50% 60% at 0% 50%, rgba(52,199,89,0.18) 0%, transparent 60%)",
+              "radial-gradient(ellipse 50% 60% at 100% 80%, rgba(52,199,89,0.12) 0%, transparent 60%)",
             ].join(", "),
           ],
         }}
@@ -54,8 +54,8 @@ export function CTA() {
             height: orb.size,
             left: orb.x,
             top: orb.y,
-            background: "rgba(45,106,79,0.5)",
-            boxShadow: `0 0 ${orb.size * 3}px rgba(45,106,79,0.3)`,
+            background: "rgba(52,199,89,0.5)",
+            boxShadow: `0 0 ${orb.size * 3}px rgba(52,199,89,0.3)`,
           }}
           animate={{
             y: [0, -20, 0],
@@ -81,19 +81,19 @@ export function CTA() {
           >
             <h2
               className="text-[36px] leading-[1.1] tracking-tight font-extrabold sm:text-[48px]"
-              style={{ color: "#FFFFFF", fontFamily: t.sans }}
+              style={{ color: "#212121", fontFamily: t.sans }}
             >
               Stop paying the high-risk tax.
             </h2>
             <p
               className="mt-4 text-[20px] leading-[1.4]"
-              style={{ color: "#9CA3AF" }}
+              style={{ color: "#5c5c5c" }}
             >
               Start settling in seconds.
             </p>
             <p
               className="mt-6 max-w-md text-[15px] leading-relaxed"
-              style={{ color: "#6B7280" }}
+              style={{ color: "#8a8a8a" }}
             >
               A settlement platform designed to simplify how you move money in
               cannabis. Low fees. Instant finality. No bank required.
@@ -129,9 +129,9 @@ export function CTA() {
               className="pointer-events-none absolute -inset-8 z-0 rounded-3xl"
               animate={{
                 background: [
-                  "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(45,106,79,0.2) 0%, transparent 70%)",
-                  "radial-gradient(ellipse 90% 70% at 50% 50%, rgba(45,106,79,0.35) 0%, transparent 70%)",
-                  "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(45,106,79,0.2) 0%, transparent 70%)",
+                  "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(52,199,89,0.2) 0%, transparent 70%)",
+                  "radial-gradient(ellipse 90% 70% at 50% 50%, rgba(52,199,89,0.35) 0%, transparent 70%)",
+                  "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(52,199,89,0.2) 0%, transparent 70%)",
                 ],
               }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}

@@ -20,7 +20,7 @@ export function SettlrLogo({
     xl: "text-[30px]",
   };
   const d = dims[size];
-  const textColor = variant === "light" ? "#FFFFFF" : "#0A0A0A";
+  const textColor = variant === "light" ? "#FFFFFF" : "#212121";
 
   return (
     <div className="flex items-center gap-2 select-none">

@@ -47,7 +47,7 @@ export default async function Image() {
             left: 0,
             right: 0,
             height: 5,
-            background: "linear-gradient(90deg, #1B6B4A, #2A9D6A)",
+            background: "linear-gradient(90deg, #34c759, #2ba048)",
           }}
         />
 
@@ -96,7 +96,7 @@ export default async function Image() {
                 background: "rgba(27,107,74,0.08)",
                 padding: "8px 18px",
                 fontSize: 15,
-                color: "#1B6B4A",
+                color: "#34c759",
                 fontWeight: 500,
                 marginBottom: 28,
               }}
@@ -106,7 +106,7 @@ export default async function Image() {
                   width: 6,
                   height: 6,
                   borderRadius: "50%",
-                  backgroundColor: "#1B6B4A",
+                  backgroundColor: "#34c759",
                 }}
               />
               Non-Custodial Settlement
@@ -125,9 +125,9 @@ export default async function Image() {
                 fontFamily: "serif",
               }}
             >
-              <span style={{ color: "#0C1829" }}>Enterprise payments</span>
-              <span style={{ color: "#0C1829" }}>
-                for the <span style={{ color: "#1B6B4A" }}>debanked</span>.
+              <span style={{ color: "#212121" }}>Enterprise payments</span>
+              <span style={{ color: "#212121" }}>
+                for the <span style={{ color: "#34c759" }}>debanked</span>.
               </span>
             </div>
 
@@ -135,7 +135,7 @@ export default async function Image() {
             <div
               style={{
                 fontSize: 21,
-                color: "#3B4963",
+                color: "#5c5c5c",
                 lineHeight: 1.5,
                 marginBottom: 40,
                 maxWidth: 480,
@@ -160,13 +160,13 @@ export default async function Image() {
                     style={{
                       fontSize: 34,
                       fontWeight: 700,
-                      color: "#1B6B4A",
+                      color: "#34c759",
                       letterSpacing: "-0.02em",
                     }}
                   >
                     {stat.value}
                   </span>
-                  <span style={{ fontSize: 14, color: "#7C8A9E" }}>
+                  <span style={{ fontSize: 14, color: "#8a8a8a" }}>
                     {stat.label}
                   </span>
                 </div>
@@ -181,8 +181,8 @@ export default async function Image() {
               flexDirection: "column",
               width: 340,
               borderRadius: 16,
-              border: "1px solid #E5E7EB",
-              background: "#0C1829",
+              border: "1px solid #d3d3d3",
+              background: "#212121",
               padding: "24px 28px",
               boxShadow: "0 24px 48px rgba(12,24,41,0.15)",
             }}
@@ -216,12 +216,12 @@ export default async function Image() {
             </div>
             {/* Code lines */}
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <span style={{ fontSize: 13, color: "#7C8A9E" }}>
+              <span style={{ fontSize: 13, color: "#8a8a8a" }}>
                 {"// Settle a B2B invoice"}
               </span>
               <span style={{ fontSize: 14, color: "rgba(255,255,255,0.6)" }}>
                 {"const "}
-                <span style={{ color: "#2A9D6A" }}>settlement</span>
+                <span style={{ color: "#2ba048" }}>settlement</span>
                 {" = await"}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
@@ -230,7 +230,7 @@ export default async function Image() {
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
                 {'    to: "vendor.sol",'}
               </span>
-              <span style={{ fontSize: 13, color: "#2A9D6A" }}>
+              <span style={{ fontSize: 13, color: "#2ba048" }}>
                 {"    amount: 5_000,"}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
@@ -240,7 +240,7 @@ export default async function Image() {
                 {"  })"}
               </span>
               <div style={{ height: 6 }} />
-              <span style={{ fontSize: 13, color: "#7C8A9E" }}>
+              <span style={{ fontSize: 13, color: "#8a8a8a" }}>
                 {"// Settled in <1s ✓"}
               </span>
             </div>
@@ -255,7 +255,7 @@ export default async function Image() {
             left: 0,
             right: 0,
             height: 48,
-            background: "#0C1829",
+            background: "#212121",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",

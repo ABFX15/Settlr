@@ -18,14 +18,14 @@ export default function TermsPage() {
         style={{ background: "#FFFFFF" }}
       >
         <article>
-          <h1 className="text-4xl font-bold tracking-tight text-[#0C1829] mb-2">
+          <h1 className="text-4xl font-bold tracking-tight text-[#212121] mb-2">
             Terms of Service
           </h1>
-          <p className="text-sm text-[#6B7280] mb-8">Last updated: June 2025</p>
+          <p className="text-sm text-[#8a8a8a] mb-8">Last updated: June 2025</p>
 
-          <div className="space-y-6 text-[#3B4963] text-base leading-relaxed">
+          <div className="space-y-6 text-[#5c5c5c] text-base leading-relaxed">
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 1. Acceptance of Terms
               </h2>
               <p>
@@ -37,7 +37,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 2. Description of Service
               </h2>
               <p>
@@ -50,7 +50,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 3. Non-Custodial Nature
               </h2>
               <p>
@@ -62,13 +62,13 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 4. Fees
               </h2>
               <p>
                 Settlr charges a platform fee on each settlement transaction.
                 Current fee schedules are published on our{" "}
-                <a href="/pricing" className="text-[#1B6B4A] underline">
+                <a href="/pricing" className="text-[#34c759] underline">
                   pricing page
                 </a>
                 . Fees are deducted at the smart-contract level and are visible
@@ -78,7 +78,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 5. Eligibility
               </h2>
               <p>
@@ -90,7 +90,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 6. Prohibited Conduct
               </h2>
               <p>You agree not to:</p>
@@ -112,7 +112,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 7. Disclaimer of Warranties
               </h2>
               <p>
@@ -124,7 +124,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 8. Limitation of Liability
               </h2>
               <p>
@@ -138,7 +138,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 9. Privacy
               </h2>
               <p>
@@ -150,7 +150,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 10. Modifications
               </h2>
               <p>
@@ -163,14 +163,14 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-[#0C1829] mb-2">
+              <h2 className="text-xl font-semibold text-[#212121] mb-2">
                 11. Contact
               </h2>
               <p>
                 For questions about these Terms, contact us at{" "}
                 <a
                   href="mailto:adam@settlr.dev"
-                  className="text-[#1B6B4A] underline"
+                  className="text-[#34c759] underline"
                 >
                   adam@settlr.dev
                 </a>

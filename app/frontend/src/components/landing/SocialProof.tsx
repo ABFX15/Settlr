@@ -42,7 +42,7 @@ const stats = [
 
 export function SocialProof() {
   return (
-    <section className="w-full" style={{ background: "#0A0A0A" }}>
+    <section className="w-full" style={{ background: "#f7f7f7" }}>
       <div className="mx-auto max-w-[1200px] px-6 py-[120px]">
         {/* headline */}
         <motion.h2
@@ -51,7 +51,7 @@ export function SocialProof() {
           viewport={{ once: true, margin: "-60px" }}
           transition={spring}
           className="mx-auto max-w-2xl text-center text-[32px] leading-[1.15] tracking-tight font-extrabold sm:text-[44px]"
-          style={{ fontFamily: t.sans, color: "#FFFFFF" }}
+          style={{ fontFamily: t.sans, color: "#212121" }}
         >
           Built for the businesses banks won&apos;t serve
         </motion.h2>
@@ -68,13 +68,13 @@ export function SocialProof() {
               transition={{ ...spring, delay: 0.1 + i * 0.08 }}
             >
               <div
-                className="text-[48px] font-extrabold leading-none tracking-tight text-white sm:text-[60px]"
+                className="text-[48px] font-extrabold leading-none tracking-tight text-[#212121] sm:text-[60px]"
                 style={{ fontFamily: t.sans }}
               >
                 {s.prefix}
                 <Counter end={s.end} suffix={s.suffix} />
               </div>
-              <p className="mt-3 text-sm" style={{ color: "#9CA3AF" }}>
+              <p className="mt-3 text-sm" style={{ color: "#8a8a8a" }}>
                 {s.label}
               </p>
             </motion.div>

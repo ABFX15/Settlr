@@ -8,11 +8,11 @@ import { Wallet, X, ChevronRight, Loader2, AlertCircle } from "lucide-react";
 import Image from "next/image";
 
 /* ─── Design tokens (match Settlr palette) ─── */
-const NAVY = "#0C1829";
-const SLATE = "#3B4963";
-const MUTED = "#7C8A9E";
-const GREEN = "#1B6B4A";
-const BORDER = "#E5E7EB";
+const NAVY = "#212121";
+const SLATE = "#5c5c5c";
+const MUTED = "#8a8a8a";
+const GREEN = "#34c759";
+const BORDER = "#d3d3d3";
 
 /* ─── Context for custom modal ─── */
 import { createContext, useContext } from "react";
@@ -144,7 +144,7 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
               </div>
               <button
                 onClick={onClose}
-                className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-gray-100"
+                className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-[#f2f2f2]"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" style={{ color: MUTED }} />
@@ -296,10 +296,10 @@ const WalletRow: FC<WalletRowProps> = ({
     <button
       onClick={onClick}
       disabled={connecting}
-      className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all hover:bg-gray-50 active:scale-[0.98] disabled:opacity-60"
+      className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all hover:bg-[#f7f7f7] active:scale-[0.98] disabled:opacity-60"
     >
       {/* Icon */}
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gray-50 p-1.5">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] p-1.5">
         {icon.startsWith("data:") || icon.startsWith("http") ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={icon} alt={name} className="h-full w-full object-contain" />

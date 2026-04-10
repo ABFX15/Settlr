@@ -164,7 +164,7 @@ export function Navbar() {
       className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
         transparent
           ? "border-b border-transparent bg-transparent"
-          : "border-b border-[#E5E7EB] bg-white/90 backdrop-blur-sm"
+          : "border-b border-[#d3d3d3] bg-white/90 backdrop-blur-sm"
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
@@ -183,15 +183,15 @@ export function Navbar() {
                 transparent
                   ? "text-white/90 hover:text-white"
                   : isActive(link.href)
-                  ? "text-[#0C1829]"
-                  : "text-[#7C8A9E] hover:text-[#0C1829]"
+                  ? "text-[#212121]"
+                  : "text-[#8a8a8a] hover:text-[#212121]"
               }`}
             >
               {link.label}
               {isActive(link.href) && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-[#1B6B4A]"
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-[#34c759]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -206,8 +206,8 @@ export function Navbar() {
                 transparent
                   ? "text-white/90 hover:text-white"
                   : isProductsActive
-                  ? "text-[#0C1829]"
-                  : "text-[#7C8A9E] hover:text-[#0C1829]"
+                  ? "text-[#212121]"
+                  : "text-[#8a8a8a] hover:text-[#212121]"
               }`}
             >
               Products
@@ -219,7 +219,7 @@ export function Navbar() {
               {isProductsActive && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#1B6B4A]"
+                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#34c759]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -232,7 +232,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-[#E5E7EB] bg-white/98 p-2 shadow-lg backdrop-blur-sm"
+                  className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-[#d3d3d3] bg-white/98 p-2 shadow-lg backdrop-blur-sm"
                 >
                   {productLinks.map((link) => (
                     <Link
@@ -241,16 +241,16 @@ export function Navbar() {
                       onClick={() => setProductsOpen(false)}
                       className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-colors ${
                         pathname === link.href
-                          ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                          : "text-[#3B4963] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
+                          ? "bg-[#34c759]/5 text-[#212121]"
+                          : "text-[#5c5c5c] hover:bg-[#f2f2f2] hover:text-[#212121]"
                       }`}
                     >
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1B6B4A]/10">
-                        <link.icon className="h-4 w-4 text-[#155939]" />
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#34c759]/10">
+                        <link.icon className="h-4 w-4 text-[#2ba048]" />
                       </div>
                       <div>
                         <div className="text-sm font-medium">{link.label}</div>
-                        <div className="text-xs text-[#7C8A9E]">
+                        <div className="text-xs text-[#8a8a8a]">
                           {link.description}
                         </div>
                       </div>
@@ -269,8 +269,8 @@ export function Navbar() {
                 transparent
                   ? "text-white/90 hover:text-white"
                   : isIndustriesActive
-                  ? "text-[#0C1829]"
-                  : "text-[#7C8A9E] hover:text-[#0C1829]"
+                  ? "text-[#212121]"
+                  : "text-[#8a8a8a] hover:text-[#212121]"
               }`}
             >
               Industries
@@ -282,7 +282,7 @@ export function Navbar() {
               {isIndustriesActive && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#1B6B4A]"
+                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#34c759]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -295,7 +295,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-72 rounded-2xl border border-[#E5E7EB] bg-white/98 p-2 shadow-lg backdrop-blur-sm"
+                  className="absolute left-0 top-full mt-2 w-72 rounded-2xl border border-[#d3d3d3] bg-white/98 p-2 shadow-lg backdrop-blur-sm"
                 >
                   {industryLinks.map((link) => (
                     <Link
@@ -304,16 +304,16 @@ export function Navbar() {
                       onClick={() => setIndustriesOpen(false)}
                       className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-colors ${
                         pathname === link.href
-                          ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                          : "text-[#3B4963] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
+                          ? "bg-[#34c759]/5 text-[#212121]"
+                          : "text-[#5c5c5c] hover:bg-[#f2f2f2] hover:text-[#212121]"
                       }`}
                     >
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1B6B4A]/10">
-                        <link.icon className="h-4 w-4 text-[#155939]" />
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#34c759]/10">
+                        <link.icon className="h-4 w-4 text-[#2ba048]" />
                       </div>
                       <div>
                         <div className="text-sm font-medium">{link.label}</div>
-                        <div className="text-xs text-[#7C8A9E]">
+                        <div className="text-xs text-[#8a8a8a]">
                           {link.description}
                         </div>
                       </div>
@@ -332,8 +332,8 @@ export function Navbar() {
                 transparent
                   ? "text-white/90 hover:text-white"
                   : isResourcesActive
-                  ? "text-[#0C1829]"
-                  : "text-[#7C8A9E] hover:text-[#0C1829]"
+                  ? "text-[#212121]"
+                  : "text-[#8a8a8a] hover:text-[#212121]"
               }`}
             >
               Resources
@@ -345,7 +345,7 @@ export function Navbar() {
               {isResourcesActive && (
                 <motion.div
                   layoutId="navbar-indicator"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#1B6B4A]"
+                  className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#34c759]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -358,7 +358,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-[#E5E7EB] bg-white/98 p-2 shadow-lg backdrop-blur-sm"
+                  className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-[#d3d3d3] bg-white/98 p-2 shadow-lg backdrop-blur-sm"
                 >
                   {resourceLinks.map((link) => (
                     <Link
@@ -368,16 +368,16 @@ export function Navbar() {
                       className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-colors ${
                         pathname === link.href ||
                         pathname.startsWith(link.href + "/")
-                          ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                          : "text-[#3B4963] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
+                          ? "bg-[#34c759]/5 text-[#212121]"
+                          : "text-[#5c5c5c] hover:bg-[#f2f2f2] hover:text-[#212121]"
                       }`}
                     >
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1B6B4A]/10">
-                        <link.icon className="h-4 w-4 text-[#155939]" />
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#34c759]/10">
+                        <link.icon className="h-4 w-4 text-[#2ba048]" />
                       </div>
                       <div>
                         <div className="text-sm font-medium">{link.label}</div>
-                        <div className="text-xs text-[#7C8A9E]">
+                        <div className="text-xs text-[#8a8a8a]">
                           {link.description}
                         </div>
                       </div>
@@ -394,7 +394,7 @@ export function Navbar() {
           <Link
             href="/login"
             className="rounded-full px-5 py-2 text-sm font-semibold transition-all hover:opacity-80"
-            style={{ color: "#1B6B4A" }}
+            style={{ color: "#34c759" }}
           >
             Sign In
           </Link>
@@ -402,7 +402,7 @@ export function Navbar() {
             href="/waitlist"
             className="rounded-full px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
             style={{
-              background: "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+              background: "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
             }}
           >
             Request Access
@@ -416,7 +416,7 @@ export function Navbar() {
           className={`rounded-lg p-2 transition-colors md:hidden ${
             transparent
               ? "text-white hover:bg-white/10"
-              : "text-[#7C8A9E] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
+              : "text-[#8a8a8a] hover:bg-[#f2f2f2] hover:text-[#212121]"
           }`}
         >
           {mobileMenuOpen ? (
@@ -434,7 +434,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-b border-[#E5E7EB] bg-white/98 backdrop-blur-xl md:hidden"
+            className="border-b border-[#d3d3d3] bg-white/98 backdrop-blur-xl md:hidden"
           >
             <div className="flex flex-col px-4 py-4">
               {navLinks.map((link) => (
@@ -444,8 +444,8 @@ export function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                     isActive(link.href)
-                      ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                      : "text-[#7C8A9E] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
+                      ? "bg-[#34c759]/5 text-[#212121]"
+                      : "text-[#8a8a8a] hover:bg-[#f2f2f2] hover:text-[#212121]"
                   }`}
                 >
                   {link.label}
@@ -453,8 +453,8 @@ export function Navbar() {
               ))}
 
               {/* Mobile Products Section */}
-              <div className="mt-2 border-t border-[#E5E7EB] pt-2">
-                <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              <div className="mt-2 border-t border-[#d3d3d3] pt-2">
+                <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
                   Products
                 </div>
                 {productLinks.map((link) => (
@@ -464,19 +464,19 @@ export function Navbar() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                       pathname === link.href
-                        ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                        : "text-[#7C8A9E] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
+                        ? "bg-[#34c759]/5 text-[#212121]"
+                        : "text-[#8a8a8a] hover:bg-[#f2f2f2] hover:text-[#212121]"
                     }`}
                   >
-                    <link.icon className="h-4 w-4 text-[#155939]" />
+                    <link.icon className="h-4 w-4 text-[#2ba048]" />
                     {link.label}
                   </Link>
                 ))}
               </div>
 
               {/* Mobile Industries Section */}
-              <div className="mt-2 border-t border-[#E5E7EB] pt-2">
-                <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              <div className="mt-2 border-t border-[#d3d3d3] pt-2">
+                <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
                   Industries
                 </div>
                 {industryLinks.map((link) => (
@@ -486,19 +486,19 @@ export function Navbar() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                       pathname === link.href
-                        ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                        : "text-[#7C8A9E] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
+                        ? "bg-[#34c759]/5 text-[#212121]"
+                        : "text-[#8a8a8a] hover:bg-[#f2f2f2] hover:text-[#212121]"
                     }`}
                   >
-                    <link.icon className="h-4 w-4 text-[#155939]" />
+                    <link.icon className="h-4 w-4 text-[#2ba048]" />
                     {link.label}
                   </Link>
                 ))}
               </div>
 
               {/* Mobile Resources Section */}
-              <div className="mt-2 border-t border-[#E5E7EB] pt-2">
-                <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+              <div className="mt-2 border-t border-[#d3d3d3] pt-2">
+                <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
                   Resources
                 </div>
                 {resourceLinks.map((link) => (
@@ -508,22 +508,22 @@ export function Navbar() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                       pathname === link.href
-                        ? "bg-[#1B6B4A]/5 text-[#0C1829]"
-                        : "text-[#7C8A9E] hover:bg-[#F9FAFB] hover:text-[#0C1829]"
+                        ? "bg-[#34c759]/5 text-[#212121]"
+                        : "text-[#8a8a8a] hover:bg-[#f2f2f2] hover:text-[#212121]"
                     }`}
                   >
-                    <link.icon className="h-4 w-4 text-[#155939]" />
+                    <link.icon className="h-4 w-4 text-[#2ba048]" />
                     {link.label}
                   </Link>
                 ))}
               </div>
 
-              <div className="mt-4 flex flex-col gap-2 border-t border-[#E5E7EB] pt-4">
+              <div className="mt-4 flex flex-col gap-2 border-t border-[#d3d3d3] pt-4">
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
                   className="rounded-full px-4 py-3 text-center text-sm font-semibold transition-all"
-                  style={{ color: "#1B6B4A" }}
+                  style={{ color: "#34c759" }}
                 >
                   Sign In
                 </Link>
@@ -533,7 +533,7 @@ export function Navbar() {
                   className="rounded-full px-4 py-3 text-center text-sm font-semibold text-white"
                   style={{
                     background:
-                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                      "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
                   Request Access

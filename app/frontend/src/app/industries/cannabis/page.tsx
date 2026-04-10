@@ -54,14 +54,14 @@ function Reveal({
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-[#E5E7EB] last:border-0">
+    <div className="border-b border-[#d3d3d3] last:border-0">
       <button
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between py-5 text-left"
       >
-        <span className="pr-4 font-medium text-[#0C1829]">{q}</span>
+        <span className="pr-4 font-medium text-[#212121]">{q}</span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-[#7C8A9E] transition-transform ${
+          className={`h-5 w-5 shrink-0 text-[#8a8a8a] transition-transform ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -75,7 +75,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
             transition={spring}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-sm leading-relaxed text-[#7C8A9E]">{a}</p>
+            <p className="pb-5 text-sm leading-relaxed text-[#8a8a8a]">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -308,14 +308,14 @@ export default function CannabisPage() {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(27,107,74,0.10),transparent)]" />
         </div>
-        <div className="absolute right-[15%] top-[20%] h-72 w-72 rounded-full bg-[#1B6B4A]/[0.06] blur-[120px]" />
+        <div className="absolute right-[15%] top-[20%] h-72 w-72 rounded-full bg-[#34c759]/[0.06] blur-[120px]" />
 
         <div className="relative mx-auto max-w-5xl">
           <div className="max-w-3xl">
             <Reveal>
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.06] px-4 py-2">
-                <Leaf className="h-4 w-4 text-[#155939]" />
-                <span className="text-sm font-medium text-[#155939]">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#34c759]/20 bg-[#34c759]/[0.06] px-4 py-2">
+                <Leaf className="h-4 w-4 text-[#2ba048]" />
+                <span className="text-sm font-medium text-[#2ba048]">
                   Cannabis &amp; Wholesalers
                 </span>
               </div>
@@ -323,15 +323,15 @@ export default function CannabisPage() {
 
             <Reveal delay={0.05}>
               <h1
-                className="mb-6 text-5xl font-bold leading-[1.08] text-[#0C1829] md:text-7xl"
+                className="mb-6 text-5xl font-bold leading-[1.08] text-[#212121] md:text-7xl"
                 style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
               >
-                Stop getting <span className="text-[#1B6B4A]">debanked.</span>
+                Stop getting <span className="text-[#34c759]">debanked.</span>
               </h1>
             </Reveal>
 
             <Reveal delay={0.1}>
-              <p className="mb-8 max-w-2xl text-lg leading-relaxed text-[#7C8A9E]">
+              <p className="mb-8 max-w-2xl text-lg leading-relaxed text-[#8a8a8a]">
                 Pay cultivators, processors, and distributors instantly in USDC.
                 No bank account required. No account to freeze. No cash vans.
                 Just fast, compliant B2B settlements that actually work for
@@ -346,7 +346,7 @@ export default function CannabisPage() {
                   className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white transition-all hover:opacity-90"
                   style={{
                     background:
-                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                      "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
                   Request Access
@@ -354,7 +354,7 @@ export default function CannabisPage() {
                 </Link>
                 <Link
                   href="/demo"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-white px-7 py-3.5 font-semibold text-[#0C1829] transition-all hover:bg-[#F9FAFB]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#d3d3d3] bg-white px-7 py-3.5 font-semibold text-[#212121] transition-all hover:bg-[#f2f2f2]"
                 >
                   See the Demo
                 </Link>
@@ -362,17 +362,17 @@ export default function CannabisPage() {
             </Reveal>
 
             <Reveal delay={0.2}>
-              <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-[#7C8A9E]">
+              <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-[#8a8a8a]">
                 <span className="flex items-center gap-1.5">
-                  <BadgeCheck className="h-4 w-4 text-[#155939]" />
+                  <BadgeCheck className="h-4 w-4 text-[#2ba048]" />
                   GENIUS Act Compliant
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Shield className="h-4 w-4 text-[#155939]" />
+                  <Shield className="h-4 w-4 text-[#2ba048]" />
                   Non-Custodial
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Scale className="h-4 w-4 text-[#155939]" />
+                  <Scale className="h-4 w-4 text-[#2ba048]" />
                   Full Audit Trail
                 </span>
               </div>
@@ -382,18 +382,18 @@ export default function CannabisPage() {
       </section>
 
       {/* ───── Stats ───── */}
-      <section className="border-y border-[#E5E7EB] bg-white px-4 py-14">
+      <section className="border-y border-[#d3d3d3] bg-white px-4 py-14">
         <div className="mx-auto grid max-w-5xl grid-cols-2 gap-8 md:grid-cols-4">
           {stats.map((stat, i) => (
             <Reveal key={stat.label} delay={i * 0.05}>
               <div className="text-center">
                 <div
-                  className="mb-1 text-3xl font-bold text-[#0C1829] md:text-4xl"
+                  className="mb-1 text-3xl font-bold text-[#212121] md:text-4xl"
                   style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
                 >
                   {stat.value}
                 </div>
-                <div className="text-sm text-[#7C8A9E]">{stat.label}</div>
+                <div className="text-sm text-[#8a8a8a]">{stat.label}</div>
               </div>
             </Reveal>
           ))}
@@ -405,13 +405,13 @@ export default function CannabisPage() {
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h2
-              className="mb-4 text-3xl font-bold text-[#0C1829] md:text-4xl"
+              className="mb-4 text-3xl font-bold text-[#212121] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               The cannabis banking{" "}
               <span className="text-[#B91C1C]">crisis is real</span>
             </h2>
-            <p className="mb-12 max-w-2xl text-[#7C8A9E]">
+            <p className="mb-12 max-w-2xl text-[#8a8a8a]">
               Your business is legal. Your licenses are current. Yet banks keep
               closing your accounts, and the processors who&apos;ll work with
               you charge extortionate fees.
@@ -425,10 +425,10 @@ export default function CannabisPage() {
                 <Reveal key={point.problem} delay={i * 0.05}>
                   <div className="rounded-xl border border-[#B91C1C]/15 bg-[#FEF2F2] p-5">
                     <Icon className="mb-3 h-6 w-6 text-[#B91C1C]" />
-                    <h3 className="mb-1 text-sm font-semibold text-[#0C1829]">
+                    <h3 className="mb-1 text-sm font-semibold text-[#212121]">
                       {point.problem}
                     </h3>
-                    <p className="text-xs text-[#7C8A9E]">{point.detail}</p>
+                    <p className="text-xs text-[#8a8a8a]">{point.detail}</p>
                   </div>
                 </Reveal>
               );
@@ -442,12 +442,12 @@ export default function CannabisPage() {
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h2
-              className="mb-4 text-3xl font-bold text-[#0C1829] md:text-4xl"
+              className="mb-4 text-3xl font-bold text-[#212121] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               Payments that can&apos;t be shut down.
             </h2>
-            <p className="mb-12 max-w-2xl text-[#7C8A9E]">
+            <p className="mb-12 max-w-2xl text-[#8a8a8a]">
               Non-custodial means no bank, no processor, and no single point of
               failure can freeze your settlement rail.
             </p>
@@ -458,29 +458,29 @@ export default function CannabisPage() {
               const Icon = f.icon;
               return (
                 <Reveal key={f.title} delay={i * 0.05}>
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6 transition-colors hover:bg-[#F9FAFB]">
+                  <div className="rounded-2xl border border-[#d3d3d3] bg-white p-6 transition-colors hover:bg-[#f2f2f2]">
                     <div className="mb-4 flex items-center justify-between">
-                      <div className="rounded-lg bg-[#1B6B4A]/[0.08] p-2.5">
-                        <Icon className="h-5 w-5 text-[#155939]" />
+                      <div className="rounded-lg bg-[#34c759]/[0.08] p-2.5">
+                        <Icon className="h-5 w-5 text-[#2ba048]" />
                       </div>
                       <div className="text-right">
                         <span
-                          className="text-2xl font-bold text-[#0C1829]"
+                          className="text-2xl font-bold text-[#212121]"
                           style={{
                             fontFamily: "var(--font-fraunces), Georgia, serif",
                           }}
                         >
                           {f.stat}
                         </span>
-                        <span className="ml-1.5 text-xs text-[#7C8A9E]">
+                        <span className="ml-1.5 text-xs text-[#8a8a8a]">
                           {f.statLabel}
                         </span>
                       </div>
                     </div>
-                    <h3 className="mb-2 font-semibold text-[#0C1829]">
+                    <h3 className="mb-2 font-semibold text-[#212121]">
                       {f.title}
                     </h3>
-                    <p className="text-sm text-[#7C8A9E]">{f.description}</p>
+                    <p className="text-sm text-[#8a8a8a]">{f.description}</p>
                   </div>
                 </Reveal>
               );
@@ -490,16 +490,16 @@ export default function CannabisPage() {
       </section>
 
       {/* ───── How It Works ───── */}
-      <section className="border-y border-[#E5E7EB] bg-white px-4 py-24">
+      <section className="border-y border-[#d3d3d3] bg-white px-4 py-24">
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h2
-              className="mb-4 text-3xl font-bold text-[#0C1829] md:text-4xl"
+              className="mb-4 text-3xl font-bold text-[#212121] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               How cannabis B2B settlements work
             </h2>
-            <p className="mb-12 max-w-2xl text-[#7C8A9E]">
+            <p className="mb-12 max-w-2xl text-[#8a8a8a]">
               No bank relationship needed. No merchant account application. Set
               up in minutes.
             </p>
@@ -535,22 +535,22 @@ export default function CannabisPage() {
               const Icon = item.icon;
               return (
                 <Reveal key={item.step} delay={i * 0.08}>
-                  <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-6">
+                  <div className="rounded-2xl border border-[#d3d3d3] bg-[#f2f2f2] p-6">
                     <div
-                      className="mb-4 text-4xl font-bold text-[#1B6B4A]/20"
+                      className="mb-4 text-4xl font-bold text-[#34c759]/20"
                       style={{
                         fontFamily: "var(--font-fraunces), Georgia, serif",
                       }}
                     >
                       {item.step}
                     </div>
-                    <div className="mb-3 inline-flex rounded-lg bg-[#1B6B4A]/[0.08] p-2.5">
-                      <Icon className="h-5 w-5 text-[#155939]" />
+                    <div className="mb-3 inline-flex rounded-lg bg-[#34c759]/[0.08] p-2.5">
+                      <Icon className="h-5 w-5 text-[#2ba048]" />
                     </div>
-                    <h3 className="mb-2 font-semibold text-[#0C1829]">
+                    <h3 className="mb-2 font-semibold text-[#212121]">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-[#7C8A9E]">{item.desc}</p>
+                    <p className="text-sm text-[#8a8a8a]">{item.desc}</p>
                   </div>
                 </Reveal>
               );
@@ -564,7 +564,7 @@ export default function CannabisPage() {
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h2
-              className="mb-10 text-center text-3xl font-bold text-[#0C1829]"
+              className="mb-10 text-center text-3xl font-bold text-[#212121]"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               Built for every part of the supply chain
@@ -576,14 +576,14 @@ export default function CannabisPage() {
               const Icon = uc.icon;
               return (
                 <Reveal key={uc.name} delay={i * 0.05}>
-                  <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#E5E7EB] bg-white p-6 text-center transition-colors hover:border-[#1B6B4A]/30">
-                    <div className="rounded-lg bg-[#1B6B4A]/[0.08] p-3">
-                      <Icon className="h-6 w-6 text-[#155939]" />
+                  <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#d3d3d3] bg-white p-6 text-center transition-colors hover:border-[#34c759]/30">
+                    <div className="rounded-lg bg-[#34c759]/[0.08] p-3">
+                      <Icon className="h-6 w-6 text-[#2ba048]" />
                     </div>
-                    <span className="font-semibold text-[#0C1829]">
+                    <span className="font-semibold text-[#212121]">
                       {uc.name}
                     </span>
-                    <span className="text-xs text-[#7C8A9E]">{uc.detail}</span>
+                    <span className="text-xs text-[#8a8a8a]">{uc.detail}</span>
                   </div>
                 </Reveal>
               );
@@ -593,28 +593,28 @@ export default function CannabisPage() {
       </section>
 
       {/* ───── Comparison Table ───── */}
-      <section className="border-y border-[#E5E7EB] bg-white px-4 py-24">
+      <section className="border-y border-[#d3d3d3] bg-white px-4 py-24">
         <div className="mx-auto max-w-4xl">
           <Reveal>
             <h2
-              className="mb-10 text-center text-3xl font-bold text-[#0C1829] md:text-4xl"
+              className="mb-10 text-center text-3xl font-bold text-[#212121] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               Traditional Banking vs.{" "}
-              <span className="text-[#1B6B4A]">Settlr</span>
+              <span className="text-[#34c759]">Settlr</span>
             </h2>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="overflow-hidden rounded-2xl border border-[#E5E7EB]">
-              <div className="grid grid-cols-3 border-b border-[#E5E7EB] bg-[#F5F5F5]">
-                <div className="p-4 text-xs font-semibold uppercase tracking-wider text-[#7C8A9E]">
+            <div className="overflow-hidden rounded-2xl border border-[#d3d3d3]">
+              <div className="grid grid-cols-3 border-b border-[#d3d3d3] bg-[#f2f2f2]">
+                <div className="p-4 text-xs font-semibold uppercase tracking-wider text-[#8a8a8a]">
                   Feature
                 </div>
                 <div className="p-4 text-center text-xs font-semibold uppercase tracking-wider text-[#B91C1C]">
                   Traditional
                 </div>
-                <div className="p-4 text-center text-xs font-semibold uppercase tracking-wider text-[#155939]">
+                <div className="p-4 text-center text-xs font-semibold uppercase tracking-wider text-[#2ba048]">
                   Settlr
                 </div>
               </div>
@@ -623,17 +623,17 @@ export default function CannabisPage() {
                   key={row.feature}
                   className={`grid grid-cols-3 ${
                     i !== comparisonRows.length - 1
-                      ? "border-b border-[#E5E7EB]"
+                      ? "border-b border-[#d3d3d3]"
                       : ""
                   }`}
                 >
-                  <div className="p-4 text-sm text-[#0C1829]">
+                  <div className="p-4 text-sm text-[#212121]">
                     {row.feature}
                   </div>
-                  <div className="p-4 text-center text-sm text-[#7C8A9E]">
+                  <div className="p-4 text-center text-sm text-[#8a8a8a]">
                     {row.traditional}
                   </div>
-                  <div className="p-4 text-center text-sm font-medium text-[#155939]">
+                  <div className="p-4 text-center text-sm font-medium text-[#2ba048]">
                     {row.settlr}
                   </div>
                 </div>
@@ -648,19 +648,19 @@ export default function CannabisPage() {
         <div className="mx-auto max-w-3xl">
           <Reveal>
             <h2
-              className="mb-4 text-center text-3xl font-bold text-[#0C1829] md:text-4xl"
+              className="mb-4 text-center text-3xl font-bold text-[#212121] md:text-4xl"
               style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
               Frequently Asked Questions
             </h2>
-            <p className="mb-10 text-center text-[#7C8A9E]">
+            <p className="mb-10 text-center text-[#8a8a8a]">
               We know the cannabis industry has unique concerns. Here are the
               questions we hear most.
             </p>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="rounded-2xl border border-[#E5E7EB] bg-white px-6">
+            <div className="rounded-2xl border border-[#d3d3d3] bg-white px-6">
               {faqItems.map((item, i) => (
                 <FAQItem key={i} q={item.q} a={item.a} />
               ))}
@@ -671,7 +671,7 @@ export default function CannabisPage() {
 
       {/* ───── CTA ───── */}
       <section className="relative overflow-hidden px-4 py-24">
-        <div className="absolute inset-0 bg-[#0C1829]" />
+        <div className="absolute inset-0 bg-[#212121]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(27,107,74,0.15),transparent)]" />
 
         <motion.div
@@ -689,9 +689,9 @@ export default function CannabisPage() {
             }}
           >
             Your business is legal.{" "}
-            <span className="text-[#1B6B4A]">Your payments should be too.</span>
+            <span className="text-[#34c759]">Your payments should be too.</span>
           </h2>
-          <p className="mb-8 text-lg text-[#7C8A9E]">
+          <p className="mb-8 text-lg text-[#8a8a8a]">
             Join cannabis operators moving from cash and unreliable banks to
             instant, compliant USDC settlements. Set up in minutes, not months.
           </p>
@@ -700,7 +700,7 @@ export default function CannabisPage() {
               href="/waitlist"
               className="group inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-white transition-all hover:opacity-90"
               style={{
-                background: "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                background: "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
               }}
             >
               Request Access
@@ -713,7 +713,7 @@ export default function CannabisPage() {
               Read the Docs
             </Link>
           </div>
-          <p className="mt-6 text-xs text-[#7C8A9E]/60">
+          <p className="mt-6 text-xs text-[#8a8a8a]/60">
             Non-custodial \u00b7 GENIUS Act compliant \u00b7 Full audit trail
             \u00b7 No bank account needed
           </p>

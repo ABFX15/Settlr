@@ -19,11 +19,11 @@ export default function AboutPage() {
         style={{ background: "#FFFFFF" }}
       >
         <article>
-          <h1 className="text-4xl font-bold tracking-tight text-[#0C1829] mb-6">
+          <h1 className="text-4xl font-bold tracking-tight text-[#212121] mb-6">
             About Settlr
           </h1>
 
-          <section className="space-y-5 text-[#3B4963] text-base leading-relaxed">
+          <section className="space-y-5 text-[#5c5c5c] text-base leading-relaxed">
             <p>
               Settlr is non-custodial stablecoin settlement infrastructure
               purpose-built for cannabis wholesalers and high-risk B2B supply
@@ -32,7 +32,7 @@ export default function AboutPage() {
               fee.
             </p>
 
-            <h2 className="text-2xl font-semibold text-[#0C1829] pt-4">
+            <h2 className="text-2xl font-semibold text-[#212121] pt-4">
               The problem we solve
             </h2>
             <p>
@@ -48,7 +48,7 @@ export default function AboutPage() {
               funds, no processor can hold your reserves.
             </p>
 
-            <h2 className="text-2xl font-semibold text-[#0C1829] pt-4">
+            <h2 className="text-2xl font-semibold text-[#212121] pt-4">
               How it works
             </h2>
             <ul className="list-disc pl-6 space-y-2">
@@ -77,7 +77,7 @@ export default function AboutPage() {
               </li>
             </ul>
 
-            <h2 className="text-2xl font-semibold text-[#0C1829] pt-4">
+            <h2 className="text-2xl font-semibold text-[#212121] pt-4">
               Built on Solana
             </h2>
             <p>
@@ -88,14 +88,14 @@ export default function AboutPage() {
               registration, and refund processing entirely on-chain.
             </p>
 
-            <h2 className="text-2xl font-semibold text-[#0C1829] pt-4">
+            <h2 className="text-2xl font-semibold text-[#212121] pt-4">
               Contact
             </h2>
             <p>
               Reach us at{" "}
               <a
                 href="mailto:adam@settlr.dev"
-                className="text-[#1B6B4A] underline"
+                className="text-[#34c759] underline"
               >
                 adam@settlr.dev
               </a>{" "}
@@ -104,7 +104,7 @@ export default function AboutPage() {
                 href="https://x.com/settlrp"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#1B6B4A] underline"
+                className="text-[#34c759] underline"
               >
                 X / Twitter
               </a>
@@ -115,13 +115,13 @@ export default function AboutPage() {
           <div className="mt-12 flex gap-4">
             <Link
               href="/pricing"
-              className="inline-block rounded-lg bg-[#1B6B4A] px-6 py-3 text-sm font-semibold text-white hover:bg-[#155a3c] transition-colors"
+              className="inline-block rounded-lg bg-[#34c759] px-6 py-3 text-sm font-semibold text-white hover:bg-[#2ba048] transition-colors"
             >
               View Pricing
             </Link>
             <Link
               href="/demo"
-              className="inline-block rounded-lg border border-[#E5E7EB] px-6 py-3 text-sm font-semibold text-[#0C1829] hover:bg-[#F9FAFB] transition-colors"
+              className="inline-block rounded-lg border border-[#d3d3d3] px-6 py-3 text-sm font-semibold text-[#212121] hover:bg-[#f2f2f2] transition-colors"
             >
               Try the Demo
             </Link>

@@ -24,7 +24,7 @@ export function Testimonials() {
           </h2>
           <p
             className="mx-auto mt-4 max-w-md text-base font-normal"
-            style={{ color: "#6B7280" }}
+            style={{ color: "#5c5c5c" }}
           >
             Every settlement is verifiable on-chain. Here&apos;s what the first
             one looked like.
@@ -65,7 +65,7 @@ export function Testimonials() {
 
               <p
                 className="mt-4 max-w-xl text-[15px] leading-relaxed"
-                style={{ color: "#6B7280" }}
+                style={{ color: "#5c5c5c" }}
               >
                 First live settlement through Settlr — USDC moved from buyer to
                 supplier in under 5 seconds with zero chargebacks, zero holds,
@@ -102,7 +102,7 @@ export function Testimonials() {
                     />
                     <span
                       className="text-xs font-medium"
-                      style={{ color: "#6B7280" }}
+                      style={{ color: "#5c5c5c" }}
                     >
                       {m.label}:
                     </span>

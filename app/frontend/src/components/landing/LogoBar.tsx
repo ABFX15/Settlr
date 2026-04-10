@@ -16,7 +16,7 @@ export function LogoBar() {
   return (
     <section className="bg-white py-14 overflow-hidden">
       <div className="mx-auto max-w-[1200px] px-6 text-center">
-        <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
+        <p className="mb-8 text-xs font-semibold uppercase tracking-[0.2em] text-[#8a8a8a]">
           Powered by
         </p>
       </div>

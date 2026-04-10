@@ -21,13 +21,13 @@ import { Footer } from "@/components/ui/Footer";
 
 /* ─── Palette ─── */
 const CREAM = "#FFFFFF";
-const NAVY = "#0C1829";
-const SLATE = "#3B4963";
-const MUTED = "#7C8A9E";
-const GREEN = "#1B6B4A";
-const ACCENT_LIGHT = "#2A9D6A";
+const NAVY = "#212121";
+const SLATE = "#5c5c5c";
+const MUTED = "#8a8a8a";
+const GREEN = "#34c759";
+const ACCENT_LIGHT = "#2ba048";
 const TOPO = "#E8E4DA";
-const CARD_BORDER = "#E5E7EB";
+const CARD_BORDER = "#d3d3d3";
 
 /* ─── Animation variants ─── */
 const fadeUp = {
@@ -236,7 +236,7 @@ export default function StripeConnectComparison() {
                 className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
                 style={{
                   background:
-                    "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                    "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                 }}
               >
                 Start Sending — Free
@@ -450,7 +450,7 @@ export default function StripeConnectComparison() {
               style={{ fontFamily: "var(--font-jetbrains)" }}
             >
               <code>
-                <span style={{ color: "#7C8A9E" }}>
+                <span style={{ color: "#8a8a8a" }}>
                   {"// npm install @settlr/sdk\n"}
                 </span>
                 <span style={{ color: MUTED }}>{"import "}</span>
@@ -474,7 +474,7 @@ export default function StripeConnectComparison() {
                 </span>
                 <span style={{ color: MUTED }}>{",\n"}</span>
                 <span style={{ color: MUTED }}>{"  amount: "}</span>
-                <span style={{ color: "#B8860B" }}>{"250_00"}</span>
+                <span style={{ color: "#d29500" }}>{"250_00"}</span>
                 <span style={{ color: MUTED }}>{",\n"}</span>
                 <span style={{ color: MUTED }}>{"  currency: "}</span>
                 <span style={{ color: ACCENT_LIGHT }}>{'"USDC"'}</span>
@@ -592,7 +592,7 @@ export default function StripeConnectComparison() {
                 className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
                 style={{
                   background:
-                    "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                    "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                 }}
               >
                 Get Early Access

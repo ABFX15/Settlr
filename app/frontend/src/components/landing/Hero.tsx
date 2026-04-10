@@ -42,9 +42,9 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 z-[2]"
         style={{
           background: [
-            "radial-gradient(ellipse 60% 50% at 0% 50%, rgba(45,106,79,0.25) 0%, transparent 60%)",
-            "radial-gradient(ellipse 60% 50% at 100% 50%, rgba(45,106,79,0.18) 0%, transparent 60%)",
-            "radial-gradient(ellipse 80% 30% at 50% 100%, rgba(45,106,79,0.22) 0%, transparent 50%)",
+            "radial-gradient(ellipse 60% 50% at 0% 50%, rgba(52,199,89,0.25) 0%, transparent 60%)",
+            "radial-gradient(ellipse 60% 50% at 100% 50%, rgba(52,199,89,0.18) 0%, transparent 60%)",
+            "radial-gradient(ellipse 80% 30% at 50% 100%, rgba(52,199,89,0.22) 0%, transparent 50%)",
           ].join(", "),
         }}
       />
@@ -70,7 +70,7 @@ export function Hero() {
               <p
                 className="mt-7 max-w-lg text-[18px] font-normal leading-[1.7]"
                 style={{
-                  color: "#D1D5DB",
+                  color: "#d3d3d3",
                   textShadow: "0 1px 8px rgba(0,0,0,0.4)",
                 }}
               >
@@ -157,8 +157,8 @@ export function Hero() {
                 }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/20">
-                    <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#34c759]/20">
+                    <CheckCircle2 className="h-4.5 w-4.5 text-[#34c759]" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-white">
@@ -183,8 +183,8 @@ export function Hero() {
                 }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/20">
-                    <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#34c759]/20">
+                    <CheckCircle2 className="h-4.5 w-4.5 text-[#34c759]" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-white">

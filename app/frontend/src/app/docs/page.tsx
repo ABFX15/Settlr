@@ -63,20 +63,20 @@ function DocsPageInner() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-[#FFFFFF] text-[#0C1829] pt-16">
+      <div className="min-h-screen bg-[#FFFFFF] text-[#212121] pt-16">
         <div className="flex">
           {/* Sidebar */}
-          <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 border-r border-[#E5E7EB] bg-[#0d0d14] overflow-y-auto">
+          <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 border-r border-[#d3d3d3] bg-[#f2f2f2] overflow-y-auto">
             <div className="p-4">
               {/* Search */}
               <div className="relative mb-6">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7C8A9E]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8a8a8a]" />
                 <input
                   type="text"
                   placeholder="Search docs..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] py-2 pl-10 pr-4 text-sm text-[#0C1829] placeholder:text-[#7C8A9E] focus:border-[#3B82F6]/50 focus:outline-none"
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] py-2 pl-10 pr-4 text-sm text-[#212121] placeholder:text-[#8a8a8a] focus:border-[#3B82F6]/50 focus:outline-none"
                 />
               </div>
 
@@ -91,8 +91,8 @@ function DocsPageInner() {
                       onClick={() => setActiveTab(tab.id as typeof activeTab)}
                       className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                         isActive
-                          ? "bg-[#1B6B4A]/10 text-[#1B6B4A]"
-                          : "text-[#3B4963] hover:bg-[#F3F4F6] hover:text-[#0C1829]"
+                          ? "bg-[#34c759]/10 text-[#34c759]"
+                          : "text-[#5c5c5c] hover:bg-[#f2f2f2] hover:text-[#212121]"
                       }`}
                     >
                       <Icon className="h-4 w-4" />
@@ -103,8 +103,8 @@ function DocsPageInner() {
               </nav>
 
               {/* External Links */}
-              <div className="mt-8 border-t border-[#E5E7EB] pt-6">
-                <p className="mb-3 text-xs font-semibold uppercase text-[#7C8A9E]">
+              <div className="mt-8 border-t border-[#d3d3d3] pt-6">
+                <p className="mb-3 text-xs font-semibold uppercase text-[#8a8a8a]">
                   Resources
                 </p>
                 <div className="space-y-1">
@@ -112,7 +112,7 @@ function DocsPageInner() {
                     href="https://github.com/ABFX15/x402-hack-payment"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#3B4963] hover:bg-[#F3F4F6] hover:text-[#0C1829]"
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#5c5c5c] hover:bg-[#f2f2f2] hover:text-[#212121]"
                   >
                     GitHub
                     <ExternalLink className="h-3 w-3" />
@@ -128,22 +128,22 @@ function DocsPageInner() {
               {/* Hero */}
               <div className="mb-10">
                 <h1 className="text-4xl font-bold mb-4">Documentation</h1>
-                <p className="text-xl text-[#3B4963]">
+                <p className="text-xl text-[#5c5c5c]">
                   Stablecoin settlement infrastructure for cannabis B2B.
                   Connects to your POS, automates invoicing, settles in USDC.
                 </p>
               </div>
 
               {/* Mobile Navigation Tabs */}
-              <div className="flex gap-1 mb-8 border-b border-[#E5E7EB] overflow-x-auto lg:hidden">
+              <div className="flex gap-1 mb-8 border-b border-[#d3d3d3] overflow-x-auto lg:hidden">
                 {docsTabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as typeof activeTab)}
                     className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
                       activeTab === tab.id
-                        ? "text-[#1B6B4A] border-b-2 border-[#1B6B4A]"
-                        : "text-[#7C8A9E] hover:text-[#0C1829]"
+                        ? "text-[#34c759] border-b-2 border-[#34c759]"
+                        : "text-[#8a8a8a] hover:text-[#212121]"
                     }`}
                   >
                     {tab.label}
@@ -182,7 +182,7 @@ function QuickStartContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Get Started in 5 Minutes</h2>
-        <p className="text-[#7C8A9E] mb-6">
+        <p className="text-[#8a8a8a] mb-6">
           Settlr automates B2B cannabis payments. Connect your POS system and
           invoices settle in USDC on Solana — no bank wires, no 30-day net
           terms, no chargebacks.
@@ -190,34 +190,34 @@ function QuickStartContent() {
 
         {/* Two paths */}
         <div className="grid md:grid-cols-2 gap-4 mb-12">
-          <div className="rounded-xl border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.05] p-5">
-            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-0.5 rounded-full mb-3">
+          <div className="rounded-xl border border-[#34c759]/20 bg-[#34c759]/[0.05] p-5">
+            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#34c759]/15 text-[#34c759] px-2 py-0.5 rounded-full mb-3">
               Flagship
             </span>
-            <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
+            <h3 className="text-lg font-semibold text-[#212121] mb-2">
               LeafLink Integration
             </h3>
-            <p className="text-sm text-[#7C8A9E] mb-3">
+            <p className="text-sm text-[#8a8a8a] mb-3">
               Connect your LeafLink account. When a purchase order is created,
               Settlr auto-generates a USDC invoice and emails a payment link to
               the buyer.
             </p>
-            <span className="text-sm text-[#1B6B4A] font-medium">
+            <span className="text-sm text-[#34c759] font-medium">
               See LeafLink tab →
             </span>
           </div>
-          <div className="rounded-xl border border-[#E5E7EB] bg-[#F3F4F6]/50 p-5">
-            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#7C8A9E]/10 text-[#7C8A9E] px-2 py-0.5 rounded-full mb-3">
+          <div className="rounded-xl border border-[#d3d3d3] bg-[#f2f2f2]/50 p-5">
+            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#8a8a8a]/10 text-[#8a8a8a] px-2 py-0.5 rounded-full mb-3">
               Manual
             </span>
-            <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
+            <h3 className="text-lg font-semibold text-[#212121] mb-2">
               Direct Invoices
             </h3>
-            <p className="text-sm text-[#7C8A9E] mb-3">
+            <p className="text-sm text-[#8a8a8a] mb-3">
               Create payment links directly from the dashboard. No
               POS integration required — works for any cannabis B2B transaction.
             </p>
-            <span className="text-sm text-[#1B6B4A] font-medium">
+            <span className="text-sm text-[#34c759] font-medium">
               See Invoices tab →
             </span>
           </div>
@@ -226,19 +226,19 @@ function QuickStartContent() {
         {/* Step 1 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-[#34c759]/15 text-[#34c759] flex items-center justify-center font-bold">
               1
             </div>
             <h3 className="text-xl font-semibold">Request Access</h3>
           </div>
-          <p className="text-[#7C8A9E] mb-4">
+          <p className="text-[#8a8a8a] mb-4">
             Settlr is currently invite-only. Submit a request on our waitlist
             and we&apos;ll review your application. Once approved, you&apos;ll
             receive an email with a link to sign in and complete onboarding.
           </p>
           <a
             href="/waitlist"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#1B6B4A] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#34c759] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
           >
             Request Access →
           </a>
@@ -247,12 +247,12 @@ function QuickStartContent() {
         {/* Step 2 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-[#34c759]/15 text-[#34c759] flex items-center justify-center font-bold">
               2
             </div>
             <h3 className="text-xl font-semibold">Complete Onboarding</h3>
           </div>
-          <p className="text-[#7C8A9E] mb-4">
+          <p className="text-[#8a8a8a] mb-4">
             Sign in with your email, complete merchant onboarding (business
             details, license verification), and connect your LeafLink account
             from the dashboard.
@@ -262,17 +262,17 @@ function QuickStartContent() {
         {/* Step 3 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[#1B6B4A]/15 text-[#1B6B4A] flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-[#34c759]/15 text-[#34c759] flex items-center justify-center font-bold">
               3
             </div>
             <h3 className="text-xl font-semibold">Orders Auto-Settle</h3>
           </div>
-          <p className="text-[#7C8A9E] mb-4">
+          <p className="text-[#8a8a8a] mb-4">
             When a purchase order hits LeafLink, Settlr receives a webhook,
             creates a USDC invoice, and emails the buyer a one-click payment
             link. Settlement is instant.
           </p>
-          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 font-mono text-sm text-[#3B4963]">
+          <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 font-mono text-sm text-[#5c5c5c]">
             <div className="space-y-1">
               <p>LeafLink PO #4821 created → webhook fires</p>
               <p>&nbsp;&nbsp;→ Settlr invoice INV-4821 auto-created</p>
@@ -316,18 +316,18 @@ function LeafLinkContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">LeafLink Integration</h2>
-        <p className="text-[#7C8A9E] mb-6">
+        <p className="text-[#8a8a8a] mb-6">
           Connect your LeafLink account to automate B2B cannabis settlement.
           When purchase orders are created in LeafLink, Settlr automatically
           generates USDC invoices and emails payment links to buyers.
         </p>
 
         {/* How it works */}
-        <div className="bg-[#1B6B4A]/10 border border-[#1B6B4A]/30 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-[#1B6B4A] mb-2">
+        <div className="bg-[#34c759]/10 border border-[#34c759]/30 rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-[#34c759] mb-2">
             How it works
           </h3>
-          <ol className="text-[#7C8A9E] text-sm space-y-2">
+          <ol className="text-[#8a8a8a] text-sm space-y-2">
             <li>1. Purchase order created in LeafLink (by buyer or seller)</li>
             <li>2. LeafLink sends a webhook to Settlr</li>
             <li>3. Settlr creates a USDC invoice + payment link</li>
@@ -343,40 +343,40 @@ function LeafLinkContent() {
         <h3 className="text-xl font-semibold mb-4">
           1. Get Your LeafLink API Key
         </h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           In LeafLink, go to{" "}
-          <strong className="text-[#3B4963]">
+          <strong className="text-[#5c5c5c]">
             Settings → Integrations → API
           </strong>{" "}
           and generate an API key. This is a real LeafLink feature — the key
           gives Settlr read access to your orders and the ability to update
           payment status.
         </p>
-        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mb-6">
-          <p className="text-sm text-[#7C8A9E]">
-            <strong className="text-[#3B4963]">Auth format:</strong>{" "}
-            <code className="text-[#1B6B4A] bg-white px-2 py-0.5 rounded">
+        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-6">
+          <p className="text-sm text-[#8a8a8a]">
+            <strong className="text-[#5c5c5c]">Auth format:</strong>{" "}
+            <code className="text-[#34c759] bg-white px-2 py-0.5 rounded">
               Authorization: App &#123;your_api_key&#125;
             </code>
           </p>
-          <p className="text-sm text-[#7C8A9E] mt-2">
-            <strong className="text-[#3B4963]">Permissions needed:</strong> Read
+          <p className="text-sm text-[#8a8a8a] mt-2">
+            <strong className="text-[#5c5c5c]">Permissions needed:</strong> Read
             orders, update order status
           </p>
         </div>
 
         {/* Step 2: Configure */}
         <h3 className="text-xl font-semibold mb-4">2. Configure in Settlr</h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           Save your LeafLink API key in the Settlr dashboard under{" "}
-          <strong className="text-[#3B4963]">Settings → Integrations → LeafLink</strong>.
+          <strong className="text-[#5c5c5c]">Settings → Integrations → LeafLink</strong>.
           Settlr validates the key immediately by calling LeafLink&apos;s company endpoint.
         </p>
-        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mb-6">
-          <p className="text-sm text-[#7C8A9E]">
-            <strong className="text-[#3B4963]">Configuration options:</strong>
+        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-6">
+          <p className="text-sm text-[#8a8a8a]">
+            <strong className="text-[#5c5c5c]">Configuration options:</strong>
           </p>
-          <ul className="text-sm text-[#7C8A9E] mt-2 space-y-1">
+          <ul className="text-sm text-[#8a8a8a] mt-2 space-y-1">
             <li>• <strong>Auto-create invoice</strong> — Automatically create a Settlr invoice when a PO arrives</li>
             <li>• <strong>Auto-send link</strong> — Automatically email the payment link to the buyer</li>
             <li>• <strong>METRC sync</strong> — Include METRC tags and licenses in invoice metadata</li>
@@ -387,7 +387,7 @@ function LeafLinkContent() {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           3. Set Your Webhook URL
         </h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           In LeafLink, configure a webhook pointing to your Settlr instance.
           LeafLink signs webhooks with HMAC-SHA256 — Settlr verifies every
           payload.
@@ -402,10 +402,10 @@ function LeafLinkContent() {
 
         {/* Webhook events */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Webhook Events</h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           Settlr listens for these LeafLink webhook events:
         </p>
-        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden">
+        <div className="bg-[#f2f2f2] rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -413,28 +413,28 @@ function LeafLinkContent() {
                 <th className="px-4 py-3 font-medium">Settlr Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E7EB]">
+            <tbody className="divide-y divide-[#d3d3d3]">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   order.created
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Creates invoice + emails payment link to buyer
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   order.accepted
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Creates invoice if not already created
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   order.cancelled
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Marks sync record as cancelled
                 </td>
               </tr>
@@ -444,7 +444,7 @@ function LeafLinkContent() {
 
         {/* METRC */}
         <h3 className="text-xl font-semibold mb-4 mt-8">METRC Compliance</h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           When METRC sync is enabled, Settlr extracts METRC package tags,
           license numbers, and manifest data from LeafLink line items and
           attaches them to the invoice metadata. Full audit trail included with
@@ -466,7 +466,7 @@ function LeafLinkContent() {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           Configuration Options
         </h3>
-        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden">
+        <div className="bg-[#f2f2f2] rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -475,40 +475,40 @@ function LeafLinkContent() {
                 <th className="px-4 py-3 font-medium">Description</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E7EB]">
+            <tbody className="divide-y divide-[#d3d3d3]">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   auto_create_invoice
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">true</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">true</td>
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Auto-create Settlr invoice when PO arrives
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   auto_send_link
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">true</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">true</td>
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Auto-email payment link to buyer
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   metrc_sync
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">true</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">true</td>
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Include METRC tags &amp; licenses in metadata
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   webhook_secret
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">—</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">—</td>
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   HMAC secret for verifying LeafLink webhooks
                 </td>
               </tr>
@@ -517,11 +517,11 @@ function LeafLinkContent() {
         </div>
 
         {/* Retry */}
-        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mt-8">
-          <h4 className="font-medium text-[#0C1829] mb-2">
+        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#212121] mb-2">
             Failed Webhook Retry
           </h4>
-          <p className="text-[#7C8A9E] text-sm">
+          <p className="text-[#8a8a8a] text-sm">
             If a webhook fails to process, you can retry it from the dashboard.
             The retry re-fetches the order from LeafLink and re-runs the invoice
             creation flow.
@@ -541,18 +541,18 @@ function InvoicesContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Invoices &amp; Payments</h2>
-        <p className="text-[#7C8A9E] mb-6">
+        <p className="text-[#8a8a8a] mb-6">
           Create USDC invoices for any cannabis B2B transaction. Works
           standalone or alongside the LeafLink integration for orders that
           don&apos;t originate from a POS.
         </p>
 
         {/* How it works */}
-        <div className="bg-[#1B6B4A]/10 border border-[#1B6B4A]/30 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-[#1B6B4A] mb-2">
+        <div className="bg-[#34c759]/10 border border-[#34c759]/30 rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-[#34c759] mb-2">
             Settlement Flow
           </h3>
-          <ol className="text-[#7C8A9E] text-sm space-y-2">
+          <ol className="text-[#8a8a8a] text-sm space-y-2">
             <li>1. Create an invoice from the dashboard</li>
             <li>2. Buyer gets an email with a payment link</li>
             <li>3. They click, connect a wallet, and pay in USDC</li>
@@ -563,17 +563,17 @@ function InvoicesContent() {
 
         {/* Create Invoice */}
         <h3 className="text-xl font-semibold mb-4">Create an Invoice</h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           From your dashboard, go to{" "}
-          <strong className="text-[#3B4963]">Invoices → Create Invoice</strong>.
+          <strong className="text-[#5c5c5c]">Invoices → Create Invoice</strong>.
           Enter the amount, memo, and buyer email. Settlr generates a unique
           payment link and sends it to the buyer automatically.
         </p>
-        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mb-6">
-          <p className="text-sm text-[#7C8A9E]">
-            <strong className="text-[#3B4963]">Invoice fields:</strong>
+        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-6">
+          <p className="text-sm text-[#8a8a8a]">
+            <strong className="text-[#5c5c5c]">Invoice fields:</strong>
           </p>
-          <ul className="text-sm text-[#7C8A9E] mt-2 space-y-1">
+          <ul className="text-sm text-[#8a8a8a] mt-2 space-y-1">
             <li>• <strong>Amount</strong> — Invoice total in USD (settled in USDC)</li>
             <li>• <strong>Memo</strong> — Description (e.g. &quot;PO #4821 — 500 units Purple Haze&quot;)</li>
             <li>• <strong>Buyer email</strong> — Payment link auto-sent to this address</li>
@@ -583,19 +583,19 @@ function InvoicesContent() {
 
         {/* Payment Links */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Payment Links</h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           Every invoice generates a unique payment link. Share it via email,
           text, or any channel — the buyer clicks, connects a wallet, and pays.
           No app download required.
         </p>
-        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mb-6">
-          <p className="text-sm text-[#7C8A9E]">
-            <strong className="text-[#3B4963]">Payment URL format:</strong>{" "}
-            <code className="text-[#1B6B4A]">
+        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-6">
+          <p className="text-sm text-[#8a8a8a]">
+            <strong className="text-[#5c5c5c]">Payment URL format:</strong>{" "}
+            <code className="text-[#34c759]">
               https://settlr.dev/invoice/&#123;token&#125;
             </code>
           </p>
-          <p className="text-sm text-[#7C8A9E] mt-2">
+          <p className="text-sm text-[#8a8a8a] mt-2">
             Links expire after 7 days by default. The buyer sees the amount,
             memo, and a one-click USDC payment button.
           </p>
@@ -605,12 +605,12 @@ function InvoicesContent() {
         <h3 className="text-xl font-semibold mb-4 mt-8">
           Track Payment Status
         </h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           Monitor all invoices from{" "}
-          <strong className="text-[#3B4963]">Dashboard → Invoices</strong>.
+          <strong className="text-[#5c5c5c]">Dashboard → Invoices</strong>.
           Each invoice shows its current status:
         </p>
-        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden mb-6">
+        <div className="bg-[#f2f2f2] rounded-lg overflow-hidden mb-6">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -618,22 +618,22 @@ function InvoicesContent() {
                 <th className="px-4 py-3 font-medium">Meaning</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E7EB]">
+            <tbody className="divide-y divide-[#d3d3d3]">
               <tr>
-                <td className="px-4 py-3 font-mono text-yellow-600">pending</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 font-mono text-[#d29500]">pending</td>
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Invoice created, awaiting payment
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">completed</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">completed</td>
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Payment received and confirmed on-chain
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#7C8A9E]">expired</td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 font-mono text-[#8a8a8a]">expired</td>
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Payment link expired (7 days default)
                 </td>
               </tr>
@@ -642,11 +642,11 @@ function InvoicesContent() {
         </div>
 
         {/* Gasless */}
-        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mt-8">
-          <h4 className="font-medium text-[#0C1829] mb-2">
+        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#212121] mb-2">
             Gasless Transactions
           </h4>
-          <p className="text-[#7C8A9E] text-sm">
+          <p className="text-[#8a8a8a] text-sm">
             All Settlr payments are gasless by default. Buyers don&apos;t need
             SOL for transaction fees — the fee payer is handled by Settlr&apos;s
             infrastructure (powered by Kora).
@@ -666,7 +666,7 @@ function DashboardContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Operator Dashboard</h2>
-        <p className="text-[#7C8A9E] mb-6">
+        <p className="text-[#8a8a8a] mb-6">
           Monitor your settlement volume, manage integrations, and track
           compliance from the dashboard.
         </p>
@@ -674,32 +674,32 @@ function DashboardContent() {
         {/* Overview */}
         <h3 className="text-xl font-semibold mb-4">Dashboard Features</h3>
         <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4">
-            <h4 className="font-medium text-[#0C1829] mb-2">
+          <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4">
+            <h4 className="font-medium text-[#212121] mb-2">
               Settlement Volume
             </h4>
-            <p className="text-sm text-[#7C8A9E]">
+            <p className="text-sm text-[#8a8a8a]">
               Real-time view of total USDC settled, active invoices, and payment
               history across all channels.
             </p>
           </div>
-          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4">
-            <h4 className="font-medium text-[#0C1829] mb-2">LeafLink Status</h4>
-            <p className="text-sm text-[#7C8A9E]">
+          <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4">
+            <h4 className="font-medium text-[#212121] mb-2">LeafLink Status</h4>
+            <p className="text-sm text-[#8a8a8a]">
               Connection health, last webhook received, sync records, and failed
               webhook retry queue.
             </p>
           </div>
-          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4">
-            <h4 className="font-medium text-[#0C1829] mb-2">Treasury</h4>
-            <p className="text-sm text-[#7C8A9E]">
+          <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4">
+            <h4 className="font-medium text-[#212121] mb-2">Treasury</h4>
+            <p className="text-sm text-[#8a8a8a]">
               On-chain treasury balance, accumulated platform fees, and
               one-click claim to your wallet.
             </p>
           </div>
-          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4">
-            <h4 className="font-medium text-[#0C1829] mb-2">Compliance Logs</h4>
-            <p className="text-sm text-[#7C8A9E]">
+          <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4">
+            <h4 className="font-medium text-[#212121] mb-2">Compliance Logs</h4>
+            <p className="text-sm text-[#8a8a8a]">
               METRC tags, license numbers, and on-chain signatures for every
               transaction. Export-ready audit trail.
             </p>
@@ -708,41 +708,41 @@ function DashboardContent() {
 
         {/* Treasury */}
         <h3 className="text-xl font-semibold mb-4">Treasury &amp; Fees</h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           Every payment processed through Settlr collects a configurable
           platform fee (default 2%) into a program-owned treasury PDA on Solana.
           Authorized signers can claim accumulated fees at any time.
         </p>
-        <div className="bg-[#F3F4F6] rounded-lg p-6 border border-[#E5E7EB] mb-6">
+        <div className="bg-[#f2f2f2] rounded-lg p-6 border border-[#d3d3d3] mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <div>
-              <p className="text-sm text-[#7C8A9E] mb-1">Fee Collection</p>
-              <p className="text-lg font-semibold text-[#0C1829]">Automatic</p>
-              <p className="text-xs text-[#7C8A9E]">On every payment</p>
+              <p className="text-sm text-[#8a8a8a] mb-1">Fee Collection</p>
+              <p className="text-lg font-semibold text-[#212121]">Automatic</p>
+              <p className="text-xs text-[#8a8a8a]">On every payment</p>
             </div>
             <div>
-              <p className="text-sm text-[#7C8A9E] mb-1">Claim Method</p>
-              <p className="text-lg font-semibold text-[#0C1829]">
+              <p className="text-sm text-[#8a8a8a] mb-1">Claim Method</p>
+              <p className="text-lg font-semibold text-[#212121]">
                 Multisig / Wallet
               </p>
-              <p className="text-xs text-[#7C8A9E]">Authority-gated</p>
+              <p className="text-xs text-[#8a8a8a]">Authority-gated</p>
             </div>
             <div>
-              <p className="text-sm text-[#7C8A9E] mb-1">Settlement</p>
-              <p className="text-lg font-semibold text-[#0C1829]">USDC</p>
-              <p className="text-xs text-[#7C8A9E]">Direct to your wallet</p>
+              <p className="text-sm text-[#8a8a8a] mb-1">Settlement</p>
+              <p className="text-lg font-semibold text-[#212121]">USDC</p>
+              <p className="text-xs text-[#8a8a8a]">Direct to your wallet</p>
             </div>
           </div>
         </div>
 
         {/* Dashboard link */}
-        <div className="bg-[#1B6B4A]/10 border border-[#1B6B4A]/20 rounded-lg p-4 mt-8">
-          <h4 className="font-medium text-[#1B6B4A] mb-2">
+        <div className="bg-[#34c759]/10 border border-[#34c759]/20 rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#34c759] mb-2">
             Access the Dashboard
           </h4>
-          <p className="text-[#7C8A9E] text-sm">
+          <p className="text-[#8a8a8a] text-sm">
             Visit{" "}
-            <a href="/dashboard" className="text-[#1B6B4A] hover:underline">
+            <a href="/dashboard" className="text-[#34c759] hover:underline">
               /dashboard
             </a>{" "}
             to see the live dashboard with real-time on-chain data, treasury
@@ -763,24 +763,24 @@ function APIContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">REST API Reference</h2>
-        <p className="text-[#7C8A9E] mb-6">
+        <p className="text-[#8a8a8a] mb-6">
           Internal API endpoints for payments, LeafLink integration, and
           treasury management. All authenticated routes require a valid session
           (Privy login).
         </p>
 
         {/* Base URL */}
-        <div className="bg-[#F3F4F6] rounded-lg p-4 mb-6">
-          <p className="text-[#7C8A9E] text-sm mb-1">Base URL</p>
-          <code className="text-[#1B6B4A]">https://settlr.dev/api</code>
+        <div className="bg-[#f2f2f2] rounded-lg p-4 mb-6">
+          <p className="text-[#8a8a8a] text-sm mb-1">Base URL</p>
+          <code className="text-[#34c759]">https://settlr.dev/api</code>
         </div>
 
         {/* Authentication */}
-        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-[#0C1829] mb-2">
+        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-8">
+          <h3 className="text-lg font-semibold text-[#212121] mb-2">
             Authentication
           </h3>
-          <p className="text-[#7C8A9E] text-sm">
+          <p className="text-[#8a8a8a] text-sm">
             API requests are authenticated via your Privy session. When calling
             from the dashboard, authentication is handled automatically. For
             server-to-server integrations (like LeafLink webhooks), Settlr uses
@@ -789,84 +789,84 @@ function APIContent() {
         </div>
 
         {/* LeafLink Endpoints */}
-        <h3 className="text-lg font-semibold text-[#3B4963] mb-4">
+        <h3 className="text-lg font-semibold text-[#5c5c5c] mb-4">
           LeafLink Integration
         </h3>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
-            <code className="text-[#0C1829]">
+            <code className="text-[#212121]">
               /integrations/leaflink/config
             </code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E]">
+            <p className="text-[#8a8a8a]">
               Get your current LeafLink integration configuration.
             </p>
           </div>
         </div>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
-            <code className="text-[#0C1829]">
+            <code className="text-[#212121]">
               /integrations/leaflink/config
             </code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E]">
+            <p className="text-[#8a8a8a]">
               Create or update your LeafLink integration. Validates the API key
               against LeafLink before saving.
             </p>
           </div>
         </div>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
-            <code className="text-[#0C1829]">
+            <code className="text-[#212121]">
               /integrations/leaflink/webhook
             </code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E]">
+            <p className="text-[#8a8a8a]">
               Receives webhooks from LeafLink. Configure this URL in your
               LeafLink webhook settings. Verifies HMAC-SHA256 signatures.
             </p>
           </div>
         </div>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
-            <code className="text-[#0C1829]">/integrations/leaflink/retry</code>
+            <code className="text-[#212121]">/integrations/leaflink/retry</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E]">
+            <p className="text-[#8a8a8a]">
               Retry a failed webhook. Re-fetches the order from LeafLink and
               re-runs invoice creation.
             </p>
           </div>
         </div>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
-            <code className="text-[#0C1829]">/integrations/leaflink/syncs</code>
+            <code className="text-[#212121]">/integrations/leaflink/syncs</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E]">
+            <p className="text-[#8a8a8a]">
               List all sync records — tracks each LeafLink order through the
               invoice lifecycle.
             </p>
@@ -874,93 +874,93 @@ function APIContent() {
         </div>
 
         {/* Payment Endpoints */}
-        <h3 className="text-lg font-semibold text-[#3B4963] mt-10 mb-4">
+        <h3 className="text-lg font-semibold text-[#5c5c5c] mt-10 mb-4">
           Payments &amp; Invoices
         </h3>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
-            <code className="text-[#0C1829]">/payments</code>
+            <code className="text-[#212121]">/payments</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E]">
+            <p className="text-[#8a8a8a]">
               Create a USDC payment with a payment link.
             </p>
           </div>
         </div>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
-            <code className="text-[#0C1829]">/payments/:id</code>
+            <code className="text-[#212121]">/payments/:id</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E]">Retrieve a payment by ID.</p>
+            <p className="text-[#8a8a8a]">Retrieve a payment by ID.</p>
           </div>
         </div>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
-            <code className="text-[#0C1829]">/invoices</code>
+            <code className="text-[#212121]">/invoices</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E]">
+            <p className="text-[#8a8a8a]">
               Create a new invoice. Returns a shareable payment link.
             </p>
           </div>
         </div>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
-            <code className="text-[#0C1829]">/invoices</code>
+            <code className="text-[#212121]">/invoices</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E]">
+            <p className="text-[#8a8a8a]">
               List all invoices with optional status filter.
             </p>
           </div>
         </div>
 
         {/* Treasury Endpoints */}
-        <h3 className="text-lg font-semibold text-[#3B4963] mt-10 mb-4">
+        <h3 className="text-lg font-semibold text-[#5c5c5c] mt-10 mb-4">
           Treasury
         </h3>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               GET
             </span>
-            <code className="text-[#0C1829]">/treasury</code>
+            <code className="text-[#212121]">/treasury</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E] text-sm">
+            <p className="text-[#8a8a8a] text-sm">
               Returns treasury balance, platform config (fee BPS, authority,
               total volume/fees), and PDA addresses.
             </p>
           </div>
         </div>
 
-        <div className="border border-[#E5E7EB] rounded-lg overflow-hidden">
-          <div className="bg-[#F3F4F6] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-1 rounded text-sm font-mono">
+        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden">
+          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
+            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
               POST
             </span>
-            <code className="text-[#0C1829]">/fees/claim</code>
+            <code className="text-[#212121]">/fees/claim</code>
           </div>
           <div className="p-4">
-            <p className="text-[#7C8A9E] text-sm">
+            <p className="text-[#8a8a8a] text-sm">
               Builds an unsigned claim_platform_fees transaction for the
               authorized signer.
             </p>
@@ -980,16 +980,16 @@ function WebhooksContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Webhooks</h2>
-        <p className="text-[#7C8A9E] mb-6">
+        <p className="text-[#8a8a8a] mb-6">
           Get notified in real-time when payments settle, invoices are paid, or
           LeafLink orders change state.
         </p>
 
         {/* Setup */}
         <h3 className="text-xl font-semibold mb-4">Setting Up Webhooks</h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           Configure your webhook endpoint in the Settlr dashboard under{" "}
-          <strong className="text-[#3B4963]">Settings → Webhooks</strong>.
+          <strong className="text-[#5c5c5c]">Settings → Webhooks</strong>.
           We&apos;ll send a POST request whenever a payment event occurs.
         </p>
 
@@ -1059,7 +1059,7 @@ export async function POST(req: NextRequest) {
 
         {/* Events */}
         <h3 className="text-xl font-semibold mb-4 mt-8">Event Types</h3>
-        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden">
+        <div className="bg-[#f2f2f2] rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -1067,52 +1067,52 @@ export async function POST(req: NextRequest) {
                 <th className="px-4 py-3 font-medium">Description</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E7EB]">
+            <tbody className="divide-y divide-[#d3d3d3]">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   payment.completed
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Invoice paid and confirmed on-chain
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   payment.expired
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Payment link expired before completion
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   payment.failed
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   Payment failed due to an error
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   leaflink.order.synced
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   LeafLink order processed and invoice created
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   leaflink.order.paid
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   LeafLink order invoice settled in USDC
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A]">
+                <td className="px-4 py-3 font-mono text-[#34c759]">
                   leaflink.sync.failed
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   LeafLink webhook processing failed (retryable)
                 </td>
               </tr>
@@ -1121,9 +1121,9 @@ export async function POST(req: NextRequest) {
         </div>
 
         {/* Security */}
-        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 mt-8">
-          <h4 className="font-medium text-yellow-600 mb-2">Security Note</h4>
-          <p className="text-[#7C8A9E]">
+        <div className="bg-[#d29500]/10 border border-[#d29500]/20 rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#d29500] mb-2">Security Note</h4>
+          <p className="text-[#8a8a8a]">
             Always verify the webhook signature before processing events. Never
             trust the payload without verification. Both Settlr webhooks and
             LeafLink webhooks use HMAC-SHA256.
@@ -1143,7 +1143,7 @@ function IntegrationsContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">POS Integrations</h2>
-        <p className="text-[#7C8A9E] mb-6">
+        <p className="text-[#8a8a8a] mb-6">
           Settlr connects to the cannabis POS and ordering platforms your
           business already uses. LeafLink is live today — Dutchie and Flowhub
           are on the roadmap.
@@ -1151,40 +1151,40 @@ function IntegrationsContent() {
 
         {/* Integration cards */}
         <div className="grid md:grid-cols-3 gap-4 mb-10">
-          <div className="rounded-lg border-2 border-[#1B6B4A]/30 bg-[#1B6B4A]/[0.05] p-5">
+          <div className="rounded-lg border-2 border-[#34c759]/30 bg-[#34c759]/[0.05] p-5">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-2xl">🌿</span>
-              <span className="text-[10px] font-bold tracking-widest uppercase bg-[#1B6B4A]/15 text-[#1B6B4A] px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-bold tracking-widest uppercase bg-[#34c759]/15 text-[#34c759] px-2 py-0.5 rounded-full">
                 Live
               </span>
             </div>
             <h3 className="font-semibold mb-1">LeafLink</h3>
-            <p className="text-sm text-[#7C8A9E]">
+            <p className="text-sm text-[#8a8a8a]">
               Wholesale B2B ordering. Auto-creates USDC invoices from purchase
               orders, syncs payment status back to LeafLink.
             </p>
           </div>
-          <div className="rounded-lg border border-[#E5E7EB] bg-[#F3F4F6]/50 p-5">
+          <div className="rounded-lg border border-[#d3d3d3] bg-[#f2f2f2]/50 p-5">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-2xl">🛒</span>
-              <span className="text-[10px] font-bold tracking-widest uppercase bg-[#7C8A9E]/10 text-[#7C8A9E] px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-bold tracking-widest uppercase bg-[#8a8a8a]/10 text-[#8a8a8a] px-2 py-0.5 rounded-full">
                 Planned
               </span>
             </div>
             <h3 className="font-semibold mb-1">Dutchie</h3>
-            <p className="text-sm text-[#7C8A9E]">
+            <p className="text-sm text-[#8a8a8a]">
               Dispensary POS with METRC integration. Planned for Q3 2026.
             </p>
           </div>
-          <div className="rounded-lg border border-[#E5E7EB] bg-[#F3F4F6]/50 p-5">
+          <div className="rounded-lg border border-[#d3d3d3] bg-[#f2f2f2]/50 p-5">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-2xl">📊</span>
-              <span className="text-[10px] font-bold tracking-widest uppercase bg-[#7C8A9E]/10 text-[#7C8A9E] px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-bold tracking-widest uppercase bg-[#8a8a8a]/10 text-[#8a8a8a] px-2 py-0.5 rounded-full">
                 Planned
               </span>
             </div>
             <h3 className="font-semibold mb-1">Flowhub</h3>
-            <p className="text-sm text-[#7C8A9E]">
+            <p className="text-sm text-[#8a8a8a]">
               Dispensary compliance platform. Planned for Q4 2026.
             </p>
           </div>
@@ -1194,14 +1194,14 @@ function IntegrationsContent() {
         <h3 className="text-xl font-semibold mb-4">
           LeafLink Integration Detail
         </h3>
-        <p className="text-[#7C8A9E] mb-4">
+        <p className="text-[#8a8a8a] mb-4">
           The LeafLink integration is fully production-ready. See the LeafLink
           tab for complete setup instructions, webhook events, METRC compliance,
           and configuration options.
         </p>
 
         <h4 className="font-medium mb-2">API Routes</h4>
-        <div className="bg-[#F3F4F6] rounded-lg overflow-hidden mb-6">
+        <div className="bg-[#f2f2f2] rounded-lg overflow-hidden mb-6">
           <table className="w-full text-left">
             <thead className="bg-white">
               <tr>
@@ -1209,44 +1209,44 @@ function IntegrationsContent() {
                 <th className="px-4 py-3 font-medium">Purpose</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E7EB]">
+            <tbody className="divide-y divide-[#d3d3d3]">
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
                   /api/integrations/leaflink/config
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   GET/POST — manage integration config
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
                   /api/integrations/leaflink/webhook
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   POST — receives LeafLink webhooks
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
                   /api/integrations/leaflink/syncs
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   GET — list order sync records
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
                   /api/integrations/leaflink/retry
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   POST — retry failed webhooks
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#1B6B4A] text-sm">
+                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
                   /api/integrations/leaflink/callback
                 </td>
-                <td className="px-4 py-3 text-[#7C8A9E]">
+                <td className="px-4 py-3 text-[#8a8a8a]">
                   POST — payment callback from buyer
                 </td>
               </tr>
@@ -1255,16 +1255,16 @@ function IntegrationsContent() {
         </div>
 
         {/* Coming Soon */}
-        <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-4 mt-8">
-          <h4 className="font-medium text-[#0C1829] mb-2">
+        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mt-8">
+          <h4 className="font-medium text-[#212121] mb-2">
             Want a different POS integration?
           </h4>
-          <p className="text-[#7C8A9E] text-sm">
+          <p className="text-[#8a8a8a] text-sm">
             We&apos;re actively building out POS integrations for the cannabis
             industry. If you use a platform not listed here, let us know at{" "}
             <a
               href="mailto:support@settlr.dev"
-              className="text-[#1B6B4A] hover:underline"
+              className="text-[#34c759] hover:underline"
             >
               support@settlr.dev
             </a>
@@ -1285,7 +1285,7 @@ function TroubleshootingContent() {
     <div className="space-y-8">
       <section>
         <h2 className="text-2xl font-bold mb-4">Troubleshooting</h2>
-        <p className="text-[#7C8A9E] mb-6">
+        <p className="text-[#8a8a8a] mb-6">
           Common issues and how to fix them.
         </p>
 
@@ -1349,14 +1349,14 @@ function TroubleshootingItem({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-[#E5E7EB] rounded-lg overflow-hidden">
+    <div className="border border-[#d3d3d3] rounded-lg overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-[#F3F4F6] transition-colors"
+        className="w-full px-4 py-4 flex items-center justify-between text-left hover:bg-[#f2f2f2] transition-colors"
       >
         <span className="font-medium">{question}</span>
         <span
-          className={`text-[#1B6B4A] transition-transform ${
+          className={`text-[#34c759] transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         >
@@ -1365,7 +1365,7 @@ function TroubleshootingItem({
       </button>
       {isOpen && (
         <div className="px-4 pb-4">
-          <p className="text-[#7C8A9E] whitespace-pre-line">{answer}</p>
+          <p className="text-[#8a8a8a] whitespace-pre-line">{answer}</p>
         </div>
       )}
     </div>
@@ -1392,11 +1392,11 @@ function CodeBlock({
       return code.split("\n").map((line, i) => (
         <div key={i}>
           {line.startsWith("#") ? (
-            <span className="text-[#7C8A9E]">{line}</span>
+            <span className="text-[#8a8a8a]">{line}</span>
           ) : (
             <>
-              <span className="text-[#7C8A9E]">$ </span>
-              <span className="text-[#1B6B4A]">{line}</span>
+              <span className="text-[#8a8a8a]">$ </span>
+              <span className="text-[#34c759]">{line}</span>
             </>
           )}
         </div>
@@ -1406,12 +1406,12 @@ function CodeBlock({
     if (lang === "json") {
       return code.split("\n").map((line, i) => {
         const highlighted = line
-          .replace(/"([^"]+)":/g, '<span class="text-[#1B6B4A]">"$1"</span>:')
-          .replace(/: "([^"]+)"/g, ': <span class="text-[#1B6B4A]">"$1"</span>')
-          .replace(/: (\d+)/g, ': <span class="text-orange-400">$1</span>')
+          .replace(/"([^"]+)":/g, '<span class="text-[#34c759]">"$1"</span>:')
+          .replace(/: "([^"]+)"/g, ': <span class="text-[#34c759]">"$1"</span>')
+          .replace(/: (\d+)/g, ': <span class="text-[#d29500]">$1</span>')
           .replace(
             /: (true|false|null)/g,
-            ': <span class="text-[#1B6B4A]">$1</span>',
+            ': <span class="text-[#34c759]">$1</span>',
           );
         return (
           <div key={i} dangerouslySetInnerHTML={{ __html: highlighted }} />
@@ -1473,7 +1473,7 @@ function CodeBlock({
     return code.split("\n").map((line, lineIndex) => {
       if (line.trim().startsWith("//")) {
         return (
-          <div key={lineIndex} className="text-[#7C8A9E]">
+          <div key={lineIndex} className="text-[#8a8a8a]">
             {line}
           </div>
         );
@@ -1567,49 +1567,49 @@ function CodeBlock({
                 );
               case "string":
                 return (
-                  <span key={tokenIndex} className="text-[#1B6B4A]">
+                  <span key={tokenIndex} className="text-[#34c759]">
                     {token.value}
                   </span>
                 );
               case "comment":
                 return (
-                  <span key={tokenIndex} className="text-[#7C8A9E]">
+                  <span key={tokenIndex} className="text-[#8a8a8a]">
                     {token.value}
                   </span>
                 );
               case "number":
                 return (
-                  <span key={tokenIndex} className="text-orange-400">
+                  <span key={tokenIndex} className="text-[#d29500]">
                     {token.value}
                   </span>
                 );
               case "builtin":
                 return (
-                  <span key={tokenIndex} className="text-[#1B6B4A]">
+                  <span key={tokenIndex} className="text-[#34c759]">
                     {token.value}
                   </span>
                 );
               case "react":
                 return (
-                  <span key={tokenIndex} className="text-[#1B6B4A]">
+                  <span key={tokenIndex} className="text-[#34c759]">
                     {token.value}
                   </span>
                 );
               case "class":
                 return (
-                  <span key={tokenIndex} className="text-yellow-300">
+                  <span key={tokenIndex} className="text-[#ffc107]">
                     {token.value}
                   </span>
                 );
               case "tag":
                 return (
-                  <span key={tokenIndex} className="text-[#1B6B4A]">
+                  <span key={tokenIndex} className="text-[#34c759]">
                     {token.value}
                   </span>
                 );
               default:
                 return (
-                  <span key={tokenIndex} className="text-[#3B4963]">
+                  <span key={tokenIndex} className="text-[#5c5c5c]">
                     {token.value}
                   </span>
                 );
@@ -1621,14 +1621,14 @@ function CodeBlock({
   };
 
   return (
-    <div className="relative bg-[#F3F4F6] rounded-lg overflow-hidden mb-4 border border-[#E5E7EB]">
-      <div className="flex items-center justify-between px-4 py-2 bg-white/70 border-b border-[#E5E7EB]">
-        <span className="text-xs text-[#7C8A9E] uppercase font-medium">
+    <div className="relative bg-[#f2f2f2] rounded-lg overflow-hidden mb-4 border border-[#d3d3d3]">
+      <div className="flex items-center justify-between px-4 py-2 bg-white/70 border-b border-[#d3d3d3]">
+        <span className="text-xs text-[#8a8a8a] uppercase font-medium">
           {language}
         </span>
         <button
           onClick={handleCopy}
-          className="text-xs text-[#7C8A9E] hover:text-[#0C1829] transition-colors px-2 py-1 rounded hover:bg-[#E8E4Da]"
+          className="text-xs text-[#8a8a8a] hover:text-[#212121] transition-colors px-2 py-1 rounded hover:bg-[#E8E4Da]"
         >
           {copied ? "✓ Copied" : "Copy"}
         </button>
@@ -1650,10 +1650,10 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg p-6">
+    <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-6">
       <div className="text-3xl mb-3">{icon}</div>
       <h3 className="font-semibold mb-2">{title}</h3>
-      <p className="text-[#7C8A9E] text-sm">{description}</p>
+      <p className="text-[#8a8a8a] text-sm">{description}</p>
     </div>
   );
 }

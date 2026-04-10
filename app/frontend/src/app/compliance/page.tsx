@@ -24,12 +24,12 @@ import {
 /* ─── palette ─── */
 const palette = {
   cream: "#FFFFFF",
-  navy: "#0C1829",
-  slate: "#3B4963",
-  muted: "#7C8A9E",
-  green: "#155939",
-  gold: "#B8860B",
-  cardBorder: "#E5E7EB",
+  navy: "#212121",
+  slate: "#5c5c5c",
+  muted: "#8a8a8a",
+  green: "#2ba048",
+  gold: "#d29500",
+  cardBorder: "#d3d3d3",
   red: "#B91C1C",
 };
 
@@ -73,10 +73,10 @@ function ComplianceBadge({
   icon: React.ElementType;
 }) {
   return (
-    <div className="inline-flex items-center gap-1.5 rounded-full border border-[#1B6B4A]/20 bg-[#1B6B4A]/[0.08] px-3 py-1">
-      <Icon className="h-3.5 w-3.5 text-[#155939]" />
+    <div className="inline-flex items-center gap-1.5 rounded-full border border-[#34c759]/20 bg-[#34c759]/[0.08] px-3 py-1">
+      <Icon className="h-3.5 w-3.5 text-[#2ba048]" />
       <span
-        className="text-[11px] font-semibold uppercase tracking-wider text-[#155939]"
+        className="text-[11px] font-semibold uppercase tracking-wider text-[#2ba048]"
         style={{ fontFamily: "var(--font-jetbrains), monospace" }}
       >
         {label}
@@ -852,7 +852,7 @@ export default function CompliancePage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr style={{ backgroundColor: "#F9FAFB" }}>
+                    <tr style={{ backgroundColor: "#f2f2f2" }}>
                       {["Factor", "Standard", "Elevated", "High"].map((h) => (
                         <th
                           key={h}
@@ -1048,7 +1048,7 @@ export default function CompliancePage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr style={{ backgroundColor: "#F9FAFB" }}>
+                    <tr style={{ backgroundColor: "#f2f2f2" }}>
                       <th
                         className="px-4 py-3 text-xs font-semibold uppercase tracking-wider sm:px-6"
                         style={{ color: palette.muted }}
@@ -1253,7 +1253,7 @@ export default function CompliancePage() {
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <div
                       className="rounded-xl p-3"
-                      style={{ backgroundColor: "#F9FAFB" }}
+                      style={{ backgroundColor: "#f2f2f2" }}
                     >
                       <p
                         className="text-[10px] font-semibold uppercase tracking-wider"
@@ -1270,7 +1270,7 @@ export default function CompliancePage() {
                     </div>
                     <div
                       className="rounded-xl p-3"
-                      style={{ backgroundColor: "#F9FAFB" }}
+                      style={{ backgroundColor: "#f2f2f2" }}
                     >
                       <p
                         className="text-[10px] font-semibold uppercase tracking-wider"
@@ -1456,7 +1456,7 @@ export default function CompliancePage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr style={{ backgroundColor: "#F9FAFB" }}>
+                    <tr style={{ backgroundColor: "#f2f2f2" }}>
                       {["Record Type", "Retention Period", "Storage"].map(
                         (h) => (
                           <th
@@ -1924,7 +1924,7 @@ export default function CompliancePage() {
                   className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:opacity-90"
                   style={{
                     background:
-                      "linear-gradient(135deg, #1B6B4A 0%, #155939 100%)",
+                      "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
                   Request Access

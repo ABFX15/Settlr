@@ -129,7 +129,7 @@ function ProblemTab() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ ...spring, delay: 0.15 + i * 0.06 }}
               >
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-red-500" />
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#e74c3c]" />
                 <span className="text-sm" style={{ color: t.slate }}>
                   {item}
                 </span>
@@ -152,8 +152,8 @@ function ProblemTab() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ ...spring, delay: 0.1 + i * 0.06 }}
             >
-              <p className="text-2xl font-bold text-red-600">{s.stat}</p>
-              <p className="mt-1 text-xs" style={{ color: "#6B7280" }}>
+              <p className="text-2xl font-bold text-[#e74c3c]">{s.stat}</p>
+              <p className="mt-1 text-xs" style={{ color: "#5c5c5c" }}>
                 {s.label}
               </p>
             </motion.div>
@@ -228,7 +228,7 @@ function SolutionTab() {
               <p className="text-2xl font-bold" style={{ color: t.green }}>
                 {s.stat}
               </p>
-              <p className="mt-1 text-xs" style={{ color: "#6B7280" }}>
+              <p className="mt-1 text-xs" style={{ color: "#5c5c5c" }}>
                 {s.label}
               </p>
             </motion.div>

@@ -313,7 +313,7 @@ export default function PrivacyPage() {
             <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#FFFFFF] to-transparent" />
           </div>
           <div className="absolute right-[15%] top-[25%] h-64 w-64 rounded-full bg-purple-500/[0.07] blur-[100px]" />
-          <div className="absolute left-[10%] top-[35%] h-48 w-48 rounded-full bg-[#1B6B4A]/[0.05] blur-[100px]" />
+          <div className="absolute left-[10%] top-[35%] h-48 w-48 rounded-full bg-[#34c759]/[0.05] blur-[100px]" />
 
           <div className="relative mx-auto max-w-4xl text-center">
             <motion.div
@@ -321,7 +321,7 @@ export default function PrivacyPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-6 inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/[0.08] px-4 py-2"
             >
-              <Shield className="h-4 w-4 text-[#1B6B4A]" />
+              <Shield className="h-4 w-4 text-[#34c759]" />
               <span className="text-sm font-medium text-purple-300">
                 MagicBlock Private Ephemeral Rollups
               </span>
@@ -331,7 +331,7 @@ export default function PrivacyPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mb-4 text-4xl font-bold tracking-tight text-[#0C1829] sm:text-5xl"
+              className="mb-4 text-4xl font-bold tracking-tight text-[#212121] sm:text-5xl"
             >
               Private Payments{" "}
               <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
@@ -343,7 +343,7 @@ export default function PrivacyPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mx-auto mb-8 max-w-2xl text-lg text-[#7C8A9E]"
+              className="mx-auto mb-8 max-w-2xl text-lg text-[#8a8a8a]"
             >
               Payment data hidden inside Intel TDX hardware enclaves. Only
               permissioned parties see state. Sub-10ms latency, gasless
@@ -364,9 +364,9 @@ export default function PrivacyPage() {
               ].map(({ icon: Icon, label }) => (
                 <div
                   key={label}
-                  className="flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-1.5 text-sm text-[#7C8A9E]"
+                  className="flex items-center gap-2 rounded-full border border-[#d3d3d3] bg-[#f2f2f2] px-3 py-1.5 text-sm text-[#8a8a8a]"
                 >
-                  <Icon className="h-3.5 w-3.5 text-[#1B6B4A]" />
+                  <Icon className="h-3.5 w-3.5 text-[#34c759]" />
                   {label}
                 </div>
               ))}
@@ -392,20 +392,20 @@ export default function PrivacyPage() {
                   transition={{ delay: 0.1 * i }}
                   className={`relative rounded-xl border p-4 transition-all ${
                     isCompleted
-                      ? "border-[#1B6B4A]/30 bg-purple-500/[0.08]"
+                      ? "border-[#34c759]/30 bg-purple-500/[0.08]"
                       : isCurrent
-                      ? "border-[#1B6B4A]/30 bg-[#1B6B4A]/[0.06]"
-                      : "border-[#E5E7EB] bg-white/[0.02]"
+                      ? "border-[#34c759]/30 bg-[#34c759]/[0.06]"
+                      : "border-[#d3d3d3] bg-white/[0.02]"
                   }`}
                 >
                   <div className="mb-2 flex items-center gap-2">
                     <div
                       className={`flex h-7 w-7 items-center justify-center rounded-full ${
                         isCompleted
-                          ? "bg-purple-500/20 text-[#1B6B4A]"
+                          ? "bg-purple-500/20 text-[#34c759]"
                           : isCurrent
-                          ? "bg-[#1B6B4A]/15 text-[#1B6B4A]"
-                          : "bg-[#F3F4F6] text-[#7C8A9E]"
+                          ? "bg-[#34c759]/15 text-[#34c759]"
+                          : "bg-[#f2f2f2] text-[#8a8a8a]"
                       }`}
                     >
                       {isCompleted ? (
@@ -419,8 +419,8 @@ export default function PrivacyPage() {
                         isCompleted
                           ? "text-purple-300"
                           : isCurrent
-                          ? "text-blue-300"
-                          : "text-[#7C8A9E]"
+                          ? "text-[#7086f2]"
+                          : "text-[#8a8a8a]"
                       }`}
                     >
                       Step {i + 1}
@@ -428,12 +428,12 @@ export default function PrivacyPage() {
                   </div>
                   <h3
                     className={`text-sm font-semibold ${
-                      isActive || isCurrent ? "text-[#0C1829]" : "text-[#7C8A9E]"
+                      isActive || isCurrent ? "text-[#212121]" : "text-[#8a8a8a]"
                     }`}
                   >
                     {step.label}
                   </h3>
-                  <p className="mt-1 text-xs text-[#7C8A9E]">
+                  <p className="mt-1 text-xs text-[#8a8a8a]">
                     {step.description}
                   </p>
                 </motion.div>
@@ -447,14 +447,14 @@ export default function PrivacyPage() {
           <div className="grid gap-6 lg:grid-cols-5">
             {/* Control Panel */}
             <div className="lg:col-span-2">
-              <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6">
-                <h2 className="mb-4 text-lg font-semibold text-[#0C1829]">
+              <div className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-6">
+                <h2 className="mb-4 text-lg font-semibold text-[#212121]">
                   Payment Details
                 </h2>
 
                 {/* Amount */}
                 <div className="mb-4">
-                  <label className="mb-1.5 block text-xs text-[#7C8A9E]">
+                  <label className="mb-1.5 block text-xs text-[#8a8a8a]">
                     Amount (USDC)
                   </label>
                   <input
@@ -472,14 +472,14 @@ export default function PrivacyPage() {
                       }))
                     }
                     disabled={session.status !== "idle"}
-                    className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2 text-sm text-[#0C1829] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
+                    className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-3 py-2 text-sm text-[#212121] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
                     placeholder="25.00"
                   />
                 </div>
 
                 {/* Memo */}
                 <div className="mb-4">
-                  <label className="mb-1.5 block text-xs text-[#7C8A9E]">
+                  <label className="mb-1.5 block text-xs text-[#8a8a8a]">
                     Memo
                   </label>
                   <input
@@ -489,28 +489,28 @@ export default function PrivacyPage() {
                       setSession((s) => ({ ...s, memo: e.target.value }))
                     }
                     disabled={session.status !== "idle"}
-                    className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-3 py-2 text-sm text-[#0C1829] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
+                    className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-3 py-2 text-sm text-[#212121] placeholder-white/20 outline-none focus:border-purple-500/40 disabled:opacity-40"
                     placeholder="Payment memo"
                   />
                 </div>
 
                 {/* Fee display */}
-                <div className="mb-6 rounded-lg border border-[#E5E7EB] bg-white/[0.02] p-3">
+                <div className="mb-6 rounded-lg border border-[#d3d3d3] bg-white/[0.02] p-3">
                   <div className="flex justify-between text-xs">
-                    <span className="text-[#7C8A9E]">Amount</span>
-                    <span className="text-[#3B4963]">
+                    <span className="text-[#8a8a8a]">Amount</span>
+                    <span className="text-[#5c5c5c]">
                       {(session.amount / 1e6).toFixed(2)} USDC
                     </span>
                   </div>
                   <div className="mt-1 flex justify-between text-xs">
-                    <span className="text-[#7C8A9E]">Platform fee (1%)</span>
-                    <span className="text-[#3B4963]">
+                    <span className="text-[#8a8a8a]">Platform fee (1%)</span>
+                    <span className="text-[#5c5c5c]">
                       {(session.feeAmount / 1e6).toFixed(2)} USDC
                     </span>
                   </div>
-                  <div className="mt-2 border-t border-[#E5E7EB] pt-2">
+                  <div className="mt-2 border-t border-[#d3d3d3] pt-2">
                     <div className="flex justify-between text-xs font-medium">
-                      <span className="text-[#7C8A9E]">Merchant receives</span>
+                      <span className="text-[#8a8a8a]">Merchant receives</span>
                       <span className="text-purple-300">
                         {((session.amount - session.feeAmount) / 1e6).toFixed(
                           2,
@@ -530,7 +530,7 @@ export default function PrivacyPage() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       onClick={handleReset}
-                      className="w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] px-4 py-3 text-sm font-medium text-[#0C1829] transition-colors hover:bg-white/[0.1]"
+                      className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-3 text-sm font-medium text-[#212121] transition-colors hover:bg-white/[0.1]"
                     >
                       Reset Demo
                     </motion.button>
@@ -554,7 +554,7 @@ export default function PrivacyPage() {
                   )}
                 </AnimatePresence>
 
-                {error && <p className="mt-3 text-xs text-red-400">{error}</p>}
+                {error && <p className="mt-3 text-xs text-[#e74c3c]">{error}</p>}
 
                 {/* Status badge */}
                 <div className="mt-4 flex items-center gap-2">
@@ -563,13 +563,13 @@ export default function PrivacyPage() {
                       session.status === "idle"
                         ? "bg-white/20"
                         : session.status === "settled"
-                        ? "bg-green-400"
+                        ? "bg-[#34c759]"
                         : session.status === "active"
                         ? "bg-purple-400 animate-pulse"
-                        : "bg-blue-400"
+                        : "bg-[#7086f2]"
                     }`}
                   />
-                  <span className="text-xs text-[#7C8A9E]">
+                  <span className="text-xs text-[#8a8a8a]">
                     {session.status === "idle" && "Ready"}
                     {session.status === "pending" &&
                       "Session created — awaiting delegation"}
@@ -586,15 +586,15 @@ export default function PrivacyPage() {
             {/* Privacy Visualization + Log */}
             <div className="space-y-6 lg:col-span-3">
               {/* Privacy state visualization */}
-              <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6">
-                <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[#0C1829]">
-                  <Eye className="h-5 w-5 text-[#1B6B4A]" />
+              <div className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-6">
+                <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[#212121]">
+                  <Eye className="h-5 w-5 text-[#34c759]" />
                   Base-Layer Observer View
                 </h2>
 
-                <div className="rounded-lg border border-[#E5E7EB] bg-[#FFFFFF]/40 p-4 font-mono text-xs">
+                <div className="rounded-lg border border-[#d3d3d3] bg-[#FFFFFF]/40 p-4 font-mono text-xs">
                   {session.status === "idle" && (
-                    <div className="text-[#7C8A9E]">
+                    <div className="text-[#8a8a8a]">
                       <p>// No active session</p>
                       <p>// Click &quot;Create Session&quot; to begin</p>
                     </div>
@@ -602,30 +602,30 @@ export default function PrivacyPage() {
 
                   {session.status === "pending" && (
                     <div className="space-y-1">
-                      <p className="text-[#1B6B4A]">
+                      <p className="text-[#34c759]">
                         // Session created on base layer
                       </p>
-                      <p className="text-[#3B4963]">
+                      <p className="text-[#5c5c5c]">
                         payment_id:{" "}
-                        <span className="text-[#1B6B4A]">
+                        <span className="text-[#34c759]">
                           &quot;{session.paymentId}&quot;
                         </span>
                       </p>
-                      <p className="text-[#3B4963]">
+                      <p className="text-[#5c5c5c]">
                         amount:{" "}
-                        <span className="text-yellow-400">
+                        <span className="text-[#d29500]">
                           {(session.amount / 1e6).toFixed(2)} USDC
                         </span>
-                        <span className="text-[#7C8A9E]">
+                        <span className="text-[#8a8a8a]">
                           {" "}
                           // visible on-chain
                         </span>
                       </p>
-                      <p className="text-[#3B4963]">
-                        status: <span className="text-[#1B6B4A]">Pending</span>
+                      <p className="text-[#5c5c5c]">
+                        status: <span className="text-[#34c759]">Pending</span>
                       </p>
-                      <p className="text-[#3B4963]">
-                        delegated: <span className="text-red-400">false</span>
+                      <p className="text-[#5c5c5c]">
+                        delegated: <span className="text-[#e74c3c]">false</span>
                       </p>
                     </div>
                   )}
@@ -633,53 +633,53 @@ export default function PrivacyPage() {
                   {(session.status === "active" ||
                     session.status === "processed") && (
                     <div className="space-y-1">
-                      <p className="text-[#1B6B4A]">
+                      <p className="text-[#34c759]">
                         // ⚠️ Account delegated to PER — data hidden
                       </p>
-                      <p className="text-[#3B4963]">
+                      <p className="text-[#5c5c5c]">
                         payment_id:{" "}
-                        <span className="text-[#1B6B4A]">
+                        <span className="text-[#34c759]">
                           &quot;{session.paymentId}&quot;
                         </span>
                       </p>
-                      <p className="text-[#7C8A9E]">
+                      <p className="text-[#8a8a8a]">
                         amount:{" "}
-                        <span className="text-[#1B6B4A]/60">██████████</span>
-                        <span className="text-[#1B6B4A]">
+                        <span className="text-[#34c759]/60">██████████</span>
+                        <span className="text-[#34c759]">
                           {" "}
                           // hidden in TEE
                         </span>
                       </p>
-                      <p className="text-[#7C8A9E]">
+                      <p className="text-[#8a8a8a]">
                         fee:{" "}
-                        <span className="text-[#1B6B4A]/60">████████</span>
-                        <span className="text-[#1B6B4A]">
+                        <span className="text-[#34c759]/60">████████</span>
+                        <span className="text-[#34c759]">
                           {" "}
                           // hidden in TEE
                         </span>
                       </p>
-                      <p className="text-[#7C8A9E]">
+                      <p className="text-[#8a8a8a]">
                         customer:{" "}
-                        <span className="text-[#1B6B4A]/60">████████████</span>
-                        <span className="text-[#1B6B4A]">
+                        <span className="text-[#34c759]/60">████████████</span>
+                        <span className="text-[#34c759]">
                           {" "}
                           // hidden in TEE
                         </span>
                       </p>
-                      <p className="text-[#7C8A9E]">
+                      <p className="text-[#8a8a8a]">
                         merchant:{" "}
-                        <span className="text-[#1B6B4A]/60">████████████</span>
-                        <span className="text-[#1B6B4A]">
+                        <span className="text-[#34c759]/60">████████████</span>
+                        <span className="text-[#34c759]">
                           {" "}
                           // hidden in TEE
                         </span>
                       </p>
-                      <p className="text-[#3B4963]">
-                        delegated: <span className="text-[#1B6B4A]">true</span>
+                      <p className="text-[#5c5c5c]">
+                        delegated: <span className="text-[#34c759]">true</span>
                       </p>
-                      <p className="text-[#3B4963]">
+                      <p className="text-[#5c5c5c]">
                         status:{" "}
-                        <span className="text-[#1B6B4A]">
+                        <span className="text-[#34c759]">
                           {session.status === "active"
                             ? "Active (in TEE)"
                             : "Processed (in TEE)"}
@@ -698,44 +698,44 @@ export default function PrivacyPage() {
 
                   {session.status === "settled" && (
                     <div className="space-y-1">
-                      <p className="text-[#1B6B4A]">
+                      <p className="text-[#34c759]">
                         // ✅ Payment settled — final state on-chain
                       </p>
-                      <p className="text-[#3B4963]">
+                      <p className="text-[#5c5c5c]">
                         payment_id:{" "}
-                        <span className="text-[#1B6B4A]">
+                        <span className="text-[#34c759]">
                           &quot;{session.paymentId}&quot;
                         </span>
                       </p>
-                      <p className="text-[#3B4963]">
+                      <p className="text-[#5c5c5c]">
                         amount:{" "}
-                        <span className="text-yellow-400">
+                        <span className="text-[#d29500]">
                           {(session.amount / 1e6).toFixed(2)} USDC
                         </span>
-                        <span className="text-[#7C8A9E]"> // revealed</span>
+                        <span className="text-[#8a8a8a]"> // revealed</span>
                       </p>
-                      <p className="text-[#3B4963]">
+                      <p className="text-[#5c5c5c]">
                         fee:{" "}
-                        <span className="text-yellow-400">
+                        <span className="text-[#d29500]">
                           {(session.feeAmount / 1e6).toFixed(2)} USDC
                         </span>
                       </p>
-                      <p className="text-[#3B4963]">
+                      <p className="text-[#5c5c5c]">
                         merchant_receives:{" "}
-                        <span className="text-[#1B6B4A]">
+                        <span className="text-[#34c759]">
                           {((session.amount - session.feeAmount) / 1e6).toFixed(
                             2,
                           )}{" "}
                           USDC
                         </span>
                       </p>
-                      <p className="text-[#3B4963]">
-                        status: <span className="text-[#1B6B4A]">Settled</span>
+                      <p className="text-[#5c5c5c]">
+                        status: <span className="text-[#34c759]">Settled</span>
                       </p>
-                      <p className="text-[#3B4963]">
-                        delegated: <span className="text-red-400">false</span>
+                      <p className="text-[#5c5c5c]">
+                        delegated: <span className="text-[#e74c3c]">false</span>
                       </p>
-                      <p className="text-[#7C8A9E]">
+                      <p className="text-[#8a8a8a]">
                         // Processing history remains private
                       </p>
                     </div>
@@ -744,17 +744,17 @@ export default function PrivacyPage() {
               </div>
 
               {/* Transaction log */}
-              <div className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6">
-                <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#0C1829]">
-                  <Server className="h-4 w-4 text-[#1B6B4A]" />
+              <div className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-6">
+                <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#212121]">
+                  <Server className="h-4 w-4 text-[#34c759]" />
                   Transaction Log
                 </h2>
-                <div className="max-h-48 overflow-y-auto rounded-lg border border-[#E5E7EB] bg-[#FFFFFF]/40 p-3 font-mono text-xs">
+                <div className="max-h-48 overflow-y-auto rounded-lg border border-[#d3d3d3] bg-[#FFFFFF]/40 p-3 font-mono text-xs">
                   {logs.length === 0 ? (
-                    <p className="text-[#7C8A9E]/60">Waiting for first action...</p>
+                    <p className="text-[#8a8a8a]/60">Waiting for first action...</p>
                   ) : (
                     logs.map((log, i) => (
-                      <p key={i} className="text-[#7C8A9E]">
+                      <p key={i} className="text-[#8a8a8a]">
                         {log}
                       </p>
                     ))
@@ -764,29 +764,29 @@ export default function PrivacyPage() {
                 {/* Tx signatures */}
                 {Object.entries(session.txSignatures).length > 0 && (
                   <div className="mt-4 space-y-2">
-                    <h3 className="text-xs font-medium text-[#7C8A9E]">
+                    <h3 className="text-xs font-medium text-[#8a8a8a]">
                       Signatures
                     </h3>
                     {Object.entries(session.txSignatures).map(([step, sig]) =>
                       sig ? (
                         <div
                           key={step}
-                          className="flex items-center justify-between rounded-lg border border-[#E5E7EB]/[0.04] bg-white/[0.02] px-3 py-1.5"
+                          className="flex items-center justify-between rounded-lg border border-[#d3d3d3]/[0.04] bg-white/[0.02] px-3 py-1.5"
                         >
                           <div className="flex items-center gap-2">
-                            <span className="text-xs capitalize text-[#7C8A9E]">
+                            <span className="text-xs capitalize text-[#8a8a8a]">
                               {step}
                             </span>
-                            <span className="font-mono text-xs text-[#7C8A9E]">
+                            <span className="font-mono text-xs text-[#8a8a8a]">
                               {sig.slice(0, 16)}...{sig.slice(-8)}
                             </span>
                           </div>
                           <button
                             onClick={() => copyToClipboard(sig, step)}
-                            className="text-[#7C8A9E] transition-colors hover:text-[#3B4963]"
+                            className="text-[#8a8a8a] transition-colors hover:text-[#5c5c5c]"
                           >
                             {copied === step ? (
-                              <Check className="h-3 w-3 text-[#1B6B4A]" />
+                              <Check className="h-3 w-3 text-[#34c759]" />
                             ) : (
                               <Copy className="h-3 w-3" />
                             )}
@@ -803,7 +803,7 @@ export default function PrivacyPage() {
 
         {/* How It Works */}
         <section className="relative mx-auto max-w-5xl px-4 pb-20">
-          <h2 className="mb-8 text-center text-2xl font-bold text-[#0C1829]">
+          <h2 className="mb-8 text-center text-2xl font-bold text-[#212121]">
             How Private Payments Work
           </h2>
 
@@ -840,25 +840,25 @@ export default function PrivacyPage() {
             ].map(({ title, description, icon: Icon, color }) => (
               <div
                 key={title}
-                className="rounded-xl border border-[#E5E7EB] bg-white/[0.02] p-6"
+                className="rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-6"
               >
                 <div
                   className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${
                     color === "purple"
-                      ? "bg-[#1B6B4A]/10 text-[#1B6B4A]"
+                      ? "bg-[#34c759]/10 text-[#34c759]"
                       : color === "blue"
-                      ? "bg-[#1B6B4A]/10 text-[#1B6B4A]"
+                      ? "bg-[#34c759]/10 text-[#34c759]"
                       : color === "yellow"
-                      ? "bg-yellow-500/10 text-yellow-400"
-                      : "bg-[#1B6B4A]/10 text-[#1B6B4A]"
+                      ? "bg-[#d29500]/10 text-[#d29500]"
+                      : "bg-[#34c759]/10 text-[#34c759]"
                   }`}
                 >
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="mb-2 text-base font-semibold text-[#0C1829]">
+                <h3 className="mb-2 text-base font-semibold text-[#212121]">
                   {title}
                 </h3>
-                <p className="text-sm leading-relaxed text-[#7C8A9E]">
+                <p className="text-sm leading-relaxed text-[#8a8a8a]">
                   {description}
                 </p>
               </div>
@@ -868,21 +868,21 @@ export default function PrivacyPage() {
           {/* Hackathon badge */}
           <div className="mt-12 rounded-xl border border-purple-500/20 bg-gradient-to-r from-purple-500/[0.06] to-blue-500/[0.06] p-6 text-center">
             <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/[0.08] px-3 py-1">
-              <Sparkles className="h-3.5 w-3.5 text-[#1B6B4A]" />
+              <Sparkles className="h-3.5 w-3.5 text-[#34c759]" />
               <span className="text-xs font-medium text-purple-300">
                 SolanaBlitz Hackathon
               </span>
             </div>
-            <h3 className="mb-2 text-xl font-bold text-[#0C1829]">
+            <h3 className="mb-2 text-xl font-bold text-[#212121]">
               Built for MagicBlock Weekend Hackathon
             </h3>
-            <p className="mx-auto max-w-xl text-sm text-[#7C8A9E]">
+            <p className="mx-auto max-w-xl text-sm text-[#8a8a8a]">
               Private payments powered by MagicBlock&apos;s Private Ephemeral
               Rollups. Real-world use case: stablecoin payouts where payment
               data is hidden during processing — only the merchant and customer
               see state.
             </p>
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-[#7C8A9E]">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-[#8a8a8a]">
               <span>ephemeral-rollups-sdk 0.8</span>
               <span>•</span>
               <span>Anchor 0.31.1</span>

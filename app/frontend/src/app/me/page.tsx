@@ -201,20 +201,20 @@ export default function RecipientDashboard() {
   // ---------------------------------------------------------------------------
 
   return (
-    <main className="min-h-screen bg-[#FFFFFF] text-[#0C1829] flex items-start justify-center pt-12 px-4 pb-20">
+    <main className="min-h-screen bg-[#FFFFFF] text-[#212121] flex items-start justify-center pt-12 px-4 pb-20">
       <div className="w-full max-w-2xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#1B6B4A]/15 flex items-center justify-center">
-              <span className="text-[#1B6B4A] font-bold text-sm">S</span>
+            <div className="w-8 h-8 rounded-lg bg-[#34c759]/15 flex items-center justify-center">
+              <span className="text-[#34c759] font-bold text-sm">S</span>
             </div>
             <h1 className="text-xl font-semibold">Settlr</h1>
           </div>
           {step === "dashboard" && (
             <button
               onClick={signOut}
-              className="text-sm text-gray-500 hover:text-gray-300 transition"
+              className="text-sm text-[#8a8a8a] hover:text-[#8a8a8a] transition"
             >
               Sign out
             </button>
@@ -232,7 +232,7 @@ export default function RecipientDashboard() {
               className="text-center"
             >
               <h2 className="text-2xl font-bold mb-2">Recipient Dashboard</h2>
-              <p className="text-gray-400 mb-8">
+              <p className="text-[#8a8a8a] mb-8">
                 Sign in with the email you received settlements on.
               </p>
               <div className="flex gap-3 max-w-md mx-auto">
@@ -242,12 +242,12 @@ export default function RecipientDashboard() {
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && requestMagicLink()}
                   placeholder="you@example.com"
-                  className="flex-1 bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg px-4 py-3 text-[#0C1829] placeholder:text-gray-500 focus:outline-none focus:border-[#1B6B4A]/50"
+                  className="flex-1 bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg px-4 py-3 text-[#212121] placeholder:text-[#8a8a8a] focus:outline-none focus:border-[#34c759]/50"
                 />
                 <button
                   onClick={requestMagicLink}
                   disabled={!email.includes("@")}
-                  className="bg-[#1B6B4A] hover:bg-[#1B6B4A] disabled:opacity-40 text-white font-medium px-6 py-3 rounded-lg transition"
+                  className="bg-[#34c759] hover:bg-[#34c759] disabled:opacity-40 text-white font-medium px-6 py-3 rounded-lg transition"
                 >
                   Sign in
                 </button>
@@ -264,21 +264,21 @@ export default function RecipientDashboard() {
               exit={{ opacity: 0, y: -20 }}
               className="text-center"
             >
-              <div className="w-16 h-16 bg-[#1B6B4A]/15 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 bg-[#34c759]/15 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl">✉️</span>
               </div>
               <h2 className="text-2xl font-bold mb-2">Check your email</h2>
-              <p className="text-gray-400 mb-4">
+              <p className="text-[#8a8a8a] mb-4">
                 We sent a sign-in link to{" "}
-                <strong className="text-[#0C1829]">{email}</strong>
+                <strong className="text-[#212121]">{email}</strong>
               </p>
-              <p className="text-gray-500 text-sm">
+              <p className="text-[#8a8a8a] text-sm">
                 The link expires in 15 minutes. Check your spam folder if you
                 don't see it.
               </p>
               <button
                 onClick={() => setStep("email")}
-                className="mt-6 text-sm text-[#1B6B4A] hover:text-blue-300 transition"
+                className="mt-6 text-sm text-[#34c759] hover:text-[#7086f2] transition"
               >
                 ← Use a different email
               </button>
@@ -294,8 +294,8 @@ export default function RecipientDashboard() {
               exit={{ opacity: 0 }}
               className="text-center py-20"
             >
-              <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-gray-400">Loading your dashboard…</p>
+              <div className="w-8 h-8 border-2 border-[#7086f2] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+              <p className="text-[#8a8a8a]">Loading your dashboard…</p>
             </motion.div>
           )}
 
@@ -308,14 +308,14 @@ export default function RecipientDashboard() {
               exit={{ opacity: 0, y: -20 }}
               className="text-center"
             >
-              <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 bg-[#e74c3c]/20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl">⚠️</span>
               </div>
               <h2 className="text-xl font-bold mb-2">Something went wrong</h2>
-              <p className="text-gray-400 mb-6">{errorMessage}</p>
+              <p className="text-[#8a8a8a] mb-6">{errorMessage}</p>
               <button
                 onClick={() => setStep("email")}
-                className="text-[#1B6B4A] hover:text-blue-300 transition text-sm"
+                className="text-[#34c759] hover:text-[#7086f2] transition text-sm"
               >
                 ← Try again
               </button>
@@ -333,22 +333,22 @@ export default function RecipientDashboard() {
             >
               {/* Stats row */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-4">
-                  <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
+                <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-xl p-4">
+                  <p className="text-[#8a8a8a] text-xs uppercase tracking-wider mb-1">
                     Total received
                   </p>
                   <p className="text-2xl font-bold">
                     ${profile.totalReceived.toFixed(2)}
                   </p>
                 </div>
-                <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-4">
-                  <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
+                <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-xl p-4">
+                  <p className="text-[#8a8a8a] text-xs uppercase tracking-wider mb-1">
                     Settlements
                   </p>
                   <p className="text-2xl font-bold">{profile.totalPayouts}</p>
                 </div>
-                <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-4">
-                  <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
+                <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-xl p-4">
+                  <p className="text-[#8a8a8a] text-xs uppercase tracking-wider mb-1">
                     Balance
                   </p>
                   <p className="text-2xl font-bold">
@@ -359,13 +359,13 @@ export default function RecipientDashboard() {
 
               {/* Balance card + withdraw */}
               {balance && balance.amount > 0 && (
-                <div className="bg-gradient-to-r from-blue-500/10 to-emerald-500/10 border border-[#1B6B4A]/20 rounded-xl p-5">
+                <div className="bg-gradient-to-r from-blue-500/10 to-emerald-500/10 border border-[#34c759]/20 rounded-xl p-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-gray-400 text-sm">Available balance</p>
+                      <p className="text-[#8a8a8a] text-sm">Available balance</p>
                       <p className="text-3xl font-bold">
                         ${balance.amount.toFixed(2)}{" "}
-                        <span className="text-base font-normal text-gray-400">
+                        <span className="text-base font-normal text-[#8a8a8a]">
                           USDC
                         </span>
                       </p>
@@ -373,7 +373,7 @@ export default function RecipientDashboard() {
                     <button
                       onClick={handleWithdraw}
                       disabled={withdrawing}
-                      className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white font-medium px-5 py-2.5 rounded-lg transition"
+                      className="bg-[#34c759] hover:bg-[#2ba048] disabled:opacity-50 text-white font-medium px-5 py-2.5 rounded-lg transition"
                     >
                       {withdrawing ? "Withdrawing…" : "Withdraw all"}
                     </button>
@@ -382,12 +382,12 @@ export default function RecipientDashboard() {
               )}
 
               {/* Settings card */}
-              <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-5 space-y-4">
+              <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-xl p-5 space-y-4">
                 <h3 className="font-semibold text-lg">Settings</h3>
 
                 {/* Wallet */}
                 <div>
-                  <label className="text-gray-400 text-sm block mb-1">
+                  <label className="text-[#8a8a8a] text-sm block mb-1">
                     Wallet address
                   </label>
                   {editingWallet ? (
@@ -396,27 +396,27 @@ export default function RecipientDashboard() {
                         value={newWallet}
                         onChange={(e) => setNewWallet(e.target.value)}
                         placeholder="Solana wallet address"
-                        className="flex-1 bg-[#F3F4F6] border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#0C1829] placeholder:text-gray-600 focus:outline-none focus:border-[#1B6B4A]/50"
+                        className="flex-1 bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg px-3 py-2 text-sm text-[#212121] placeholder:text-[#5c5c5c] focus:outline-none focus:border-[#34c759]/50"
                       />
                       <button
                         onClick={() =>
                           updatePreferences({ walletAddress: newWallet })
                         }
                         disabled={saving || newWallet.length < 32}
-                        className="bg-[#1B6B4A] hover:bg-[#1B6B4A] disabled:opacity-40 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+                        className="bg-[#34c759] hover:bg-[#34c759] disabled:opacity-40 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
                       >
                         {saving ? "…" : "Save"}
                       </button>
                       <button
                         onClick={() => setEditingWallet(false)}
-                        className="text-gray-500 hover:text-gray-300 text-sm px-2"
+                        className="text-[#8a8a8a] hover:text-[#8a8a8a] text-sm px-2"
                       >
                         Cancel
                       </button>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <code className="text-sm text-gray-300 bg-[#F3F4F6] px-3 py-1.5 rounded-lg">
+                      <code className="text-sm text-[#8a8a8a] bg-[#f2f2f2] px-3 py-1.5 rounded-lg">
                         {profile.walletAddress
                           ? `${profile.walletAddress.slice(
                               0,
@@ -429,7 +429,7 @@ export default function RecipientDashboard() {
                           setNewWallet(profile.walletAddress || "");
                           setEditingWallet(true);
                         }}
-                        className="text-[#1B6B4A] hover:text-blue-300 text-sm transition"
+                        className="text-[#34c759] hover:text-[#7086f2] text-sm transition"
                       >
                         Edit
                       </button>
@@ -441,7 +441,7 @@ export default function RecipientDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium">Instant delivery</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[#8a8a8a]">
                       Auto-send settlements to your saved wallet
                     </p>
                   </div>
@@ -450,7 +450,7 @@ export default function RecipientDashboard() {
                       updatePreferences({ autoWithdraw: !profile.autoWithdraw })
                     }
                     className={`w-11 h-6 rounded-full transition ${
-                      profile.autoWithdraw ? "bg-[#1B6B4A]" : "bg-white/10"
+                      profile.autoWithdraw ? "bg-[#34c759]" : "bg-white/10"
                     } relative`}
                   >
                     <span
@@ -464,7 +464,7 @@ export default function RecipientDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium">Email notifications</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[#8a8a8a]">
                       Get notified when you receive settlements
                     </p>
                   </div>
@@ -476,7 +476,7 @@ export default function RecipientDashboard() {
                     }
                     className={`w-11 h-6 rounded-full transition ${
                       profile.notificationsEnabled
-                        ? "bg-[#1B6B4A]"
+                        ? "bg-[#34c759]"
                         : "bg-white/10"
                     } relative`}
                   >
@@ -490,12 +490,12 @@ export default function RecipientDashboard() {
               </div>
 
               {/* Settlement history */}
-              <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-xl p-5">
+              <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-xl p-5">
                 <h3 className="font-semibold text-lg mb-4">
                   Settlement History
                 </h3>
                 {payouts.length === 0 ? (
-                  <p className="text-gray-500 text-sm text-center py-6">
+                  <p className="text-[#8a8a8a] text-sm text-center py-6">
                     No settlements yet
                   </p>
                 ) : (
@@ -503,19 +503,19 @@ export default function RecipientDashboard() {
                     {payouts.map((p) => (
                       <div
                         key={p.id}
-                        className="flex items-center justify-between py-2 border-b border-[#E5E7EB] last:border-0"
+                        className="flex items-center justify-between py-2 border-b border-[#d3d3d3] last:border-0"
                       >
                         <div>
                           <p className="font-medium">
                             ${p.amount.toFixed(2)}{" "}
-                            <span className="text-sm text-gray-400">
+                            <span className="text-sm text-[#8a8a8a]">
                               {p.currency}
                             </span>
                           </p>
                           {p.memo && (
-                            <p className="text-xs text-gray-500">{p.memo}</p>
+                            <p className="text-xs text-[#8a8a8a]">{p.memo}</p>
                           )}
-                          <p className="text-xs text-gray-600">
+                          <p className="text-xs text-[#5c5c5c]">
                             {new Date(p.createdAt).toLocaleDateString("en-US", {
                               month: "short",
                               day: "numeric",
@@ -527,12 +527,12 @@ export default function RecipientDashboard() {
                           <span
                             className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
                               p.status === "claimed"
-                                ? "bg-emerald-500/20 text-[#1B6B4A]"
+                                ? "bg-[#34c759]/20 text-[#34c759]"
                                 : p.status === "sent"
-                                ? "bg-amber-500/20 text-amber-400"
+                                ? "bg-[#d29500]/20 text-[#d29500]"
                                 : p.status === "expired"
-                                ? "bg-red-500/20 text-red-400"
-                                : "bg-white/10 text-gray-400"
+                                ? "bg-[#e74c3c]/20 text-[#e74c3c]"
+                                : "bg-white/10 text-[#8a8a8a]"
                             }`}
                           >
                             {p.status}
@@ -543,7 +543,7 @@ export default function RecipientDashboard() {
                                 href={`https://explorer.solana.com/tx/${p.txSignature}?cluster=devnet`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block text-xs text-[#1B6B4A] hover:text-blue-300 mt-1"
+                                className="block text-xs text-[#34c759] hover:text-[#7086f2] mt-1"
                               >
                                 View tx ↗
                               </a>
@@ -556,11 +556,11 @@ export default function RecipientDashboard() {
               </div>
 
               {/* Footer */}
-              <p className="text-center text-gray-600 text-xs">
+              <p className="text-center text-[#5c5c5c] text-xs">
                 Powered by{" "}
                 <a
                   href="https://settlr.dev"
-                  className="text-[#1B6B4A] hover:text-blue-300 transition"
+                  className="text-[#34c759] hover:text-[#7086f2] transition"
                 >
                   Settlr
                 </a>{" "}

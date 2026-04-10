@@ -4,23 +4,23 @@ import { type Variants } from "framer-motion";
 
 /* ── design tokens ─────────────────────────────────────── */
 export const t = {
-    green: "#2D6A4F",
+    green: "#34c759",
     greenLight: "#D8F3DC",
     greenPale: "#B7E4C7",
-    dark: "#0A0A0A",
-    navy: "#0A0A0A",
-    bodyLight: "#6B7280",
-    bodyDark: "#9CA3AF",
-    muted: "#9CA3AF",
-    border: "#E5E7EB",
-    cardBg: "#F5F5F5",
-    bgOff: "#F5F5F5",
+    dark: "#212121",
+    navy: "#212121",
+    bodyLight: "#5c5c5c",
+    bodyDark: "#8a8a8a",
+    muted: "#8a8a8a",
+    border: "#d3d3d3",
+    cardBg: "#f2f2f2",
+    bgOff: "#f2f2f2",
     /** Inter clean sans-serif for all text */
     sans: "var(--font-inter), Inter, system-ui, -apple-system, sans-serif",
     /** @deprecated – kept for compat, maps to sans now */
     serif: "var(--font-inter), Inter, system-ui, -apple-system, sans-serif",
     /** alias for body text on light bg — matches bodyLight */
-    slate: "#6B7280",
+    slate: "#5c5c5c",
     /** max content width */
     maxW: "1200px",
     /** section vertical padding */

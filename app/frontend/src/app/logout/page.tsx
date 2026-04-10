@@ -20,8 +20,8 @@ export default function LogoutPage() {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center">
       <div className="text-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#1B6B4A] mx-auto mb-4" />
-        <p className="text-[#7C8A9E]">Disconnecting...</p>
+        <Loader2 className="w-8 h-8 animate-spin text-[#34c759] mx-auto mb-4" />
+        <p className="text-[#8a8a8a]">Disconnecting...</p>
       </div>
     </div>
   );

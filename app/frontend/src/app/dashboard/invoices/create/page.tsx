@@ -228,17 +228,17 @@ export default function CreateInvoicePage() {
     )}`;
     return (
       <div className="mx-auto max-w-lg space-y-6 py-12 text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#00ff41]/10">
-          <Check className="h-8 w-8 text-[#00ff41]" />
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#34c759]/10">
+          <Check className="h-8 w-8 text-[#34c759]" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Invoice Sent</h1>
-          <p className="mt-2 text-sm text-[#888]">
-            <span className="font-mono font-medium text-white">
+          <h1 className="text-2xl font-bold text-[#212121]">Invoice Sent</h1>
+          <p className="mt-2 text-sm text-[#8a8a8a]">
+            <span className="font-mono font-medium text-[#212121]">
               {createdInvoice.invoiceNumber}
             </span>{" "}
             for{" "}
-            <span className="font-mono font-semibold text-[#00ff41]">
+            <span className="font-mono font-semibold text-[#34c759]">
               $
               {createdInvoice.total.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
@@ -249,20 +249,20 @@ export default function CreateInvoicePage() {
         </div>
 
         {/* Blink URL */}
-        <div className="rounded-xl border border-[#1f1f1f] bg-[#141414] p-6 text-left">
+        <div className="rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-6 text-left">
           <div className="mb-3 flex items-center gap-2">
-            <Link2 className="h-4 w-4 text-[#00ff41]" />
-            <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#666]">
+            <Link2 className="h-4 w-4 text-[#34c759]" />
+            <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#5c5c5c]">
               Pay Link (Blink)
             </h2>
           </div>
-          <div className="flex items-center gap-2 rounded-lg border border-[#333] bg-[#1a1a1a] p-3">
-            <code className="flex-1 truncate text-xs text-[#aaa]">
+          <div className="flex items-center gap-2 rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] p-3">
+            <code className="flex-1 truncate text-xs text-[#5c5c5c]">
               {createdInvoice.blinkUrl}
             </code>
             <button
               onClick={() => copyToClipboard(createdInvoice.blinkUrl, "blink")}
-              className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
+              className="shrink-0 rounded-lg p-2 text-[#34c759] hover:bg-[#34c759]/10 transition-colors"
             >
               {copiedField === "blink" ? (
                 <Check className="h-4 w-4" />
@@ -272,16 +272,16 @@ export default function CreateInvoicePage() {
             </button>
           </div>
           <div className="mt-3">
-            <p className="mb-2 text-xs font-medium text-[#666]">
+            <p className="mb-2 text-xs font-medium text-[#5c5c5c]">
               For Twitter / X unfurl:
             </p>
-            <div className="flex items-center gap-2 rounded-lg border border-[#333] bg-[#1a1a1a] p-3">
-              <code className="flex-1 truncate text-xs text-[#aaa]">
+            <div className="flex items-center gap-2 rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] p-3">
+              <code className="flex-1 truncate text-xs text-[#5c5c5c]">
                 {dialtoUrl}
               </code>
               <button
                 onClick={() => copyToClipboard(dialtoUrl, "dialto")}
-                className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
+                className="shrink-0 rounded-lg p-2 text-[#34c759] hover:bg-[#34c759]/10 transition-colors"
               >
                 {copiedField === "dialto" ? (
                   <Check className="h-4 w-4" />
@@ -294,22 +294,22 @@ export default function CreateInvoicePage() {
         </div>
 
         {/* Invoice Link */}
-        <div className="rounded-xl border border-[#1f1f1f] bg-[#141414] p-6 text-left">
+        <div className="rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-6 text-left">
           <div className="mb-3 flex items-center gap-2">
-            <FileText className="h-4 w-4 text-[#00ff41]" />
-            <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#666]">
+            <FileText className="h-4 w-4 text-[#34c759]" />
+            <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#5c5c5c]">
               Invoice Link
             </h2>
           </div>
-          <div className="flex items-center gap-2 rounded-lg border border-[#333] bg-[#1a1a1a] p-3">
-            <code className="flex-1 truncate text-xs text-[#aaa]">
+          <div className="flex items-center gap-2 rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] p-3">
+            <code className="flex-1 truncate text-xs text-[#5c5c5c]">
               {createdInvoice.invoiceUrl}
             </code>
             <button
               onClick={() =>
                 copyToClipboard(createdInvoice.invoiceUrl, "invoice")
               }
-              className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
+              className="shrink-0 rounded-lg p-2 text-[#34c759] hover:bg-[#34c759]/10 transition-colors"
             >
               {copiedField === "invoice" ? (
                 <Check className="h-4 w-4" />
@@ -321,7 +321,7 @@ export default function CreateInvoicePage() {
               href={createdInvoice.invoiceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 rounded-lg p-2 text-[#00ff41] hover:bg-[#00ff41]/10 transition-colors"
+              className="shrink-0 rounded-lg p-2 text-[#34c759] hover:bg-[#34c759]/10 transition-colors"
             >
               <ExternalLink className="h-4 w-4" />
             </a>
@@ -331,7 +331,7 @@ export default function CreateInvoicePage() {
         <div className="flex items-center justify-center gap-4 pt-2">
           <Link
             href="/dashboard/invoices"
-            className="rounded-lg border border-[#333] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors"
+            className="rounded-lg border border-[#d3d3d3] px-5 py-2.5 text-sm font-medium text-[#212121] hover:bg-[#f2f2f2] transition-colors"
           >
             View All Invoices
           </Link>
@@ -348,7 +348,7 @@ export default function CreateInvoicePage() {
               setMemo("");
               setInvoiceNumber("");
             }}
-            className="rounded-lg bg-[#00ff41] px-6 py-2.5 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors"
+            className="rounded-lg bg-[#34c759] px-6 py-2.5 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
           >
             Create Another
           </button>
@@ -362,23 +362,23 @@ export default function CreateInvoicePage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <span className="text-[11px] text-[#00ff41] uppercase tracking-[0.15em] font-semibold">
+          <span className="text-[11px] text-[#34c759] uppercase tracking-[0.15em] font-semibold">
             New Transaction
           </span>
-          <h1 className="text-3xl font-bold text-white tracking-tight mt-1">
+          <h1 className="text-3xl font-bold text-[#212121] tracking-tight mt-1">
             Create Invoice
           </h1>
         </div>
         <div className="text-right">
-          <span className="text-[10px] text-[#666] uppercase tracking-wider block">
+          <span className="text-[10px] text-[#5c5c5c] uppercase tracking-wider block">
             Draft Status
           </span>
-          <span className="text-sm text-[#aaa]">Unsaved Progress</span>
+          <span className="text-sm text-[#5c5c5c]">Unsaved Progress</span>
         </div>
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-400">
+        <div className="flex items-center gap-2 rounded-lg bg-[#e74c3c]/10 border border-[#e74c3c]/20 p-4 text-sm text-[#e74c3c]">
           <AlertCircle className="h-4 w-4 shrink-0" />
           {error}
         </div>
@@ -388,16 +388,16 @@ export default function CreateInvoicePage() {
         {/* Left Column — Form */}
         <div className="lg:col-span-2 space-y-6">
           {/* Recipient Information */}
-          <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6">
+          <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-6">
             <div className="mb-5 flex items-center gap-2">
-              <User className="h-4 w-4 text-[#00ff41]" />
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#888]">
+              <User className="h-4 w-4 text-[#34c759]" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#8a8a8a]">
                 Recipient Information
               </h2>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#666]">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#5c5c5c]">
                   Client Name / Business
                 </label>
                 <input
@@ -405,11 +405,11 @@ export default function CreateInvoicePage() {
                   value={buyerName}
                   onChange={(e) => setBuyerName(e.target.value)}
                   placeholder="e.g. Ether Distribution Ltd"
-                  className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white placeholder-[#555] outline-none transition-colors focus:border-[#00ff41]/50"
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2.5 text-sm text-[#212121] placeholder-[#8a8a8a] outline-none transition-colors focus:border-[#34c759]/50"
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#666]">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#5c5c5c]">
                   Email Address
                 </label>
                 <input
@@ -417,11 +417,11 @@ export default function CreateInvoicePage() {
                   value={buyerEmail}
                   onChange={(e) => setBuyerEmail(e.target.value)}
                   placeholder="billing@retailer.io"
-                  className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white placeholder-[#555] outline-none transition-colors focus:border-[#00ff41]/50"
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2.5 text-sm text-[#212121] placeholder-[#8a8a8a] outline-none transition-colors focus:border-[#34c759]/50"
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#666]">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#5c5c5c]">
                   Recipient Wallet Address (Optional)
                 </label>
                 <div className="relative">
@@ -430,33 +430,33 @@ export default function CreateInvoicePage() {
                     value={buyerWallet}
                     onChange={(e) => setBuyerWallet(e.target.value)}
                     placeholder="So1ana..."
-                    className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 pr-10 text-sm text-white placeholder-[#555] outline-none transition-colors focus:border-[#00ff41]/50 font-mono"
+                    className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2.5 pr-10 text-sm text-[#212121] placeholder-[#8a8a8a] outline-none transition-colors focus:border-[#34c759]/50 font-mono"
                   />
-                  <QrCode className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#555]" />
+                  <QrCode className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8a8a8a]" />
                 </div>
               </div>
             </div>
           </div>
 
           {/* Product Details */}
-          <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6">
+          <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-6">
             <div className="mb-5 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <FileText className="h-4 w-4 text-[#00ff41]" />
-                <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#888]">
+                <FileText className="h-4 w-4 text-[#34c759]" />
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#8a8a8a]">
                   Product Details
                 </h2>
               </div>
               <button
                 onClick={addLineItem}
-                className="text-[11px] font-semibold text-[#00ff41] hover:text-[#00dd38] transition-colors flex items-center gap-1"
+                className="text-[11px] font-semibold text-[#34c759] hover:text-[#2ba048] transition-colors flex items-center gap-1"
               >
                 + Add Item
               </button>
             </div>
 
             {/* Table header */}
-            <div className="hidden grid-cols-12 gap-3 text-[10px] font-semibold uppercase tracking-wider text-[#555] mb-3 sm:grid">
+            <div className="hidden grid-cols-12 gap-3 text-[10px] font-semibold uppercase tracking-wider text-[#8a8a8a] mb-3 sm:grid">
               <div className="col-span-5">Description</div>
               <div className="col-span-2 text-center">Qty</div>
               <div className="col-span-3 text-center">Unit Price (USD)</div>
@@ -474,7 +474,7 @@ export default function CreateInvoicePage() {
                         updateLineItem(i, "description", e.target.value)
                       }
                       placeholder="Product or service description"
-                      className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2.5 text-sm text-white placeholder-[#555] outline-none focus:border-[#00ff41]/50"
+                      className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-3 py-2.5 text-sm text-[#212121] placeholder-[#8a8a8a] outline-none focus:border-[#34c759]/50"
                     />
                   </div>
                   <div className="col-span-4 sm:col-span-2">
@@ -489,7 +489,7 @@ export default function CreateInvoicePage() {
                         )
                       }
                       min={1}
-                      className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2.5 text-center text-sm text-white outline-none focus:border-[#00ff41]/50"
+                      className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-3 py-2.5 text-center text-sm text-[#212121] outline-none focus:border-[#34c759]/50"
                     />
                   </div>
                   <div className="col-span-4 sm:col-span-3">
@@ -506,14 +506,14 @@ export default function CreateInvoicePage() {
                       min={0}
                       step={0.01}
                       placeholder="0.00"
-                      className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-3 py-2.5 text-center text-sm text-white placeholder-[#555] outline-none focus:border-[#00ff41]/50"
+                      className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-3 py-2.5 text-center text-sm text-[#212121] placeholder-[#8a8a8a] outline-none focus:border-[#34c759]/50"
                     />
                   </div>
                   <div className="col-span-4 sm:col-span-2 flex items-center justify-end">
                     <button
                       onClick={() => removeLineItem(i)}
                       disabled={lineItems.length === 1}
-                      className="rounded-lg p-2 text-[#555] hover:text-red-400 hover:bg-red-400/10 transition-colors disabled:opacity-30"
+                      className="rounded-lg p-2 text-[#8a8a8a] hover:text-[#e74c3c] hover:bg-[#e74c3c]/80/10 transition-colors disabled:opacity-30"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -524,22 +524,22 @@ export default function CreateInvoicePage() {
           </div>
 
           {/* Settlement Options */}
-          <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6">
+          <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-6">
             <div className="mb-5 flex items-center gap-2">
-              <DollarSign className="h-4 w-4 text-[#00ff41]" />
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#888]">
+              <DollarSign className="h-4 w-4 text-[#34c759]" />
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#8a8a8a]">
                 Settlement Options
               </h2>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#8a8a8a]">
                   Requested Asset
                 </label>
                 <select
                   value={requestedAsset}
                   onChange={(e) => setRequestedAsset(e.target.value)}
-                  className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white outline-none appearance-none cursor-pointer focus:border-[#00ff41]/50"
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2.5 text-sm text-[#212121] outline-none appearance-none cursor-pointer focus:border-[#34c759]/50"
                 >
                   {ASSET_OPTIONS.map((a) => (
                     <option key={a} value={a}>
@@ -549,13 +549,13 @@ export default function CreateInvoicePage() {
                 </select>
               </div>
               <div>
-                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#555]">
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#8a8a8a]">
                   Payment Terms
                 </label>
                 <select
                   value={terms}
                   onChange={(e) => setTerms(e.target.value)}
-                  className="w-full rounded-lg border border-[#333] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white outline-none appearance-none cursor-pointer focus:border-[#00ff41]/50"
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2.5 text-sm text-[#212121] outline-none appearance-none cursor-pointer focus:border-[#34c759]/50"
                 >
                   {TERMS_OPTIONS.map((t) => (
                     <option key={t} value={t}>
@@ -570,15 +570,15 @@ export default function CreateInvoicePage() {
 
         {/* Right Column — Invoice Summary */}
         <div className="space-y-4">
-          <div className="rounded-xl bg-[#141414] border border-[#1f1f1f] p-6 sticky top-20">
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#666] mb-5">
+          <div className="rounded-xl bg-[#ffffff] border border-[#d3d3d3] p-6 sticky top-20">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#5c5c5c] mb-5">
               Invoice Summary
             </h3>
 
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
-                <span className="text-[#888]">Subtotal</span>
-                <span className="text-white font-mono">
+                <span className="text-[#8a8a8a]">Subtotal</span>
+                <span className="text-[#212121] font-mono">
                   $
                   {subtotal.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
@@ -586,32 +586,32 @@ export default function CreateInvoicePage() {
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-[#888]">Network Fee Est.</span>
-                <span className="text-white font-mono">
+                <span className="text-[#8a8a8a]">Network Fee Est.</span>
+                <span className="text-[#212121] font-mono">
                   ${networkFee.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-[#888]">Tax ({taxRate || "0"}%)</span>
-                <span className="text-white font-mono">
+                <span className="text-[#8a8a8a]">Tax ({taxRate || "0"}%)</span>
+                <span className="text-[#212121] font-mono">
                   ${tax.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
-              <div className="border-t border-[#1f1f1f] pt-3">
+              <div className="border-t border-[#d3d3d3] pt-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-[#666] uppercase tracking-wider">
+                  <span className="text-[10px] text-[#5c5c5c] uppercase tracking-wider">
                     Total Due
                   </span>
                 </div>
                 <div className="text-right mt-1">
-                  <span className="text-3xl font-bold text-[#00ff41]">
+                  <span className="text-3xl font-bold text-[#34c759]">
                     $
                     {total.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                     })}
                   </span>
-                  <div className="text-[11px] text-[#666] mt-0.5">
+                  <div className="text-[11px] text-[#5c5c5c] mt-0.5">
                     ~
                     {total.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
@@ -627,7 +627,7 @@ export default function CreateInvoicePage() {
               <button
                 onClick={() => handleSubmit(true)}
                 disabled={saving}
-                className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#00ff41] px-5 py-3 text-sm font-bold text-black hover:bg-[#00dd38] transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-[#34c759] px-5 py-3 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors disabled:opacity-50"
               >
                 {saving ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -639,19 +639,19 @@ export default function CreateInvoicePage() {
               <button
                 onClick={() => handleSubmit(false)}
                 disabled={saving}
-                className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#333] px-5 py-3 text-sm font-medium text-white hover:bg-[#1a1a1a] transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#d3d3d3] px-5 py-3 text-sm font-medium text-[#212121] hover:bg-[#f2f2f2] transition-colors disabled:opacity-50"
               >
                 <Eye className="h-4 w-4" />
                 Preview PDF
               </button>
-              <button className="w-full text-center text-[11px] text-[#666] uppercase tracking-wider hover:text-[#888] transition-colors py-2">
+              <button className="w-full text-center text-[11px] text-[#5c5c5c] uppercase tracking-wider hover:text-[#8a8a8a] transition-colors py-2">
                 Save as Template
               </button>
             </div>
 
             {/* Trust note */}
-            <div className="mt-4 rounded-lg bg-[#1a1a1a] border border-[#1f1f1f] p-3">
-              <p className="text-[11px] text-[#555] italic leading-relaxed">
+            <div className="mt-4 rounded-lg bg-[#f2f2f2] border border-[#d3d3d3] p-3">
+              <p className="text-[11px] text-[#8a8a8a] italic leading-relaxed">
                 Invoices generated by Settlr are cryptographically signed.
                 Payments are settled directly via smart contract to ensure
                 atomic swaps.
@@ -662,13 +662,13 @@ export default function CreateInvoicePage() {
       </div>
 
       {/* Wholesale Tip */}
-      <div className="rounded-xl bg-[#00ff41]/5 border border-[#00ff41]/10 p-5">
+      <div className="rounded-xl bg-[#34c759]/5 border border-[#34c759]/10 p-5">
         <div className="flex items-start gap-3">
           <div>
-            <span className="text-[11px] font-bold text-[#00ff41] uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-[#34c759] uppercase tracking-wider">
               Wholesale Tip
             </span>
-            <p className="text-sm text-[#888] mt-1 leading-relaxed">
+            <p className="text-sm text-[#8a8a8a] mt-1 leading-relaxed">
               Retailers on the Polygon network typically settle invoices 40%
               faster due to lower gas overhead. Consider offering a 1% discount
               for MATIC-based settlements.
