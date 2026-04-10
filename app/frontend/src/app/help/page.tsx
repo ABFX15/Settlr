@@ -233,7 +233,7 @@ export default function HelpPage() {
   const [activeCategory, setActiveCategory] = useState("getting-started");
 
   return (
-    <div className="min-h-screen" style={{ background: p.bg, color: p.slate }}>
+    <main className="min-h-screen" style={{ background: p.bg, color: p.slate }}>
       <Navbar />
 
       {/* ═══════ HERO ═══════ */}
@@ -514,6 +514,6 @@ export default function HelpPage() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }

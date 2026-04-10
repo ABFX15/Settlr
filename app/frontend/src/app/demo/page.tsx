@@ -420,12 +420,12 @@ function StepBusiness({
         </span>
       </div>
 
-      <h2
+      <h1
         className="mb-2 text-3xl font-bold text-[#0C1829] md:text-4xl"
         style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
       >
         Enter Your Details
-      </h2>
+      </h1>
       <p className="mb-8 max-w-xl text-[#7C8A9E]">
         Fill in your business details to generate a compliant,
         cryptographically-secured invoice. This is a demo {"\u2014"} no real

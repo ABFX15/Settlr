@@ -44,5 +44,20 @@ export default function DocsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      {/* SSR-visible content for crawlers — the client page renders over this */}
+      <div className="sr-only" aria-hidden="true">
+        <h1>Settlr Documentation — Settlement SDK &amp; API Reference</h1>
+        <p>
+          Integrate Settlr non-custodial USDC settlement in under 30 minutes.
+          TypeScript SDK, React components, webhooks, and REST API for high-risk
+          B2B settlement on Solana. Topics include: Getting Started, LeafLink
+          integration, Invoices &amp; Payments, Dashboard, REST API reference,
+          Webhooks, Integrations, and Troubleshooting.
+        </p>
+      </div>
+      {children}
+    </>
+  );
 }

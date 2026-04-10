@@ -90,7 +90,7 @@ export default function WaitlistPage() {
       <div className="absolute inset-0 z-0">
         <Image
           src="/blockchain.png"
-          alt=""
+          alt="Abstract blockchain network visualization"
           fill
           priority
           className="object-cover object-center"

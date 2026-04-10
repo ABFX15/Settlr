@@ -53,9 +53,9 @@ export default function LoginPage() {
           >
             <Shield className="w-10 h-10" style={{ color: c.green }} />
           </div>
-          <h2 className="text-3xl font-bold mb-3" style={{ color: c.navy }}>
+          <h1 className="text-3xl font-bold mb-3" style={{ color: c.navy }}>
             Complete Onboarding
-          </h2>
+          </h1>
           <p className="mb-6" style={{ color: c.slate }}>
             Your wallet is connected but you haven&apos;t completed merchant
             onboarding yet. You need an invite link from your approval email to
@@ -113,9 +113,9 @@ export default function LoginPage() {
         >
           <Shield className="w-10 h-10" style={{ color: c.green }} />
         </div>
-        <h2 className="text-3xl font-bold mb-3" style={{ color: c.navy }}>
+        <h1 className="text-3xl font-bold mb-3" style={{ color: c.navy }}>
           Sign In to Settlr
-        </h2>
+        </h1>
         <p className="mb-2 text-lg" style={{ color: c.slate }}>
           Connect the wallet you used during onboarding.
         </p>

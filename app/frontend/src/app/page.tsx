@@ -50,12 +50,71 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "Settlr",
-            url: "https://settlr.dev",
-            logo: "https://settlr.dev/icon.svg",
-            description:
-              "Non-custodial stablecoin settlement for B2B cannabis distributors at 1% flat fee.",
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://settlr.dev/#organization",
+                name: "Settlr",
+                url: "https://settlr.dev",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://settlr.dev/icon.svg",
+                  width: 512,
+                  height: 512,
+                },
+                description:
+                  "Non-custodial stablecoin settlement infrastructure for B2B cannabis distributors. Instant USDC payments on Solana at a 1% flat fee.",
+                foundingDate: "2025",
+                sameAs: ["https://x.com/settlrp"],
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  email: "adam@settlr.dev",
+                  contactType: "sales",
+                },
+                areaServed: "US",
+                knowsAbout: [
+                  "stablecoin settlement",
+                  "cannabis B2B payments",
+                  "USDC",
+                  "Solana blockchain",
+                  "non-custodial payments",
+                  "high-risk merchant processing",
+                ],
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://settlr.dev/#website",
+                url: "https://settlr.dev",
+                name: "Settlr",
+                publisher: { "@id": "https://settlr.dev/#organization" },
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: "https://settlr.dev/help?q={search_term_string}",
+                  "query-input": "required name=search_term_string",
+                },
+              },
+              {
+                "@type": "SoftwareApplication",
+                name: "Settlr",
+                applicationCategory: "FinanceApplication",
+                operatingSystem: "Web",
+                offers: {
+                  "@type": "Offer",
+                  price: "0",
+                  priceCurrency: "USD",
+                  description:
+                    "1% flat fee per settlement — no monthly minimums",
+                },
+                featureList: [
+                  "Non-custodial USDC settlement",
+                  "Instant on-chain finality on Solana",
+                  "Purchase order to invoice workflow",
+                  "Automated collection reminders",
+                  "LeafLink integration",
+                  "BSA/AML compliance receipts",
+                ],
+              },
+            ],
           }),
         }}
       />
