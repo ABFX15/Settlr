@@ -22,6 +22,7 @@ import {
   HelpCircle,
   Settings,
   Bell,
+  CreditCard,
 } from "lucide-react";
 import Link from "next/link";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
@@ -249,6 +250,19 @@ export default function InvoicePayClient({
       });
 
       setState("success");
+
+      // Trigger auto off-ramp for the merchant (fire-and-forget)
+      if (invoice.merchantWallet && invoice.total > 0 && sig) {
+        fetch("/api/auto-offramp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            merchantWallet: invoice.merchantWallet,
+            amount: invoice.total,
+            txSignature: sig,
+          }),
+        }).catch(() => {});
+      }
     } catch (err) {
       console.error("[invoice] Payment error:", err);
       setError(
@@ -371,7 +385,9 @@ export default function InvoicePayClient({
               </h2>
               <p className="mt-2 text-sm text-[#5c5c5c]">
                 Invoice #{invoice.invoiceNumber} from{" "}
-                <strong className="text-[#212121]">{invoice.merchantName}</strong>{" "}
+                <strong className="text-[#212121]">
+                  {invoice.merchantName}
+                </strong>{" "}
                 has been cancelled.
               </p>
             </motion.div>
@@ -632,13 +648,115 @@ export default function InvoicePayClient({
                               </span>
                             </div>
                           ) : !connected ? (
-                            <button
-                              onClick={() => openWalletModal(true)}
-                              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#34c759] py-4 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
-                            >
-                              <Wallet className="h-4 w-4" />
-                              Sign In to Pay
-                            </button>
+                            <div className="space-y-3">
+                              <button
+                                onClick={() => openWalletModal(true)}
+                                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#34c759] py-4 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
+                              >
+                                <Wallet className="h-4 w-4" />
+                                Sign In to Pay
+                              </button>
+                              {!IS_DEVNET && (
+                                <>
+                                  <div className="flex items-center gap-3 text-[#8a8a8a] text-xs">
+                                    <div className="flex-1 h-px bg-[#d3d3d3]" />
+                                    <span>no crypto?</span>
+                                    <div className="flex-1 h-px bg-[#d3d3d3]" />
+                                  </div>
+
+                                  {/* Card — up to $5K */}
+                                  {(invoice?.total || 0) <= 5000 && (
+                                    <button
+                                      onClick={() => {
+                                        const params = new URLSearchParams({
+                                          apiKey:
+                                            process.env
+                                              .NEXT_PUBLIC_MOONPAY_API_KEY ||
+                                            "",
+                                          currencyCode: "usdc_sol",
+                                          baseCurrencyCode: "usd",
+                                          baseCurrencyAmount: (
+                                            invoice?.total || 0
+                                          ).toString(),
+                                          colorCode: "#34c759",
+                                          language: "en",
+                                          redirectURL: window.location.href,
+                                          showWalletAddressForm: "true",
+                                        });
+                                        window.open(
+                                          `https://buy.moonpay.com?${params.toString()}`,
+                                          "moonpay-onramp",
+                                          "width=500,height=700,toolbar=no,menubar=no,scrollbars=yes",
+                                        );
+                                      }}
+                                      className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#f2f2f2] py-4 text-sm font-semibold text-[#212121] border border-[#d3d3d3] hover:bg-[#d3d3d3]/50 transition-colors"
+                                    >
+                                      <CreditCard className="h-4 w-4" />
+                                      Pay with Card (~5 min)
+                                    </button>
+                                  )}
+
+                                  {/* Bank transfer — $100–$100K */}
+                                  {(invoice?.total || 0) >= 100 &&
+                                    (invoice?.total || 0) <= 100000 && (
+                                      <button
+                                        onClick={() => {
+                                          const params = new URLSearchParams({
+                                            amount: (
+                                              invoice?.total || 0
+                                            ).toString(),
+                                            currency: "usdc",
+                                            network: "solana",
+                                          });
+                                          window.open(
+                                            `https://spherepay.co/buy?${params.toString()}`,
+                                            "sphere-onramp",
+                                            "width=600,height=750,toolbar=no,menubar=no,scrollbars=yes",
+                                          );
+                                        }}
+                                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#f2f2f2] py-4 text-sm font-semibold text-[#212121] border border-[#d3d3d3] hover:bg-[#d3d3d3]/50 transition-colors"
+                                      >
+                                        <Building2 className="h-4 w-4" />
+                                        Bank Transfer / ACH
+                                        {(invoice?.total || 0) > 5000
+                                          ? " (Recommended)"
+                                          : ""}
+                                      </button>
+                                    )}
+
+                                  {/* OTC — $25K+ */}
+                                  {(invoice?.total || 0) >= 25000 && (
+                                    <button
+                                      onClick={() => {
+                                        // For invoices, direct to contact for OTC
+                                        window.open(
+                                          `mailto:otc@settlr.app?subject=OTC Quote Request — Invoice ${
+                                            invoice?.invoiceNumber || ""
+                                          }&body=Amount: $${(
+                                            invoice?.total || 0
+                                          ).toLocaleString()} USDC`,
+                                          "_blank",
+                                        );
+                                      }}
+                                      className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#f2f2f2] py-4 text-sm font-semibold text-[#212121] border border-[#d3d3d3] hover:bg-[#d3d3d3]/50 transition-colors"
+                                    >
+                                      <Building2 className="h-4 w-4" />
+                                      OTC Desk — Large Transfer
+                                      {(invoice?.total || 0) >= 100000
+                                        ? " (Recommended)"
+                                        : ""}
+                                    </button>
+                                  )}
+
+                                  {(invoice?.total || 0) > 5000 && (
+                                    <p className="text-center text-[#8a8a8a] text-xs">
+                                      Card limited to $5K. Bank transfer or OTC
+                                      recommended for this amount.
+                                    </p>
+                                  )}
+                                </>
+                              )}
+                            </div>
                           ) : (
                             <button
                               onClick={handlePay}

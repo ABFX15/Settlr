@@ -21,6 +21,8 @@ import {
   Fuel,
   Lock,
   ShieldCheck,
+  Building2,
+  Landmark,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -41,6 +43,11 @@ import {
   USDC_MINT as JUPITER_USDC_MINT,
 } from "@/hooks/useJupiterSwap";
 import { ChainType, USDC_ADDRESSES } from "@/hooks/useMultichainWallet";
+import {
+  useOnRamp,
+  getRecommendedTier,
+  PAYMENT_TIERS,
+} from "@/hooks/useOnRamp";
 
 // Base58 alphabet for encoding signatures
 const BASE58_ALPHABET =
@@ -148,13 +155,28 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     | "wallet"
     | "kyc"
     | "confirm"
+    | "otc-quote"
     | "processing"
     | "success"
     | "error"
   >("loading");
   const [error, setError] = useState("");
   const [txSignature, setTxSignature] = useState("");
-  const [paidFromWallet, setPaidFromWallet] = useState<string>(""); // Store customer wallet for success screen
+  const [paidFromWallet, setPaidFromWallet] = useState<string>("");
+  const [otcEmail, setOtcEmail] = useState("");
+  const [otcQuote, setOtcQuote] = useState<{
+    quoteId: string;
+    indicativeRate: number;
+    indicativeTotal: number;
+    expiresAt: string;
+    wireInstructions: {
+      bankName: string;
+      accountName: string;
+      reference: string;
+      note: string;
+    };
+    estimatedDelivery: string;
+  } | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
   const [solBalance, setSolBalance] = useState<number | null>(null); // SOL balance for gas
   const [loadingBalance, setLoadingBalance] = useState(false);
@@ -247,6 +269,55 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     executeSwap: executeJupiterSwap,
     reset: resetJupiter,
   } = useJupiterSwap(jupiterWalletAddress);
+
+  // On-ramp: tiered system (card / bank / OTC) based on amount
+  const {
+    status: onRampStatus,
+    error: onRampError,
+    availableTiers,
+    recommendedTier,
+    openCardOnRamp,
+    openBankOnRamp,
+    requestOtcQuote,
+    reset: resetOnRamp,
+  } = useOnRamp(amount);
+
+  // When on-ramp completes (popup closes), refresh balance
+  useEffect(() => {
+    if (onRampStatus === "funded" && activeWallet?.address) {
+      fetchBalance();
+      resetOnRamp();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onRampStatus]);
+
+  // Auto off-ramp: trigger when payment succeeds
+  useEffect(() => {
+    if (step === "success" && merchantWallet && amount > 0 && txSignature) {
+      // Fire-and-forget — don't block the success screen
+      fetch("/api/auto-offramp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          merchantWallet,
+          amount,
+          txSignature,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.triggered) {
+            console.log(
+              `[auto-offramp] Triggered: $${amount} → ${data.offramp.currency} via ${data.offramp.provider}`,
+            );
+          }
+        })
+        .catch(() => {
+          // Silent fail — off-ramp is secondary to the payment
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
 
   // Whether a Jupiter swap is needed (non-USDC token selected on Solana mainnet)
   // Jupiter only works on mainnet, not devnet
@@ -1900,11 +1971,98 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                     <Wallet className="w-5 h-5" />
                     Connect Wallet (Phantom/Solflare)
                   </button>
+
+                  {/* Pay with card — fiat on-ramp for non-crypto users */}
+                  {!IS_DEVNET && (
+                    <>
+                      <div className="flex items-center gap-3 text-[#8a8a8a] text-xs">
+                        <div className="flex-1 h-px bg-[#d3d3d3]" />
+                        <span>or pay without crypto</span>
+                        <div className="flex-1 h-px bg-[#d3d3d3]" />
+                      </div>
+
+                      {/* Card option — amounts up to $5K */}
+                      {amount <= 5000 && (
+                        <button
+                          onClick={() => {
+                            const params = new URLSearchParams({
+                              apiKey:
+                                process.env.NEXT_PUBLIC_MOONPAY_API_KEY || "",
+                              currencyCode: "usdc_sol",
+                              baseCurrencyCode: "usd",
+                              baseCurrencyAmount: amount.toString(),
+                              colorCode: "#34c759",
+                              language: "en",
+                              redirectURL: window.location.href,
+                              showWalletAddressForm: "true",
+                            });
+                            window.open(
+                              `https://buy.moonpay.com?${params.toString()}`,
+                              "moonpay-onramp",
+                              "width=500,height=700,toolbar=no,menubar=no,scrollbars=yes",
+                            );
+                          }}
+                          className="w-full py-4 bg-[#f2f2f2] text-[#212121] font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-[#d3d3d3]/50 transition-colors border border-[#d3d3d3]"
+                        >
+                          <CreditCard className="w-5 h-5" />
+                          Pay with Card (~5 min)
+                        </button>
+                      )}
+
+                      {/* Bank transfer — amounts $100–$100K */}
+                      {amount >= 100 && amount <= 100000 && (
+                        <button
+                          onClick={() => {
+                            const params = new URLSearchParams({
+                              amount: amount.toString(),
+                              currency: "usdc",
+                              network: "solana",
+                            });
+                            window.open(
+                              `https://spherepay.co/buy?${params.toString()}`,
+                              "sphere-onramp",
+                              "width=600,height=750,toolbar=no,menubar=no,scrollbars=yes",
+                            );
+                          }}
+                          className="w-full py-4 bg-[#f2f2f2] text-[#212121] font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-[#d3d3d3]/50 transition-colors border border-[#d3d3d3]"
+                        >
+                          <Building2 className="w-5 h-5" />
+                          Bank Transfer / ACH
+                          {amount > 5000 ? " (Recommended)" : ""}
+                        </button>
+                      )}
+
+                      {/* OTC — amounts $25K+ */}
+                      {amount >= 25000 && (
+                        <button
+                          onClick={() => {
+                            setStep("otc-quote");
+                          }}
+                          className="w-full py-4 bg-[#f2f2f2] text-[#212121] font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-[#d3d3d3]/50 transition-colors border border-[#d3d3d3]"
+                        >
+                          <Landmark className="w-5 h-5" />
+                          OTC Desk — Large Transfer
+                          {amount >= 100000 ? " (Recommended)" : ""}
+                        </button>
+                      )}
+
+                      {amount > 5000 && (
+                        <p className="text-center text-[#8a8a8a] text-xs">
+                          Card payments limited to $5,000.{" "}
+                          {amount > 100000
+                            ? "Use OTC desk for best rates on large transfers."
+                            : "Bank transfer recommended for this amount."}
+                        </p>
+                      )}
+                    </>
+                  )}
                 </div>
               )}
 
               <p className="text-center text-[#8a8a8a] text-xs mt-4">
-                Use Phantom, Solflare, or any Solana wallet
+                {IS_DEVNET
+                  ? "Use Phantom, Solflare, or any Solana wallet"
+                  : "Connect an existing wallet or buy USDC instantly with a debit card"}
               </p>
             </div>
           </div>
@@ -2535,6 +2693,83 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                   </p>
                 </div>
 
+                {/* Tiered on-ramp options based on needed amount */}
+                {!IS_DEVNET &&
+                  (() => {
+                    const needed = Math.ceil(amount - balance + 0.5);
+                    return (
+                      <div className="space-y-2 mb-3">
+                        {needed <= 5000 && (
+                          <button
+                            onClick={() =>
+                              openCardOnRamp({
+                                walletAddress: activeWallet.address,
+                                amount: needed,
+                              })
+                            }
+                            disabled={
+                              onRampStatus === "waiting" ||
+                              onRampStatus === "opening"
+                            }
+                            className="w-full py-3 bg-[#34c759] text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#2ba048] transition-colors disabled:opacity-60"
+                          >
+                            {onRampStatus === "waiting" ? (
+                              <>
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                Complete purchase in MoonPay…
+                              </>
+                            ) : (
+                              <>
+                                <CreditCard className="w-4 h-4" />
+                                Buy ${needed} USDC with Card
+                              </>
+                            )}
+                          </button>
+                        )}
+                        {needed > 5000 && needed <= 100000 && (
+                          <button
+                            onClick={() =>
+                              openBankOnRamp({
+                                walletAddress: activeWallet.address,
+                                amount: needed,
+                              })
+                            }
+                            disabled={
+                              onRampStatus === "waiting" ||
+                              onRampStatus === "opening"
+                            }
+                            className="w-full py-3 bg-[#34c759] text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#2ba048] transition-colors disabled:opacity-60"
+                          >
+                            {onRampStatus === "waiting" ? (
+                              <>
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                Complete bank transfer…
+                              </>
+                            ) : (
+                              <>
+                                <Building2 className="w-4 h-4" />
+                                Buy ${needed.toLocaleString()} USDC via Bank
+                                Transfer
+                              </>
+                            )}
+                          </button>
+                        )}
+                        {needed > 100000 && (
+                          <button
+                            onClick={() => setStep("otc-quote")}
+                            className="w-full py-3 bg-[#34c759] text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#2ba048] transition-colors"
+                          >
+                            <Landmark className="w-4 h-4" />
+                            Request OTC Quote — ${needed.toLocaleString()} USDC
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })()}
+                {onRampError && (
+                  <p className="text-[#e74c3c] text-xs mb-2">{onRampError}</p>
+                )}
+
                 {/* Devnet: Get test USDC from faucet */}
                 {IS_DEVNET && (
                   <>
@@ -2571,7 +2806,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                     </span>
                     <Copy className="w-3 h-3 text-[#8a8a8a]" />
                   </button>
-                  <p className="text-[#8a8a8a] text-xs mt-1">Solana Devnet</p>
+                  <p className="text-[#8a8a8a] text-xs mt-1">
+                    {IS_DEVNET ? "Solana Devnet" : "Solana"}
+                  </p>
                 </div>
               </div>
             )}
@@ -2698,6 +2935,160 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             >
               Refresh Balance
             </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // OTC quote step — large transfer ($25K+)
+  if (step === "otc-quote") {
+    return (
+      <div className="min-h-screen bg-[#f7f7f7] flex flex-col items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-lg"
+        >
+          <div className="bg-white rounded-2xl shadow-lg border border-[#d3d3d3] p-8">
+            <button
+              onClick={() => setStep("auth")}
+              className="mb-6 text-[#8a8a8a] hover:text-[#212121] transition-colors flex items-center gap-1 text-sm"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </button>
+
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-full bg-[#34c759]/15 flex items-center justify-center">
+                <Landmark className="w-6 h-6 text-[#34c759]" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-[#212121]">
+                  OTC Desk — Large Transfer
+                </h2>
+                <p className="text-[#8a8a8a] text-sm">
+                  Best rates for transfers over $25,000
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-4 mb-6">
+              <div className="bg-[#f2f2f2] rounded-xl p-4">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-[#8a8a8a]">Amount</span>
+                  <span className="text-[#212121] font-semibold">
+                    ${amount.toLocaleString()} USDC
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-[#8a8a8a]">Est. Rate</span>
+                  <span className="text-[#212121]">~1:1 (near-peg)</span>
+                </div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-[#8a8a8a]">Fees</span>
+                  <span className="text-[#34c759]">~0.1-0.5% (negotiated)</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-[#8a8a8a]">Settlement</span>
+                  <span className="text-[#212121]">
+                    Same day (wire before 3 PM ET)
+                  </span>
+                </div>
+              </div>
+
+              {!otcQuote ? (
+                <>
+                  <div>
+                    <label className="block text-sm text-[#5c5c5c] mb-1">
+                      Email for wire instructions
+                    </label>
+                    <input
+                      type="email"
+                      value={otcEmail}
+                      onChange={(e) => setOtcEmail(e.target.value)}
+                      placeholder="treasury@yourcompany.com"
+                      className="w-full px-4 py-3 bg-[#f2f2f2] border border-[#d3d3d3] rounded-xl text-[#212121] placeholder:text-[#8a8a8a] focus:outline-none focus:ring-2 focus:ring-[#34c759]/40"
+                    />
+                  </div>
+                  <button
+                    onClick={async () => {
+                      if (!otcEmail || !otcEmail.includes("@")) return;
+                      try {
+                        const res = await fetch("/api/otc-quote", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            walletAddress:
+                              activeWallet?.address || "pending-wallet",
+                            amount,
+                            email: otcEmail,
+                          }),
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setOtcQuote(data);
+                        }
+                      } catch {
+                        // ignore
+                      }
+                    }}
+                    disabled={!otcEmail || !otcEmail.includes("@")}
+                    className="w-full py-4 bg-[#34c759] text-white font-semibold rounded-xl hover:bg-[#2ba048] transition-colors disabled:opacity-50"
+                  >
+                    Request Quote & Wire Instructions
+                  </button>
+                </>
+              ) : (
+                <div className="space-y-3">
+                  <div className="bg-[#34c759]/[0.06] border border-[#34c759]/20 rounded-xl p-4">
+                    <div className="flex items-center gap-2 text-[#34c759] mb-2">
+                      <Check className="w-4 h-4" />
+                      <span className="font-medium text-sm">
+                        Quote Received
+                      </span>
+                    </div>
+                    <div className="text-sm text-[#5c5c5c] space-y-1">
+                      <p>
+                        Total:{" "}
+                        <span className="font-semibold text-[#212121]">
+                          ${otcQuote.indicativeTotal.toLocaleString()} USD
+                        </span>{" "}
+                        → {amount.toLocaleString()} USDC
+                      </p>
+                      <p>Reference: {otcQuote.quoteId}</p>
+                      <p>Delivery: {otcQuote.estimatedDelivery}</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-[#f2f2f2] rounded-xl p-4">
+                    <p className="text-sm font-medium text-[#212121] mb-2">
+                      Wire Instructions
+                    </p>
+                    <p className="text-sm text-[#5c5c5c]">
+                      {otcQuote.wireInstructions.note}
+                    </p>
+                    <p className="text-xs text-[#8a8a8a] mt-2">
+                      Wire instructions and bank details will be sent to{" "}
+                      <strong>{otcEmail}</strong>
+                    </p>
+                  </div>
+
+                  <div className="bg-[#7086f2]/10 border border-[#7086f2]/20 rounded-xl p-3">
+                    <p className="text-xs text-[#7086f2]">
+                      Once your wire is received, USDC will be delivered to your
+                      wallet automatically. You&apos;ll receive an email
+                      confirmation.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-[#8a8a8a]">
+              <Shield className="w-3 h-3" />
+              <span>OTC trades via regulated partners. No card limits.</span>
+            </div>
           </div>
         </motion.div>
       </div>
