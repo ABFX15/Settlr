@@ -1,40 +1,41 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Settlr vs Traditional Processors — Settlement Comparison",
+  title: "Settlr vs Legacy Cannabis Payment Workflows — Comparison",
   description:
-    "Compare Settlr non-custodial USDC settlement with traditional high-risk payment processors. 1% flat vs 5-8% industry average.",
+    "Compare Settlr order-to-cash workflow with LeafLink + ACH, high-risk processors, and generic crypto gateways for cannabis wholesale.",
   keywords: [
-    "settlement comparison",
-    "high-risk payment processor comparison",
+    "cannabis wholesale payments comparison",
     "cannabis payment processor alternative",
-    "non-custodial settlement vs traditional",
-    "cheapest high-risk processing",
-    "best settlement platform",
+    "order-to-cash cannabis",
+    "cannabis invoicing",
+    "cannabis receivables",
+    "time-to-cash cannabis",
+    "cannabis B2B settlement",
   ],
   alternates: { canonical: "/compare" },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Settlr",
-    title: "Settlr vs Traditional Processors — Settlement Comparison",
+    title: "Settlr vs Legacy Cannabis Payment Workflows",
     description:
-      "Compare settlement fees, speed, and compliance. 1% flat vs 5-8% traditional high-risk processors.",
+      "How Settlr compares to LeafLink + ACH, high-risk processors, and generic crypto gateways for cannabis wholesale order-to-cash.",
     url: "https://settlr.dev/compare",
     images: [
       {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Settlr Settlement Comparison",
+        alt: "Settlr Cannabis Wholesale Payment Comparison",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr vs Traditional Processors — Settlement Comparison",
+    title: "Settlr vs Legacy Cannabis Payment Workflows",
     description:
-      "1% flat non-custodial USDC settlement vs 5-8% traditional high-risk processors.",
+      "Cannabis wholesalers need faster invoicing, collections, and settlement — not another generic payment gateway.",
     images: ["/twitter-image?v=3"],
   },
 };

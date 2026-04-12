@@ -7,15 +7,19 @@ import {
   Check,
   X,
   Minus,
-  Shield,
-  Zap,
-  Globe,
   Clock,
+  DollarSign,
+  FileText,
+  BarChart3,
+  Bell,
+  RefreshCw,
+  Zap,
+  Building2,
 } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 
-/* ─── Reveal helper ─── */
+/* --- Reveal helper --- */
 function Reveal({
   children,
   className = "",
@@ -38,13 +42,12 @@ function Reveal({
   );
 }
 
-/* ─── Data ─── */
+/* --- Comparison data --- */
 const providers = [
   { name: "Settlr", highlight: true },
-  { name: "Stripe" },
-  { name: "Coinbase Commerce" },
-  { name: "NOWPayments" },
-  { name: "BitPay" },
+  { name: "LeafLink + ACH" },
+  { name: "High-risk processor" },
+  { name: "Generic crypto gateway" },
 ];
 
 const features: {
@@ -56,148 +59,90 @@ const features: {
   }[];
 }[] = [
   {
-    category: "Pricing & Fees",
+    category: "Workflow",
     rows: [
       {
-        label: "Transaction fee",
-        values: ["1% flat", "2.9% + 30¢", "1%", "0.5–1%", "1–2%"],
-        note: "Stripe source: stripe.com/pricing. Coinbase: commerce.coinbase.com. NOWPayments: nowpayments.io/pricing.",
+        label: "Built for cannabis wholesale",
+        values: [true, "Partially", false, false],
+        note: "Settlr is purpose-built for cannabis B2B. LeafLink is a marketplace with payment add-ons. High-risk processors and crypto gateways are industry-agnostic.",
       },
       {
-        label: "Monthly fee",
-        values: ["$0", "$0", "$0", "From $0", "From $0"],
+        label: "Order-to-cash workflow",
+        values: ["Full", "Partial", false, false],
+        note: "Settlr covers PO creation, invoice generation, payment collection, reminders, reconciliation, and settlement in one workflow.",
       },
       {
-        label: "Setup fee",
-        values: ["$0", "$0", "$0", "$0", "$0"],
+        label: "Invoice creation",
+        values: [true, "Limited", false, false],
       },
       {
-        label: "Chargeback fee",
-        values: ["N/A — impossible", "$15 per dispute", "N/A", "N/A", "$15"],
-        note: "Stablecoin transactions are final and irreversible on-chain. Stripe chargeback fee: stripe.com/docs/disputes.",
+        label: "Automated collection reminders",
+        values: [true, false, false, false],
       },
       {
-        label: "Cost on $10K/mo",
-        values: ["$100", "$320+", "$100", "$50–100", "$100–200"],
+        label: "Receivables visibility",
+        values: [true, "Limited", false, false],
+        note: "AR aging, outstanding balances, and payment status across all buyers — in one dashboard.",
+      },
+      {
+        label: "Reconciliation",
+        values: [true, "Partial", "Manual", "Manual"],
       },
     ],
   },
   {
-    category: "Settlement & Speed",
+    category: "Settlement & Cost",
     rows: [
       {
-        label: "Settlement time",
-        values: [
-          "< 1 second",
-          "2–7 business days",
-          "1–2 days",
-          "Instant (crypto)",
-          "1–2 days",
-        ],
-        note: "Solana settlement finality is ~400ms. Source: Solana docs (solana.com/docs). Stripe: 2 business days standard, up to 7 for new accounts.",
+        label: "Time to cash",
+        values: ["Seconds", "Days to weeks", "3–7 business days", "Seconds"],
+        note: "Settlr settles on Solana in under 2 seconds. ACH takes 2–5 business days. High-risk processors hold funds 3–7 days plus rolling reserves.",
       },
       {
-        label: "Settlement currency",
-        values: [
-          "USDC/USDT stablecoin",
-          "Fiat (bank account)",
-          "Crypto or fiat",
-          "Crypto",
-          "Fiat or BTC",
-        ],
+        label: "Processing fees",
+        values: ["1% flat", "Varies", "5–9%+", "0.5–2%"],
+        note: "High-risk merchant accounts for cannabis typically charge 5–9% with rolling reserves of 10–20% held for up to 6 months.",
       },
       {
-        label: "Weekend settlement",
-        values: [true, false, false, true, false],
+        label: "Rolling reserves",
+        values: [false, false, "10–20%", false],
+      },
+      {
+        label: "Monthly fees",
+        values: ["$0", "Varies", "$50–$500+", "From $0"],
+      },
+      {
+        label: "Weekend & holiday settlement",
+        values: [true, false, false, true],
+      },
+      {
+        label: "Cost on $500K/month",
+        values: ["$5,000", "Varies", "$25K–$45K", "$2.5K–$10K"],
+        note: "A cannabis distributor processing $500K/month pays $5,000 on Settlr vs. $25,000–$45,000 on a typical high-risk processor.",
       },
     ],
   },
   {
-    category: "Custody & Security",
+    category: "Risk & Reliability",
     rows: [
       {
-        label: "Non-custodial",
-        values: [true, false, false, false, false],
-        note: "Settlr uses on-chain smart contracts — funds flow directly to your wallet. Other providers hold funds temporarily.",
+        label: "Bank dependency",
+        values: ["Lower", "High", "High", "Lower"],
+        note: "Settlr uses non-custodial stablecoin settlement. Funds move wallet-to-wallet without requiring bank intermediaries for the transaction itself.",
       },
       {
-        label: "Chargebacks possible",
-        values: [false, true, false, false, true],
+        label: "Account freeze risk",
+        values: ["None", "Moderate", "High", "Low"],
+        note: "62% of cannabis businesses have had at least one bank account closed. Non-custodial settlement eliminates this risk for the payment itself.",
       },
       {
-        label: "KYC required for buyers",
-        values: [false, false, false, false, true],
-      },
-    ],
-  },
-  {
-    category: "Developer Experience",
-    rows: [
-      {
-        label: "Integration time",
-        values: [
-          "< 30 minutes",
-          "1–3 days",
-          "< 1 hour",
-          "< 1 hour",
-          "1–3 days",
-        ],
+        label: "Chargeback exposure",
+        values: [false, "ACH returns possible", true, false],
       },
       {
-        label: "React/Next.js SDK",
-        values: [true, true, false, false, false],
-      },
-      {
-        label: "Webhook support",
-        values: [true, true, true, true, true],
-      },
-      {
-        label: "TypeScript SDK",
-        values: [true, true, false, true, false],
-      },
-      {
-        label: "Embedded wallets (email login)",
-        values: [true, false, false, false, false],
-        note: "Settlr uses Privy for embedded wallets — customers pay with email, no crypto wallet needed.",
-      },
-      {
-        label: "Gasless transactions",
-        values: [true, "N/A", false, false, false],
-        note: "Settlr uses Kora (backed by Solana Foundation) for gasless transactions.",
-      },
-    ],
-  },
-  {
-    category: "Payments & Coverage",
-    rows: [
-      {
-        label: "Recurring billing",
-        values: [true, true, false, true, true],
-      },
-      {
-        label: "Countries supported",
-        values: ["180+", "47 (payout)", "100+", "200+", "229"],
-        note: "Stripe payout availability is limited to 47 countries. Source: stripe.com/global.",
-      },
-      {
-        label: "Stablecoin support",
-        values: [
-          "USDC, USDT, USDG",
-          "USDC (limited)",
-          "USDC, DAI, + more",
-          "USDT, USDC, + more",
-          "None",
-        ],
-      },
-      {
-        label: "Multi-chain",
-        values: [
-          "Solana + EVM bridges",
-          "No",
-          "Ethereum, Polygon, Base",
-          "200+ coins",
-          "BTC, ETH, + few",
-        ],
+        label: "Early-pay incentives",
+        values: [true, false, false, false],
+        note: "Offer buyers discount terms for faster payment — reduces time-to-cash and improves working capital.",
       },
     ],
   },
@@ -220,30 +165,29 @@ function CellValue({ value }: { value: string | boolean | null }) {
   return <span className="text-sm text-[#5c5c5c]">{value}</span>;
 }
 
-/* ═══════════════════════════════════════
-   PAGE
-   ═══════════════════════════════════════ */
+/* ====== PAGE ====== */
 export default function ComparePage() {
   return (
     <main
       className="relative min-h-screen bg-[#FFFFFF] text-[#5c5c5c] antialiased"
-      style={{ fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif" }}
+      style={{
+        fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif",
+      }}
     >
-      {/* JSON-LD for comparison page */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "Stablecoin Settlement Gateway Comparison — Settlr vs Stripe vs Coinbase Commerce",
+            name: "How Settlr Compares — Cannabis Wholesale Payment Workflows",
             description:
-              "Detailed comparison of stablecoin settlement gateways including fees, settlement speed, custody model, developer experience, and global coverage.",
+              "Compare Settlr to LeafLink + ACH, high-risk processors, and generic crypto gateways for cannabis wholesale order-to-cash workflows.",
             url: "https://settlr.dev/compare",
             mainEntity: {
               "@type": "Table",
               about:
-                "Comparison of stablecoin settlement processors: Settlr, Stripe, Coinbase Commerce, NOWPayments, BitPay",
+                "Comparison of cannabis wholesale payment workflows: Settlr, LeafLink + ACH, high-risk processors, and generic crypto gateways",
             },
           }),
         }}
@@ -251,59 +195,58 @@ export default function ComparePage() {
 
       <Navbar />
 
-      {/* ── Hero ── */}
+      {/* Hero */}
       <section className="relative pt-32 pb-16 md:pt-40 md:pb-20">
         <div className="absolute left-1/2 top-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#34c759]/[0.04] blur-[150px]" />
         <div className="mx-auto max-w-4xl px-6 text-center">
           <Reveal>
             <p className="mb-4 text-sm font-medium uppercase tracking-widest text-[#34c759]">
-              Payment gateway comparison
+              Cannabis wholesale payments
             </p>
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="text-4xl font-semibold tracking-tight text-[#212121] md:text-5xl lg:text-6xl">
-              Best stablecoin settlement gateway{" "}
-              <span className="text-[#34c759]">for 2026</span>
+              How Settlr compares to{" "}
+              <span className="text-[#34c759]">legacy payment workflows</span>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#8a8a8a]">
-              How does Settlr compare to Stripe, Coinbase Commerce, NOWPayments,
-              and BitPay? We break down fees, settlement speed, custody model,
-              developer experience, and global coverage so you can make an
-              informed decision.
+              Cannabis wholesalers don&apos;t need another generic payment
+              gateway. They need a faster way to invoice, collect, reconcile, and
+              turn orders into cash.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ── Quick wins summary ── */}
+      {/* Value props */}
       <section className="mx-auto max-w-5xl px-6 pb-16">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             {
               icon: Zap,
-              title: "66% lower fees",
-              text: "1% flat vs Stripe's 2.9% + 30¢",
+              title: "Get paid in seconds, not days",
+              text: "Instant settlement instead of waiting on ACH, wires, or processor delays.",
+              color: "#34c759",
+            },
+            {
+              icon: DollarSign,
+              title: "Lower the cost of getting paid",
+              text: "1% flat instead of high-risk processing fees that can reach 5–9%+.",
+              color: "#34c759",
+            },
+            {
+              icon: FileText,
+              title: "Turn invoices into cash faster",
+              text: "Built for collections, reminders, reconciliation, and receivables visibility.",
               color: "#3B82F6",
             },
             {
-              icon: Clock,
-              title: "604,800× faster",
-              text: "< 1s settlement vs 7-day bank hold",
+              icon: Building2,
+              title: "Reduce dependency on fragile rails",
+              text: "Less reliance on slow banking workflows and manual follow-up.",
               color: "#3B82F6",
-            },
-            {
-              icon: Shield,
-              title: "Fully non-custodial",
-              text: "Only Settlr among major providers",
-              color: "#34d399",
-            },
-            {
-              icon: Globe,
-              title: "No bank needed",
-              text: "vs Stripe's 47 settlement countries",
-              color: "#fbbf24",
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 0.08}>
@@ -325,7 +268,19 @@ export default function ComparePage() {
         </div>
       </section>
 
-      {/* ── Comparison table ── */}
+      {/* Intro copy */}
+      <section className="mx-auto max-w-3xl px-6 pb-12">
+        <Reveal>
+          <p className="text-center text-[15px] leading-relaxed text-[#8a8a8a]">
+            Most cannabis wholesalers are stitching together marketplaces, ACH,
+            processors, spreadsheets, and manual follow-up just to get paid.
+            Settlr brings invoicing, collections, reconciliation, and instant
+            settlement into one workflow.
+          </p>
+        </Reveal>
+      </section>
+
+      {/* Comparison table */}
       <section className="mx-auto max-w-6xl px-6 pb-24">
         {features.map((section, si) => (
           <Reveal key={section.category} delay={si * 0.05}>
@@ -388,136 +343,115 @@ export default function ComparePage() {
             </div>
           </Reveal>
         ))}
+      </section>
 
-        {/* Sources */}
+      {/* Supporting copy */}
+      <section className="mx-auto max-w-3xl px-6 pb-24">
         <Reveal>
-          <div className="mt-8 rounded-xl bg-[#f2f2f2] p-6">
-            <h3 className="mb-3 text-sm font-semibold text-[#8a8a8a]">
-              Sources &amp; methodology
-            </h3>
-            <ul className="space-y-1.5 text-xs leading-relaxed text-[#8a8a8a]">
-              <li>
-                • Stripe pricing and settlement data from{" "}
-                <a
-                  href="https://stripe.com/pricing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-[#5c5c5c]"
-                >
-                  stripe.com/pricing
-                </a>{" "}
-                and{" "}
-                <a
-                  href="https://stripe.com/global"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-[#5c5c5c]"
-                >
-                  stripe.com/global
-                </a>
-                . Accessed February 2026.
-              </li>
-              <li>
-                • Coinbase Commerce data from{" "}
-                <a
-                  href="https://commerce.coinbase.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-[#5c5c5c]"
-                >
-                  commerce.coinbase.com
-                </a>
-                . Accessed February 2026.
-              </li>
-              <li>
-                • NOWPayments pricing from{" "}
-                <a
-                  href="https://nowpayments.io/pricing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-[#5c5c5c]"
-                >
-                  nowpayments.io/pricing
-                </a>
-                . Accessed February 2026.
-              </li>
-              <li>
-                • Global crypto ownership: 562M+ owners per{" "}
-                <a
-                  href="https://triple-a.io/cryptocurrency-ownership-data"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-[#5c5c5c]"
-                >
-                  Triple-A Cryptocurrency Ownership Data (2024)
-                </a>
-                .
-              </li>
-              <li>
-                • Solana settlement finality (~400ms) per{" "}
-                <a
-                  href="https://solana.com/docs"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-[#5c5c5c]"
-                >
-                  Solana documentation
-                </a>
-                .
-              </li>
-              <li>
-                • Traditional bank settlement (2–7 days) per{" "}
-                <a
-                  href="https://www.federalreserve.gov"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-[#5c5c5c]"
-                >
-                  Federal Reserve payment system data
-                </a>
-                .
-              </li>
-              <li>
-                • All data verified as of February 2026. Pricing may vary by
-                plan and volume.
-              </li>
-            </ul>
+          <div className="rounded-2xl border border-[#d3d3d3] bg-[#f2f2f2] p-8 sm:p-10">
+            <p className="text-[15px] leading-relaxed text-[#5c5c5c]">
+              Settlr is not just another way to move money. It is built to help
+              cannabis wholesalers get paid faster. Instead of relying on a
+              patchwork of ACH, processors, manual invoice chasing, and
+              disconnected reconciliation, Settlr gives operators one
+              order-to-cash workflow: create the invoice, collect the payment,
+              track receivables, automate follow-up, reconcile transactions, and
+              settle instantly when speed matters.
+            </p>
           </div>
         </Reveal>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="border-t border-[#d3d3d3] bg-gradient-to-b from-[#f2f2f2] to-transparent">
+      {/* Why wholesalers switch */}
+      <section className="border-t border-[#d3d3d3] bg-[#f2f2f2]">
+        <div className="mx-auto max-w-4xl px-6 py-24">
+          <Reveal>
+            <h2 className="text-center text-3xl font-semibold tracking-tight text-[#212121] md:text-4xl">
+              Why wholesalers switch
+            </h2>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <p className="mx-auto mt-4 max-w-xl text-center text-[#8a8a8a]">
+              Wholesalers don&apos;t change payment workflows because the
+              technology is interesting. They change when the current process is
+              too slow, too expensive, or too painful to manage.
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="mx-auto mt-12 max-w-lg space-y-5">
+              {[
+                {
+                  icon: Clock,
+                  text: "Reduce time-to-cash from days to seconds",
+                },
+                {
+                  icon: Bell,
+                  text: "Stop chasing invoices manually",
+                },
+                {
+                  icon: DollarSign,
+                  text: "Lower high-risk processing costs from 5–9% to 1%",
+                },
+                {
+                  icon: BarChart3,
+                  text: "Gain visibility into outstanding receivables",
+                },
+                {
+                  icon: RefreshCw,
+                  text: "Offer faster payment options when cashflow matters",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-4 rounded-xl bg-white p-5 shadow-sm"
+                  style={{ border: "1px solid #d3d3d3" }}
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#34c759]/10">
+                    <item.icon className="h-5 w-5 text-[#34c759]" />
+                  </div>
+                  <p className="text-sm font-medium text-[#212121] leading-relaxed pt-2">
+                    {item.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-[#d3d3d3] bg-gradient-to-b from-white to-[#f2f2f2]">
         <div className="mx-auto max-w-3xl px-6 py-24 text-center">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-tight text-[#212121] md:text-4xl">
-              Ready to ditch card network gatekeeping?
+              Get paid faster on wholesale orders
             </h2>
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-4 max-w-lg text-[#8a8a8a]">
-              Switch to Settlr in under 30 minutes. No content restrictions,
-              instant settlement, 1% flat. Built for creator platforms.
+              See how Settlr shortens time-to-cash for cannabis wholesalers. One
+              workflow for invoicing, collections, reconciliation, and instant
+              settlement.
             </p>
           </Reveal>
           <Reveal delay={0.1}>
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
-                href="/onboarding"
+                href="/demo"
                 className="inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[15px] font-semibold text-white shadow-lg shadow-[#34c759]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
                 style={{
                   background:
                     "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                 }}
               >
-                Start integrating
+                See Settlr in action
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/docs"
+                href="/waitlist"
                 className="inline-flex items-center gap-2 rounded-xl border border-[#d3d3d3] px-7 py-3.5 text-[15px] font-medium text-[#5c5c5c] transition-colors hover:bg-[#f2f2f2] hover:text-[#212121]"
               >
-                Read the docs
+                Book a demo
               </Link>
             </div>
           </Reveal>

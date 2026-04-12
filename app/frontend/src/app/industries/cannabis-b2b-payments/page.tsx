@@ -904,8 +904,12 @@ export default function CannabisB2BPaymentsPage() {
             </h2>
           </R>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-3">
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
+              {
+                title: "Settlr vs Legacy Payment Workflows",
+                href: "/compare",
+              },
               {
                 title: "Settlr vs Cash & Armored Cars",
                 href: "/compare/settlr-vs-cash-armored-cars",
@@ -964,7 +968,7 @@ export default function CannabisB2BPaymentsPage() {
                   className="text-4xl font-bold tracking-tight text-white sm:text-5xl"
                   style={{ color: "#FFFFFF" }}
                 >
-                  Your supply chain,{" "}
+                  Get paid faster on{" "}
                   <span
                     style={{
                       background: "linear-gradient(135deg, #34c759, #2D9D6E)",
@@ -972,15 +976,16 @@ export default function CannabisB2BPaymentsPage() {
                       WebkitTextFillColor: "transparent",
                     }}
                   >
-                    cash-free
+                    wholesale orders
                   </span>
                 </h2>
                 <p
                   className="mx-auto mt-6 max-w-md text-lg"
                   style={{ color: "rgba(255,255,255,0.55)" }}
                 >
-                  Join cannabis cultivators, processors, and distributors
-                  settling B2B payments at 1% flat with zero bank interference.
+                  One order-to-cash workflow for invoicing, collections,
+                  reconciliation, and instant settlement. Built for cannabis
+                  wholesale.
                 </p>
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
                   <Link
