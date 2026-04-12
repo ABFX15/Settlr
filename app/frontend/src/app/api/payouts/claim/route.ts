@@ -7,6 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 import { getPayoutByClaimToken, claimPayout, updatePayoutStatus, getRecipientByEmail, registerRecipient, updateRecipientStats, releasePayoutFunds, calculatePayoutFee } from "@/lib/db";
 import { dispatchWebhookEvent } from "@/lib/webhooks";
 
@@ -266,7 +267,7 @@ async function executePayoutTransfer(params: {
         getAccount,
     } = await import("@solana/spl-token");
 
-    const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com";
+    const rpcUrl = SOLANA_RPC_URL;
     const connection = new Connection(rpcUrl, "confirmed");
 
     // Load fee payer keypair
@@ -279,10 +280,8 @@ async function executePayoutTransfer(params: {
         Uint8Array.from(JSON.parse(feePayerSecret))
     );
 
-    // USDC mint (devnet)
-    const usdcMint = new PublicKey(
-        process.env.USDC_MINT || "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
-    );
+    // USDC mint
+    const usdcMint = new PublicKey(USDC_MINT_ADDRESS);
 
     const recipientPubkey = new PublicKey(params.recipientWallet);
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { explorerUrl } from "@/lib/constants";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -362,7 +363,9 @@ export default function RecipientDashboard() {
                 <div className="bg-gradient-to-r from-blue-500/10 to-emerald-500/10 border border-[#34c759]/20 rounded-xl p-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-[#8a8a8a] text-sm">Available balance</p>
+                      <p className="text-[#8a8a8a] text-sm">
+                        Available balance
+                      </p>
                       <p className="text-3xl font-bold">
                         ${balance.amount.toFixed(2)}{" "}
                         <span className="text-base font-normal text-[#8a8a8a]">
@@ -540,7 +543,7 @@ export default function RecipientDashboard() {
                           {p.txSignature &&
                             !p.txSignature.startsWith("demo") && (
                               <a
-                                href={`https://explorer.solana.com/tx/${p.txSignature}?cluster=devnet`}
+                                href={explorerUrl(p.txSignature)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="block text-xs text-[#34c759] hover:text-[#7086f2] mt-1"

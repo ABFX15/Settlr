@@ -18,8 +18,10 @@ import {
     getAccount,
 } from "@solana/spl-token";
 
-const RPC_ENDPOINT = process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com";
-const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"); // Devnet USDC
+import { SOLANA_RPC_URL, USDC_MINT as USDC_MINT_CONST } from "@/lib/constants";
+
+const RPC_ENDPOINT = SOLANA_RPC_URL;
+const USDC_MINT = USDC_MINT_CONST;
 
 // Platform fee configuration
 const PLATFORM_FEE_BPS = 100; // 1% = 100 basis points

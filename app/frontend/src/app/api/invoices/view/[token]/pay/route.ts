@@ -11,6 +11,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { explorerUrl } from "@/lib/constants";
 import {
     getInvoiceByViewToken,
     updateInvoiceStatus,
@@ -85,7 +86,7 @@ export async function POST(
                 currency: invoice.currency || "USDC",
                 description: `Invoice #${invoice.invoiceNumber} — ${invoice.buyerName}`,
                 txSignature: paymentSignature,
-                explorerUrl: `https://explorer.solana.com/tx/${paymentSignature}?cluster=devnet`,
+                explorerUrl: explorerUrl(paymentSignature),
                 createdAt: now,
                 completedAt: now,
                 status: "completed",

@@ -26,6 +26,17 @@ const quoteRequests: {
 }[] = [];
 
 export async function POST(request: NextRequest) {
+    // OTC desk integration not yet available — requires a real provider (Circle, Cumberland, etc.)
+    if (process.env.OTC_PROVIDER_ENABLED !== "true") {
+        return NextResponse.json(
+            {
+                error: "OTC desk integration coming soon",
+                message: "Large USDC purchases via wire transfer will be available once we onboard an OTC provider. Contact support@settlr.dev for manual assistance with orders over $25K.",
+            },
+            { status: 503 },
+        );
+    }
+
     try {
         const body = await request.json();
         const { walletAddress, amount, email } = body;

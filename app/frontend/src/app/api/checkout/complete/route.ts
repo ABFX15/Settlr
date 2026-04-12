@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { explorerUrl } from "@/lib/constants";
 import { checkoutSessions } from "../store";
 import {
     getCheckoutSession,
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
             description: session.description,
             metadata: session.metadata,
             txSignature: signature,
-            explorerUrl: `https://explorer.solana.com/tx/${signature}?cluster=devnet`,
+            explorerUrl: explorerUrl(signature),
             createdAt: session.createdAt,
             completedAt: Date.now(),
             status: "completed",

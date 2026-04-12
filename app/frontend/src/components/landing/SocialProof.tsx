@@ -34,7 +34,7 @@ function Counter({ end, suffix = "" }: { end: number; suffix?: string }) {
 }
 
 const stats = [
-  { end: 67, suffix: "K+", prefix: "$", label: "Settled this quarter" },
+  { end: 100, suffix: "+", prefix: "", label: "Testnet transactions" },
   { end: 1, suffix: "s", prefix: "<", label: "Average settlement" },
   { end: 0, suffix: "%", prefix: "", label: "Bank dependency" },
   { end: 1, suffix: "%", prefix: "", label: "Flat fee" },

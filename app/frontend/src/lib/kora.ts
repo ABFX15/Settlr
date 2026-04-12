@@ -1,12 +1,13 @@
 /**
  * Kora Gasless Transaction Integration
- * 
+ *
  * Kora is the official Solana Foundation gasless solution that enables
  * users to pay transaction fees with SPL tokens instead of SOL.
- * 
+ *
  * Docs: https://launch.solana.com/docs/kora
  * SDK: @solana/kora
  */
+const USDC_MINT_DEVNET_STR = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
 
 import { KoraClient } from "@solana/kora";
 import {
@@ -501,7 +502,7 @@ export async function simpleGaslessTransfer(params: {
         // Cast to access signature field
         const result = response as typeof response & { signature?: string };
 
-        const network = params.usdcMint.includes("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU")
+        const network = params.usdcMint.includes(USDC_MINT_DEVNET_STR)
             ? "devnet"
             : "mainnet";
 

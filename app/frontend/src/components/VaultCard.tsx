@@ -6,6 +6,7 @@ import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddress, getAccount } from "@solana/spl-token";
+import { USDC_MINT, SOLANA_RPC_URL } from "@/lib/constants";
 import {
   getVaultInfo,
   buildAddMemberTransactions,
@@ -31,10 +32,8 @@ import {
 import Link from "next/link";
 
 // ─── Constants ────────────────────────────────────────────
-const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
 const USDC_DECIMALS = 6;
-const RPC_ENDPOINT =
-  process.env.NEXT_PUBLIC_SOLANA_RPC || "https://api.devnet.solana.com";
+const RPC_ENDPOINT = SOLANA_RPC_URL;
 
 /**
  * Self-contained vault overview card for the dashboard.

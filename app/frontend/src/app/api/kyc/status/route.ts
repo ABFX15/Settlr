@@ -27,9 +27,9 @@ export async function GET(request: NextRequest) {
 
         // Check if Sumsub is configured
         if (!process.env.SUMSUB_APP_TOKEN || !process.env.SUMSUB_SECRET_KEY) {
-            // If not configured, treat everyone as verified (KYC disabled)
+            // KYC not configured — default to unverified for safety
             return NextResponse.json({
-                verified: true,
+                verified: false,
                 status: "disabled",
                 message: "KYC service not configured",
             });

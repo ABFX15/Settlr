@@ -5,6 +5,8 @@
  * Falls back to console.log for development / when no key is set.
  */
 
+import { explorerUrl as buildExplorerUrl } from "./constants";
+
 const FROM_EMAIL = process.env.PAYOUT_FROM_EMAIL || "adam@settlr.dev";
 const APP_NAME = "Settlr";
 
@@ -91,7 +93,7 @@ export async function sendInstantPayoutEmail(params: {
     const formattedAmount = `$${amount.toFixed(2)} ${currency}`;
     const sender = merchantName || "A platform";
     const shortWallet = `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`;
-    const explorerUrl = `https://explorer.solana.com/tx/${txSignature}?cluster=devnet`;
+    const explorerUrl = buildExplorerUrl(txSignature);
 
     const subject = `${formattedAmount} sent to your wallet`;
 

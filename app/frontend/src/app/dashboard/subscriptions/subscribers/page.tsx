@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { explorerUrl } from "@/lib/constants";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
@@ -591,7 +592,7 @@ export default function SubscribersPage() {
                                   </span>
                                   {payment.txSignature && (
                                     <a
-                                      href={`https://explorer.solana.com/tx/${payment.txSignature}?cluster=devnet`}
+                                      href={explorerUrl(payment.txSignature)}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       className="text-[#34c759] hover:text-[#c4b5fd]"

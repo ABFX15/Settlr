@@ -8,6 +8,7 @@ import { SettlrLogoWithIcon } from "@/components/settlr-logo";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { USDC_MINT_ADDRESS as USDC_MINT_ADDRESS_CONST } from "@/lib/constants";
 import {
   ArrowLeft,
   Copy,
@@ -89,7 +90,7 @@ export default function CreatePaymentPage() {
 
       // Generate Solana Pay URL for mobile wallets
       // Format: solana:<recipient>?amount=<amount>&spl-token=<mint>&label=<label>&message=<message>
-      const USDC_MINT = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
+      const USDC_MINT = USDC_MINT_ADDRESS_CONST;
       const solanaParams = new URLSearchParams({
         amount: amount,
         "spl-token": USDC_MINT,

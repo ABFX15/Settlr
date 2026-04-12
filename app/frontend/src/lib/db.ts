@@ -6,6 +6,7 @@
  */
 
 import { supabase, isSupabaseConfigured } from "./supabase";
+import { explorerUrl as buildExplorerUrl } from "./constants";
 
 // Types
 export interface Merchant {
@@ -806,7 +807,7 @@ export async function getPayment(id: string): Promise<Payment | null> {
             description: data.description || undefined,
             metadata: data.metadata as Record<string, string> | undefined,
             txSignature: data.tx_signature,
-            explorerUrl: `https://explorer.solana.com/tx/${data.tx_signature}?cluster=devnet`,
+            explorerUrl: buildExplorerUrl(data.tx_signature),
             createdAt: new Date(data.created_at).getTime(),
             completedAt: new Date(data.completed_at).getTime(),
             status: data.status as Payment["status"],
@@ -849,7 +850,7 @@ export async function getPaymentBySessionId(sessionId: string): Promise<Payment 
             description: data.description || undefined,
             metadata: data.metadata as Record<string, string> | undefined,
             txSignature: data.tx_signature,
-            explorerUrl: `https://explorer.solana.com/tx/${data.tx_signature}?cluster=devnet`,
+            explorerUrl: buildExplorerUrl(data.tx_signature),
             createdAt: new Date(data.created_at).getTime(),
             completedAt: new Date(data.completed_at).getTime(),
             status: data.status as Payment["status"],
@@ -898,7 +899,7 @@ export async function getPaymentsByMerchant(merchantId: string): Promise<Payment
                 description: row.description || undefined,
                 metadata: row.metadata as Record<string, string> | undefined,
                 txSignature: row.tx_signature,
-                explorerUrl: `https://explorer.solana.com/tx/${row.tx_signature}?cluster=devnet`,
+                explorerUrl: buildExplorerUrl(row.tx_signature),
                 createdAt: new Date(row.created_at).getTime(),
                 completedAt: new Date(row.completed_at).getTime(),
                 status: row.status as Payment["status"],
@@ -949,7 +950,7 @@ export async function getAllPayments(): Promise<Payment[]> {
                 description: row.description || undefined,
                 metadata: row.metadata as Record<string, string> | undefined,
                 txSignature: row.tx_signature,
-                explorerUrl: `https://explorer.solana.com/tx/${row.tx_signature}?cluster=devnet`,
+                explorerUrl: buildExplorerUrl(row.tx_signature),
                 createdAt: new Date(row.created_at).getTime(),
                 completedAt: new Date(row.completed_at).getTime(),
                 status: row.status as Payment["status"],
@@ -1004,7 +1005,7 @@ export async function getPaymentsByMerchantWallet(walletAddress: string): Promis
                 description: row.description || undefined,
                 metadata: row.metadata as Record<string, string> | undefined,
                 txSignature: row.tx_signature,
-                explorerUrl: `https://explorer.solana.com/tx/${row.tx_signature}?cluster=devnet`,
+                explorerUrl: buildExplorerUrl(row.tx_signature),
                 createdAt: new Date(row.created_at).getTime(),
                 completedAt: new Date(row.completed_at).getTime(),
                 status: row.status as Payment["status"],
@@ -1219,6 +1220,8 @@ const DEMO_MERCHANT_STUB = {
     walletAddress: "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV",
 };
 
+const DEMO_MODE = process.env.DEMO_MODE === "true" || process.env.NODE_ENV === "development";
+
 export async function validateApiKey(rawKey: string): Promise<{
     valid: boolean;
     merchantId?: string;
@@ -1229,6 +1232,9 @@ export async function validateApiKey(rawKey: string): Promise<{
     error?: string;
 }> {
     if (rawKey === DEMO_API_KEY) {
+        if (!DEMO_MODE) {
+            return { valid: false, error: "Demo keys are disabled in production" };
+        }
         return {
             valid: true,
             merchantId: DEMO_MERCHANT_STUB.id,

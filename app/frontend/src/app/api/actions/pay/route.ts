@@ -29,12 +29,13 @@ import {
 import { getInvoiceByViewToken, updateInvoiceStatus } from "@/lib/db";
 import { actionsResponse, actionsOptions } from "./helpers";
 
+import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
+
 /* ─── Config ─── */
 const RPC_ENDPOINT =
-    process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com";
+    SOLANA_RPC_URL;
 const USDC_MINT = new PublicKey(
-    process.env.USDC_MINT_ADDRESS ||
-    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
+    USDC_MINT_ADDRESS
 );
 const USDC_DECIMALS = 6;
 const APP_URL =

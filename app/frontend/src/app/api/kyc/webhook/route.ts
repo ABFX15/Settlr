@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyWebhookSignature } from "@/lib/sumsub";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 /**
  * Sumsub Webhook Payload Types
@@ -101,26 +102,24 @@ async function handleApplicantReviewed(data: SumsubWebhookPayload) {
     const { applicantId, externalUserId, reviewResult, levelName } = data;
 
     if (reviewResult?.reviewAnswer === "GREEN") {
-        // User passed verification
         console.log(`[KYC] ✅ User ${externalUserId} APPROVED`, {
             applicantId,
             levelName,
         });
 
-        // TODO: Update user record in database
-        // await supabase
-        //   .from("customer_kyc")
-        //   .upsert({
-        //     customer_id: externalUserId.split(":")[0], // wallet address
-        //     merchant_id: externalUserId.split(":")[1],
-        //     sumsub_applicant_id: applicantId,
-        //     status: "verified",
-        //     level_name: levelName,
-        //     verified_at: new Date().toISOString(),
-        //   });
+        if (isSupabaseConfigured()) {
+            const { error } = await supabase
+                .from("customer_kyc")
+                .upsert({
+                    external_user_id: externalUserId,
+                    sumsub_applicant_id: applicantId,
+                    status: "verified",
+                    verified_at: new Date().toISOString(),
+                }, { onConflict: "external_user_id" });
+            if (error) console.error("[KYC Webhook] DB error (approved):", error);
+        }
 
     } else if (reviewResult?.reviewAnswer === "RED") {
-        // User failed verification
         console.log(`[KYC] ❌ User ${externalUserId} REJECTED`, {
             applicantId,
             levelName,
@@ -128,17 +127,17 @@ async function handleApplicantReviewed(data: SumsubWebhookPayload) {
             comment: reviewResult.moderationComment,
         });
 
-        // TODO: Update user record
-        // await supabase
-        //   .from("customer_kyc")
-        //   .upsert({
-        //     customer_id: externalUserId.split(":")[0],
-        //     merchant_id: externalUserId.split(":")[1],
-        //     sumsub_applicant_id: applicantId,
-        //     status: "rejected",
-        //     level_name: levelName,
-        //     rejection_reason: reviewResult.rejectLabels?.join(", "),
-        //   });
+        if (isSupabaseConfigured()) {
+            const { error } = await supabase
+                .from("customer_kyc")
+                .upsert({
+                    external_user_id: externalUserId,
+                    sumsub_applicant_id: applicantId,
+                    status: "rejected",
+                    reject_reasons: reviewResult.rejectLabels || [],
+                }, { onConflict: "external_user_id" });
+            if (error) console.error("[KYC Webhook] DB error (rejected):", error);
+        }
     }
 }
 
@@ -153,15 +152,16 @@ async function handleApplicantActionPending(data: SumsubWebhookPayload) {
         applicantActionId,
     });
 
-    // TODO: Update status to pending
-    // await supabase
-    //   .from("customer_kyc")
-    //   .upsert({
-    //     customer_id: externalUserId.split(":")[0],
-    //     merchant_id: externalUserId.split(":")[1],
-    //     sumsub_applicant_id: applicantId,
-    //     status: "pending",
-    //   });
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("customer_kyc")
+            .upsert({
+                external_user_id: externalUserId,
+                sumsub_applicant_id: applicantId,
+                status: "pending",
+            }, { onConflict: "external_user_id" });
+        if (error) console.error("[KYC Webhook] DB error (pending):", error);
+    }
 }
 
 /**
@@ -176,14 +176,14 @@ async function handleApplicantActivated(data: SumsubWebhookPayload) {
         sandboxMode,
     });
 
-    // TODO: Store initial record
-    // await supabase
-    //   .from("customer_kyc")
-    //   .upsert({
-    //     customer_id: externalUserId.split(":")[0],
-    //     merchant_id: externalUserId.split(":")[1],
-    //     sumsub_applicant_id: applicantId,
-    //     status: "init",
-    //     level_name: levelName,
-    //   });
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("customer_kyc")
+            .upsert({
+                external_user_id: externalUserId,
+                sumsub_applicant_id: applicantId,
+                status: "not_started",
+            }, { onConflict: "external_user_id" });
+        if (error) console.error("[KYC Webhook] DB error (activated):", error);
+    }
 }

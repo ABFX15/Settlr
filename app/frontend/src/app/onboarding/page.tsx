@@ -6,6 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
+import { SOLANA_RPC_URL } from "@/lib/constants";
 import { buildCreateVaultTransaction, shortenAddress } from "@/lib/squads";
 import { useSearchParams } from "next/navigation";
 import {
@@ -41,8 +42,8 @@ const c = {
   red: "#e74c3c",
 };
 
-const RPC_ENDPOINT =
-  process.env.NEXT_PUBLIC_SOLANA_RPC || "https://api.devnet.solana.com";
+// Imported from @/lib/constants at top of file
+const RPC_ENDPOINT = SOLANA_RPC_URL;
 
 interface OnboardingState {
   step: 1 | 2 | 3 | 4 | 5;

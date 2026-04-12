@@ -9,6 +9,7 @@
  *
  * Authentication: X-API-Key header OR wallet field in body (dashboard)
  */
+import { SOLANA_RPC_URL, USDC_MINT_ADDRESS, IS_DEVNET } from "@/lib/constants";
 
 import { NextRequest, NextResponse } from "next/server";
 import {
@@ -58,22 +59,20 @@ export async function POST(request: NextRequest) {
             // Users fund their treasury by sending USDC to their connected wallet.
             const depositAddress = body.wallet || "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV";
 
-            const usdcMint =
-                process.env.USDC_MINT ||
-                "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
+            const usdcMint = USDC_MINT_ADDRESS;
 
             return NextResponse.json({
                 depositAddress,
                 usdcMint,
                 network: "solana",
-                cluster: process.env.NEXT_PUBLIC_SOLANA_CLUSTER || "devnet",
+                cluster: IS_DEVNET ? "devnet" : "mainnet-beta",
                 currency: "USDC",
                 currentBalance: {
                     available: balance.available,
                     pending: balance.pending,
                     reserved: balance.reserved,
                 },
-                instructions: `Send USDC (SPL Token) to ${depositAddress} on Solana ${process.env.NEXT_PUBLIC_SOLANA_CLUSTER || "devnet"}. After sending, call this endpoint again with the txSignature to confirm.`,
+                instructions: `Send USDC (SPL Token) to ${depositAddress} on Solana ${IS_DEVNET ? "devnet" : "mainnet-beta"}. After sending, call this endpoint again with the txSignature to confirm.`,
             });
         }
 
@@ -113,9 +112,7 @@ export async function POST(request: NextRequest) {
         try {
             // Attempt on-chain verification
             const { Connection } = await import("@solana/web3.js");
-            const rpcUrl =
-                process.env.NEXT_PUBLIC_SOLANA_RPC_URL ||
-                "https://api.devnet.solana.com";
+            const rpcUrl = SOLANA_RPC_URL;
             const connection = new Connection(rpcUrl, "confirmed");
 
             const tx = await connection.getTransaction(txSignature, {

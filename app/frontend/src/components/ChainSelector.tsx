@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ChainType, CHAIN_IDS } from "@/hooks/useMultichainWallet";
+import { explorerUrl as buildExplorerUrl } from "@/lib/constants";
 
 interface ChainSelectorProps {
   selectedChain: ChainType;
@@ -159,7 +160,7 @@ export function ChainSelector({
 export function getExplorerUrl(chain: ChainType, txHash: string): string {
   switch (chain) {
     case "solana":
-      return `https://explorer.solana.com/tx/${txHash}?cluster=devnet`;
+      return buildExplorerUrl(txHash);
     case "ethereum":
       return `https://etherscan.io/tx/${txHash}`;
     case "base":

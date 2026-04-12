@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { explorerUrl } from "@/lib/constants";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
@@ -580,7 +581,7 @@ export default function TreasuryPage() {
                         </div>
                         {tx.txSignature && (
                           <a
-                            href={`https://explorer.solana.com/tx/${tx.txSignature}?cluster=devnet`}
+                            href={explorerUrl(tx.txSignature)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-[#CBD5E1] hover:text-[#64748B] transition-colors"

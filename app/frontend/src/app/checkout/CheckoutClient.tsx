@@ -5,6 +5,12 @@ import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
 import {
+  SOLANA_RPC_URL,
+  USDC_MINT_ADDRESS as CONSTANTS_USDC_MINT,
+  IS_DEVNET,
+  solscanUrl,
+} from "@/lib/constants";
+import {
   Check,
   Loader2,
   Mail,
@@ -79,7 +85,7 @@ function encodeBase58(bytes: Uint8Array): string {
 // Token configurations
 const TOKENS = {
   USDC: {
-    mint: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+    mint: CONSTANTS_USDC_MINT,
     decimals: 6,
     symbol: "USDC",
     name: "USD Coin",
@@ -101,10 +107,7 @@ const USDC_MINT = new PublicKey(USDC_MINT_ADDRESS);
 const USDC_DECIMALS = 6;
 
 // RPC endpoint
-const RPC_ENDPOINT = "https://api.devnet.solana.com";
-
-// Devnet mode - EVM/Mayan doesn't work on devnet, only Solana
-const IS_DEVNET = RPC_ENDPOINT.includes("devnet");
+const RPC_ENDPOINT = SOLANA_RPC_URL;
 
 interface CheckoutClientProps {
   searchParams: URLSearchParams;
@@ -3152,7 +3155,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     const isCrossChain = selectedChain !== "solana";
     const explorerUrl = isCrossChain
       ? `https://explorer.mayan.finance/swap/${txSignature}`
-      : `https://solscan.io/tx/${txSignature}?cluster=devnet`;
+      : solscanUrl(txSignature);
     const explorerName = isCrossChain ? "Mayan Explorer" : "Solscan";
 
     return (

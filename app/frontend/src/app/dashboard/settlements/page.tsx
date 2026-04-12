@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { explorerUrl as buildExplorerUrl } from "@/lib/constants";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -79,7 +80,7 @@ function formatFullDate(epoch: number): string {
 }
 
 function explorerUrl(sig: string): string {
-  return `https://explorer.solana.com/tx/${sig}?cluster=devnet`;
+  return buildExplorerUrl(sig);
 }
 
 export default function SettlementsPage() {
@@ -263,7 +264,9 @@ export default function SettlementsPage() {
               {p.description && (
                 <div className="flex justify-between">
                   <span className="text-sm text-[#5c5c5c]">Description</span>
-                  <span className="text-sm text-[#212121]">{p.description}</span>
+                  <span className="text-sm text-[#212121]">
+                    {p.description}
+                  </span>
                 </div>
               )}
               {p.isPrivate && (
@@ -417,7 +420,9 @@ export default function SettlementsPage() {
             <span className="text-[10px] font-semibold uppercase tracking-wider text-[#5c5c5c]">
               {stat.label}
             </span>
-            <p className="mt-1 text-xl font-bold text-[#212121]">{stat.value}</p>
+            <p className="mt-1 text-xl font-bold text-[#212121]">
+              {stat.value}
+            </p>
           </div>
         ))}
       </div>

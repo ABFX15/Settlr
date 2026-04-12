@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { solscanUrl } from "@/lib/constants";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
@@ -231,7 +232,7 @@ export default function TransactionsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <a
-                        href={`https://solscan.io/tx/${payment.txSignature}?cluster=devnet`}
+                        href={solscanUrl(payment.txSignature)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="rounded-lg p-1.5 text-[#CBD5E1] transition-colors hover:bg-[#F8FAFC] hover:text-[#64748B]"

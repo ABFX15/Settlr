@@ -27,11 +27,9 @@ import {
 const PROGRAM_ID = new PublicKey(
     "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5"
 );
-const USDC_MINT = new PublicKey(
-    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
-);
-const RPC_URL =
-    process.env.NEXT_PUBLIC_RPC_URL || "https://api.devnet.solana.com";
+import { USDC_MINT as USDC_MINT_CONST, SOLANA_RPC_URL } from "@/lib/constants";
+const USDC_MINT = USDC_MINT_CONST;
+const RPC_URL = SOLANA_RPC_URL;
 
 function getPlatformConfigPDA(): [PublicKey, number] {
     return PublicKey.findProgramAddressSync(

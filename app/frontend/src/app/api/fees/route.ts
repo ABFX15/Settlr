@@ -4,6 +4,7 @@
  *
  * Admin-only: requires PLATFORM_ADMIN_KEY env var in the X-Admin-Key header.
  */
+import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 
 import { NextRequest, NextResponse } from "next/server";
 import {
@@ -127,8 +128,8 @@ export async function POST(request: NextRequest) {
             const { getAssociatedTokenAddress } = await import("@solana/spl-token");
 
             const programId = new PublicKey("339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5");
-            const usdcMint = new PublicKey(process.env.USDC_MINT || "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
-            const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com";
+            const usdcMint = new PublicKey(USDC_MINT_ADDRESS);
+            const rpcUrl = SOLANA_RPC_URL;
             const connection = new Connection(rpcUrl, "confirmed");
 
             // Derive the on-chain platform treasury PDA

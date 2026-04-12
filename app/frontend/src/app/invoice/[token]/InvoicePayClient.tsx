@@ -33,12 +33,16 @@ import {
   createAssociatedTokenAccountInstruction,
 } from "@solana/spl-token";
 
+import {
+  SOLANA_RPC_URL,
+  USDC_MINT,
+  USDC_MINT_ADDRESS,
+  IS_DEVNET,
+} from "@/lib/constants";
+
 /* ─── Solana config ─── */
-const RPC_ENDPOINT = "https://api.devnet.solana.com";
-const USDC_MINT_ADDRESS = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
-const USDC_MINT = new PublicKey(USDC_MINT_ADDRESS);
+const RPC_ENDPOINT = SOLANA_RPC_URL;
 const USDC_DECIMALS = 6;
-const IS_DEVNET = RPC_ENDPOINT.includes("devnet");
 
 /* ─── Types ─── */
 interface LineItem {

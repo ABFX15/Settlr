@@ -6,15 +6,16 @@ import {
     getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
 import { X402HackPayment } from "./x402_hack_payment";
-import idl from "./x402_hack_payment.json";// Program ID from the IDL
+import idl from "./x402_hack_payment.json";
+import { USDC_MINT, SOLANA_RPC_URL } from "@/lib/constants";
+
+// Program ID from the IDL
 export const PROGRAM_ID = new PublicKey(
     "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5"
 );
 
-// Devnet USDC mint
-export const USDC_MINT = new PublicKey(
-    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
-);
+// Re-export from constants for backward compat
+export { USDC_MINT };
 
 // PDA Seeds
 const PLATFORM_CONFIG_SEED = Buffer.from("platform_config");

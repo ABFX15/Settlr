@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { explorerUrl } from "@/lib/constants";
 import {
   Loader2,
   XCircle,
@@ -130,7 +131,9 @@ export default function CheckoutSessionPage() {
           <div className="w-16 h-16 bg-[#e74c3c]/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <XCircle className="w-8 h-8 text-[#e74c3c]" />
           </div>
-          <h1 className="text-2xl font-bold text-[#212121] mb-2">Checkout Error</h1>
+          <h1 className="text-2xl font-bold text-[#212121] mb-2">
+            Checkout Error
+          </h1>
           <p className="text-[#8a8a8a] mb-6">{error}</p>
           <Link
             href="/"
@@ -228,7 +231,7 @@ export default function CheckoutSessionPage() {
 
           {session?.paymentSignature && (
             <a
-              href={`https://explorer.solana.com/tx/${session.paymentSignature}?cluster=devnet`}
+              href={explorerUrl(session.paymentSignature)}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#f472b6] text-sm hover:underline font-semibold mb-6 inline-block"

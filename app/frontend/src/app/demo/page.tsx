@@ -36,6 +36,7 @@ import {
   Transaction,
   TransactionInstruction,
 } from "@solana/web3.js";
+import { SOLANA_RPC_URL, solscanUrl } from "@/lib/constants";
 
 /* --- spring config --- */
 const spring = { type: "spring" as const, stiffness: 80, damping: 18 };
@@ -933,11 +934,7 @@ function StepReceipt({
               On-Chain Transaction
             </span>
             <a
-              href={
-                isReal
-                  ? `https://solscan.io/tx/${fullTxId}?cluster=devnet`
-                  : "#"
-              }
+              href={isReal ? solscanUrl(fullTxId) : "#"}
               target={isReal ? "_blank" : undefined}
               rel={isReal ? "noopener noreferrer" : undefined}
               className="inline-flex items-center gap-1 text-xs font-medium text-[#2ba048] hover:underline"
@@ -1327,10 +1324,7 @@ export default function DemoPage() {
       // If the user has a Privy wallet, build & sign a real Memo tx on devnet
       if (authenticated && activeWallet) {
         try {
-          const connection = new Connection(
-            "https://api.devnet.solana.com",
-            "confirmed",
-          );
+          const connection = new Connection(SOLANA_RPC_URL, "confirmed");
           const { blockhash } = await connection.getLatestBlockhash();
           const userPubkey = new PublicKey(activeWallet.address);
 

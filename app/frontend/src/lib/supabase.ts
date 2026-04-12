@@ -8,16 +8,12 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
-// Only log warning once on server startup
-let warnedOnce = false;
 if (!supabaseUrl || !supabaseAnonKey) {
-    if (!warnedOnce) {
-        console.warn(
-            "[Settlr] Supabase not configured. Using in-memory storage. " +
-            "Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY for persistence."
-        );
-        warnedOnce = true;
-    }
+    console.error(
+        "[Settlr] FATAL: Supabase not configured. " +
+        "Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY. " +
+        "The app will fall back to in-memory storage which LOSES DATA on restart."
+    );
 }
 
 // Create client (with placeholder URL if not configured - won't be used anyway)

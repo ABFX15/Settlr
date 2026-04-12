@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { explorerUrl } from "@/lib/constants";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import Link from "next/link";
@@ -202,7 +203,9 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <Loader2 className="h-6 w-6 animate-spin text-[#34c759]" />
-        <span className="ml-2 text-sm text-[#5c5c5c]">Loading dashboard...</span>
+        <span className="ml-2 text-sm text-[#5c5c5c]">
+          Loading dashboard...
+        </span>
       </div>
     );
   }
@@ -457,7 +460,7 @@ export default function DashboardPage() {
                   {timeAgo(p.completedAt)}
                 </div>
                 <a
-                  href={`https://explorer.solana.com/tx/${p.txSignature}?cluster=devnet`}
+                  href={explorerUrl(p.txSignature)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#34c759] hover:text-[#2ba048] transition-colors"

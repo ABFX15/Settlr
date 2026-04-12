@@ -7,6 +7,7 @@
  *
  * This is read-only on-chain data (publicly visible), so no auth required.
  */
+import { SOLANA_RPC_URL } from "@/lib/constants";
 
 import { NextResponse } from "next/server";
 import { Connection, PublicKey } from "@solana/web3.js";
@@ -20,7 +21,7 @@ const PROGRAM_ID = new PublicKey(
 );
 
 const RPC_URL =
-    process.env.NEXT_PUBLIC_RPC_URL || "https://api.devnet.solana.com";
+    SOLANA_RPC_URL;
 
 function getPlatformConfigPDA(): [PublicKey, number] {
     return PublicKey.findProgramAddressSync(

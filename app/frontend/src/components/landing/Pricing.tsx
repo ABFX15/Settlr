@@ -3,53 +3,15 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
-import { t, spring, staggerContainer, fadeUpScale, cardHover } from "./shared";
+import { t, spring, fadeUpScale } from "./shared";
 
-const plans = [
-  {
-    name: "Explorer",
-    desc: "Free tools to get started",
-    price: "$0",
-    suffix: "/month",
-    features: [
-      "Create invoices",
-      "View settlement history",
-      "Basic compliance",
-      "Email support",
-    ],
-    cta: "Get Started",
-    highlighted: false,
-  },
-  {
-    name: "Settlement",
-    desc: "Full settlement infrastructure",
-    price: "1%",
-    suffix: "/transaction",
-    features: [
-      "All Explorer features",
-      "Instant USDC settlement",
-      "Email-based claiming",
-      "Full compliance suite",
-      "Priority support",
-    ],
-    cta: "Request Access",
-    highlighted: true,
-  },
-  {
-    name: "Enterprise",
-    desc: "For high-volume operators",
-    price: "Custom",
-    suffix: "",
-    features: [
-      "All Settlement features",
-      "Volume discounts",
-      "Multi-entity support",
-      "Dedicated manager",
-      "Custom integrations",
-    ],
-    cta: "Contact Sales",
-    highlighted: false,
-  },
+const features = [
+  "Instant USDC settlement",
+  "Create invoices & payment links",
+  "Email-based claiming",
+  "Full compliance tools",
+  "Explorer & transaction history",
+  "Priority support",
 ];
 
 export function Pricing() {
@@ -73,107 +35,57 @@ export function Pricing() {
             className="mx-auto mt-4 max-w-lg text-base font-normal"
             style={{ color: t.bodyLight }}
           >
-            Choose the plan that fits your goals — simple, transparent pricing
-            with no hidden fees.
+            One flat rate. No monthly fees, no hidden charges, no minimums.
           </p>
         </motion.div>
 
         <motion.div
-          className="mt-14 grid gap-5 sm:grid-cols-3"
-          variants={staggerContainer}
+          className="mt-14 mx-auto max-w-md"
+          variants={fadeUpScale}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
         >
-          {plans.map((plan) => (
-            <motion.div
-              key={plan.name}
-              variants={fadeUpScale}
-              whileHover={
-                plan.highlighted
-                  ? { y: -8, scale: 1.02, transition: { duration: 0.25 } }
-                  : cardHover
-              }
-              className={`flex flex-col rounded-3xl p-7 transition-shadow duration-300 ${
-                plan.highlighted
-                  ? "text-white shadow-xl hover:shadow-2xl"
-                  : "border bg-white shadow-sm hover:shadow-lg"
-              }`}
-              style={
-                plan.highlighted
-                  ? { background: t.green }
-                  : { borderColor: t.border }
-              }
+          <div
+            className="flex flex-col rounded-3xl p-8 text-white shadow-xl"
+            style={{ background: t.green }}
+          >
+            <p className="text-lg font-bold">Pay as you go</p>
+            <p className="mt-1 text-xs text-white/70">
+              No setup fees. No monthly commitment.
+            </p>
+            <p className="mt-5">
+              <span className="text-5xl font-bold">1%</span>
+              <span className="text-sm text-white/70"> per transaction</span>
+            </p>
+            <div className="mt-6 flex-1 space-y-2.5">
+              {features.map((f) => (
+                <div key={f} className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-white/80" />
+                  <span className="text-sm text-white/90">{f}</span>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/waitlist"
+              className="mt-8 block rounded-full bg-white py-3 text-center text-sm font-semibold shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+              style={{ color: t.green }}
             >
-              <p
-                className={`text-lg font-bold ${plan.highlighted ? "" : ""}`}
-                style={plan.highlighted ? {} : { color: t.navy }}
-              >
-                {plan.name}
-              </p>
-              <p
-                className={`mt-1 text-xs ${
-                  plan.highlighted ? "text-white/70" : ""
-                }`}
-                style={plan.highlighted ? {} : { color: t.muted }}
-              >
-                {plan.desc}
-              </p>
-              <p className="mt-5">
-                <span
-                  className={`text-4xl font-bold ${plan.highlighted ? "" : ""}`}
-                  style={plan.highlighted ? {} : { color: t.navy }}
-                >
-                  {plan.price}
-                </span>
-                {plan.suffix && (
-                  <span
-                    className={`text-sm ${
-                      plan.highlighted ? "text-white/70" : ""
-                    }`}
-                    style={plan.highlighted ? {} : { color: t.muted }}
-                  >
-                    {plan.suffix}
-                  </span>
-                )}
-              </p>
-              <div className="mt-6 flex-1 space-y-2.5">
-                {plan.features.map((f) => (
-                  <div key={f} className="flex items-center gap-2">
-                    <CheckCircle2
-                      className={`h-4 w-4 ${
-                        plan.highlighted ? "text-white/80" : ""
-                      }`}
-                      style={plan.highlighted ? {} : { color: t.green }}
-                    />
-                    <span
-                      className={`text-sm ${
-                        plan.highlighted ? "text-white/90" : ""
-                      }`}
-                      style={plan.highlighted ? {} : { color: t.slate }}
-                    >
-                      {f}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <Link
-                href="/waitlist"
-                className={`mt-8 block rounded-full py-3 text-center text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
-                  plan.highlighted
-                    ? "bg-white shadow-md hover:shadow-lg"
-                    : "border hover:shadow-md"
-                }`}
-                style={
-                  plan.highlighted
-                    ? { color: t.green }
-                    : { borderColor: t.green, color: t.green }
-                }
-              >
-                {plan.cta}
-              </Link>
-            </motion.div>
-          ))}
+              Get Started
+            </Link>
+          </div>
+
+          <p className="mt-6 text-center text-xs" style={{ color: t.muted }}>
+            Enterprise volume?{" "}
+            <Link
+              href="/waitlist"
+              className="underline"
+              style={{ color: t.green }}
+            >
+              Contact us
+            </Link>{" "}
+            for custom pricing.
+          </p>
         </motion.div>
       </div>
     </section>

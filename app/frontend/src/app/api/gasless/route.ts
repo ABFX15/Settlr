@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SOLANA_RPC_URL } from "@/lib/constants";
 import {
     getKoraClient,
     isKoraEnabled,
@@ -236,7 +237,7 @@ export async function POST(req: NextRequest) {
                 } = await import("@solana/spl-token");
 
                 const connection = new Connection(
-                    process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com",
+                    SOLANA_RPC_URL,
                     "confirmed"
                 );
 
@@ -335,7 +336,7 @@ export async function POST(req: NextRequest) {
 
                 const { Connection } = await import("@solana/web3.js");
                 const connection = new Connection(
-                    process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com",
+                    SOLANA_RPC_URL,
                     "confirmed"
                 );
 

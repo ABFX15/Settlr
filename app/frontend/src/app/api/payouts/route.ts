@@ -4,6 +4,7 @@
  *
  * Authentication: X-API-Key header (validated against merchant API keys)
  */
+import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 
 import { NextRequest, NextResponse } from "next/server";
 import {
@@ -39,14 +40,14 @@ async function executePayoutTransfer(params: {
         getAccount,
     } = await import("@solana/spl-token");
 
-    const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com";
+    const rpcUrl = SOLANA_RPC_URL;
     const connection = new Connection(rpcUrl, "confirmed");
 
     const feePayerSecret = process.env.FEE_PAYER_SECRET_KEY;
     if (!feePayerSecret) throw new Error("FEE_PAYER_SECRET_KEY not configured");
 
     const feePayerKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(feePayerSecret)));
-    const usdcMint = new PublicKey(process.env.USDC_MINT || "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
+    const usdcMint = new PublicKey(USDC_MINT_ADDRESS);
     const recipientPubkey = new PublicKey(params.recipientWallet);
 
     const sourceAta = await getAssociatedTokenAddress(usdcMint, feePayerKeypair.publicKey);

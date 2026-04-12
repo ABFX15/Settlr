@@ -53,13 +53,13 @@ export function Testimonials() {
                   className="text-[56px] font-extrabold leading-none tracking-tight sm:text-[72px]"
                   style={{ color: t.navy, fontFamily: t.sans }}
                 >
-                  $67K
+                  &lt;5s
                 </span>
                 <span
                   className="text-lg font-semibold"
                   style={{ color: t.green }}
                 >
-                  settled on-chain
+                  settlement time
                 </span>
               </div>
 
@@ -67,9 +67,9 @@ export function Testimonials() {
                 className="mt-4 max-w-xl text-[15px] leading-relaxed"
                 style={{ color: "#5c5c5c" }}
               >
-                First live settlement through Settlr — USDC moved from buyer to
-                supplier in under 5 seconds with zero chargebacks, zero holds,
-                and an immutable audit trail on Solana.
+                Settlr moves USDC from buyer to supplier in under 5 seconds with
+                zero chargebacks, zero holds, and an immutable audit trail on
+                Solana. Currently live on devnet.
               </p>
 
               {/* metric pills */}

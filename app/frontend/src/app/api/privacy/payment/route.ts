@@ -19,6 +19,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { solscanUrl } from '@/lib/constants';
 
 // Supabase client for storing private payment records
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -130,7 +131,7 @@ export async function POST(request: NextRequest) {
                 amountHidden: true,
 
                 // Explorer links (show the unshield - doesn't reveal customer)
-                explorerUrl: `https://solscan.io/tx/${unshieldTx}?cluster=devnet`,
+                explorerUrl: solscanUrl(unshieldTx),
 
                 // Message for UI
                 message: `Private payment of $${amount} USDC completed. Amount is hidden on-chain.`,

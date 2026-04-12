@@ -17,13 +17,13 @@ import {
     getAccount,
 } from "@solana/spl-token";
 
-const RPC_ENDPOINT =
-    process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com";
+import { SOLANA_RPC_URL, USDC_MINT as USDC_MINT_CONST } from "@/lib/constants";
 
-// USDC mint address (devnet)
-const USDC_MINT = new PublicKey(
-    "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
-);
+const RPC_ENDPOINT =
+    SOLANA_RPC_URL;
+
+// USDC mint address
+const USDC_MINT = USDC_MINT_CONST;
 
 /**
  * GET /api/privy-gasless

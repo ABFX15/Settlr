@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createPayment, getMerchantByWallet } from "@/lib/db";
+import { explorerUrl } from "@/lib/constants";
 
 // CORS headers for SDK requests from any origin
 const corsHeaders = {
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
             description: memo || "SDK Payment",
             metadata: { source: "sdk-redirect" },
             txSignature: signature,
-            explorerUrl: `https://explorer.solana.com/tx/${signature}?cluster=devnet`,
+            explorerUrl: explorerUrl(signature),
             createdAt: Date.now(),
             completedAt: Date.now(),
             status: "completed",
