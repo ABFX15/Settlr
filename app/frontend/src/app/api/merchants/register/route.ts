@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createMerchant, getMerchantByWallet, getMerchantBySignerWallet } from "@/lib/db";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * POST /api/merchants/register
@@ -16,6 +17,10 @@ import { createMerchant, getMerchantByWallet, getMerchantBySignerWallet } from "
  */
 export async function POST(request: NextRequest) {
     try {
+        // Rate limit by IP
+        const rateLimited = await checkRateLimit(`register:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
         const { name, websiteUrl, walletAddress, webhookUrl, signerWallet, multisigPda, licenseNumber } = body;
 

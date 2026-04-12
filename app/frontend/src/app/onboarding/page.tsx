@@ -92,7 +92,7 @@ function OnboardingPageInner() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (!token) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_ALLOW_OPEN_REGISTRATION === "true") {
         setTokenStatus("valid");
         return;
       }

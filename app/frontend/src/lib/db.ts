@@ -1204,13 +1204,8 @@ export async function createMerchant(
 // ============================================
 
 function hashApiKey(key: string): string {
-    let hash = 0;
-    for (let i = 0; i < key.length; i++) {
-        const char = key.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-    }
-    return Math.abs(hash).toString(16).padStart(16, '0');
+    const { createHash } = require("crypto");
+    return createHash("sha256").update(key).digest("hex");
 }
 
 const DEMO_API_KEY = "sk_test_demo_xxxxxxxxxxxx";

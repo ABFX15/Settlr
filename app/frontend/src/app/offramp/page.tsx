@@ -74,7 +74,7 @@ function OfframpContent() {
             Convert to Cash
           </h1>
           <p className="text-[var(--text-muted)]">
-            Convert your USDC to fiat and withdraw to your bank
+            Convert USDC to fiat via Sphere (third-party off-ramp)
           </p>
         </div>
 
@@ -119,7 +119,9 @@ function OfframpContent() {
           <div className="card-pop-header">
             <Wallet className="w-5 h-5" />
             <span>Cash Out</span>
-            <span className="badge-pop badge-pop-green ml-auto">Live</span>
+            <span className="badge-pop badge-pop-green ml-auto">
+              Third-Party
+            </span>
           </div>
           <div className="card-pop-body text-center">
             <div className="mb-6">
@@ -128,8 +130,9 @@ function OfframpContent() {
               </div>
               <h3 className="text-xl font-bold mb-2">Ready to Cash Out?</h3>
               <p className="text-[var(--card-pop-text-secondary)] text-sm max-w-sm mx-auto">
-                Sign in to your Sphere account to convert USDC to fiat and
-                withdraw directly to your bank account.
+                You&apos;ll be redirected to Sphere to convert USDC to fiat.
+                Settlr does not handle the off-ramp directly — Sphere is a
+                separate, licensed service.
               </p>
             </div>
 

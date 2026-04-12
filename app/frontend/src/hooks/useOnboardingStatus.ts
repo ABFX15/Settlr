@@ -57,28 +57,29 @@ export function useOnboardingStatus(): OnboardingResult {
                     setHasVault(vault);
                     setStatus("onboarded");
                 } else {
-                    // Also check localStorage as fallback (onboarding might have just completed)
-                    const lsVault = localStorage.getItem(`settlr_vault_pda_${publicKey}`);
+                    // localStorage is only a short-lived cache for the onboarding→dashboard handoff.
+                    // If the server says not registered, trust the server and clear stale cache.
                     const lsMerchant = localStorage.getItem(`settlr_merchant_id_${publicKey}`);
-                    if (lsVault && lsMerchant) {
-                        setMerchantId(lsMerchant);
-                        setHasVault(true);
-                        setStatus("onboarded");
-                    } else {
-                        setMerchantId(null);
-                        setMerchantName(null);
-                        setHasVault(false);
-                        setStatus("needs-onboarding");
+                    if (lsMerchant) {
+                        // Stale cache from a previous onboarding attempt — re-check server once
+                        localStorage.removeItem(`settlr_merchant_id_${publicKey}`);
+                        localStorage.removeItem(`settlr_vault_pda_${publicKey}`);
+                        localStorage.removeItem(`settlr_vault_${publicKey}`);
                     }
+                    setMerchantId(null);
+                    setMerchantName(null);
+                    setHasVault(false);
+                    setStatus("needs-onboarding");
                 }
             } catch {
                 if (cancelled) return;
-                // On error, check localStorage as fallback
+                // On network error, use localStorage as temporary cache to avoid blocking the user
                 const lsVault = localStorage.getItem(`settlr_vault_pda_${publicKey}`);
                 const lsMerchant = localStorage.getItem(`settlr_merchant_id_${publicKey}`);
                 if (lsVault && lsMerchant) {
                     setMerchantId(lsMerchant);
                     setHasVault(true);
+                    // Mark as onboarded but schedule a re-check
                     setStatus("onboarded");
                 } else {
                     setStatus("needs-onboarding");

@@ -202,7 +202,7 @@ x402-hack-payment/
 |       +-- instructions/            # payment, payout, refund, merchant, platform
 |       +-- state/                   # Platform, Merchant, Payment, Customer
 |       +-- errors.rs
-+-- packages/sdk/                    # @settlr/sdk (npm — for external developers)
++-- packages/                        # (SDK — planned, not yet published)
 +-- supabase/migrations/             # Database migrations
 +-- scripts/                         # Admin scripts (claim fees, etc.)
 +-- tests/                           # Anchor program tests
@@ -286,18 +286,7 @@ Apply at [settlr.dev/waitlist](https://settlr.dev/waitlist).
 
 ## For Developers
 
-An npm SDK is available for platforms that want to embed Settlr settlement into their own applications:
-
-```bash
-npm install @settlr/sdk
-```
-
-See [packages/sdk/README.md](packages/sdk/README.md) for the full API reference. The SDK provides:
-
-- `SettlrClient` — Create invoices, payment links, check settlement status
-- `CheckoutButton` / `CheckoutWidget` — Drop-in React components
-- `createWebhookHandler` — Type-safe webhook event processing
-- `verifyWebhookSignature` — HMAC-SHA256 signature verification
+An embeddable SDK (`@settlr/sdk`) is planned but not yet published. If you're interested in integrating Settlr settlement into your platform, reach out via the waitlist or GitHub issues.
 
 ---
 
@@ -314,4 +303,4 @@ ISC
 - **Website:** [settlr.dev](https://settlr.dev)
 - **Twitter:** [@SettlrP](https://twitter.com/SettlrP)
 - **GitHub:** [@ABFX15](https://github.com/ABFX15)
-- **npm:** [@settlr/sdk](https://www.npmjs.com/package/@settlr/sdk)
+- **SDK:** Planned (not yet published)

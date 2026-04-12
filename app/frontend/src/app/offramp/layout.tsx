@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Cash Out USDC",
   description:
-    "Convert your USDC to local currency. Off-ramp your Settlr settlements to your bank account or mobile money.",
+    "Convert USDC to fiat via Sphere (third-party off-ramp provider). Settlr does not handle off-ramp directly.",
   robots: { index: false, follow: false },
 };
 

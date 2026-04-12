@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     q: "Is this legal?",
-    a: "Yes. USDC is a regulated stablecoin issued by Circle, a licensed money transmitter. Settlr is GENIUS Act compliant and performs full BSA/AML screening on all users.",
+    a: "Yes. Settlr uses USDC (a fully-reserved, audited stablecoin issued by Circle) and performs KYB/KYC verification on all merchants. All transactions are recorded on-chain for full auditability.",
   },
   {
     q: "What if cannabis becomes federally legal?",

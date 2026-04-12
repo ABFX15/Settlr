@@ -22,6 +22,7 @@ import {
 } from "@/lib/db";
 import { sendPayoutClaimEmail, sendInstantPayoutEmail } from "@/lib/email";
 import { dispatchWebhookEvent } from "@/lib/webhooks";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * Execute an on-chain USDC transfer for auto-delivery.
@@ -75,6 +76,10 @@ async function executePayoutTransfer(params: {
 
 export async function POST(request: NextRequest) {
     try {
+        // Rate limit by IP
+        const rateLimited = await checkRateLimit(`payout:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         // Authenticate
         const apiKey = request.headers.get("x-api-key") || request.headers.get("authorization")?.replace("Bearer ", "");
         if (!apiKey) {

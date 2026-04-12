@@ -7,7 +7,7 @@
 
 ## Overview
 
-Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2B USDC rails on Solana that replace cash drops and high-risk processors. The primary product is automated settlement for LeafLink purchase orders. Secondary paths include direct invoices, Solana Actions pay links (Blinks), and an embeddable SDK for external developers.
+Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2B USDC rails on Solana that replace cash drops and high-risk processors. The primary product is automated settlement for LeafLink purchase orders. Secondary paths include direct invoices and Solana Actions pay links (Blinks). An embeddable SDK is planned but not yet published.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -49,21 +49,21 @@ Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2
 
 ## Stack Summary
 
-| Layer       | Technology                           | Status                      |
-| ----------- | ------------------------------------ | --------------------------- |
-| Frontend    | Next.js 16 (App Router)              | ✅ Implemented              |
-| LeafLink    | LeafLink REST API v2                 | ✅ Fully implemented        |
-| Auth        | Privy (embedded wallets)             | ✅ Implemented              |
-| Gasless     | Kora + Privy fee payer               | ✅ Implemented              |
-| Privacy     | MagicBlock Private Ephemeral Rollups | ✅ Implemented              |
-| Security    | Range (wallet risk screening)        | ✅ Implemented              |
-| One-Click   | Saved payment methods                | ✅ Implemented              |
-| Blinks      | Solana Actions (shareable pay links) | ✅ Implemented              |
-| Database    | Supabase (with in-memory fallback)   | ✅ Implemented              |
-| SDK         | @settlr/sdk (npm)                    | ✅ v0.6.0 published         |
-| KYC         | Sumsub                               | ⚠️ Scaffolded, not enforced |
-| Cross-chain | Mayan                                | ❌ Not implemented          |
-| On-chain    | Anchor (Solana)                      | ✅ Deployed to devnet       |
+| Layer       | Technology                           | Status                        |
+| ----------- | ------------------------------------ | ----------------------------- |
+| Frontend    | Next.js 16 (App Router)              | ✅ Implemented                |
+| LeafLink    | LeafLink REST API v2                 | ✅ Fully implemented          |
+| Auth        | Privy (embedded wallets)             | ✅ Implemented                |
+| Gasless     | Kora + Privy fee payer               | ✅ Implemented                |
+| Privacy     | MagicBlock Private Ephemeral Rollups | ✅ Implemented                |
+| Security    | Range (wallet risk screening)        | ✅ Implemented                |
+| One-Click   | Saved payment methods                | ✅ Implemented                |
+| Blinks      | Solana Actions (shareable pay links) | ✅ Implemented                |
+| Database    | Supabase (with in-memory fallback)   | ✅ Implemented                |
+| SDK         | @settlr/sdk (npm)                    | ⚠️ Planned, not yet published |
+| KYC         | Sumsub                               | ⚠️ Scaffolded, not enforced   |
+| Cross-chain | Mayan                                | ❌ Not implemented            |
+| On-chain    | Anchor (Solana)                      | ✅ Deployed to devnet         |
 
 ---
 
@@ -126,7 +126,7 @@ x402-hack-payment/
 │   │   └── anchor/            # Generated Anchor types
 │   └── supabase/
 │       └── migrations/        # Database migrations
-├── packages/sdk/              # Published npm package
+├── packages/                  # SDK (planned, not yet published)
 │   └── src/
 │       ├── client.ts          # SettlrClient class
 │       ├── components.tsx     # React components
@@ -609,7 +609,7 @@ POST /api/risk-check (full payment risk assessment)
 
 **Locations:**
 
-- `packages/sdk/src/privacy.ts` - PER SDK helpers (PDAs, connections, permissions)
+- `app/frontend/src/lib/privacy/` - Privacy helpers (planned for SDK)
 - `app/frontend/src/app/api/privacy/gaming/route.ts` - Private payments API
 - `app/frontend/src/app/privacy/page.tsx` - Interactive demo UI
 - `programs/x402-hack-payment/src/instructions/private_receipt.rs` - On-chain (4 instructions)
@@ -785,7 +785,7 @@ Access-Control-Expose-Headers: x-action-version, x-blockchain-ids
 
 **Purpose:** Bridge USDC from Ethereum/Base/Arbitrum to Solana
 
-**Documented in:** README.md, packages/sdk/README.md
+**Documented in:** README.md
 
 **Actual Implementation:** ❌ **NONE**
 
@@ -807,11 +807,9 @@ Access-Control-Expose-Headers: x-action-version, x-blockchain-ids
 
 ## SDK (@settlr/sdk)
 
-npm package for external developers who want to embed Settlr settlement into their own platforms. **Not required** for the LeafLink integration or direct invoice flows — those are handled entirely by the backend.
+An embeddable SDK for external developers is planned but **not yet published**. The `packages/` directory is currently empty.
 
-See [packages/sdk/README.md](packages/sdk/README.md) for the full API reference.
-
-**Exports:** `Settlr` client, `BuyButton` / `CheckoutWidget` / `PaymentModal` React components, `PayoutClient`, `OneClickClient`, `SubscriptionClient`, `createWebhookHandler`, privacy (MagicBlock PER), mobile checkout utilities.
+When available, the SDK will provide: `Settlr` client, checkout components, webhook handlers, and privacy utilities.
 
 ---
 
@@ -985,11 +983,7 @@ anchor deploy --provider.cluster devnet
 
 ### SDK Publishing
 
-```bash
-cd packages/sdk
-npm version patch
-npm publish --access public
-```
+SDK is planned but not yet implemented. The `packages/` directory is reserved for the future `@settlr/sdk` npm package.
 
 ---
 
@@ -999,7 +993,7 @@ npm publish --access public
 | ------------------ | -------------------------------------------------------------------- |
 | Program source     | `programs/x402-hack-payment/src/`                                    |
 | Frontend           | `app/frontend/`                                                      |
-| SDK source         | `packages/sdk/src/`                                                  |
+| SDK source         | `packages/` (planned, not yet published)                             |
 | API routes         | `app/frontend/src/app/api/`                                          |
 | LeafLink routes    | `app/frontend/src/app/api/integrations/leaflink/`                    |
 | LeafLink library   | `app/frontend/src/lib/leaflink/`                                     |

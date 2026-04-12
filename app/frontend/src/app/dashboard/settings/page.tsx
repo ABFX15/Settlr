@@ -16,6 +16,8 @@ import {
   Landmark,
   ArrowDownToLine,
   DollarSign,
+  Link2,
+  Copy,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -236,6 +238,83 @@ export default function SettingsPage() {
             Automatic USDC-to-fiat conversion after each payment. We&apos;re
             integrating with licensed off-ramp providers to enable this feature.
           </p>
+        </div>
+      </section>
+
+      {/* ─── LeafLink Integration ─── */}
+      <section className="mb-8 rounded-2xl border border-[#d3d3d3] bg-white p-6">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="h-10 w-10 rounded-full bg-[#34c759]/10 flex items-center justify-center">
+            <Link2 className="h-5 w-5 text-[#34c759]" />
+          </div>
+          <div>
+            <h2 className="text-base font-semibold text-[#212121]">
+              LeafLink Integration
+            </h2>
+            <p className="text-xs text-[#8a8a8a]">
+              Connect your LeafLink account to auto-settle purchase orders
+            </p>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
+              LeafLink API Key
+            </label>
+            <input
+              type="password"
+              placeholder="ll_api_xxxxxxxxxxxxxxxx"
+              className="w-full rounded-lg border border-[#d3d3d3] bg-[#f7f7f7] px-4 py-2.5 text-sm text-[#212121] placeholder-[#8a8a8a] focus:border-[#34c759] focus:outline-none focus:ring-1 focus:ring-[#34c759]"
+              disabled
+            />
+            <p className="mt-1 text-xs text-[#8a8a8a]">
+              Find your API key at{" "}
+              <a
+                href="https://www.leaflink.com/settings/api"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#34c759] hover:underline"
+              >
+                LeafLink Settings → API
+              </a>
+            </p>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
+              Webhook URL
+            </label>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2.5 text-sm font-mono text-[#8a8a8a] truncate">
+                {typeof window !== "undefined"
+                  ? `${window.location.origin}/api/integrations/leaflink/webhook`
+                  : "/api/integrations/leaflink/webhook"}
+              </div>
+              <button
+                onClick={() => {
+                  const url = `${window.location.origin}/api/integrations/leaflink/webhook`;
+                  navigator.clipboard.writeText(url);
+                }}
+                className="rounded-lg border border-[#d3d3d3] p-2.5 text-[#8a8a8a] hover:text-[#212121] hover:bg-[#f7f7f7] transition-colors"
+                title="Copy webhook URL"
+              >
+                <Copy className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mt-1 text-xs text-[#8a8a8a]">
+              Add this URL to your LeafLink webhook settings to receive order
+              updates automatically.
+            </p>
+          </div>
+          <div className="rounded-xl bg-[#34c759]/5 border border-[#34c759]/20 p-4">
+            <p className="text-xs text-[#5c5c5c] leading-relaxed">
+              <span className="font-semibold text-[#212121]">
+                How it works:
+              </span>{" "}
+              When an order is created or updated in LeafLink, the webhook
+              triggers automatic USDC settlement via your Settlr vault. No
+              manual intervention required.
+            </p>
+          </div>
         </div>
       </section>
 

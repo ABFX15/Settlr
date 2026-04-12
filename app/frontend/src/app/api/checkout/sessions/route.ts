@@ -6,6 +6,7 @@ import {
     updateCheckoutSession,
     CheckoutSession,
 } from "@/lib/db";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { checkoutSessions } from "../store";
 
 // Generate a unique checkout session ID
@@ -49,6 +50,10 @@ function isValidSolanaAddress(address: string): boolean {
  */
 export async function POST(request: NextRequest) {
     try {
+        // Rate limit by IP
+        const rateLimited = await checkRateLimit(`checkout:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
 
         // Validate required fields

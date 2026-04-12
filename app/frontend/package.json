@@ -28,6 +28,8 @@
     "@sqds/multisig": "^2.1.4",
     "@supabase/supabase-js": "^2.87.3",
     "@tailwindcss/postcss": "^4",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.37.0",
     "ethers": "^6.16.0",
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.555.0",
