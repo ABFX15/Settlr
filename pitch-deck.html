@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settlr — Investor Pitch Deck</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+      :root {
+        --green: #34c759;
+        --green-dark: #2ba048;
+        --navy: #212121;
+        --slate: #5c5c5c;
+        --muted: #8a8a8a;
+        --bg: #ffffff;
+        --card: #f7f7f7;
+        --border: #e0e0e0;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--navy);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ── Slide system ── */
+      .slide {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 60px 80px;
+        position: relative;
+        page-break-after: always;
+      }
+
+      .slide-number {
+        position: absolute;
+        bottom: 30px;
+        right: 40px;
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      .slide-logo {
+        position: absolute;
+        top: 30px;
+        left: 40px;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--green);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+
+      /* ── Hero slide ── */
+      .hero {
+        background: linear-gradient(135deg, #111 0%, #1a1a2e 50%, #0d1117 100%);
+        color: #fff;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(52, 199, 89, 0.15) 0%,
+          transparent 70%
+        );
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .hero h1 {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        position: relative;
+      }
+      .hero h1 span {
+        color: var(--green);
+      }
+      .hero .subtitle {
+        font-size: 22px;
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 700px;
+        margin: 0 auto 40px;
+        line-height: 1.5;
+      }
+      .hero .tagline {
+        display: inline-block;
+        background: rgba(52, 199, 89, 0.12);
+        border: 1px solid rgba(52, 199, 89, 0.3);
+        color: var(--green);
+        padding: 10px 24px;
+        border-radius: 100px;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      /* ── Typography ── */
+      h2 {
+        font-size: 42px;
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 12px;
+      }
+      h2 span {
+        color: var(--green);
+      }
+      .slide-desc {
+        font-size: 18px;
+        color: var(--slate);
+        margin-bottom: 48px;
+        max-width: 650px;
+        line-height: 1.6;
+      }
+      h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      /* ── Grid layouts ── */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 24px;
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 20px;
+      }
+
+      /* ── Cards ── */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 28px;
+      }
+      .card h3 {
+        margin-bottom: 10px;
+      }
+      .card p {
+        font-size: 15px;
+        color: var(--slate);
+        line-height: 1.55;
+      }
+
+      .card-accent {
+        border-left: 4px solid var(--green);
+        background: rgba(52, 199, 89, 0.04);
+      }
+
+      .card-dark {
+        background: var(--navy);
+        color: #fff;
+        border-color: #333;
+      }
+      .card-dark p {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* ── Stat blocks ── */
+      .stat {
+        text-align: center;
+      }
+      .stat .num {
+        font-size: 48px;
+        font-weight: 800;
+        color: var(--green);
+        line-height: 1;
+        margin-bottom: 8px;
+      }
+      .stat .label {
+        font-size: 14px;
+        color: var(--slate);
+        font-weight: 500;
+      }
+
+      /* ── Tables ── */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 15px;
+        margin-top: 8px;
+      }
+      th {
+        text-align: left;
+        font-weight: 700;
+        padding: 12px 16px;
+        border-bottom: 2px solid var(--navy);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--muted);
+      }
+      td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        color: var(--slate);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      .check {
+        color: var(--green);
+        font-weight: 700;
+      }
+      .cross {
+        color: #e53935;
+        font-weight: 700;
+      }
+      .warn {
+        color: #f5a623;
+        font-weight: 700;
+      }
+
+      /* ── Comparison bars ── */
+      .bar-row {
+        margin-bottom: 20px;
+      }
+      .bar-label {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .bar-track {
+        height: 32px;
+        background: var(--card);
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+      .bar-fill {
+        height: 100%;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        padding-left: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+      }
+      .bar-green {
+        background: linear-gradient(90deg, var(--green), var(--green-dark));
+      }
+      .bar-red {
+        background: linear-gradient(90deg, #e53935, #c62828);
+      }
+      .bar-gray {
+        background: linear-gradient(90deg, #999, #777);
+      }
+
+      /* ── Flow diagram ── */
+      .flow {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        flex-wrap: nowrap;
+        margin-top: 16px;
+      }
+      .flow-step {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px 20px;
+        text-align: center;
+        flex: 1;
+        min-width: 0;
+      }
+      .flow-step .icon {
+        font-size: 28px;
+        margin-bottom: 6px;
+      }
+      .flow-step .step-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--green);
+        margin-bottom: 4px;
+      }
+      .flow-step .step-text {
+        font-size: 13px;
+        color: var(--slate);
+        line-height: 1.4;
+      }
+      .flow-arrow {
+        font-size: 20px;
+        color: var(--green);
+        padding: 0 6px;
+        flex-shrink: 0;
+      }
+
+      /* ── Pill tags ── */
+      .pill {
+        display: inline-block;
+        background: rgba(52, 199, 89, 0.1);
+        color: var(--green-dark);
+        padding: 4px 12px;
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 600;
+        margin: 2px;
+      }
+      .pill-dark {
+        background: var(--navy);
+        color: #fff;
+      }
+
+      /* ── Timeline ── */
+      .timeline {
+        margin-top: 24px;
+      }
+      .tl-row {
+        display: flex;
+        gap: 20px;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .tl-row:last-child {
+        border-bottom: none;
+      }
+      .tl-phase {
+        width: 100px;
+        flex-shrink: 0;
+        font-weight: 700;
+        font-size: 13px;
+        text-transform: uppercase;
+        color: var(--green);
+        padding-top: 4px;
+      }
+      .tl-content h3 {
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      .tl-content p {
+        font-size: 14px;
+        color: var(--slate);
+        line-height: 1.5;
+      }
+
+      /* ── Funnel ── */
+      .funnel {
+        margin-top: 32px;
+      }
+      .funnel-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+      }
+      .funnel-bar {
+        height: 52px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 15px;
+        color: #fff;
+        transition: all 0.3s;
+      }
+      .funnel-label {
+        margin-left: 20px;
+        font-size: 14px;
+        color: var(--slate);
+        min-width: 200px;
+      }
+
+      /* ── Big quote ── */
+      .big-quote {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--navy);
+        border-left: 4px solid var(--green);
+        padding-left: 28px;
+        margin: 40px 0;
+        max-width: 800px;
+      }
+
+      /* ── Ask slide ── */
+      .ask-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 32px;
+      }
+      .ask-amount {
+        font-size: 56px;
+        font-weight: 800;
+        color: var(--green);
+        margin-bottom: 8px;
+      }
+      .use-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .use-item:last-child {
+        border-bottom: none;
+      }
+      .use-pct {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--green);
+        min-width: 50px;
+      }
+      .use-label {
+        font-size: 15px;
+        color: var(--slate);
+      }
+
+      /* ── Closing ── */
+      .closing {
+        background: linear-gradient(135deg, #111 0%, #1a1a2e 50%, #0d1117 100%);
+        color: #fff;
+        text-align: center;
+      }
+      .closing::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(
+          circle,
+          rgba(52, 199, 89, 0.12) 0%,
+          transparent 70%
+        );
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .closing h2 {
+        font-size: 52px;
+        position: relative;
+      }
+      .closing .contact-grid {
+        display: flex;
+        gap: 40px;
+        justify-content: center;
+        margin-top: 48px;
+        position: relative;
+      }
+      .contact-item {
+        text-align: center;
+      }
+      .contact-item .clabel {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+      }
+      .contact-item .cvalue {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--green);
+      }
+
+      @media print {
+        .slide {
+          page-break-after: always;
+          height: 100vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 1 — TITLE
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide hero">
+      <div>
+        <h1>Stablecoin Settlement<br />for <span>Cannabis B2B</span></h1>
+        <p class="subtitle">
+          Non-custodial USDC payments on Solana. T+0 finality at 1% flat.<br />
+          Replace cash drops and bank-hostile processors.
+        </p>
+        <div class="tagline">
+          SETTLR &nbsp;·&nbsp; SEED STAGE &nbsp;·&nbsp; APRIL 2026
+        </div>
+      </div>
+      <span class="slide-number" style="color: rgba(255, 255, 255, 0.3)"
+        >1</span
+      >
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 2 — THE PROBLEM
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>The <span>$34B Problem</span></h2>
+      <p class="slide-desc">
+        Cannabis operators move $34B+ annually through cash or predatory
+        processors. Federal banking exclusion hasn't been solved — and won't be
+        anytime soon.
+      </p>
+
+      <div class="grid-4" style="margin-bottom: 48px">
+        <div class="stat">
+          <div class="num">60%</div>
+          <div class="label">
+            of cannabis operators<br />lack stable banking
+          </div>
+        </div>
+        <div class="stat">
+          <div class="num">8–12%</div>
+          <div class="label">high-risk processor<br />fees per transaction</div>
+        </div>
+        <div class="stat">
+          <div class="num">30–60</div>
+          <div class="label">
+            days payment terms<br />tie up working capital
+          </div>
+        </div>
+        <div class="stat">
+          <div class="num">$120K</div>
+          <div class="label">annual cash handling<br />cost per operator</div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card card-accent">
+          <h3>🏦 Banking Exclusion</h3>
+          <p>
+            SAFE Act failed for 7+ years. Schedule III rescheduling didn't solve
+            it. Banks still close cannabis accounts without warning.
+          </p>
+        </div>
+        <div class="card card-accent">
+          <h3>💸 Predatory Fees</h3>
+          <p>
+            High-risk processors charge 5–12% with rolling reserves. A $10M
+            distributor pays $500K–$1.2M annually just to accept payments.
+          </p>
+        </div>
+        <div class="card card-accent">
+          <h3>🔒 Cash Traps</h3>
+          <p>
+            30–50% of B2B cannabis transactions are still cash. Armed transport,
+            vault storage, and robbery risk cost $60K–$120K/year.
+          </p>
+        </div>
+      </div>
+      <span class="slide-number">2</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 3 — THE SOLUTION
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>The <span>Solution</span></h2>
+      <p class="slide-desc">
+        Non-custodial USDC settlement on Solana. Instant finality, no bank
+        required, full compliance audit trail.
+      </p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="icon">📋</div>
+          <div class="step-label">1. ORDER</div>
+          <div class="step-text">LeafLink PO received via webhook</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="icon">📨</div>
+          <div class="step-label">2. INVOICE</div>
+          <div class="step-text">Compliance-stamped invoice + payment link</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="icon">💳</div>
+          <div class="step-label">3. PAY</div>
+          <div class="step-text">Buyer pays USDC via link, wallet, or QR</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div
+          class="flow-step"
+          style="
+            border-color: var(--green);
+            background: rgba(52, 199, 89, 0.06);
+          "
+        >
+          <div class="icon">⚡</div>
+          <div class="step-label">4. SETTLE</div>
+          <div class="step-text">
+            <strong>&lt;5 seconds</strong> on-chain finality
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="icon">✅</div>
+          <div class="step-label">5. PROOF</div>
+          <div class="step-text">Immutable receipt synced back to LeafLink</div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 48px">
+        <div class="card card-dark">
+          <h3 style="color: var(--green)">Non-Custodial</h3>
+          <p>
+            Funds flow directly between counterparties. Settlr never holds
+            assets. No bank can freeze your money.
+          </p>
+        </div>
+        <div class="card card-dark">
+          <h3 style="color: var(--green)">Gasless</h3>
+          <p>
+            Kora-sponsored transactions — users pay $0 in gas. Privy embedded
+            wallets eliminate wallet setup entirely.
+          </p>
+        </div>
+        <div class="card card-dark">
+          <h3 style="color: var(--green)">Compliant</h3>
+          <p>
+            OFAC screening, METRC tags embedded, BSA/AML monitoring, and
+            immutable on-chain audit trail for regulators.
+          </p>
+        </div>
+      </div>
+      <span class="slide-number">3</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 4 — COMPETITIVE COMPARISON
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>Why <span>Settlr Wins</span></h2>
+      <p class="slide-desc">
+        The only B2B stablecoin settlement for cannabis. Every alternative is
+        broken for this market.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 22%">Factor</th>
+            <th style="width: 26%">Settlr</th>
+            <th style="width: 26%">Stripe Connect</th>
+            <th style="width: 26%">High-Risk Processors</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Settlement Speed</strong></td>
+            <td><span class="check">✓</span> &lt;5 seconds</td>
+            <td><span class="cross">✕</span> 2–7 business days</td>
+            <td><span class="cross">✕</span> 3–10 business days</td>
+          </tr>
+          <tr>
+            <td><strong>Transaction Fee</strong></td>
+            <td><span class="check">✓</span> 1% flat</td>
+            <td><span class="warn">~</span> 0.25% + $0.25</td>
+            <td><span class="cross">✕</span> 5–12% + reserves</td>
+          </tr>
+          <tr>
+            <td><strong>Serves Cannabis</strong></td>
+            <td><span class="check">✓</span> Built for it</td>
+            <td><span class="cross">✕</span> Refuses high-risk</td>
+            <td><span class="warn">~</span> With harsh terms</td>
+          </tr>
+          <tr>
+            <td><strong>Account Freezes</strong></td>
+            <td><span class="check">✓</span> Impossible (non-custodial)</td>
+            <td><span class="cross">✕</span> Documented issue</td>
+            <td><span class="cross">✕</span> Common occurrence</td>
+          </tr>
+          <tr>
+            <td><strong>Chargebacks</strong></td>
+            <td><span class="check">✓</span> None (blockchain)</td>
+            <td><span class="cross">✕</span> Recurring problem</td>
+            <td><span class="cross">✕</span> Recurring problem</td>
+          </tr>
+          <tr>
+            <td><strong>Rolling Reserves</strong></td>
+            <td><span class="check">✓</span> None</td>
+            <td><span class="warn">~</span> Possible</td>
+            <td><span class="cross">✕</span> 5–15% held 6 months</td>
+          </tr>
+          <tr>
+            <td><strong>Privacy</strong></td>
+            <td><span class="check">✓</span> TEE-secured (MagicBlock)</td>
+            <td><span class="cross">✕</span> Standard bank rails</td>
+            <td><span class="cross">✕</span> Standard bank rails</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top: 32px">
+        <div class="bar-row">
+          <div class="bar-label">
+            <span>Settlr</span
+            ><span style="color: var(--green); font-weight: 700">1% flat</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill bar-green" style="width: 12%">1%</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">
+            <span>Stripe Connect</span
+            ><span style="color: var(--muted)">Refuses cannabis</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill bar-gray" style="width: 4%">—</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">
+            <span>High-Risk Processors</span
+            ><span style="color: #e53935; font-weight: 700">8–12%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill bar-red" style="width: 100%">
+              8–12% + reserves
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">4</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 5 — MARKET OPPORTUNITY
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>Market <span>Opportunity</span></h2>
+      <p class="slide-desc">
+        $34B+ flows through US cannabis wholesale annually. Over half lacks
+        reliable payment infrastructure.
+      </p>
+
+      <div class="funnel">
+        <div class="funnel-row">
+          <div
+            class="funnel-bar"
+            style="width: 80%; background: linear-gradient(90deg, #444, #666)"
+          >
+            $34B+ &nbsp;US Cannabis Wholesale Market
+          </div>
+        </div>
+        <div class="funnel-row">
+          <div
+            class="funnel-bar"
+            style="width: 62%; background: linear-gradient(90deg, #555, #777)"
+          >
+            $20B &nbsp;Operators Without Stable Banking (TAM)
+          </div>
+        </div>
+        <div class="funnel-row">
+          <div
+            class="funnel-bar"
+            style="
+              width: 42%;
+              background: linear-gradient(
+                90deg,
+                var(--green-dark),
+                var(--green)
+              );
+            "
+          >
+            $5–8B &nbsp;B2B Distributors (SAM)
+          </div>
+        </div>
+        <div class="funnel-row">
+          <div
+            class="funnel-bar"
+            style="
+              width: 22%;
+              background: linear-gradient(90deg, var(--green), #5fd87a);
+            "
+          >
+            $100M–$500M &nbsp;Year 1 (SOM)
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 48px">
+        <div class="card">
+          <h3>🌿 Cannabis Specific</h3>
+          <p>
+            The only crypto payment infra purpose-built for wholesale cannabis
+            compliance (METRC, state licensing, BSA/AML).
+          </p>
+        </div>
+        <div class="card">
+          <h3>🔗 LeafLink Integration</h3>
+          <p>
+            Direct webhook integration with the largest cannabis B2B
+            marketplace. Automatic PO → Invoice → Settlement.
+          </p>
+        </div>
+        <div class="card">
+          <h3>🏆 Zero Competitors</h3>
+          <p>
+            Colosseum database: 2,800+ crypto projects indexed. Zero alive in
+            cannabis B2B stablecoin settlement.
+          </p>
+        </div>
+      </div>
+      <span class="slide-number">5</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 6 — PRODUCT
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>Product <span>Overview</span></h2>
+      <p class="slide-desc">
+        A complete settlement stack — from order ingestion to compliance-ready
+        export.
+      </p>
+
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>📊 Operator Dashboard</h3>
+            <p>
+              Revenue analytics, aging buckets, counterparty risk, invoice
+              lifecycle tracking, and treasury management in a single view.
+            </p>
+            <div style="margin-top: 12px">
+              <span class="pill">Orders</span>
+              <span class="pill">Invoices</span>
+              <span class="pill">Settlements</span>
+              <span class="pill">AR / Collections</span>
+              <span class="pill">Treasury</span>
+              <span class="pill">Reports</span>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>🔗 Payment Links (Blinks)</h3>
+            <p>
+              Shareable payment links via Solana Actions. Works on Twitter/X,
+              Discord, Telegram, SMS, email. No wallet required for payer.
+            </p>
+          </div>
+          <div class="card">
+            <h3>📤 Data Pipeline</h3>
+            <p>
+              Real-time event streaming, daily aggregation stats, CSV/JSON
+              export — QuickBooks and Xero compatible for reconciliation.
+            </p>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>🤫 Privacy Settlements</h3>
+            <p>
+              MagicBlock Private Ephemeral Rollups. Intel TDX hardware enclaves
+              hide amounts and counterparties during processing. Sub-10ms
+              latency.
+            </p>
+            <div style="margin-top: 12px">
+              <span class="pill pill-dark">TEE Processing</span>
+              <span class="pill pill-dark">Hidden Amounts</span>
+              <span class="pill pill-dark">MEV Protected</span>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>🔐 Compliance Suite</h3>
+            <p>
+              OFAC walletscreening, METRC tag embedding, BSA/AML transaction
+              monitoring, SAR filing, and immutable on-chain audit trail.
+            </p>
+          </div>
+          <div class="card">
+            <h3>⚡ Gasless UX</h3>
+            <p>
+              Kora-sponsored gas + Privy embedded wallets. Users pay $0 for gas
+              and don't need a crypto wallet installed. Turn-key cannabis
+              payment experience.
+            </p>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">6</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 7 — REVENUE MODEL
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>Revenue <span>Model</span></h2>
+      <p class="slide-desc">
+        Simple per-transaction pricing. A $10M distributor saves $140K+ per year
+        vs. incumbents.
+      </p>
+
+      <div class="grid-3" style="margin-bottom: 40px">
+        <div class="card" style="text-align: center">
+          <div
+            style="
+              font-size: 12px;
+              font-weight: 700;
+              color: var(--muted);
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              margin-bottom: 16px;
+            "
+          >
+            Starter
+          </div>
+          <div style="font-size: 40px; font-weight: 800; color: var(--navy)">
+            1%
+          </div>
+          <div
+            style="font-size: 14px; color: var(--slate); margin-bottom: 16px"
+          >
+            per transaction
+          </div>
+          <div style="font-size: 13px; color: var(--muted)">
+            60 req/min · Solo operators
+          </div>
+        </div>
+        <div
+          class="card"
+          style="
+            text-align: center;
+            border-color: var(--green);
+            background: rgba(52, 199, 89, 0.04);
+          "
+        >
+          <div
+            style="
+              font-size: 12px;
+              font-weight: 700;
+              color: var(--green);
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              margin-bottom: 16px;
+            "
+          >
+            Growth ★
+          </div>
+          <div style="font-size: 40px; font-weight: 800; color: var(--green)">
+            0.75%
+          </div>
+          <div
+            style="font-size: 14px; color: var(--slate); margin-bottom: 16px"
+          >
+            per transaction
+          </div>
+          <div style="font-size: 13px; color: var(--muted)">
+            300 req/min · Mid-market
+          </div>
+        </div>
+        <div class="card" style="text-align: center">
+          <div
+            style="
+              font-size: 12px;
+              font-weight: 700;
+              color: var(--muted);
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              margin-bottom: 16px;
+            "
+          >
+            Enterprise
+          </div>
+          <div style="font-size: 40px; font-weight: 800; color: var(--navy)">
+            Custom
+          </div>
+          <div
+            style="font-size: 14px; color: var(--slate); margin-bottom: 16px"
+          >
+            0.5–0.7%
+          </div>
+          <div style="font-size: 13px; color: var(--muted)">
+            1000 req/min · $20M+ volume
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-accent" style="max-width: 700px">
+        <h3>💰 Operator Economics (Example: $2M Annual Volume)</h3>
+        <table>
+          <tr>
+            <td><strong>High-risk processor (incumbent)</strong></td>
+            <td style="text-align: right">
+              <span class="cross">$160,000</span> /year @ 8%
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Cash handling costs</strong></td>
+            <td style="text-align: right">
+              <span class="cross">$90,000</span> /year (transport, storage,
+              shrink)
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Settlr</strong></td>
+            <td style="text-align: right">
+              <span class="check">$20,000</span> /year @ 1%
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Annual savings</strong></td>
+            <td
+              style="
+                text-align: right;
+                font-weight: 800;
+                color: var(--green);
+                font-size: 18px;
+              "
+            >
+              $230,000
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="margin-top: 32px">
+        <div class="big-quote">
+          At scale, 10–20% market penetration = $20M–$100M+ ARR for Settlr.
+        </div>
+      </div>
+      <span class="slide-number">7</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 8 — TECHNICAL MOATS
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>Technical <span>Moats</span></h2>
+      <p class="slide-desc">
+        Purpose-built infrastructure on Solana with unique privacy and
+        compliance advantages.
+      </p>
+
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>⛓️ Solana-Native Smart Contract</h3>
+            <p>
+              7-instruction Anchor program deployed on Solana. Sub-5s finality,
+              &lt;$0.0001 gas. Squads multi-sig treasury authority.
+            </p>
+            <div
+              style="
+                margin-top: 12px;
+                font-family: monospace;
+                font-size: 12px;
+                color: var(--muted);
+                background: #f0f0f0;
+                padding: 8px 12px;
+                border-radius: 6px;
+                word-break: break-all;
+              "
+            >
+              Program: 339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5
+            </div>
+          </div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>🛡️ Non-Custodial Architecture</h3>
+            <p>
+              Per FinCEN Guidance FIN-2019-G001: non-custodial software
+              facilitating peer-to-peer transfers is
+              <strong>not</strong> classified as a money transmitter. No MTL
+              required.
+            </p>
+          </div>
+          <div class="card">
+            <h3>📜 GENIUS Act Compliance</h3>
+            <p>
+              USDC is a fully-compliant payment stablecoin under the GENIUS Act
+              2025. Circle is registered with FinCEN, reserves are fully backed
+              by U.S. Treasuries + cash.
+            </p>
+          </div>
+        </div>
+        <div>
+          <div class="card card-dark" style="margin-bottom: 20px">
+            <h3 style="color: var(--green)">🔐 MagicBlock PER (Privacy)</h3>
+            <p>
+              Private Ephemeral Rollups on Intel TDX hardware enclaves.
+              Transaction data is hidden inside a TEE during processing — only
+              merchant + customer can observe state.
+            </p>
+            <table style="margin-top: 12px">
+              <tr>
+                <td style="border-color: #444; color: #aaa">Latency</td>
+                <td style="border-color: #444; color: #fff">
+                  &lt;10ms inside TEE
+                </td>
+              </tr>
+              <tr>
+                <td style="border-color: #444; color: #aaa">Privacy</td>
+                <td style="border-color: #444; color: #fff">
+                  Amount + counterparty hidden
+                </td>
+              </tr>
+              <tr>
+                <td style="border-color: #444; color: #aaa">MEV Protection</td>
+                <td style="border-color: #444; color: #fff">
+                  Full (not visible on public ledger)
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>🔌 Integration Stack</h3>
+            <div style="margin-top: 8px">
+              <span class="pill">LeafLink</span>
+              <span class="pill">Privy</span>
+              <span class="pill">Kora</span>
+              <span class="pill">MoonPay</span>
+              <span class="pill">Sumsub</span>
+              <span class="pill">Range</span>
+              <span class="pill">Resend</span>
+              <span class="pill">Supabase</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>📊 Data Pipeline</h3>
+            <p>
+              Event-driven architecture: real-time SSE streaming, batch
+              aggregation (5-min cron), CSV/JSON export. Production-grade
+              analytics from Day 1.
+            </p>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">8</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 9 — GO-TO-MARKET
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>Go-to-<span>Market</span></h2>
+      <p class="slide-desc">
+        Land with LeafLink operators, expand across the cannabis wholesale
+        supply chain.
+      </p>
+
+      <div class="timeline">
+        <div class="tl-row">
+          <div class="tl-phase">
+            Phase 1<br /><span
+              style="color: var(--muted); font-size: 11px; font-weight: 500"
+              >Now</span
+            >
+          </div>
+          <div class="tl-content">
+            <h3>First 3 Paying Customers</h3>
+            <p>
+              Onboard LeafLink distributors via direct outreach. Target: $500K+
+              monthly volume through Settlr. Prove settlement finality and
+              compliance workflow end-to-end.
+            </p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-phase">
+            Phase 2<br /><span
+              style="color: var(--muted); font-size: 11px; font-weight: 500"
+              >Q3 2026</span
+            >
+          </div>
+          <div class="tl-content">
+            <h3>Mainnet Launch + $500K Monthly Volume</h3>
+            <p>
+              Deploy to Solana mainnet. Activate Sumsub KYB at onboarding. First
+              institutional cannabis operator. Target: 10 merchants, $500K/mo
+              settlement volume.
+            </p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-phase">
+            Phase 3<br /><span
+              style="color: var(--muted); font-size: 11px; font-weight: 500"
+              >2027</span
+            >
+          </div>
+          <div class="tl-content">
+            <h3>Expand Integrations</h3>
+            <p>
+              Add Flowhub, Dutchie, METRC direct integrations. Launch REST API
+              for self-serve onboarding. Target: 50+ merchants, $5M/mo volume.
+            </p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-phase">
+            Phase 4<br /><span
+              style="color: var(--muted); font-size: 11px; font-weight: 500"
+              >2028</span
+            >
+          </div>
+          <div class="tl-content">
+            <h3>Platform & SDK Licensing</h3>
+            <p>
+              White-label solution for cannabis marketplaces. SDK licensing for
+              other debanked verticals (hemp, CBD, emerging markets). Target:
+              $100M+ annual volume.
+            </p>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">9</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 10 — TRACTION
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>Traction & <span>Validation</span></h2>
+      <p class="slide-desc">Built, validated, and ready for first customers.</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>✅ What's Built</h3>
+            <table>
+              <tr>
+                <td>
+                  <span class="check">✓</span> Smart contract deployed (devnet)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> Full operator dashboard
+                  (invoices, orders, settlements, AR, treasury)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> LeafLink webhook integration
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> Gasless payments (Kora + Privy)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> Payment links / Solana Blinks
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> Private settlements (MagicBlock
+                  PER)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> OFAC screening + compliance
+                  monitoring
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> Data pipeline (events,
+                  aggregation, export)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> Rate limiting + security
+                  hardening
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>🎯 Validation Signals</h3>
+            <table>
+              <tr>
+                <td>
+                  <span class="check">✓</span> 82% confidence score (GO verdict)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> 0 live competitors (2,800+
+                  projects searched)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> $34B+ addressable market
+                  documented
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> SAFE Act failure confirms banking
+                  won't solve it
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="check">✓</span> GENIUS Act provides federal
+                  stablecoin framework
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="card card-accent">
+            <h3>🏁 Next Milestones</h3>
+            <table>
+              <tr>
+                <td>→ 3 real cannabis operators paying via Settlr</td>
+              </tr>
+              <tr>
+                <td>→ First $500+ mainnet settlement</td>
+              </tr>
+              <tr>
+                <td>→ LeafLink partnership (unofficial → official)</td>
+              </tr>
+              <tr>
+                <td>→ Colosseum Accelerator / Solana grant application</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">10</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 11 — THE ASK
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>The <span>Ask</span></h2>
+      <p class="slide-desc">
+        Seed round to take Settlr from devnet to first $100K in monthly
+        settlement volume.
+      </p>
+
+      <div class="ask-grid">
+        <div>
+          <div class="ask-amount">$750K</div>
+          <div
+            style="font-size: 18px; color: var(--slate); margin-bottom: 32px"
+          >
+            Seed Round
+          </div>
+
+          <div class="use-item">
+            <div class="use-pct">35%</div>
+            <div>
+              <strong style="font-size: 15px">Engineering & Mainnet</strong>
+              <div class="use-label">
+                Mainnet deployment, security audit, production hardening
+              </div>
+            </div>
+          </div>
+          <div class="use-item">
+            <div class="use-pct">25%</div>
+            <div>
+              <strong style="font-size: 15px">Go-to-Market</strong>
+              <div class="use-label">
+                First sales hire, LeafLink partnership, operator outreach
+              </div>
+            </div>
+          </div>
+          <div class="use-item">
+            <div class="use-pct">20%</div>
+            <div>
+              <strong style="font-size: 15px">Compliance & Legal</strong>
+              <div class="use-label">
+                Cannabis regulatory counsel, state-by-state compliance review
+              </div>
+            </div>
+          </div>
+          <div class="use-item">
+            <div class="use-pct">20%</div>
+            <div>
+              <strong style="font-size: 15px">Operations</strong>
+              <div class="use-label">
+                12-month runway, infrastructure, support
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>📈 12-Month Targets</h3>
+            <table>
+              <tr>
+                <td><strong>Monthly Volume</strong></td>
+                <td
+                  style="
+                    text-align: right;
+                    color: var(--green);
+                    font-weight: 700;
+                  "
+                >
+                  $500K+
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Active Merchants</strong></td>
+                <td
+                  style="
+                    text-align: right;
+                    color: var(--green);
+                    font-weight: 700;
+                  "
+                >
+                  10+
+                </td>
+              </tr>
+              <tr>
+                <td><strong>ARR (at 1%)</strong></td>
+                <td
+                  style="
+                    text-align: right;
+                    color: var(--green);
+                    font-weight: 700;
+                  "
+                >
+                  $60K+
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Mainnet Deployment</strong></td>
+                <td
+                  style="
+                    text-align: right;
+                    color: var(--green);
+                    font-weight: 700;
+                  "
+                >
+                  Q3 2026
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Security Audit</strong></td>
+                <td
+                  style="
+                    text-align: right;
+                    color: var(--green);
+                    font-weight: 700;
+                  "
+                >
+                  Q3 2026
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="card card-dark">
+            <h3 style="color: var(--green)">Why Now?</h3>
+            <p>
+              GENIUS Act = federal stablecoin clarity.<br />SAFE Act failure =
+              banks won't fix this.<br />Solana maturity = production-grade
+              infra.<br />MagicBlock PER = unique privacy moat.<br /><strong
+                style="color: #fff"
+                >Zero competitors = blue ocean.</strong
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">11</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 12 — TEAM
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide">
+      <span class="slide-logo">SETTLR</span>
+      <h2>Founding <span>Team</span></h2>
+      <p class="slide-desc">
+        Solo technical founder with deep Solana and cannabis compliance
+        expertise.
+      </p>
+
+      <div class="grid-2" style="max-width: 900px">
+        <div class="card" style="text-align: center; padding: 40px">
+          <div
+            style="
+              width: 80px;
+              height: 80px;
+              border-radius: 50%;
+              background: linear-gradient(
+                135deg,
+                var(--green),
+                var(--green-dark)
+              );
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 auto 20px;
+              font-size: 32px;
+              color: #fff;
+              font-weight: 800;
+            "
+          >
+            AB
+          </div>
+          <h3 style="font-size: 22px">Adam Bryant</h3>
+          <div
+            style="color: var(--green); font-weight: 600; margin-bottom: 16px"
+          >
+            Founder & CEO
+          </div>
+          <p style="font-size: 14px; color: var(--slate); line-height: 1.6">
+            Full-stack Solana engineer. Built Settlr end-to-end: smart contracts
+            (Anchor), dashboard (Next.js), gasless infrastructure, privacy
+            settlements, compliance stack. Cannabis domain expertise —
+            understands METRC, state licensing, and operator workflows.
+          </p>
+          <div style="margin-top: 16px">
+            <span class="pill">Solana</span>
+            <span class="pill">Anchor</span>
+            <span class="pill">TypeScript</span>
+            <span class="pill">Next.js</span>
+            <span class="pill">Cannabis Compliance</span>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom: 20px">
+            <h3>🔑 Key Hiring Plans</h3>
+            <table>
+              <tr>
+                <td><strong>Head of Sales</strong></td>
+                <td style="color: var(--muted)">
+                  Cannabis industry relationships, LeafLink operators
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Compliance Lead</strong></td>
+                <td style="color: var(--muted)">
+                  BSA/AML, state cannabis licensing, FinCEN
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Solana Engineer</strong></td>
+                <td style="color: var(--muted)">
+                  Smart contract audit prep, mainnet optimization
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="card">
+            <h3>🏗️ Built & Shipped</h3>
+            <p style="font-size: 14px">
+              Complete product from zero: on-chain program (7 instructions),
+              operator dashboard, LeafLink integration, gasless UX, MagicBlock
+              privacy, compliance suite, data pipeline, and 23 Supabase
+              migrations.
+            </p>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">12</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+     SLIDE 13 — CLOSING
+     ═══════════════════════════════════════════════════════════════════ -->
+    <section class="slide closing">
+      <div style="position: relative">
+        <h2><span>Settlr</span></h2>
+        <p
+          style="
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 16px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+          "
+        >
+          The payment infrastructure cannabis has been waiting for.<br />
+          Non-custodial. Instant. Compliant. Private.
+        </p>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <div class="clabel">Website</div>
+            <div class="cvalue">settlr.dev</div>
+          </div>
+          <div class="contact-item">
+            <div class="clabel">Email</div>
+            <div class="cvalue">adam@settlr.dev</div>
+          </div>
+          <div class="contact-item">
+            <div class="clabel">GitHub</div>
+            <div class="cvalue">github.com/ABFX15</div>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number" style="color: rgba(255, 255, 255, 0.2)"
+        >13</span
+      >
+    </section>
+  </body>
+</html>
