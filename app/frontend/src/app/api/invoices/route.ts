@@ -13,6 +13,7 @@ import {
     getOrCreateMerchantByWallet,
 } from "@/lib/db";
 import { sendInvoiceEmail } from "@/lib/email";
+import { emitEvent } from "@/lib/pipeline";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 // ─── Auth helper ───
@@ -143,6 +144,10 @@ export async function POST(request: NextRequest) {
                 console.error("[invoices] Failed to send email:", err)
             );
         }
+
+        emitEvent("invoice.created", "invoice", invoice.id, auth.merchantId, {
+            amount: invoice.total, invoiceNumber: invoice.invoiceNumber, buyerEmail: invoice.buyerEmail,
+        }).catch((err) => console.error("[pipeline] emit error:", err));
 
         return NextResponse.json(
             {

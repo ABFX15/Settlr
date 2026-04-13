@@ -12,6 +12,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { explorerUrl } from "@/lib/constants";
+import { emitEvent } from "@/lib/pipeline";
 import {
     getInvoiceByViewToken,
     updateInvoiceStatus,
@@ -96,6 +97,10 @@ export async function POST(
             // The invoice is already marked paid and the on-chain tx is confirmed
             console.error("[invoices/pay] Error crediting treasury or recording payment:", err);
         }
+
+        emitEvent("invoice.paid", "invoice", invoice.id, invoice.merchantId || "", {
+            amount: invoice.total, invoiceNumber: invoice.invoiceNumber, paymentSignature, payerWallet,
+        }).catch((err) => console.error("[pipeline] emit error:", err));
 
         return NextResponse.json({
             status: updated?.status || "paid",

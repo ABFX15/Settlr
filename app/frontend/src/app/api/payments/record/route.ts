@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createPayment, getMerchantByWallet } from "@/lib/db";
 import { explorerUrl } from "@/lib/constants";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { emitEvent } from "@/lib/pipeline";
 
 // CORS headers for SDK requests from any origin
 const corsHeaders = {
@@ -75,6 +76,10 @@ export async function POST(request: NextRequest) {
         });
 
         console.log(`[Payments] Recorded redirect payment: ${payment.id} for ${amount} USDC to ${merchantWallet}`);
+
+        emitEvent("payment.completed", "payment", payment.id, merchantId, {
+            amount, merchantWallet, customerWallet, signature, currency: "USDC",
+        }).catch((err) => console.error("[pipeline] emit error:", err));
 
         return NextResponse.json({
             success: true,

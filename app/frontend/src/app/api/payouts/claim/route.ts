@@ -11,6 +11,7 @@ import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 import { getPayoutByClaimToken, claimPayout, updatePayoutStatus, getRecipientByEmail, registerRecipient, updateRecipientStats, releasePayoutFunds, calculatePayoutFee } from "@/lib/db";
 import { dispatchWebhookEvent } from "@/lib/webhooks";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { emitEvent } from "@/lib/pipeline";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -230,6 +231,10 @@ export async function POST(request: NextRequest) {
             txSignature,
             claimedAt: claimed.claimedAt?.toISOString() || new Date().toISOString(),
         }).catch((err) => console.error("[webhooks] dispatch error:", err));
+
+        emitEvent("payout.claimed", "payout", claimed.id, payout.merchantId || "", {
+            amount: claimed.amount, recipientWallet, txSignature, email: payout.email,
+        }).catch((err) => console.error("[pipeline] emit error:", err));
 
         return NextResponse.json({
             success: true,

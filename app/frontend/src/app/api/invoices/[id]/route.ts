@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getInvoice, updateInvoiceStatus, validateApiKey, getOrCreateMerchantByWallet } from "@/lib/db";
 import { sendInvoiceEmail } from "@/lib/email";
+import { emitEvent } from "@/lib/pipeline";
 
 async function authenticate(request: NextRequest) {
     // API key auth
@@ -134,6 +135,9 @@ export async function PATCH(
 
         if (action === "cancel") {
             const updated = await updateInvoiceStatus(id, "cancelled");
+            emitEvent("invoice.cancelled", "invoice", id, invoice.merchantId || "", {
+                invoiceNumber: invoice.invoiceNumber, amount: invoice.total,
+            }).catch((err) => console.error("[pipeline] emit error:", err));
             return NextResponse.json({ status: updated?.status || "cancelled" });
         }
 
@@ -143,6 +147,9 @@ export async function PATCH(
                 payerWallet,
                 paidAt: new Date(),
             });
+            emitEvent("invoice.paid", "invoice", id, invoice.merchantId || "", {
+                amount: invoice.total, invoiceNumber: invoice.invoiceNumber, paymentSignature,
+            }).catch((err) => console.error("[pipeline] emit error:", err));
             return NextResponse.json({ status: updated?.status || "paid" });
         }
 

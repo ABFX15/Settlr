@@ -7,6 +7,7 @@ import { createPayoutBatch, validateApiKey, getOrCreateMerchantBalance, reserveP
 import { sendPayoutClaimEmail } from "@/lib/email";
 import { dispatchWebhookEvent } from "@/lib/webhooks";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { emitEvent } from "@/lib/pipeline";
 
 export async function POST(request: NextRequest) {
     try {
@@ -109,6 +110,16 @@ export async function POST(request: NextRequest) {
             payoutIds: result.payouts.map((p: { id: string }) => p.id),
             createdAt: result.batch.createdAt.toISOString(),
         }).catch((err) => console.error("[webhooks] dispatch error:", err));
+
+        emitEvent("batch.created", "batch", result.batch.id, validation.merchantId, {
+            amount: result.batch.totalAmount, count: result.batch.count,
+        }).catch((err) => console.error("[pipeline] emit error:", err));
+
+        for (const p of result.payouts) {
+            emitEvent("payout.created", "payout", p.id, validation.merchantId, {
+                amount: p.amount, email: p.email, batchId: result.batch.id,
+            }).catch((err) => console.error("[pipeline] emit error:", err));
+        }
 
         return NextResponse.json({
             id: result.batch.id,

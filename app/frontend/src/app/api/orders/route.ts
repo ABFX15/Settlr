@@ -11,6 +11,7 @@ import {
     getOrCreateMerchantByWallet,
 } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { emitEvent } from "@/lib/pipeline";
 
 async function authenticate(request: NextRequest) {
     const walletAddress = request.headers.get("x-merchant-wallet");
@@ -79,6 +80,10 @@ export async function POST(request: NextRequest) {
             terms,
             expectedDate: expectedDate ? new Date(expectedDate) : undefined,
         });
+
+        emitEvent("order.created", "order", order.id, auth.merchantId, {
+            amount: order.total, orderNumber: order.orderNumber, buyerEmail,
+        }).catch((err) => console.error("[pipeline] emit error:", err));
 
         return NextResponse.json({
             id: order.id,
