@@ -6,9 +6,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { createPayoutBatch, validateApiKey, getOrCreateMerchantBalance, reservePayoutFunds, calculatePayoutFee } from "@/lib/db";
 import { sendPayoutClaimEmail } from "@/lib/email";
 import { dispatchWebhookEvent } from "@/lib/webhooks";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`batch:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         // Authenticate
         const apiKey = request.headers.get("x-api-key") || request.headers.get("authorization")?.replace("Bearer ", "");
         if (!apiKey) {

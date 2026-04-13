@@ -10,6 +10,7 @@ import {
     getOrderStats,
     getOrCreateMerchantByWallet,
 } from "@/lib/db";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 async function authenticate(request: NextRequest) {
     const walletAddress = request.headers.get("x-merchant-wallet");
@@ -31,6 +32,9 @@ async function authenticate(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`orders:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const auth = await authenticate(request);
         if (!auth) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

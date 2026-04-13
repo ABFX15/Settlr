@@ -451,24 +451,27 @@ export default function StripeConnectComparison() {
             >
               <code>
                 <span style={{ color: "#8a8a8a" }}>
-                  {"// npm install @settlr/sdk\n"}
+                  {"// Settlr REST API — pay a contractor in 5 lines\n"}
                 </span>
-                <span style={{ color: MUTED }}>{"import "}</span>
-                <span style={{ color: "white" }}>{"{ SettlrClient }"}</span>
-                <span style={{ color: MUTED }}>{" from "}</span>
-                <span style={{ color: ACCENT_LIGHT }}>{'"@settlr/sdk"'}</span>
-                <span style={{ color: MUTED }}>{";\n\n"}</span>
-                <span style={{ color: MUTED }}>{"const client = "}</span>
-                <span style={{ color: "white" }}>{"new SettlrClient"}</span>
+                <span style={{ color: MUTED }}>{"const res = await "}</span>
+                <span style={{ color: "white" }}>{"fetch"}</span>
                 <span style={{ color: MUTED }}>{"("}</span>
                 <span style={{ color: ACCENT_LIGHT }}>
-                  {"process.env.SETTLR_API_KEY"}
+                  {'"https://settlr.dev/api/payouts"'}
                 </span>
-                <span style={{ color: MUTED }}>{");\n\n"}</span>
-                <span style={{ color: MUTED }}>{"await client."}</span>
-                <span style={{ color: "white" }}>{"pay"}</span>
-                <span style={{ color: MUTED }}>{"({\n"}</span>
-                <span style={{ color: MUTED }}>{"  email: "}</span>
+                <span style={{ color: MUTED }}>{", {\n"}</span>
+                <span style={{ color: MUTED }}>{"  method: "}</span>
+                <span style={{ color: ACCENT_LIGHT }}>{'"POST"'}</span>
+                <span style={{ color: MUTED }}>{",\n"}</span>
+                <span style={{ color: MUTED }}>{"  headers: { "}</span>
+                <span style={{ color: ACCENT_LIGHT }}>{'"X-API-Key"'}</span>
+                <span style={{ color: MUTED }}>
+                  {": process.env.SETTLR_API_KEY },\n"}
+                </span>
+                <span style={{ color: MUTED }}>
+                  {"  body: JSON.stringify({\n"}
+                </span>
+                <span style={{ color: MUTED }}>{"    email: "}</span>
                 <span style={{ color: ACCENT_LIGHT }}>
                   {'"contractor@example.com"'}
                 </span>
@@ -483,7 +486,7 @@ export default function StripeConnectComparison() {
                 <span style={{ color: ACCENT_LIGHT }}>
                   {'"February invoice"'}
                 </span>
-                <span style={{ color: MUTED }}>{"\n});"}</span>
+                <span style={{ color: MUTED }}>{"\n  })\n});"}</span>
               </code>
             </pre>
           </motion.div>

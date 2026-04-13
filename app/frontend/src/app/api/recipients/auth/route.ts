@@ -12,6 +12,7 @@ import {
     validateRecipientAuthToken,
 } from "@/lib/db";
 import { sendAuthLinkEmail } from "@/lib/email";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const CLAIM_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
 
@@ -22,6 +23,9 @@ const CLAIM_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
  */
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`auth:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
         const { email } = body;
 

@@ -21,6 +21,7 @@ import {
     cancelRemindersForInvoice,
 } from "@/lib/db";
 import { sendCollectionReminderEmail } from "@/lib/email";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 async function authenticate(request: NextRequest) {
     const walletAddress = request.headers.get("x-merchant-wallet");
@@ -40,6 +41,9 @@ async function authenticate(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+    const rateLimited = await checkRateLimit(`collections:${getClientIp(request)}`);
+    if (rateLimited) return rateLimited;
+
     const auth = await authenticate(request);
     if (!auth) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

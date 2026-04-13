@@ -361,7 +361,7 @@ export default function CompliancePage() {
                 {[
                   { label: "Non-Custodial", icon: Lock },
                   { label: "No MTL Required", icon: Building2 },
-                  { label: "GENIUS Act Ready", icon: Shield },
+                  { label: "USDC: GENIUS Act Compliant", icon: Shield },
                   { label: "Full Audit Trail", icon: Eye },
                 ].map((item) => (
                   <div
@@ -1640,7 +1640,7 @@ export default function CompliancePage() {
               {
                 title: "On-Chain Compliance Stamps",
                 description:
-                  "Every settlement embeds compliance metadata directly in the transaction: KYB verification status, OFAC screening result, and GENIUS Act compliance flag. This data is immutable and auditable by any third party.",
+                  "Every settlement embeds compliance metadata directly in the transaction: KYB verification status and OFAC screening result. This data is immutable and auditable by any third party.",
               },
               {
                 title: "Gasless via Kora Fee Payer",

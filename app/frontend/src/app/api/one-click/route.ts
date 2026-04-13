@@ -13,6 +13,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
 // Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -35,6 +36,9 @@ export interface SpendingApproval {
 
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`oneclick:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
         const { action } = body;
 

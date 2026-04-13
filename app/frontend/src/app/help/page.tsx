@@ -76,7 +76,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   "getting-started": [
     {
       q: "How do I get started with Settlr?",
-      a: "Getting started is easy! Simply sign up, complete KYB verification, and you'll receive your API keys. Our SDK handles the rest — gasless payments, embedded wallets, and instant USDC settlements.",
+      a: "Getting started is easy! Simply sign up, complete KYB verification, and you'll receive your API keys. Our API handles the rest — gasless payments, embedded wallets, and instant USDC settlements.",
     },
     {
       q: "Do I need any crypto knowledge?",
@@ -132,7 +132,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   integration: [
     {
       q: "How hard is it to integrate?",
-      a: "Our React SDK makes integration a breeze. Most developers are up and running in under an hour. We also offer payment links for no-code solutions.",
+      a: "Our REST API makes integration a breeze. Most developers are up and running in under an hour. We also offer payment links for no-code solutions.",
     },
     {
       q: "Do you support webhooks?",

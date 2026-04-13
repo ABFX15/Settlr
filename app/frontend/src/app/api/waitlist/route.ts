@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addToWaitlist, getWaitlist, type WaitlistEntry } from "@/lib/db";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 // POST - Join the waitlist
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`waitlist:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
         const { email, name, company, useCase, walletAddress } = body;
 

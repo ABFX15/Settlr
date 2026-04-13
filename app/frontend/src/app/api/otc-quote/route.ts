@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * POST /api/otc-quote — Request an OTC desk quote for large USDC purchases
@@ -26,6 +27,9 @@ const quoteRequests: {
 }[] = [];
 
 export async function POST(request: NextRequest) {
+    const rateLimited = await checkRateLimit(`otc:${getClientIp(request)}`);
+    if (rateLimited) return rateLimited;
+
     // OTC desk integration not yet available — requires a real provider (Circle, Cumberland, etc.)
     if (process.env.OTC_PROVIDER_ENABLED !== "true") {
         return NextResponse.json(

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createPayment, getMerchantByWallet } from "@/lib/db";
 import { explorerUrl } from "@/lib/constants";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 // CORS headers for SDK requests from any origin
 const corsHeaders = {
@@ -37,6 +38,9 @@ export async function OPTIONS() {
  */
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`record:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
         const { signature, merchantWallet, customerWallet, amount, memo } = body;
 

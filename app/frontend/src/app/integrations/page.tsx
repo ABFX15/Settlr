@@ -162,7 +162,9 @@ export default function IntegrationsPage() {
   return (
     <main
       className="relative min-h-screen bg-[#FFFFFF] text-[#212121] antialiased"
-      style={{ fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif" }}
+      style={{
+        fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif",
+      }}
     >
       <script
         type="application/ld+json"
@@ -430,8 +432,8 @@ export default function IntegrationsPage() {
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-5 max-w-md text-base text-[#8a8a8a]">
-              Settlr&apos;s TypeScript SDK and REST API work with any stack.
-              Build a custom integration in under 30 minutes.
+              Settlr&apos;s REST API works with any stack. Build a custom
+              integration in under 30 minutes.
             </p>
           </Reveal>
           <Reveal delay={0.1}>

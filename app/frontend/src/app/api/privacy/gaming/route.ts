@@ -14,6 +14,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
 // MagicBlock endpoints
 const MAGIC_ROUTER_DEVNET = 'https://devnet-router.magicblock.app';
@@ -51,6 +52,9 @@ const sessions = new Map<string, {
 
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`privacy:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
         const { action, customerPubkey, merchantPubkey, sessionId, amount, feeAmount, memo } = body;
 

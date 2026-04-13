@@ -19,6 +19,7 @@ import {
 } from "@solana/spl-token";
 
 import { SOLANA_RPC_URL, USDC_MINT as USDC_MINT_CONST } from "@/lib/constants";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const RPC_ENDPOINT = SOLANA_RPC_URL;
 const USDC_MINT = USDC_MINT_CONST;
@@ -76,6 +77,9 @@ export async function GET() {
  */
 export async function POST(req: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`sponsor:${getClientIp(req)}`);
+        if (rateLimited) return rateLimited;
+
         if (!isPrivyGaslessEnabled()) {
             return NextResponse.json(
                 { error: "Gasless transactions not configured" },

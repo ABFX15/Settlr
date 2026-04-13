@@ -30,6 +30,7 @@ import { getInvoiceByViewToken, updateInvoiceStatus } from "@/lib/db";
 import { actionsResponse, actionsOptions } from "./helpers";
 
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 /* ─── Config ─── */
 const RPC_ENDPOINT =
@@ -156,6 +157,9 @@ export async function GET(request: NextRequest) {
  * POST — Build and return an unsigned USDC transfer transaction
  * ═════════════════════════════════════════════════════════════════════ */
 export async function POST(request: NextRequest) {
+    const rateLimited = await checkRateLimit(`blink:${getClientIp(request)}`);
+    if (rateLimited) return rateLimited;
+
     const token = getInvoiceToken(request);
     if (!token) {
         return actionsResponse(

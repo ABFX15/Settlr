@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import crypto from "crypto";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * POST /api/webhooks/[id]/test - Send a test webhook event
@@ -10,6 +11,9 @@ export async function POST(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const rateLimited = await checkRateLimit(`webhook-test:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const { id } = await params;
 
         // Get the webhook config

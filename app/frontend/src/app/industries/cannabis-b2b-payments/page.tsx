@@ -782,8 +782,8 @@ export default function CannabisB2BPaymentsPage() {
           <R delay={0.24}>
             <div className="mt-12 text-center">
               <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
-                Don&apos;t see your platform? Settlr&apos;s REST API and
-                TypeScript SDK work with any system.{" "}
+                Don&apos;t see your platform? Settlr&apos;s REST API works with
+                any system.{" "}
                 <Link
                   href="/integrations"
                   className="font-semibold underline transition-opacity hover:opacity-80"

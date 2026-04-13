@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 import { getPayoutByClaimToken, claimPayout, updatePayoutStatus, getRecipientByEmail, registerRecipient, updateRecipientStats, releasePayoutFunds, calculatePayoutFee } from "@/lib/db";
 import { dispatchWebhookEvent } from "@/lib/webhooks";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -97,6 +98,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`claim:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
         const { token, recipientWallet } = body;
 

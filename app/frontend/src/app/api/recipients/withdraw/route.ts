@@ -15,6 +15,7 @@ import {
     getOrCreateBalance,
     debitBalance,
 } from "@/lib/db";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 async function authenticateRecipient(request: NextRequest) {
     const recipientEmail = request.headers.get("x-recipient-email");
@@ -68,6 +69,9 @@ async function executeWithdrawalTransfer(params: {
 
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`withdraw:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const recipient = await authenticateRecipient(request);
         if (!recipient) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

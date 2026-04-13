@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateAccessToken, KYC_LEVELS, KYCLevel } from "@/lib/sumsub";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * POST /api/kyc/token
@@ -14,6 +15,9 @@ import { generateAccessToken, KYC_LEVELS, KYCLevel } from "@/lib/sumsub";
  */
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`kyc:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
         const { userId, customerId, merchantId, level, levelName } = body;
 

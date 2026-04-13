@@ -6,6 +6,7 @@ import {
     getKoraSigner,
     getSupportedTokens,
 } from "@/lib/kora";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * GET /api/gasless
@@ -50,6 +51,9 @@ export async function GET() {
  */
 export async function POST(req: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`gasless:${getClientIp(req)}`);
+        if (rateLimited) return rateLimited;
+
         if (!isKoraEnabled()) {
             return NextResponse.json(
                 { error: "Gasless not configured" },

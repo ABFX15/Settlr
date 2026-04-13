@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
  * POST /api/auto-offramp — Trigger automatic off-ramp after a payment
@@ -118,6 +119,9 @@ function initiateOfframp(
 
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`offramp:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const body = await request.json();
         const { merchantWallet, amount, txSignature } = body;
 

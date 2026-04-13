@@ -13,6 +13,7 @@ import {
     getOrCreateMerchantByWallet,
 } from "@/lib/db";
 import { sendInvoiceEmail } from "@/lib/email";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 // ─── Auth helper ───
 // Authenticates via wallet address (x-merchant-wallet header) from dashboard
@@ -37,6 +38,9 @@ async function authenticate(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
+        const rateLimited = await checkRateLimit(`invoice:${getClientIp(request)}`);
+        if (rateLimited) return rateLimited;
+
         const auth = await authenticate(request);
         if (!auth) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
