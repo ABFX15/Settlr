@@ -491,4 +491,302 @@ $200,000/mo × (6% - 1%) = $10,000/month
       { question: "How much can a cannabis business save with stablecoin settlement?", answer: "A cannabis distributor doing $500,000/month in B2B sales can save approximately $37,500/month ($450,000/year) by switching from traditional processors (5.5% + cash handling) to Settlr's 1% flat stablecoin settlement." },
     ],
   },
+
+  // ─── STABLECOIN PAYMENT PLATFORM (April 2026) ─────────────
+  {
+    slug: "stablecoin-payment-platform",
+    title: "Transform B2B Finance with a Stablecoin Payment Platform",
+    excerpt:
+      "Your AR team is calling customers for updates. Your controller is checking whether yesterday's ACH will clear. A stablecoin payment platform changes the rail itself — moving dollar-denominated value directly on-chain with final settlement in seconds, not days.",
+    date: "2026-04-17",
+    author: "Adam Bryant",
+    readTime: "12 min read",
+    tags: ["stablecoin payments", "B2B finance", "cannabis payments", "USDC", "on-chain settlement", "payment rails"],
+    content: `
+      <img src="/article-img-payments.jpg" alt="Transform B2B finance with a stablecoin payment platform" style="width:100%;border-radius:12px;margin-bottom:32px;" />
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        <strong>Quick Answer:</strong> A stablecoin payment platform is a 24/7 B2B payment rail that uses blockchain settlement under the hood while the platform handles invoices, compliance, and reconciliation. In 2025, stablecoins processed $28 trillion in real economic volume — projected to reach $719 trillion by 2035.
+      </div>
+
+      <nav style="background:#FAFAF8;border:1px solid #e5e5e5;border-radius:12px;padding:24px 28px;margin-bottom:32px;">
+        <p style="font-weight:600;font-size:1.1rem;margin-bottom:12px;color:#212121;">Table of Contents</p>
+        <ol style="list-style:none;padding:0;margin:0;font-size:0.95rem;line-height:2;">
+          <li><a href="#the-end-of-waiting-for-money" style="color:#22863a;text-decoration:none;">The End of Waiting for Money</a></li>
+          <li><a href="#what-is-a-stablecoin-payment-platform" style="color:#22863a;text-decoration:none;">What Is a Stablecoin Payment Platform</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#three-layers-that-matter" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Three layers that matter</a></li>
+              <li><a href="#what-it-is-not" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">What it is not</a></li>
+            </ol>
+          </li>
+          <li><a href="#legacy-rails-vs-stablecoin-rails" style="color:#22863a;text-decoration:none;">Legacy Rails vs Stablecoin Rails: A Clear Comparison</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#where-finance-teams-feel-the-pain" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Where finance teams feel the pain</a></li>
+              <li><a href="#payment-rail-comparison" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Payment rail comparison</a></li>
+            </ol>
+          </li>
+          <li><a href="#how-on-chain-settlement-unlocks-instant-finality" style="color:#22863a;text-decoration:none;">How On-Chain Settlement Unlocks Instant Finality</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#what-actually-happens-when-you-send-payment" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">What actually happens when you send payment</a></li>
+              <li><a href="#custodial-and-non-custodial-trade-offs" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Custodial and non-custodial trade-offs</a></li>
+            </ol>
+          </li>
+          <li><a href="#key-benefits-for-the-b2b-cannabis-supply-chain" style="color:#22863a;text-decoration:none;">Key Benefits for the B2B Cannabis Supply Chain</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#cash-flow-gets-compressed" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Cash flow gets compressed</a></li>
+              <li><a href="#compliance-becomes-part-of-the-workflow" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Compliance becomes part of the workflow</a></li>
+            </ol>
+          </li>
+          <li><a href="#integrating-a-stablecoin-platform-into-your-workflow" style="color:#22863a;text-decoration:none;">Integrating a Stablecoin Platform Into Your Workflow</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#a-rollout-that-finance-can-control" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">A rollout that finance can control</a></li>
+              <li><a href="#how-to-think-about-roi" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">How to think about ROI</a></li>
+            </ol>
+          </li>
+          <li><a href="#frequently-asked-questions" style="color:#22863a;text-decoration:none;">Frequently Asked Questions About Stablecoin Payments</a></li>
+        </ol>
+      </nav>
+
+      <p>Your AR team is calling customers for updates. Your controller is checking whether yesterday's ACH will clear. A buyer says payment was sent, but your supplier hasn't seen funds. Meanwhile, the bank relationship you spent months stabilizing still feels fragile, and every large payment carries some mix of delay, manual follow-up, and reputational risk.</p>
+
+      <p>That's normal in cannabis B2B finance. It's also expensive.</p>
+
+      <p>The problem isn't that your team needs another dashboard. The problem is that most legacy payment rails were never built for a state-legal, bank-constrained supply chain where timing, proof of payment, and operational resilience matter as much as price. A stablecoin payment platform changes the rail itself. Instead of pushing money through intermediaries that batch, hold, and reconcile on their own timelines, it moves dollar-denominated value directly on-chain with final settlement.</p>
+
+      <p>This is no longer a fringe workaround. In <strong>2025, stablecoins processed $28 trillion in real economic volume</strong>, and that volume is <strong>projected to reach $719 trillion by 2035</strong> through organic growth alone, according to <a href="https://www.chainalysis.com/blog/stablecoin-utility-future-of-payments/" target="_blank" rel="noopener">Chainalysis</a>. For a cannabis CFO, that matters for one reason. The rail is maturing fast enough to be treated as infrastructure, not experimentation.</p>
+
+      <h2 id="the-end-of-waiting-for-money">The End of Waiting for Money</h2>
+
+      <p>A common cannabis finance scenario looks like this. Product has shipped. The invoice is approved. The buyer intends to pay. But funds still move through a chain of uncertainty.</p>
+
+      <p>ACH can sit in transit. Wires depend on cutoffs and bank review. Checks create collection risk and manual handling. Cash solves one problem while creating several others, especially once you factor in transport, controls, and reconciliation.</p>
+
+      <p>For a CFO, that delay doesn't live in an abstract payment ops bucket. It hits working capital. It delays vendor payments. It forces the team to spend time proving where money is instead of deciding where money should go.</p>
+
+      <p>A stablecoin payment platform fixes the part of the process that legacy finance keeps breaking. It gives both sides a direct settlement rail for digital dollars, with payment status visible on-chain instead of hidden behind bank queues and processor support tickets.</p>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        <strong>Practical rule:</strong> If your team still treats receivables timing as a collections problem, you may actually have a rail problem.
+      </div>
+
+      <p>In high-risk B2B sectors, that distinction matters. Cannabis operators don't just need a faster way to move money. They need a payment system that doesn't become brittle the moment a bank changes policy, a processor tightens underwriting, or a payment gets flagged for manual review.</p>
+
+      <p>Stablecoin settlement is a better fit because it is always on, doesn't depend on banking hours, and gives operations teams a common source of truth. That changes behavior quickly. Buyers can pay at the moment goods are accepted. Suppliers can release inventory against final funds, not promises. Finance can reconcile from the ledger instead of chasing email threads.</p>
+
+      <p>The fundamental shift is operational. When money stops waiting on intermediaries, the rest of the workflow starts moving on time.</p>
+
+      <h2 id="what-is-a-stablecoin-payment-platform">What Is a Stablecoin Payment Platform</h2>
+
+      <p>A <strong>stablecoin payment platform</strong> is the business layer that lets you send, receive, track, and reconcile payments made in a dollar-backed digital asset such as USDC. The simplest way to think about it is this. It's a <strong>24/7 payment rail for business-to-business money movement</strong> that uses blockchain settlement under the hood, while the platform handles invoices, counterparties, compliance checks, and payment operations.</p>
+
+      <img src="/247-payments.png" alt="Two smartphones displaying a mobile app interface for processing 24/7 business payments with a digital network background" style="width:100%;border-radius:12px;margin:24px 0;" />
+
+      <p>This category has matured fast. The <strong>total stablecoin market capitalization reached $308.55 billion in January 2026, more than doubling since January 2023</strong>, with adoption supported by developments including Visa's USDC settlements and the <strong>2025 GENIUS Act</strong>, described by eMarketer as the first U.S. federal framework for stablecoins in its <a href="https://www.emarketer.com/content/stablecoin-explainer-2026" target="_blank" rel="noopener">stablecoin explainer</a>.</p>
+
+      <h3 id="three-layers-that-matter">Three layers that matter</h3>
+
+      <p>A stablecoin payment platform has three practical components.</p>
+
+      <p><strong>The stablecoin.</strong> This is the asset being transferred. For business payments, the point isn't speculation. The point is using a digital token designed to track the U.S. dollar so finance teams can move value without introducing crypto price volatility into routine receivables or payables.</p>
+
+      <p><strong>The blockchain rail.</strong> This is the settlement network. Think of it as the infrastructure that records and validates the transfer. Some blockchains are too slow or too expensive for routine B2B payments. Others are optimized for payments and support low-cost, fast transfers.</p>
+
+      <p><strong>The platform layer.</strong> This is what your team uses. It creates invoices and payment links, maps incoming funds to customers, applies compliance workflows, and gives accounting and ops teams a usable record.</p>
+
+      <p>That third layer is what separates a real business payment system from "just sending crypto." A CFO doesn't want a wallet experiment. They want controlled workflows, auditability, and predictable operations.</p>
+
+      <div style="position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;border-radius:12px;overflow:hidden;">
+        <iframe src="https://www.youtube.com/embed/oy16iHKcys4" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+
+      <h3 id="what-it-is-not">What it is not</h3>
+
+      <p>It's not a treasury bet on volatile tokens.</p>
+      <p>It's not a replacement for accounting policy.</p>
+      <p>And it's not an excuse to ignore compliance. If anything, serious stablecoin payment platforms increase the importance of KYB, sanctions screening, and transaction monitoring because the rail moves fast and finality matters.</p>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        A good platform makes blockchain feel boring. Payment goes out, payment lands, both parties can verify it, and finance closes the loop without improvising.
+      </div>
+
+      <p>That's why the best implementations look less like crypto products and more like purpose-built B2B payment systems. The user experience should be familiar. The settlement mechanics should be different.</p>
+
+      <h2 id="legacy-rails-vs-stablecoin-rails">Legacy Rails vs Stablecoin Rails: A Clear Comparison</h2>
+
+      <p>A cannabis finance leader doesn't need a philosophy debate about payment innovation. They need to know which rail creates fewer delays, fewer disputes, and less manual work.</p>
+
+      <p>Legacy methods still dominate because they're familiar. Not because they're efficient.</p>
+
+      <img src="/legacy-stables.png" alt="A comparison chart showing the advantages of stablecoin platforms over traditional banking payment rails" style="width:100%;border-radius:12px;margin:24px 0;" />
+
+      <h3 id="where-finance-teams-feel-the-pain">Where finance teams feel the pain</h3>
+
+      <p>ACH and wires are acceptable when banking relationships are stable, cutoffs aren't an issue, and both counterparties are easy to underwrite. Cannabis rarely gets that clean version of reality.</p>
+
+      <p>Checks create lag and exception handling. Cash introduces physical risk and difficult controls. Even when the transaction "works," someone still has to confirm receipt, match the payment to the invoice, and explain timing to the other side.</p>
+
+      <p>Stablecoin rails change the sequence. Funds move directly. Status is visible. Settlement doesn't stop for weekends or banking windows. Finality is built into the rail instead of being inferred from a bank statement later.</p>
+
+      <p>For teams comparing options against embedded payment providers, this <a href="/vs/stripe-connect">Stripe Connect comparison</a> is useful because it frames the difference between generalized payment infrastructure and systems built for restricted or high-risk operating conditions.</p>
+
+      <h3 id="payment-rail-comparison">Payment rail comparison</h3>
+
+      <table>
+        <thead>
+          <tr><th>Metric</th><th>ACH / Wire Transfer</th><th>Cash / Checks</th><th>Stablecoin Platform</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Settlement speed</strong></td><td>Delayed, dependent on bank processing windows</td><td>Delayed, manual deposit and collection steps</td><td>Near real-time with on-chain confirmation</td></tr>
+          <tr><td><strong>Availability</strong></td><td>Limited by banking hours and cutoffs</td><td>Limited by physical handling and deposit timing</td><td>Operates continuously, 24/7</td></tr>
+          <tr><td><strong>Finality</strong></td><td>Can involve reversals, recalls, or uncertainty</td><td>Checks can bounce, cash requires physical verification</td><td>Final settlement on-chain once confirmed</td></tr>
+          <tr><td><strong>Operational overhead</strong></td><td>High coordination between AP, AR, bank ops</td><td>Highest burden — people must move and verify funds</td><td>Lower reconciliation burden — status is verifiable</td></tr>
+          <tr><td><strong>Auditability</strong></td><td>Fragmented across banks, processors, emails</td><td>Often the weakest paper trail</td><td>Native on-chain audit trail</td></tr>
+          <tr><td><strong>Bank-sensitive industries</strong></td><td>Unpredictable when banks tighten posture</td><td>Often used as a fallback, not scalable</td><td>Bank-independent payment continuity</td></tr>
+        </tbody>
+      </table>
+
+      <p>What doesn't work in practice is using stablecoins as a side channel while keeping the rest of the process manual. If AP sends from one wallet, AR watches another, and accounting reconciles from screenshots, the rail may be modern but the workflow is still broken.</p>
+
+      <p>What does work is platform-level orchestration. Invoice creation, payment routing, counterparty onboarding, compliance checks, and ledger sync need to sit in one operating flow. That's when stablecoin rails stop being a novelty and start functioning like finance infrastructure.</p>
+
+      <h2 id="how-on-chain-settlement-unlocks-instant-finality">How On-Chain Settlement Unlocks Instant Finality</h2>
+
+      <p>The term <strong>on-chain settlement</strong> gets thrown around loosely. For a finance team, it means something very specific. The payment is broadcast to a blockchain network, verified by the network, and recorded on a ledger that both parties can inspect. No intermediary has to update a separate internal ledger before the money is considered moved.</p>
+
+      <img src="/finality.png" alt="A 3D stylized globe with a network of connected nodes representing instant finality" style="width:100%;border-radius:12px;margin:24px 0;" />
+
+      <p>On high-performance blockchains like <strong>Solana</strong>, <strong>USDC payments settle in 1 to 2 seconds with irreversibility after 30 seconds, at fees under $0.01</strong>, according to McKinsey's analysis of tokenized cash and next-generation payments. That speed is one reason payment-focused platforms use it for B2B settlement instead of slower, more expensive alternatives.</p>
+
+      <h3 id="what-actually-happens-when-you-send-payment">What actually happens when you send payment</h3>
+
+      <p>The mechanics are simpler than is commonly expected.</p>
+
+      <p>A sender initiates a payment from the platform. The transaction includes the sending address, receiving address, and amount. The network validates that the funds exist and that the transaction follows consensus rules. Once confirmed, the transaction is written to the chain.</p>
+
+      <p>After that, both sides can verify the same event from the same ledger.</p>
+
+      <p>That removes several legacy failure points:</p>
+
+      <ul>
+        <li><strong>No banking window dependency</strong> because the network is always live.</li>
+        <li><strong>No correspondent chain</strong> because the transfer doesn't need multiple institutions to relay funds.</li>
+        <li><strong>No waiting for downstream posting</strong> because the ledger update is the settlement event.</li>
+      </ul>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        Finality matters more than speed. Fast but uncertain is still uncertain.
+      </div>
+
+      <p>For cannabis operators, that distinction is huge. If a distributor can release product against final settlement rather than a pending bank instruction, the payment rail starts shaping inventory behavior, delivery timing, and credit policy.</p>
+
+      <h3 id="custodial-and-non-custodial-trade-offs">Custodial and non-custodial trade-offs</h3>
+
+      <p>The next practical question is who controls the funds.</p>
+
+      <p>In a <strong>custodial</strong> model, a provider holds assets on behalf of users. That can simplify setup, but it also adds counterparty exposure and operational dependency.</p>
+
+      <p>In a <strong>non-custodial</strong> model, the platform orchestrates payment workflows without taking ownership of customer funds. That structure usually fits businesses that want stronger control over treasury movement and clearer separation between software operations and asset custody.</p>
+
+      <p>Each model has trade-offs:</p>
+
+      <ul>
+        <li><strong>Custodial systems</strong> can feel easier at first, especially for teams that want a single vendor to manage everything.</li>
+        <li><strong>Non-custodial systems</strong> demand more deliberate controls, but they reduce the risk that a third party becomes a choke point for your money.</li>
+        <li><strong>Hybrid workflows</strong> can work for some companies, but they need clear rules on who can approve, send, and verify transactions.</li>
+      </ul>
+
+      <p>What doesn't work is adopting a fast rail with weak key management and loose internal controls. The technology is strong. Sloppy process is still sloppy process.</p>
+
+      <h2 id="key-benefits-for-the-b2b-cannabis-supply-chain">Key Benefits for the B2B Cannabis Supply Chain</h2>
+
+      <p>Cannabis finance teams don't need abstract benefits. They need relief in the places where the supply chain breaks.</p>
+
+      <img src="/supply-chain.png" alt="Two warehouse workers in high-visibility jackets handling boxes in a secure supply chain setting" style="width:100%;border-radius:12px;margin:24px 0;" />
+
+      <h3 id="cash-flow-gets-compressed">Cash flow gets compressed</h3>
+
+      <p>The first benefit is obvious and immediate. Receivables stop sitting in limbo.</p>
+
+      <p>When payment settles on-chain, the seller doesn't have to wait through the familiar sequence of "sent," "processing," and "should land tomorrow." The money is either there or it isn't, and both parties can verify it. That changes credit conversations. It also changes how quickly a distributor can recycle capital into inventory, payroll, and upstream supplier payments.</p>
+
+      <p>In cannabis, that matters more than in ordinary verticals because financing options are narrower and operational surprises cost more.</p>
+
+      <p>A second benefit is <strong>payment finality</strong>. Chargebacks don't belong in wholesale commerce, but payment reversals, bounced checks, and disputed timing still consume hours. Stablecoin settlement reduces that noise because the rail itself gives a clearer answer about whether funds moved.</p>
+
+      <p>If your team wants a sector-specific example of how this is being packaged, <a href="/industries/cannabis">Settlr's cannabis payments overview</a> shows the model built around non-custodial USDC settlement, compliance screening, and invoice-based workflows for cannabis counterparties.</p>
+
+      <h3 id="compliance-becomes-part-of-the-workflow">Compliance becomes part of the workflow</h3>
+
+      <p>The strongest stablecoin implementations don't treat compliance as a separate review queue.</p>
+
+      <p>They embed controls into payment operations. That means counterparties are vetted before funds move, sanctions screening happens before transactions are sent, and the payment record itself remains available for audit and review.</p>
+
+      <p>That's a practical improvement over piecing together compliance evidence from email approvals, processor portals, and bank statements. Finance and ops teams can work from one flow instead of three partial systems.</p>
+
+      <p>A few gains show up quickly:</p>
+
+      <ul>
+        <li><strong>Cleaner receivables evidence</strong> because invoices and payment records tie together more directly.</li>
+        <li><strong>Less reliance on bank tolerance</strong> because continuity doesn't depend on one fragile account relationship.</li>
+        <li><strong>Better dispute handling</strong> because the payment trail is transparent from initiation through settlement.</li>
+      </ul>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        In high-risk industries, resilience is a finance function. If a payment rail can disappear overnight, it's not infrastructure.
+      </div>
+
+      <p>The final benefit is continuity. Many cannabis operators already know the feeling of being forced into suboptimal payment behavior because a bank or processor makes the primary route unreliable. Stablecoin rails give the business another option that doesn't depend on permission from the same legacy stack that keeps excluding the industry.</p>
+
+      <h2 id="integrating-a-stablecoin-platform-into-your-workflow">Integrating a Stablecoin Platform Into Your Workflow</h2>
+
+      <p>Adoption goes smoother when finance owns the rollout and operations helps shape exceptions, not the other way around. The companies that struggle usually start with wallets and only later ask how invoicing, approvals, and reconciliation should work.</p>
+
+      <p>The better path is process-first.</p>
+
+      <h3 id="a-rollout-that-finance-can-control">A rollout that finance can control</h3>
+
+      <p>Start with a narrow payment lane. Usually that means one supplier group, one receivables segment, or one entity that already experiences the most friction with banks.</p>
+
+      <p>Then define the operating flow:</p>
+
+      <ol>
+        <li><strong>Invoice creation</strong> — Generate invoices or payment links from a platform that can associate each payment with a counterparty and transaction record.</li>
+        <li><strong>Counterparty onboarding</strong> — Collect business details, verify who the recipient is, and complete the required compliance checks before money moves.</li>
+        <li><strong>Payment receipt or payout approval</strong> — Assign clear internal approval authority. Blockchain speed is helpful only if your internal process doesn't recreate the same delay.</li>
+        <li><strong>Ledger and reconciliation handling</strong> — Decide how on-chain payment confirmations map into ERP or accounting workflows. The ledger should support close, not complicate it.</li>
+        <li><strong>Exception management</strong> — Document what happens if a recipient wants fiat conversion, misses an email claim, or needs support during first use.</li>
+      </ol>
+
+      <p>One feature that meaningfully lowers friction is walletless claiming. According to <a href="https://alphapoint.com/blog/stablecoin-payment-integration-for-banks-apis-methods-and-the-2026-roadmap/" target="_blank" rel="noopener">AlphaPoint's stablecoin payment integration roadmap</a>, direct on-chain integration can support <strong>near-real-time settlement in 1 to 30 seconds</strong> and non-custodial <strong>email-claiming</strong>, where a recipient clicks a link to claim USDC using a temporary keypair, with the transaction verifiable on-chain and chargebacks cut by <strong>100%</strong>. That matters because many counterparties don't want to manage crypto infrastructure on day one. They just want to get paid.</p>
+
+      <p>For treasury teams evaluating control models, this piece on <a href="/blog/non-custodial-multisig-business-treasury">non-custodial multisig business treasury</a> is a useful reference point.</p>
+
+      <h3 id="how-to-think-about-roi">How to think about ROI</h3>
+
+      <p>Don't reduce the analysis to transaction fees alone.</p>
+
+      <p>A CFO should compare a stablecoin workflow against the full cost of the current system:</p>
+
+      <ul>
+        <li><strong>Delay cost</strong> tied to slower collections and constrained working capital</li>
+        <li><strong>Labor cost</strong> from payment follow-up, exception handling, and manual reconciliation</li>
+        <li><strong>Risk cost</strong> from failed deposits, account instability, or counterparties delaying release until funds are confirmed</li>
+        <li><strong>Access cost</strong> when restricted banking pushes the team into more expensive or fragile workarounds</li>
+      </ul>
+
+      <p>If a platform uses a flat fee model, weigh that against the all-in cost of today's process, not the nominal price of one legacy rail in isolation. In cannabis, the expensive part is rarely the line-item fee. It's the chaos wrapped around the payment.</p>
+
+      <p>If your team is still managing wholesale payments through a mix of ACH delays, check risk, and manual follow-up, it's worth looking at <a href="/">Settlr</a>. It's a non-custodial stablecoin settlement platform built for B2B cannabis supply chains, with invoice and payment-link workflows, embedded compliance screening, on-chain auditability, and USDC settlement on Solana.</p>
+
+      <p><a href="/onboarding">Get started →</a> or <a href="/pricing">see pricing</a></p>
+    `,
+    faqs: [
+      { question: "Is a stablecoin payment platform compliant?", answer: "It can be, if the operating model is built correctly. A stablecoin payment platform should support business verification, sanctions screening, and AML controls as part of onboarding and transaction flow. The rail doesn't remove compliance responsibility — it gives you a clearer and more traceable way to execute it." },
+      { question: "What if my partners are not crypto native?", answer: "Most suppliers and buyers don't need to understand blockchain. They need a straightforward way to receive or send a payment, verify that it happened, and convert funds when necessary. Good platforms reduce friction with invoice links, guided flows, and walletless options for first-time users." },
+      { question: "How do treasury and accounting teams handle stablecoin payments?", answer: "With policy first. Treasury defines who can initiate payments, who approves them, how keys are controlled, and when conversion to banked dollars is required. Accounting defines how stablecoin receipts and disbursements are recorded, reconciled, and documented. The rail helps because the underlying payment record is verifiable and timestamped." },
+      { question: "How do you convert USDC back into dollars?", answer: "That depends on the platform and your treasury setup. Some teams hold USDC for outbound supplier payments and reduce the number of conversions. Others convert incoming funds to dollars based on internal policy. The practical answer is to choose a workflow that matches your cash needs, vendor expectations, and bank strategy." },
+      { question: "Is this only useful for cross-border payments?", answer: "No. It's useful anywhere legacy rails create delay, uncertainty, or access risk. Cannabis finance teams often get value from stablecoin settlement even in domestic transactions because the core issue isn't geography — it's friction, finality, and continuity." },
+      { question: "What should a CFO ask before adopting a stablecoin payment platform?", answer: "Ask: Who controls the funds? How are KYB, OFAC, and AML handled? What does the recipient experience look like? How is reconciliation managed? What happens when a payment exception occurs? Can the system support your approval and treasury controls? If a vendor can't answer those clearly, the rail may be fast but the operation still won't be dependable." },
+    ],
+  },
 ];
