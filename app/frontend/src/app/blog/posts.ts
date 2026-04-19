@@ -789,4 +789,272 @@ $200,000/mo × (6% - 1%) = $10,000/month
       { question: "What should a CFO ask before adopting a stablecoin payment platform?", answer: "Ask: Who controls the funds? How are KYB, OFAC, and AML handled? What does the recipient experience look like? How is reconciliation managed? What happens when a payment exception occurs? Can the system support your approval and treasury controls? If a vendor can't answer those clearly, the rail may be fast but the operation still won't be dependable." },
     ],
   },
+
+  // ─── CANNABIS PAYMENT PROCESSING & SAFE BANKING (April 2026) ───
+  {
+    slug: "cannabis-payment-processing-safe-banking-act-2026",
+    title: "Cannabis Payment Processing & The SAFE Banking Act 2026",
+    excerpt:
+      "Invoices go out to dispensary buyers. Payment terms stretch. Someone asks whether a large ACH will get flagged. The core reality of cannabis payment processing in wholesale is a billion-dollar infrastructure problem — and SAFE Banking alone won't fix it.",
+    date: "2026-04-19",
+    author: "Adam Bryant",
+    readTime: "14 min read",
+    tags: ["cannabis payments", "SAFE Banking Act", "payment processing", "B2B settlement", "wholesale cannabis", "compliance"],
+    content: `
+      <img src="/processing.jpg" alt="Cannabis payment processing and the SAFE Banking Act 2026" style="width:100%;border-radius:12px;margin-bottom:32px;" />
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        <strong>Quick Answer:</strong> Cannabis payment processing in wholesale is broken by federal illegality, fragile bank relationships, and legacy rails never built for B2B supply chains. The SAFE Banking Act may improve bank access but won't fix settlement delays, reconciliation overhead, or invoice-level payment friction. Modern stablecoin settlement offers a bank-independent alternative with instant finality.
+      </div>
+
+      <nav style="background:#FAFAF8;border:1px solid #e5e5e5;border-radius:12px;padding:24px 28px;margin-bottom:32px;">
+        <p style="font-weight:600;font-size:1.1rem;margin-bottom:12px;color:#212121;">Table of Contents</p>
+        <ol style="list-style:none;padding:0;margin:0;font-size:0.95rem;line-height:2;">
+          <li><a href="#the-cannabis-industrys-billion-dollar-payment-problem" style="color:#22863a;text-decoration:none;">The Cannabis Industry's Billion-Dollar Payment Problem</a></li>
+          <li><a href="#why-traditional-payment-processing-is-off-limits" style="color:#22863a;text-decoration:none;">Why Traditional Payment Processing Is Off-Limits</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#why-processors-classify-cannabis-as-high-risk" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Why processors classify cannabis as high risk</a></li>
+              <li><a href="#what-that-means-in-practice" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">What that means in practice</a></li>
+            </ol>
+          </li>
+          <li><a href="#the-safe-banking-act" style="color:#22863a;text-decoration:none;">The SAFE Banking Act: A Beacon of Hope or False Dawn</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#what-the-act-is-meant-to-do" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">What the act is meant to do</a></li>
+              <li><a href="#what-it-would-not-do" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">What it would not do</a></li>
+              <li><a href="#why-the-optimism-keeps-colliding-with-reality" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Why the optimism keeps colliding with reality</a></li>
+              <li><a href="#how-to-plan-while-the-law-remains-unsettled" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">How to plan while the law remains unsettled</a></li>
+            </ol>
+          </li>
+          <li><a href="#how-payment-friction-cripples-the-b2b-supply-chain" style="color:#22863a;text-decoration:none;">How Payment Friction Cripples the B2B Supply Chain</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#wholesale-pain-looks-different-from-retail-pain" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Wholesale pain looks different from retail pain</a></li>
+              <li><a href="#what-breaks-inside-the-back-office" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">What breaks inside the back office</a></li>
+            </ol>
+          </li>
+          <li><a href="#comparing-compliant-cannabis-payment-rails-in-2026" style="color:#22863a;text-decoration:none;">Comparing Compliant Cannabis Payment Rails in 2026</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#what-each-rail-does-well-and-where-it-breaks-in-b2b" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">What each rail does well and where it breaks</a></li>
+              <li><a href="#b2b-cannabis-payment-method-comparison" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">B2B Cannabis Payment Method Comparison</a></li>
+            </ol>
+          </li>
+          <li><a href="#beyond-banking-rails" style="color:#22863a;text-decoration:none;">Beyond Banking Rails: A Path to Instant B2B Settlement</a>
+            <ol style="list-style:none;padding-left:1.25rem;margin:0;">
+              <li><a href="#why-bank-dependence-keeps-creating-the-same-bottlenecks" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">Why bank dependence keeps creating the same bottlenecks</a></li>
+              <li><a href="#what-a-modern-settlement-model-changes" style="color:#5c5c5c;text-decoration:none;font-size:0.9rem;">What a modern settlement model changes</a></li>
+            </ol>
+          </li>
+          <li><a href="#frequently-asked-questions" style="color:#22863a;text-decoration:none;">Frequently Asked Questions</a></li>
+        </ol>
+      </nav>
+
+      <p>You're probably dealing with some version of the same mess I see across cannabis finance teams. Invoices go out to dispensary buyers. Payment terms stretch. Someone asks whether a large ACH will get flagged. Someone else is still reconciling checks, cash drops, and partial wire receipts from last week. Meanwhile, your operators need inventory, your tax obligations don't wait, and your bank relationship never feels fully secure.</p>
+
+      <p>That's the core reality of <strong>cannabis payment processing</strong> in wholesale. The public conversation usually centers on the checkout counter. The harder problem sits behind it. Cultivators, manufacturers, distributors, and multi-site retailers have to move larger payments, document them cleanly, and survive the delays and interruptions that come with a federally restricted industry.</p>
+
+      <h2 id="the-cannabis-industrys-billion-dollar-payment-problem">The Cannabis Industry's Billion-Dollar Payment Problem</h2>
+
+      <p>A distributor closes a strong month on paper, then spends Friday afternoon deciding which payables can wait until Monday. That is a common finance problem in cannabis wholesale. Inventory moves, invoices go out, and revenue is booked, but cash does not arrive with the predictability most B2B operators need to run purchasing, payroll, and tax schedules with confidence.</p>
+
+      <p>The core issue is scale colliding with fragile payment infrastructure. Cannabis is a large commercial industry, yet many wholesalers, cultivators, and distributors still rely on payment workflows that feel patched together. Collections happen through bank transfers, manual reconciliation, payment links, workarounds tied to retail tools, and a lot of email chasing. For a back office managing six-figure invoice batches, that is not an inconvenience. It is a balance-sheet problem.</p>
+
+      <p>Retail gets the attention. Supply chain finance carries more risk.</p>
+
+      <p>A dispensary sale is usually small and immediate. A wholesale order is different. Ticket sizes are larger, terms are longer, supporting documents matter, and one delayed payment can stall the next inventory purchase. That pressure shows up in places executives feel quickly: borrowing needs, vendor strain, reserve planning, and slower inventory turns.</p>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        <strong>Practical rule:</strong> If your payment setup forces your AR team to behave like a collections department, you don't have a payment system. You have a cash flow liability.
+      </div>
+
+      <p>This is why the payment conversation needs to start upstream, not only at checkout. The unserved gap is not just how consumers pay at dispensaries. It is how businesses settle large invoices between cultivators, processors, distributors, and retail buyers without creating avoidable delay, exception handling, and compliance stress. Teams trying to fix that problem usually look for <a href="/industries/cannabis">B2B cannabis payment infrastructure built for supply chain settlement</a>, not another retail-facing workaround.</p>
+
+      <h2 id="why-traditional-payment-processing-is-off-limits">Why Traditional Payment Processing Is Off-Limits</h2>
+
+      <p>The root issue is federal law, not product design. Cannabis remains federally illegal, even in state-legal markets. That single fact shapes everything that follows in <strong>cannabis payment processing</strong>.</p>
+
+      <img src="/federal.png" alt="A bank vault door representing the barriers to cannabis payment processing" style="width:100%;border-radius:12px;margin:24px 0;" />
+
+      <h3 id="why-processors-classify-cannabis-as-high-risk">Why processors classify cannabis as high risk</h3>
+
+      <p>Cannabis merchants automatically fall into the <strong>high-risk</strong> category because federal illegality clashes with state legalization. That forces them toward specialized processors that charge materially more than standard low-risk merchant setups. As <a href="https://paymentnerds.com/blog/high-risk-payment-gateways-for-cannabis-ecommerce/" target="_blank" rel="noopener">Payment Nerds explains</a>, standard processors charge <strong>1.5–3%</strong> for low-risk verticals, while cannabis-specific providers charge substantially more because they carry compliance overhead, fraud exposure, and sponsor bank risk.</p>
+
+      <p>That "high-risk" label isn't just a pricing issue. It affects:</p>
+
+      <ul>
+        <li><strong>Bank access:</strong> A relationship can look stable until a sponsor bank changes posture.</li>
+        <li><strong>Underwriting depth:</strong> Operators face more KYB, OFAC, and transaction monitoring scrutiny.</li>
+        <li><strong>Processor durability:</strong> A vendor may lose upstream support even if the merchant did nothing wrong.</li>
+      </ul>
+
+      <h3 id="what-that-means-in-practice">What that means in practice</h3>
+
+      <p>For finance teams, the consequence is instability. The choice extends beyond vendor A and vendor B. You're choosing how much exposure you'll accept to interruptions you can't fully control.</p>
+
+      <p>A compliant processor in this market needs real monitoring, proper transaction coding, dedicated settlement structure, and backup relationships. Without that, a merchant can end up dealing with delayed settlements, sudden account review, or forced migration at the worst possible time. In wholesale, those failures hit harder because the payments are larger and the invoice chain is more complex.</p>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        The biggest mistake I see is treating processor approval as the finish line. In cannabis, approval is only the start of continuous compliance risk.
+      </div>
+
+      <p>There's also a structural limitation that many operators learn too late. Traditional card rails still aren't the answer. Even when a provider presents a card-like user experience, the underlying mechanics often depend on alternative rails and careful compliance handling rather than standard credit card acceptance.</p>
+
+      <h2 id="the-safe-banking-act">The SAFE Banking Act: A Beacon of Hope or False Dawn</h2>
+
+      <p>The SAFE Banking Act has become the shorthand answer to almost every cannabis finance problem. That's understandable, but it's also where many operators lose the plot. SAFE matters. It just doesn't solve as much as people assume.</p>
+
+      <img src="/safe.png" alt="Infographic explaining the SAFE Banking Act and its implications for cannabis payment processing" style="width:100%;border-radius:12px;margin:24px 0;" />
+
+      <h3 id="what-the-act-is-meant-to-do">What the act is meant to do</h3>
+
+      <p>At a high level, SAFE is designed to give financial institutions a safer path to serve state-legal cannabis businesses without fearing the same level of federal reprisal. That matters because the current system leaves many banks cautious, selective, or entirely absent from the sector.</p>
+
+      <p>If enacted in a workable form, SAFE could improve access to banking services, reduce some cash dependence, and make it easier for legitimate operators to maintain more durable financial relationships. That would be helpful. It would also be overdue.</p>
+
+      <h3 id="what-it-would-not-do">What it would not do</h3>
+
+      <p>A sober view is essential for finance teams. SAFE would not federally legalize cannabis. It would not force every bank to serve the industry. It would not automatically make Visa and Mastercard available for ordinary cannabis purchases. It would not erase state-by-state compliance burdens. It would not guarantee lower fees or eliminate underwriting friction for every operator.</p>
+
+      <p>Those distinctions matter because many wholesale teams delay infrastructure decisions while waiting for a legislative fix that may not solve their immediate settlement problem anyway.</p>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        <strong>Reality check:</strong> Even if banking access improves, B2B operators still need payment rails built for larger invoices, auditability, and predictable final settlement.
+      </div>
+
+      <h3 id="why-the-optimism-keeps-colliding-with-reality">Why the optimism keeps colliding with reality</h3>
+
+      <p>The bill has repeatedly attracted support and repeatedly stalled. The broad pattern is familiar: House movement, Senate friction, and ongoing uncertainty tied to federal cannabis policy.</p>
+
+      <p>That's why planning your treasury operations around eventual passage is risky. Legislative progress can improve the environment, but it's a poor substitute for operational resilience. Finance leaders should treat SAFE as a possible tailwind, not as this year's implementation roadmap.</p>
+
+      <p>There's a useful parallel in other restricted markets. The legal framework can soften while core payment bottlenecks remain until the settlement model itself changes. That's one reason more teams are paying attention to <a href="/blog/genius-act-2025-b2b-settlement-restricted-markets">B2B settlement design in restricted markets</a> rather than assuming a banking bill will clean up receivables, reconciliation, and final payment risk on its own.</p>
+
+      <h3 id="how-to-plan-while-the-law-remains-unsettled">How to plan while the law remains unsettled</h3>
+
+      <p>A practical finance posture looks like this:</p>
+
+      <ol>
+        <li><strong>Separate policy hope from cash planning.</strong> Build around current constraints, not expected relief.</li>
+        <li><strong>Assume bank appetite will stay uneven.</strong> Even with reform, some institutions still won't participate.</li>
+        <li><strong>Prioritize payment resilience.</strong> The best setup is the one that still works when an upstream provider changes its rules.</li>
+        <li><strong>Map exposure across counterparties.</strong> Your buyers' payment limitations become your collection delays.</li>
+      </ol>
+
+      <p>That approach isn't pessimistic. It's operationally mature.</p>
+
+      <h2 id="how-payment-friction-cripples-the-b2b-supply-chain">How Payment Friction Cripples the B2B Supply Chain</h2>
+
+      <p>Wholesale cannabis payments fail differently than retail payments. At the store level, the issue is often checkout acceptance. In the supply chain, the issue is whether one business can get paid by another on time, in full, and with documentation that survives audit and banking review.</p>
+
+      <img src="/friction.png" alt="Shipping boxes representing logistical challenges in cannabis B2B payment processing" style="width:100%;border-radius:12px;margin:24px 0;" />
+
+      <p>As <a href="https://payboticfinancial.com/cannabis-payment-guide/" target="_blank" rel="noopener">Paybotic's cannabis payment guide</a> notes, most public discussion centers on retail methods, while wholesalers still rely on checks, wires, and cash. That leaves cultivators and distributors dealing with <strong>30–60 day collection cycles</strong>, account freezes, and heavy operational drag.</p>
+
+      <h3 id="wholesale-pain-looks-different-from-retail-pain">Wholesale pain looks different from retail pain</h3>
+
+      <p>A dispensary buying from a distributor may have valid internal controls, but the payment path can still be clumsy. Someone initiates a wire manually. Someone mails a check. Someone splits a payment across methods because limits or bank rules get in the way. Every one of those workarounds creates reconciliation labor and timing risk.</p>
+
+      <p>The result is a chain reaction:</p>
+
+      <ul>
+        <li><strong>Suppliers wait longer to collect:</strong> Revenue sits in AR instead of funding operations.</li>
+        <li><strong>Buyers spend more time managing exceptions:</strong> AP teams chase confirmations and remittance details.</li>
+        <li><strong>Controllers lose visibility:</strong> It becomes harder to know which payments are pending, posted, or at risk.</li>
+      </ul>
+
+      <h3 id="what-breaks-inside-the-back-office">What breaks inside the back office</h3>
+
+      <p>The biggest damage rarely shows up as a single failure. It shows up as constant handling. Teams keep side spreadsheets because the system of record doesn't reflect payment status fast enough. Sales asks finance whether an account is clear to reorder. Finance asks operations whether product should ship before funds are final. No one loves the answer.</p>
+
+      <div style="position:relative;width:100%;padding-bottom:56.25%;margin:24px 0;border-radius:12px;overflow:hidden;">
+        <iframe src="https://www.youtube.com/embed/_rvSa1MnCCk" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        When wholesale settlement is slow, every department starts compensating for payments. That's when friction stops being a finance issue and becomes an operating model issue.
+      </div>
+
+      <p>That distinction matters. In B2B cannabis, payment design affects purchasing velocity, order approval, vendor trust, and inventory turnover. If the collection process is unreliable, growth gets throttled long before demand does.</p>
+
+      <h2 id="comparing-compliant-cannabis-payment-rails-in-2026">Comparing Compliant Cannabis Payment Rails in 2026</h2>
+
+      <p>A cultivator ships a wholesale order on Tuesday. The distributor wants terms, the seller wants certainty, and finance wants proof that funds will reliably settle without a compliance surprise two days later. This is the core rail-selection problem in cannabis.</p>
+
+      <p>One market signal is clear. <strong>ACH and real-time bank payment rails are projected to handle nearly 42% of cannabis transaction volume in 2026</strong>, up from roughly 28% previously, according to <a href="https://tsgpayments.com/cannabis-reclassification-implications-for-u-s-payments-and-merchant-acquiring/" target="_blank" rel="noopener">TSG Payments' analysis</a>. The shift matters, but volume share is not the same as operational fit. Wholesale cannabis has different requirements than dispensary checkout.</p>
+
+      <h3 id="what-each-rail-does-well-and-where-it-breaks-in-b2b">What each rail does well and where it breaks in B2B</h3>
+
+      <p><strong>Cash</strong> gives immediate possession and finality at the moment of exchange. It also creates custody risk, armored transport cost, and weak remittance detail. For wholesalers and distributors running frequent repeat orders, cash does not scale cleanly across locations or counterparties.</p>
+
+      <p><strong>Checks</strong> still show up because some suppliers and buyers know how to work around them. The trade-off is obvious. Mail float, deposit delays, return risk, and manual matching make checks expensive in labor even when the bank fee looks low.</p>
+
+      <p><strong>Wires</strong> are usable for high-value transfers where both sides accept the bank process and cutoff times. They are less attractive for routine wholesale volume. Treasury teams end up approving each payment manually, buyers pay more per transfer, and remittance often arrives outside the ERP workflow.</p>
+
+      <p><strong>ACH</strong> remains the default compliant bank rail for many cannabis businesses because it avoids prohibited card network use. For AP and AR teams, though, ACH solves legality more than operations. Traditional ACH typically settles in <strong>1–3 business days</strong>, requires account linking, and can still expose the merchant to reversals or disruption if activity is flagged. Teams dealing with high fees can also review <a href="/blog/cannabis-b2b-8-percent-fees-stablecoin-fix">why many cannabis B2B payments still carry inflated costs</a>.</p>
+
+      <p><strong>Real-time bank payment tools</strong> improve speed where supported by the provider, sponsor bank, and receiving institution. They still sit inside the same bank-controlled compliance structure. That means faster messaging does not always equal guaranteed access, universal availability, or reduced account risk.</p>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        In cannabis wholesale, a compliant rail only earns its keep if it also reduces reconciliation effort, failed payment follow-up, and shipment-timing uncertainty.
+      </div>
+
+      <h3 id="b2b-cannabis-payment-method-comparison">B2B Cannabis Payment Method Comparison</h3>
+
+      <table>
+        <thead>
+          <tr><th>Payment Method</th><th>Settlement Speed</th><th>Typical Cost</th><th>Freeze/Reversal Risk</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Cash</strong></td><td>Immediate physical exchange</td><td>Operationally high, varies</td><td>Low reversal, high handling risk</td></tr>
+          <tr><td><strong>Check</strong></td><td>Slow, manual clearing</td><td>Bank and admin costs vary</td><td>Moderate, subject to return/delay</td></tr>
+          <tr><td><strong>Wire</strong></td><td>Faster than check, manual</td><td>Higher bank-dependent cost</td><td>Moderate, bank dependent</td></tr>
+          <tr><td><strong>ACH</strong></td><td>1–3 business days</td><td>Bank-dependent</td><td>Meaningful if flagged/reversed</td></tr>
+          <tr><td><strong>Real-time bank tools</strong></td><td>Faster where available</td><td>Provider-dependent</td><td>Lower delay, still bank-tied</td></tr>
+        </tbody>
+      </table>
+
+      <p>The practical takeaway is straightforward. Compliance is only one filter. Finance teams also need to judge finality, remittance quality, exception handling, and how much staff time each rail consumes after the payment is sent.</p>
+
+      <h2 id="beyond-banking-rails">Beyond Banking Rails: A Path to Instant B2B Settlement</h2>
+
+      <p>A distributor ships a six-figure order on Monday, the buyer says payment has been sent, and the seller still cannot release the next batch with confidence because the money is stuck in transit, under review, or waiting on bank timing. That scenario is common in cannabis wholesale. It creates working capital pressure all through the supply chain.</p>
+
+      <img src="/settlement.png" alt="Abstract render of a winding path representing fluid financial movement and instant settlement" style="width:100%;border-radius:12px;margin:24px 0;" />
+
+      <h3 id="why-bank-dependence-keeps-creating-the-same-bottlenecks">Why bank dependence keeps creating the same bottlenecks</h3>
+
+      <p>The core problem in B2B cannabis is settlement certainty. Sending a payment instruction is easy enough. Knowing when funds are final, usable, and unlikely to be pulled into a review cycle is harder.</p>
+
+      <p>Bank-based rails still carry the same structural constraints. Sponsor bank policy can change. A receiving bank can flag activity. Cutoff times, returns, and manual reviews still affect treasury operations even when the payment experience looks modern on the front end. For wholesalers and cultivators, that delay shows up as slower inventory turns, more collection work, and tighter cash planning.</p>
+
+      <p>Stablecoin-based settlement is getting attention for a practical reason. It gives counterparties a way to move value directly with an auditable record and much faster finality than traditional wholesale payment flows usually provide.</p>
+
+      <h3 id="what-a-modern-settlement-model-changes">What a modern settlement model changes</h3>
+
+      <p>For finance teams, the benefit is operational, not ideological. Faster final settlement changes how payables, receivables, and shipment release decisions get managed day to day.</p>
+
+      <p>Four changes matter most:</p>
+
+      <ul>
+        <li><strong>Settlement finality:</strong> Treasury teams can confirm receipt faster and make funding decisions with less guesswork.</li>
+        <li><strong>Cost visibility:</strong> Flat or clearly defined pricing is easier to budget than stacked bank fees, processor fees, and exception handling labor.</li>
+        <li><strong>Audit trail:</strong> Recorded transaction history supports internal controls, invoice matching, and external review.</li>
+        <li><strong>Counterparty adoption:</strong> Claim-by-email or similar workflows reduce friction for buyers and suppliers that do not want wallet-heavy processes.</li>
+      </ul>
+
+      <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
+        The better rail for cannabis wholesale is the one that shortens settlement time without creating more reconciliation work for the back office.
+      </div>
+
+      <p>The best rollout usually starts with one payment lane, not a full treasury rebuild. High-value wholesale invoices are a common starting point because the pain is obvious and the savings are easier to measure. For a closer look at the cost side, see this analysis of <a href="/blog/cannabis-b2b-8-percent-fees-stablecoin-fix">cannabis B2B fees and stablecoin settlement</a>.</p>
+
+      <p>If your team is still managing cannabis B2B payments through checks, wires, delayed ACH, or manual cash reconciliation, <a href="/">Settlr</a> is worth a serious look. It's built specifically for state-legal cannabis supply chains and enables non-custodial USDC settlement in under five seconds with a transparent 1% flat fee, embedded KYB and AML controls, and auditable on-chain records.</p>
+
+      <p><a href="/onboarding">Get started &#8594;</a> or <a href="/pricing">see pricing</a></p>
+    `,
+    faqs: [
+      { question: "Does SAFE Banking fix wholesale payment problems?", answer: "Not by itself. It may improve the banking environment if it advances, but it won't automatically solve invoice delays, reconciliation overhead, or the need for fast final settlement between businesses. Wholesale operators still need rails that match B2B payment behavior." },
+      { question: "What's the difference between payment processing and settlement?", answer: "Processing is the acceptance and routing layer — how a payment gets initiated, verified, and passed through a system. Settlement is when funds are delivered and final. That distinction matters in cannabis because a transaction can look accepted while the business still carries delay, review risk, or reversal exposure before funds are usable." },
+      { question: "Can stablecoin-based B2B payments be operationally usable?", answer: "Yes, if the platform is designed for ordinary finance teams rather than crypto specialists. The right setup should support business onboarding, compliance checks, invoicing, payment links, and a simple receiving experience for counterparties. A tool that lets recipients claim funds through familiar workflows has a much better chance of adoption." },
+      { question: "What should finance teams evaluate before switching rails?", answer: "Start with operational fit: settlement certainty (does the method provide finality quickly?), compliance design (are KYB, OFAC, and transaction monitoring built in?), counterparty usability (can buyers and suppliers complete payments without extra friction?), audit trail quality, and business continuity (if one provider fails, how exposed is your order-to-cash process?)." },
+    ],
+  },
 ];
