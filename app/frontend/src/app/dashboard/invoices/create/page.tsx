@@ -44,12 +44,7 @@ const TERMS_OPTIONS = [
   "Custom",
 ];
 
-const ASSET_OPTIONS = [
-  "USDC (Solana)",
-  "SOL (Native)",
-  "PYUSD (Solana)",
-  "USDT (Solana)",
-];
+const ASSET_OPTIONS = ["USDC (Solana)"];
 
 function getDueDateFromTerms(terms: string): Date {
   const now = new Date();
@@ -680,9 +675,9 @@ export default function CreateInvoicePage() {
               Wholesale Tip
             </span>
             <p className="text-sm text-[#8a8a8a] mt-1 leading-relaxed">
-              Retailers on the Polygon network typically settle invoices 40%
-              faster due to lower gas overhead. Consider offering a 1% discount
-              for MATIC-based settlements.
+              Keep invoice settlement standardized on Solana USDC to simplify
+              treasury reconciliation, reduce support overhead, and keep every
+              payment flow consistent for buyers.
             </p>
           </div>
         </div>

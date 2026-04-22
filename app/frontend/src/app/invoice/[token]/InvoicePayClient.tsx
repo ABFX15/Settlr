@@ -92,8 +92,6 @@ const fadeIn = {
 
 const PAYMENT_METHODS = [
   { symbol: "USDC", label: "US Dollar (USDC)", icon: "$", selected: true },
-  { symbol: "SOL", label: "SOL Balance", icon: "S", selected: false },
-  { symbol: "PYUSD", label: "PayPal USD", icon: "P", selected: false },
 ];
 
 export default function InvoicePayClient({
@@ -677,15 +675,9 @@ export default function InvoicePayClient({
                                 <div className="text-right">
                                   <div className="text-sm font-mono text-[#212121]">
                                     $
-                                    {i === 0
-                                      ? invoice.total.toLocaleString("en-US", {
-                                          minimumFractionDigits: 2,
-                                        })
-                                      : i === 1
-                                      ? `~${(invoice.total / 170).toFixed(2)}`
-                                      : invoice.total.toLocaleString("en-US", {
-                                          minimumFractionDigits: 2,
-                                        })}
+                                    {invoice.total.toLocaleString("en-US", {
+                                      minimumFractionDigits: 2,
+                                    })}
                                   </div>
                                 </div>
                                 {selectedAsset === i && (
