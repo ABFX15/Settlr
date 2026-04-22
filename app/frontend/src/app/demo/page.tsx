@@ -30,13 +30,8 @@ import {
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
-import {
-  Connection,
-  PublicKey,
-  Transaction,
-  TransactionInstruction,
-} from "@solana/web3.js";
-import { SOLANA_RPC_URL, solscanUrl } from "@/lib/constants";
+import { solscanUrl } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 
 /* --- spring config --- */
 const spring = { type: "spring" as const, stiffness: 80, damping: 18 };
@@ -1274,23 +1269,15 @@ function StepBlinks({ form }: { form: DemoForm }) {
 /* =================================================================
    MAIN PAGE
    ================================================================= */
-/* Solana Memo Program */
-const MEMO_PROGRAM_ID = new PublicKey(
-  "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
-);
-
 export default function DemoPage() {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [settlementDone, setSettlementDone] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [realSignature, setRealSignature] = useState<string | null>(null);
+  const [realSignature] = useState<string | null>(null);
 
   /* ── Wallet hooks ── */
-  const {
-    connected: authenticated,
-    publicKey: walletPubkey,
-    signTransaction,
-  } = useWallet();
+  const { connected: authenticated, publicKey: walletPubkey } = useWallet();
   const { setVisible } = useWalletModal();
 
   const activeWallet = useMemo(() => {
@@ -1314,78 +1301,32 @@ export default function DemoPage() {
     return true;
   }, [step, settlementDone]);
 
-  /* ── Sign (real) or simulate ── */
+  /* ── Route settlement into real checkout (fee-bearing transfer path) ── */
   const handleNext = useCallback(async () => {
     if (step >= 5) return;
 
     if (step === 2) {
       setIsProcessing(true);
+      const merchantWallet = "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV";
+      const settlementAmount = Number(form.amount || "0");
+      const safeAmount =
+        Number.isFinite(settlementAmount) && settlementAmount > 0
+          ? settlementAmount
+          : 45000;
+      const memo = `Settlement: ${form.businessName || "Demo Business"}`;
 
-      // If the user has a Privy wallet, build & sign a real Memo tx on devnet
-      if (authenticated && activeWallet) {
-        try {
-          const connection = new Connection(SOLANA_RPC_URL, "confirmed");
-          const { blockhash } = await connection.getLatestBlockhash();
-          const userPubkey = new PublicKey(activeWallet.address);
-
-          const memo = `settlr:demo:${form.businessName || "Demo"}:$${
-            form.amount || "45000"
-          }`;
-          const tx = new Transaction();
-          tx.add(
-            new TransactionInstruction({
-              keys: [{ pubkey: userPubkey, isSigner: true, isWritable: false }],
-              programId: MEMO_PROGRAM_ID,
-              data: Buffer.from(memo),
-            }),
-          );
-          tx.recentBlockhash = blockhash;
-          tx.feePayer = userPubkey;
-
-          const txBytes = new Uint8Array(
-            tx.serialize({
-              requireAllSignatures: false,
-              verifySignatures: false,
-            }),
-          );
-
-          if (!signTransaction) throw new Error("Wallet cannot sign");
-          const signedTx = await signTransaction(tx);
-
-          if (signedTx.signature) {
-            const bs58 = await import("bs58");
-            setRealSignature(bs58.default.encode(signedTx.signature));
-          }
-
-          setIsProcessing(false);
-          setStep((s) => s + 1);
-          return;
-        } catch (err) {
-          console.warn(
-            "[Demo] Wallet signing cancelled or failed, falling back to simulation:",
-            err,
-          );
-          // Fall through to simulation
-        }
-      }
-
-      // Simulation fallback (anonymous or signing failed)
-      setTimeout(() => {
-        setIsProcessing(false);
-        setStep((s) => s + 1);
-      }, 800);
+      router.push(
+        `/checkout?amount=${safeAmount.toFixed(
+          2,
+        )}&merchant=Settlr&to=${merchantWallet}&memo=${encodeURIComponent(
+          memo,
+        )}`,
+      );
       return;
     }
 
     setStep((s) => s + 1);
-  }, [
-    step,
-    authenticated,
-    activeWallet,
-    signTransaction,
-    form.businessName,
-    form.amount,
-  ]);
+  }, [step, form.businessName, form.amount, router]);
 
   const handleBack = useCallback(() => {
     if (step <= 1) return;
@@ -1471,12 +1412,13 @@ export default function DemoPage() {
                         <Wallet className="h-5 w-5 shrink-0 text-[#2ba048]" />
                         <div>
                           <p className="text-sm font-semibold text-[#212121]">
-                            Live Signing Enabled
+                            Ready For Real Checkout
                           </p>
                           <p className="text-xs text-[#8a8a8a]">
-                            Your wallet ({activeWallet.address.slice(0, 4)}...
-                            {activeWallet.address.slice(-4)}) will sign a real
-                            Solana devnet transaction
+                            Continue to run a real USDC transfer with automatic
+                            platform fee split (
+                            {activeWallet.address.slice(0, 4)}...
+                            {activeWallet.address.slice(-4)})
                           </p>
                         </div>
                       </div>
@@ -1486,10 +1428,11 @@ export default function DemoPage() {
                           <Fingerprint className="h-5 w-5 shrink-0 text-[#8a8a8a]" />
                           <div>
                             <p className="text-sm font-semibold text-[#212121]">
-                              Simulation Mode
+                              Wallet Required
                             </p>
                             <p className="text-xs text-[#8a8a8a]">
-                              Connect a wallet to sign with a real transaction
+                              Connect a wallet to continue to real checkout.
+                              This path no longer simulates settlement.
                             </p>
                           </div>
                         </div>
@@ -1557,11 +1500,11 @@ export default function DemoPage() {
                 {isProcessing ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Signing...
+                    Opening Checkout...
                   </>
                 ) : step === 2 ? (
                   <>
-                    Sign &amp; Settle
+                    Continue To Real Checkout
                     <Zap className="h-4 w-4" />
                   </>
                 ) : step === 3 && !settlementDone ? (
