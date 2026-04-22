@@ -197,6 +197,17 @@ export default function InvoicePayClient({
       const amountLamports = BigInt(
         Math.round(invoice.total * Math.pow(10, USDC_DECIMALS)),
       );
+      const PLATFORM_FEE_BPS = BigInt(100); // 1%
+      const PROGRAM_ID = new PublicKey(
+        "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5",
+      );
+      const [treasuryPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_treasury")],
+        PROGRAM_ID,
+      );
+      const platformFee = (amountLamports * PLATFORM_FEE_BPS) / BigInt(10000);
+      const merchantAmount = amountLamports - platformFee;
+
       const transaction = new Transaction();
 
       try {
@@ -217,9 +228,20 @@ export default function InvoicePayClient({
           userAta,
           merchantAta,
           userPubkey,
-          amountLamports,
+          merchantAmount,
         ),
       );
+
+      if (platformFee > BigInt(0)) {
+        transaction.add(
+          createTransferInstruction(
+            userAta,
+            treasuryPDA,
+            userPubkey,
+            platformFee,
+          ),
+        );
+      }
 
       const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash();
