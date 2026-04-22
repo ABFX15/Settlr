@@ -11,7 +11,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { explorerUrl } from "@/lib/constants";
+import { explorerUrl, SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 import { emitEvent } from "@/lib/pipeline";
 import {
     getInvoiceByViewToken,
@@ -20,6 +20,25 @@ import {
     getOrCreateMerchantByWallet,
     createPayment,
 } from "@/lib/db";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { getAssociatedTokenAddress } from "@solana/spl-token";
+
+const PROGRAM_ID = new PublicKey("339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5");
+
+function extractRawAmountFromParsedInstruction(ix: any): bigint {
+    const info = ix?.parsed?.info;
+    if (!info) return BigInt(0);
+
+    if (typeof info.amount === "string") {
+        return BigInt(info.amount);
+    }
+
+    if (info.tokenAmount?.amount && typeof info.tokenAmount.amount === "string") {
+        return BigInt(info.tokenAmount.amount);
+    }
+
+    return BigInt(0);
+}
 
 export async function POST(
     request: NextRequest,
@@ -56,6 +75,64 @@ export async function POST(
         if (!paymentSignature || typeof paymentSignature !== "string") {
             return NextResponse.json(
                 { error: "paymentSignature is required" },
+                { status: 400 }
+            );
+        }
+
+        // Verify on-chain transaction includes both merchant transfer and platform fee transfer.
+        const connection = new Connection(SOLANA_RPC_URL, "confirmed");
+        const parsedTx = await connection.getParsedTransaction(paymentSignature, {
+            commitment: "confirmed",
+            maxSupportedTransactionVersion: 0,
+        });
+
+        if (!parsedTx || parsedTx.meta?.err) {
+            return NextResponse.json(
+                { error: "Invalid or failed on-chain transaction" },
+                { status: 400 }
+            );
+        }
+
+        const usdcMint = new PublicKey(USDC_MINT_ADDRESS);
+        const merchantWalletPk = new PublicKey(invoice.merchantWallet);
+        const merchantAta = await getAssociatedTokenAddress(usdcMint, merchantWalletPk, true);
+        const [treasuryPDA] = PublicKey.findProgramAddressSync(
+            [Buffer.from("platform_treasury")],
+            PROGRAM_ID,
+        );
+
+        const totalLamports = BigInt(Math.round(invoice.total * 1_000_000));
+        const platformFee = (totalLamports * BigInt(100)) / BigInt(10000);
+        const merchantAmount = totalLamports - platformFee;
+
+        const topLevelTransferIxs = parsedTx.transaction.message.instructions.filter((ix: any) => {
+            return (
+                ix?.program === "spl-token" &&
+                ix?.parsed?.type &&
+                (ix.parsed.type === "transfer" || ix.parsed.type === "transferChecked")
+            );
+        });
+
+        const merchantTransfer = topLevelTransferIxs.find((ix: any) => {
+            const destination = ix?.parsed?.info?.destination;
+            if (destination !== merchantAta.toBase58()) return false;
+            const amount = extractRawAmountFromParsedInstruction(ix);
+            return amount >= merchantAmount;
+        });
+
+        const treasuryTransfer = topLevelTransferIxs.find((ix: any) => {
+            const destination = ix?.parsed?.info?.destination;
+            if (destination !== treasuryPDA.toBase58()) return false;
+            const amount = extractRawAmountFromParsedInstruction(ix);
+            return amount >= platformFee;
+        });
+
+        if (!merchantTransfer || !treasuryTransfer) {
+            return NextResponse.json(
+                {
+                    error:
+                        "Payment transaction does not include required merchant + platform fee transfers",
+                },
                 { status: 400 }
             );
         }

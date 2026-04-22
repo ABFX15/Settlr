@@ -297,7 +297,7 @@ export default function InvoicePayClient({
 
       setTxSignature(sig);
 
-      await fetch(`/api/invoices/view/${token}/pay`, {
+      const recordResponse = await fetch(`/api/invoices/view/${token}/pay`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -305,6 +305,14 @@ export default function InvoicePayClient({
           payerWallet: payerAddress,
         }),
       });
+
+      if (!recordResponse.ok) {
+        const body = await recordResponse.json().catch(() => ({}));
+        throw new Error(
+          body.error ||
+            "Payment signature verification failed. Fee split may be missing.",
+        );
+      }
 
       setState("success");
 
