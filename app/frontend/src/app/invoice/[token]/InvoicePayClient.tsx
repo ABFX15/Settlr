@@ -207,6 +207,14 @@ export default function InvoicePayClient({
       );
       const platformFee = (amountLamports * PLATFORM_FEE_BPS) / BigInt(10000);
       const merchantAmount = amountLamports - platformFee;
+      const treasuryBalanceBefore = platformFee
+        ? BigInt(
+            (await connection
+              .getTokenAccountBalance(treasuryPDA)
+              .then((b) => b.value.amount)
+              .catch(() => "0")) || "0",
+          )
+        : BigInt(0);
 
       const transaction = new Transaction();
 
@@ -263,6 +271,29 @@ export default function InvoicePayClient({
         { signature: sig, blockhash, lastValidBlockHeight },
         "confirmed",
       );
+
+      const status = await connection.getSignatureStatuses([sig], {
+        searchTransactionHistory: true,
+      });
+      const txStatus = status.value[0];
+      if (!txStatus || txStatus.err) {
+        throw new Error("Invoice payment failed on-chain confirmation");
+      }
+
+      if (platformFee > BigInt(0)) {
+        const treasuryBalanceAfter = BigInt(
+          (await connection
+            .getTokenAccountBalance(treasuryPDA)
+            .then((b) => b.value.amount)
+            .catch(() => "0")) || "0",
+        );
+        const feeCredited = treasuryBalanceAfter - treasuryBalanceBefore;
+        if (feeCredited < platformFee) {
+          throw new Error(
+            `Platform fee not credited: expected >= ${platformFee}, got ${feeCredited}`,
+          );
+        }
+      }
 
       setTxSignature(sig);
 
