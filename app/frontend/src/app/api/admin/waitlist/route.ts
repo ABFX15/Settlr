@@ -41,26 +41,46 @@ export async function PATCH(request: NextRequest) {
 
     try {
         const body = await request.json();
-        const { email, status } = body;
+        const { email, status, walletAddress } = body;
 
         if (!email || !status) {
             return NextResponse.json({ error: "email and status are required" }, { status: 400 });
+        }
+
+        const normalizedEmail = String(email).toLowerCase().trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(normalizedEmail)) {
+            return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
+        }
+
+        if (walletAddress) {
+            const wallet = String(walletAddress).trim();
+            const solanaAddressRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+            if (!solanaAddressRegex.test(wallet)) {
+                return NextResponse.json({ error: "Invalid wallet address" }, { status: 400 });
+            }
         }
 
         if (!["pending", "invited", "active"].includes(status)) {
             return NextResponse.json({ error: "status must be pending, invited, or active" }, { status: 400 });
         }
 
-        const updated = await updateWaitlistStatus(email, status);
+        const updated = await updateWaitlistStatus(normalizedEmail, status);
         if (!updated) {
             return NextResponse.json({ error: "Entry not found" }, { status: 404 });
+        }
+
+        // Optionally bind wallet at approval time for stronger access control.
+        if (walletAddress) {
+            const { linkWalletToWaitlist } = await import("@/lib/db");
+            await linkWalletToWaitlist(normalizedEmail, String(walletAddress).trim());
         }
 
         // Send invite email when approving
         if (status === "invited" || status === "active") {
             // Generate a unique invite token for the magic link
             const inviteToken = crypto.randomBytes(32).toString("hex");
-            await updateWaitlistStatus(email, status, inviteToken);
+            await updateWaitlistStatus(normalizedEmail, status, inviteToken);
 
             const loginUrl = `${APP_URL}/onboarding?token=${inviteToken}`;
             const emailSent = await sendEmail({
@@ -91,12 +111,12 @@ export async function PATCH(request: NextRequest) {
                 text: `You're approved for Settlr! Sign in at ${loginUrl} — this link is unique to you.`,
             });
             if (!emailSent) {
-                console.error(`[admin] Email failed for ${email}. RESEND_API_KEY set: ${!!process.env.RESEND_API_KEY}`);
+                console.error(`[admin] Email failed for ${normalizedEmail}. RESEND_API_KEY set: ${!!process.env.RESEND_API_KEY}`);
             }
-            return NextResponse.json({ success: true, email, status, emailSent });
+            return NextResponse.json({ success: true, email: normalizedEmail, status, emailSent, walletAddress: walletAddress || null });
         }
 
-        return NextResponse.json({ success: true, email, status });
+        return NextResponse.json({ success: true, email: normalizedEmail, status, walletAddress: walletAddress || null });
     } catch (error) {
         console.error("Admin waitlist update error:", error);
         return NextResponse.json({ error: "Failed to update entry" }, { status: 500 });

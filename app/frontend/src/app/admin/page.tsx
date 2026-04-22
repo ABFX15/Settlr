@@ -47,6 +47,24 @@ interface TreasuryData {
   cluster: string;
 }
 
+interface PipelineHealthData {
+  status: "healthy" | "degraded" | "down";
+  pendingEvents: number;
+  oldestPendingAge: number | null;
+  eventsProcessedLast24h: number;
+  storage: "supabase" | "memory";
+}
+
+interface PlatformStatsData {
+  totals?: {
+    paymentsVolume?: number;
+    feesCollected?: number;
+    invoicesCreated?: number;
+    invoicesPaid?: number;
+    newMerchants?: number;
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -97,6 +115,17 @@ export default function AdminDashboardPage() {
   const [waitlistEntries, setWaitlistEntries] = useState<any[]>([]);
   const [waitlistLoading, setWaitlistLoading] = useState(false);
   const [approvingEmail, setApprovingEmail] = useState<string | null>(null);
+  const [grantEmail, setGrantEmail] = useState("");
+  const [grantWallet, setGrantWallet] = useState("");
+  const [grantStatus, setGrantStatus] = useState<"invited" | "active">(
+    "invited",
+  );
+  const [granting, setGranting] = useState(false);
+  const [waitlistSearch, setWaitlistSearch] = useState("");
+
+  const [opsHealth, setOpsHealth] = useState<PipelineHealthData | null>(null);
+  const [opsStats, setOpsStats] = useState<PlatformStatsData | null>(null);
+  const [opsLoading, setOpsLoading] = useState(false);
 
   // ── Admin secret auth ────────────────────────────────────────────────
   const handleAdminLogin = async () => {
@@ -226,6 +255,34 @@ export default function AdminDashboardPage() {
     fetchTreasuryData();
   }, [fetchTreasuryData]);
 
+  const fetchOperationalData = useCallback(async () => {
+    setOpsLoading(true);
+    try {
+      const [healthRes, statsRes] = await Promise.all([
+        fetch("/api/pipeline/health"),
+        fetch("/api/pipeline/stats?scope=platform&days=7"),
+      ]);
+
+      if (healthRes.ok) {
+        const health = await healthRes.json();
+        setOpsHealth(health);
+      }
+
+      if (statsRes.ok) {
+        const stats = await statsRes.json();
+        setOpsStats(stats);
+      }
+    } catch {
+      // Non-blocking: admin page should still render treasury + waitlist.
+    } finally {
+      setOpsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOperationalData();
+  }, [fetchOperationalData]);
+
   // ── Waitlist management ──────────────────────────────────────────────
   const fetchWaitlist = useCallback(async () => {
     if (!adminSecret) return;
@@ -281,6 +338,47 @@ export default function AdminDashboardPage() {
       setError(err.message || "Failed to approve entry");
     } finally {
       setApprovingEmail(null);
+    }
+  };
+
+  const handleGrantAccess = async () => {
+    const email = grantEmail.trim().toLowerCase();
+    const walletAddress = grantWallet.trim();
+
+    if (!email) {
+      setError("Email is required to grant access");
+      return;
+    }
+
+    setGranting(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/waitlist", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${adminSecret}`,
+        },
+        body: JSON.stringify({
+          email,
+          status: grantStatus,
+          walletAddress: walletAddress || undefined,
+        }),
+      });
+
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(result.error || "Failed to grant access");
+      }
+
+      setSuccess(`Granted ${grantStatus} access for ${email}`);
+      setGrantEmail("");
+      setGrantWallet("");
+      fetchWaitlist();
+    } catch (err: any) {
+      setError(err.message || "Failed to grant access");
+    } finally {
+      setGranting(false);
     }
   };
 
@@ -384,7 +482,9 @@ export default function AdminDashboardPage() {
                 onKeyDown={(e) => e.key === "Enter" && handleAdminLogin()}
                 className="w-full px-4 py-3 rounded-xl bg-[#f2f2f2] border border-[#d3d3d3] text-[#212121] placeholder:text-[#8a8a8a] focus:outline-none focus:ring-2 focus:ring-[#34c759]/30"
               />
-              {authError && <p className="text-sm text-[#e74c3c]">{authError}</p>}
+              {authError && (
+                <p className="text-sm text-[#e74c3c]">{authError}</p>
+              )}
               <button
                 onClick={handleAdminLogin}
                 disabled={!adminSecret}
@@ -418,7 +518,11 @@ export default function AdminDashboardPage() {
           </div>
           <div className="flex items-center gap-4">
             <button
-              onClick={fetchTreasuryData}
+              onClick={() => {
+                fetchTreasuryData();
+                fetchOperationalData();
+                fetchWaitlist();
+              }}
               disabled={loading}
               className="p-2 rounded-lg bg-[#f2f2f2] hover:bg-[#f2f2f2] border border-[#d3d3d3] transition-all"
               title="Refresh"
@@ -678,7 +782,9 @@ export default function AdminDashboardPage() {
             <div className="flex items-center gap-2">
               <span
                 className={`w-2 h-2 rounded-full ${
-                  data?.platformConfig?.isActive ? "bg-[#34c759]" : "bg-[#e74c3c]/80"
+                  data?.platformConfig?.isActive
+                    ? "bg-[#34c759]"
+                    : "bg-[#e74c3c]/80"
                 } animate-pulse`}
               />
               <span className="text-sm text-[#8a8a8a]">
@@ -722,6 +828,45 @@ export default function AdminDashboardPage() {
             </div>
           </motion.div>
         )}
+
+        {/* Ops Monitoring */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.28 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+        >
+          <div className="rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6">
+            <p className="text-sm text-[#8a8a8a] mb-2">Pipeline Health</p>
+            <p className="text-2xl font-bold text-[#212121]">
+              {opsLoading ? "…" : opsHealth?.status || "unknown"}
+            </p>
+            <p className="text-xs text-[#8a8a8a] mt-2">
+              Storage: {opsHealth?.storage || "-"}
+            </p>
+          </div>
+          <div className="rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6">
+            <p className="text-sm text-[#8a8a8a] mb-2">Pending Events</p>
+            <p className="text-2xl font-bold text-[#212121]">
+              {opsLoading
+                ? "…"
+                : (opsHealth?.pendingEvents ?? 0).toLocaleString()}
+            </p>
+            <p className="text-xs text-[#8a8a8a] mt-2">
+              Last 24h processed:{" "}
+              {(opsHealth?.eventsProcessedLast24h ?? 0).toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6">
+            <p className="text-sm text-[#8a8a8a] mb-2">7d Platform Fees</p>
+            <p className="text-2xl font-bold text-[#212121]">
+              {formatUSD(opsStats?.totals?.feesCollected || 0)}
+            </p>
+            <p className="text-xs text-[#8a8a8a] mt-2">
+              7d volume: {formatUSD(opsStats?.totals?.paymentsVolume || 0)}
+            </p>
+          </div>
+        </motion.div>
 
         {/* On-Chain Details */}
         <motion.div
@@ -850,6 +995,55 @@ export default function AdminDashboardPage() {
             Waitlist Management
           </h2>
 
+          <div className="mb-6 rounded-xl bg-[#FFFFFF] border border-[#d3d3d3] p-4">
+            <p className="text-sm font-semibold text-[#212121] mb-3">
+              Grant Access
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <input
+                type="email"
+                value={grantEmail}
+                onChange={(e) => setGrantEmail(e.target.value)}
+                placeholder="customer@company.com"
+                className="px-3 py-2 rounded-lg border border-[#d3d3d3] bg-white text-[#212121]"
+              />
+              <input
+                type="text"
+                value={grantWallet}
+                onChange={(e) => setGrantWallet(e.target.value)}
+                placeholder="Optional wallet (base58)"
+                className="px-3 py-2 rounded-lg border border-[#d3d3d3] bg-white text-[#212121]"
+              />
+              <select
+                value={grantStatus}
+                onChange={(e) =>
+                  setGrantStatus(e.target.value as "invited" | "active")
+                }
+                className="px-3 py-2 rounded-lg border border-[#d3d3d3] bg-white text-[#212121]"
+              >
+                <option value="invited">Invited</option>
+                <option value="active">Active</option>
+              </select>
+              <button
+                onClick={handleGrantAccess}
+                disabled={granting || !grantEmail.trim()}
+                className="px-4 py-2 rounded-lg bg-[#34c759] text-white font-medium disabled:opacity-50"
+              >
+                {granting ? "Granting..." : "Grant Access"}
+              </button>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <input
+              type="text"
+              value={waitlistSearch}
+              onChange={(e) => setWaitlistSearch(e.target.value)}
+              placeholder="Filter by email, name, company, or wallet"
+              className="w-full md:w-[420px] px-3 py-2 rounded-lg border border-[#d3d3d3] bg-white text-[#212121]"
+            />
+          </div>
+
           {/* Auth for waitlist admin — already authenticated */}
           {waitlistEntries.length === 0 && !waitlistLoading && (
             <div className="text-center py-4">
@@ -883,59 +1077,77 @@ export default function AdminDashboardPage() {
                 </button>
               </div>
               <div className="space-y-3">
-                {waitlistEntries.map((entry: any) => (
-                  <div
-                    key={entry.id || entry.email}
-                    className="flex items-center justify-between p-4 rounded-xl bg-[#FFFFFF] border border-[#d3d3d3]"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-[#212121] truncate">
-                          {entry.name || entry.email}
-                        </span>
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                            entry.status === "invited" ||
-                            entry.status === "active"
-                              ? "bg-[#34c759]/15 text-[#34c759]"
-                              : "bg-[#d29500]/20 text-[#d29500]"
-                          }`}
-                        >
-                          {entry.status}
-                        </span>
-                      </div>
-                      <p className="text-xs text-[#8a8a8a] truncate">
-                        {entry.email}
-                        {entry.company ? ` · ${entry.company}` : ""}
-                      </p>
-                      {entry.useCase && (
-                        <p className="text-xs text-[#8a8a8a] mt-1 truncate">
-                          {entry.useCase}
+                {waitlistEntries
+                  .filter((entry: any) => {
+                    const q = waitlistSearch.trim().toLowerCase();
+                    if (!q) return true;
+                    return [
+                      entry.email,
+                      entry.name,
+                      entry.company,
+                      entry.walletAddress,
+                    ]
+                      .filter(Boolean)
+                      .some((v) => String(v).toLowerCase().includes(q));
+                  })
+                  .map((entry: any) => (
+                    <div
+                      key={entry.id || entry.email}
+                      className="flex items-center justify-between p-4 rounded-xl bg-[#FFFFFF] border border-[#d3d3d3]"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-sm font-medium text-[#212121] truncate">
+                            {entry.name || entry.email}
+                          </span>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                              entry.status === "invited" ||
+                              entry.status === "active"
+                                ? "bg-[#34c759]/15 text-[#34c759]"
+                                : "bg-[#d29500]/20 text-[#d29500]"
+                            }`}
+                          >
+                            {entry.status}
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#8a8a8a] truncate">
+                          {entry.email}
+                          {entry.company ? ` · ${entry.company}` : ""}
                         </p>
-                      )}
+                        {entry.walletAddress && (
+                          <p className="text-xs text-[#8a8a8a] mt-1 truncate">
+                            Wallet: {entry.walletAddress}
+                          </p>
+                        )}
+                        {entry.useCase && (
+                          <p className="text-xs text-[#8a8a8a] mt-1 truncate">
+                            {entry.useCase}
+                          </p>
+                        )}
+                      </div>
+                      <div className="ml-4 shrink-0">
+                        {entry.status === "pending" ? (
+                          <button
+                            onClick={() => handleApprove(entry.email)}
+                            disabled={approvingEmail === entry.email}
+                            className="px-4 py-2 rounded-lg bg-[#34c759] text-white text-sm font-medium hover:bg-[#155a3e] transition-all disabled:opacity-50 flex items-center gap-2"
+                          >
+                            {approvingEmail === entry.email ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <Check className="w-3.5 h-3.5" />
+                            )}
+                            Approve
+                          </button>
+                        ) : (
+                          <span className="text-xs text-[#34c759] font-medium flex items-center gap-1">
+                            <Check className="w-3.5 h-3.5" /> Approved
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="ml-4 shrink-0">
-                      {entry.status === "pending" ? (
-                        <button
-                          onClick={() => handleApprove(entry.email)}
-                          disabled={approvingEmail === entry.email}
-                          className="px-4 py-2 rounded-lg bg-[#34c759] text-white text-sm font-medium hover:bg-[#155a3e] transition-all disabled:opacity-50 flex items-center gap-2"
-                        >
-                          {approvingEmail === entry.email ? (
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          ) : (
-                            <Check className="w-3.5 h-3.5" />
-                          )}
-                          Approve
-                        </button>
-                      ) : (
-                        <span className="text-xs text-[#34c759] font-medium flex items-center gap-1">
-                          <Check className="w-3.5 h-3.5" /> Approved
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </>
           )}

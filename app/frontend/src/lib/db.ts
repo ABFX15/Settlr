@@ -1290,6 +1290,7 @@ export interface WaitlistEntry {
     position: number;
     createdAt: Date;
     status: "pending" | "invited" | "active";
+    inviteToken?: string;
 }
 
 // In-memory waitlist storage
@@ -1539,6 +1540,68 @@ export async function verifyInviteToken(token: string): Promise<{ valid: boolean
         );
         return { valid: !!entry, email: entry?.email || null };
     }
+}
+
+export async function claimInviteForWallet(
+    token: string,
+    wallet: string
+): Promise<{ ok: boolean; reason?: "not_found" | "wallet_conflict"; message?: string; email?: string }> {
+    if (isSupabaseConfigured()) {
+        const { data: row, error: findError } = await supabase
+            .from("waitlist")
+            .select("email, wallet_address, status")
+            .eq("invite_token", token)
+            .in("status", ["invited", "active"])
+            .single();
+
+        if (findError || !row) {
+            return { ok: false, reason: "not_found", message: "Invite token is invalid or expired" };
+        }
+
+        if (row.wallet_address && row.wallet_address !== wallet) {
+            return {
+                ok: false,
+                reason: "wallet_conflict",
+                message: "This invite is already linked to a different wallet",
+            };
+        }
+
+        if (!row.wallet_address) {
+            const { error: updateError } = await supabase
+                .from("waitlist")
+                .update({ wallet_address: wallet })
+                .eq("invite_token", token)
+                .is("wallet_address", null);
+
+            if (updateError) {
+                return { ok: false, message: "Failed to link wallet to invite" };
+            }
+        }
+
+        return { ok: true, email: row.email };
+    }
+
+    const entry = memoryWaitlist.find(
+        (e: any) => e.inviteToken === token && (e.status === "invited" || e.status === "active")
+    );
+
+    if (!entry) {
+        return { ok: false, reason: "not_found", message: "Invite token is invalid or expired" };
+    }
+
+    if (entry.walletAddress && entry.walletAddress !== wallet) {
+        return {
+            ok: false,
+            reason: "wallet_conflict",
+            message: "This invite is already linked to a different wallet",
+        };
+    }
+
+    if (!entry.walletAddress) {
+        entry.walletAddress = wallet;
+    }
+
+    return { ok: true, email: entry.email };
 }
 
 export async function checkWaitlistByEmail(email: string): Promise<{ approved: boolean; entry: WaitlistEntry | null }> {

@@ -65,11 +65,12 @@ export async function POST(request: NextRequest) {
 // GET - Get waitlist stats (admin only - add auth later)
 export async function GET(request: NextRequest) {
     try {
-        // Simple auth check via query param (replace with proper auth)
-        const { searchParams } = new URL(request.url);
-        const secret = searchParams.get("secret");
+        const auth = request.headers.get("authorization") || "";
+        const bearer = auth.startsWith("Bearer ") ? auth.replace("Bearer ", "") : "";
+        const adminKey = request.headers.get("x-admin-key") || "";
+        const expected = process.env.ADMIN_SECRET || "";
 
-        if (secret !== process.env.ADMIN_SECRET && secret !== "admin123") {
+        if (!expected || (bearer !== expected && adminKey !== expected)) {
             return NextResponse.json(
                 { error: "Unauthorized" },
                 { status: 401 }

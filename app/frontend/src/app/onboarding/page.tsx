@@ -88,6 +88,7 @@ function OnboardingPageInner() {
     "checking" | "valid" | "invalid"
   >("checking");
   const [inviteEmail, setInviteEmail] = useState<string | null>(null);
+  const [inviteClaimed, setInviteClaimed] = useState(false);
 
   useEffect(() => {
     const token = searchParams.get("token");
@@ -111,6 +112,42 @@ function OnboardingPageInner() {
       })
       .catch(() => setTokenStatus("invalid"));
   }, [searchParams]);
+
+  useEffect(() => {
+    async function claimInvite() {
+      const token = searchParams.get("token");
+      if (!token || !publicKey || tokenStatus !== "valid" || inviteClaimed) {
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/waitlist/claim-invite", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, wallet: publicKey }),
+        });
+
+        // Conflict means token is already bound to another wallet; surface clearly.
+        if (!res.ok && res.status === 409) {
+          const body = await res.json().catch(() => ({}));
+          setState((s) => ({
+            ...s,
+            error:
+              body.error || "Invite token already linked to a different wallet",
+          }));
+          return;
+        }
+
+        if (res.ok) {
+          setInviteClaimed(true);
+        }
+      } catch {
+        // Non-blocking: user can still proceed and retry later.
+      }
+    }
+
+    claimInvite();
+  }, [searchParams, publicKey, tokenStatus, inviteClaimed]);
 
   const [state, setState] = useState<OnboardingState>({
     step: 1,
