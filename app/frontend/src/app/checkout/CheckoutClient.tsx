@@ -113,6 +113,37 @@ interface CheckoutClientProps {
   searchParams: URLSearchParams;
 }
 
+async function getTokenBalanceRaw(
+  connection: Connection,
+  tokenAccount: PublicKey,
+): Promise<bigint> {
+  try {
+    const info = await connection.getTokenAccountBalance(tokenAccount);
+    return BigInt(info.value.amount || "0");
+  } catch {
+    return BigInt(0);
+  }
+}
+
+async function assertTransactionConfirmed(
+  connection: Connection,
+  signature: string,
+  context: string,
+): Promise<void> {
+  const status = await connection.getSignatureStatuses([signature], {
+    searchTransactionHistory: true,
+  });
+  const value = status.value[0];
+
+  if (!value) {
+    throw new Error(`${context}: transaction status unavailable`);
+  }
+
+  if (value.err) {
+    throw new Error(`${context}: ${JSON.stringify(value.err)}`);
+  }
+}
+
 export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const router = useRouter();
   const {
@@ -1414,13 +1445,34 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       });
 
       if (!walletAdapterSignTransaction) throw new Error("Wallet cannot sign");
+      const treasuryBalanceBefore = await getTokenBalanceRaw(
+        connection,
+        treasuryPDAJupiter,
+      );
+
       const signedTx = await walletAdapterSignTransaction(transaction);
       const connection2 = new Connection(RPC_ENDPOINT, "confirmed");
       const rawTx = signedTx.serialize();
-      const sig = await connection2.sendRawTransaction(rawTx, {
-        skipPreflight: true,
-      });
+      const sig = await connection2.sendRawTransaction(rawTx);
       await connection2.confirmTransaction(sig, "confirmed");
+      await assertTransactionConfirmed(
+        connection2,
+        sig,
+        "Jupiter settlement transaction failed",
+      );
+
+      if (platformFeeJupiter > BigInt(0)) {
+        const treasuryBalanceAfter = await getTokenBalanceRaw(
+          connection2,
+          treasuryPDAJupiter,
+        );
+        const feeCredited = treasuryBalanceAfter - treasuryBalanceBefore;
+        if (feeCredited < platformFeeJupiter) {
+          throw new Error(
+            `Jupiter fee transfer missing: expected >= ${platformFeeJupiter}, got ${feeCredited}`,
+          );
+        }
+      }
 
       const transferSignature = sig;
       console.log(`[Jupiter] Transfer complete: ${transferSignature}`);
@@ -1793,13 +1845,34 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       // Sign and send via wallet-adapter
       if (!walletAdapterSignTransaction) throw new Error("Wallet cannot sign");
+      const treasuryBalanceBefore = await getTokenBalanceRaw(
+        connection,
+        treasuryPDA,
+      );
+
       const signedTx = await walletAdapterSignTransaction(transaction);
       const connForSend = new Connection(RPC_ENDPOINT, "confirmed");
       const rawTx = signedTx.serialize();
-      const txSig = await connForSend.sendRawTransaction(rawTx, {
-        skipPreflight: true,
-      });
+      const txSig = await connForSend.sendRawTransaction(rawTx);
       await connForSend.confirmTransaction(txSig, "confirmed");
+      await assertTransactionConfirmed(
+        connForSend,
+        txSig,
+        "Settlement transaction failed",
+      );
+
+      if (platformFee > BigInt(0)) {
+        const treasuryBalanceAfter = await getTokenBalanceRaw(
+          connForSend,
+          treasuryPDA,
+        );
+        const feeCredited = treasuryBalanceAfter - treasuryBalanceBefore;
+        if (feeCredited < platformFee) {
+          throw new Error(
+            `Fee transfer missing: expected >= ${platformFee}, got ${feeCredited}`,
+          );
+        }
+      }
 
       console.log("Transaction result:", txSig);
       const signatureBase58 = txSig;
