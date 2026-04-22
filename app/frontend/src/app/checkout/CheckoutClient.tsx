@@ -243,7 +243,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Privacy state (MagicBlock PER)
   // If URL has private=true, force privacy on and don't allow toggling
-  const [privacyEnabled, setPrivacyEnabled] = useState(true); // Enable by default
+  const [privacyEnabled, setPrivacyEnabled] = useState(isPrivatePayment);
   const isPrivacyForced = isPrivatePayment; // Can't toggle off if merchant requested private
   const [privateReceiptHandle, setPrivateReceiptHandle] = useState<
     string | null
@@ -1590,6 +1590,12 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       const privacyData = await privacyResponse.json();
       console.log("[Private Payment] ZK payment complete:", privacyData);
+
+      if (privacyData?.demo) {
+        throw new Error(
+          "Private payment is running in demo mode. Disable Privacy Mode for real on-chain settlement and fee collection.",
+        );
+      }
 
       const signatureBase58 =
         privacyData.signature || privacyData.unshieldTxSignature;
