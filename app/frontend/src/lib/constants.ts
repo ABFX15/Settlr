@@ -12,18 +12,37 @@ import { PublicKey } from "@solana/web3.js";
 const MAINNET_RPC_DEFAULT = "https://api.mainnet-beta.solana.com";
 const DEVNET_RPC_DEFAULT = "https://api.devnet.solana.com";
 
+function normalizeNetwork(value?: string): "devnet" | "mainnet-beta" | undefined {
+    if (!value) return undefined;
+    const v = value.trim().toLowerCase();
+    if (v === "devnet") return "devnet";
+    if (v === "mainnet" || v === "mainnet-beta") return "mainnet-beta";
+    return undefined;
+}
+
+const EXPLICIT_NETWORK =
+    normalizeNetwork(process.env.NEXT_PUBLIC_SOLANA_NETWORK) ||
+    normalizeNetwork(process.env.SOLANA_NETWORK);
+
+const FORCE_DEVNET =
+    process.env.NEXT_PUBLIC_FORCE_DEVNET === "true" ||
+    process.env.FORCE_DEVNET === "true" ||
+    EXPLICIT_NETWORK === "devnet";
+
 /**
  * Canonical RPC URL. Reads from the env vars used across the codebase,
  * falling back in order. Defaults to **devnet** only when SOLANA_NETWORK
  * is not explicitly set to "mainnet-beta".
  */
 export const SOLANA_RPC_URL: string =
-    process.env.NEXT_PUBLIC_SOLANA_RPC_URL ||
-    process.env.NEXT_PUBLIC_SOLANA_RPC ||
-    process.env.SOLANA_RPC_URL ||
-    (process.env.NEXT_PUBLIC_SOLANA_NETWORK === "mainnet-beta"
-        ? MAINNET_RPC_DEFAULT
-        : DEVNET_RPC_DEFAULT);
+    FORCE_DEVNET
+        ? DEVNET_RPC_DEFAULT
+        : process.env.NEXT_PUBLIC_SOLANA_RPC_URL ||
+        process.env.NEXT_PUBLIC_SOLANA_RPC ||
+        process.env.SOLANA_RPC_URL ||
+        (EXPLICIT_NETWORK === "mainnet-beta"
+            ? MAINNET_RPC_DEFAULT
+            : DEVNET_RPC_DEFAULT);
 
 /** True when the RPC url points at devnet. */
 export const IS_DEVNET: boolean = SOLANA_RPC_URL.includes("devnet");
