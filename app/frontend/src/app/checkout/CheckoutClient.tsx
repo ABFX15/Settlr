@@ -868,6 +868,12 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         throw new Error(data.error || "One-click payment failed");
       }
 
+      if (data.demo) {
+        throw new Error(
+          "One-click is running in demo mode and cannot settle real fee-bearing payments.",
+        );
+      }
+
       // For embedded wallets, payment is complete
       if (data.success && data.signature) {
         console.log(
@@ -981,6 +987,23 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         .slice(2, 8)}`;
       console.log("[Gasless] Payment nonce:", paymentNonce);
 
+      // Track expected platform fee and treasury balance delta for verification
+      const connection = new Connection(RPC_ENDPOINT, "confirmed");
+      const PLATFORM_FEE_BPS = BigInt(100); // 1%
+      const PROGRAM_ID = new PublicKey(
+        "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5",
+      );
+      const [treasuryPDA] = PublicKey.findProgramAddressSync(
+        [Buffer.from("platform_treasury")],
+        PROGRAM_ID,
+      );
+      const totalAmount = BigInt(Math.floor(amount * 1_000_000));
+      const platformFee = (totalAmount * PLATFORM_FEE_BPS) / BigInt(10000);
+      const treasuryBalanceBefore = await getTokenBalanceRaw(
+        connection,
+        treasuryPDA,
+      );
+
       // Step 1: Create transfer transaction via Kora API
       const transferResponse = await fetch("/api/gasless", {
         method: "POST",
@@ -1084,12 +1107,34 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         console.log("[Gasless] Transaction sent:", signature);
       }
 
-      // Set signature if available
-      if (signature) {
-        setTxSignature(signature);
-      } else if (extractedSignature) {
-        setTxSignature(extractedSignature);
+      const finalSignature = signature || extractedSignature;
+      if (!finalSignature) {
+        throw new Error(
+          "Gasless payment submitted but no transaction signature was returned.",
+        );
       }
+
+      await connection.confirmTransaction(finalSignature, "confirmed");
+      await assertTransactionConfirmed(
+        connection,
+        finalSignature,
+        "Gasless settlement transaction failed",
+      );
+
+      if (platformFee > BigInt(0)) {
+        const treasuryBalanceAfter = await getTokenBalanceRaw(
+          connection,
+          treasuryPDA,
+        );
+        const feeCredited = treasuryBalanceAfter - treasuryBalanceBefore;
+        if (feeCredited < platformFee) {
+          throw new Error(
+            `Gasless fee transfer missing: expected >= ${platformFee}, got ${feeCredited}`,
+          );
+        }
+      }
+
+      setTxSignature(finalSignature);
 
       // Complete checkout session if applicable
       if (sessionId) {
@@ -1099,7 +1144,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               sessionId,
-              signature: signature,
+              signature: finalSignature,
               customerWallet: activeWallet.address,
             }),
           });
@@ -1121,7 +1166,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              signature: signature || extractedSignature,
+              signature: finalSignature,
               merchantWallet,
               customerWallet: activeWallet.address,
               amount,
@@ -1135,7 +1180,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       }
 
       // Issue private receipt for the payment (MagicBlock PER)
-      const paymentId = signature || `payment_${Date.now()}`;
+      const paymentId = finalSignature || `payment_${Date.now()}`;
       issuePrivateReceipt(
         paymentId,
         amount,
@@ -1146,7 +1191,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       setPaidFromWallet(activeWallet.address);
       setStep("success");
       sendToParent("settlr:success", {
-        signature: signature,
+        signature: finalSignature,
         amount,
         merchantWallet,
         memo,
@@ -1158,44 +1203,24 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       const errorMessage =
         err instanceof Error ? err.message : "Gasless payment failed";
 
-      // Check if it's an "already processed" error - this means success!
+      // Check if it's an "already processed" error.
+      // Treat as success only when we still have a concrete signature.
       if (
         errorMessage.includes("already been processed") ||
         errorMessage.includes("AlreadyProcessed") ||
         errorMessage.includes("-32002")
       ) {
-        console.log(
-          "[Gasless] Transaction already processed - wallet likely auto-submitted",
-        );
-        // Use extracted signature if available
-        if (extractedSignature) {
-          setTxSignature(extractedSignature);
-          console.log(
-            "[Gasless] Using extracted signature:",
-            extractedSignature,
+        if (!extractedSignature) {
+          setError(
+            "Gasless transaction may have been processed, but no signature was available to verify treasury fee transfer.",
           );
+          setStep("error");
+          sendToParent("settlr:error", {
+            message:
+              "Gasless processed without signature; fee transfer could not be verified.",
+          });
+          return;
         }
-        // Issue private receipt
-        const paymentId = extractedSignature || `payment_${Date.now()}`;
-        issuePrivateReceipt(
-          paymentId,
-          amount,
-          activeWallet?.address || "",
-          merchantWallet,
-        );
-
-        setPaidFromWallet(activeWallet?.address || "");
-        setStep("success");
-        sendToParent("settlr:success", {
-          signature: extractedSignature,
-          amount,
-          merchantWallet,
-          memo,
-          gasless: true,
-          alreadyProcessed: true,
-          privacy: privacyEnabled,
-        });
-        return;
       }
 
       // For other errors, show error state
