@@ -5,17 +5,12 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletName, WalletReadyState } from "@solana/wallet-adapter-base";
 import { AnimatePresence, motion } from "framer-motion";
 import { Wallet, X, ChevronRight, Loader2, AlertCircle } from "lucide-react";
-import Image from "next/image";
+import { createContext, useContext } from "react";
 
-/* ─── Design tokens (match Settlr palette) ─── */
 const NAVY = "#212121";
-const SLATE = "#5c5c5c";
 const MUTED = "#8a8a8a";
 const GREEN = "#34c759";
 const BORDER = "#d3d3d3";
-
-/* ─── Context for custom modal ─── */
-import { createContext, useContext } from "react";
 
 interface WalletModalContextState {
   visible: boolean;
@@ -42,7 +37,6 @@ export const WalletModalProvider: FC<{ children: React.ReactNode }> = ({
   );
 };
 
-/* ─── Modal ─── */
 interface WalletModalProps {
   visible: boolean;
   onClose: () => void;
@@ -50,23 +44,25 @@ interface WalletModalProps {
 
 const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
   const { wallets, select, connecting, connected } = useWallet();
-  const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
+
+  const [selectedWallet, setSelectedWallet] = useState<WalletName | null>(null);
+  const [connectError, setConnectError] = useState<string | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Close after connecting
   useEffect(() => {
     if (connected && visible) {
-      const t = setTimeout(onClose, 300);
+      const t = setTimeout(onClose, 250);
       return () => clearTimeout(t);
     }
   }, [connected, visible, onClose]);
 
-  // Reset on open
   useEffect(() => {
-    if (visible) setSelectedWallet(null);
+    if (visible) {
+      setSelectedWallet(null);
+      setConnectError(null);
+    }
   }, [visible]);
 
-  // Close on Escape
   useEffect(() => {
     if (!visible) return;
     const handler = (e: KeyboardEvent) => {
@@ -78,13 +74,13 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
 
   const handleSelect = useCallback(
     (walletName: WalletName) => {
+      setConnectError(null);
       setSelectedWallet(walletName);
       select(walletName);
     },
     [select],
   );
 
-  // Sort: installed first, then loadable
   const sorted = [...wallets].sort((a, b) => {
     const order = (state: WalletReadyState) => {
       if (state === WalletReadyState.Installed) return 0;
@@ -129,7 +125,6 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
             className="w-full max-w-sm overflow-hidden rounded-2xl border bg-white shadow-xl"
             style={{ borderColor: BORDER }}
           >
-            {/* Header */}
             <div className="flex items-center justify-between px-6 pt-6 pb-2">
               <div>
                 <h2
@@ -151,7 +146,6 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
               </button>
             </div>
 
-            {/* Wallet list */}
             <div className="px-4 pb-2 pt-3">
               {installed.length > 0 && (
                 <div className="mb-3">
@@ -211,6 +205,12 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
                 </div>
               )}
 
+              {connectError && (
+                <p className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+                  {connectError}
+                </p>
+              )}
+
               {wallets.length === 0 && (
                 <div className="flex flex-col items-center gap-3 py-8 text-center">
                   <div
@@ -251,7 +251,6 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
               )}
             </div>
 
-            {/* Footer */}
             <div
               className="border-t px-6 py-3 text-center"
               style={{ borderColor: BORDER }}
@@ -273,7 +272,6 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
   );
 };
 
-/* ─── Row ─── */
 interface WalletRowProps {
   name: string;
   icon: string;
@@ -298,7 +296,6 @@ const WalletRow: FC<WalletRowProps> = ({
       disabled={connecting}
       className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all hover:bg-[#f7f7f7] active:scale-[0.98] disabled:opacity-60"
     >
-      {/* Icon */}
       <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] p-1.5">
         {icon.startsWith("data:") || icon.startsWith("http") ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -308,7 +305,6 @@ const WalletRow: FC<WalletRowProps> = ({
         )}
       </div>
 
-      {/* Label */}
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium" style={{ color: NAVY }}>
           {name}
@@ -325,17 +321,11 @@ const WalletRow: FC<WalletRowProps> = ({
         )}
       </div>
 
-      {/* Right icon */}
-      <div className="shrink-0">
-        {connecting ? (
-          <Loader2 className="h-4 w-4 animate-spin" style={{ color: GREEN }} />
-        ) : (
-          <ChevronRight
-            className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100"
-            style={{ color: MUTED }}
-          />
-        )}
-      </div>
+      {connecting ? (
+        <Loader2 className="h-4 w-4 animate-spin" style={{ color: GREEN }} />
+      ) : (
+        <ChevronRight className="h-4 w-4" style={{ color: MUTED }} />
+      )}
     </button>
   );
 };

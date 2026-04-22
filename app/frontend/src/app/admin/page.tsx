@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useConnection } from "@solana/wallet-adapter-react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@/components/WalletModal";
 import {
   Wallet,
   TrendingUp,
@@ -93,15 +94,19 @@ function shortenAddress(addr: string): string {
 
 export default function AdminDashboardPage() {
   const { connection } = useConnection();
+  const {
+    publicKey: connectedPublicKey,
+    connected: walletConnected,
+    signTransaction,
+    disconnect,
+  } = useWallet();
+  const { setVisible } = useWalletModal();
+  const publicKey = connectedPublicKey?.toBase58() ?? null;
 
   // Admin auth — simple secret, no Privy session
   const [adminSecret, setAdminSecret] = useState("");
   const [isAuthed, setIsAuthed] = useState(false);
   const [authError, setAuthError] = useState("");
-
-  // Phantom wallet — direct browser extension, no Privy
-  const [phantomWallet, setPhantomWallet] = useState<any>(null);
-  const [publicKey, setPublicKey] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
@@ -159,70 +164,27 @@ export default function AdminDashboardPage() {
   const handleAdminLogout = () => {
     setIsAuthed(false);
     setAdminSecret("");
-    setPublicKey(null);
-    // Disconnect Phantom globally so it doesn't leak into user flow
-    try {
-      phantomWallet?.disconnect();
-    } catch {}
-    try {
-      const provider =
-        (window as any)?.phantom?.solana || (window as any)?.solana;
-      provider?.disconnect();
-    } catch {}
-    setPhantomWallet(null);
+    disconnect().catch(() => undefined);
     sessionStorage.removeItem("adminSecret");
-    // Also clear wallet-adapter localStorage
+  };
+
+  // ── Wallet adapter connect/disconnect (lets user choose wallet) ──────
+  const connectWallet = () => {
+    setError(null);
+    // Reset persisted wallet adapter selection so admin can choose fresh.
     try {
       localStorage.removeItem("walletName");
+      sessionStorage.removeItem("walletName");
     } catch {}
+
+    disconnect().catch(() => undefined);
+    setVisible(true);
   };
 
-  // Disconnect Phantom on unmount AND on beforeunload to prevent wallet leaking
-  useEffect(() => {
-    function disconnectPhantomGlobal() {
-      try {
-        const provider =
-          (window as any)?.phantom?.solana || (window as any)?.solana;
-        provider?.disconnect();
-      } catch {}
-      try {
-        localStorage.removeItem("walletName");
-      } catch {}
-    }
-
-    window.addEventListener("beforeunload", disconnectPhantomGlobal);
-    return () => {
-      window.removeEventListener("beforeunload", disconnectPhantomGlobal);
-      disconnectPhantomGlobal();
-    };
-  }, []);
-
-  // ── Direct Phantom wallet connection ─────────────────────────────────
-  const connectPhantom = async () => {
+  const disconnectWallet = async () => {
     try {
-      const provider =
-        (window as any)?.phantom?.solana || (window as any)?.solana;
-      if (!provider?.isPhantom) {
-        setError("Phantom wallet not found. Please install Phantom.");
-        return;
-      }
-      const resp = await provider.connect();
-      setPhantomWallet(provider);
-      setPublicKey(resp.publicKey.toString());
-    } catch (err: any) {
-      if (err.code !== 4001) {
-        // user rejected
-        setError("Failed to connect Phantom: " + (err.message || ""));
-      }
-    }
-  };
-
-  const disconnectPhantom = async () => {
-    try {
-      await phantomWallet?.disconnect();
+      await disconnect();
     } catch {}
-    setPhantomWallet(null);
-    setPublicKey(null);
   };
 
   const copyToClipboard = (text: string, id: string) => {
@@ -384,8 +346,8 @@ export default function AdminDashboardPage() {
 
   // ── Claim fees ───────────────────────────────────────────────────────
   const handleClaimFees = async () => {
-    if (!publicKey || !phantomWallet) {
-      setError("Connect Phantom wallet first");
+    if (!publicKey || !walletConnected || !signTransaction) {
+      setError("Connect a wallet first");
       return;
     }
 
@@ -409,8 +371,8 @@ export default function AdminDashboardPage() {
       const txBuffer = Buffer.from(body.transaction, "base64");
       const tx = Transaction.from(txBuffer);
 
-      // 3. Sign with Phantom directly (not Privy)
-      const signedTx = await phantomWallet.signTransaction(tx);
+      // 3. Sign with selected wallet via wallet-adapter
+      const signedTx = await signTransaction(tx);
 
       // 4. Send the signed transaction
       const sig = await connection.sendRawTransaction(signedTx.serialize(), {
@@ -545,7 +507,7 @@ export default function AdminDashboardPage() {
                   </span>
                 )}
                 <button
-                  onClick={disconnectPhantom}
+                  onClick={disconnectWallet}
                   className="ml-1 p-1 rounded hover:bg-[#d3d3d3] transition-colors"
                   title="Disconnect wallet"
                 >
@@ -554,11 +516,11 @@ export default function AdminDashboardPage() {
               </div>
             ) : (
               <button
-                onClick={connectPhantom}
+                onClick={connectWallet}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#34c759] text-white text-sm font-medium hover:bg-[#155a3e] transition-all"
               >
                 <Wallet className="w-4 h-4" />
-                Connect Phantom
+                Connect Wallet
               </button>
             )}
             <button
