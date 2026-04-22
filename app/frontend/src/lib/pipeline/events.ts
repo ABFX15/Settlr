@@ -20,6 +20,7 @@ import type { PipelineEvent, PipelineEventType, EntityType } from "./types";
 
 const memoryEvents: PipelineEvent[] = [];
 const MAX_MEMORY_EVENTS = 10_000;
+let pipelineSupabaseAvailable = true;
 
 // ---------------------------------------------------------------------------
 // ID generation
@@ -51,7 +52,7 @@ export async function emitEvent(
         createdAt: new Date().toISOString(),
     };
 
-    if (isSupabaseConfigured()) {
+    if (isSupabaseConfigured() && pipelineSupabaseAvailable) {
         const { error } = await supabase.from("pipeline_events").insert({
             id: event.id,
             event_type: event.eventType,
@@ -64,7 +65,19 @@ export async function emitEvent(
         });
 
         if (error) {
-            console.error("[Pipeline] Failed to write event:", error.message);
+            if (
+                (error as any).code === "42P01" ||
+                String(error.message || "").includes("pipeline_events")
+            ) {
+                if (pipelineSupabaseAvailable) {
+                    console.warn(
+                        "[Pipeline] pipeline_events table missing; falling back to in-memory events",
+                    );
+                }
+                pipelineSupabaseAvailable = false;
+            } else {
+                console.error("[Pipeline] Failed to write event:", error.message);
+            }
             // Fallback to memory so we don't lose the event
             pushToMemory(event);
         }
@@ -88,7 +101,7 @@ function pushToMemory(event: PipelineEvent): void {
 // ---------------------------------------------------------------------------
 
 export async function getPendingEvents(limit = 500): Promise<PipelineEvent[]> {
-    if (isSupabaseConfigured()) {
+    if (isSupabaseConfigured() && pipelineSupabaseAvailable) {
         const { data, error } = await supabase
             .from("pipeline_events")
             .select("*")
@@ -110,7 +123,7 @@ export async function getPendingEvents(limit = 500): Promise<PipelineEvent[]> {
 export async function markEventsProcessed(eventIds: string[]): Promise<void> {
     if (eventIds.length === 0) return;
 
-    if (isSupabaseConfigured()) {
+    if (isSupabaseConfigured() && pipelineSupabaseAvailable) {
         const { error } = await supabase
             .from("pipeline_events")
             .update({ processed: true, processed_at: new Date().toISOString() })
@@ -134,7 +147,7 @@ export async function getEventsByMerchant(
 ): Promise<PipelineEvent[]> {
     const { limit = 100, offset = 0, eventType, dateFrom, dateTo } = opts;
 
-    if (isSupabaseConfigured()) {
+    if (isSupabaseConfigured() && pipelineSupabaseAvailable) {
         let query = supabase
             .from("pipeline_events")
             .select("*")
@@ -162,7 +175,7 @@ export async function getEventsByMerchant(
 }
 
 export async function getEventCount(processed?: boolean): Promise<number> {
-    if (isSupabaseConfigured()) {
+    if (isSupabaseConfigured() && pipelineSupabaseAvailable) {
         let query = supabase.from("pipeline_events").select("id", { count: "exact", head: true });
         if (processed !== undefined) query = query.eq("processed", processed);
         const { count, error } = await query;
@@ -175,7 +188,7 @@ export async function getEventCount(processed?: boolean): Promise<number> {
 }
 
 export async function getOldestPendingEvent(): Promise<PipelineEvent | null> {
-    if (isSupabaseConfigured()) {
+    if (isSupabaseConfigured() && pipelineSupabaseAvailable) {
         const { data, error } = await supabase
             .from("pipeline_events")
             .select("*")

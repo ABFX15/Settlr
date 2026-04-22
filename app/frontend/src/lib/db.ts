@@ -751,7 +751,7 @@ export async function createPayment(
     };
 
     if (isSupabaseConfigured()) {
-        const { error } = await supabase.from("payments").insert({
+        const baseInsert = {
             id: payment.id,
             session_id: payment.sessionId,
             merchant_id: payment.merchantId,
@@ -763,7 +763,23 @@ export async function createPayment(
             tx_signature: payment.txSignature,
             status: payment.status,
             completed_at: new Date(payment.completedAt).toISOString(),
-        });
+        };
+
+        let { error } = await supabase.from("payments").insert(baseInsert);
+
+        // Invoice and non-checkout flows may not have a backing checkout_sessions row.
+        // Retry with NULL session_id so payment recording does not fail on FK constraint.
+        if (
+            error &&
+            (error as any).code === "23503" &&
+            String((error as any).message || "").includes("payments_session_id_fkey")
+        ) {
+            const retry = await supabase.from("payments").insert({
+                ...baseInsert,
+                session_id: null,
+            });
+            error = retry.error;
+        }
 
         if (error) {
             console.error("Supabase error creating payment:", error);
