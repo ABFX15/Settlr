@@ -26,9 +26,16 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 if (isServer && supabaseUrl && !supabaseServiceRoleKey) {
+    if (process.env.NODE_ENV === "production") {
+        // Hard fail: silent fallback to anon on the server is dangerous because
+        // RLS policies become the only safeguard, and write paths may fail
+        // open or fail silently depending on policy.
+        throw new Error(
+            "[Settlr] FATAL: SUPABASE_SERVICE_ROLE_KEY is required on the server in production.",
+        );
+    }
     console.warn(
-        "[Settlr] WARNING: SUPABASE_SERVICE_ROLE_KEY missing on server; using anon key. " +
-        "Admin and waitlist operations should use service role in production."
+        "[Settlr] WARNING: SUPABASE_SERVICE_ROLE_KEY missing on server; using anon key (dev only).",
     );
 }
 

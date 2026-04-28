@@ -883,6 +883,51 @@ export async function getPaymentBySessionId(sessionId: string): Promise<Payment 
     }
 }
 
+export async function getPaymentByTxSignature(txSignature: string): Promise<Payment | null> {
+    if (!txSignature) return null;
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("payments")
+            .select(`
+        *,
+        merchants (
+          name,
+          wallet_address
+        )
+      `)
+            .eq("tx_signature", txSignature)
+            .maybeSingle();
+
+        if (error || !data) return null;
+
+        const merchant = data.merchants as any;
+        return {
+            id: data.id,
+            sessionId: data.session_id,
+            merchantId: data.merchant_id,
+            merchantName: merchant?.name || "",
+            merchantWallet: merchant?.wallet_address || "",
+            customerWallet: data.customer_wallet,
+            amount: data.amount,
+            currency: data.currency,
+            description: data.description || undefined,
+            metadata: data.metadata as Record<string, string> | undefined,
+            txSignature: data.tx_signature,
+            explorerUrl: buildExplorerUrl(data.tx_signature),
+            createdAt: new Date(data.created_at).getTime(),
+            completedAt: new Date(data.completed_at).getTime(),
+            status: data.status as Payment["status"],
+            refundedAmount: data.refunded_amount || undefined,
+            refundSignature: data.refund_signature || undefined,
+        };
+    } else {
+        for (const payment of memoryPayments.values()) {
+            if (payment.txSignature === txSignature) return payment;
+        }
+        return null;
+    }
+}
+
 export async function getPaymentsByMerchant(merchantId: string): Promise<Payment[]> {
     if (isSupabaseConfigured()) {
         const { data, error } = await supabase

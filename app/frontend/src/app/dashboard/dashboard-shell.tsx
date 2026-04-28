@@ -4,8 +4,14 @@ import {
   DashboardSidebar,
   DashboardTopBar,
 } from "@/components/ui/DashboardSidebar";
+import { useWalletSession } from "@/hooks/useWalletSession";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
+  // Establish a server-verified session by signing a one-time nonce on
+  // wallet connect. Without this, every dashboard API call would be
+  // rejected by the new requireMerchantSession middleware.
+  useWalletSession();
+
   return (
     <div className="flex min-h-screen bg-[#f7f7f7] text-[#212121]">
       <DashboardSidebar />

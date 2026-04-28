@@ -12,24 +12,9 @@ import {
 } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { emitEvent } from "@/lib/pipeline";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
-async function authenticate(request: NextRequest) {
-    const walletAddress = request.headers.get("x-merchant-wallet");
-    if (walletAddress && walletAddress.length >= 32) {
-        try {
-            const merchant = await getOrCreateMerchantByWallet(walletAddress);
-            return {
-                valid: true,
-                merchantId: merchant.id,
-                merchantWallet: merchant.walletAddress,
-                merchantName: merchant.name,
-            };
-        } catch {
-            return null;
-        }
-    }
-    return null;
-}
+const authenticate = requireMerchantSession;
 
 export async function POST(request: NextRequest) {
     try {

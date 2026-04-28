@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createPayment, getMerchantByWallet } from "@/lib/db";
+import { createPayment, getMerchantByWallet, getPaymentByTxSignature } from "@/lib/db";
 import { explorerUrl } from "@/lib/constants";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { emitEvent } from "@/lib/pipeline";
+import { verifyOnChainPayment } from "@/lib/verify-payment";
 
 // CORS headers for SDK requests from any origin
 const corsHeaders = {
@@ -49,6 +50,52 @@ export async function POST(request: NextRequest) {
             return NextResponse.json(
                 { error: "Missing required fields: signature, merchantWallet, customerWallet, amount" },
                 { status: 400, headers: corsHeaders }
+            );
+        }
+
+        // Reject obvious bad inputs before hitting RPC.
+        if (
+            typeof signature !== "string" ||
+            typeof merchantWallet !== "string" ||
+            typeof customerWallet !== "string" ||
+            typeof amount !== "number" ||
+            !Number.isFinite(amount) ||
+            amount <= 0
+        ) {
+            return NextResponse.json(
+                { error: "Invalid field types" },
+                { status: 400, headers: corsHeaders }
+            );
+        }
+
+        // Idempotency: refuse to double-record the same on-chain signature.
+        try {
+            const existing = await getPaymentByTxSignature(signature);
+            if (existing) {
+                return NextResponse.json(
+                    { success: true, paymentId: existing.id, deduped: true },
+                    { headers: corsHeaders },
+                );
+            }
+        } catch (err) {
+            // If lookup fails we proceed; verification below is the real gate.
+            console.error("[Payments] Dedup lookup error:", err);
+        }
+
+        // CRITICAL: verify the buyer-supplied signature actually represents a
+        // successful on-chain payment of the claimed amount to the claimed
+        // merchant, with the platform fee leg also present. Without this the
+        // endpoint trusts arbitrary client input and would let anyone insert
+        // fake "completed" rows.
+        const verification = await verifyOnChainPayment({
+            signature,
+            merchantWallet,
+            totalUsdc: amount,
+        });
+        if (!verification.ok) {
+            return NextResponse.json(
+                { error: `Payment verification failed: ${verification.error}` },
+                { status: 400, headers: corsHeaders },
             );
         }
 

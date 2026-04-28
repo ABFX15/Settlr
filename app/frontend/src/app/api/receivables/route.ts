@@ -16,19 +16,9 @@ import {
     getInvoicesByMerchant,
     type Invoice,
 } from "@/lib/db";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
-async function authenticate(request: NextRequest) {
-    const walletAddress = request.headers.get("x-merchant-wallet");
-    if (walletAddress && walletAddress.length >= 32) {
-        try {
-            const merchant = await getOrCreateMerchantByWallet(walletAddress);
-            return { merchantId: merchant.id, merchantWallet: merchant.walletAddress };
-        } catch {
-            return null;
-        }
-    }
-    return null;
-}
+const authenticate = requireMerchantSession;
 
 // Bucket helper
 function ageBucket(daysOverdue: number): string {

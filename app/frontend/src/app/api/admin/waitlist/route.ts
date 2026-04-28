@@ -8,9 +8,16 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
 
 function isAuthorized(request: NextRequest): boolean {
     const auth = request.headers.get("authorization");
-    if (!auth) return false;
+    if (!auth || !ADMIN_SECRET) return false;
     const token = auth.replace("Bearer ", "");
-    return !!ADMIN_SECRET && token === ADMIN_SECRET;
+    const a = Buffer.from(token);
+    const b = Buffer.from(ADMIN_SECRET);
+    if (a.length !== b.length) return false;
+    try {
+        return crypto.timingSafeEqual(a, b);
+    } catch {
+        return false;
+    }
 }
 
 /**

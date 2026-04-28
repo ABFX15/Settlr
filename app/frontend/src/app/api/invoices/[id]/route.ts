@@ -4,12 +4,13 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getInvoice, updateInvoiceStatus, validateApiKey, getOrCreateMerchantByWallet } from "@/lib/db";
+import { getInvoice, updateInvoiceStatus, validateApiKey } from "@/lib/db";
 import { sendInvoiceEmail } from "@/lib/email";
 import { emitEvent } from "@/lib/pipeline";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
 async function authenticate(request: NextRequest) {
-    // API key auth
+    // API key auth (for SDK / external integrations)
     const apiKey =
         request.headers.get("x-api-key") ||
         request.headers.get("authorization")?.replace("Bearer ", "");
@@ -17,22 +18,14 @@ async function authenticate(request: NextRequest) {
         const v = await validateApiKey(apiKey);
         if (v.valid && v.merchantId && v.merchantWallet) return v;
     }
-    // Wallet-based auth from dashboard
-    const walletAddress = request.headers.get("x-merchant-wallet");
-    if (walletAddress && walletAddress.length >= 32) {
-        try {
-            const merchant = await getOrCreateMerchantByWallet(walletAddress);
-            return {
-                valid: true,
-                merchantId: merchant.id,
-                merchantWallet: merchant.walletAddress,
-                merchantName: merchant.name,
-                tier: "free" as const,
-                rateLimit: 60,
-            };
-        } catch {
-            return null;
-        }
+    // Wallet sign-in session (dashboard)
+    const session = await requireMerchantSession(request);
+    if (session) {
+        return {
+            ...session,
+            tier: "free" as const,
+            rateLimit: 60,
+        };
     }
     return null;
 }

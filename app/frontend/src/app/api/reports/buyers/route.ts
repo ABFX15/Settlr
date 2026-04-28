@@ -14,19 +14,9 @@ import {
     getOrCreateMerchantByWallet,
     getInvoicesByMerchant,
 } from "@/lib/db";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
-async function authenticate(request: NextRequest) {
-    const walletAddress = request.headers.get("x-merchant-wallet");
-    if (walletAddress && walletAddress.length >= 32) {
-        try {
-            const merchant = await getOrCreateMerchantByWallet(walletAddress);
-            return { merchantId: merchant.id };
-        } catch {
-            return null;
-        }
-    }
-    return null;
-}
+const authenticate = requireMerchantSession;
 
 interface BuyerSummary {
     name: string;

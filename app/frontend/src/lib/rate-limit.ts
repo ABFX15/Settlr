@@ -29,7 +29,20 @@ if (
 export async function checkRateLimit(
     identifier: string,
 ): Promise<NextResponse | null> {
-    if (!ratelimit) return null; // No Redis configured — allow all (dev mode)
+    if (!ratelimit) {
+        // Production must have Redis configured — fail closed to avoid silent
+        // unbounded request floods. In dev (NODE_ENV !== "production"), skip.
+        if (process.env.NODE_ENV === "production") {
+            console.error(
+                "[rate-limit] FATAL: UPSTASH_REDIS_REST_URL/TOKEN missing in production",
+            );
+            return NextResponse.json(
+                { error: "Service temporarily unavailable" },
+                { status: 503 },
+            );
+        }
+        return null;
+    }
 
     const { success, limit, remaining, reset } =
         await ratelimit.limit(identifier);
