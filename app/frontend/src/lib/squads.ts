@@ -176,22 +176,45 @@ export async function getVaultInfo(
     }
 }
 
-// ─── Add Member ────────────────────────────────────────────
+// ─── Add Member (proposal flow) ────────────────────────────
 
 /**
- * Build a config transaction to add a new member to the multisig.
- * This requires a proposal flow (create proposal → approve → execute)
- * because it's a config change.
+ * Result of building an add-member proposal — caller signs and sends each
+ * transaction in order. For a 1-of-1 vault, the existing member can do
+ * all four steps in sequence and the change executes immediately.
  *
- * For 1-of-1 vaults, the existing member can propose + approve + execute
- * in a single flow.
+ * For higher-threshold vaults, only the `create` and `approve`
+ * transactions are returned and the proposal must wait for additional
+ * approvals before `execute` can be called.
+ */
+export interface AddMemberProposalResult {
+    transactionIndex: bigint;
+    /**
+     * Ordered list of transactions to sign and send. Each one MUST be
+     * confirmed before sending the next, since later steps depend on
+     * earlier on-chain state (the proposal account, the vote tally).
+     */
+    transactions: { label: string; transaction: Transaction }[];
+    /** True if `execute` was included (only when proposing member can also execute). */
+    canExecuteImmediately: boolean;
+}
+
+/**
+ * Build the four-instruction proposal flow that adds a new signer and
+ * updates the threshold on a Squads v4 multisig whose configAuthority
+ * is null (i.e. members govern themselves — the default for Settlr
+ * vaults).
  *
- * @param connection    Solana connection
- * @param multisigPda   The multisig PDA
- * @param currentMember The existing member's public key (must have Initiate + Vote + Execute)
- * @param newMember     The new member's public key
- * @param newThreshold  New signing threshold (e.g., 2 for 2-of-2)
- * @returns            Array of transactions to sign and send in sequence
+ * Steps:
+ *   1. configTransactionCreate   — defines the AddMember + ChangeThreshold actions
+ *   2. proposalCreate            — opens the proposal for voting
+ *   3. proposalApprove           — proposer casts their vote
+ *   4. configTransactionExecute  — applies the changes (only valid once
+ *                                  the threshold of approvals is met)
+ *
+ * For a 1-of-1 vault, all four are returned. For a k-of-n vault with
+ * k > 1, step 4 is omitted and other members must call proposalApprove
+ * separately before someone can execute.
  */
 export async function buildAddMemberTransactions(
     connection: Connection,
@@ -199,113 +222,245 @@ export async function buildAddMemberTransactions(
     currentMember: PublicKey,
     newMember: PublicKey,
     newThreshold: number
-): Promise<Transaction[]> {
-    // Fetch current state to get the next transaction index
+): Promise<AddMemberProposalResult> {
     const info = await getVaultInfo(connection, multisigPda);
     if (!info) throw new Error("Multisig not found");
 
-    const transactionIndex = BigInt(info.transactionIndex) + BigInt(1);
+    if (newThreshold < 1 || newThreshold > info.members.length + 1) {
+        throw new Error(
+            `New threshold ${newThreshold} out of range for ${info.members.length + 1} members`,
+        );
+    }
+    if (info.members.some((m) => m.key.equals(newMember))) {
+        throw new Error("Member already exists in this multisig");
+    }
 
-    // For 1-of-1 → 2-of-2, we use config transactions (not vault transactions).
-    // Config transactions modify the multisig structure itself.
+    const transactionIndex = info.transactionIndex + BigInt(1);
 
-    // Step 1: Create the config transaction that adds a member
-    const addMemberIx = multisig.instructions.multisigAddMember({
+    // 1. Config transaction: define add-member + change-threshold actions
+    const createIx = multisig.instructions.configTransactionCreate({
         multisigPda,
-        configAuthority: currentMember,
+        transactionIndex,
+        creator: currentMember,
         rentPayer: currentMember,
-        newMember: {
-            key: newMember,
-            permissions: Permissions.all(),
-        },
-        memo: "Add signer",
+        actions: [
+            {
+                __kind: "AddMember",
+                newMember: {
+                    key: newMember,
+                    permissions: Permissions.all(),
+                },
+            },
+            {
+                __kind: "ChangeThreshold",
+                newThreshold,
+            },
+        ],
+        memo: "Add signer + update threshold",
         programId: SQUADS_PROGRAM_ID,
     });
 
-    // Step 2: Change threshold
-    const changeThresholdIx = multisig.instructions.multisigChangeThreshold({
+    // 2. Open the proposal
+    const proposalIx = multisig.instructions.proposalCreate({
         multisigPda,
-        configAuthority: currentMember,
+        transactionIndex,
+        creator: currentMember,
         rentPayer: currentMember,
-        newThreshold,
-        memo: "Update threshold",
         programId: SQUADS_PROGRAM_ID,
     });
 
-    // For a vault with configAuthority = null, adding members requires the
-    // proposal flow. But for the initial setup where configAuthority is a
-    // member key, we can call addMember directly.
-    //
-    // The create flow sets configAuthority = null, so we need the proposal path.
-    // For simplicity in the initial 1-of-1 → 2-of-N upgrade, we build two
-    // separate config transactions through the proposal flow.
+    // 3. Proposer's approval vote
+    const approveIx = multisig.instructions.proposalApprove({
+        multisigPda,
+        transactionIndex,
+        member: currentMember,
+        memo: "Self-approve add-signer proposal",
+        programId: SQUADS_PROGRAM_ID,
+    });
 
-    // Actually, since configAuthority is null (set in createVault), these
-    // direct instructions won't work. We need the proposal flow with
-    // configTransactionCreate → proposalCreate → proposalApprove → configTransactionExecute.
-    // 
-    // For the MVP, we'll build a simplified helper that the frontend
-    // orchestrates step by step.
+    // 4. Execute — only safe if proposer's single vote is enough to clear
+    // the *current* threshold. Otherwise other members need to approve first.
+    const canExecuteImmediately = info.threshold <= 1;
 
+    const buildTx = (instructions: TransactionInstruction[]) => {
+        const tx = new Transaction();
+        for (const ix of instructions) tx.add(ix);
+        tx.feePayer = currentMember;
+        return tx;
+    };
+
+    const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash("confirmed");
+
+    const transactions: { label: string; transaction: Transaction }[] = [];
+
+    // Bundle create + open + approve into one tx (saves the user 2 signatures
+    // + 2 confirmations). If they fit; if not we'd split. They do fit.
+    const setupTx = buildTx([createIx, proposalIx, approveIx]);
+    setupTx.recentBlockhash = blockhash;
+    setupTx.lastValidBlockHeight = lastValidBlockHeight;
+    transactions.push({ label: "Create + open + approve proposal", transaction: setupTx });
+
+    if (canExecuteImmediately) {
+        const executeIx = multisig.instructions.configTransactionExecute({
+            multisigPda,
+            transactionIndex,
+            member: currentMember,
+            rentPayer: currentMember,
+            programId: SQUADS_PROGRAM_ID,
+        });
+        const execTx = buildTx([executeIx]);
+        // Execute must be sent AFTER setup confirms. The frontend will fetch
+        // a fresh blockhash before sending, but we set one here for parity.
+        execTx.recentBlockhash = blockhash;
+        execTx.lastValidBlockHeight = lastValidBlockHeight;
+        transactions.push({ label: "Execute config change", transaction: execTx });
+    }
+
+    return {
+        transactionIndex,
+        transactions,
+        canExecuteImmediately,
+    };
+}
+
+/**
+ * Build a standalone execute transaction for an existing approved proposal.
+ * Used when a higher-threshold vault has accumulated enough approvals and
+ * any member wants to apply the change.
+ */
+export async function buildExecuteProposalTransaction(
+    connection: Connection,
+    multisigPda: PublicKey,
+    member: PublicKey,
+    transactionIndex: bigint,
+): Promise<Transaction> {
+    const ix = multisig.instructions.configTransactionExecute({
+        multisigPda,
+        transactionIndex,
+        member,
+        rentPayer: member,
+        programId: SQUADS_PROGRAM_ID,
+    });
     const tx = new Transaction();
-    tx.add(addMemberIx);
-    tx.add(changeThresholdIx);
-    tx.feePayer = currentMember;
-
+    tx.add(ix);
+    tx.feePayer = member;
     const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash("confirmed");
     tx.recentBlockhash = blockhash;
     tx.lastValidBlockHeight = lastValidBlockHeight;
-
-    return [tx];
+    return tx;
 }
 
-// ─── Remove Member ─────────────────────────────────────────
+/**
+ * Approve an existing proposal. Used by additional signers in a k-of-n
+ * vault to vote on an open add/remove-member proposal.
+ */
+export async function buildApproveProposalTransaction(
+    connection: Connection,
+    multisigPda: PublicKey,
+    member: PublicKey,
+    transactionIndex: bigint,
+): Promise<Transaction> {
+    const ix = multisig.instructions.proposalApprove({
+        multisigPda,
+        transactionIndex,
+        member,
+        memo: "Approve config change",
+        programId: SQUADS_PROGRAM_ID,
+    });
+    const tx = new Transaction();
+    tx.add(ix);
+    tx.feePayer = member;
+    const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash("confirmed");
+    tx.recentBlockhash = blockhash;
+    tx.lastValidBlockHeight = lastValidBlockHeight;
+    return tx;
+}
+
+// ─── Remove Member (proposal flow) ─────────────────────────
 
 /**
- * Build a transaction to remove a member from the multisig.
- *
- * @param connection    Solana connection
- * @param multisigPda   The multisig PDA
- * @param authority     The config authority or member with removal permission
- * @param memberToRemove The member to remove
- * @param newThreshold  New signing threshold after removal
+ * Build a remove-member proposal using the same config-transaction flow as
+ * `buildAddMemberTransactions`. The new threshold must be ≤ remaining
+ * member count.
  */
 export async function buildRemoveMemberTransaction(
     connection: Connection,
     multisigPda: PublicKey,
-    authority: PublicKey,
+    currentMember: PublicKey,
     memberToRemove: PublicKey,
     newThreshold: number
-): Promise<Transaction> {
-    const ix = multisig.instructions.multisigRemoveMember({
+): Promise<AddMemberProposalResult> {
+    const info = await getVaultInfo(connection, multisigPda);
+    if (!info) throw new Error("Multisig not found");
+    if (!info.members.some((m) => m.key.equals(memberToRemove))) {
+        throw new Error("Member not found in this multisig");
+    }
+    const remaining = info.members.length - 1;
+    if (newThreshold < 1 || newThreshold > remaining) {
+        throw new Error(
+            `New threshold ${newThreshold} out of range for ${remaining} remaining members`,
+        );
+    }
+
+    const transactionIndex = info.transactionIndex + BigInt(1);
+
+    const createIx = multisig.instructions.configTransactionCreate({
         multisigPda,
-        configAuthority: authority,
-        oldMember: memberToRemove,
-        memo: "Remove signer",
+        transactionIndex,
+        creator: currentMember,
+        rentPayer: currentMember,
+        actions: [
+            { __kind: "RemoveMember", oldMember: memberToRemove },
+            { __kind: "ChangeThreshold", newThreshold },
+        ],
+        memo: "Remove signer + update threshold",
+        programId: SQUADS_PROGRAM_ID,
+    });
+    const proposalIx = multisig.instructions.proposalCreate({
+        multisigPda,
+        transactionIndex,
+        creator: currentMember,
+        rentPayer: currentMember,
+        programId: SQUADS_PROGRAM_ID,
+    });
+    const approveIx = multisig.instructions.proposalApprove({
+        multisigPda,
+        transactionIndex,
+        member: currentMember,
+        memo: "Self-approve remove-signer proposal",
         programId: SQUADS_PROGRAM_ID,
     });
 
-    const thresholdIx = multisig.instructions.multisigChangeThreshold({
-        multisigPda,
-        configAuthority: authority,
-        rentPayer: authority,
-        newThreshold,
-        memo: "Update threshold after member removal",
-        programId: SQUADS_PROGRAM_ID,
-    });
-
-    const tx = new Transaction();
-    tx.add(ix);
-    tx.add(thresholdIx);
-    tx.feePayer = authority;
+    const canExecuteImmediately = info.threshold <= 1;
 
     const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash("confirmed");
-    tx.recentBlockhash = blockhash;
-    tx.lastValidBlockHeight = lastValidBlockHeight;
 
-    return tx;
+    const setupTx = new Transaction().add(createIx, proposalIx, approveIx);
+    setupTx.feePayer = currentMember;
+    setupTx.recentBlockhash = blockhash;
+    setupTx.lastValidBlockHeight = lastValidBlockHeight;
+    const transactions = [{ label: "Create + open + approve proposal", transaction: setupTx }];
+
+    if (canExecuteImmediately) {
+        const executeIx = multisig.instructions.configTransactionExecute({
+            multisigPda,
+            transactionIndex,
+            member: currentMember,
+            rentPayer: currentMember,
+            programId: SQUADS_PROGRAM_ID,
+        });
+        const execTx = new Transaction().add(executeIx);
+        execTx.feePayer = currentMember;
+        execTx.recentBlockhash = blockhash;
+        execTx.lastValidBlockHeight = lastValidBlockHeight;
+        transactions.push({ label: "Execute config change", transaction: execTx });
+    }
+
+    return { transactionIndex, transactions, canExecuteImmediately };
 }
 
 // ─── Permission Helpers ────────────────────────────────────

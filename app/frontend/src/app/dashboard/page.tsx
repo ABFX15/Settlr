@@ -6,6 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { explorerUrl } from "@/lib/constants";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 import Link from "next/link";
 import {
   Wallet,
@@ -91,6 +92,7 @@ export default function DashboardPage() {
   const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
+  const onboarding = useOnboardingStatus();
 
   const [treasury, setTreasury] = useState<TreasuryBalance | null>(null);
   const [invoiceStats, setInvoiceStats] = useState<InvoiceStats | null>(null);
@@ -194,6 +196,57 @@ export default function DashboardPage() {
             <LogIn className="h-4 w-4" />
             Connect Wallet
           </button>
+          <p className="mt-6 text-xs text-[#8a8a8a]">
+            New to Settlr?{" "}
+            <Link
+              href="/onboarding"
+              className="text-[#34c759] font-medium hover:underline"
+            >
+              Create an account
+            </Link>
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Wallet connected but not yet onboarded — don't show empty dashboard,
+  // route them to finish setup. This is the "easier route for clients":
+  // a wallet that hits /dashboard without an account gets a clear CTA
+  // instead of an unexplained empty state.
+  if (onboarding.status === "loading") {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <Loader2 className="h-6 w-6 text-[#34c759] animate-spin" />
+      </div>
+    );
+  }
+
+  if (onboarding.status === "needs-onboarding") {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-md"
+        >
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#34c759]/10 border border-[#34c759]/20">
+            <Plus className="h-6 w-6 text-[#34c759]" />
+          </div>
+          <h2 className="text-xl font-semibold text-[#212121] mb-2">
+            Finish setting up your account
+          </h2>
+          <p className="text-[#8a8a8a] mb-6 text-sm">
+            This wallet isn't registered as a merchant yet. Complete onboarding
+            to start accepting payments.
+          </p>
+          <Link
+            href="/onboarding"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#34c759] px-5 py-2.5 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
+          >
+            Continue setup
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </motion.div>
       </div>
     );

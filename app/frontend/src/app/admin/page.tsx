@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
+import { useWalletSession } from "@/hooks/useWalletSession";
 import {
   Wallet,
   TrendingUp,
@@ -23,6 +24,7 @@ import {
   BarChart3,
   ArrowDownToLine,
   LogOut,
+  ShieldAlert,
 } from "lucide-react";
 import Link from "next/link";
 import { Transaction, PublicKey } from "@solana/web3.js";
@@ -103,10 +105,14 @@ export default function AdminDashboardPage() {
   const { setVisible } = useWalletModal();
   const publicKey = connectedPublicKey?.toBase58() ?? null;
 
-  // Admin auth — simple secret
-  const [adminSecret, setAdminSecret] = useState("");
-  const [isAuthed, setIsAuthed] = useState(false);
-  const [authError, setAuthError] = useState("");
+  // Wallet-session sign-in (sets settlr_session cookie). Once ready, all
+  // /api/admin/* requests are auto-authed by cookie.
+  const { status: sessionStatus, error: sessionError } = useWalletSession();
+
+  // Admin gate: ask the server whether this signed-in wallet is on the
+  // ADMIN_WALLETS env list. We only render the dashboard if so.
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [adminCheckError, setAdminCheckError] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
@@ -132,40 +138,49 @@ export default function AdminDashboardPage() {
   const [opsStats, setOpsStats] = useState<PlatformStatsData | null>(null);
   const [opsLoading, setOpsLoading] = useState(false);
 
-  // ── Admin secret auth ────────────────────────────────────────────────
-  const handleAdminLogin = async () => {
-    setAuthError("");
-    try {
-      // Verify secret by trying to load waitlist
-      const res = await fetch("/api/admin/waitlist", {
-        headers: { Authorization: `Bearer ${adminSecret}` },
-      });
-      if (!res.ok) {
-        setAuthError("Invalid admin secret");
-        return;
-      }
-      setIsAuthed(true);
-      // Store in sessionStorage so it survives page refreshes but not new tabs
-      sessionStorage.setItem("adminSecret", adminSecret);
-    } catch {
-      setAuthError("Failed to verify admin secret");
-    }
-  };
-
-  // Restore admin secret from sessionStorage
+  // ── Admin gate (wallet-based) ─────────────────────────────────────────
+  // After the wallet session is ready we ask the server whether this wallet
+  // is on the ADMIN_WALLETS list. The dashboard only renders if so.
   useEffect(() => {
-    const stored = sessionStorage.getItem("adminSecret");
-    if (stored) {
-      setAdminSecret(stored);
-      setIsAuthed(true);
+    if (sessionStatus !== "ready") {
+      setIsAdmin(null);
+      return;
     }
-  }, []);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/admin/me", { credentials: "include" });
+        if (cancelled) return;
+        if (!res.ok) {
+          setAdminCheckError(`Admin check failed (${res.status})`);
+          setIsAdmin(false);
+          return;
+        }
+        const data = await res.json();
+        setIsAdmin(Boolean(data.isAdmin));
+        setAdminCheckError(null);
+      } catch (err) {
+        if (cancelled) return;
+        setAdminCheckError(
+          err instanceof Error ? err.message : "Admin check failed",
+        );
+        setIsAdmin(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionStatus, publicKey]);
 
-  const handleAdminLogout = () => {
-    setIsAuthed(false);
-    setAdminSecret("");
-    disconnect().catch(() => undefined);
-    sessionStorage.removeItem("adminSecret");
+  const handleAdminLogout = async () => {
+    try {
+      await fetch("/api/auth/wallet/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {}
+    await disconnect().catch(() => undefined);
+    setIsAdmin(null);
   };
 
   // ── Wallet adapter connect/disconnect (lets user choose wallet) ──────
@@ -246,12 +261,13 @@ export default function AdminDashboardPage() {
   }, [fetchOperationalData]);
 
   // ── Waitlist management ──────────────────────────────────────────────
+  // All admin requests rely on the settlr_session cookie set by
+  // useWalletSession + the server's requireAdmin() check.
   const fetchWaitlist = useCallback(async () => {
-    if (!adminSecret) return;
     setWaitlistLoading(true);
     try {
       const res = await fetch("/api/admin/waitlist", {
-        headers: { Authorization: `Bearer ${adminSecret}` },
+        credentials: "include",
       });
       if (!res.ok) throw new Error("Unauthorized or failed");
       const json = await res.json();
@@ -262,14 +278,14 @@ export default function AdminDashboardPage() {
     } finally {
       setWaitlistLoading(false);
     }
-  }, [adminSecret]);
+  }, []);
 
-  // Auto-load waitlist once authenticated
+  // Auto-load waitlist once authed as admin
   useEffect(() => {
-    if (isAuthed && adminSecret) {
+    if (isAdmin) {
       fetchWaitlist();
     }
-  }, [isAuthed, adminSecret, fetchWaitlist]);
+  }, [isAdmin, fetchWaitlist]);
 
   const handleApprove = async (email: string) => {
     setApprovingEmail(email);
@@ -277,10 +293,8 @@ export default function AdminDashboardPage() {
     try {
       const res = await fetch("/api/admin/waitlist", {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${adminSecret}`,
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, status: "invited" }),
       });
       if (!res.ok) {
@@ -317,10 +331,8 @@ export default function AdminDashboardPage() {
     try {
       const res = await fetch("/api/admin/waitlist", {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${adminSecret}`,
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           email,
           status: grantStatus,
@@ -417,7 +429,12 @@ export default function AdminDashboardPage() {
       : `?cluster=${data?.cluster || "devnet"}`;
 
   // ── Loading / not ready ───────────────────────────────────────────────
-  if (!isAuthed) {
+  // Three gates, in order:
+  //   1. Wallet not connected → prompt connect
+  //   2. Wallet connected but session not yet established → spinner
+  //   3. Session ready but wallet is not on ADMIN_WALLETS → forbidden
+  // Only after all three pass do we render the dashboard.
+  if (!walletConnected) {
     return (
       <div className="min-h-screen bg-[#FFFFFF]">
         <div className="max-w-md mx-auto px-6 py-20">
@@ -433,28 +450,81 @@ export default function AdminDashboardPage() {
               Platform Admin
             </h1>
             <p className="text-[#8a8a8a] mb-8">
-              Enter your admin secret to access the dashboard.
+              Connect an admin wallet to access the dashboard.
             </p>
-            <div className="space-y-4">
-              <input
-                type="password"
-                placeholder="Admin secret"
-                value={adminSecret}
-                onChange={(e) => setAdminSecret(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleAdminLogin()}
-                className="w-full px-4 py-3 rounded-xl bg-[#f2f2f2] border border-[#d3d3d3] text-[#212121] placeholder:text-[#8a8a8a] focus:outline-none focus:ring-2 focus:ring-[#34c759]/30"
-              />
-              {authError && (
-                <p className="text-sm text-[#e74c3c]">{authError}</p>
-              )}
+            <button
+              onClick={connectWallet}
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#34c759] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#155a3e] transition-all"
+            >
+              <Wallet className="w-5 h-5" />
+              Connect Wallet
+            </button>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
+
+  if (sessionStatus !== "ready" || isAdmin === null) {
+    return (
+      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 mx-auto mb-4 text-[#34c759] animate-spin" />
+          <p className="text-[#5c5c5c] text-sm">
+            {sessionStatus === "signing"
+              ? "Sign the message in your wallet to authenticate…"
+              : "Verifying admin access…"}
+          </p>
+          {sessionError && (
+            <p className="text-[#e74c3c] text-sm mt-3">{sessionError}</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen bg-[#FFFFFF]">
+        <div className="max-w-md mx-auto px-6 py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#e74c3c]/10 flex items-center justify-center border border-[#e74c3c]/20">
+              <ShieldAlert className="w-10 h-10 text-[#e74c3c]" />
+            </div>
+            <h1 className="text-3xl font-bold text-[#212121] mb-3">
+              Not authorized
+            </h1>
+            <p className="text-[#8a8a8a] mb-2 font-mono text-sm">
+              {publicKey ? shortenAddress(publicKey) : ""}
+            </p>
+            <p className="text-[#8a8a8a] mb-8">
+              This wallet is not on the platform admin list. Add it to the{" "}
+              <code className="px-1.5 py-0.5 rounded bg-[#f2f2f2] text-[#212121]">
+                ADMIN_WALLETS
+              </code>{" "}
+              env var, or sign in with a different wallet.
+            </p>
+            {adminCheckError && (
+              <p className="text-[#e74c3c] text-sm mb-4">{adminCheckError}</p>
+            )}
+            <div className="flex gap-2">
               <button
-                onClick={handleAdminLogin}
-                disabled={!adminSecret}
-                className="w-full inline-flex items-center justify-center gap-2 bg-[#34c759] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#155a3e] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleAdminLogout}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-[#f2f2f2] text-[#212121] px-6 py-3 rounded-xl font-medium hover:bg-[#e5e5e5] transition-all"
               >
-                <LogIn className="w-5 h-5" />
-                Sign In
+                <LogOut className="w-4 h-4" />
+                Sign out
               </button>
+              <Link
+                href="/dashboard"
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-[#34c759] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#155a3e] transition-all"
+              >
+                Merchant dashboard
+              </Link>
             </div>
           </motion.div>
         </div>

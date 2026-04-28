@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
 import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Shield, Wallet, Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,69 +22,63 @@ const c = {
 };
 
 export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2
+            className="w-8 h-8 animate-spin"
+            style={{ color: c.green }}
+          />
+        </div>
+      }
+    >
+      <LoginPageInner />
+    </Suspense>
+  );
+}
+
+function LoginPageInner() {
   const { connected } = useWallet();
   const { setVisible } = useWalletModal();
   const { status } = useOnboardingStatus();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // Once connected and onboarded, redirect to dashboard
+  // Smart routing once we know who this wallet is.
+  //   onboarded         → /dashboard
+  //   needs-onboarding  → /onboarding (preserve invite token if present)
   useEffect(() => {
-    if (connected && status === "onboarded") {
-      router.push("/dashboard");
+    if (!connected) return;
+    if (status === "onboarded") {
+      router.replace("/dashboard");
+    } else if (status === "needs-onboarding") {
+      const token = searchParams.get("token");
+      router.replace(
+        token
+          ? `/onboarding?token=${encodeURIComponent(token)}`
+          : "/onboarding",
+      );
     }
-  }, [connected, status, router]);
+  }, [connected, status, router, searchParams]);
 
-  // Connected but not onboarded
-  if (connected && status === "needs-onboarding") {
+  // Connected and verifying account status
+  if (
+    connected &&
+    (status === "loading" ||
+      status === "onboarded" ||
+      status === "needs-onboarding")
+  ) {
     return (
       <div
         className="min-h-screen flex items-center justify-center p-4"
         style={{ background: c.bg }}
       >
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl border p-10 text-center max-w-lg"
-          style={{ background: c.card, borderColor: c.border }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center"
         >
-          <div
-            className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8"
-            style={{ background: c.greenBg }}
-          >
-            <Shield className="w-10 h-10" style={{ color: c.green }} />
-          </div>
-          <h1 className="text-3xl font-bold mb-3" style={{ color: c.navy }}>
-            Complete Onboarding
-          </h1>
-          <p className="mb-6" style={{ color: c.slate }}>
-            Your wallet is connected but you haven&apos;t completed merchant
-            onboarding yet. You need an invite link from your approval email to
-            set up your account.
-          </p>
-          <p className="mb-6 text-sm" style={{ color: c.muted }}>
-            Check your email for the sign-in link, or request access below.
-          </p>
-          <Link
-            href="/waitlist"
-            className="inline-flex items-center gap-3 px-8 py-4 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
-            style={{ background: c.green }}
-          >
-            Request Access
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </motion.div>
-      </div>
-    );
-  }
-
-  // Connected and loading onboarding status
-  if (connected && status === "loading") {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center p-4"
-        style={{ background: c.bg }}
-      >
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <Loader2
             className="w-8 h-8 animate-spin mx-auto mb-4"
             style={{ color: c.green }}

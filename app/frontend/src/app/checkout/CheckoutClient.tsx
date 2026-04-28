@@ -50,6 +50,11 @@ import {
   getRecommendedTier,
   PAYMENT_TIERS,
 } from "@/hooks/useOnRamp";
+import {
+  encryptReceipt,
+  hashEncryptedReceipt,
+  type ReceiptPlaintext,
+} from "@/lib/receipt-encryption";
 
 // Base58 alphabet for encoding signatures
 const BASE58_ALPHABET =
@@ -432,7 +437,20 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
   }, [activeWallet?.address]);
 
-  // Issue a private receipt for the payment (MagicBlock PER)
+  // Issue a private receipt for the payment.
+  //
+  // Privacy model: the on-chain USDC transfer is unchanged (amount visible
+  // on Solscan — that is unavoidable without a real ZK shielding integration).
+  // What this hides from observers / DB readers is the *receipt metadata*:
+  // memo, line items, customer email, exact split, etc.
+  //
+  // Flow:
+  //   1. Fetch the merchant's published X25519 receipt-encryption pubkey
+  //      from /api/merchants/receipt-key. If the merchant has never set
+  //      one, fall back to an unencrypted receipt and surface a warning.
+  //   2. Encrypt the full receipt details client-side using NaCl box.
+  //   3. POST the ciphertext + payload hash to /api/privacy/receipt where
+  //      it lands in Supabase. Only the merchant's wallet can decrypt.
   const issuePrivateReceipt = useCallback(
     async (
       paymentId: string,
@@ -444,31 +462,63 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       setIssuingPrivateReceipt(true);
       try {
-        console.log(
-          "[Privacy] Issuing private receipt for payment:",
-          paymentId,
-        );
+        // 1. Lookup merchant's encryption pubkey
+        let recipientPubkey: string | null = null;
+        try {
+          const keyRes = await fetch(
+            `/api/merchants/receipt-key?wallet=${encodeURIComponent(
+              merchantAddress,
+            )}`,
+          );
+          if (keyRes.ok) {
+            const keyData = await keyRes.json();
+            recipientPubkey = keyData.receiptPubkey || null;
+          } else if (keyRes.status === 404) {
+            console.warn(
+              "[Privacy] Merchant has not published a receipt-encryption pubkey — receipt will be stored unencrypted (handle/hash only).",
+            );
+          }
+        } catch (err) {
+          console.warn("[Privacy] receipt-key lookup failed:", err);
+        }
 
+        // 2. Encrypt if we have a key
+        let encrypted: ReturnType<typeof encryptReceipt> | null = null;
+        let payloadHash: string | null = null;
+        if (recipientPubkey) {
+          const plaintext: ReceiptPlaintext = {
+            paymentId,
+            amount: paymentAmount,
+            currency: "USDC",
+            customerWallet: customerAddress,
+            merchantWallet: merchantAddress,
+            memo: memo || undefined,
+            timestamp: new Date().toISOString(),
+          };
+          encrypted = encryptReceipt(plaintext, recipientPubkey);
+          payloadHash = await hashEncryptedReceipt(encrypted);
+        }
+
+        // 3. POST to receipt API
         const response = await fetch("/api/privacy/receipt", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            action: "issue", // Issue private receipt with PER privacy
+            action: "issue",
             paymentId,
             amount: paymentAmount,
             customer: customerAddress,
             merchant: merchantAddress,
+            txSignature: paymentId,
+            encrypted,
+            payloadHash,
           }),
         });
 
         if (response.ok) {
           const data = await response.json();
-          console.log("[Privacy] Private receipt issued:", data);
-          // Use the short handle for display, full handle for verification
           if (data.handleShort) {
             setPrivateReceiptHandle(data.handleShort);
-          } else if (data.handle) {
-            setPrivateReceiptHandle(`0x${data.handle.slice(-12)}`);
           }
         } else {
           console.error(
@@ -482,7 +532,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         setIssuingPrivateReceipt(false);
       }
     },
-    [privacyEnabled],
+    [privacyEnabled, memo],
   );
 
   // Check auth and wallet status
@@ -1079,163 +1129,13 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     }
   };
 
-  // Process PRIVATE payment - real USDC transfer + PER-private receipt
-  // For hackathon demo: The USDC transfer is visible on Solscan,
-  // but we issue a private receipt via MagicBlock PER (TEE-based privacy).
-  // This demonstrates the privacy layer Settlr adds on top of standard transfers.
-  const processPrivatePayment = async () => {
-    if (!activeWallet?.address || !merchantWallet) {
-      setError("Missing wallet or merchant address");
-      setStep("error");
-      return;
-    }
-
-    setStep("processing");
-    setError("");
-
-    try {
-      console.log(
-        "[Private Payment] Processing ZK-shielded payment via Privacy Cash...",
-      );
-
-      // Use Privacy Cash for true on-chain privacy
-      // This shields the USDC and unshields to merchant - no visible link or amount
-      const privacyResponse = await fetch("/api/privacy/payment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount,
-          customerWallet: activeWallet.address,
-          merchantWallet,
-          memo,
-          sessionId,
-        }),
-      });
-
-      if (!privacyResponse.ok) {
-        const errorData = await privacyResponse.json();
-        throw new Error(errorData.error || "Private payment failed");
-      }
-
-      const privacyData = await privacyResponse.json();
-      console.log("[Private Payment] ZK payment complete:", privacyData);
-
-      if (privacyData?.demo) {
-        throw new Error(
-          "Private payment is running in demo mode. Disable Privacy Mode for real on-chain settlement and fee collection.",
-        );
-      }
-
-      const signatureBase58 =
-        privacyData.signature || privacyData.unshieldTxSignature;
-      setTxSignature(signatureBase58);
-
-      // Set private receipt handle if available
-      if (privacyData.privateHandle) {
-        setPrivateReceiptHandle(`0x${privacyData.privateHandle.slice(-12)}`);
-      }
-
-      // Also issue PER receipt for additional privacy layer
-      console.log(
-        "[Private Payment] Issuing private receipt via MagicBlock PER...",
-      );
-      const receiptResponse = await fetch("/api/privacy/receipt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "issue",
-          paymentId: signatureBase58,
-          amount,
-          customer: activeWallet.address,
-          merchant: merchantWallet,
-          txSignature: signatureBase58,
-        }),
-      });
-
-      if (receiptResponse.ok) {
-        const receiptData = await receiptResponse.json();
-        console.log("[Private Payment] PER receipt issued:", receiptData);
-        if (receiptData.handleShort) {
-          setPrivateReceiptHandle(receiptData.handleShort);
-        }
-      }
-
-      // Complete checkout session if exists
-      if (sessionId) {
-        try {
-          await fetch("/api/checkout/complete", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              sessionId,
-              signature: signatureBase58,
-              customerWallet: activeWallet.address,
-              private: true,
-            }),
-          });
-
-          if (successUrl) {
-            window.location.href = successUrl;
-            return;
-          }
-        } catch (completeErr) {
-          console.error(
-            "[Private Payment] Error completing checkout:",
-            completeErr,
-          );
-        }
-      } else {
-        // No session - record payment for redirect-based checkouts
-        try {
-          await fetch("/api/payments/record", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              signature: signatureBase58,
-              merchantWallet,
-              customerWallet: activeWallet.address,
-              amount,
-              memo,
-            }),
-          });
-          console.log("[Private Payment] Payment recorded for redirect flow");
-        } catch (recordErr) {
-          console.error(
-            "[Private Payment] Error recording payment:",
-            recordErr,
-          );
-        }
-      }
-
-      setPaidFromWallet(activeWallet.address);
-      setStep("success");
-      sendToParent("settlr:success", {
-        signature: signatureBase58,
-        amount,
-        merchantWallet,
-        memo,
-        privacy: true,
-        privateReceipt: true,
-      });
-    } catch (err: unknown) {
-      console.error("[Private Payment] Error:", err);
-      const errorMessage =
-        err instanceof Error ? err.message : "Private payment failed";
-      setError(errorMessage);
-      setStep("error");
-      sendToParent("settlr:error", { message: errorMessage });
-    }
-  };
-
   // Process payment (standard - user pays gas)
   const processPayment = async () => {
-    // PRIVACY: If privacy is enabled/forced, use private payment flow
-    if (privacyEnabled || isPrivacyForced) {
-      console.log(
-        "[Payment] Privacy enabled - routing to private payment flow",
-      );
-      return processPrivatePayment();
-    }
+    // Privacy mode is now an additive layer applied AFTER the on-chain
+    // transfer (see issuePrivateReceipt) — no separate code path. The
+    // USDC transfer is identical; only the receipt metadata is encrypted
+    // and stored off-chain so observers / DB readers cannot see line
+    // items, customer email, or memo.
 
     // If Jupiter swap is needed (non-USDC token on Solana)
     if (needsJupiterSwap) {

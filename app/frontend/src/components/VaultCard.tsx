@@ -175,21 +175,40 @@ export function VaultCard() {
     setError(null);
     try {
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
-      const txs = await buildAddMemberTransactions(
+      const result = await buildAddMemberTransactions(
         connection,
         vaultInfo.multisigPda,
         new PublicKey(publicKey),
         new PublicKey(newSignerAddress),
         newThreshold,
       );
-      // Sign each transaction using wallet-adapter
-      for (const tx of txs) {
-        if (!walletSignTx) throw new Error("Wallet does not support signing");
-        const signedTx = await walletSignTx(tx);
+      if (!walletSignTx) throw new Error("Wallet does not support signing");
+
+      // Sign + send each tx in order, waiting for confirmation between
+      // them since later steps depend on prior on-chain state.
+      for (const step of result.transactions) {
+        // Refresh blockhash for each tx so they don't expire while the
+        // user is reviewing the wallet popup.
+        const { blockhash, lastValidBlockHeight } =
+          await connection.getLatestBlockhash("confirmed");
+        step.transaction.recentBlockhash = blockhash;
+        step.transaction.lastValidBlockHeight = lastValidBlockHeight;
+
+        const signedTx = await walletSignTx(step.transaction);
         const signature = await connection.sendRawTransaction(
           signedTx.serialize(),
         );
-        console.log("Add-signer tx:", signature);
+        await connection.confirmTransaction(
+          { signature, blockhash, lastValidBlockHeight },
+          "confirmed",
+        );
+        console.log(`[Squads] ${step.label}:`, signature);
+      }
+
+      if (!result.canExecuteImmediately) {
+        setError(
+          `Proposal ${result.transactionIndex.toString()} created and approved by you. Other signers must approve before it can be executed.`,
+        );
       }
       setShowAddSigner(false);
       setNewSignerAddress("");

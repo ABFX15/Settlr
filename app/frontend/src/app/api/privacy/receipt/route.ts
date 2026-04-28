@@ -55,7 +55,17 @@ const sessions = new Map<string, {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { action, paymentId, amount, customer, merchant, txSignature, wallet } = body;
+        const {
+            action,
+            paymentId,
+            amount,
+            customer,
+            merchant,
+            txSignature,
+            wallet,
+            encrypted, // { ciphertext, nonce, ephemeralPublicKey, recipientPublicKey, version }
+            payloadHash,
+        } = body;
 
         if (!action) {
             return NextResponse.json(
@@ -86,12 +96,28 @@ export async function POST(request: NextRequest) {
                     );
                 }
 
+                // Validate optional encrypted payload shape
+                if (encrypted) {
+                    const ok =
+                        typeof encrypted.ciphertext === 'string' &&
+                        typeof encrypted.nonce === 'string' &&
+                        typeof encrypted.ephemeralPublicKey === 'string' &&
+                        typeof encrypted.recipientPublicKey === 'string' &&
+                        encrypted.version === 1;
+                    if (!ok) {
+                        return NextResponse.json(
+                            { error: 'Invalid encrypted payload shape' },
+                            { status: 400 }
+                        );
+                    }
+                }
+
                 // Derive PDAs
                 const [privateReceiptPda] = findPrivateReceiptPda(paymentId);
                 const [delegationRecordPda] = findDelegationRecordPda(privateReceiptPda);
                 const [delegationMetadataPda] = findDelegationMetadataPda(privateReceiptPda);
 
-                // Generate session hash
+                // Generate session hash (also used as receipt-bind handle if no payload hash provided)
                 const sessionHash = await generateSessionHash(paymentId, amount, customer, merchant);
 
                 const session = {
@@ -114,22 +140,36 @@ export async function POST(request: NextRequest) {
                 let stored = false;
                 if (supabase) {
                     try {
+                        const row: Record<string, unknown> = {
+                            payment_id: paymentId,
+                            customer_wallet: customer,
+                            merchant_wallet: merchant,
+                            session_hash: sessionHash,
+                            session_status: 'pending',
+                            is_delegated: false,
+                            payment_timestamp: new Date().toISOString(),
+                            privacy_version: 3,
+                            encryption_method: encrypted ? 'nacl_box_v1' : 'magicblock_per',
+                            status: 'active',
+                            // NOT NULL legacy column from initial migration:
+                            encrypted_handle: encrypted?.payloadHash || payloadHash || sessionHash,
+                        };
+                        if (encrypted) {
+                            row.ciphertext = encrypted.ciphertext;
+                            row.encryption_nonce = encrypted.nonce;
+                            row.ephemeral_pubkey = encrypted.ephemeralPublicKey;
+                            row.recipient_pubkey = encrypted.recipientPublicKey;
+                            row.encryption_scheme = encrypted.version;
+                        }
+                        if (payloadHash) row.payload_hash = payloadHash;
+                        if (txSignature) row.tx_signature = txSignature;
+
                         const { error } = await supabase
                             .from('privacy_receipts')
-                            .upsert({
-                                payment_id: paymentId,
-                                customer_wallet: customer,
-                                merchant_wallet: merchant,
-                                session_hash: sessionHash,
-                                session_status: 'pending',
-                                is_delegated: false,
-                                payment_timestamp: new Date().toISOString(),
-                                privacy_version: 3,
-                                encryption_method: 'magicblock_per',
-                                status: 'active'
-                            }, { onConflict: 'payment_id' });
+                            .upsert(row, { onConflict: 'payment_id' });
 
                         if (!error) stored = true;
+                        else console.warn('[PER] Supabase upsert error:', error.message);
                     } catch (err) {
                         console.warn('[PER] Supabase error:', err);
                     }
@@ -142,6 +182,8 @@ export async function POST(request: NextRequest) {
                     action: 'create',
                     paymentId,
                     sessionHash,
+                    payloadHash: payloadHash || null,
+                    encryptedStored: !!encrypted && stored,
                     status: 'pending',
                     statusLabel: SESSION_STATUS_LABELS[SessionStatus.Pending],
                     isDelegated: false,
@@ -152,136 +194,32 @@ export async function POST(request: NextRequest) {
                     stored,
                     teeValidator: TEE_VALIDATOR.toBase58(),
                     perEndpoint: PER_ENDPOINT,
-                    message: 'Private payment session created. Ready for TEE delegation.',
-                    handleShort: `0x${sessionHash.slice(0, 12)}`,
+                    teeDelegationStatus:
+                        'unavailable_on_devnet — receipt is encrypted client-side and stored off-chain. TEE delegation will activate when MagicBlock devnet program is live.',
+                    message: encrypted
+                        ? 'Encrypted private receipt stored. Only the merchant can decrypt.'
+                        : 'Private payment session created (no client encryption supplied).',
+                    handleShort: `0x${(payloadHash || sessionHash).slice(0, 12)}`,
                 });
             }
 
-            case 'delegate': {
-                // Delegate session to TEE
-                if (!paymentId) {
-                    return NextResponse.json({ error: 'Missing paymentId' }, { status: 400 });
-                }
-
-                const session = sessions.get(paymentId);
-                if (!session) {
-                    return NextResponse.json({ error: 'Session not found' }, { status: 404 });
-                }
-
-                if (session.status !== SessionStatus.Pending) {
-                    return NextResponse.json({
-                        error: `Cannot delegate session in ${SESSION_STATUS_LABELS[session.status]} state`
-                    }, { status: 400 });
-                }
-
-                session.status = SessionStatus.Active;
-                session.isDelegated = true;
-                session.delegatedAt = new Date().toISOString();
-
-                if (supabase) {
-                    try {
-                        await supabase.from('privacy_receipts')
-                            .update({ session_status: 'active', is_delegated: true })
-                            .eq('payment_id', paymentId);
-                    } catch { /* ignore */ }
-                }
-
-                const visibility = getPrivacyVisibility(SessionStatus.Active);
-
-                return NextResponse.json({
-                    success: true,
-                    action: 'delegate',
-                    paymentId,
-                    status: 'active',
-                    statusLabel: SESSION_STATUS_LABELS[SessionStatus.Active],
-                    isDelegated: true,
-                    visibility,
-                    message: 'Session delegated to MagicBlock TEE. Amount hidden from base-layer observers.',
-                    privacyNote: 'Account state is now inside TEE. Base-layer queries will not see current data.',
-                });
-            }
-
-            case 'process': {
-                // Process payment privately inside TEE
-                if (!paymentId) {
-                    return NextResponse.json({ error: 'Missing paymentId' }, { status: 400 });
-                }
-
-                const session = sessions.get(paymentId);
-                if (!session) {
-                    return NextResponse.json({ error: 'Session not found' }, { status: 404 });
-                }
-
-                if (session.status !== SessionStatus.Active) {
-                    return NextResponse.json({
-                        error: `Cannot process session in ${SESSION_STATUS_LABELS[session.status]} state`
-                    }, { status: 400 });
-                }
-
-                session.status = SessionStatus.Processed;
-                session.processedAt = new Date().toISOString();
-
-                if (supabase) {
-                    try {
-                        await supabase.from('privacy_receipts')
-                            .update({ session_status: 'processed' })
-                            .eq('payment_id', paymentId);
-                    } catch { /* ignore */ }
-                }
-
-                return NextResponse.json({
-                    success: true,
-                    action: 'process',
-                    paymentId,
-                    status: 'processed',
-                    statusLabel: SESSION_STATUS_LABELS[SessionStatus.Processed],
-                    isDelegated: true,
-                    visibility: getPrivacyVisibility(SessionStatus.Processed),
-                    message: 'Payment processed privately inside TEE. Ready for settlement.',
-                });
-            }
-
+            case 'delegate':
+            case 'process':
             case 'settle': {
-                // Settle: commit state back to base layer
-                if (!paymentId) {
-                    return NextResponse.json({ error: 'Missing paymentId' }, { status: 400 });
-                }
-
-                const session = sessions.get(paymentId);
-                if (!session) {
-                    return NextResponse.json({ error: 'Session not found' }, { status: 404 });
-                }
-
-                if (session.status !== SessionStatus.Processed) {
-                    return NextResponse.json({
-                        error: `Cannot settle session in ${SESSION_STATUS_LABELS[session.status]} state`
-                    }, { status: 400 });
-                }
-
-                session.status = SessionStatus.Settled;
-                session.isDelegated = false;
-                session.settledAt = new Date().toISOString();
-
-                if (supabase) {
-                    try {
-                        await supabase.from('privacy_receipts')
-                            .update({ session_status: 'settled', is_delegated: false })
-                            .eq('payment_id', paymentId);
-                    } catch { /* ignore */ }
-                }
-
-                return NextResponse.json({
-                    success: true,
-                    action: 'settle',
-                    paymentId,
-                    status: 'settled',
-                    statusLabel: SESSION_STATUS_LABELS[SessionStatus.Settled],
-                    isDelegated: false,
-                    visibility: getPrivacyVisibility(SessionStatus.Settled),
-                    amount: session.amount,
-                    message: 'Payment settled. State committed back to base layer.',
-                    privacyNote: 'Amount is now visible on base layer after settlement.',
-                });
+                // MagicBlock TEE delegation program is not deployed on devnet.
+                // We expose these actions for forward-compatibility but return
+                // 501 so the UI can show an honest "coming soon" badge instead
+                // of pretending state has transitioned inside a TEE.
+                return NextResponse.json(
+                    {
+                        error: 'tee_delegation_unavailable',
+                        action,
+                        message:
+                            'MagicBlock Private Ephemeral Rollup delegation is not yet available on devnet. The encrypted receipt is already protecting your data — TEE delegation will activate once the on-chain program is live.',
+                        replacement: 'Encrypted receipt via action "issue" with `encrypted` payload.',
+                    },
+                    { status: 501 }
+                );
             }
 
             case 'verify':
@@ -367,7 +305,9 @@ export async function POST(request: NextRequest) {
                 try {
                     const { data, error } = await supabase
                         .from('privacy_receipts')
-                        .select('payment_id, session_hash, session_status, is_delegated, created_at, status')
+                        .select(
+                            'payment_id, customer_wallet, merchant_wallet, session_hash, session_status, is_delegated, created_at, status, ciphertext, encryption_nonce, ephemeral_pubkey, recipient_pubkey, payload_hash, tx_signature, encryption_scheme, encryption_method, payment_timestamp'
+                        )
                         .or(`customer_wallet.eq.${wallet},merchant_wallet.eq.${wallet}`)
                         .order('created_at', { ascending: false })
                         .limit(50);

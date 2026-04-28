@@ -2,7 +2,10 @@
  * GET  /api/fees — Get platform fee summary (all merchants or one)
  * POST /api/fees/collect — Trigger on-chain claim_platform_fees + record in ledger
  *
- * Admin-only: requires PLATFORM_ADMIN_KEY env var in the X-Admin-Key header.
+ * Admin-only: requires the caller's wallet session to be on the
+ * ADMIN_WALLETS env list (see lib/admin-auth.ts). Falls back to the
+ * legacy PLATFORM_ADMIN_KEY / X-Admin-Key header for backwards compat
+ * with internal scripts.
  */
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 
@@ -13,24 +16,29 @@ import {
     type TreasuryTransaction,
 } from "@/lib/db";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 // ---------------------------------------------------------------------------
-// Admin auth helper
+// Admin auth helper — wallet-gated, with legacy header fallback
 // ---------------------------------------------------------------------------
 
 function authenticateAdmin(request: NextRequest): { valid: boolean; error?: string } {
+    // Preferred: wallet-session admin
+    const auth = requireAdmin(request);
+    if (auth.ok) return { valid: true };
+
+    // Legacy: X-Admin-Key header (kept for internal scripts/cron). Distinct
+    // env var (PLATFORM_ADMIN_KEY) from the wallet-session ADMIN_SECRET so
+    // we can deprecate independently.
     const adminKey = request.headers.get("x-admin-key");
     const expected = process.env.PLATFORM_ADMIN_KEY;
+    if (expected && adminKey && adminKey === expected) return { valid: true };
 
-    // If no PLATFORM_ADMIN_KEY is set, allow in dev mode only
-    if (!expected) {
-        if (process.env.NODE_ENV === "development") return { valid: true };
-        return { valid: false, error: "PLATFORM_ADMIN_KEY not configured" };
+    if (process.env.NODE_ENV === "development" && !expected) {
+        // Dev convenience: allow when neither admin model is configured
+        return { valid: true };
     }
-
-    if (!adminKey) return { valid: false, error: "Missing X-Admin-Key header" };
-    if (adminKey !== expected) return { valid: false, error: "Invalid admin key" };
-    return { valid: true };
+    return { valid: false, error: "Sign in with an admin wallet, or supply X-Admin-Key for scripts." };
 }
 
 // ---------------------------------------------------------------------------

@@ -5,10 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import { SOLANA_RPC_URL } from "@/lib/constants";
 import { buildCreateVaultTransaction, shortenAddress } from "@/lib/squads";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   Store,
   Check,
@@ -82,6 +83,17 @@ function OnboardingPageInner() {
   const { setVisible } = useWalletModal();
   const { publicKey, connected, wallet } = useActiveWallet();
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // If the connected wallet is already a registered merchant, send them
+  // straight to the dashboard. This makes /onboarding safe to link from
+  // anywhere — re-visitors don't get stuck in a setup wizard.
+  const onboardingStatus = useOnboardingStatus();
+  useEffect(() => {
+    if (onboardingStatus.status === "onboarded") {
+      router.replace("/dashboard");
+    }
+  }, [onboardingStatus.status, router]);
 
   // ─── Invite token verification ─────────────────────
   const [tokenStatus, setTokenStatus] = useState<
@@ -93,11 +105,13 @@ function OnboardingPageInner() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (!token) {
-      if (process.env.NEXT_PUBLIC_ALLOW_OPEN_REGISTRATION === "true") {
-        setTokenStatus("valid");
+      // Default: open registration. Set NEXT_PUBLIC_INVITE_ONLY=true to
+      // require an invite token from the waitlist flow.
+      if (process.env.NEXT_PUBLIC_INVITE_ONLY === "true") {
+        setTokenStatus("invalid");
         return;
       }
-      setTokenStatus("invalid");
+      setTokenStatus("valid");
       return;
     }
     fetch(`/api/waitlist/verify-token?token=${encodeURIComponent(token)}`)

@@ -17,7 +17,18 @@ import * as path from "path";
 // Configuration
 const PROGRAM_ID = new PublicKey("339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5");
 const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
-const SQUADS_VAULT = new PublicKey("DthkuDsPKR6MqqV28rVSBEqdgnuNtEU6QpLACZ7bCBpD");
+// SQUADS_VAULT_ADDRESS env var is required in production deployments so we
+// don't ship hardcoded keys. The fallback below is the devnet test vault
+// only and MUST NOT be relied on for mainnet.
+const SQUADS_VAULT_FALLBACK_DEVNET = "DthkuDsPKR6MqqV28rVSBEqdgnuNtEU6QpLACZ7bCBpD";
+const squadsVaultStr = process.env.SQUADS_VAULT_ADDRESS || SQUADS_VAULT_FALLBACK_DEVNET;
+if (!process.env.SQUADS_VAULT_ADDRESS) {
+    console.warn(
+        "⚠️  SQUADS_VAULT_ADDRESS env var not set — falling back to devnet test vault.\n" +
+        "    Set SQUADS_VAULT_ADDRESS in .env before running against mainnet.\n"
+    );
+}
+const SQUADS_VAULT = new PublicKey(squadsVaultStr);
 
 // Platform settings
 const FEE_BPS = 200; // 2%

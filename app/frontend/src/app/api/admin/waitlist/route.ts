@@ -2,31 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { getWaitlist, updateWaitlistStatus } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
 import crypto from "crypto";
+import { requireAdmin } from "@/lib/admin-auth";
 
-const ADMIN_SECRET = process.env.ADMIN_SECRET;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
-
-function isAuthorized(request: NextRequest): boolean {
-    const auth = request.headers.get("authorization");
-    if (!auth || !ADMIN_SECRET) return false;
-    const token = auth.replace("Bearer ", "");
-    const a = Buffer.from(token);
-    const b = Buffer.from(ADMIN_SECRET);
-    if (a.length !== b.length) return false;
-    try {
-        return crypto.timingSafeEqual(a, b);
-    } catch {
-        return false;
-    }
-}
 
 /**
  * GET /api/admin/waitlist — List all waitlist entries
  */
 export async function GET(request: NextRequest) {
-    if (!isAuthorized(request)) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const auth = requireAdmin(request);
+    if (!auth.ok) return auth.response;
 
     try {
         const entries = await getWaitlist();
@@ -42,9 +27,8 @@ export async function GET(request: NextRequest) {
  * Body: { email: string, status: "invited" | "active" | "pending" }
  */
 export async function PATCH(request: NextRequest) {
-    if (!isAuthorized(request)) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const auth = requireAdmin(request);
+    if (!auth.ok) return auth.response;
 
     try {
         const body = await request.json();

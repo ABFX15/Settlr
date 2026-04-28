@@ -62,20 +62,12 @@ export async function POST(request: NextRequest) {
     }
 }
 
-// GET - Get waitlist stats (admin only - add auth later)
+// GET - Get waitlist stats (admin only)
 export async function GET(request: NextRequest) {
     try {
-        const auth = request.headers.get("authorization") || "";
-        const bearer = auth.startsWith("Bearer ") ? auth.replace("Bearer ", "") : "";
-        const adminKey = request.headers.get("x-admin-key") || "";
-        const expected = process.env.ADMIN_SECRET || "";
-
-        if (!expected || (bearer !== expected && adminKey !== expected)) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const { requireAdmin } = await import("@/lib/admin-auth");
+        const auth = requireAdmin(request);
+        if (!auth.ok) return auth.response;
 
         const waitlist = await getWaitlist();
 

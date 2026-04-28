@@ -20,6 +20,8 @@ export interface Merchant {
     multisigPda?: string | null;
     /** Cannabis license number (METRC/BioTrack) */
     licenseNumber?: string | null;
+    /** Long-lived X25519 public key (base58) for receipt encryption */
+    receiptPubkey?: string | null;
     webhookUrl?: string | null;
     webhookSecret?: string | null;
     kycEnabled?: boolean;
@@ -1122,6 +1124,7 @@ function parseMerchantRow(data: any): Merchant {
         signerWallet: data.signer_wallet || null,
         multisigPda: data.multisig_pda || null,
         licenseNumber: data.license_number || null,
+        receiptPubkey: data.receipt_pubkey || null,
         websiteUrl: data.website_url || null,
         webhookUrl: data.webhook_url,
         webhookSecret: data.webhook_secret,

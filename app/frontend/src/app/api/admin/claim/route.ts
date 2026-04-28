@@ -23,6 +23,7 @@ import {
     getAssociatedTokenAddressSync,
     createAssociatedTokenAccountInstruction,
 } from "@solana/spl-token";
+import { requireAdmin } from "@/lib/admin-auth";
 
 const PROGRAM_ID = new PublicKey(
     "339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5"
@@ -47,12 +48,26 @@ function getPlatformTreasuryPDA(): [PublicKey, number] {
 
 export async function POST(request: NextRequest) {
     try {
+        // Wallet-gated: caller must be an admin AND be the on-chain authority
+        // (the program enforces the latter; this is a UI/UX safeguard).
+        const auth = requireAdmin(request);
+        if (!auth.ok) return auth.response;
+
         const body = await request.json();
         const { authority } = body;
 
         if (!authority) {
             return NextResponse.json(
                 { error: "Missing authority wallet address" },
+                { status: 400 }
+            );
+        }
+        // If the request was wallet-authed, the body authority MUST match
+        // the session wallet (prevents one admin from building a tx for
+        // another admin's wallet to sign).
+        if (auth.via === "wallet" && auth.wallet && auth.wallet !== authority) {
+            return NextResponse.json(
+                { error: "authority must match the signed-in wallet" },
                 { status: 400 }
             );
         }
