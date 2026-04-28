@@ -118,11 +118,6 @@ export default function RootLayout({
         {/* Preconnect to external domains loaded at runtime */}
         <link
           rel="preconnect"
-          href="https://auth.privy.io"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
           href="https://explorer-api.walletconnect.com"
           crossOrigin="anonymous"
         />

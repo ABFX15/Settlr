@@ -214,8 +214,8 @@ function QuickStartContent() {
               Direct Invoices
             </h3>
             <p className="text-sm text-[#8a8a8a] mb-3">
-              Create payment links directly from the dashboard. No
-              POS integration required — works for any cannabis B2B transaction.
+              Create payment links directly from the dashboard. No POS
+              integration required — works for any cannabis B2B transaction.
             </p>
             <span className="text-sm text-[#34c759] font-medium">
               See Invoices tab →
@@ -369,17 +369,29 @@ function LeafLinkContent() {
         <h3 className="text-xl font-semibold mb-4">2. Configure in Settlr</h3>
         <p className="text-[#8a8a8a] mb-4">
           Save your LeafLink API key in the Settlr dashboard under{" "}
-          <strong className="text-[#5c5c5c]">Settings → Integrations → LeafLink</strong>.
-          Settlr validates the key immediately by calling LeafLink&apos;s company endpoint.
+          <strong className="text-[#5c5c5c]">
+            Settings → Integrations → LeafLink
+          </strong>
+          . Settlr validates the key immediately by calling LeafLink&apos;s
+          company endpoint.
         </p>
         <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-6">
           <p className="text-sm text-[#8a8a8a]">
             <strong className="text-[#5c5c5c]">Configuration options:</strong>
           </p>
           <ul className="text-sm text-[#8a8a8a] mt-2 space-y-1">
-            <li>• <strong>Auto-create invoice</strong> — Automatically create a Settlr invoice when a PO arrives</li>
-            <li>• <strong>Auto-send link</strong> — Automatically email the payment link to the buyer</li>
-            <li>• <strong>METRC sync</strong> — Include METRC tags and licenses in invoice metadata</li>
+            <li>
+              • <strong>Auto-create invoice</strong> — Automatically create a
+              Settlr invoice when a PO arrives
+            </li>
+            <li>
+              • <strong>Auto-send link</strong> — Automatically email the
+              payment link to the buyer
+            </li>
+            <li>
+              • <strong>METRC sync</strong> — Include METRC tags and licenses in
+              invoice metadata
+            </li>
           </ul>
         </div>
 
@@ -574,10 +586,21 @@ function InvoicesContent() {
             <strong className="text-[#5c5c5c]">Invoice fields:</strong>
           </p>
           <ul className="text-sm text-[#8a8a8a] mt-2 space-y-1">
-            <li>• <strong>Amount</strong> — Invoice total in USD (settled in USDC)</li>
-            <li>• <strong>Memo</strong> — Description (e.g. &quot;PO #4821 — 500 units Purple Haze&quot;)</li>
-            <li>• <strong>Buyer email</strong> — Payment link auto-sent to this address</li>
-            <li>• <strong>Metadata</strong> — Optional: METRC tags, license numbers</li>
+            <li>
+              • <strong>Amount</strong> — Invoice total in USD (settled in USDC)
+            </li>
+            <li>
+              • <strong>Memo</strong> — Description (e.g. &quot;PO #4821 — 500
+              units Purple Haze&quot;)
+            </li>
+            <li>
+              • <strong>Buyer email</strong> — Payment link auto-sent to this
+              address
+            </li>
+            <li>
+              • <strong>Metadata</strong> — Optional: METRC tags, license
+              numbers
+            </li>
           </ul>
         </div>
 
@@ -607,8 +630,8 @@ function InvoicesContent() {
         </h3>
         <p className="text-[#8a8a8a] mb-4">
           Monitor all invoices from{" "}
-          <strong className="text-[#5c5c5c]">Dashboard → Invoices</strong>.
-          Each invoice shows its current status:
+          <strong className="text-[#5c5c5c]">Dashboard → Invoices</strong>. Each
+          invoice shows its current status:
         </p>
         <div className="bg-[#f2f2f2] rounded-lg overflow-hidden mb-6">
           <table className="w-full text-left">
@@ -626,7 +649,9 @@ function InvoicesContent() {
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">completed</td>
+                <td className="px-4 py-3 font-mono text-[#34c759]">
+                  completed
+                </td>
                 <td className="px-4 py-3 text-[#8a8a8a]">
                   Payment received and confirmed on-chain
                 </td>
@@ -765,8 +790,8 @@ function APIContent() {
         <h2 className="text-2xl font-bold mb-4">REST API Reference</h2>
         <p className="text-[#8a8a8a] mb-6">
           Internal API endpoints for payments, LeafLink integration, and
-          treasury management. All authenticated routes require a valid session
-          (Privy login).
+          treasury management. All authenticated routes require a valid wallet
+          sign-in session.
         </p>
 
         {/* Base URL */}
@@ -781,10 +806,10 @@ function APIContent() {
             Authentication
           </h3>
           <p className="text-[#8a8a8a] text-sm">
-            API requests are authenticated via your Privy session. When calling
-            from the dashboard, authentication is handled automatically. For
-            server-to-server integrations (like LeafLink webhooks), Settlr uses
-            HMAC signature verification.
+            API requests are authenticated via your Solana wallet sign-in
+            session. When calling from the dashboard, authentication is handled
+            automatically. For server-to-server integrations (like LeafLink
+            webhooks), Settlr uses HMAC signature verification.
           </p>
         </div>
 

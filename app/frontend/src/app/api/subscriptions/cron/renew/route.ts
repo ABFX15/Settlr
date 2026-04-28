@@ -313,43 +313,16 @@ async function chargeSubscription(
         const appUrl =
             process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
         const amountLamports = Math.floor(amount * 1_000_000);
+        void appUrl;
+        void amountLamports;
 
-        const response = await fetch(`${appUrl}/api/sponsor-transaction`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                action: "create-and-submit",
-                amount: amountLamports,
-                source: customerWallet,
-                destination: merchantWallet,
-                memo: `Settlr sub renewal ${subId}`,
-            }),
-        });
-
-        if (!response.ok) {
-            const err = await response.json().catch(() => ({}));
-            throw new Error(
-                (err as Record<string, string>).error || "Payment failed"
-            );
-        }
-
-        const txData = (await response.json()) as Record<string, unknown>;
-        const signature = txData.transactionHash as string;
-
-        // Mark payment completed
-        await supabase
-            .from("subscription_payments")
-            .update({
-                status: "completed",
-                tx_signature: signature,
-                platform_fee: amount * 0.01,
-            })
-            .eq("id", paymentId);
-
-        return {
-            success: true,
-            payment: { id: paymentId, amount, signature, status: "completed" },
-        };
+        // Gasless sponsor-transaction infrastructure was removed in the
+        // self-custody architectural cleanup. Auto-renewals now require
+        // manual customer action — throw so the catch block marks this
+        // charge as failed and merchant collects via invoice.
+        throw new Error(
+            "Auto-renewal unavailable — gasless infrastructure removed. Customer must pay invoice manually."
+        );
     } catch (error) {
         console.error(`[Charge] Failed for sub ${subId}:`, error);
 

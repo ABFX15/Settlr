@@ -39,16 +39,12 @@ import {
   createTransferInstruction,
   createAssociatedTokenAccountInstruction,
 } from "@solana/spl-token";
-import { ChainSelector, getExplorerUrl } from "@/components/ChainSelector";
 import { TokenSelector } from "@/components/TokenSelector";
-import { useEvmPayment } from "@/hooks/useEvmPayment";
-import { useMayanSwap, MayanStatus } from "@/hooks/useMayanSwap";
 import {
   useJupiterSwap,
   SOLANA_TOKENS,
   USDC_MINT as JUPITER_USDC_MINT,
 } from "@/hooks/useJupiterSwap";
-import { ChainType, USDC_ADDRESSES } from "@/hooks/useMultichainWallet";
 import {
   useOnRamp,
   getRecommendedTier,
@@ -219,7 +215,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   const [gaslessAvailable, setGaslessAvailable] = useState(false);
   const [checkingGasless, setCheckingGasless] = useState(true);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false); // Prevent double submissions
-  const privyFeePayerAddress: string | null = null; // Legacy: no longer used
 
   // KYC state
   const [merchantKycEnabled, setMerchantKycEnabled] = useState(false);
@@ -230,17 +225,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   >("unknown");
   const [checkingKyc, setCheckingKyc] = useState(false);
 
-  // One-Click payment state
-  const [hasOneClickApproval, setHasOneClickApproval] = useState(false);
-  const [oneClickApproval, setOneClickApproval] = useState<{
-    id: string;
-    spendingLimit: number;
-    amountSpent: number;
-    remainingLimit: number;
-  } | null>(null);
-  const [checkingOneClick, setCheckingOneClick] = useState(false);
-  const [processingOneClick, setProcessingOneClick] = useState(false);
-
   // Privacy state (MagicBlock PER)
   // If URL has private=true, force privacy on and don't allow toggling
   const [privacyEnabled, setPrivacyEnabled] = useState(isPrivatePayment);
@@ -249,40 +233,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     string | null
   >(null);
   const [issuingPrivateReceipt, setIssuingPrivateReceipt] = useState(false);
-
-  // Multichain state
-  const [selectedChain, setSelectedChain] = useState<ChainType>("solana");
-  const [evmBalance, setEvmBalance] = useState<number | null>(null);
-  const [mayanQuotePreview, setMayanQuotePreview] = useState<{
-    expectedOut: number;
-    fee: number;
-    eta: string;
-  } | null>(null);
-
-  // EVM wallet and payment hooks — disabled (wallet-adapter is Solana-only)
-  const evmWalletsList: any[] = [];
-  const evmWalletsReady = true;
-  const {
-    sendPayment: sendEvmPayment,
-    getBalance: getEvmBalance,
-    loading: evmLoading,
-  } = useEvmPayment();
-
-  // Mayan cross-chain swap hook
-  const {
-    executeSwap: executeMayanSwap,
-    getQuotePreview: getMayanQuotePreview,
-    trackSwap: trackMayanSwap,
-    loading: mayanLoading,
-    status: mayanStatus,
-    error: mayanError,
-  } = useMayanSwap();
-
-  // Get active EVM wallet
-  const activeEvmWallet =
-    evmWalletsList?.find((w) => w.walletClientType !== "embedded") ||
-    evmWalletsList?.[0];
-  const hasEvmWallet = !!activeEvmWallet;
 
   // Get a simple wallet reference for Jupiter
   const jupiterWalletAddress = walletPubkey?.toBase58() || null;
@@ -356,12 +306,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // Whether a Jupiter swap is needed (non-USDC token selected on Solana mainnet)
   // Jupiter only works on mainnet, not devnet
   const needsJupiterSwap =
-    !IS_DEVNET &&
-    selectedChain === "solana" &&
-    selectedToken.mint !== JUPITER_USDC_MINT;
-
-  // Determine if selected chain is EVM
-  const isEvmChain = selectedChain !== "solana";
+    !IS_DEVNET && selectedToken.mint !== JUPITER_USDC_MINT;
 
   // Check if gasless is available (Kora for external wallets)
   useEffect(() => {
@@ -409,20 +354,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     checkMerchantKyc();
   }, [merchantWallet]);
 
-  // Fetch Mayan quote preview when EVM chain is selected
-  useEffect(() => {
-    async function fetchMayanQuote() {
-      if (!isEvmChain || amount <= 0) {
-        setMayanQuotePreview(null);
-        return;
-      }
-
-      const preview = await getMayanQuotePreview(amount, selectedChain);
-      setMayanQuotePreview(preview);
-    }
-    fetchMayanQuote();
-  }, [isEvmChain, amount, selectedChain, getMayanQuotePreview]);
-
   // Fetch Jupiter quote when Solana token changes (for non-USDC tokens)
   // Only runs on mainnet since Jupiter doesn't work on devnet
   useEffect(() => {
@@ -443,53 +374,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   // With wallet-adapter, user always has external wallet
   const hasExternalWallet = authenticated;
   const isExternalWallet = true;
-
-  // Check for existing one-click approval
-  useEffect(() => {
-    async function checkOneClickApproval() {
-      if (!activeWallet?.address || !merchantWallet) return;
-
-      setCheckingOneClick(true);
-      try {
-        const response = await fetch("/api/one-click", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "check",
-            customerWallet: activeWallet.address,
-            merchantWallet: merchantWallet,
-          }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.hasApproval && data.approval) {
-            const remainingLimit =
-              data.approval.spending_limit - data.approval.amount_spent;
-            if (remainingLimit >= amount) {
-              setHasOneClickApproval(true);
-              setOneClickApproval({
-                id: data.approval.id,
-                spendingLimit: data.approval.spending_limit,
-                amountSpent: data.approval.amount_spent,
-                remainingLimit,
-              });
-              console.log("[One-Click] Found active approval:", {
-                limit: data.approval.spending_limit,
-                spent: data.approval.amount_spent,
-                remaining: remainingLimit,
-              });
-            }
-          }
-        }
-      } catch (err) {
-        console.log("[One-Click] Could not check approval:", err);
-      } finally {
-        setCheckingOneClick(false);
-      }
-    }
-    checkOneClickApproval();
-  }, [activeWallet?.address, merchantWallet, amount]);
 
   // Check customer KYC status when merchant requires it
   useEffect(() => {
@@ -652,284 +536,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       setError("Failed to connect wallet");
     } finally {
       setCreatingWallet(false);
-    }
-  };
-
-  // Process sponsored payment (server creates tx, user signs, server submits)
-  // Note: Privacy receipts are issued at the end of this flow if enabled
-  const processSponsoredPayment = async () => {
-    if (!activeWallet?.address || !merchantWallet || !privyFeePayerAddress) {
-      setError("Missing wallet, merchant, or fee payer");
-      setStep("error");
-      return;
-    }
-
-    setStep("processing");
-    setError("");
-
-    try {
-      // Step 0: Check merchant wallet safety with Range Security
-      console.log("[Sponsored] Checking merchant wallet safety...");
-      const riskCheck = await fetch(
-        `/api/risk-check?address=${merchantWallet}`,
-      );
-      const riskData = await riskCheck.json();
-
-      if (riskData.blocked) {
-        console.error(
-          "[Sponsored] Merchant wallet blocked:",
-          riskData.riskLevel,
-        );
-        throw new Error(
-          `Payment blocked: Merchant wallet flagged as ${riskData.riskLevel}. ${riskData.reasoning}`,
-        );
-      }
-
-      if (riskData.warning) {
-        console.warn(
-          "[Sponsored] Merchant wallet warning:",
-          riskData.riskLevel,
-        );
-      }
-
-      console.log(
-        "[Sponsored] Merchant wallet safe, risk score:",
-        riskData.riskScore,
-      );
-
-      const amountInBaseUnits = Math.round(
-        amount * Math.pow(10, USDC_DECIMALS),
-      );
-
-      // Step 1: Server creates the transaction (with its own blockhash)
-      // This ensures blockhash is from the same RPC the server uses
-      console.log("[Sponsored] Step 1: Server creating transaction...");
-      const createResponse = await fetch("/api/sponsor-transaction", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "create",
-          amount: amountInBaseUnits,
-          source: activeWallet.address,
-          destination: merchantWallet,
-        }),
-      });
-
-      if (!createResponse.ok) {
-        const errorData = await createResponse.json();
-        throw new Error(errorData.error || "Failed to create transaction");
-      }
-
-      const { transaction: txBase64 } = await createResponse.json();
-      console.log("[Sponsored] Transaction created by server");
-
-      // Step 2: User signs their portion (the USDC transfer authorization)
-      console.log("[Sponsored] Step 2: Requesting user signature...");
-      const txBytes = Buffer.from(txBase64, "base64");
-
-      if (!walletAdapterSignTransaction) throw new Error("Wallet cannot sign");
-      const txToSign = Transaction.from(txBytes);
-      const signedTx = await walletAdapterSignTransaction(txToSign);
-
-      console.log("[Sponsored] User signed");
-
-      // Step 3: Send user-signed tx back to server for fee payer signature + broadcast
-      console.log("[Sponsored] Step 3: Server signing and submitting...");
-      const signedTxBase64 = Buffer.from(
-        signedTx.serialize({ requireAllSignatures: false }),
-      ).toString("base64");
-
-      const submitResponse = await fetch("/api/sponsor-transaction", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "submit",
-          transaction: signedTxBase64,
-        }),
-      });
-
-      if (!submitResponse.ok) {
-        const errorData = await submitResponse.json();
-        throw new Error(errorData.error || "Failed to submit transaction");
-      }
-
-      const { transactionHash } = await submitResponse.json();
-      console.log("[Sponsored] Transaction sent:", transactionHash);
-
-      setTxSignature(transactionHash);
-
-      // Complete checkout session if needed
-      if (sessionId) {
-        try {
-          const completeResponse = await fetch("/api/checkout/complete", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              sessionId,
-              signature: transactionHash,
-              customerWallet: activeWallet.address,
-            }),
-          });
-
-          if (completeResponse.ok) {
-            const completeData = await completeResponse.json();
-            console.log("[Sponsored] Checkout completed:", completeData);
-
-            if (successUrl) {
-              window.location.href = successUrl;
-              return;
-            }
-          }
-        } catch (completeErr) {
-          console.error("[Sponsored] Error completing checkout:", completeErr);
-        }
-      } else {
-        // No session - record payment for redirect-based checkouts
-        try {
-          await fetch("/api/payments/record", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              signature: transactionHash,
-              merchantWallet,
-              customerWallet: activeWallet.address,
-              amount,
-              memo,
-            }),
-          });
-          console.log("[Sponsored] Payment recorded for redirect flow");
-        } catch (recordErr) {
-          console.error("[Sponsored] Error recording payment:", recordErr);
-        }
-      }
-
-      // Issue private receipt for the payment (MagicBlock PER)
-      const paymentId = transactionHash || `payment_${Date.now()}`;
-      issuePrivateReceipt(
-        paymentId,
-        amount,
-        activeWallet.address,
-        merchantWallet,
-      );
-
-      setPaidFromWallet(activeWallet.address);
-      setStep("success");
-      sendToParent("settlr:success", {
-        signature: transactionHash,
-        amount,
-        merchantWallet,
-        memo,
-        sponsored: true,
-        privacy: privacyEnabled,
-      });
-    } catch (err: unknown) {
-      console.error("[Sponsored] Payment error:", err);
-      const errorMessage =
-        err instanceof Error ? err.message : "Payment failed";
-      setError(errorMessage);
-      setStep("error");
-      sendToParent("settlr:error", { message: errorMessage });
-    }
-  };
-
-  // Process one-click payment
-  // For embedded wallets: server signs on behalf of user (true one-click)
-  // For external wallets: validates approval, then uses gasless flow (faster checkout)
-  const processOneClickPayment = async () => {
-    if (!activeWallet?.address || !merchantWallet || !oneClickApproval) {
-      setError("Missing wallet, merchant, or approval");
-      setStep("error");
-      return;
-    }
-
-    setProcessingOneClick(true);
-    setStep("processing");
-    setError("");
-
-    try {
-      console.log("[One-Click] Processing payment...", { isExternalWallet });
-
-      const response = await fetch("/api/one-click", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "charge",
-          customerWallet: activeWallet.address,
-          merchantWallet: merchantWallet,
-          amount: amount,
-          memo: memo || `Payment to ${merchantName}`,
-          isEmbeddedWallet: !isExternalWallet,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "One-click payment failed");
-      }
-
-      if (data.demo) {
-        throw new Error(
-          "One-click is running in demo mode and cannot settle real fee-bearing payments.",
-        );
-      }
-
-      // For embedded wallets, payment is complete
-      if (data.success && data.signature) {
-        console.log(
-          "[One-Click] Embedded wallet payment successful:",
-          data.signature,
-        );
-        setTxSignature(data.signature);
-        setPaidFromWallet(activeWallet.address);
-
-        // Issue private receipt
-        issuePrivateReceipt(
-          data.signature,
-          amount,
-          activeWallet.address,
-          merchantWallet,
-        );
-
-        setStep("success");
-        sendToParent("settlr:success", {
-          signature: data.signature,
-          amount,
-          merchantWallet,
-          memo,
-          oneClick: true,
-          privacy: privacyEnabled,
-        });
-        return;
-      }
-
-      // For external wallets, approval is validated - now use gasless payment
-      if (data.requiresSignature) {
-        console.log(
-          "[One-Click] External wallet - approval validated, using gasless...",
-        );
-        setProcessingOneClick(false);
-
-        // Use gasless payment flow (which requires wallet signature)
-        if (useGasless && gaslessAvailable) {
-          return processGaslessPayment();
-        } else if (privyFeePayerAddress) {
-          return processSponsoredPayment();
-        } else {
-          return processPayment();
-        }
-      }
-
-      throw new Error("Unexpected response from one-click API");
-    } catch (err: unknown) {
-      console.error("[One-Click] Payment error:", err);
-      const errorMessage =
-        err instanceof Error ? err.message : "One-click payment failed";
-      setError(errorMessage);
-      setStep("error");
-      sendToParent("settlr:error", { message: errorMessage });
-    } finally {
-      setProcessingOneClick(false);
     }
   };
 
@@ -1230,108 +836,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     } finally {
       // Always reset the processing flag
       setIsProcessingPayment(false);
-    }
-  };
-
-  // Process EVM payment via Mayan (cross-chain to Solana)
-  const processEvmPayment = async () => {
-    if (!activeEvmWallet?.address || !merchantWallet) {
-      setError("Missing wallet or merchant address");
-      setStep("error");
-      return;
-    }
-
-    setStep("processing");
-    setError("");
-
-    try {
-      // Use Mayan to bridge USDC from EVM chain to merchant's Solana wallet
-      const result = await executeMayanSwap({
-        amount,
-        fromChain: selectedChain,
-        toAddress: merchantWallet, // Merchant's Solana address
-      });
-
-      if (!result.success) {
-        throw new Error(result.error || "Cross-chain payment failed");
-      }
-
-      setTxSignature(result.hash || "");
-
-      // Complete checkout session if applicable
-      if (sessionId && result.hash) {
-        try {
-          const completeResponse = await fetch("/api/checkout/complete", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              sessionId,
-              signature: result.hash,
-              customerWallet: activeEvmWallet.address,
-              chain: selectedChain,
-              bridgeType: "mayan",
-              destinationChain: "solana",
-            }),
-          });
-
-          if (completeResponse.ok) {
-            console.log("[Mayan] Checkout completed");
-            if (successUrl) {
-              window.location.href = successUrl;
-              return;
-            }
-          }
-        } catch (completeErr) {
-          console.error("Error completing checkout:", completeErr);
-        }
-      } else if (result.hash) {
-        // No session - record payment for redirect-based checkouts
-        try {
-          await fetch("/api/payments/record", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              signature: result.hash,
-              merchantWallet,
-              customerWallet: activeEvmWallet.address,
-              amount,
-              memo,
-            }),
-          });
-          console.log("[Mayan] Payment recorded for redirect flow");
-        } catch (recordErr) {
-          console.error("[Mayan] Error recording payment:", recordErr);
-        }
-      }
-
-      // Issue private receipt for EVM cross-chain payment
-      const paymentId = result.hash || `payment_${Date.now()}`;
-      issuePrivateReceipt(
-        paymentId,
-        amount,
-        activeEvmWallet.address,
-        merchantWallet,
-      );
-
-      setPaidFromWallet(activeEvmWallet.address);
-      setStep("success");
-      sendToParent("settlr:success", {
-        signature: result.hash,
-        amount,
-        merchantWallet,
-        memo,
-        sourceChain: selectedChain,
-        destinationChain: "solana",
-        bridgeType: "mayan",
-        privacy: privacyEnabled,
-      });
-    } catch (err: unknown) {
-      console.error("[EVM] Payment error:", err);
-      const errorMessage =
-        err instanceof Error ? err.message : "Payment failed";
-      setError(errorMessage);
-      setStep("error");
-      sendToParent("settlr:error", { message: errorMessage });
     }
   };
 
@@ -1731,11 +1235,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         "[Payment] Privacy enabled - routing to private payment flow",
       );
       return processPrivatePayment();
-    }
-
-    // If EVM chain is selected, use EVM payment flow
-    if (isEvmChain) {
-      return processEvmPayment();
     }
 
     // If Jupiter swap is needed (non-USDC token on Solana)
@@ -2442,11 +1941,10 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Confirm step
   if (step === "confirm") {
-    // Check balance based on selected chain
-    const currentBalance = isEvmChain ? evmBalance : balance;
+    const currentBalance = balance;
     const hasEnoughBalance =
       currentBalance !== null && currentBalance >= amount;
-    const hasCorrectWallet = isEvmChain ? hasEvmWallet : !!activeWallet;
+    const hasCorrectWallet = !!activeWallet;
 
     return (
       <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4 pb-safe relative overflow-y-auto">
@@ -2529,59 +2027,8 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               </div>
             )}
 
-            {/* Chain Selector */}
-            <div className="mb-4 p-3 bg-[#f2f2f2] rounded-xl">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[#8a8a8a] text-xs mb-1">
-                    Pay with USDC on
-                  </p>
-                  <ChainSelector
-                    selectedChain={selectedChain}
-                    onSelect={(chain) => {
-                      setSelectedChain(chain);
-                      // Reset balance when chain changes
-                      if (chain === "solana") {
-                        fetchBalance();
-                      } else {
-                        // Fetch EVM balance
-                        getEvmBalance(chain).then(setEvmBalance);
-                      }
-                    }}
-                    availableChains={IS_DEVNET ? ["solana"] : undefined}
-                  />
-                </div>
-                {isEvmChain && activeEvmWallet && (
-                  <div className="text-right">
-                    <p className="text-[#8a8a8a] text-xs">Balance</p>
-                    <p
-                      className={`text-sm font-medium ${
-                        (evmBalance || 0) >= amount
-                          ? "text-[#34c759]"
-                          : "text-[#e74c3c]"
-                      }`}
-                    >
-                      ${evmBalance?.toFixed(2) || "0.00"}
-                    </p>
-                  </div>
-                )}
-              </div>
-              {IS_DEVNET && (
-                <p className="text-[#d29500]/70 text-xs mt-2 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  Devnet mode - multichain disabled
-                </p>
-              )}
-              {isEvmChain && !hasEvmWallet && !IS_DEVNET && (
-                <p className="text-[#d29500] text-xs mt-2 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  Connect an Ethereum wallet to pay on {selectedChain}
-                </p>
-              )}
-            </div>
-
-            {/* Token Selector (for Solana - pay with SOL, BONK, etc.) */}
-            {selectedChain === "solana" && !IS_DEVNET && (
+            {/* Token Selector (pay with SOL, BONK, etc.) */}
+            {!IS_DEVNET && (
               <div className="mb-4">
                 <p className="text-[#8a8a8a] text-xs mb-2">Pay with</p>
                 <TokenSelector
@@ -2650,55 +2097,9 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             </div>
 
             {/* Mayan Cross-chain Info (for EVM chains) */}
-            {isEvmChain && (
-              <div className="bg-[#34c759]/[0.06] border border-[#8e24aa]/20 rounded-xl p-4 mb-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-full bg-[#34c759]/15 flex items-center justify-center">
-                    <Zap className="w-4 h-4 text-[#34c759]" />
-                  </div>
-                  <div>
-                    <p className="text-[#212121] font-medium text-sm">
-                      Cross-Chain Payment
-                    </p>
-                    <p className="text-[#8a8a8a] text-xs">
-                      Bridged to Solana via Mayan
-                    </p>
-                  </div>
-                </div>
-                {mayanQuotePreview ? (
-                  <div className="space-y-2 text-xs">
-                    <div className="flex justify-between text-[#8a8a8a]">
-                      <span>You pay ({selectedChain})</span>
-                      <span className="text-[#212121]">
-                        ${amount.toFixed(2)} USDC
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-[#8a8a8a]">
-                      <span>Merchant receives (Solana)</span>
-                      <span className="text-[#34c759]">
-                        ~${mayanQuotePreview.expectedOut.toFixed(2)} USDC
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-[#8a8a8a]">
-                      <span>Bridge fee</span>
-                      <span>${mayanQuotePreview.fee.toFixed(4)}</span>
-                    </div>
-                    <div className="flex justify-between text-[#8a8a8a]">
-                      <span>Estimated time</span>
-                      <span>{mayanQuotePreview.eta}</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 text-[#8a8a8a] text-xs">
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                    <span>Fetching best route...</span>
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* Gasless Toggle (Solana only, uses Kora) */}
-            {!isEvmChain && !checkingGasless && gaslessAvailable && (
+            {!checkingGasless && gaslessAvailable && (
               <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-[#34c759]/30 rounded-xl p-4 mb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -2737,58 +2138,54 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             )}
 
             {/* Privacy Toggle (Always visible on Solana) */}
-            {!isEvmChain && (
-              <div className="bg-[#34c759]/[0.06] border border-[#8e24aa]/20 rounded-xl p-4 mb-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#34c759]/15 flex items-center justify-center">
-                      <Lock className="w-5 h-5 text-[#34c759]" />
-                    </div>
-                    <div>
-                      <p className="text-[#212121] font-medium">
-                        Private Receipt
-                        {isPrivacyForced && (
-                          <span className="ml-2 text-xs text-[#34c759] font-normal">
-                            (Required)
-                          </span>
-                        )}
-                      </p>
-                      <p className="text-[#8a8a8a] text-xs">
-                        Receipt private via MagicBlock PER
-                      </p>
-                    </div>
+            <div className="bg-[#34c759]/[0.06] border border-[#8e24aa]/20 rounded-xl p-4 mb-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#34c759]/15 flex items-center justify-center">
+                    <Lock className="w-5 h-5 text-[#34c759]" />
                   </div>
-                  <button
-                    onClick={() =>
-                      !isPrivacyForced && setPrivacyEnabled(!privacyEnabled)
-                    }
-                    disabled={isPrivacyForced}
-                    className={`relative w-12 h-6 rounded-full transition-colors ${
-                      privacyEnabled || isPrivacyForced
-                        ? "bg-[#34c759]"
-                        : "bg-white/20"
-                    } ${
-                      isPrivacyForced ? "opacity-75 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    <span
-                      className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
-                        privacyEnabled || isPrivacyForced
-                          ? "translate-x-6"
-                          : "translate-x-0.5"
-                      }`}
-                    />
-                  </button>
+                  <div>
+                    <p className="text-[#212121] font-medium">
+                      Private Receipt
+                      {isPrivacyForced && (
+                        <span className="ml-2 text-xs text-[#34c759] font-normal">
+                          (Required)
+                        </span>
+                      )}
+                    </p>
+                    <p className="text-[#8a8a8a] text-xs">
+                      Receipt private via MagicBlock PER
+                    </p>
+                  </div>
                 </div>
-                {(privacyEnabled || isPrivacyForced) && (
-                  <p className="text-[#34c759] text-xs mt-2 flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3" />
-                    Payment details encrypted • Only you & merchant can see
-                    receipt
-                  </p>
-                )}
+                <button
+                  onClick={() =>
+                    !isPrivacyForced && setPrivacyEnabled(!privacyEnabled)
+                  }
+                  disabled={isPrivacyForced}
+                  className={`relative w-12 h-6 rounded-full transition-colors ${
+                    privacyEnabled || isPrivacyForced
+                      ? "bg-[#34c759]"
+                      : "bg-white/20"
+                  } ${isPrivacyForced ? "opacity-75 cursor-not-allowed" : ""}`}
+                >
+                  <span
+                    className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
+                      privacyEnabled || isPrivacyForced
+                        ? "translate-x-6"
+                        : "translate-x-0.5"
+                    }`}
+                  />
+                </button>
               </div>
-            )}
+              {(privacyEnabled || isPrivacyForced) && (
+                <p className="text-[#34c759] text-xs mt-2 flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  Payment details encrypted • Only you & merchant can see
+                  receipt
+                </p>
+              )}
+            </div>
 
             {/* Low balance warning with fund options */}
             {!hasEnoughBalance && balance !== null && activeWallet && (
@@ -2919,9 +2316,8 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
               </div>
             )}
 
-            {/* Low SOL balance warning for gas (Solana, not using Kora gasless) */}
-            {!isEvmChain &&
-              !useGasless &&
+            {/* Low SOL balance warning for gas (when not using Kora gasless) */}
+            {!useGasless &&
               isExternalWallet &&
               solBalance !== null &&
               solBalance < 0.001 &&
@@ -2951,46 +2347,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </div>
               )}
 
-            {/* One-Click Payment Button (when customer has active approval) */}
-            {hasOneClickApproval && oneClickApproval && !checkingOneClick && (
-              <div className="mb-4">
-                <button
-                  onClick={processOneClickPayment}
-                  disabled={processingOneClick}
-                  className="w-full py-4 font-semibold rounded-xl flex items-center justify-center gap-2 transition-all bg-white text-[#212121] hover:opacity-90 shadow-lg hover:shadow-[#212121]/5"
-                >
-                  {processingOneClick ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="w-5 h-5" />
-                      One-Click Pay ${amount.toFixed(2)} USDC
-                    </>
-                  )}
-                </button>
-                <p className="text-center text-xs text-[#8a8a8a] mt-2">
-                  Spending limit: ${oneClickApproval.remainingLimit.toFixed(2)}{" "}
-                  remaining
-                </p>
-                <div className="flex items-center justify-center gap-2 mt-2">
-                  <span className="text-[#8a8a8a] text-xs">or</span>
-                </div>
-              </div>
-            )}
-
             <button
               onClick={processPayment}
               disabled={
                 !hasEnoughBalance ||
                 loadingBalance ||
                 !hasCorrectWallet ||
-                evmLoading ||
                 // Only check SOL balance for gas
-                (!isEvmChain &&
-                  !useGasless &&
+                (!useGasless &&
                   isExternalWallet &&
                   solBalance !== null &&
                   solBalance < 0.001)
@@ -2999,25 +2363,14 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 hasEnoughBalance &&
                 !loadingBalance &&
                 hasCorrectWallet &&
-                (isEvmChain ||
-                  useGasless ||
-                  (solBalance !== null && solBalance >= 0.001))
-                  ? isEvmChain
-                    ? "bg-[#38bdf8] text-[#212121] hover:opacity-90"
-                    : useGasless && gaslessAvailable
+                (useGasless || (solBalance !== null && solBalance >= 0.001))
+                  ? useGasless && gaslessAvailable
                     ? "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:opacity-90"
                     : "bg-white text-[#212121] hover:opacity-90"
                   : "bg-[#f2f2f2] text-[#8a8a8a] cursor-not-allowed"
               }`}
             >
-              {isEvmChain ? (
-                <>
-                  <Check className="w-5 h-5" />
-                  Pay ${amount.toFixed(2)} USDC on{" "}
-                  {selectedChain.charAt(0).toUpperCase() +
-                    selectedChain.slice(1)}
-                </>
-              ) : needsJupiterSwap ? (
+              {needsJupiterSwap ? (
                 <>
                   <Zap className="w-5 h-5" />
                   Pay {jupiterInputAmount} {selectedToken.symbol}
@@ -3203,30 +2556,8 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Processing step
   if (step === "processing") {
-    // Determine status message based on Mayan status for cross-chain payments
-    let statusMessage = "Please wait while we confirm your transaction...";
-    let statusTitle = "Processing Payment";
-
-    if (isEvmChain && mayanStatus !== "idle") {
-      switch (mayanStatus) {
-        case "quoting":
-          statusTitle = "Finding Best Route";
-          statusMessage = "Getting the best cross-chain swap rate...";
-          break;
-        case "approving":
-          statusTitle = "Approving USDC";
-          statusMessage = "Please approve USDC spending in your wallet...";
-          break;
-        case "swapping":
-          statusTitle = "Bridging to Solana";
-          statusMessage = "Sending USDC cross-chain via Mayan...";
-          break;
-        case "tracking":
-          statusTitle = "Confirming Bridge";
-          statusMessage = "Waiting for cross-chain confirmation...";
-          break;
-      }
-    }
+    const statusMessage = "Please wait while we confirm your transaction...";
+    const statusTitle = "Processing Payment";
 
     return (
       <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4">
@@ -3242,11 +2573,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             {statusTitle}
           </h2>
           <p className="text-[#8a8a8a]">{statusMessage}</p>
-          {isEvmChain && (
-            <p className="text-xs text-[#8a8a8a] mt-4">
-              Cross-chain payment powered by Mayan
-            </p>
-          )}
         </motion.div>
       </div>
     );
@@ -3254,13 +2580,8 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
   // Success step
   if (step === "success") {
-    // For EVM cross-chain payments, link to Mayan explorer
-    // For Solana direct payments, link to Solscan (more user-friendly)
-    const isCrossChain = selectedChain !== "solana";
-    const explorerUrl = isCrossChain
-      ? `https://explorer.mayan.finance/swap/${txSignature}`
-      : solscanUrl(txSignature);
-    const explorerName = isCrossChain ? "Mayan Explorer" : "Solscan";
+    const explorerUrl = solscanUrl(txSignature);
+    const explorerName = "Solscan";
 
     return (
       <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4">
@@ -3277,13 +2598,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           </h2>
           <p className="text-[#8a8a8a] mb-6">
             You paid ${amount.toFixed(2)} USDC to {merchantName}
-            {selectedChain !== "solana" && (
-              <span className="block text-sm text-[#8a8a8a] mt-1">
-                Bridged from{" "}
-                {selectedChain.charAt(0).toUpperCase() + selectedChain.slice(1)}{" "}
-                → Solana via Mayan
-              </span>
-            )}
           </p>
 
           {/* Privacy Badge */}
@@ -3343,67 +2657,6 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           </div>
 
           {/* One-Click Payment Opt-in */}
-          <div className="mb-6 p-4 bg-[#38bdf8]/[0.06] border border-[#38bdf8]/20 rounded-xl">
-            <div className="flex items-center gap-3 mb-2">
-              <Zap className="w-5 h-5 text-cyan-400" />
-              <span className="text-[#212121] font-medium">
-                Enable One-Click Payments?
-              </span>
-            </div>
-            <p className="text-[#8a8a8a] text-xs mb-3">
-              Skip approval next time. Set a spending limit for {merchantName}.
-            </p>
-            <button
-              onClick={async () => {
-                const customerWallet = paidFromWallet || activeWallet?.address;
-                if (!customerWallet) {
-                  alert("Error: No wallet address available");
-                  return;
-                }
-                try {
-                  console.log("[One-Click] Requesting approval for:", {
-                    customerWallet,
-                    merchantWallet,
-                  });
-                  const response = await fetch("/api/one-click", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      action: "approve",
-                      customerWallet: customerWallet,
-                      merchantWallet: merchantWallet,
-                      spendingLimit: 100, // $100 default limit
-                      expiresInDays: 30,
-                    }),
-                  });
-                  const data = await response.json();
-                  console.log("[One-Click] Response:", data);
-                  if (response.ok && data.success) {
-                    alert(
-                      "✓ One-click payments enabled! Future purchases will be instant.",
-                    );
-                  } else {
-                    alert(
-                      `Error: ${
-                        data.error || "Failed to enable one-click payments"
-                      }`,
-                    );
-                  }
-                } catch (e) {
-                  console.error("One-click approval failed:", e);
-                  alert(
-                    `Error: ${
-                      e instanceof Error ? e.message : "Failed to enable"
-                    }`,
-                  );
-                }
-              }}
-              className="w-full py-2 px-4 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              Enable One-Click ($100 limit)
-            </button>
-          </div>
-
           <div className="space-y-3">
             {successUrl ? (
               <a

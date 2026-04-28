@@ -89,7 +89,7 @@ function shortenAddress(addr: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// Component — Completely standalone, NO Privy. Uses admin secret + direct Phantom.
+// Component — Completely standalone. Uses admin secret + direct Phantom.
 // ---------------------------------------------------------------------------
 
 export default function AdminDashboardPage() {
@@ -103,7 +103,7 @@ export default function AdminDashboardPage() {
   const { setVisible } = useWalletModal();
   const publicKey = connectedPublicKey?.toBase58() ?? null;
 
-  // Admin auth — simple secret, no Privy session
+  // Admin auth — simple secret
   const [adminSecret, setAdminSecret] = useState("");
   const [isAuthed, setIsAuthed] = useState(false);
   const [authError, setAuthError] = useState("");

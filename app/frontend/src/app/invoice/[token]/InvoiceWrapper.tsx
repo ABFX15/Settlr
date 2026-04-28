@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { Loader2 } from "lucide-react";
 
-// Dynamically import the invoice client to avoid SSR issues with Privy Solana hooks
+// Dynamically import the invoice client to avoid SSR issues with Solana wallet hooks
 // (thread-stream / pino pulled in by @walletconnect/logger are Node.js-only)
 const InvoicePayClient = dynamic(() => import("./InvoicePayClient"), {
   ssr: false,

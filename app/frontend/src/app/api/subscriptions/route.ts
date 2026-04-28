@@ -554,8 +554,9 @@ async function handleCharge(body: Record<string, unknown>) {
 }
 
 /**
- * Core charge function — charges a subscription via sponsor-transaction
- * This reuses the existing Privy gasless infrastructure.
+ * Core charge function — was charging via sponsor-transaction.
+ * Gasless infrastructure was removed; auto-charges now fail and merchant
+ * collects via invoice.
  */
 async function chargeSubscription(
     sub: Record<string, unknown>,
@@ -594,55 +595,16 @@ async function chargeSubscription(
         const appUrl =
             process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
         const amountLamports = Math.floor(amount * 1_000_000);
+        void appUrl;
+        void amountLamports;
 
-        // Step 1: Create the transaction
-        const createRes = await fetch(`${appUrl}/api/sponsor-transaction`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                action: "create-and-submit",
-                amount: amountLamports,
-                source: customerWallet,
-                destination: merchantWallet,
-                memo: `Settlr subscription ${subId}`,
-            }),
-        });
-
-        if (!createRes.ok) {
-            const err = await createRes.json().catch(() => ({}));
-            throw new Error(
-                (err as Record<string, string>).error || "Transaction creation failed"
-            );
-        }
-
-        const txData = (await createRes.json()) as Record<string, unknown>;
-        const signature = txData.transactionHash as string;
-
-        // Update payment as completed
-        await supabase
-            .from("subscription_payments")
-            .update({
-                status: "completed",
-                tx_signature: signature,
-                platform_fee: amount * 0.01, // 1%
-            })
-            .eq("id", paymentId);
-
-        // Reset retry count on success
-        await supabase
-            .from("subscriptions")
-            .update({ retry_count: 0 })
-            .eq("id", subId);
-
-        return {
-            success: true,
-            payment: {
-                id: paymentId,
-                amount,
-                signature,
-                status: "completed",
-            },
-        };
+        // Gasless sponsor-transaction infrastructure was removed in the
+        // self-custody architectural cleanup. Auto-renewals now require
+        // manual customer action — throw so the catch block marks this
+        // charge as failed and merchant collects via invoice.
+        throw new Error(
+            "Auto-charge unavailable — gasless infrastructure removed. Customer must pay invoice manually."
+        );
     } catch (error) {
         console.error(`[Subscription Charge] Failed for ${subId}:`, error);
 
