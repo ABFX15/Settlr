@@ -199,10 +199,10 @@ export default function DashboardPage() {
           <p className="mt-6 text-xs text-[#8a8a8a]">
             New to Settlr?{" "}
             <Link
-              href="/onboarding"
+              href="/waitlist"
               className="text-[#34c759] font-medium hover:underline"
             >
-              Create an account
+              Request access
             </Link>
           </p>
         </motion.div>
@@ -234,19 +234,28 @@ export default function DashboardPage() {
             <Plus className="h-6 w-6 text-[#34c759]" />
           </div>
           <h2 className="text-xl font-semibold text-[#212121] mb-2">
-            Finish setting up your account
+            This wallet isn't registered yet
           </h2>
           <p className="text-[#8a8a8a] mb-6 text-sm">
-            This wallet isn't registered as a merchant yet. Complete onboarding
-            to start accepting payments.
+            Settlr is invite-only. If you've already been approved, open the
+            sign-in link from your invite email. Otherwise request access and
+            we'll review your application.
           </p>
-          <Link
-            href="/onboarding"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#34c759] px-5 py-2.5 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
-          >
-            Continue setup
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+          <div className="flex gap-2 justify-center">
+            <Link
+              href="/waitlist"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#34c759] px-5 py-2.5 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
+            >
+              Request access
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <button
+              onClick={() => openWalletModal(true)}
+              className="inline-flex items-center gap-2 rounded-lg border border-[#d3d3d3] bg-white px-5 py-2.5 text-sm font-medium text-[#212121] hover:bg-[#f2f2f2] transition-colors"
+            >
+              Switch wallet
+            </button>
+          </div>
         </motion.div>
       </div>
     );

@@ -172,6 +172,25 @@ export default function AdminDashboardPage() {
     };
   }, [sessionStatus, publicKey]);
 
+  // Force-unselect any previously-chosen wallet so wallet-adapter's
+  // autoConnect won't immediately reconnect to it (e.g. Phantom) when the
+  // picker opens. wallet-adapter caches the chosen wallet name in
+  // localStorage AND in an in-memory React state — calling select(null)
+  // alone leaves stale state behind, so the cleanest "switch wallet" is
+  // to wipe storage and hard-reload the page with ?pick=1 so the modal
+  // re-opens automatically with no wallet pre-selected.
+  const hardResetAndPickWallet = () => {
+    try {
+      localStorage.removeItem("walletName");
+      sessionStorage.removeItem("walletName");
+    } catch {}
+    // Also tell the wallet extension itself to disconnect so it doesn't
+    // silently re-grant the next page load.
+    disconnect().catch(() => undefined);
+    // Use replace so back-button doesn't loop.
+    window.location.replace("/admin?pick=1");
+  };
+
   const handleAdminLogout = async () => {
     try {
       await fetch("/api/auth/wallet/logout", {
@@ -179,22 +198,40 @@ export default function AdminDashboardPage() {
         credentials: "include",
       });
     } catch {}
-    await disconnect().catch(() => undefined);
-    setIsAdmin(null);
+    hardResetAndPickWallet();
   };
 
   // ── Wallet adapter connect/disconnect (lets user choose wallet) ──────
   const connectWallet = () => {
     setError(null);
-    // Reset persisted wallet adapter selection so admin can choose fresh.
-    try {
-      localStorage.removeItem("walletName");
-      sessionStorage.removeItem("walletName");
-    } catch {}
-
-    disconnect().catch(() => undefined);
-    setVisible(true);
+    hardResetAndPickWallet();
   };
+
+  // Sign out current admin session AND open the wallet picker so the user
+  // can sign in with a different wallet (e.g. Phantom → Solflare).
+  const switchWallet = async () => {
+    try {
+      await fetch("/api/auth/wallet/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {}
+    hardResetAndPickWallet();
+  };
+
+  // After a hard-reset reload (?pick=1) we land here with no wallet
+  // selected. Auto-open the picker.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("pick") === "1" && !walletConnected) {
+      setVisible(true);
+      // Strip the query param so a manual refresh doesn't keep nagging.
+      const url = new URL(window.location.href);
+      url.searchParams.delete("pick");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [walletConnected, setVisible]);
 
   const disconnectWallet = async () => {
     try {
@@ -513,19 +550,26 @@ export default function AdminDashboardPage() {
             )}
             <div className="flex gap-2">
               <button
+                onClick={switchWallet}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-[#212121] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#000] transition-all"
+              >
+                <Wallet className="w-4 h-4" />
+                Switch wallet
+              </button>
+              <button
                 onClick={handleAdminLogout}
                 className="flex-1 inline-flex items-center justify-center gap-2 bg-[#f2f2f2] text-[#212121] px-6 py-3 rounded-xl font-medium hover:bg-[#e5e5e5] transition-all"
               >
                 <LogOut className="w-4 h-4" />
                 Sign out
               </button>
-              <Link
-                href="/dashboard"
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-[#34c759] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#155a3e] transition-all"
-              >
-                Merchant dashboard
-              </Link>
             </div>
+            <Link
+              href="/dashboard"
+              className="mt-3 inline-flex items-center justify-center gap-2 text-[#8a8a8a] hover:text-[#212121] text-sm transition-colors"
+            >
+              ← Merchant dashboard
+            </Link>
           </motion.div>
         </div>
       </div>

@@ -105,13 +105,14 @@ function OnboardingPageInner() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (!token) {
-      // Default: open registration. Set NEXT_PUBLIC_INVITE_ONLY=true to
-      // require an invite token from the waitlist flow.
-      if (process.env.NEXT_PUBLIC_INVITE_ONLY === "true") {
-        setTokenStatus("invalid");
+      // Default: invite-only. The waitlist + admin-approval flow is the
+      // gate. Set NEXT_PUBLIC_ALLOW_OPEN_REGISTRATION=true *only* in dev
+      // or when intentionally running an open beta.
+      if (process.env.NEXT_PUBLIC_ALLOW_OPEN_REGISTRATION === "true") {
+        setTokenStatus("valid");
         return;
       }
-      setTokenStatus("valid");
+      setTokenStatus("invalid");
       return;
     }
     fetch(`/api/waitlist/verify-token?token=${encodeURIComponent(token)}`)
