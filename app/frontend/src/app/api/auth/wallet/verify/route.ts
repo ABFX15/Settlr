@@ -67,7 +67,9 @@ export async function POST(request: NextRequest) {
     // matches what nonce route returned.
     // (Implementation note: nonce cookie token = nonce.exp.wallet.sig — exp
     // is parsed back here.)
-    const expiresAtMatch = request.cookies.get("settlr_nonce")?.value?.split(".")[1];
+    const nonceToken = request.cookies.get("offbank_nonce")?.value
+        ?? request.cookies.get("settlr_nonce")?.value;
+    const expiresAtMatch = nonceToken?.split(".")[1];
     const expiresAt = expiresAtMatch ? Number(expiresAtMatch) : NaN;
     if (!Number.isFinite(expiresAt)) {
         return NextResponse.json({ error: "Malformed nonce cookie" }, { status: 401 });

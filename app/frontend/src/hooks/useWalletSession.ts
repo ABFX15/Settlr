@@ -62,13 +62,15 @@ export function useWalletSession() {
         }
     }, [publicKey, signMessage]);
 
-    // Auto sign-in when a wallet connects.
+    // Auto sign-in when a wallet connects. Only retry from `idle`; if a
+    // previous attempt errored, surface it and wait for an explicit retry
+    // so we don't reopen the wallet's signature prompt in a loop.
     useEffect(() => {
         if (!connected || !publicKey) {
             setStatus("idle");
             return;
         }
-        if (status === "idle" || status === "error") {
+        if (status === "idle") {
             void signIn();
         }
     }, [connected, publicKey, status, signIn]);
