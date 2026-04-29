@@ -30,12 +30,18 @@ export const WalletProvider: FC<WalletProviderProps> = ({ children }) => {
   // also register via the standard.
   const wallets = useMemo(() => [], []);
 
-  // Disable autoConnect on the admin route, or whenever ?pick=1 is in the
-  // URL. Otherwise wallet-adapter silently re-grabs the previously trusted
-  // wallet (typically Phantom) before the admin gets a chance to pick a
-  // different one.
+  // Disable autoConnect on:
+  //   - /admin (admin should pick a wallet explicitly)
+  //   - ?pick=1 (force-pick override)
+  //   - /login and /onboarding (Privy is the primary path; wallet-adapter
+  //     should only connect when the user explicitly clicks "Connect
+  //     existing Solana wallet". Otherwise it silently reconnects to the
+  //     last trusted wallet — typically Phantom — the moment the Privy
+  //     embedded wallet registers via the Wallet Standard, which then
+  //     pops the Phantom signer right after a successful email login.)
   const autoConnect = useMemo(() => {
     if (pathname?.startsWith("/admin")) return false;
+    if (pathname === "/login" || pathname === "/onboarding") return false;
     if (searchParams?.get("pick") === "1") return false;
     return true;
   }, [pathname, searchParams]);
