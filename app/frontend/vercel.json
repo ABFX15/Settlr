@@ -1,7 +1,7 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
-  "installCommand": "npm install",
+  "installCommand": "rm -f package-lock.json && npm install --legacy-peer-deps --no-audit --no-fund",
   "framework": "nextjs",
   "crons": [
     {
