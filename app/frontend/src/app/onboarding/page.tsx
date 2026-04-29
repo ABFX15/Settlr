@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { EmailFirstSignup } from "@/components/onboarding/EmailFirstSignup";
 
 // ─── Design tokens ────────────────────────────────────────
 const c = {
@@ -564,117 +565,138 @@ function OnboardingPageInner() {
         </AnimatePresence>
 
         {/* ═══════════════════════════════════════ */}
-        {/*  STEP 1 — Connect Wallet              */}
+        {/*  STEP 1 — Email-first OR connect wallet */}
         {/* ═══════════════════════════════════════ */}
         {state.step === 1 && (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="rounded-2xl border p-8"
-            style={{ background: c.card, borderColor: c.border }}
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: c.greenBg }}
-              >
-                <Wallet className="w-5 h-5" style={{ color: c.green }} />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold" style={{ color: c.navy }}>
-                  Connect Your Wallet
-                </h2>
-                <p className="text-sm" style={{ color: c.muted }}>
-                  This wallet becomes the primary signer on your vault
-                </p>
-              </div>
+          <div className="space-y-4">
+            {/* Recommended path: email + managed wallet */}
+            <EmailFirstSignup
+              defaultBusinessName={state.businessName}
+              onError={(msg) => setState((s) => ({ ...s, error: msg }))}
+            />
+
+            {/* OR divider */}
+            <div className="flex items-center gap-3 py-2">
+              <div className="h-px flex-1 bg-[#d3d3d3]" />
+              <span className="text-xs font-medium uppercase tracking-wider text-[#8a8a8a]">
+                or, advanced
+              </span>
+              <div className="h-px flex-1 bg-[#d3d3d3]" />
             </div>
 
-            {connected && publicKey ? (
-              <div className="space-y-4">
+            {/* Power-user path: connect existing wallet, set up Squads multisig */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="rounded-2xl border p-8"
+              style={{ background: c.card, borderColor: c.border }}
+            >
+              <div className="flex items-center gap-3 mb-6">
                 <div
-                  className="rounded-xl border p-4 flex items-center gap-4"
-                  style={{ borderColor: c.green, background: c.greenBg }}
+                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: c.greenBg }}
                 >
-                  <CheckCircle2
-                    className="w-6 h-6 flex-shrink-0"
-                    style={{ color: c.green }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p
-                      className="text-sm font-medium"
+                  <Wallet className="w-5 h-5" style={{ color: c.green }} />
+                </div>
+                <div>
+                  <h2
+                    className="text-xl font-semibold"
+                    style={{ color: c.navy }}
+                  >
+                    Connect an existing wallet
+                  </h2>
+                  <p className="text-sm" style={{ color: c.muted }}>
+                    For Solana power-users — sets up a Squads multisig vault
+                  </p>
+                </div>
+              </div>
+
+              {connected && publicKey ? (
+                <div className="space-y-4">
+                  <div
+                    className="rounded-xl border p-4 flex items-center gap-4"
+                    style={{ borderColor: c.green, background: c.greenBg }}
+                  >
+                    <CheckCircle2
+                      className="w-6 h-6 flex-shrink-0"
                       style={{ color: c.green }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p
+                        className="text-sm font-medium"
+                        style={{ color: c.green }}
+                      >
+                        Wallet Connected
+                      </p>
+                      <p
+                        className="text-xs font-mono truncate mt-0.5"
+                        style={{ color: c.slate }}
+                      >
+                        {publicKey}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(publicKey, "wallet")}
+                      className="p-2 rounded-lg hover:opacity-70 transition-opacity"
                     >
-                      Wallet Connected
+                      {copied === "wallet" ? (
+                        <Check className="w-4 h-4" style={{ color: c.green }} />
+                      ) : (
+                        <Copy className="w-4 h-4" style={{ color: c.muted }} />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Security note */}
+                  <div
+                    className="rounded-lg p-4 text-sm"
+                    style={{ background: c.bg, color: c.muted }}
+                  >
+                    <p className="font-medium mb-1" style={{ color: c.slate }}>
+                      <Lock className="w-3.5 h-3.5 inline mr-1" />
+                      Why wallet-first?
                     </p>
-                    <p
-                      className="text-xs font-mono truncate mt-0.5"
-                      style={{ color: c.slate }}
-                    >
-                      {publicKey}
+                    <p className="text-xs leading-relaxed">
+                      Your wallet is your identity on Solana — no email/password
+                      to phish, no database to hack. We&apos;ll create a Squads
+                      multisig vault secured by this wallet so no single key can
+                      access your funds without authorization.
                     </p>
                   </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-sm mb-4" style={{ color: c.muted }}>
+                    No wallet detected. Connect Phantom, Solflare, or another
+                    Solana wallet.
+                  </p>
                   <button
-                    onClick={() => copyToClipboard(publicKey, "wallet")}
-                    className="p-2 rounded-lg hover:opacity-70 transition-opacity"
+                    onClick={() => setVisible(true)}
+                    className="inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
+                    style={{ background: c.green }}
                   >
-                    {copied === "wallet" ? (
-                      <Check className="w-4 h-4" style={{ color: c.green }} />
-                    ) : (
-                      <Copy className="w-4 h-4" style={{ color: c.muted }} />
-                    )}
+                    <Wallet className="w-4 h-4" />
+                    Connect Wallet
                   </button>
                 </div>
+              )}
 
-                {/* Security note */}
-                <div
-                  className="rounded-lg p-4 text-sm"
-                  style={{ background: c.bg, color: c.muted }}
-                >
-                  <p className="font-medium mb-1" style={{ color: c.slate }}>
-                    <Lock className="w-3.5 h-3.5 inline mr-1" />
-                    Why wallet-first?
-                  </p>
-                  <p className="text-xs leading-relaxed">
-                    Your wallet is your identity on Solana — no email/password
-                    to phish, no database to hack. We&apos;ll create a Squads
-                    multisig vault secured by this wallet so no single key can
-                    access your funds without authorization.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-sm mb-4" style={{ color: c.muted }}>
-                  No wallet detected. Connect Phantom, Solflare, or another
-                  Solana wallet.
-                </p>
+              <div className="mt-8 flex justify-end">
                 <button
-                  onClick={() => setVisible(true)}
-                  className="inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
-                  style={{ background: c.green }}
+                  onClick={() =>
+                    validateStep(1) &&
+                    setState((s) => ({ ...s, step: 2, error: null }))
+                  }
+                  disabled={!validateStep(1)}
+                  className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-opacity hover:opacity-90 text-white"
+                  style={{ background: validateStep(1) ? c.green : c.muted }}
                 >
-                  <Wallet className="w-4 h-4" />
-                  Connect Wallet
+                  Continue
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-            )}
-
-            <div className="mt-8 flex justify-end">
-              <button
-                onClick={() =>
-                  validateStep(1) &&
-                  setState((s) => ({ ...s, step: 2, error: null }))
-                }
-                disabled={!validateStep(1)}
-                className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-opacity hover:opacity-90 text-white"
-                style={{ background: validateStep(1) ? c.green : c.muted }}
-              >
-                Continue
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         )}
 
         {/* ═══════════════════════════════════════ */}
