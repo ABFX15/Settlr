@@ -10,7 +10,7 @@
     },
     {
       "path": "/api/pipeline/process",
-      "schedule": "*/5 * * * *"
+      "schedule": "0 2 * * *"
     }
   ]
 }
