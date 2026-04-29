@@ -126,7 +126,8 @@ export function BentoCards() {
             className="text-[32px] leading-[1.15] tracking-tight font-extrabold sm:text-[44px]"
             style={{ color: t.navy, fontFamily: t.sans }}
           >
-            B2B operators in restricted industries wait 30-60 days to get paid.
+            Your bank can pull the plug tomorrow. The rail you settle on
+            shouldn&apos;t.
           </h2>
         </motion.div>
 

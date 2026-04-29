@@ -64,24 +64,27 @@ export function Hero() {
                   textShadow: "0 2px 30px rgba(0,0,0,0.7)",
                 }}
               >
-                USDC settlement for cannabis wholesalers.
+                Your processor can&apos;t shut you down.
               </h1>
 
               <p
-                className="mt-7 max-w-lg text-[18px] font-normal leading-[1.7]"
+                className="mt-7 max-w-lg text-[19px] font-normal leading-[1.65]"
                 style={{
-                  color: "#d3d3d3",
+                  color: "#e5e5e5",
                   textShadow: "0 1px 8px rgba(0,0,0,0.4)",
                 }}
               >
-                Send invoices. Get paid the same hour. Cash out to your business
-                bank account. 1% flat. No bank required.
+                Cannabis wholesalers lost 4 days of receivables in the March
+                outage. Offbank settles in 0.6 seconds, on a rail no bank can
+                pull. 1% flat. Cash out to your business account when
+                you&apos;re ready.
               </p>
               <p
                 className="mt-3 text-[13px] font-medium"
                 style={{ color: "#a3a3a3" }}
               >
-                Also serving CBD, hemp, firearms, and other restricted B2B.
+                Built for cannabis, CBD, hemp, firearms, and other restricted
+                B2B verticals.
               </p>
 
               {/* ── CTAs ───────────────────────────────────── */}
@@ -114,7 +117,7 @@ export function Hero() {
                 transition={{ ...spring, delay: 0.35 }}
                 className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2"
               >
-                {["Non-Custodial", "KYB + BSA/AML", "USD Off-Ramp"].map(
+                {["Shutdown-proof", "No debanking risk", "1% all-in"].map(
                   (badge) => (
                     <span
                       key={badge}
@@ -208,10 +211,11 @@ export function Hero() {
 
       {/* ── sr-only for SEO ────────────────────────────── */}
       <p className="sr-only">
-        Offbank is non-custodial USDC invoicing and B2B settlement for cannabis
+        Offbank is shutdown-proof B2B payment infrastructure for cannabis
         distributors, brands, and wholesalers banks won&apos;t reliably serve.
-        Send invoices, get paid in USDC, cash out to USD via ACH. 1% flat fee,
-        built on Solana.
+        When traditional processors go down or freeze accounts, Offbank keeps
+        settling. Send invoices, get paid in seconds, cash out to USD via ACH.
+        1% flat fee, non-custodial, built on Solana.
       </p>
     </section>
   );

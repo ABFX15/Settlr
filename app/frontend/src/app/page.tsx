@@ -63,7 +63,7 @@ export default function HomePage() {
                   height: 512,
                 },
                 description:
-                  "Non-custodial stablecoin settlement infrastructure for B2B cannabis distributors. Instant USDC payments on Solana at a 1% flat fee.",
+                  "Shutdown-proof B2B payment infrastructure for cannabis distributors. When your processor freezes or goes down, Offbank keeps settling. 1% flat, non-custodial, USDC on Solana.",
                 foundingDate: "2025",
                 sameAs: ["https://x.com/offbankpay"],
                 contactPoint: {
