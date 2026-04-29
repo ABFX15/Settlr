@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Dashboard pages use wallet/session context that depends on request data
+// (cookies, search params via WalletProvider). Force dynamic rendering so
+// Next 16 doesn't try to prerender them at build time and trip the
+// useSearchParams() suspense-boundary error.
+export const dynamic = "force-dynamic";
+
 export default function DashboardLayout({
   children,
 }: {

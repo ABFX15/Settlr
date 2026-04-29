@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, ReactNode, useMemo } from "react";
+import { FC, ReactNode, Suspense, useMemo } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
   ConnectionProvider,
@@ -13,7 +13,11 @@ interface WalletProviderProps {
   children: ReactNode;
 }
 
-export const WalletProvider: FC<WalletProviderProps> = ({ children }) => {
+/**
+ * Inner provider — calls useSearchParams which Next 16 requires to live
+ * inside a Suspense boundary so static prerendering doesn't bail out.
+ */
+const WalletProviderInner: FC<WalletProviderProps> = ({ children }) => {
   const endpoint = useMemo(
     () => process.env.NEXT_PUBLIC_RPC_URL || clusterApiUrl("devnet"),
     [],
@@ -54,3 +58,14 @@ export const WalletProvider: FC<WalletProviderProps> = ({ children }) => {
     </ConnectionProvider>
   );
 };
+
+/**
+ * Public WalletProvider — wraps the inner provider in Suspense so that
+ * useSearchParams() doesn't force every page that mounts this provider
+ * to be dynamically rendered (Next 16 requirement).
+ */
+export const WalletProvider: FC<WalletProviderProps> = ({ children }) => (
+  <Suspense fallback={null}>
+    <WalletProviderInner>{children}</WalletProviderInner>
+  </Suspense>
+);
