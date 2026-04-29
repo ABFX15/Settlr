@@ -566,6 +566,7 @@ export default function SettlementsPage() {
                         href={explorerUrl(p.txSignature)}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="View transaction on Solana Explorer"
                         onClick={(e) => e.stopPropagation()}
                         className="text-[#34c759] hover:text-[#2ba048] transition-colors"
                       >

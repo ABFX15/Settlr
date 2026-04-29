@@ -24,6 +24,9 @@ import {
   Loader2,
   ArrowUpRight,
   ArrowDownToLine,
+  AlertTriangle,
+  FileText,
+  X,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -99,6 +102,8 @@ export default function DashboardPage() {
   const [invoiceStats, setInvoiceStats] = useState<InvoiceStats | null>(null);
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   const fetchData = useCallback(async () => {
     if (!publicKey) {
@@ -113,14 +118,40 @@ export default function DashboardPage() {
         }),
         fetch(`/api/payments?wallet=${publicKey}`),
       ]);
+
+      // Detect session expiry on any 401 — surfaces silent auth drops.
+      if (
+        treasuryRes.status === 401 ||
+        statsRes.status === 401 ||
+        paymentsRes.status === 401
+      ) {
+        setSessionExpired(true);
+        setLoading(false);
+        return;
+      }
+
+      const failures: string[] = [];
       if (treasuryRes.ok) setTreasury(await treasuryRes.json());
+      else failures.push("treasury");
       if (statsRes.ok) setInvoiceStats(await statsRes.json());
+      else failures.push("invoices");
       if (paymentsRes.ok) {
         const data = await paymentsRes.json();
         setPayments(data.payments || []);
+      } else {
+        failures.push("payments");
+      }
+
+      if (failures.length > 0) {
+        setFetchError(
+          `Couldn’t refresh ${failures.join(", ")} — retrying in 30s.`,
+        );
+      } else {
+        setFetchError(null);
       }
     } catch (err) {
       console.error("Failed to fetch dashboard data:", err);
+      setFetchError("Couldn’t reach Offbank — retrying in 30s.");
     } finally {
       setLoading(false);
     }
@@ -282,8 +313,58 @@ export default function DashboardPage() {
     );
   }
 
+  if (sessionExpired) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-md"
+        >
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#fff5f0] border border-[#ffd6c2]">
+            <AlertTriangle className="h-6 w-6 text-[#e74c3c]" />
+          </div>
+          <h2 className="text-xl font-semibold text-[#212121] mb-2">
+            Your session expired
+          </h2>
+          <p className="text-[#8a8a8a] mb-6 text-sm">
+            For security we logged you out after a period of inactivity. Sign
+            back in to continue.
+          </p>
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#34c759] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#2ba048] transition-colors"
+          >
+            <LogIn className="h-4 w-4" />
+            Sign back in
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
+
+  const hasInvoices = (invoiceStats?.total ?? 0) > 0;
+  const isFreshAccount = !hasInvoices && payments.length === 0;
+
   return (
     <div className="space-y-6">
+      {fetchError && (
+        <div className="flex items-center justify-between gap-3 rounded-lg border border-[#ffd6c2] bg-[#fff5f0] px-4 py-3 text-sm text-[#a04b1f]">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4" />
+            <span>{fetchError}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFetchError(null)}
+            aria-label="Dismiss notification"
+            className="text-[#a04b1f] hover:text-[#212121]"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -296,14 +377,22 @@ export default function DashboardPage() {
         </div>
         <div className="flex items-center gap-2">
           <Link
-            href={`/offramp${publicKey ? `?wallet=${publicKey}` : ""}`}
+            href="/dashboard/invoices/create"
             className="inline-flex items-center gap-2 rounded-lg bg-[#34c759] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#2ba048] transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            Create invoice
+          </Link>
+          <Link
+            href={`/offramp${publicKey ? `?wallet=${publicKey}` : ""}`}
+            className="inline-flex items-center gap-2 rounded-lg border border-[#d3d3d3] bg-white px-4 py-2.5 text-sm font-semibold text-[#212121] hover:bg-[#f2f2f2] transition-colors"
           >
             <ArrowDownToLine className="h-4 w-4" />
             Cash Out
           </Link>
           <button
             onClick={fetchData}
+            aria-label="Refresh dashboard data"
             className="inline-flex items-center gap-2 rounded-lg border border-[#d3d3d3] px-4 py-2.5 text-sm font-medium text-[#212121] hover:bg-[#f2f2f2] transition-colors"
           >
             <RefreshCw className="h-4 w-4" />
@@ -311,6 +400,47 @@ export default function DashboardPage() {
           </button>
         </div>
       </div>
+
+      {isFreshAccount && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative overflow-hidden rounded-xl border-2 border-[#34c759]/30 bg-gradient-to-br from-[#34c759]/[0.08] via-[#34c759]/[0.04] to-transparent p-6"
+        >
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#34c759] text-white">
+                <FileText className="h-6 w-6" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-[#212121]">
+                  You’re set up. Send your first invoice.
+                </h2>
+                <p className="mt-1 text-sm text-[#5c5c5c]">
+                  Paste a buyer’s email and an amount — we’ll send a payment
+                  link, settle USDC to your vault, and let you cash out to USD
+                  when you’re ready.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-shrink-0 gap-2">
+              <Link
+                href="/dashboard/invoices/create"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#34c759] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#2ba048] transition-colors"
+              >
+                Create your first invoice
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/demo"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#d3d3d3] bg-white px-5 py-2.5 text-sm font-medium text-[#212121] hover:bg-[#f2f2f2] transition-colors"
+              >
+                See it first
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* Balance + Pending Invoices Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -544,6 +674,7 @@ export default function DashboardPage() {
                   href={explorerUrl(p.txSignature)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="View transaction on Solana Explorer"
                   className="text-[#34c759] hover:text-[#2ba048] transition-colors"
                 >
                   <ExternalLink className="h-4 w-4" />

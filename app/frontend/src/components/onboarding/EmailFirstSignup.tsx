@@ -267,9 +267,9 @@ function EmailFirstSignupInner({ defaultBusinessName, onError }: Props) {
         <div className="flex items-start gap-2 pt-1">
           <ShieldCheck className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-[#8a8a8a]" />
           <p className="text-[11px] leading-relaxed text-[#8a8a8a]">
-            We provision a secure Solana wallet for you behind the scenes
-            (powered by Privy). You can export the keys anytime from Settings.
-            We never custody your funds.
+            We provision a secure managed wallet for you behind the scenes. You
+            can export the keys anytime from Settings. We never custody your
+            funds.
           </p>
         </div>
       </div>

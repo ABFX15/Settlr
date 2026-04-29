@@ -258,6 +258,9 @@ export default function CreateInvoicePage() {
             </code>
             <button
               onClick={() => copyToClipboard(createdInvoice.blinkUrl, "blink")}
+              aria-label={
+                copiedField === "blink" ? "Blink URL copied" : "Copy Blink URL"
+              }
               className="shrink-0 rounded-lg p-2 text-[#34c759] hover:bg-[#34c759]/10 transition-colors"
             >
               {copiedField === "blink" ? (
@@ -277,6 +280,11 @@ export default function CreateInvoicePage() {
               </code>
               <button
                 onClick={() => copyToClipboard(dialtoUrl, "dialto")}
+                aria-label={
+                  copiedField === "dialto"
+                    ? "Dialto URL copied"
+                    : "Copy Dialto URL"
+                }
                 className="shrink-0 rounded-lg p-2 text-[#34c759] hover:bg-[#34c759]/10 transition-colors"
               >
                 {copiedField === "dialto" ? (
@@ -305,6 +313,11 @@ export default function CreateInvoicePage() {
               onClick={() =>
                 copyToClipboard(createdInvoice.invoiceUrl, "invoice")
               }
+              aria-label={
+                copiedField === "invoice"
+                  ? "Invoice link copied"
+                  : "Copy invoice link"
+              }
               className="shrink-0 rounded-lg p-2 text-[#34c759] hover:bg-[#34c759]/10 transition-colors"
             >
               {copiedField === "invoice" ? (
@@ -317,6 +330,7 @@ export default function CreateInvoicePage() {
               href={createdInvoice.invoiceUrl}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Open invoice in new tab"
               className="shrink-0 rounded-lg p-2 text-[#34c759] hover:bg-[#34c759]/10 transition-colors"
             >
               <ExternalLink className="h-4 w-4" />

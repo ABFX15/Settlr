@@ -421,6 +421,9 @@ export default function TreasuryPage() {
                   </code>
                   <button
                     onClick={copyAddress}
+                    aria-label={
+                      copied ? "Address copied" : "Copy deposit address"
+                    }
                     className="shrink-0 text-[#94A3B8] hover:text-[#212121] transition-colors"
                   >
                     {copied ? (

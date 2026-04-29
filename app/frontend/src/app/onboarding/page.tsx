@@ -212,6 +212,20 @@ function OnboardingPageInner() {
     setLoading(true);
     setState((s) => ({ ...s, error: null }));
 
+    // Hard timeout so a stuck RPC doesn't strand the user on the spinner.
+    const VAULT_TIMEOUT_MS = 45_000;
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(
+        () =>
+          reject(
+            new Error(
+              "TIMEOUT: Network is slow. The transaction may still confirm — check your wallet history before retrying.",
+            ),
+          ),
+        VAULT_TIMEOUT_MS,
+      ),
+    );
+
     try {
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
       const creatorPubkey = new PublicKey(publicKey);
@@ -225,19 +239,23 @@ function OnboardingPageInner() {
         throw new Error("Wallet does not support transaction signing");
       }
       const signedTx = await walletSignTransaction(transaction);
-      const signature = await connection.sendRawTransaction(
-        signedTx.serialize(),
-      );
+      const signature = await Promise.race([
+        connection.sendRawTransaction(signedTx.serialize()),
+        timeoutPromise,
+      ]);
 
       // Confirm
-      await connection.confirmTransaction(
-        {
-          signature,
-          blockhash: transaction.recentBlockhash!,
-          lastValidBlockHeight: transaction.lastValidBlockHeight!,
-        },
-        "confirmed",
-      );
+      await Promise.race([
+        connection.confirmTransaction(
+          {
+            signature: signature as string,
+            blockhash: transaction.recentBlockhash!,
+            lastValidBlockHeight: transaction.lastValidBlockHeight!,
+          },
+          "confirmed",
+        ),
+        timeoutPromise,
+      ]);
 
       setState((s) => ({
         ...s,
@@ -247,13 +265,38 @@ function OnboardingPageInner() {
       }));
     } catch (err) {
       console.error("Vault creation failed:", err);
-      setState((s) => ({
-        ...s,
-        error:
-          err instanceof Error
-            ? err.message
-            : "Vault creation failed. Make sure you have SOL for rent.",
-      }));
+      const raw = err instanceof Error ? err.message : String(err);
+      // Categorise so the message is actionable.
+      let friendly = "Vault creation failed. Try again in a moment.";
+      const lc = raw.toLowerCase();
+      if (lc.startsWith("timeout") || lc.includes("timeout")) {
+        friendly =
+          "Network was slow and we lost the transaction. Check your wallet — if the vault was created we'll detect it on retry.";
+      } else if (
+        lc.includes("user rejected") ||
+        lc.includes("user denied") ||
+        lc.includes("rejected the request")
+      ) {
+        friendly = "You cancelled the signature. Click again when ready.";
+      } else if (
+        lc.includes("insufficient") ||
+        lc.includes("0x1") ||
+        lc.includes("0xfffffffe")
+      ) {
+        friendly =
+          "Not enough SOL to pay rent + fees. Top up your wallet with ~0.05 SOL and try again.";
+      } else if (
+        lc.includes("blockhash") ||
+        lc.includes("expired") ||
+        lc.includes("not found")
+      ) {
+        friendly =
+          "Transaction expired before confirmation. Click again — the network is congested.";
+      } else if (lc.includes("does not support")) {
+        friendly =
+          "Your wallet can't sign this transaction. Switch to Phantom, Solflare, or use email sign-in.";
+      }
+      setState((s) => ({ ...s, error: friendly }));
     } finally {
       setLoading(false);
     }

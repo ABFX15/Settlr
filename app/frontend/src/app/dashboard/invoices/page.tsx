@@ -245,7 +245,9 @@ export default function InvoicesPage() {
                   {stat.label}
                 </span>
               </div>
-              <p className="mt-1 text-xl font-bold text-[#212121]">{stat.value}</p>
+              <p className="mt-1 text-xl font-bold text-[#212121]">
+                {stat.value}
+              </p>
               {stat.sub && <p className="text-xs text-[#5c5c5c]">{stat.sub}</p>}
             </div>
           ))}
@@ -494,12 +496,18 @@ export default function InvoicesPage() {
                           <Link
                             href={`/invoice/${inv.viewToken}`}
                             target="_blank"
+                            aria-label={`Open invoice ${
+                              inv.invoiceNumber ?? ""
+                            } in new tab`}
                             className="opacity-0 transition-opacity group-hover:opacity-100 text-[#34c759]"
                           >
                             <ExternalLink className="h-4 w-4" />
                           </Link>
                         ) : (
-                          <span className="opacity-0 transition-opacity group-hover:opacity-100 text-[#5c5c5c]">
+                          <span
+                            aria-hidden="true"
+                            className="opacity-0 transition-opacity group-hover:opacity-100 text-[#5c5c5c]"
+                          >
                             <ExternalLink className="h-4 w-4" />
                           </span>
                         )}

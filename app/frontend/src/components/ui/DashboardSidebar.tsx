@@ -23,6 +23,7 @@ import {
   ClipboardList,
   BellRing,
   ShieldCheck,
+  Users,
 } from "lucide-react";
 
 const navItems = [
@@ -42,6 +43,7 @@ const navItems = [
   { href: "/dashboard/receivables", icon: BarChart3, label: "Receivables" },
   { href: "/dashboard/collections", icon: BellRing, label: "Collections" },
   { href: "/dashboard/reports", icon: ClipboardList, label: "Reports" },
+  { href: "/dashboard/team", icon: Users, label: "Team" },
   { href: "/dashboard/privacy", icon: ShieldCheck, label: "Privacy" },
 ];
 
@@ -66,6 +68,7 @@ export function DashboardSidebar() {
         </Link>
         <button
           onClick={() => setMobileOpen(false)}
+          aria-label="Close navigation"
           className="ml-auto rounded-md p-1.5 text-[#5c5c5c] hover:text-[#212121] lg:hidden"
         >
           <X className="h-4 w-4" />
@@ -75,7 +78,7 @@ export function DashboardSidebar() {
       {/* Subtitle */}
       <div className="px-5 pt-3 pb-2">
         <span className="text-[10px] font-semibold tracking-[0.15em] text-[#8a8a8a] uppercase">
-          Wholesale Crypto
+          USDC Treasury
         </span>
       </div>
 

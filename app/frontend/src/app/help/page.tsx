@@ -76,7 +76,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   "getting-started": [
     {
       q: "How do I get started with Offbank?",
-      a: "Getting started is easy! Simply sign up, complete KYB verification, and you'll receive your API keys. Our API handles the rest, gasless payments, embedded wallets, and instant USDC settlements.",
+      a: "Sign up, complete KYB verification, and you're settling USDC the same day. Buyers pay by email — we provision a managed wallet on their behalf, settle to your Squads vault, and you cash out to USD when you're ready.",
     },
     {
       q: "Do I need any crypto knowledge?",
@@ -98,7 +98,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
     },
     {
       q: "Is there a minimum payment amount?",
-      a: "No minimum! You can accept payments of any size. Our gasless infrastructure makes even micro-payments economically viable.",
+      a: "No minimum. Accept invoices of any size. We absorb network fees so the buyer never sees a SOL prompt.",
     },
   ],
   security: [
@@ -118,7 +118,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   refunds: [
     {
       q: "How do refunds work?",
-      a: "Refunds are initiated through our dashboard or API. The USDC is returned to the customer's original payment method, their embedded wallet or connected wallet.",
+      a: "Refunds are initiated through the dashboard or API. USDC is returned to the buyer's original payment method — their managed Offbank wallet or the wallet they connected.",
     },
     {
       q: "How long do refunds take?",

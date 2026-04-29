@@ -77,12 +77,12 @@ const integrations = [
     name: "Shopify App",
     tagline: "Stablecoin payments where Shopify's native crypto falls short",
     description:
-      "Accept USDC payments on Shopify with a native app. Fills the gap that Shopify's built-in Solana integration doesn't cover — subscription billing, gasless checkout, and instant merchant settlement.",
+      "Accept USDC payments on Shopify with a native app. Fills the gap that Shopify's built-in Solana integration doesn't cover — subscription billing, no-wallet checkout for buyers, and instant merchant settlement.",
     color: "#95BF47",
     highlights: [
       "Native Shopify app — no custom code",
       "Subscription billing support",
-      "Gasless checkout for customers",
+      "No-wallet checkout for buyers",
       "Instant settlement to your wallet",
     ],
   },

@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
+import { usePrivy } from "@privy-io/react-auth";
+import { BuyerTourModal } from "@/components/buyer/BuyerTourModal";
 import {
   SOLANA_RPC_URL,
   USDC_MINT_ADDRESS as CONSTANTS_USDC_MINT,
@@ -155,6 +157,11 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
     disconnect,
   } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
+  // Privy email-first — the embedded Solana wallet auto-registers via the
+  // Wallet Standard, so wallet-adapter picks it up after login. No extra
+  // signing path needed here.
+  const privyEnabled = !!process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+  const privy = usePrivy();
   const ready = true;
   const walletsReady = true;
 
@@ -1469,13 +1476,29 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 </div>
               ) : (
                 <div className="space-y-3">
+                  {/* Pay with email — primary CTA for buyers without a wallet */}
+                  {privyEnabled && (
+                    <button
+                      onClick={() => privy.login()}
+                      className="w-full py-4 bg-[#34c759] text-white font-bold rounded-xl flex items-center justify-center gap-3 hover:bg-[#2ba048] transition-colors"
+                    >
+                      Pay with email — no wallet needed
+                    </button>
+                  )}
+
                   {/* Connect existing wallet */}
                   <button
                     onClick={() => openWalletModal(true)}
-                    className="w-full py-4 bg-white text-[#212121] font-semibold rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+                    className={`w-full py-4 rounded-xl flex items-center justify-center gap-3 transition-opacity ${
+                      privyEnabled
+                        ? "bg-white text-[#212121] font-semibold border border-[#d3d3d3] hover:bg-[#f2f2f2]"
+                        : "bg-white text-[#212121] font-semibold hover:opacity-90"
+                    }`}
                   >
                     <Wallet className="w-5 h-5" />
-                    Connect Wallet (Phantom/Solflare)
+                    {privyEnabled
+                      ? "Connect existing wallet"
+                      : "Connect Wallet (Phantom/Solflare)"}
                   </button>
 
                   {/* Pay with card — fiat on-ramp for non-crypto users */}
@@ -1603,6 +1626,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
   if (step === "wallet") {
     return (
       <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center p-4 relative">
+        <BuyerTourModal />
         {/* Close/Back button */}
         <button
           onClick={() => {

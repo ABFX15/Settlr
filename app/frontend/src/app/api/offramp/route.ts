@@ -9,6 +9,53 @@ import { NextRequest, NextResponse } from "next/server";
 import {
     getOrCreateMerchantByWallet,
 } from "@/lib/db";
+import { isUserVerified } from "@/lib/sumsub";
+
+/**
+ * KYB enforcement gate.
+ *
+ * When OFFBANK_REQUIRE_KYB_FOR_OFFRAMP=true and Sumsub credentials are
+ * configured, every off-ramp POST is gated on the merchant having a
+ * verified Sumsub applicant under their wallet address. This is the
+ * compliance-required check for restricted verticals (cannabis, firearms,
+ * high-risk SMB) before any USD movement.
+ *
+ * If the env flag is off OR Sumsub isn't configured, this is a no-op so
+ * dev/devnet flows keep working.
+ */
+async function assertKybIfRequired(wallet: string): Promise<NextResponse | null> {
+    const required = process.env.OFFBANK_REQUIRE_KYB_FOR_OFFRAMP === "true";
+    const sumsubReady = !!process.env.SUMSUB_APP_TOKEN && !!process.env.SUMSUB_SECRET_KEY;
+    if (!required || !sumsubReady) return null;
+
+    try {
+        const verified = await isUserVerified(wallet);
+        if (!verified) {
+            return NextResponse.json(
+                {
+                    error: "kyb_required",
+                    message:
+                        "Your business must complete KYB verification before settling to USD. Visit /dashboard/compliance to start.",
+                },
+                { status: 403 },
+            );
+        }
+    } catch (err) {
+        console.error("[offramp] KYB check failed:", err);
+        // Fail closed when the gate is required but the check errors —
+        // refusing settlement is safer than leaking funds to an unverified
+        // merchant.
+        return NextResponse.json(
+            {
+                error: "kyb_check_failed",
+                message:
+                    "Couldn't verify your KYB status. Please retry in a moment or contact support.",
+            },
+            { status: 503 },
+        );
+    }
+    return null;
+}
 
 // ---------------------------------------------------------------------------
 // In-memory store (replace with DB in production)
@@ -115,6 +162,11 @@ export async function POST(request: NextRequest) {
                 { status: 400 },
             );
         }
+
+        // Compliance gate — refuses off-ramp for unverified merchants when
+        // OFFBANK_REQUIRE_KYB_FOR_OFFRAMP=true.
+        const kybBlock = await assertKybIfRequired(wallet);
+        if (kybBlock) return kybBlock;
 
         const merchant = await getOrCreateMerchantByWallet(wallet);
 

@@ -462,6 +462,9 @@ export default function SettingsPage() {
                   </code>
                   <button
                     onClick={copyWebhook}
+                    aria-label={
+                      copiedWebhook ? "Webhook URL copied" : "Copy webhook URL"
+                    }
                     className="shrink-0 rounded-lg border border-[#d3d3d3] bg-white p-2 text-[#8a8a8a] hover:text-[#212121]"
                   >
                     {copiedWebhook ? (

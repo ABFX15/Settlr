@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
+import { usePrivy } from "@privy-io/react-auth";
+import { useWallets as useSolanaWallets } from "@privy-io/react-auth/solana";
+import { BuyerTourModal } from "@/components/buyer/BuyerTourModal";
 import {
   Check,
   Loader2,
@@ -23,6 +26,7 @@ import {
   Settings,
   Bell,
   CreditCard,
+  Mail,
 } from "lucide-react";
 import Link from "next/link";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
@@ -109,6 +113,26 @@ export default function InvoicePayClient({
   } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
 
+  // Privy email-first — honours the "no wallet needed" promise from the
+  // landing page. If the buyer signs in with email, we provision a managed
+  // Solana wallet for them and use it as the payer.
+  const privyEnabled = !!process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+  const privy = usePrivy();
+  const { wallets: privyWallets } = useSolanaWallets();
+  const privyEmbeddedWallet = useMemo(() => {
+    if (!privyEnabled) return null;
+    const embedded = privyWallets.find(
+      (w) => (w as { walletClientType?: string }).walletClientType === "privy",
+    );
+    return embedded ?? privyWallets[0] ?? null;
+  }, [privyEnabled, privyWallets]);
+
+  const usingPrivy =
+    privyEnabled &&
+    !connected &&
+    privy.authenticated &&
+    !!privyEmbeddedWallet?.address;
+
   const [state, setState] = useState<PageState>("loading");
   const [invoice, setInvoice] = useState<InvoiceData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -145,15 +169,28 @@ export default function InvoicePayClient({
     fetchInvoice();
   }, [fetchInvoice]);
 
-  const payerAddress = publicKey?.toBase58() ?? null;
+  const payerAddress =
+    publicKey?.toBase58() ??
+    (usingPrivy ? privyEmbeddedWallet?.address ?? null : null);
 
   const handlePay = async () => {
     if (!invoice) return;
-    if (!publicKey || !payerAddress) {
-      openWalletModal(true);
+    if (!payerAddress) {
+      // No signer at all — ask the user to choose a sign-in path.
+      if (privyEnabled) {
+        privy.login();
+      } else {
+        openWalletModal(true);
+      }
       return;
     }
-    if (!walletSignTransaction && !sendTransaction) {
+    // Need at least one signer path.
+    const hasWalletAdapterSigner = !!walletSignTransaction || !!sendTransaction;
+    const hasPrivySigner =
+      usingPrivy &&
+      typeof (privyEmbeddedWallet as { signTransaction?: unknown })
+        ?.signTransaction === "function";
+    if (!hasWalletAdapterSigner && !hasPrivySigner) {
       setError(
         "Your account does not support payments. Please try a different sign-in method.",
       );
@@ -164,7 +201,7 @@ export default function InvoicePayClient({
 
     try {
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
-      const userPubkey = publicKey;
+      const userPubkey = publicKey ?? new PublicKey(payerAddress);
       const merchantPubkey = new PublicKey(invoice.merchantWallet);
 
       const userAta = await getAssociatedTokenAddress(USDC_MINT, userPubkey);
@@ -255,7 +292,23 @@ export default function InvoicePayClient({
       transaction.feePayer = userPubkey;
 
       let sig: string;
-      if (walletSignTransaction) {
+      if (usingPrivy && privyEmbeddedWallet) {
+        // Privy embedded wallet path — buyer paid with email.
+        const privySign = (
+          privyEmbeddedWallet as unknown as {
+            signTransaction?: (tx: Transaction) => Promise<Transaction>;
+          }
+        ).signTransaction;
+        if (!privySign) {
+          throw new Error(
+            "Managed wallet not ready. Refresh the page and try again.",
+          );
+        }
+        const signedTx = await privySign(transaction);
+        sig = await connection.sendRawTransaction(signedTx.serialize(), {
+          skipPreflight: true,
+        });
+      } else if (walletSignTransaction) {
         const signedTx = await walletSignTransaction(transaction);
         sig = await connection.sendRawTransaction(signedTx.serialize(), {
           skipPreflight: true,
@@ -364,6 +417,7 @@ export default function InvoicePayClient({
 
   return (
     <div className="min-h-screen bg-[#f7f7f7] text-[#212121]">
+      <BuyerTourModal />
       {/* Header */}
       <header className="border-b border-[#d3d3d3] px-6 py-4">
         <div className="mx-auto max-w-6xl flex items-center justify-between">
@@ -704,14 +758,29 @@ export default function InvoicePayClient({
                                 Connecting...
                               </span>
                             </div>
-                          ) : !connected ? (
+                          ) : !connected && !usingPrivy ? (
                             <div className="space-y-3">
+                              {privyEnabled && (
+                                <button
+                                  onClick={() => privy.login()}
+                                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#34c759] py-4 text-sm font-bold text-white hover:bg-[#2ba048] transition-colors"
+                                >
+                                  <Mail className="h-4 w-4" />
+                                  Pay with email — no wallet needed
+                                </button>
+                              )}
                               <button
                                 onClick={() => openWalletModal(true)}
-                                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#34c759] py-4 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors"
+                                className={`flex w-full items-center justify-center gap-2 rounded-lg py-4 text-sm font-semibold transition-colors ${
+                                  privyEnabled
+                                    ? "bg-white text-[#212121] border border-[#d3d3d3] hover:bg-[#f2f2f2]"
+                                    : "bg-[#34c759] text-black hover:bg-[#2ba048] font-bold"
+                                }`}
                               >
                                 <Wallet className="h-4 w-4" />
-                                Sign In to Pay
+                                {privyEnabled
+                                  ? "Connect existing wallet"
+                                  : "Sign In to Pay"}
                               </button>
                               {
                                 <>

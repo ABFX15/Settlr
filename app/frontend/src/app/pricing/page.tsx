@@ -32,17 +32,17 @@ function Reveal({
 const plans = [
   {
     name: "Starter",
-    description: "Perfect for indie developers and small projects",
+    description: "Single-location operators and pilots",
     price: "1%",
-    priceSubtext: "per transaction",
+    priceSubtext: "per settled invoice",
     icon: Zap,
     features: [
-      "Unlimited transactions",
-      "Gasless payments",
-      "Embedded wallets",
-      "Payment links",
+      "Unlimited invoices & payment links",
+      "USDC settlement to your vault",
+      "Buyer pays by email — no wallet required",
+      "BSA/AML transaction monitoring",
+      "USD off-ramp to your bank",
       "Email support",
-      "Basic analytics",
     ],
     cta: "Get Started",
     href: "/onboarding",
@@ -50,39 +50,39 @@ const plans = [
   },
   {
     name: "Growth",
-    description: "For growing businesses with higher volume",
+    description: "Multi-location distributors and wholesalers",
     price: "0.75%",
-    priceSubtext: "per transaction",
+    priceSubtext: "per settled invoice",
     icon: Rocket,
     features: [
       "Everything in Starter",
-      "Priority support",
-      "Webhooks",
-      "Advanced analytics",
-      "Custom branding",
+      "Priority settlement support",
+      "Webhooks & accounting exports",
+      "Collections automation (pre-due + overdue)",
+      "Custom branded invoices",
       "API access",
-      "Team accounts",
+      "Team / multi-signer accounts",
     ],
-    cta: "Contact Sales",
+    cta: "Talk to sales",
     href: "mailto:adam@offbankpay.com?subject=Growth%20plan%20enquiry",
     popular: true,
   },
   {
     name: "Enterprise",
-    description: "Custom solutions for high-volume merchants",
+    description: "High-volume B2B settlement programs",
     price: "Custom",
     priceSubtext: "volume-based pricing",
     icon: Building2,
     features: [
       "Everything in Growth",
-      "Dedicated support",
-      "Custom integrations",
+      "Dedicated compliance support",
+      "Custom KYB and SAR workflows",
       "SLA guarantees",
-      "Compliance tools",
-      "White-label options",
-      "On-chain reporting",
+      "Squads multisig with custom approval rules",
+      "White-label payment links",
+      "Audit-ready on-chain reporting",
     ],
-    cta: "Talk to Us",
+    cta: "Talk to sales",
     href: "mailto:adam@offbankpay.com?subject=Enterprise%20enquiry",
     popular: false,
   },
@@ -91,19 +91,19 @@ const plans = [
 const faqs = [
   {
     q: "Are there any monthly fees?",
-    a: "No. You only pay per transaction. There are no setup fees, monthly fees, or hidden charges.",
+    a: "No. You only pay per settled invoice. No setup fees, no monthly minimums, no hidden charges.",
   },
   {
-    q: "Who pays for gas fees?",
-    a: "We cover all gas fees for your customers. They only pay the transaction amount — no SOL required.",
+    q: "Does my buyer need a crypto wallet?",
+    a: "No. Buyers pay by email. We provision a managed wallet on the buyer's behalf, on-ramp USDC if needed, and settle to your vault. They never see a seed phrase.",
   },
   {
     q: "How fast are settlements?",
-    a: "Instant. Funds are settled directly to your wallet in real-time, typically within 2 seconds.",
+    a: "Funds land in your Squads vault in seconds. USD off-ramp to your bank account typically settles same-day or next business day depending on your tier.",
   },
   {
     q: "Can I try before committing?",
-    a: "Yes! Try our demo with test payments. No credit card or signup required.",
+    a: "Yes — the live demo runs the full settlement flow with test funds. No card, no signup, no wallet required.",
   },
 ];
 
@@ -256,8 +256,7 @@ export default function PricingPage() {
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-5 max-w-md text-base text-[#8a8a8a]">
-              Join merchants already using Offbank for instant, gasless USDC
-              payments.
+              Join merchants already using Offbank for instant USDC payments.
             </p>
           </Reveal>
           <Reveal delay={0.1}>
