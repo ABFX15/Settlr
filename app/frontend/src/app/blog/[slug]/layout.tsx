@@ -24,10 +24,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       type: "article",
       locale: "en_US",
-      siteName: "Settlr",
+      siteName: "Offbank",
       title: post.title,
       description: post.excerpt,
-      url: `https://settlr.dev/blog/${post.slug}`,
+      url: `https://offbankpay.com/blog/${post.slug}`,
       publishedTime: post.date,
       authors: [post.author],
       tags: post.tags,

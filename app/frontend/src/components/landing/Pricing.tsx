@@ -67,7 +67,7 @@ export function Pricing() {
               ))}
             </div>
             <Link
-              href="/waitlist"
+              href="/onboarding"
               className="mt-8 block rounded-full bg-white py-3 text-center text-sm font-semibold shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ color: t.green }}
             >
@@ -76,15 +76,15 @@ export function Pricing() {
           </div>
 
           <p className="mt-6 text-center text-xs" style={{ color: t.muted }}>
-            Enterprise volume?{" "}
+            Doing more than $1M/month?{" "}
             <Link
-              href="/waitlist"
+              href="mailto:adam@offbankpay.com?subject=Volume%20pricing%20enquiry"
               className="underline"
               style={{ color: t.green }}
             >
-              Contact us
+              Talk to us
             </Link>{" "}
-            for custom pricing.
+            about volume pricing (down to 0.5%) and a dedicated success manager.
           </p>
         </motion.div>
       </div>

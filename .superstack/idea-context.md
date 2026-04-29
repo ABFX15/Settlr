@@ -1,4 +1,4 @@
-# Settlr — Idea Context
+# Offbank — Idea Context
 
 ## Idea
 
@@ -113,7 +113,7 @@
 - **On-chain program:** Deployed to devnet (339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5)
 - **Frontend:** Next.js 16, full dashboard, checkout, payment links, Blinks
 - **Integrations:** LeafLink webhooks, Privy wallets, Kora gasless, MoonPay on-ramp, MagicBlock PER, Range Security, Supabase
-- **SDK:** @settlr/sdk v0.6.0 published
+- **SDK:** @offbank/sdk v0.6.0 published
 - **KYC:** Sumsub scaffolded, not enforced
 
 ## Phase

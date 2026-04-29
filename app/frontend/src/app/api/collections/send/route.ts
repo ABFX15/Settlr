@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
         // Build invoice URL
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL
             ? `https://${process.env.VERCEL_URL}`
-            : "https://settlr.dev";
+            : "https://offbankpay.com";
         const invoiceUrl = `${baseUrl}/invoice/${invoice.viewToken}`;
 
         try {

@@ -1,5 +1,5 @@
 /**
- * GET /api/integrations/leaflink/syncs — List LeafLink ↔ Settlr sync records
+ * GET /api/integrations/leaflink/syncs — List LeafLink ↔ Offbank sync records
  *
  * Query params:
  *   ?status=pending|link_sent|paid|synced|failed|cancelled

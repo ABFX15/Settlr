@@ -56,14 +56,14 @@ export default function SendPaymentsPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Service",
-            name: "Settlr Settlement API",
+            name: "Offbank Settlement API",
             serviceType: "Non-custodial USDC settlement infrastructure",
-            provider: { "@id": "https://settlr.dev/#organization" },
-            url: "https://settlr.dev/send-payments",
+            provider: { "@id": "https://offbankpay.com/#organization" },
+            url: "https://offbankpay.com/send-payments",
             description:
               "Non-custodial USDC settlement for high-risk B2B supply chains. Instant finality, 1% flat fee, no bank interference.",
             areaServed: "Worldwide",
-            about: { "@id": "https://settlr.dev/#defined-term" },
+            about: { "@id": "https://offbankpay.com/#defined-term" },
           }),
         }}
       />
@@ -138,7 +138,7 @@ export default function SendPaymentsPage() {
                 icon: Code2,
                 title: "Call the API",
                 text: "Send a settlement with one SDK call — just a wallet address and an amount in USDC. We handle gas, multisig, and finality.",
-                code: `await settlr.settle({
+                code: `await offbank.settle({
   to: "worker@email.com",
   amount: 50,
   currency: "USDC"
@@ -224,7 +224,7 @@ export default function SendPaymentsPage() {
             {
               icon: Shield,
               title: "Non-custodial — we never hold funds",
-              text: "Payments flow directly via on-chain smart contracts. Settlr never takes custody of your money or your recipients' money.",
+              text: "Payments flow directly via on-chain smart contracts. Offbank never takes custody of your money or your recipients' money.",
               color: "#f87171",
             },
           ].map((item, i) => (
@@ -324,7 +324,7 @@ export default function SendPaymentsPage() {
       <section className="mx-auto max-w-5xl px-6 py-28">
         <Reveal>
           <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
-            Settlr vs traditional payment methods
+            Offbank vs traditional payment methods
           </h2>
         </Reveal>
 
@@ -337,7 +337,7 @@ export default function SendPaymentsPage() {
                     &nbsp;
                   </th>
                   <th className="px-6 py-4 text-left font-semibold text-[#34c759]">
-                    Settlr
+                    Offbank
                   </th>
                   <th className="px-6 py-4 text-left font-medium text-[#8a8a8a]">
                     Wire Transfer
@@ -354,35 +354,35 @@ export default function SendPaymentsPage() {
                 {[
                   {
                     label: "Fee",
-                    settlr: "From 1%",
+                    offbank: "From 1%",
                     wire: "$25-50",
                     paypal: "~5%",
                     stripe: "0.25%+$0.25",
                   },
                   {
                     label: "Speed",
-                    settlr: "< 1 second",
+                    offbank: "< 1 second",
                     wire: "3-7 days",
                     paypal: "1-3 days",
                     stripe: "2-7 days",
                   },
                   {
                     label: "Countries",
-                    settlr: "180+",
+                    offbank: "180+",
                     wire: "Most",
                     paypal: "~100",
                     stripe: "47",
                   },
                   {
                     label: "Bank needed",
-                    settlr: "No",
+                    offbank: "No",
                     wire: "Yes",
                     paypal: "Yes",
                     stripe: "Yes",
                   },
                   {
                     label: "Custodial",
-                    settlr: "No",
+                    offbank: "No",
                     wire: "Yes",
                     paypal: "Yes",
                     stripe: "Yes",
@@ -391,7 +391,7 @@ export default function SendPaymentsPage() {
                   <tr key={row.label}>
                     <td className="px-6 py-3 text-[#8a8a8a]">{row.label}</td>
                     <td className="px-6 py-3 font-medium text-[#34c759]">
-                      {row.settlr}
+                      {row.offbank}
                     </td>
                     <td className="px-6 py-3 text-[#8a8a8a]">{row.wire}</td>
                     <td className="px-6 py-3 text-[#8a8a8a]">{row.paypal}</td>
@@ -409,7 +409,7 @@ export default function SendPaymentsPage() {
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
-              Who sends payments with Settlr
+              Who sends payments with Offbank
             </h2>
             <p className="mt-4 text-center text-[#8a8a8a]">
               Any business in a debanked or high-risk industry.

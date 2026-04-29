@@ -93,10 +93,10 @@ export default function BlogPostPage() {
             },
             publisher: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
+              name: "Offbank",
+              url: "https://offbankpay.com",
             },
-            url: `https://settlr.dev/blog/${post.slug}`,
+            url: `https://offbankpay.com/blog/${post.slug}`,
             keywords: post.tags.join(", "),
           }),
         }}
@@ -189,7 +189,7 @@ export default function BlogPostPage() {
           {/* Content */}
           <Reveal delay={0.25}>
             <div
-              className="prose-settlr"
+              className="prose-offbank"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </Reveal>

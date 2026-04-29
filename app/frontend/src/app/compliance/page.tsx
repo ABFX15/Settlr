@@ -152,15 +152,15 @@ export default function CompliancePage() {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "Is Settlr a money transmitter?",
+                name: "Is Offbank a money transmitter?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "No. Settlr is a non-custodial technology provider. Under FinCEN guidance FIN-2019-G001, non-custodial software that facilitates peer-to-peer transfers is not classified as a money transmitter.",
+                  text: "No. Offbank is a non-custodial technology provider. Under FinCEN guidance FIN-2019-G001, non-custodial software that facilitates peer-to-peer transfers is not classified as a money transmitter.",
                 },
               },
               {
                 "@type": "Question",
-                name: "How does Settlr screen wallets against OFAC sanctions?",
+                name: "How does Offbank screen wallets against OFAC sanctions?",
                 acceptedAnswer: {
                   "@type": "Answer",
                   text: "Every wallet address is screened against OFAC SDN, Consolidated, and Non-SDN lists in real-time before any transaction is processed. Fuzzy matching at 90%+ confidence triggers manual review.",
@@ -168,7 +168,7 @@ export default function CompliancePage() {
               },
               {
                 "@type": "Question",
-                name: "What happens if suspicious activity is detected on Settlr?",
+                name: "What happens if suspicious activity is detected on Offbank?",
                 acceptedAnswer: {
                   "@type": "Answer",
                   text: "The transaction is held pending investigation. If confirmed, a SAR is filed with FinCEN within 30 calendar days. The merchant account may be restricted or terminated.",
@@ -176,7 +176,7 @@ export default function CompliancePage() {
               },
               {
                 "@type": "Question",
-                name: "What KYB documentation do cannabis businesses need for Settlr?",
+                name: "What KYB documentation do cannabis businesses need for Offbank?",
                 acceptedAnswer: {
                   "@type": "Answer",
                   text: "Cannabis businesses must provide Articles of Incorporation, EIN/Tax ID, state business and cannabis licenses, beneficial owner IDs, proof of address, bank verification, and Metrc/BioTrack license number.",
@@ -203,18 +203,18 @@ export default function CompliancePage() {
             "@context": "https://schema.org",
             "@type": "Article",
             headline:
-              "Settlr Compliance Documentation — AML Program, KYB, Transaction Monitoring & SAR Process",
+              "Offbank Compliance Documentation — AML Program, KYB, Transaction Monitoring & SAR Process",
             description:
-              "Complete compliance documentation for Settlr: AML program structure, KYB verification, OFAC screening, transaction monitoring typologies, SAR filing procedures, and record retention policy.",
+              "Complete compliance documentation for Offbank: AML program structure, KYB verification, OFAC screening, transaction monitoring typologies, SAR filing procedures, and record retention policy.",
             author: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
+              name: "Offbank",
+              url: "https://offbankpay.com",
             },
             publisher: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
+              name: "Offbank",
+              url: "https://offbankpay.com",
             },
             datePublished: "2025-12-01",
             dateModified: "2026-02-27",
@@ -234,13 +234,13 @@ export default function CompliancePage() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://settlr.dev/",
+                item: "https://offbankpay.com/",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Compliance",
-                item: "https://settlr.dev/compliance",
+                item: "https://offbankpay.com/compliance",
               },
             ],
           }),
@@ -277,7 +277,7 @@ export default function CompliancePage() {
               className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed"
               style={{ color: palette.slate }}
             >
-              How Settlr achieves full regulatory compliance for
+              How Offbank achieves full regulatory compliance for
               restricted-commerce B2B settlements — without custody, without
               banks, and without compromising on speed or privacy.
             </p>
@@ -340,7 +340,7 @@ export default function CompliancePage() {
                 className="text-sm leading-relaxed"
                 style={{ color: palette.slate }}
               >
-                Settlr is a <strong>non-custodial</strong> settlement protocol —
+                Offbank is a <strong>non-custodial</strong> settlement protocol —
                 a software layer, not a money services business. We never hold,
                 pool, or have unilateral control over user funds. Payments move
                 directly between counterparties via on-chain smart contracts on
@@ -350,7 +350,7 @@ export default function CompliancePage() {
                 className="mt-4 text-sm leading-relaxed"
                 style={{ color: palette.slate }}
               >
-                This architecture means Settlr is{" "}
+                This architecture means Offbank is{" "}
                 <strong>not a money transmitter</strong> under federal FinCEN
                 guidance (FIN-2019-G001) or the majority of state money
                 transmission statutes. We are a technology provider that
@@ -505,7 +505,7 @@ export default function CompliancePage() {
               </strong>
               , signed into law in 2025, established the first comprehensive
               federal framework for payment stablecoins in the United States.
-              Here is how Settlr aligns with every major provision.
+              Here is how Offbank aligns with every major provision.
             </p>
           </Reveal>
 
@@ -514,37 +514,37 @@ export default function CompliancePage() {
               {
                 title: "Permitted Payment Stablecoins Only",
                 description:
-                  "Settlr exclusively uses USDC issued by Circle — a fully reserved, audited, and GENIUS Act-compliant payment stablecoin. We do not support algorithmic, offshore, or unregistered stablecoins. Every dollar that flows through Settlr is backed 1:1 by U.S. Treasury obligations and cash equivalents.",
+                  "Offbank exclusively uses USDC issued by Circle — a fully reserved, audited, and GENIUS Act-compliant payment stablecoin. We do not support algorithmic, offshore, or unregistered stablecoins. Every dollar that flows through Offbank is backed 1:1 by U.S. Treasury obligations and cash equivalents.",
                 badge: "§3 — Definitions",
               },
               {
                 title: "Issuer Compliance Requirements",
                 description:
-                  "Circle, as the USDC issuer, maintains registration with FinCEN, state-level licenses, and undergoes monthly reserve attestations by a Big Four accounting firm. Settlr verifies that all stablecoins routed through our protocol originate from compliant issuers — a check embedded at the smart contract level.",
+                  "Circle, as the USDC issuer, maintains registration with FinCEN, state-level licenses, and undergoes monthly reserve attestations by a Big Four accounting firm. Offbank verifies that all stablecoins routed through our protocol originate from compliant issuers — a check embedded at the smart contract level.",
                 badge: "§4 — Registration",
               },
               {
                 title: "Redemption Guarantees",
                 description:
-                  "USDC provides 1:1 redemption to U.S. dollars on demand. Because Settlr is non-custodial, recipients can redeem their USDC directly through Circle or any compliant on-ramp/off-ramp. We never create a redemption bottleneck — there is no pooling, no lock-up, and no withdrawal queue.",
+                  "USDC provides 1:1 redemption to U.S. dollars on demand. Because Offbank is non-custodial, recipients can redeem their USDC directly through Circle or any compliant on-ramp/off-ramp. We never create a redemption bottleneck — there is no pooling, no lock-up, and no withdrawal queue.",
                 badge: "§5 — Redemption",
               },
               {
                 title: "Reserve & Transparency Requirements",
                 description:
-                  "Circle publishes monthly reserve reports and undergoes annual audits under the GENIUS Act's transparency mandate. Settlr surfaces this information in our compliance dashboard, giving operators direct visibility into the backing of every dollar settled on our rails.",
+                  "Circle publishes monthly reserve reports and undergoes annual audits under the GENIUS Act's transparency mandate. Offbank surfaces this information in our compliance dashboard, giving operators direct visibility into the backing of every dollar settled on our rails.",
                 badge: "§6 — Reserves",
               },
               {
                 title: "Consumer & Business Protection",
                 description:
-                  "By operating non-custodially on public blockchain infrastructure (Solana), every Settlr transaction produces an immutable, timestamped receipt. Both counterparties can independently verify settlement status, amount, and timing — no reliance on Settlr's systems for proof of payment.",
+                  "By operating non-custodially on public blockchain infrastructure (Solana), every Offbank transaction produces an immutable, timestamped receipt. Both counterparties can independently verify settlement status, amount, and timing — no reliance on Offbank's systems for proof of payment.",
                 badge: "§8 — Protection",
               },
               {
                 title: "Interoperability & Open Standards",
                 description:
-                  "Settlr is built on Solana's public, permissionless infrastructure using open-source smart contracts. Our protocol is interoperable with any wallet, exchange, or DeFi protocol that supports SPL tokens. No vendor lock-in, no proprietary rails, no walled gardens.",
+                  "Offbank is built on Solana's public, permissionless infrastructure using open-source smart contracts. Our protocol is interoperable with any wallet, exchange, or DeFi protocol that supports SPL tokens. No vendor lock-in, no proprietary rails, no walled gardens.",
                 badge: "§10 — Interoperability",
               },
             ].map((item, i) => (
@@ -619,7 +619,7 @@ export default function CompliancePage() {
               className="mt-4 max-w-2xl text-sm leading-relaxed"
               style={{ color: palette.slate }}
             >
-              While Settlr is not a money transmitter, we proactively implement
+              While Offbank is not a money transmitter, we proactively implement
               Bank Secrecy Act and Anti-Money Laundering controls as a matter of
               principles — and because our customers in restricted industries
               need this protection to operate confidently.
@@ -632,25 +632,25 @@ export default function CompliancePage() {
                 icon: Fingerprint,
                 title: "OFAC Screening",
                 description:
-                  "Every wallet address is screened against the OFAC SDN (Specially Designated Nationals) list before a transaction is processed. Blocked wallets cannot initiate or receive payments through Settlr. Screening runs in real-time, not in batch.",
+                  "Every wallet address is screened against the OFAC SDN (Specially Designated Nationals) list before a transaction is processed. Blocked wallets cannot initiate or receive payments through Offbank. Screening runs in real-time, not in batch.",
               },
               {
                 icon: AlertTriangle,
                 title: "Transaction Monitoring",
                 description:
-                  "Settlr monitors settlement patterns for anomalous activity — unusual volumes, rapid-fire transactions, structuring patterns, and sanctioned-jurisdiction exposure. Flagged transactions are held for manual review before settlement.",
+                  "Offbank monitors settlement patterns for anomalous activity — unusual volumes, rapid-fire transactions, structuring patterns, and sanctioned-jurisdiction exposure. Flagged transactions are held for manual review before settlement.",
               },
               {
                 icon: FileCheck,
                 title: "Suspicious Activity Reporting",
                 description:
-                  "When transaction monitoring surfaces activity consistent with money laundering, structuring, or sanctions evasion, Settlr files Suspicious Activity Reports (SARs) with FinCEN. Our compliance team maintains direct filing capability.",
+                  "When transaction monitoring surfaces activity consistent with money laundering, structuring, or sanctions evasion, Offbank files Suspicious Activity Reports (SARs) with FinCEN. Our compliance team maintains direct filing capability.",
               },
               {
                 icon: Globe,
                 title: "Jurisdiction Controls",
                 description:
-                  "Settlr enforces geographic restrictions at the protocol level. IP geolocation and wallet provenance checks block transactions originating from OFAC-sanctioned jurisdictions (Cuba, Iran, North Korea, Syria, Crimea, et al.).",
+                  "Offbank enforces geographic restrictions at the protocol level. IP geolocation and wallet provenance checks block transactions originating from OFAC-sanctioned jurisdictions (Cuba, Iran, North Korea, Syria, Crimea, et al.).",
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.04}>
@@ -760,7 +760,7 @@ export default function CompliancePage() {
               className="mt-4 max-w-2xl text-sm leading-relaxed"
               style={{ color: palette.slate }}
             >
-              Settlr maintains a written Anti-Money Laundering Compliance
+              Offbank maintains a written Anti-Money Laundering Compliance
               Program modeled on FinCEN&apos;s five-pillar framework. Even
               though our non-custodial architecture likely exempts us from MSB
               registration, we hold ourselves to MSB-grade standards because our
@@ -775,7 +775,7 @@ export default function CompliancePage() {
               {
                 title: "Pillar 1 — Designated Compliance Officer",
                 description:
-                  "Settlr designates a qualified Compliance Officer responsible for the day-to-day administration of the AML program, including policy updates, staff training, and regulatory reporting. The Compliance Officer reports directly to the CEO and has authority to halt transactions pending investigation. Current CO credentials and contact are available to regulators and KYB-verified merchants upon request.",
+                  "Offbank designates a qualified Compliance Officer responsible for the day-to-day administration of the AML program, including policy updates, staff training, and regulatory reporting. The Compliance Officer reports directly to the CEO and has authority to halt transactions pending investigation. Current CO credentials and contact are available to regulators and KYB-verified merchants upon request.",
               },
               {
                 title: "Pillar 2 — Internal Policies, Procedures & Controls",
@@ -785,17 +785,17 @@ export default function CompliancePage() {
               {
                 title: "Pillar 3 — Training Program",
                 description:
-                  "All Settlr employees with access to customer data or transaction systems complete AML/BSA training at onboarding and annually thereafter. Training covers: identifying red flags for money laundering and terrorist financing, SAR filing obligations, OFAC compliance requirements, cannabis-industry-specific AML considerations, and proper escalation procedures. Training completion is documented and retained for 5 years.",
+                  "All Offbank employees with access to customer data or transaction systems complete AML/BSA training at onboarding and annually thereafter. Training covers: identifying red flags for money laundering and terrorist financing, SAR filing obligations, OFAC compliance requirements, cannabis-industry-specific AML considerations, and proper escalation procedures. Training completion is documented and retained for 5 years.",
               },
               {
                 title: "Pillar 4 — Independent Testing",
                 description:
-                  "Settlr engages independent third-party auditors to test AML program effectiveness at least annually. Testing scope includes: review of KYB procedures, sample testing of OFAC screening results, evaluation of transaction monitoring thresholds and alert resolution, SAR filing timeliness and completeness, and staff training adequacy. Audit findings are tracked to remediation.",
+                  "Offbank engages independent third-party auditors to test AML program effectiveness at least annually. Testing scope includes: review of KYB procedures, sample testing of OFAC screening results, evaluation of transaction monitoring thresholds and alert resolution, SAR filing timeliness and completeness, and staff training adequacy. Audit findings are tracked to remediation.",
               },
               {
                 title: "Pillar 5 — Risk-Based Customer Due Diligence",
                 description:
-                  "Every Settlr merchant receives a risk rating at onboarding (Standard, Elevated, or High) based on: industry classification, geographic exposure, expected transaction volume and velocity, beneficial ownership complexity, and adverse media screening results. High-risk merchants receive Enhanced Due Diligence (EDD) including quarterly re-verification, lower transaction monitoring thresholds, and manual review of transactions above $10,000.",
+                  "Every Offbank merchant receives a risk rating at onboarding (Standard, Elevated, or High) based on: industry classification, geographic exposure, expected transaction volume and velocity, beneficial ownership complexity, and adverse media screening results. High-risk merchants receive Enhanced Due Diligence (EDD) including quarterly re-verification, lower transaction monitoring thresholds, and manual review of transactions above $10,000.",
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.04}>
@@ -971,7 +971,7 @@ export default function CompliancePage() {
               className="mt-4 max-w-2xl text-sm leading-relaxed"
               style={{ color: palette.slate }}
             >
-              Every business on Settlr goes through Know Your Business
+              Every business on Offbank goes through Know Your Business
               verification before their first settlement. This is non-negotiable
               — even for industries that banks refuse to serve.
             </p>
@@ -1007,7 +1007,7 @@ export default function CompliancePage() {
                 step: "5",
                 title: "Ongoing Monitoring",
                 description:
-                  "KYB is not a one-time check. Settlr performs periodic re-verification (quarterly for restricted industries), monitors for adverse media, regulatory actions, and changes in ownership structure. License expirations trigger automatic review.",
+                  "KYB is not a one-time check. Offbank performs periodic re-verification (quarterly for restricted industries), monitors for adverse media, regulatory actions, and changes in ownership structure. License expirations trigger automatic review.",
                 last: true,
               },
             ].map((item, i) => (
@@ -1181,7 +1181,7 @@ export default function CompliancePage() {
               className="mt-4 max-w-2xl text-sm leading-relaxed"
               style={{ color: palette.slate }}
             >
-              Settlr runs real-time and batch-level transaction monitoring
+              Offbank runs real-time and batch-level transaction monitoring
               across every settlement. Below are the specific typologies,
               thresholds, and actions we take — not vague promises, but the
               actual rules engine that processes every dollar on the platform.
@@ -1208,7 +1208,7 @@ export default function CompliancePage() {
               {
                 title: "Sanctions & Watchlist Hits",
                 description:
-                  "Every wallet address involved in a Settlr transaction (sender, receiver, and intermediate wallets) is screened against: OFAC SDN and Consolidated Lists, UN Security Council Sanctions Lists, EU Consolidated Financial Sanctions, known ransomware and darknet-linked addresses (via Chainalysis integration). Screening occurs pre-transaction in real-time.",
+                  "Every wallet address involved in a Offbank transaction (sender, receiver, and intermediate wallets) is screened against: OFAC SDN and Consolidated Lists, UN Security Council Sanctions Lists, EU Consolidated Financial Sanctions, known ransomware and darknet-linked addresses (via Chainalysis integration). Screening occurs pre-transaction in real-time.",
                 threshold: "Any match (fuzzy matching at 90%+ confidence)",
                 action: "Immediate block + SAR filing if warranted",
               },
@@ -1324,7 +1324,7 @@ export default function CompliancePage() {
             >
               When transaction monitoring or manual review surfaces activity
               consistent with money laundering, structuring, terrorist
-              financing, or sanctions evasion, Settlr follows a documented SAR
+              financing, or sanctions evasion, Offbank follows a documented SAR
               identification, investigation, and filing process.
             </p>
           </Reveal>
@@ -1365,7 +1365,7 @@ export default function CompliancePage() {
                 <TimelineItem
                   step="4"
                   title="Filing with FinCEN"
-                  description="SARs are filed electronically with FinCEN via BSA E-Filing within 30 calendar days of the initial alert (15 days if the subject is not identifiable and additional time is needed). Settlr maintains direct BSA E-Filing access — we do not rely on third-party intermediaries for SAR submission."
+                  description="SARs are filed electronically with FinCEN via BSA E-Filing within 30 calendar days of the initial alert (15 days if the subject is not identifiable and additional time is needed). Offbank maintains direct BSA E-Filing access — we do not rely on third-party intermediaries for SAR submission."
                 />
                 <TimelineItem
                   step="5"
@@ -1396,7 +1396,7 @@ export default function CompliancePage() {
                 className="mt-2 text-sm leading-relaxed"
                 style={{ color: palette.slate }}
               >
-                Settlr cannot disclose whether a SAR has been filed on a
+                Offbank cannot disclose whether a SAR has been filed on a
                 specific transaction or individual (per federal &ldquo;tipping
                 off&rdquo; prohibitions). However, we publish aggregate
                 compliance statistics quarterly: total alerts generated,
@@ -1438,7 +1438,7 @@ export default function CompliancePage() {
               className="mt-4 max-w-2xl text-sm leading-relaxed"
               style={{ color: palette.slate }}
             >
-              Settlr retains all compliance-relevant records in accordance with
+              Offbank retains all compliance-relevant records in accordance with
               BSA requirements and cannabis-industry best practices. On-chain
               transaction data is immutable and permanently accessible;
               off-chain records follow the retention schedule below.
@@ -1577,7 +1577,7 @@ export default function CompliancePage() {
               style={{ color: palette.slate }}
             >
               Compliance is not a feature bolted on after the fact — it is
-              embedded in every layer of the Settlr protocol. Here is how it
+              embedded in every layer of the Offbank protocol. Here is how it
               works end-to-end.
             </p>
           </Reveal>
@@ -1635,7 +1635,7 @@ export default function CompliancePage() {
               {
                 title: "Non-Custodial by Design",
                 description:
-                  "Settlr smart contracts are escrow programs — funds move atomically from sender to receiver in a single transaction. At no point does Settlr (or any Settlr-controlled wallet) have unilateral control over user funds.",
+                  "Offbank smart contracts are escrow programs — funds move atomically from sender to receiver in a single transaction. At no point does Offbank (or any Offbank-controlled wallet) have unilateral control over user funds.",
               },
               {
                 title: "On-Chain Compliance Stamps",
@@ -1645,7 +1645,7 @@ export default function CompliancePage() {
               {
                 title: "Gasless via Kora Fee Payer",
                 description:
-                  "Users don't need SOL for gas. Settlr's Kora integration covers transaction fees, removing friction while maintaining full self-custody. The fee payer is a signing service, not a custodian.",
+                  "Users don't need SOL for gas. Offbank's Kora integration covers transaction fees, removing friction while maintaining full self-custody. The fee payer is a signing service, not a custodian.",
               },
               {
                 title: "Privacy via TEE (MagicBlock PER)",
@@ -1709,35 +1709,35 @@ export default function CompliancePage() {
                     regulation: "GENIUS Act (2025)",
                     status: "Enacted",
                     impact:
-                      "Federal stablecoin framework. Settlr uses only compliant payment stablecoins (USDC). Non-custodial providers are software providers, not regulated entities.",
+                      "Federal stablecoin framework. Offbank uses only compliant payment stablecoins (USDC). Non-custodial providers are software providers, not regulated entities.",
                     color: palette.green,
                   },
                   {
                     regulation: "FinCEN MSB Guidance (2019)",
                     status: "Active",
                     impact:
-                      'FIN-2019-G001 clarifies that non-custodial software providers are not money transmitters. Settlr\'s architecture aligns with the "non-custodial wallet" classification.',
+                      'FIN-2019-G001 clarifies that non-custodial software providers are not money transmitters. Offbank\'s architecture aligns with the "non-custodial wallet" classification.',
                     color: palette.green,
                   },
                   {
                     regulation: "Bank Secrecy Act (BSA)",
                     status: "Active",
                     impact:
-                      "Settlr voluntarily implements BSA-grade controls (OFAC screening, transaction monitoring, SAR filing) as a best practice for operating in restricted industries.",
+                      "Offbank voluntarily implements BSA-grade controls (OFAC screening, transaction monitoring, SAR filing) as a best practice for operating in restricted industries.",
                     color: palette.green,
                   },
                   {
                     regulation: "MiCA (EU, 2024)",
                     status: "Active",
                     impact:
-                      "Markets in Crypto-Assets regulation governs EU operations. USDC (Circle) is MiCA-compliant. Settlr's European operations leverage this established framework.",
+                      "Markets in Crypto-Assets regulation governs EU operations. USDC (Circle) is MiCA-compliant. Offbank's European operations leverage this established framework.",
                     color: palette.green,
                   },
                   {
                     regulation: "State Cannabis Regulations",
                     status: "Varies by State",
                     impact:
-                      "Each state has unique cannabis compliance requirements. Settlr's KYB process verifies state-specific licenses and integrates with track-and-trace systems (Metrc, BioTrack).",
+                      "Each state has unique cannabis compliance requirements. Offbank's KYB process verifies state-specific licenses and integrates with track-and-trace systems (Metrc, BioTrack).",
                     color: palette.gold,
                   },
                 ].map((item, i) => (
@@ -1816,11 +1816,11 @@ export default function CompliancePage() {
               during due diligence. If your question isn&apos;t covered here,
               contact{" "}
               <a
-                href="mailto:compliance@settlr.dev"
+                href="mailto:compliance@offbankpay.com"
                 className="font-semibold underline"
                 style={{ color: palette.green }}
               >
-                compliance@settlr.dev
+                compliance@offbankpay.com
               </a>
               .
             </p>
@@ -1829,8 +1829,8 @@ export default function CompliancePage() {
           <div className="mt-10 space-y-4">
             {[
               {
-                q: "Is Settlr a money transmitter?",
-                a: "No. Settlr is a non-custodial technology provider. We never hold, pool, or have unilateral control over user funds. Under FinCEN guidance FIN-2019-G001, non-custodial software that facilitates peer-to-peer transfers is not classified as a money transmitter. Our smart contracts execute atomic settlements — funds move directly from sender to receiver in a single on-chain transaction with no Settlr-controlled intermediary wallet.",
+                q: "Is Offbank a money transmitter?",
+                a: "No. Offbank is a non-custodial technology provider. We never hold, pool, or have unilateral control over user funds. Under FinCEN guidance FIN-2019-G001, non-custodial software that facilitates peer-to-peer transfers is not classified as a money transmitter. Our smart contracts execute atomic settlements — funds move directly from sender to receiver in a single on-chain transaction with no Offbank-controlled intermediary wallet.",
               },
               {
                 q: "Why do you implement BSA/AML controls if you're not an MSB?",
@@ -1838,7 +1838,7 @@ export default function CompliancePage() {
               },
               {
                 q: "How do you screen wallets against OFAC sanctions?",
-                a: "Every wallet address (sender and receiver) is screened against OFAC SDN, Consolidated, and Non-SDN lists in real-time before any transaction is processed. We also screen against known ransomware addresses and darknet-linked wallets via blockchain analytics integration. Screening runs pre-transaction (not in batch), meaning a sanctioned wallet cannot complete a settlement through Settlr. Fuzzy matching at 90%+ confidence triggers manual review.",
+                a: "Every wallet address (sender and receiver) is screened against OFAC SDN, Consolidated, and Non-SDN lists in real-time before any transaction is processed. We also screen against known ransomware addresses and darknet-linked wallets via blockchain analytics integration. Screening runs pre-transaction (not in batch), meaning a sanctioned wallet cannot complete a settlement through Offbank. Fuzzy matching at 90%+ confidence triggers manual review.",
               },
               {
                 q: "What happens if suspicious activity is detected?",
@@ -1853,7 +1853,7 @@ export default function CompliancePage() {
                 a: "All compliance records — KYB files, OFAC screening results, SAR documentation, transaction monitoring alerts, and audit reports — are retained for 5 years from the relevant date (account closure, screening date, filing date, or resolution date, respectively). On-chain transaction records are permanently accessible on the Solana blockchain. Off-chain enrichment data (compliance metadata, risk scores, case notes) is retained for 5 years in encrypted storage.",
               },
               {
-                q: "Can my auditor access Settlr's compliance data?",
+                q: "Can my auditor access Offbank's compliance data?",
                 a: "Yes. KYB-verified merchants can export their full compliance history via the dashboard or API: transaction records with compliance stamps, KYB verification status and documentation, OFAC screening results for all counterparties, risk scores and monitoring alert history, and aggregate compliance statistics. We also provide direct auditor read-access upon merchant authorization — your auditor can independently verify compliance data without going through your team.",
               },
               {
@@ -1914,20 +1914,20 @@ export default function CompliancePage() {
                 Compliance Should Not Be a Competitive Disadvantage
               </h2>
               <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-white/70">
-                Your industry was abandoned by banks — not by regulators. Settlr
+                Your industry was abandoned by banks — not by regulators. Offbank
                 gives you the compliance infrastructure that traditional finance
                 refused to build for you.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
                 <Link
-                  href="/waitlist"
+                  href="/onboarding"
                   className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:opacity-90"
                   style={{
                     background:
                       "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
-                  Request Access
+                  Get Started
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link

@@ -19,7 +19,7 @@ export const t = {
     sans: "var(--font-inter), system-ui, -apple-system, sans-serif",
     /** Serif heading font */
     serif: "var(--font-heading)",
-    /** alias for body text on light bg — matches bodyLight */
+    /** alias for body text on light bg, matches bodyLight */
     slate: "#5c5c5c",
     /** max content width */
     maxW: "1200px",

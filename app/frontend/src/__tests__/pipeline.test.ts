@@ -250,7 +250,7 @@ describe("Data Pipeline", () => {
             });
 
             expect(result.format).to.equal("csv");
-            expect(result.filename).to.match(/^settlr-stats-.*\.csv$/);
+            expect(result.filename).to.match(/^offbank-stats-.*\.csv$/);
             expect(result.rowCount).to.be.greaterThan(0);
             expect(result.data).to.include("Date,Payments");
 

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SettlrLogo } from "@/components/settlr-logo";
+import { OffbankLogo } from "@/components/offbank-logo";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
@@ -14,9 +14,11 @@ import {
   Play,
   BookOpen,
   Leaf,
+  Sprout,
+  Crosshair,
+  Globe,
   LinkIcon,
   FileText,
-  Truck,
   GraduationCap,
   Scale,
 } from "lucide-react";
@@ -37,7 +39,7 @@ const resourceLinks = [
     href: "/compare",
     label: "Compare Providers",
     icon: Scale,
-    description: "Settlr vs cash, high-risk processors",
+    description: "Offbank vs cash, high-risk processors",
   },
   {
     href: "/demo",
@@ -47,9 +49,15 @@ const resourceLinks = [
   },
   {
     href: "/docs",
-    label: "Documentation",
+    label: "Operator Docs",
     icon: BookOpen,
-    description: "API reference and integration guides",
+    description: "How to send invoices and cash out, no code",
+  },
+  {
+    href: "/developers",
+    label: "Developer Docs",
+    icon: BookOpen,
+    description: "REST API, webhooks, and SDK references",
   },
   {
     href: "/compliance",
@@ -76,16 +84,28 @@ const productLinks = [
 
 const industryLinks = [
   {
+    href: "/industries",
+    label: "All Industries",
+    icon: Globe,
+    description: "Every vertical we serve, in one place",
+  },
+  {
     href: "/industries/cannabis",
     label: "Cannabis & Wholesalers",
     icon: Leaf,
     description: "B2B settlement for state-legal operators",
   },
   {
-    href: "/industries/cannabis-b2b-payments",
-    label: "Cannabis B2B Payments",
-    icon: Truck,
-    description: "Supply-chain settlement without cash or banks",
+    href: "/industries/cbd-hemp",
+    label: "CBD & Hemp",
+    icon: Sprout,
+    description: "Hemp-derived cannabinoids and botanicals",
+  },
+  {
+    href: "/industries/firearms",
+    label: "Firearms & Ammunition",
+    icon: Crosshair,
+    description: "FFLs, ammo manufacturers, 2A retail",
   },
 ];
 
@@ -170,7 +190,7 @@ export function Navbar() {
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <SettlrLogo size="sm" variant={transparent ? "light" : "dark"} />
+          <OffbankLogo size="sm" variant={transparent ? "light" : "dark"} />
         </Link>
 
         {/* Desktop Navigation */}
@@ -399,13 +419,13 @@ export function Navbar() {
             Sign In
           </Link>
           <Link
-            href="/waitlist"
+            href="/onboarding"
             className="rounded-full px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
             style={{
               background: "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
             }}
           >
-            Request Access
+            Get Started
           </Link>
         </div>
 
@@ -528,7 +548,7 @@ export function Navbar() {
                   Sign In
                 </Link>
                 <Link
-                  href="/waitlist"
+                  href="/onboarding"
                   onClick={() => setMobileMenuOpen(false)}
                   className="rounded-full px-4 py-3 text-center text-sm font-semibold text-white"
                   style={{
@@ -536,7 +556,7 @@ export function Navbar() {
                       "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
-                  Request Access
+                  Get Started
                 </Link>
               </div>
             </div>

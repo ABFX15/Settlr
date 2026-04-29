@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://settlr.dev/integrations/bubble",
-    siteName: "Settlr",
+    url: "https://offbankpay.com/integrations/bubble",
+    siteName: "Offbank",
     title: "Bubble Plugin — No-Code USDC Settlement",
     description:
       "Add instant USDC settlement to your Bubble app. No code required.",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Settlr + Bubble",
+        alt: "Offbank + Bubble",
       },
     ],
   },

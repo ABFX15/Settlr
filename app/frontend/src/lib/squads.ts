@@ -1,5 +1,5 @@
 /**
- * Squads Protocol v4 — Vault utilities for Settlr.
+ * Squads Protocol v4 — Vault utilities for Offbank.
  *
  * Every merchant gets a Squads Smart Account (multisig vault).
  * This module handles vault creation, member management, and
@@ -109,7 +109,7 @@ export async function buildCreateVaultTransaction(
         timeLock: 0,
         createKey: createKey.publicKey,
         rentCollector: null,
-        memo: "Settlr merchant vault",
+        memo: "Offbank merchant vault",
         programId: SQUADS_PROGRAM_ID,
     });
 
@@ -202,7 +202,7 @@ export interface AddMemberProposalResult {
 /**
  * Build the four-instruction proposal flow that adds a new signer and
  * updates the threshold on a Squads v4 multisig whose configAuthority
- * is null (i.e. members govern themselves — the default for Settlr
+ * is null (i.e. members govern themselves — the default for Offbank
  * vaults).
  *
  * Steps:

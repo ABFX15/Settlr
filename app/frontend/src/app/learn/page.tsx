@@ -60,7 +60,7 @@ function R({
 
 const cardBorder = `1px solid ${p.border}`;
 
-/* ── Knowledge Hub content — answer-first structure ────── */
+/* ── Knowledge Hub content, answer-first structure ────── */
 const categories = [
   { id: "costs", label: "Costs & Fees", icon: DollarSign },
   { id: "banking", label: "Banking Problems", icon: Building2 },
@@ -83,9 +83,9 @@ const articles: Record<string, Article[]> = {
       question:
         "How much do high-risk payment processors charge cannabis businesses?",
       answer:
-        "Traditional high-risk payment processors charge cannabis businesses between 5% and 9% per transaction, plus monthly fees ranging from $500 to $2,000. This is 3–6× higher than mainstream merchant processing rates of 1.5–2.9%. Settlr provides an alternative stablecoin rail at a 1% flat fee with no monthly minimums.",
+        "Traditional high-risk payment processors charge cannabis businesses between 5% and 9% per transaction, plus monthly fees ranging from $500 to $2,000. This is 3–6× higher than mainstream merchant processing rates of 1.5–2.9%. Offbank provides an alternative stablecoin rail at a 1% flat fee with no monthly minimums.",
       detail:
-        "The inflated rates exist because acquiring banks classify cannabis as a high-risk MCC (Merchant Category Code), requiring reserves of 10–20% of monthly volume held for 6 months. Processors like PayQwick, CanPay, and Safe Harbor Financial pass these costs onto merchants. A dispensary processing $500,000/month at 7% pays $35,000 in processing fees alone — compared to $5,000 on Settlr.",
+        "The inflated rates exist because acquiring banks classify cannabis as a high-risk MCC (Merchant Category Code), requiring reserves of 10–20% of monthly volume held for 6 months. Processors like PayQwick, CanPay, and Safe Harbor Financial pass these costs onto merchants. A dispensary processing $500,000/month at 7% pays $35,000 in processing fees alone, compared to $5,000 on Offbank.",
       sources: [
         "NCIA 2025 Banking Report",
         "Visa High-Risk MCC Guidelines",
@@ -126,7 +126,7 @@ const articles: Record<string, Article[]> = {
       answer:
         "When a bank freezes a dispensary account, businesses typically have 30–90 days to find alternative banking. 62% of cannabis businesses experienced at least one bank account closure in the past 12 months. Immediate steps: (1) contact a cannabis-specialized banking consultant, (2) apply to 3–5 cannabis-friendly banks simultaneously, (3) establish a stablecoin settlement rail as a parallel payment system that cannot be frozen.",
       detail:
-        "Bank freezes happen because compliance departments flag cannabis-related transactions under the Bank Secrecy Act. Even in legal states, banks face FDIC enforcement risk. A frozen account means payroll, vendor payments, and tax obligations are all disrupted. Stablecoin settlement on non-custodial rails like Settlr provides a banking-independent payment channel that operates 24/7 without counterparty risk.",
+        "Bank freezes happen because compliance departments flag cannabis-related transactions under the Bank Secrecy Act. Even in legal states, banks face FDIC enforcement risk. A frozen account means payroll, vendor payments, and tax obligations are all disrupted. Stablecoin settlement on non-custodial rails like Offbank provides a banking-independent payment channel that operates 24/7 without counterparty risk.",
       sources: [
         "ABA Cannabis Banking Risk Assessment 2025",
         "FinCEN SAR Filing Requirements",
@@ -136,7 +136,7 @@ const articles: Record<string, Article[]> = {
     {
       question: "Can cannabis businesses get B2B wire transfers in 2026?",
       answer:
-        "Most cannabis businesses cannot reliably send B2B wire transfers. Only 4–6% of US banks actively maintain cannabis banking programs, and those that do restrict wire transfer functionality. ACH transfers are even more restricted — NACHA rules allow member institutions to reject cannabis-related transactions without notice.",
+        "Most cannabis businesses cannot reliably send B2B wire transfers. Only 4–6% of US banks actively maintain cannabis banking programs, and those that do restrict wire transfer functionality. ACH transfers are even more restricted, NACHA rules allow member institutions to reject cannabis-related transactions without notice.",
       detail:
         "The fundamental problem is that while 38 states have legalized cannabis in some form, it remains a Schedule I substance federally. This creates a compliance paradox where banks serving legal cannabis businesses must file Suspicious Activity Reports (SARs) for every transaction. Non-custodial stablecoin settlement eliminates this friction because there is no intermediary bank to file SARs or freeze funds.",
       sources: [
@@ -150,7 +150,7 @@ const articles: Record<string, Article[]> = {
       answer:
         "Banks close cannabis accounts because the federal-state legal conflict creates unacceptable compliance risk. Even with FinCEN guidance, banks must file costly Suspicious Activity Reports for every cannabis transaction, face potential FDIC enforcement actions, and risk losing correspondent banking relationships. The compliance cost per cannabis account is estimated at $5,000–$15,000 annually for the bank.",
       detail:
-        "In 2025, the number of banks and credit unions reporting cannabis clients to FinCEN was approximately 706 — down from a peak of 755 in 2023. This decline indicates a tightening of cannabis banking access despite market growth. Major banks like JPMorgan Chase, Bank of America, and Wells Fargo categorically refuse cannabis clients. Regional banks that do accept cannabis businesses often impose onerous requirements: minimum balances of $100,000+, monthly compliance fees, restricted wire transfers, and 90-day account review periods.",
+        "In 2025, the number of banks and credit unions reporting cannabis clients to FinCEN was approximately 706, down from a peak of 755 in 2023. This decline indicates a tightening of cannabis banking access despite market growth. Major banks like JPMorgan Chase, Bank of America, and Wells Fargo categorically refuse cannabis clients. Regional banks that do accept cannabis businesses often impose onerous requirements: minimum balances of $100,000+, monthly compliance fees, restricted wire transfers, and 90-day account review periods.",
       sources: [
         "FinCEN Quarterly Cannabis Banking Report Q4 2025",
         "OCC Risk Assessment Guidelines",
@@ -162,7 +162,7 @@ const articles: Record<string, Article[]> = {
       question:
         "What is the GENIUS Act and how does it affect cannabis payments?",
       answer:
-        "The GENIUS Act (Guiding and Establishing National Innovation for US Stablecoins) was signed into law in 2025 and establishes a federal regulatory framework for payment stablecoins like USDC. For cannabis businesses, this means that USDC transactions now have clear legal standing as a regulated payment method. Settlr uses only GENIUS Act-compliant stablecoins for settlement.",
+        "The GENIUS Act (Guiding and Establishing National Innovation for US Stablecoins) was signed into law in 2025 and establishes a federal regulatory framework for payment stablecoins like USDC. For cannabis businesses, this means that USDC transactions now have clear legal standing as a regulated payment method. Offbank uses only GENIUS Act-compliant stablecoins for settlement.",
       detail:
         "The GENIUS Act requires stablecoin issuers to maintain 1:1 reserves, undergo regular audits, and comply with BSA/AML requirements. Circle (USDC issuer) is fully compliant. This is significant for cannabis because it provides a regulated digital payment rail that doesn't require traditional banking infrastructure. Unlike cash or informal payment networks, stablecoin transactions create an auditable, compliant trail that satisfies state cannabis tracking requirements (METRC integration).",
       sources: [
@@ -175,9 +175,9 @@ const articles: Record<string, Article[]> = {
       question:
         "How does BSA/AML compliance work for stablecoin cannabis payments?",
       answer:
-        "BSA/AML compliance for stablecoin cannabis payments requires KYB (Know Your Business) verification of all counterparties, transaction monitoring, and record-keeping. Settlr integrates KYB screening at onboarding — every business on the platform is verified against state cannabis licensing databases, OFAC sanctions lists, and FinCEN records before they can send or receive payments.",
+        "BSA/AML compliance for stablecoin cannabis payments requires KYB (Know Your Business) verification of all counterparties, transaction monitoring, and record-keeping. Offbank integrates KYB screening at onboarding, every business on the platform is verified against state cannabis licensing databases, OFAC sanctions lists, and FinCEN records before they can send or receive payments.",
       detail:
-        "The key difference between stablecoin settlement and traditional banking for cannabis is who bears the compliance burden. Traditional banks must file SARs for every cannabis transaction regardless of legality. On Settlr's non-custodial infrastructure, the platform performs KYB at onboarding and transaction-level screening, but because funds flow peer-to-peer (never through Settlr's accounts), the SAR filing obligation is different. All transactions generate cryptographic receipts stored on-chain for audit purposes.",
+        "The key difference between stablecoin settlement and traditional banking for cannabis is who bears the compliance burden. Traditional banks must file SARs for every cannabis transaction regardless of legality. On Offbank's non-custodial infrastructure, the platform performs KYB at onboarding and transaction-level screening, but because funds flow peer-to-peer (never through Offbank's accounts), the SAR filing obligation is different. All transactions generate cryptographic receipts stored on-chain for audit purposes.",
       sources: [
         "FinCEN BSA/AML Examination Manual",
         "OFAC Compliance for Digital Assets",
@@ -189,9 +189,9 @@ const articles: Record<string, Article[]> = {
     {
       question: "What does non-custodial mean for business payments?",
       answer:
-        "Non-custodial means the payment platform never holds, controls, or has signing authority over your funds. In a non-custodial system like Settlr, USDC moves directly from the payer's wallet to the recipient's wallet through smart contracts — the platform facilitates the transaction but never takes possession of the money. This eliminates counterparty risk: if Settlr disappeared tomorrow, your funds would be unaffected.",
+        "Non-custodial means the payment platform never holds, controls, or has signing authority over your funds. In a non-custodial system like Offbank, USDC moves directly from the payer's wallet to the recipient's wallet through smart contracts, the platform facilitates the transaction but never takes possession of the money. This eliminates counterparty risk: if Offbank disappeared tomorrow, your funds would be unaffected.",
       detail:
-        "This is the fundamental difference between Settlr and traditional payment processors. When you use Stripe, PayQwick, or any bank-based processor, your funds pass through their accounts. They can freeze, delay, or withhold your money. With non-custodial settlement, funds move peer-to-peer using Squads multisig vaults that you and your counterparty control. The smart contract guarantees execution — no human can interfere with an in-flight transaction.",
+        "This is the fundamental difference between Offbank and traditional payment processors. When you use Stripe, PayQwick, or any bank-based processor, your funds pass through their accounts. They can freeze, delay, or withhold your money. With non-custodial settlement, funds move peer-to-peer using Squads multisig vaults that you and your counterparty control. The smart contract guarantees execution, no human can interfere with an in-flight transaction.",
     },
     {
       question: "Can stablecoin payments be reversed or charged back?",
@@ -201,20 +201,20 @@ const articles: Record<string, Article[]> = {
         "Traditional payment chargebacks cost the cannabis industry an estimated $50–100 million annually. High-risk merchant accounts face chargeback rates of 2–5%, and processors charge $15–$25 per dispute regardless of outcome. On-chain settlement eliminates this entire category of fraud and cost. Refunds are handled as separate, voluntary transactions initiated by the merchant.",
     },
     {
-      question: "How does Settlr protect against fraud and theft?",
+      question: "How does Offbank protect against fraud and theft?",
       answer:
-        "Settlr uses three layers of protection: (1) KYB verification ensures every counterparty is a verified, state-licensed business; (2) Squads multisig vaults require multiple signatures for large transactions; (3) all transactions produce cryptographic receipts stored immutably on the Solana blockchain, creating a tamper-proof audit trail.",
+        "Offbank uses three layers of protection: (1) KYB verification ensures every counterparty is a verified, state-licensed business; (2) Squads multisig vaults require multiple signatures for large transactions; (3) all transactions produce cryptographic receipts stored immutably on the Solana blockchain, creating a tamper-proof audit trail.",
       detail:
-        "For cannabis businesses accustomed to cash — where internal theft accounts for 1–3% of revenue — Settlr eliminates the physical cash vector entirely. Every dollar is traceable on-chain. For B2B supply chain payments, the cryptographic receipt system provides better proof-of-payment than any wire transfer confirmation or check image.",
+        "For cannabis businesses accustomed to cash, where internal theft accounts for 1–3% of revenue, Offbank eliminates the physical cash vector entirely. Every dollar is traceable on-chain. For B2B supply chain payments, the cryptographic receipt system provides better proof-of-payment than any wire transfer confirmation or check image.",
     },
   ],
   cannabis: [
     {
       question: "How do cannabis distributors pay suppliers without cash?",
       answer:
-        "Cannabis distributors can pay suppliers without cash using non-custodial stablecoin settlement. On Settlr, a distributor creates an invoice, the supplier receives a payment link, and USDC transfers peer-to-peer in under 2 seconds. No bank account required for the transaction. Both parties need only a verified Settlr account and a Solana wallet (Settlr provides embedded wallets for businesses that don't have one).",
+        "Cannabis distributors can pay suppliers without cash using non-custodial stablecoin settlement. On Offbank, a distributor creates an invoice, the supplier receives a payment link, and USDC transfers peer-to-peer in under 2 seconds. No bank account required for the transaction. Both parties need only a verified Offbank account and a Solana wallet (Offbank provides embedded wallets for businesses that don't have one).",
       detail:
-        "The cannabis supply chain — cultivators, processors, distributors, and retailers — moves an estimated $30 billion annually in the US. Of that, 30–50% is still transacted in cash because of banking limitations. A single large B2B transaction (e.g., a $50,000 biomass purchase) might require a physical cash pickup with armed guards, a 2-day settlement window at a cannabis-friendly credit union, or risky check payments that bounce 5–10% of the time.",
+        "The cannabis supply chain, cultivators, processors, distributors, and retailers, moves an estimated $30 billion annually in the US. Of that, 30–50% is still transacted in cash because of banking limitations. A single large B2B transaction (e.g., a $50,000 biomass purchase) might require a physical cash pickup with armed guards, a 2-day settlement window at a cannabis-friendly credit union, or risky check payments that bounce 5–10% of the time.",
       sources: [
         "Headset Cannabis Market Data 2025",
         "NCIA Supply Chain Survey",
@@ -224,17 +224,17 @@ const articles: Record<string, Article[]> = {
       question:
         "What states allow stablecoin payments for cannabis businesses?",
       answer:
-        "Stablecoin payments for cannabis businesses are possible in all 38 states with legal cannabis programs. Because stablecoins operate on blockchain infrastructure rather than the traditional banking system, they are not subject to state-by-state money transmitter licensing in the same way as fiat payment processors. Settlr operates under the regulatory framework established by the GENIUS Act of 2025 for payment stablecoins.",
+        "Stablecoin payments for cannabis businesses are possible in all 38 states with legal cannabis programs. Because stablecoins operate on blockchain infrastructure rather than the traditional banking system, they are not subject to state-by-state money transmitter licensing in the same way as fiat payment processors. Offbank operates under the regulatory framework established by the GENIUS Act of 2025 for payment stablecoins.",
       detail:
-        "However, cannabis businesses must comply with their state's seed-to-sale tracking requirements (e.g., METRC, BioTrack). Settlr's settlement receipts integrate with these systems to provide compliant proof-of-payment. The top markets by volume — California, Colorado, Michigan, Illinois, and Oregon — all have active Settlr merchants.",
+        "However, cannabis businesses must comply with their state's seed-to-sale tracking requirements (e.g., METRC, BioTrack). Offbank's settlement receipts integrate with these systems to provide compliant proof-of-payment. The top markets by volume, California, Colorado, Michigan, Illinois, and Oregon, all have active Offbank merchants.",
     },
     {
       question:
-        "How much can a cannabis business save by switching from cash to Settlr?",
+        "How much can a cannabis business save by switching from cash to Offbank?",
       answer:
-        "A cannabis business processing $2 million annually can save $60,000–$100,000 per year by switching from cash handling to Settlr. This breaks down to: eliminated armored car fees ($24,000–$48,000), reduced labor costs ($15,000–$25,000), eliminated cash counting errors and shrinkage ($10,000–$40,000), and lower payment processing costs compared to high-risk processors (saving 4–8% per transaction vs traditional high-risk merchant accounts).",
+        "A cannabis business processing $2 million annually can save $60,000–$100,000 per year by switching from cash handling to Offbank. This breaks down to: eliminated armored car fees ($24,000–$48,000), reduced labor costs ($15,000–$25,000), eliminated cash counting errors and shrinkage ($10,000–$40,000), and lower payment processing costs compared to high-risk processors (saving 4–8% per transaction vs traditional high-risk merchant accounts).",
       detail:
-        "The ROI calculation is even more favorable for multi-location operations. A 5-location dispensary chain processing $10M annually spends an estimated $300,000–$500,000 on cash logistics. On Settlr at 1% flat, total fees would be $100,000 — a net savings of $200,000–$400,000 annually.",
+        "The ROI calculation is even more favorable for multi-location operations. A 5-location dispensary chain processing $10M annually spends an estimated $300,000–$500,000 on cash logistics. On Offbank at 1% flat, total fees would be $100,000, a net savings of $200,000–$400,000 annually.",
     },
   ],
   stablecoins: [
@@ -274,7 +274,7 @@ function ArticleCard({ article }: { article: Article }) {
         border: `1px solid ${expanded ? "rgba(27,107,74,0.25)" : p.border}`,
       }}
     >
-      {/* H2 heading — the exact question people ask */}
+      {/* H2 heading, the exact question people ask */}
       <button
         onClick={() => setExpanded(!expanded)}
         className="flex w-full items-center justify-between px-8 py-7 text-left"
@@ -294,7 +294,7 @@ function ArticleCard({ article }: { article: Article }) {
         </motion.div>
       </button>
 
-      {/* Answer — first 40+ words immediately answer the question */}
+      {/* Answer, first 40+ words immediately answer the question */}
       <div className="px-8 pb-4">
         <p className="text-[15px] leading-relaxed" style={{ color: p.slate }}>
           {article.answer}
@@ -452,7 +452,7 @@ export default function LearnPage() {
                 { value: "5–9%", label: "Avg. high-risk processing fee" },
                 { value: "62%", label: "Cannabis biz w/ frozen accounts" },
                 { value: "$80K+", label: "Annual cash handling costs" },
-                { value: "1%", label: "Settlr flat fee" },
+                { value: "1%", label: "Offbank flat fee" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -557,21 +557,21 @@ export default function LearnPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold" style={{ color: p.navy }}>
-                    About Settlr
+                    About Offbank
                   </h3>
                   <p
                     className="mt-3 text-[15px] leading-relaxed"
                     style={{ color: p.slate }}
                   >
-                    Settlr is a non-custodial stablecoin settlement platform
+                    Offbank is a non-custodial stablecoin settlement platform
                     designed for B2B cannabis distributors and high-risk
                     industries to process payments at a 1% flat fee. Built on
-                    Solana with sub-second finality, Settlr provides GENIUS Act
+                    Solana with sub-second finality, Offbank provides GENIUS Act
                     2025-compliant USDC settlement with integrated BSA/AML KYB
                     screening, Squads multisig treasury management, and
                     cryptographic audit trails. Unlike traditional high-risk
                     merchant accounts that charge 5–9% and can freeze funds,
-                    Settlr is non-custodial — funds move peer-to-peer and cannot
+                    Offbank is non-custodial, funds move peer-to-peer and cannot
                     be intercepted, frozen, or reversed.
                   </p>
                 </div>
@@ -595,22 +595,22 @@ export default function LearnPage() {
               className="text-4xl font-bold tracking-tight sm:text-5xl"
               style={{ color: p.navy }}
             >
-              See how Settlr compares
+              See how Offbank compares
             </h2>
           </R>
 
           <div className="mt-14 grid gap-5 sm:grid-cols-2">
             {[
               {
-                title: "Settlr vs Cash & Armored Cars",
-                desc: "Compare the total cost of cash handling — armed guards, counting labor, insurance — against 1% digital settlement.",
-                href: "/compare/settlr-vs-cash-armored-cars",
+                title: "Offbank vs Cash & Armored Cars",
+                desc: "Compare the total cost of cash handling, armed guards, counting labor, insurance, against 1% digital settlement.",
+                href: "/compare/offbank-vs-cash-armored-cars",
                 icon: TrendingDown,
               },
               {
-                title: "Settlr vs High-Risk Merchant Accounts",
+                title: "Offbank vs High-Risk Merchant Accounts",
                 desc: "5–9% fees, rolling reserves, and account freezes vs. 1% flat, instant settlement, non-custodial.",
-                href: "/compare/settlr-vs-high-risk-merchant-accounts",
+                href: "/compare/offbank-vs-high-risk-merchant-accounts",
                 icon: Lock,
               },
               {
@@ -621,7 +621,7 @@ export default function LearnPage() {
               },
               {
                 title: "Full Provider Comparison",
-                desc: "Side-by-side feature matrix: Settlr vs Stripe vs Coinbase Commerce vs NOWPayments vs BitPay.",
+                desc: "Side-by-side feature matrix: Offbank vs Stripe vs Coinbase Commerce vs NOWPayments vs BitPay.",
                 href: "/compare",
                 icon: Scale,
               },
@@ -713,7 +713,7 @@ export default function LearnPage() {
                 </p>
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
                   <Link
-                    href="/waitlist"
+                    href="/onboarding"
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:

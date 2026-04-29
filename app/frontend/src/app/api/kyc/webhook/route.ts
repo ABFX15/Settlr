@@ -31,7 +31,7 @@ interface SumsubWebhookPayload {
  * POST /api/kyc/webhook
  * 
  * Handle Sumsub webhook callbacks
- * Configure this URL in Sumsub dashboard: https://settlr.dev/api/kyc/webhook
+ * Configure this URL in Sumsub dashboard: https://offbankpay.com/api/kyc/webhook
  * 
  * Events to subscribe to:
  * - applicantReviewed: Verification completed (GREEN/RED)

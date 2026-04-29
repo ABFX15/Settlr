@@ -108,7 +108,7 @@ function LoginPageInner() {
           <Shield className="w-10 h-10" style={{ color: c.green }} />
         </div>
         <h1 className="text-3xl font-bold mb-3" style={{ color: c.navy }}>
-          Sign In to Settlr
+          Sign In to Offbank
         </h1>
         <p className="mb-2 text-lg" style={{ color: c.slate }}>
           Connect the wallet you used during onboarding.
@@ -155,7 +155,7 @@ function LoginPageInner() {
           <p className="text-sm" style={{ color: c.muted }}>
             Don&apos;t have an account?{" "}
             <Link
-              href="/waitlist"
+              href="/onboarding"
               className="font-medium underline"
               style={{ color: c.green }}
             >

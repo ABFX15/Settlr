@@ -3,9 +3,9 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — Settlr",
+  title: "Terms of Service — Offbank",
   description:
-    "Settlr Terms of Service. Read the conditions that govern use of the Settlr stablecoin settlement platform.",
+    "Offbank Terms of Service. Read the conditions that govern use of the Offbank stablecoin settlement platform.",
   alternates: { canonical: "/terms" },
 };
 
@@ -29,7 +29,7 @@ export default function TermsPage() {
                 1. Acceptance of Terms
               </h2>
               <p>
-                By accessing or using the Settlr platform
+                By accessing or using the Offbank platform
                 (&ldquo;Service&rdquo;), you agree to be bound by these Terms of
                 Service (&ldquo;Terms&rdquo;). If you do not agree to all the
                 terms and conditions, you may not access or use the Service.
@@ -41,9 +41,9 @@ export default function TermsPage() {
                 2. Description of Service
               </h2>
               <p>
-                Settlr provides non-custodial stablecoin settlement
+                Offbank provides non-custodial stablecoin settlement
                 infrastructure that enables B2B payments on the Solana
-                blockchain. Settlr does not take custody of user funds at any
+                blockchain. Offbank does not take custody of user funds at any
                 point. All transactions are executed through publicly auditable
                 smart contracts.
               </p>
@@ -54,7 +54,7 @@ export default function TermsPage() {
                 3. Non-Custodial Nature
               </h2>
               <p>
-                Settlr is non-custodial. We do not hold, control, or have access
+                Offbank is non-custodial. We do not hold, control, or have access
                 to your wallet private keys or funds. You are solely responsible
                 for the security of your wallet and any transactions you
                 authorize through the Service.
@@ -66,13 +66,13 @@ export default function TermsPage() {
                 4. Fees
               </h2>
               <p>
-                Settlr charges a platform fee on each settlement transaction.
+                Offbank charges a platform fee on each settlement transaction.
                 Current fee schedules are published on our{" "}
                 <a href="/pricing" className="text-[#34c759] underline">
                   pricing page
                 </a>
                 . Fees are deducted at the smart-contract level and are visible
-                on-chain. Settlr reserves the right to modify fees with
+                on-chain. Offbank reserves the right to modify fees with
                 reasonable notice.
               </p>
             </section>
@@ -118,7 +118,7 @@ export default function TermsPage() {
               <p>
                 The Service is provided &ldquo;as is&rdquo; and &ldquo;as
                 available&rdquo; without warranties of any kind, whether express
-                or implied. Settlr does not guarantee uninterrupted access to
+                or implied. Offbank does not guarantee uninterrupted access to
                 the Service or the Solana blockchain.
               </p>
             </section>
@@ -128,11 +128,11 @@ export default function TermsPage() {
                 8. Limitation of Liability
               </h2>
               <p>
-                To the fullest extent permitted by law, Settlr shall not be
+                To the fullest extent permitted by law, Offbank shall not be
                 liable for any indirect, incidental, special, consequential, or
                 punitive damages arising out of or related to your use of the
-                Service. Settlr&rsquo;s total aggregate liability shall not
-                exceed the fees paid by you to Settlr in the twelve (12) months
+                Service. Offbank&rsquo;s total aggregate liability shall not
+                exceed the fees paid by you to Offbank in the twelve (12) months
                 preceding the claim.
               </p>
             </section>
@@ -142,7 +142,7 @@ export default function TermsPage() {
                 9. Privacy
               </h2>
               <p>
-                Settlr processes minimal user data. Wallet addresses and
+                Offbank processes minimal user data. Wallet addresses and
                 on-chain transactions are publicly visible on the Solana
                 blockchain by design. We do not sell user data to third parties.
                 For detailed information, see our Privacy Policy.
@@ -154,7 +154,7 @@ export default function TermsPage() {
                 10. Modifications
               </h2>
               <p>
-                Settlr reserves the right to modify these Terms at any time. We
+                Offbank reserves the right to modify these Terms at any time. We
                 will provide notice of material changes by updating the
                 &ldquo;Last updated&rdquo; date above. Your continued use of the
                 Service after such changes constitutes acceptance of the updated
@@ -169,10 +169,10 @@ export default function TermsPage() {
               <p>
                 For questions about these Terms, contact us at{" "}
                 <a
-                  href="mailto:adam@settlr.dev"
+                  href="mailto:adam@offbankpay.com"
                   className="text-[#34c759] underline"
                 >
-                  adam@settlr.dev
+                  adam@offbankpay.com
                 </a>
                 .
               </p>

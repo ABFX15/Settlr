@@ -141,7 +141,7 @@ export default function DemoStorePage() {
     router.push(
       `/checkout?amount=${total.toFixed(
         2,
-      )}&merchant=Settlr&to=${demoWallet}&memo=${encodeURIComponent(
+      )}&merchant=Offbank&to=${demoWallet}&memo=${encodeURIComponent(
         `Checkout: ${itemNames}`,
       )}`,
     );
@@ -163,7 +163,7 @@ export default function DemoStorePage() {
             <span className="text-3xl">💳</span>
             <div>
               <h1 className="text-xl font-bold text-[var(--text-primary)]">
-                Settlr Platform Plans
+                Offbank Platform Plans
               </h1>
               <p className="text-xs text-[var(--text-muted)]">
                 Demo Store • Pay with USDC
@@ -344,7 +344,7 @@ export default function DemoStorePage() {
                 Pay with USDC • Zero Gas Fees
               </h3>
               <p className="text-sm text-[var(--text-muted)]">
-                Pay with USDC — no SOL required. Settlr covers the gas so
+                Pay with USDC — no SOL required. Offbank covers the gas so
                 checkout is seamless for every user.
               </p>
             </div>
@@ -443,7 +443,7 @@ export default function DemoStorePage() {
                   </button>
 
                   <p className="text-xs text-center text-[var(--text-muted)]">
-                    Powered by Settlr. Instant USDC settlement.
+                    Powered by Offbank. Instant USDC settlement.
                   </p>
                 </div>
               </>

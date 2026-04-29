@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 
 /**
- * Example webhook endpoint for receiving Settlr payment notifications
+ * Example webhook endpoint for receiving Offbank payment notifications
  * 
  * Merchants would implement their own version of this to handle:
  * - Order fulfillment
@@ -35,10 +35,10 @@ function verifySignature(
 export async function POST(request: NextRequest) {
     try {
         // Get webhook secret from environment
-        const webhookSecret = process.env.SETTLR_WEBHOOK_SECRET;
+        const webhookSecret = process.env.OFFBANK_WEBHOOK_SECRET;
 
         if (!webhookSecret) {
-            console.error("SETTLR_WEBHOOK_SECRET not configured");
+            console.error("OFFBANK_WEBHOOK_SECRET not configured");
             return NextResponse.json(
                 { error: "Webhook secret not configured" },
                 { status: 500 }
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Get signature from header
-        const signature = request.headers.get("x-settlr-signature");
+        const signature = request.headers.get("x-offbank-signature");
 
         if (!signature) {
             return NextResponse.json(

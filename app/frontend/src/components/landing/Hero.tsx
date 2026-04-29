@@ -37,7 +37,7 @@ export function Hero() {
       {/* ── dark overlay ───────────────────────────────── */}
       <div className="pointer-events-none absolute inset-0 z-[1] bg-black/50" />
 
-      {/* ── volumetric green glow — edges ──────────────── */}
+      {/* ── volumetric green glow, edges ──────────────── */}
       <div
         className="pointer-events-none absolute inset-0 z-[2]"
         style={{
@@ -64,7 +64,7 @@ export function Hero() {
                   textShadow: "0 2px 30px rgba(0,0,0,0.7)",
                 }}
               >
-                Get paid instantly on wholesale orders.
+                Send an invoice. Get paid in USDC. Cash out to USD.
               </h1>
 
               <p
@@ -74,9 +74,10 @@ export function Hero() {
                   textShadow: "0 1px 8px rgba(0,0,0,0.4)",
                 }}
               >
-                Settle invoices in seconds, not days. No bank needed. No account
-                freezes. Just USDC moving directly between you and your
-                suppliers. 1% flat.
+                Stop chasing NET-30 cheques. Send a buyer an invoice, get paid
+                in USDC the same hour, cash out to your business bank account.
+                Built for cannabis distributors, brands, and the wholesalers
+                banks won&apos;t reliably serve. 1% flat. Non-custodial.
               </p>
 
               {/* ── CTAs ───────────────────────────────────── */}
@@ -87,11 +88,11 @@ export function Hero() {
                 className="mt-10 flex flex-wrap items-center gap-4"
               >
                 <Link
-                  href="/waitlist"
+                  href="/onboarding"
                   className="group inline-flex items-center gap-2.5 rounded-full px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:brightness-110"
                   style={{ background: t.green }}
                 >
-                  Start Getting Paid Instantly
+                  Get Started
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <Link
@@ -109,7 +110,7 @@ export function Hero() {
                 transition={{ ...spring, delay: 0.35 }}
                 className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2"
               >
-                {["GENIUS Act Compliant", "Non-Custodial", "BSA/AML"].map(
+                {["Non-Custodial", "KYB + BSA/AML", "USD Off-Ramp"].map(
                   (badge) => (
                     <span
                       key={badge}
@@ -136,7 +137,7 @@ export function Hero() {
               <div className="relative overflow-hidden rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
                 <Image
                   src="/dashboard-mock.png"
-                  alt="Settlr settlement dashboard showing volumes, transactions, and real-time settlement data"
+                  alt="Offbank settlement dashboard showing volumes, transactions, and real-time settlement data"
                   width={960}
                   height={640}
                   priority
@@ -162,10 +163,10 @@ export function Hero() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-white">
-                      Settlement Complete
+                      Invoice Paid
                     </p>
                     <p className="text-xs text-white/60">
-                      $47,500 · GreenLeaf → Pacific Dist. · 0.6s
+                      $47,500 · Wholesale order · 0.6s
                     </p>
                   </div>
                 </div>
@@ -188,10 +189,10 @@ export function Hero() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-white">
-                      Invoice Paid
+                      Cash-out to USD
                     </p>
                     <p className="text-xs text-white/60">
-                      $14,250 · Mountain Extracts · 0.8s
+                      $14,250 · ACH to your bank · next day
                     </p>
                   </div>
                 </div>
@@ -201,10 +202,12 @@ export function Hero() {
         </div>
       </div>
 
-      {/* ── sr-only for SEO ─────────────────────────────── */}
+      {/* ── sr-only for SEO ────────────────────────────── */}
       <p className="sr-only">
-        Settlr is a non-custodial stablecoin settlement platform for B2B
-        cannabis distributors at 1% flat fee, built on Solana.
+        Offbank is non-custodial USDC invoicing and B2B settlement for cannabis
+        distributors, brands, and wholesalers banks won&apos;t reliably serve.
+        Send invoices, get paid in USDC, cash out to USD via ACH. 1% flat fee,
+        built on Solana.
       </p>
     </section>
   );

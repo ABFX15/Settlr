@@ -47,63 +47,63 @@ const fadeUp = {
 const comparisonRows = [
   {
     feature: "Settlement Speed",
-    settlr: "< 1 second",
+    offbank: "< 1 second",
     stripe: "2–7 business days",
-    winner: "settlr",
+    winner: "offbank",
   },
   {
     feature: "Per-Payout Fee",
-    settlr: "1% flat",
+    offbank: "1% flat",
     stripe: "0.25% + $0.25 (domestic) / 1% + $0.25 (intl)",
-    winner: "settlr",
+    winner: "offbank",
   },
   {
     feature: "Countries Supported",
-    settlr: "180+ (email-based, no bank details)",
+    offbank: "180+ (email-based, no bank details)",
     stripe: "~47 (requires local bank account)",
-    winner: "settlr",
+    winner: "offbank",
   },
   {
     feature: "Onboarding Friction",
-    settlr: "Email address only",
+    offbank: "Email address only",
     stripe: "Full KYC per recipient, days to verify",
-    winner: "settlr",
+    winner: "offbank",
   },
   {
     feature: "Currency",
-    settlr: "USDC (stablecoin, 1:1 USD)",
+    offbank: "USDC (stablecoin, 1:1 USD)",
     stripe: "Fiat (local currency conversion fees)",
-    winner: "settlr",
+    winner: "offbank",
   },
   {
     feature: "Frozen Accounts",
-    settlr: "Non-custodial — funds flow directly",
+    offbank: "Non-custodial — funds flow directly",
     stripe: "Stripe holds funds, freezing reported",
-    winner: "settlr",
+    winner: "offbank",
   },
   {
     feature: "Compliance (OFAC / AML)",
-    settlr: "Built-in screening on every settlement",
+    offbank: "Built-in screening on every settlement",
     stripe: "Via Connect, requires configuration",
     winner: "tie",
   },
   {
     feature: "API Integration",
-    settlr: "3 lines of code",
+    offbank: "3 lines of code",
     stripe: "Complex Connect onboarding flows",
-    winner: "settlr",
+    winner: "offbank",
   },
   {
     feature: "Marketplace Support",
-    settlr: "Yes — split payments, multi-party",
+    offbank: "Yes — split payments, multi-party",
     stripe: "Yes — Stripe Connect",
     winner: "tie",
   },
   {
     feature: "Privacy",
-    settlr: "Confidential transfers (SPL Token 2022)",
+    offbank: "Confidential transfers (SPL Token 2022)",
     stripe: "Standard bank transfers",
-    winner: "settlr",
+    winner: "offbank",
   },
 ];
 
@@ -112,37 +112,37 @@ const painPoints = [
     icon: Clock,
     title: "Wait 5 days for settlements to land?",
     description:
-      "Stripe Connect batches payouts on a rolling schedule. Your vendors wait days for money they're owed. Settlr settles in under a second.",
+      "Stripe Connect batches payouts on a rolling schedule. Your vendors wait days for money they're owed. Offbank settles in under a second.",
   },
   {
     icon: Globe,
     title: "Debanked? Stripe won't serve you.",
     description:
-      "Stripe Connect won't touch cannabis or other high-risk verticals. Settlr is built for the debanked — non-custodial USDC, no bank interference.",
+      "Stripe Connect won't touch cannabis or other high-risk verticals. Offbank is built for the debanked — non-custodial USDC, no bank interference.",
   },
   {
     icon: DollarSign,
     title: "Hidden fees everywhere?",
     description:
-      "Cross-border conversions, platform fees, FX markups. With Settlr, it's 1% flat. Period. No currency conversion because USDC is already a dollar.",
+      "Cross-border conversions, platform fees, FX markups. With Offbank, it's 1% flat. Period. No currency conversion because USDC is already a dollar.",
   },
   {
     icon: Lock,
     title: "Funds frozen without warning?",
     description:
-      "Stripe holds your money in reserve and can freeze accounts with little notice. Settlr is non-custodial — funds flow directly from your wallet to theirs.",
+      "Stripe holds your money in reserve and can freeze accounts with little notice. Offbank is non-custodial — funds flow directly from your wallet to theirs.",
   },
   {
     icon: Building2,
     title: "Weeks of onboarding per recipient?",
     description:
-      "Stripe Connect requires full KYC for every connected account. Settlr: send an email, they claim their USDC. Done.",
+      "Stripe Connect requires full KYC for every connected account. Offbank: send an email, they claim their USDC. Done.",
   },
   {
     icon: Shield,
     title: "Compliance headaches?",
     description:
-      "Settlr screens every payout against OFAC automatically. No extra config, no third-party add-ons. Compliance is built into the protocol.",
+      "Offbank screens every payout against OFAC automatically. No extra config, no third-party add-ons. Compliance is built into the protocol.",
   },
 ];
 
@@ -157,15 +157,15 @@ const faqs = [
   },
   {
     q: "Do I need to understand crypto?",
-    a: "No. Settlr abstracts all blockchain complexity. You call an API with an email and an amount. We handle wallets, transactions, and delivery. Your recipients see a branded claim page — no crypto knowledge needed.",
+    a: "No. Offbank abstracts all blockchain complexity. You call an API with an email and an amount. We handle wallets, transactions, and delivery. Your recipients see a branded claim page — no crypto knowledge needed.",
   },
   {
-    q: "How does Settlr handle compliance?",
+    q: "How does Offbank handle compliance?",
     a: "Every settlement is screened against OFAC and global sanctions lists in real-time. We maintain an audit trail for every transaction. Confidential transfers on SPL Token 2022 ensure amounts stay private on-chain while maintaining full compliance.",
   },
   {
     q: "Can I migrate from Stripe Connect?",
-    a: "Yes. Most teams integrate Settlr in under an hour. You can run both systems in parallel during migration — use Stripe for card processing and Settlr for settlement.",
+    a: "Yes. Most teams integrate Offbank in under an hour. You can run both systems in parallel during migration — use Stripe for card processing and Offbank for settlement.",
   },
   {
     q: "What about chargebacks?",
@@ -225,14 +225,14 @@ export default function StripeConnectComparison() {
               className="mx-auto mb-10 max-w-2xl text-lg md:text-xl"
               style={{ color: SLATE }}
             >
-              Stripe Connect was built for card payments. Settlr was built for
+              Stripe Connect was built for card payments. Offbank was built for
               non-custodial B2B settlement. Faster finality, lower fees, built
               for the debanked.
             </p>
 
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
-                href="/waitlist"
+                href="/onboarding"
                 className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
                 style={{
                   background:
@@ -327,7 +327,7 @@ export default function StripeConnectComparison() {
               className="mb-4 text-3xl font-bold tracking-tight md:text-4xl"
               style={{ color: NAVY, fontFamily: "var(--font-heading)" }}
             >
-              Settlr vs Stripe Connect
+              Offbank vs Stripe Connect
             </motion.h2>
             <motion.p
               custom={1}
@@ -355,7 +355,7 @@ export default function StripeConnectComparison() {
             >
               <span>Feature</span>
               <span className="text-center" style={{ color: ACCENT_LIGHT }}>
-                Settlr
+                Offbank
               </span>
               <span className="text-center opacity-60">Stripe Connect</span>
             </div>
@@ -375,18 +375,18 @@ export default function StripeConnectComparison() {
                 </span>
                 <span
                   className="text-center"
-                  style={{ color: row.winner === "settlr" ? GREEN : SLATE }}
+                  style={{ color: row.winner === "offbank" ? GREEN : SLATE }}
                 >
-                  {row.winner === "settlr" && (
+                  {row.winner === "offbank" && (
                     <Check
                       className="mr-1 inline h-4 w-4"
                       style={{ color: GREEN }}
                     />
                   )}
-                  {row.settlr}
+                  {row.offbank}
                 </span>
                 <span className="text-center" style={{ color: MUTED }}>
-                  {row.winner === "settlr" && (
+                  {row.winner === "offbank" && (
                     <X className="mr-1 inline h-4 w-4 opacity-40" />
                   )}
                   {row.stripe}
@@ -420,7 +420,7 @@ export default function StripeConnectComparison() {
               className="mx-auto mb-12 max-w-2xl text-lg"
               style={{ color: SLATE }}
             >
-              Stripe Connect requires building complex onboarding flows. Settlr
+              Stripe Connect requires building complex onboarding flows. Offbank
               is three lines of code.
             </motion.p>
           </motion.div>
@@ -451,13 +451,13 @@ export default function StripeConnectComparison() {
             >
               <code>
                 <span style={{ color: "#8a8a8a" }}>
-                  {"// Settlr REST API — pay a contractor in 5 lines\n"}
+                  {"// Offbank REST API — pay a contractor in 5 lines\n"}
                 </span>
                 <span style={{ color: MUTED }}>{"const res = await "}</span>
                 <span style={{ color: "white" }}>{"fetch"}</span>
                 <span style={{ color: MUTED }}>{"("}</span>
                 <span style={{ color: ACCENT_LIGHT }}>
-                  {'"https://settlr.dev/api/payouts"'}
+                  {'"https://offbankpay.com/api/payouts"'}
                 </span>
                 <span style={{ color: MUTED }}>{", {\n"}</span>
                 <span style={{ color: MUTED }}>{"  method: "}</span>
@@ -591,7 +591,7 @@ export default function StripeConnectComparison() {
               className="flex flex-col items-center justify-center gap-4 sm:flex-row"
             >
               <Link
-                href="/waitlist"
+                href="/onboarding"
                 className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl"
                 style={{
                   background:
@@ -622,10 +622,10 @@ export default function StripeConnectComparison() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "Settlr vs Stripe Connect — Faster, Cheaper B2B Settlement",
+            name: "Offbank vs Stripe Connect — Faster, Cheaper B2B Settlement",
             description:
-              "Compare Settlr and Stripe Connect for B2B settlement. Settlr settles in seconds with non-custodial USDC, costs 1% flat, and serves high-risk industries.",
-            url: "https://settlr.dev/vs/stripe-connect",
+              "Compare Offbank and Stripe Connect for B2B settlement. Offbank settles in seconds with non-custodial USDC, costs 1% flat, and serves high-risk industries.",
+            url: "https://offbankpay.com/vs/stripe-connect",
             breadcrumb: {
               "@type": "BreadcrumbList",
               itemListElement: [
@@ -633,13 +633,13 @@ export default function StripeConnectComparison() {
                   "@type": "ListItem",
                   position: 1,
                   name: "Home",
-                  item: "https://settlr.dev/",
+                  item: "https://offbankpay.com/",
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
-                  name: "Settlr vs Stripe Connect",
-                  item: "https://settlr.dev/vs/stripe-connect",
+                  name: "Offbank vs Stripe Connect",
+                  item: "https://offbankpay.com/vs/stripe-connect",
                 },
               ],
             },

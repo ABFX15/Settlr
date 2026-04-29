@@ -73,7 +73,7 @@ export interface LeafLinkWebhookPayload {
 
 /* ── Internal sync record ────────────────────────────── */
 export type SyncStatus =
-    | "pending"       // Invoice created on Settlr, waiting for payment
+    | "pending"       // Invoice created on Offbank, waiting for payment
     | "link_sent"     // Payment link delivered to buyer
     | "paid"          // USDC settled on-chain
     | "synced"        // LeafLink order updated with payment proof
@@ -104,7 +104,7 @@ export interface LeafLinkIntegrationConfig {
     merchant_id: string;
     leaflink_api_key: string;
     leaflink_company_id: number;
-    auto_create_invoice: boolean;   // Create Settlr invoice on order.created
+    auto_create_invoice: boolean;   // Create Offbank invoice on order.created
     auto_send_link: boolean;        // Email payment link to buyer automatically
     webhook_secret?: string;        // HMAC secret for verifying LL webhooks
     metrc_sync: boolean;            // Tag invoices with METRC manifest IDs

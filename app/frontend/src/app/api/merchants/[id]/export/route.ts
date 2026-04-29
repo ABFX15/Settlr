@@ -146,7 +146,7 @@ export async function GET(
 
         // Generate filename
         const dateStr = new Date().toISOString().split("T")[0];
-        const filename = `settlr-payments-${merchant.name.toLowerCase().replace(/\s+/g, "-")}-${dateStr}.csv`;
+        const filename = `offbank-payments-${merchant.name.toLowerCase().replace(/\s+/g, "-")}-${dateStr}.csv`;
 
         return new NextResponse(csv, {
             headers: {

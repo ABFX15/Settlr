@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { posts } from './blog/posts'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://settlr.dev'
+    const baseUrl = 'https://offbankpay.com'
     const lastModified = new Date()
 
     const blogEntries: MetadataRoute.Sitemap = posts.map((post) => ({
@@ -190,13 +190,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9,
         },
         {
-            url: `${baseUrl}/compare/settlr-vs-high-risk-merchant-accounts`,
+            url: `${baseUrl}/compare/offbank-vs-high-risk-merchant-accounts`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.9,
         },
         {
-            url: `${baseUrl}/compare/settlr-vs-cash-armored-cars`,
+            url: `${baseUrl}/compare/offbank-vs-cash-armored-cars`,
             lastModified,
             changeFrequency: 'monthly',
             priority: 0.9,

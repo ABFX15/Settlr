@@ -260,7 +260,7 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
                 <span
                   style={{ color: GREEN, fontFamily: "var(--font-heading)" }}
                 >
-                  settlr
+                  offbank
                 </span>{" "}
                 · Non-custodial
               </p>

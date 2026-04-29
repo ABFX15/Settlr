@@ -121,7 +121,7 @@ export async function PATCH(
             });
 
             // Send email
-            const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+            const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
             try {
                 await sendInvoiceEmail({
                     to: order.buyerEmail,

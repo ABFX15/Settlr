@@ -1,7 +1,7 @@
 -- ============================================================================
 -- Data Pipeline Tables
 -- ============================================================================
--- Central event bus + pre-aggregated analytics for Settlr.
+-- Central event bus + pre-aggregated analytics for Offbank.
 -- Supports the /api/pipeline/* endpoints.
 -- ============================================================================
 

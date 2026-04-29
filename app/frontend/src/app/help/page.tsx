@@ -75,12 +75,12 @@ const categories = [
 const faqs: Record<string, { q: string; a: string }[]> = {
   "getting-started": [
     {
-      q: "How do I get started with Settlr?",
-      a: "Getting started is easy! Simply sign up, complete KYB verification, and you'll receive your API keys. Our API handles the rest — gasless payments, embedded wallets, and instant USDC settlements.",
+      q: "How do I get started with Offbank?",
+      a: "Getting started is easy! Simply sign up, complete KYB verification, and you'll receive your API keys. Our API handles the rest, gasless payments, embedded wallets, and instant USDC settlements.",
     },
     {
       q: "Do I need any crypto knowledge?",
-      a: "Not at all! Settlr abstracts away all blockchain complexity. You integrate with simple REST APIs, and your customers see a familiar payment experience — no wallets or crypto knowledge required.",
+      a: "Not at all! Offbank abstracts away all blockchain complexity. You integrate with simple REST APIs, and your customers see a familiar payment experience, no wallets or crypto knowledge required.",
     },
     {
       q: "What currencies do you support?",
@@ -90,7 +90,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   payments: [
     {
       q: "How fast are payments settled?",
-      a: "Payments are settled instantly! As soon as a customer completes a payment, the USDC arrives in your wallet — typically within 2 seconds.",
+      a: "Payments are settled instantly! As soon as a customer completes a payment, the USDC arrives in your wallet, typically within 2 seconds.",
     },
     {
       q: "Who pays for transaction fees?",
@@ -103,11 +103,11 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   ],
   security: [
     {
-      q: "How secure is Settlr?",
-      a: "Security is our top priority. We use MPC wallets, never store private keys, and all transactions are verified on-chain. Funds go directly to your wallet — we never custody your money.",
+      q: "How secure is Offbank?",
+      a: "Security is our top priority. We use MPC wallets, never store private keys, and all transactions are verified on-chain. Funds go directly to your wallet, we never custody your money.",
     },
     {
-      q: "Is Settlr compliant?",
+      q: "Is Offbank compliant?",
       a: "Yes, we maintain SOC 2 compliance and work with regulated partners. All merchants complete KYB verification to ensure a safe ecosystem.",
     },
     {
@@ -118,7 +118,7 @@ const faqs: Record<string, { q: string; a: string }[]> = {
   refunds: [
     {
       q: "How do refunds work?",
-      a: "Refunds are initiated through our dashboard or API. The USDC is returned to the customer's original payment method — their embedded wallet or connected wallet.",
+      a: "Refunds are initiated through our dashboard or API. The USDC is returned to the customer's original payment method, their embedded wallet or connected wallet.",
     },
     {
       q: "How long do refunds take?",
@@ -157,14 +157,14 @@ const quickLinks = [
     title: "Contact Support",
     description: "Get help from our team directly",
     icon: Mail,
-    href: "mailto:support@settlr.dev",
+    href: "mailto:support@offbankpay.com",
     external: true,
   },
   {
     title: "Twitter / X",
     description: "Follow for updates and announcements",
     icon: Twitter,
-    href: "https://x.com/settlrp",
+    href: "https://x.com/offbankpay",
     external: true,
   },
 ];
@@ -296,7 +296,7 @@ export default function HelpPage() {
         </div>
       </section>
 
-      {/* ═══════ QUICK LINKS — bento style ═══════ */}
+      {/* ═══════ QUICK LINKS, bento style ═══════ */}
       <section className="pb-32 sm:pb-48">
         <div className="mx-auto max-w-5xl px-6">
           <div className="grid gap-5 md:grid-cols-3">
@@ -489,7 +489,7 @@ export default function HelpPage() {
                 </p>
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
                   <a
-                    href="mailto:support@settlr.dev"
+                    href="mailto:support@offbankpay.com"
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:

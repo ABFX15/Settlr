@@ -131,7 +131,7 @@ function OfframpContent() {
               <h3 className="text-xl font-bold mb-2">Ready to Cash Out?</h3>
               <p className="text-[var(--card-pop-text-secondary)] text-sm max-w-sm mx-auto">
                 You&apos;ll be redirected to Sphere to convert USDC to fiat.
-                Settlr does not handle the off-ramp directly — Sphere is a
+                Offbank does not handle the off-ramp directly — Sphere is a
                 separate, licensed service.
               </p>
             </div>

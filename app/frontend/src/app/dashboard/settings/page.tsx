@@ -16,8 +16,9 @@ import {
   Landmark,
   ArrowDownToLine,
   DollarSign,
-  Link2,
+  Leaf,
   Copy,
+  ExternalLink,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -32,10 +33,23 @@ interface OfframpSettings {
   batchThreshold: number;
 }
 
+interface LeafLinkSettings {
+  enabled: boolean;
+  apiKey: string;
+  companyId: number | null;
+  autoCreateInvoice: boolean;
+  autoSendLink: boolean;
+  metrcSync: boolean;
+  webhookSecret: string;
+  connected: boolean;
+  lastSyncAt: string | null;
+}
+
 interface MerchantSettings {
   businessName: string;
   wallet: string;
   autoOfframp: OfframpSettings;
+  leaflink: LeafLinkSettings;
   notifications: {
     emailOnPayment: boolean;
     emailOnOfframp: boolean;
@@ -54,6 +68,17 @@ const DEFAULT_SETTINGS: MerchantSettings = {
     minAmount: 100,
     batchMode: false,
     batchThreshold: 5000,
+  },
+  leaflink: {
+    enabled: false,
+    apiKey: "",
+    companyId: null,
+    autoCreateInvoice: true,
+    autoSendLink: true,
+    metrcSync: true,
+    webhookSecret: "",
+    connected: false,
+    lastSyncAt: null,
   },
   notifications: {
     emailOnPayment: true,
@@ -151,6 +176,26 @@ export default function SettingsPage() {
       autoOfframp: { ...prev.autoOfframp, ...patch },
     }));
 
+  const updateLeaflink = (patch: Partial<LeafLinkSettings>) =>
+    setSettings((prev) => ({
+      ...prev,
+      leaflink: { ...prev.leaflink, ...patch },
+    }));
+
+  const webhookUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/api/integrations/leaflink/webhook`
+      : "";
+
+  const [copiedWebhook, setCopiedWebhook] = useState(false);
+  const copyWebhook = () => {
+    if (!webhookUrl) return;
+    navigator.clipboard.writeText(webhookUrl).then(() => {
+      setCopiedWebhook(true);
+      setTimeout(() => setCopiedWebhook(false), 2000);
+    });
+  };
+
   if (loading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
@@ -211,7 +256,7 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      {/* ─── Auto Off-Ramp ─── */}
+      {/* ─── Off-Ramp ─── */}
       <section className="mb-8 rounded-2xl border border-[#d3d3d3] bg-white p-6">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
@@ -220,101 +265,254 @@ export default function SettingsPage() {
             </div>
             <div>
               <h2 className="text-base font-semibold text-[#212121]">
-                Auto Off-Ramp
+                Cash Out (Off-Ramp)
               </h2>
               <p className="text-xs text-[#8a8a8a]">
-                Automatically convert USDC to fiat after each payment
+                Convert USDC to USD via Sphere — ACH, Wire, or SEPA
               </p>
             </div>
           </div>
-          <span className="rounded-full bg-[#f59e0b]/10 px-3 py-1 text-xs font-semibold text-[#f59e0b]">
-            Coming Soon
+          <span className="rounded-full bg-[#34c759]/10 px-3 py-1 text-xs font-semibold text-[#34c759]">
+            Live
           </span>
         </div>
 
-        <div className="rounded-xl bg-[#f59e0b]/5 border border-[#f59e0b]/20 p-4">
-          <p className="text-xs text-[#5c5c5c] leading-relaxed">
-            <span className="font-semibold text-[#212121]">Coming soon:</span>{" "}
-            Automatic USDC-to-fiat conversion after each payment. We&apos;re
-            integrating with licensed off-ramp providers to enable this feature.
-          </p>
+        <div className="space-y-3">
+          <div className="rounded-xl border border-[#d3d3d3] bg-[#f7f7f7] p-4">
+            <p className="text-sm font-medium text-[#212121] mb-1">
+              Manual cash-out via Sphere
+            </p>
+            <p className="text-xs text-[#8a8a8a] mb-3">
+              Sphere is a licensed money transmitter that converts your USDC to
+              fiat in your bank account. We pre-fill your wallet address and
+              amount — you complete the cash-out on Sphere&apos;s platform.
+            </p>
+            <a
+              href={`/offramp${wallet ? `?wallet=${wallet}` : ""}`}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#34c759] px-4 py-2 text-xs font-semibold text-white hover:bg-[#2ba048] transition-colors"
+            >
+              Open Cash-Out Page
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+          <div className="flex items-center justify-between rounded-lg border border-[#d3d3d3] px-4 py-3">
+            <div>
+              <p className="text-sm font-medium text-[#212121]">
+                Auto cash-out after each settlement
+              </p>
+              <p className="text-xs text-[#8a8a8a]">
+                Beta — converts above your minimum threshold automatically
+              </p>
+            </div>
+            <button
+              onClick={() =>
+                updateOfframp({ enabled: !settings.autoOfframp.enabled })
+              }
+              className={
+                settings.autoOfframp.enabled
+                  ? "text-[#34c759]"
+                  : "text-[#d3d3d3]"
+              }
+            >
+              {settings.autoOfframp.enabled ? (
+                <ToggleRight className="h-7 w-7" />
+              ) : (
+                <ToggleLeft className="h-7 w-7" />
+              )}
+            </button>
+          </div>
+          {settings.autoOfframp.enabled && (
+            <div className="grid gap-3 sm:grid-cols-2 rounded-lg border border-[#d3d3d3] bg-[#f7f7f7] p-4">
+              <div>
+                <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
+                  Minimum amount (USDC)
+                </label>
+                <input
+                  type="number"
+                  value={settings.autoOfframp.minAmount}
+                  onChange={(e) =>
+                    updateOfframp({
+                      minAmount: Math.max(1, parseInt(e.target.value) || 1),
+                    })
+                  }
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-white px-3 py-2 text-sm focus:border-[#34c759] focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
+                  Bank account label
+                </label>
+                <input
+                  type="text"
+                  value={settings.autoOfframp.accountLabel}
+                  onChange={(e) =>
+                    updateOfframp({ accountLabel: e.target.value })
+                  }
+                  placeholder="Operating account"
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-white px-3 py-2 text-sm focus:border-[#34c759] focus:outline-none"
+                />
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
       {/* ─── LeafLink Integration ─── */}
       <section className="mb-8 rounded-2xl border border-[#d3d3d3] bg-white p-6">
-        <div className="flex items-center gap-3 mb-5">
-          <div className="h-10 w-10 rounded-full bg-[#34c759]/10 flex items-center justify-center">
-            <Link2 className="h-5 w-5 text-[#34c759]" />
-          </div>
-          <div>
-            <h2 className="text-base font-semibold text-[#212121]">
-              LeafLink Integration
-            </h2>
-            <p className="text-xs text-[#8a8a8a]">
-              Connect your LeafLink account to auto-settle purchase orders
-            </p>
-          </div>
-        </div>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
-              LeafLink API Key
-            </label>
-            <input
-              type="password"
-              placeholder="ll_api_xxxxxxxxxxxxxxxx"
-              className="w-full rounded-lg border border-[#d3d3d3] bg-[#f7f7f7] px-4 py-2.5 text-sm text-[#212121] placeholder-[#8a8a8a] focus:border-[#34c759] focus:outline-none focus:ring-1 focus:ring-[#34c759]"
-              disabled
-            />
-            <p className="mt-1 text-xs text-[#8a8a8a]">
-              Find your API key at{" "}
-              <a
-                href="https://www.leaflink.com/settings/api"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#34c759] hover:underline"
-              >
-                LeafLink Settings → API
-              </a>
-            </p>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
-              Webhook URL
-            </label>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2.5 text-sm font-mono text-[#8a8a8a] truncate">
-                {typeof window !== "undefined"
-                  ? `${window.location.origin}/api/integrations/leaflink/webhook`
-                  : "/api/integrations/leaflink/webhook"}
-              </div>
-              <button
-                onClick={() => {
-                  const url = `${window.location.origin}/api/integrations/leaflink/webhook`;
-                  navigator.clipboard.writeText(url);
-                }}
-                className="rounded-lg border border-[#d3d3d3] p-2.5 text-[#8a8a8a] hover:text-[#212121] hover:bg-[#f7f7f7] transition-colors"
-                title="Copy webhook URL"
-              >
-                <Copy className="h-4 w-4" />
-              </button>
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-[#34c759]/10 flex items-center justify-center">
+              <Leaf className="h-5 w-5 text-[#34c759]" />
             </div>
-            <p className="mt-1 text-xs text-[#8a8a8a]">
-              Add this URL to your LeafLink webhook settings to receive order
-              updates automatically.
-            </p>
+            <div>
+              <h2 className="text-base font-semibold text-[#212121]">
+                LeafLink Integration
+              </h2>
+              <p className="text-xs text-[#8a8a8a]">
+                Auto-create USDC invoices from LeafLink purchase orders
+              </p>
+            </div>
           </div>
-          <div className="rounded-xl bg-[#34c759]/5 border border-[#34c759]/20 p-4">
-            <p className="text-xs text-[#5c5c5c] leading-relaxed">
-              <span className="font-semibold text-[#212121]">
-                How it works:
-              </span>{" "}
-              When an order is created or updated in LeafLink, the webhook
-              triggers automatic USDC settlement via your Settlr vault. No
-              manual intervention required.
-            </p>
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${
+              settings.leaflink.enabled
+                ? "bg-[#34c759]/10 text-[#34c759]"
+                : "bg-[#8a8a8a]/10 text-[#8a8a8a]"
+            }`}
+          >
+            {settings.leaflink.enabled
+              ? settings.leaflink.connected
+                ? "Connected"
+                : "Pending verification"
+              : "Disabled"}
+          </span>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between rounded-lg border border-[#d3d3d3] px-4 py-3">
+            <div>
+              <p className="text-sm font-medium text-[#212121]">
+                Enable LeafLink sync
+              </p>
+              <p className="text-xs text-[#8a8a8a]">
+                Receive webhooks when buyers create or accept POs
+              </p>
+            </div>
+            <button
+              onClick={() =>
+                updateLeaflink({ enabled: !settings.leaflink.enabled })
+              }
+              className={
+                settings.leaflink.enabled ? "text-[#34c759]" : "text-[#d3d3d3]"
+              }
+            >
+              {settings.leaflink.enabled ? (
+                <ToggleRight className="h-7 w-7" />
+              ) : (
+                <ToggleLeft className="h-7 w-7" />
+              )}
+            </button>
           </div>
+
+          {settings.leaflink.enabled && (
+            <div className="space-y-4 rounded-lg border border-[#d3d3d3] bg-[#f7f7f7] p-4">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
+                    LeafLink API Key
+                  </label>
+                  <input
+                    type="password"
+                    value={settings.leaflink.apiKey}
+                    onChange={(e) => updateLeaflink({ apiKey: e.target.value })}
+                    placeholder="Paste your LeafLink API key"
+                    className="w-full rounded-lg border border-[#d3d3d3] bg-white px-3 py-2 text-sm font-mono focus:border-[#34c759] focus:outline-none"
+                  />
+                  <p className="mt-1 text-[10px] text-[#8a8a8a]">
+                    LeafLink → Settings → Integrations → API
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
+                    LeafLink Company ID
+                  </label>
+                  <input
+                    type="number"
+                    value={settings.leaflink.companyId ?? ""}
+                    onChange={(e) =>
+                      updateLeaflink({
+                        companyId: e.target.value
+                          ? parseInt(e.target.value)
+                          : null,
+                      })
+                    }
+                    placeholder="e.g. 12345"
+                    className="w-full rounded-lg border border-[#d3d3d3] bg-white px-3 py-2 text-sm focus:border-[#34c759] focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
+                  Webhook URL
+                </label>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 truncate rounded-lg border border-[#d3d3d3] bg-white px-3 py-2 text-xs font-mono text-[#5c5c5c]">
+                    {webhookUrl || "—"}
+                  </code>
+                  <button
+                    onClick={copyWebhook}
+                    className="shrink-0 rounded-lg border border-[#d3d3d3] bg-white p-2 text-[#8a8a8a] hover:text-[#212121]"
+                  >
+                    {copiedWebhook ? (
+                      <Check className="h-4 w-4 text-[#34c759]" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                <p className="mt-1 text-[10px] text-[#8a8a8a]">
+                  Paste into LeafLink → Settings → Integrations → Webhooks
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-[#5c5c5c] mb-1.5">
+                  Webhook signing secret (optional)
+                </label>
+                <input
+                  type="password"
+                  value={settings.leaflink.webhookSecret}
+                  onChange={(e) =>
+                    updateLeaflink({ webhookSecret: e.target.value })
+                  }
+                  placeholder="HMAC-SHA256 secret from LeafLink"
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-white px-3 py-2 text-sm font-mono focus:border-[#34c759] focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-2 pt-2 border-t border-[#d3d3d3]">
+                <ToggleRow
+                  label="Auto-create Offbank invoice on order.created"
+                  desc="Generates a USDC invoice the moment a buyer submits a PO"
+                  checked={settings.leaflink.autoCreateInvoice}
+                  onChange={(v) => updateLeaflink({ autoCreateInvoice: v })}
+                />
+                <ToggleRow
+                  label="Auto-email payment link to buyer"
+                  desc="Buyer receives a Offbank payment link via email"
+                  checked={settings.leaflink.autoSendLink}
+                  onChange={(v) => updateLeaflink({ autoSendLink: v })}
+                />
+                <ToggleRow
+                  label="Embed METRC tags in settlement memo"
+                  desc="Package tags from LeafLink line items get written on-chain"
+                  checked={settings.leaflink.metrcSync}
+                  onChange={(v) => updateLeaflink({ metrcSync: v })}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -422,6 +620,41 @@ export default function SettingsPage() {
           )}
         </button>
       </div>
+    </div>
+  );
+}
+
+/* ─── Toggle row helper ─── */
+function ToggleRow({
+  label,
+  desc,
+  checked,
+  onChange,
+}: {
+  label: string;
+  desc: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4 py-1.5">
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-[#212121]">{label}</p>
+        <p className="text-xs text-[#8a8a8a]">{desc}</p>
+      </div>
+      <button
+        type="button"
+        onClick={() => onChange(!checked)}
+        className={
+          checked ? "text-[#34c759] shrink-0" : "text-[#d3d3d3] shrink-0"
+        }
+      >
+        {checked ? (
+          <ToggleRight className="h-7 w-7" />
+        ) : (
+          <ToggleLeft className="h-7 w-7" />
+        )}
+      </button>
     </div>
   );
 }

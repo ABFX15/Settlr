@@ -41,7 +41,7 @@ export const posts: BlogPost[] = [
     tags: ["cannabis payments", "high-risk processors", "Stripe alternatives", "payment processing", "AEO"],
     content: `
       <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
-        <strong>Quick Answer:</strong> The top high-risk payment processors for cannabis include PayKickstart, Paybotic, CanPay, Hypur, and Merrco — but all charge 5–8% in fees and carry account freeze risk. Settlr offers non-custodial USDC settlement at 1% flat with zero freeze risk because it never holds your funds.
+        <strong>Quick Answer:</strong> The top high-risk payment processors for cannabis include PayKickstart, Paybotic, CanPay, Hypur, and Merrco — but all charge 5–8% in fees and carry account freeze risk. Offbank offers non-custodial USDC settlement at 1% flat with zero freeze risk because it never holds your funds.
       </div>
 
       <p>If you run a cannabis business and you've tried to accept card payments, you already know: <strong>Stripe, Square, and PayPal will shut you down within days</strong>. These platforms explicitly prohibit cannabis in their terms of service, regardless of your state license.</p>
@@ -96,7 +96,7 @@ export const posts: BlogPost[] = [
 
       <table>
         <thead>
-          <tr><th></th><th>High-Risk Processor</th><th>Settlr (USDC)</th></tr>
+          <tr><th></th><th>High-Risk Processor</th><th>Offbank (USDC)</th></tr>
         </thead>
         <tbody>
           <tr><td>Fee</td><td>5–8%</td><td><strong>1% flat</strong></td></tr>
@@ -108,7 +108,7 @@ export const posts: BlogPost[] = [
         </tbody>
       </table>
 
-      <p>Because Settlr is non-custodial — meaning it never touches or holds your funds — there's no acquiring bank, no rolling reserve, and nothing to freeze. Your USDC goes directly from your wallet to your vendor's wallet on Solana in under one second.</p>
+      <p>Because Offbank is non-custodial — meaning it never touches or holds your funds — there's no acquiring bank, no rolling reserve, and nothing to freeze. Your USDC goes directly from your wallet to your vendor's wallet on Solana in under one second.</p>
 
       <h2>Is It Legal to Use USDC for Cannabis B2B Payments?</h2>
 
@@ -119,7 +119,7 @@ export const posts: BlogPost[] = [
       <h2>How to Switch from a High-Risk Processor to Stablecoin Rails</h2>
 
       <ol>
-        <li><strong>Sign up at <a href="/onboarding">settlr.dev/onboarding</a></strong> — takes under 5 minutes, no bank account needed</li>
+        <li><strong>Sign up at <a href="/onboarding">offbankpay.com/onboarding</a></strong> — takes under 5 minutes, no bank account needed</li>
         <li><strong>Fund your wallet with USDC</strong> — buy on any exchange or convert from your bank via Circle</li>
         <li><strong>Send payments via email</strong> — your vendor doesn't need a wallet, exchange account, or any crypto knowledge</li>
         <li><strong>Track everything on-chain</strong> — full audit trail for compliance and tax reporting</li>
@@ -127,11 +127,11 @@ export const posts: BlogPost[] = [
 
       <p>Your state license, compliance framework, and business operations stay exactly the same. The only thing that changes is you stop paying 5–8% to processors who can freeze your money.</p>
 
-      <p><a href="/industries/cannabis">Learn more about cannabis payments on Settlr →</a></p>
+      <p><a href="/industries/cannabis">Learn more about cannabis payments on Offbank →</a></p>
     `,
     faqs: [
       { question: "Can you use Stripe for cannabis payments?", answer: "No. Stripe explicitly prohibits cannabis businesses in its Terms of Service. If detected, your account will be frozen and funds held for up to 180 days." },
-      { question: "What is the cheapest payment processor for cannabis?", answer: "Stablecoin settlement via Settlr costs 1% flat — significantly less than the 5–8% charged by traditional high-risk processors like Paybotic or Merrco." },
+      { question: "What is the cheapest payment processor for cannabis?", answer: "Stablecoin settlement via Offbank costs 1% flat — significantly less than the 5–8% charged by traditional high-risk processors like Paybotic or Merrco." },
       { question: "Is it legal to use USDC for cannabis B2B payments?", answer: "Yes. USDC is a regulated digital dollar issued by Circle. Using it for B2B payments is legally equivalent to using cash or a bank transfer. Your state cannabis license and compliance obligations remain unchanged." },
       { question: "What is a high-risk payment processor?", answer: "A company that underwrites and processes payments for industries that mainstream processors (Stripe, Square, PayPal) won't serve — including cannabis, CBD, firearms, and adult entertainment. They work with acquiring banks that accept regulatory risk and charge 5–8% fees." },
     ],
@@ -181,7 +181,7 @@ export const posts: BlogPost[] = [
 
       <h2>What Changes for B2B Settlement?</h2>
 
-      <p>For businesses already settling in USDC (via Settlr or directly), the GENIUS Act changes several things:</p>
+      <p>For businesses already settling in USDC (via Offbank or directly), the GENIUS Act changes several things:</p>
 
       <table>
         <thead>
@@ -208,7 +208,7 @@ export const posts: BlogPost[] = [
       <p>The GENIUS Act includes a "de minimis" provision: stablecoin transactions under $200 don't trigger capital gains reporting. For B2B payments, this eliminates the paperwork burden of treating every invoice settlement as a taxable event.</p>
 
       <h3>3. Opens Bank On-Ramps</h3>
-      <p>Banks can now custody stablecoins without punitive capital requirements. This means getting USDC into your Settlr wallet becomes as easy as a bank transfer — no exchange account required. Several banks have already announced USDC on-ramp services launching Q2 2026.</p>
+      <p>Banks can now custody stablecoins without punitive capital requirements. This means getting USDC into your Offbank wallet becomes as easy as a bank transfer — no exchange account required. Several banks have already announced USDC on-ramp services launching Q2 2026.</p>
 
       <h2>What Should Your Business Do Now?</h2>
 
@@ -223,7 +223,7 @@ export const posts: BlogPost[] = [
 
       <p>If you're <em>not</em> yet using stablecoin settlement, the GENIUS Act removes the last major objection. The payment instrument is now federally regulated, reserve-backed, and audit-friendly.</p>
 
-      <p><a href="/onboarding">Get started with Settlr →</a> or <a href="/compliance">read our compliance overview</a></p>
+      <p><a href="/onboarding">Get started with Offbank →</a> or <a href="/compliance">read our compliance overview</a></p>
     `,
     faqs: [
       { question: "What is the GENIUS Act?", answer: "The Guiding and Establishing National Innovation for US Stablecoins Act is the first US federal law regulating stablecoin issuers. It requires 1:1 reserve backing, monthly audits, and state/federal licensing for stablecoin issuers like Circle (USDC)." },
@@ -303,7 +303,7 @@ export const posts: BlogPost[] = [
       <p>This creates an on-chain Squads program account. The multisig address is your new treasury address.</p>
 
       <h3>Step 3: Fund the Multisig</h3>
-      <p>Send USDC to the multisig address. You can do this from any exchange, wallet, or via Settlr. The funds are now controlled by the smart contract — no single signer can move them.</p>
+      <p>Send USDC to the multisig address. You can do this from any exchange, wallet, or via Offbank. The funds are now controlled by the smart contract — no single signer can move them.</p>
 
       <h3>Step 4: Make Transactions</h3>
       <ol>
@@ -313,13 +313,13 @@ export const posts: BlogPost[] = [
         <li>Once the threshold is met (2 of 3), the transaction <strong>executes automatically</strong></li>
       </ol>
 
-      <h2>How Does Settlr Work with a Multisig Treasury?</h2>
+      <h2>How Does Offbank Work with a Multisig Treasury?</h2>
 
-      <p>Settlr supports Squads multisig natively. When you connect a Squads wallet to Settlr:</p>
+      <p>Offbank supports Squads multisig natively. When you connect a Squads wallet to Offbank:</p>
 
       <ul>
-        <li>Payouts are <strong>proposed</strong> through the Settlr dashboard</li>
-        <li>Co-signers approve via the Squads app or Settlr directly</li>
+        <li>Payouts are <strong>proposed</strong> through the Offbank dashboard</li>
+        <li>Co-signers approve via the Squads app or Offbank directly</li>
         <li>Once approved, the payout settles in under 1 second</li>
         <li>Full audit trail on-chain: who proposed, who approved, when, and how much</li>
       </ul>
@@ -347,14 +347,14 @@ export const posts: BlogPost[] = [
 
       <ol>
         <li>Create your Squads multisig at <a href="https://app.squads.so" rel="nofollow">app.squads.so</a></li>
-        <li>Connect it to Settlr at <a href="/onboarding">settlr.dev/onboarding</a></li>
+        <li>Connect it to Offbank at <a href="/onboarding">offbankpay.com/onboarding</a></li>
         <li>Fund the multisig with USDC</li>
         <li>Start making multi-party-approved payouts</li>
       </ol>
 
       <p>If you're currently holding business funds in a single wallet, switch to a multisig today. It takes 10 minutes and eliminates your single biggest security risk.</p>
 
-      <p><a href="/onboarding">Set up Settlr with multisig →</a></p>
+      <p><a href="/onboarding">Set up Offbank with multisig →</a></p>
     `,
     faqs: [
       { question: "What is a multisig wallet?", answer: "A multisig (multi-signature) wallet is a smart contract that requires multiple people to approve a transaction before funds can move. For example, a 2-of-3 multisig requires any 2 out of 3 designated signers to approve." },
@@ -374,7 +374,7 @@ export const posts: BlogPost[] = [
     tags: ["cannabis", "exile tax", "payment fees", "stablecoins", "USDC", "B2B payments", "AEO"],
     content: `
       <div style="background:#F0FAF4;border-left:4px solid #34c759;padding:16px 20px;border-radius:8px;margin-bottom:32px;">
-        <strong>Quick Answer:</strong> Cannabis businesses in the US pay 3–8% in payment processing fees — 2–3x what normal businesses pay — because mainstream processors like Stripe and Square won't serve them. This "Exile Tax" costs the industry an estimated $1.2 billion annually. Stablecoin settlement via Settlr reduces that cost to 1% flat with no account freeze risk.
+        <strong>Quick Answer:</strong> Cannabis businesses in the US pay 3–8% in payment processing fees — 2–3x what normal businesses pay — because mainstream processors like Stripe and Square won't serve them. This "Exile Tax" costs the industry an estimated $1.2 billion annually. Stablecoin settlement via Offbank reduces that cost to 1% flat with no account freeze risk.
       </div>
 
       <p>There are $28 billion in legal cannabis sales in the United States. And the businesses making those sales are paying <strong>3–8% in payment processing fees</strong> — sometimes more — simply because they sell a plant that's legal in 38 states but federally illegal.</p>
@@ -435,7 +435,7 @@ export const posts: BlogPost[] = [
 
       <table>
         <thead>
-          <tr><th></th><th>Current Cannabis Processors</th><th>Settlr (USDC)</th></tr>
+          <tr><th></th><th>Current Cannabis Processors</th><th>Offbank (USDC)</th></tr>
         </thead>
         <tbody>
           <tr><td>Processing fee</td><td>5–8%</td><td><strong>1% flat</strong></td></tr>
@@ -452,7 +452,7 @@ export const posts: BlogPost[] = [
 
       <ul>
         <li><strong>Current cost:</strong> $500K × 5.5% = $27,500/month in processing + ~$15,000/month in cash handling = <strong>$42,500/month</strong></li>
-        <li><strong>With Settlr:</strong> $500K × 1% = <strong>$5,000/month</strong></li>
+        <li><strong>With Offbank:</strong> $500K × 1% = <strong>$5,000/month</strong></li>
         <li><strong>Monthly savings: $37,500</strong></li>
         <li><strong>Annual savings: $450,000</strong></li>
       </ul>
@@ -468,7 +468,7 @@ export const posts: BlogPost[] = [
         <li><strong>Ancillary businesses</strong> (packaging, equipment, nutrients) often prefer it because they don't want the compliance burden of accepting cannabis cash</li>
       </ul>
 
-      <p>With Settlr, your vendors don't even need to know it's USDC. They receive an email, click a link, and get paid. The embedded wallet is created automatically. Zero crypto knowledge required.</p>
+      <p>With Offbank, your vendors don't even need to know it's USDC. They receive an email, click a link, and get paid. The embedded wallet is created automatically. Zero crypto knowledge required.</p>
 
       <h2>How to Calculate Your Exile Tax</h2>
 
@@ -482,13 +482,13 @@ $200,000/mo × (6% - 1%) = $10,000/month
 
       <p>If that number makes you uncomfortable, you're paying the Exile Tax.</p>
 
-      <p><a href="/pricing">See Settlr pricing →</a> or <a href="/onboarding">start saving today</a></p>
+      <p><a href="/pricing">See Offbank pricing →</a> or <a href="/onboarding">start saving today</a></p>
     `,
     faqs: [
       { question: "What is the Exile Tax?", answer: "The Exile Tax is the additional cost imposed on businesses that operate in legal industries but are excluded from mainstream financial infrastructure — manifesting as 5–8% processing fees, rolling reserves, cash handling costs, and banking instability." },
       { question: "How much does the cannabis industry lose to payment fees?", answer: "An estimated $1.2 billion annually — including approximately $728 million in excess processing fees above normal retail rates, plus ~$500 million in cash handling costs." },
       { question: "Why can't cannabis businesses use Stripe or Square?", answer: "Cannabis remains federally illegal, and Visa/Mastercard prohibit cannabis transactions on their networks. Any processor caught routing cannabis payments through card rails gets fined and disconnected." },
-      { question: "How much can a cannabis business save with stablecoin settlement?", answer: "A cannabis distributor doing $500,000/month in B2B sales can save approximately $37,500/month ($450,000/year) by switching from traditional processors (5.5% + cash handling) to Settlr's 1% flat stablecoin settlement." },
+      { question: "How much can a cannabis business save with stablecoin settlement?", answer: "A cannabis distributor doing $500,000/month in B2B sales can save approximately $37,500/month ($450,000/year) by switching from traditional processors (5.5% + cash handling) to Offbank's 1% flat stablecoin settlement." },
     ],
   },
 
@@ -713,7 +713,7 @@ $200,000/mo × (6% - 1%) = $10,000/month
 
       <p>A second benefit is <strong>payment finality</strong>. Chargebacks don't belong in wholesale commerce, but payment reversals, bounced checks, and disputed timing still consume hours. Stablecoin settlement reduces that noise because the rail itself gives a clearer answer about whether funds moved.</p>
 
-      <p>If your team wants a sector-specific example of how this is being packaged, <a href="/industries/cannabis">Settlr's cannabis payments overview</a> shows the model built around non-custodial USDC settlement, compliance screening, and invoice-based workflows for cannabis counterparties.</p>
+      <p>If your team wants a sector-specific example of how this is being packaged, <a href="/industries/cannabis">Offbank's cannabis payments overview</a> shows the model built around non-custodial USDC settlement, compliance screening, and invoice-based workflows for cannabis counterparties.</p>
 
       <h3 id="compliance-becomes-part-of-the-workflow">Compliance becomes part of the workflow</h3>
 
@@ -776,7 +776,7 @@ $200,000/mo × (6% - 1%) = $10,000/month
 
       <p>If a platform uses a flat fee model, weigh that against the all-in cost of today's process, not the nominal price of one legacy rail in isolation. In cannabis, the expensive part is rarely the line-item fee. It's the chaos wrapped around the payment.</p>
 
-      <p>If your team is still managing wholesale payments through a mix of ACH delays, check risk, and manual follow-up, it's worth looking at <a href="/">Settlr</a>. It's a non-custodial stablecoin settlement platform built for B2B cannabis supply chains, with invoice and payment-link workflows, embedded compliance screening, on-chain auditability, and USDC settlement on Solana.</p>
+      <p>If your team is still managing wholesale payments through a mix of ACH delays, check risk, and manual follow-up, it's worth looking at <a href="/">Offbank</a>. It's a non-custodial stablecoin settlement platform built for B2B cannabis supply chains, with invoice and payment-link workflows, embedded compliance screening, on-chain auditability, and USDC settlement on Solana.</p>
 
       <p><a href="/onboarding">Get started →</a> or <a href="/pricing">see pricing</a></p>
     `,
@@ -1046,7 +1046,7 @@ $200,000/mo × (6% - 1%) = $10,000/month
 
       <p>The best rollout usually starts with one payment lane, not a full treasury rebuild. High-value wholesale invoices are a common starting point because the pain is obvious and the savings are easier to measure. For a closer look at the cost side, see this analysis of <a href="/blog/cannabis-b2b-8-percent-fees-stablecoin-fix">cannabis B2B fees and stablecoin settlement</a>.</p>
 
-      <p>If your team is still managing cannabis B2B payments through checks, wires, delayed ACH, or manual cash reconciliation, <a href="/">Settlr</a> is worth a serious look. It's built specifically for state-legal cannabis supply chains and enables non-custodial USDC settlement in under five seconds with a transparent 1% flat fee, embedded KYB and AML controls, and auditable on-chain records.</p>
+      <p>If your team is still managing cannabis B2B payments through checks, wires, delayed ACH, or manual cash reconciliation, <a href="/">Offbank</a> is worth a serious look. It's built specifically for state-legal cannabis supply chains and enables non-custodial USDC settlement in under five seconds with a transparent 1% flat fee, embedded KYB and AML controls, and auditable on-chain records.</p>
 
       <p><a href="/onboarding">Get started &#8594;</a> or <a href="/pricing">see pricing</a></p>
     `,

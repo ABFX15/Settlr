@@ -389,8 +389,8 @@ async function fireWebhook(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Settlr-Signature": signature,
-                "X-Settlr-Event": eventType,
+                "X-Offbank-Signature": signature,
+                "X-Offbank-Event": eventType,
             },
             body: JSON.stringify(payload),
         }).catch((err) =>

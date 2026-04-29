@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SettlrLogo } from "@/components/settlr-logo";
+import { OffbankLogo } from "@/components/offbank-logo";
 
 const columns = [
   {
@@ -14,8 +14,10 @@ const columns = [
   {
     title: "Industries",
     links: [
+      { href: "/industries", label: "All Industries" },
       { href: "/industries/cannabis", label: "Cannabis" },
-      { href: "/industries/cannabis-b2b-payments", label: "Cannabis B2B" },
+      { href: "/industries/cbd-hemp", label: "CBD & Hemp" },
+      { href: "/industries/firearms", label: "Firearms" },
     ],
   },
   {
@@ -31,7 +33,7 @@ const columns = [
     title: "Company",
     links: [
       { href: "/about", label: "About" },
-      { href: "mailto:adam@settlr.dev", label: "Contact" },
+      { href: "mailto:adam@offbankpay.com", label: "Contact" },
       { href: "/terms", label: "Terms" },
       { href: "/privacy", label: "Privacy" },
     ],
@@ -40,7 +42,7 @@ const columns = [
 
 const socials = [
   {
-    href: "https://x.com/settlrp",
+    href: "https://x.com/offbankpay",
     label: "X / Twitter",
     icon: (
       <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
@@ -49,7 +51,7 @@ const socials = [
     ),
   },
   {
-    href: "https://linkedin.com/company/settlr",
+    href: "https://linkedin.com/company/offbankpay",
     label: "LinkedIn",
     icon: (
       <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
@@ -67,14 +69,14 @@ export function Footer() {
           {/* brand */}
           <div>
             <Link href="/" className="inline-block">
-              <SettlrLogo size="sm" variant="dark" />
+              <OffbankLogo size="sm" variant="dark" />
             </Link>
             <p
               className="mt-4 max-w-[240px] text-sm leading-relaxed"
               style={{ color: "#8a8a8a" }}
             >
-              Non-custodial stablecoin settlement for B2B cannabis supply
-              chains. Built on Solana.
+              Non-custodial USDC invoicing and B2B settlement for restricted
+              commerce. Built on Solana.
             </p>
             <div className="mt-6 flex gap-3">
               {socials.map((s) => (
@@ -124,10 +126,10 @@ export function Footer() {
           style={{ borderColor: "#d3d3d3" }}
         >
           <p className="text-sm" style={{ color: "#8a8a8a" }}>
-            &copy; {new Date().getFullYear()} Settlr. All rights reserved.
+            &copy; {new Date().getFullYear()} Offbank. All rights reserved.
           </p>
           <p className="text-xs" style={{ color: "#8a8a8a" }}>
-            Settlr is not a bank or money transmitter. Settlement is
+            Offbank is not a bank or money transmitter. Settlement is
             peer-to-peer via USDC on Solana.
           </p>
         </div>

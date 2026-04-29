@@ -130,7 +130,7 @@ export default function InvoicesPage() {
               className="mt-14 flex flex-wrap items-center justify-center gap-4"
             >
               <Link
-                href="/waitlist"
+                href="/onboarding"
                 className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                 style={{
                   background:
@@ -138,7 +138,7 @@ export default function InvoicesPage() {
                   boxShadow: "0 4px 24px rgba(27,107,74,0.25)",
                 }}
               >
-                Request Access
+                Get Started
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               <Link
@@ -151,7 +151,7 @@ export default function InvoicesPage() {
             </R>
           </div>
 
-          {/* Product mockup — invoice */}
+          {/* Product mockup, invoice */}
           <R delay={0.24}>
             <div
               className="mx-auto mt-24 max-w-3xl overflow-hidden rounded-3xl"
@@ -177,7 +177,7 @@ export default function InvoicesPage() {
                   className="flex-1 text-center text-xs font-medium"
                   style={{ color: p.muted }}
                 >
-                  settlr.dev/dashboard/invoices
+                  offbankpay.com/dashboard/invoices
                 </div>
               </div>
               {/* Invoice content */}
@@ -264,13 +264,13 @@ export default function InvoicesPage() {
                   <div className="mt-4 space-y-2">
                     {[
                       {
-                        item: "Flower — OG Kush (50 lbs)",
+                        item: "Flower, OG Kush (50 lbs)",
                         qty: "50",
                         price: "$800",
                         total: "$40,000",
                       },
                       {
-                        item: "Concentrate — Live Rosin (5 lbs)",
+                        item: "Concentrate, Live Rosin (5 lbs)",
                         qty: "5",
                         price: "$1,500",
                         total: "$7,500",
@@ -377,7 +377,7 @@ export default function InvoicesPage() {
         </div>
       </section>
 
-      {/* ═══════ INVOICE LIFECYCLE — steps with mockups ═══════ */}
+      {/* ═══════ INVOICE LIFECYCLE, steps with mockups ═══════ */}
       <section className="py-32 sm:py-48" style={{ background: p.bgSubtle }}>
         <div className="mx-auto max-w-6xl px-6">
           <R className="mx-auto max-w-2xl text-center">
@@ -589,7 +589,7 @@ export default function InvoicesPage() {
           </R>
 
           <div className="mt-20 grid gap-5 md:grid-cols-3 md:grid-rows-2">
-            {/* Large — 2 cols */}
+            {/* Large, 2 cols */}
             <R className="md:col-span-2">
               <div
                 className={`${cardStatic} h-full`}
@@ -615,7 +615,7 @@ export default function InvoicesPage() {
                       style={{ color: p.slate }}
                     >
                       Every settled invoice generates an immutable on-chain
-                      receipt. Amount, timestamp, sender, recipient —
+                      receipt. Amount, timestamp, sender, recipient -
                       tamper-proof and verifiable by any auditor.
                     </p>
                   </div>
@@ -711,7 +711,7 @@ export default function InvoicesPage() {
               </div>
             </R>
 
-            {/* Wide — 2 cols, comparison */}
+            {/* Wide, 2 cols, comparison */}
             <R delay={0.14} className="md:col-span-2">
               <div
                 className={`${cardStatic} h-full`}
@@ -725,7 +725,7 @@ export default function InvoicesPage() {
                   className="mb-4 text-[11px] font-semibold uppercase tracking-widest"
                   style={{ color: p.muted }}
                 >
-                  Settlr Invoices vs Traditional
+                  Offbank Invoices vs Traditional
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {[
@@ -823,7 +823,7 @@ export default function InvoicesPage() {
                 </p>
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
                   <Link
-                    href="/waitlist"
+                    href="/onboarding"
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:
@@ -831,7 +831,7 @@ export default function InvoicesPage() {
                       boxShadow: "0 4px 24px rgba(27,107,74,0.3)",
                     }}
                   >
-                    Request Access
+                    Get Started
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                   </Link>
                   <Link

@@ -3,12 +3,14 @@
 import { useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
-import { useWaitlistAccess } from "@/hooks/useWaitlistAccess";
 
 /**
  * Invisible component that auto-redirects authenticated users:
- *  - Approved on waitlist but not onboarded → /onboarding
- *  - Not approved / no entry → /waitlist (the form)
+ *  - Wallet connected but not onboarded → /onboarding
+ *
+ * Self-serve: any wallet that signs in can complete onboarding (KYB happens
+ * at first settlement, not at signup). The waitlist still exists for
+ * pre-launch interest collection but does NOT gate access.
  *
  * Only redirects from protected merchant pages (dashboard, create).
  * Customer-facing pages (checkout, invoice, demo, etc.) never redirect.
@@ -25,36 +27,26 @@ function isProtectedPath(pathname: string): boolean {
 
 export function PostLoginRouter() {
   const { status } = useOnboardingStatus();
-  const { access } = useWaitlistAccess();
   const router = useRouter();
   const pathname = usePathname();
   const hasRedirected = useRef(false);
 
   useEffect(() => {
     if (hasRedirected.current) return;
-    if (status === "loading" || access === "loading") return;
+    if (status === "loading") return;
 
-    // Only redirect from protected merchant pages
     if (status === "needs-onboarding" && isProtectedPath(pathname)) {
       hasRedirected.current = true;
-      if (access === "approved") {
-        router.replace("/onboarding");
-      } else {
-        router.replace("/waitlist");
-      }
+      router.replace("/onboarding");
     }
-  }, [status, access, pathname, router]);
+  }, [status, pathname, router]);
 
   // Block direct access to protected pages (same logic, no hasRedirected guard)
   useEffect(() => {
     if (status === "needs-onboarding" && isProtectedPath(pathname)) {
-      if (access === "approved") {
-        router.replace("/onboarding");
-      } else if (access !== "loading") {
-        router.replace("/waitlist");
-      }
+      router.replace("/onboarding");
     }
-  }, [status, access, pathname, router]);
+  }, [status, pathname, router]);
 
   return null;
 }

@@ -1,7 +1,7 @@
 /**
  * Initialize Platform with Squads Multisig as Authority
  * 
- * This script sets up the Settlr platform and transfers authority to your Squads vault.
+ * This script sets up the Offbank platform and transfers authority to your Squads vault.
  * Only the Squads multisig will be able to claim platform fees.
  * 
  * Run with: npx ts-node scripts/init-with-squads.ts
@@ -35,7 +35,7 @@ const FEE_BPS = 200; // 2%
 const MIN_PAYMENT_AMOUNT = 100000; // 0.1 USDC (6 decimals)
 
 async function main() {
-    console.log("🚀 Settlr Platform Initialization with Squads\n");
+    console.log("🚀 Offbank Platform Initialization with Squads\n");
     console.log("=".repeat(50));
     console.log(`Program ID: ${PROGRAM_ID.toBase58()}`);
     console.log(`USDC Mint: ${USDC_MINT.toBase58()}`);

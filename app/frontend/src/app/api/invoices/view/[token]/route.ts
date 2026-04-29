@@ -32,7 +32,7 @@ export async function GET(
             await updateInvoiceStatus(invoice.id, "viewed");
         }
 
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
 
         return NextResponse.json({
             id: invoice.id,

@@ -12,6 +12,11 @@ const features = [
     img: "/nobg-document.png",
   },
   {
+    title: "Plug Into\nYour OMS",
+    desc: "LeafLink, Shopify, or your custom stack. Webhook in, USDC payment link out. REST API for everything else.",
+    img: "/nobg-globe.png",
+  },
+  {
     title: "Compliance\nBuilt In",
     desc: "Automated KYB verification, OFAC screening, real-time BSA/AML monitoring.",
     img: "/nobg-shield.png",
@@ -22,18 +27,13 @@ const features = [
     img: "/nobg-padlock.png",
   },
   {
-    title: "On-Chain\nTransparency",
-    desc: "Every settlement is verifiable on Solana. Real-time proof, not promises.",
-    img: "/nobg-globe.png",
+    title: "Cash Out\nto USD",
+    desc: "Cash out USDC to USD via ACH, Wire, or SEPA. Bank deposit in 1-2 business days.",
+    img: "/nobg-dollar.png",
   },
   {
     title: "1% Flat\nFee",
     desc: "Not 5–9% like high-risk processors. One percent, every transaction, no surprises.",
-    img: "/nobg-dollar.png",
-  },
-  {
-    title: "Email-Based\nClaiming",
-    desc: "Recipients don\u2019t need a wallet or app. They get an email, click, and claim their payment.",
     img: "/nobg-envelope.png",
   },
 ];
@@ -129,8 +129,8 @@ export function Features() {
             className="mx-auto mt-4 max-w-lg text-base"
             style={{ color: "#5c5c5c" }}
           >
-            Discover how our platform streamlines B2B settlement for cannabis
-            supply chains.
+            Discover how our platform streamlines B2B settlement for restricted
+            and high-friction commerce.
           </p>
         </motion.div>
 
@@ -142,7 +142,7 @@ export function Features() {
           {features.map((f, i) => (
             <TiltCard key={f.title} i={i}>
               <div className="h-full w-full" style={{ background: "#F0F0F0" }}>
-                {/* text — top left */}
+                {/* text, top left */}
                 <div className="relative z-10 px-7 pt-7 pb-2">
                   <h3
                     className="whitespace-pre-line text-[26px] font-extrabold leading-[1.15] tracking-tight sm:text-[30px]"
@@ -158,7 +158,7 @@ export function Features() {
                   </p>
                 </div>
 
-                {/* 3D illustration — bottom half, blended into card */}
+                {/* 3D illustration, bottom half, blended into card */}
                 <div className="relative mt-auto overflow-hidden">
                   {/* top fade */}
                   <div

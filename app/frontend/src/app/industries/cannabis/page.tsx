@@ -167,7 +167,7 @@ const painPoints = [
 const stats = [
   { value: "$34B+", label: "US Legal Cannabis Market" },
   { value: "70%+", label: "Still Cash-Dependent" },
-  { value: "$0", label: "Debanking Risk with Settlr" },
+  { value: "$0", label: "Debanking Risk with Offbank" },
   { value: "1%", label: "Flat Processing Fee" },
 ];
 
@@ -198,49 +198,49 @@ const comparisonRows = [
   {
     feature: "Bank account required?",
     traditional: "Yes (and it gets closed)",
-    settlr: "No bank needed",
+    offbank: "No bank needed",
   },
-  { feature: "Processing fee", traditional: "5\u20138%", settlr: "1% flat" },
+  { feature: "Processing fee", traditional: "5\u20138%", offbank: "1% flat" },
   {
     feature: "Settlement time",
     traditional: "3\u20135 business days",
-    settlr: "Under 5 seconds",
+    offbank: "Under 5 seconds",
   },
   {
     feature: "Cash handling costs",
     traditional: "$1,000\u20135,000/mo",
-    settlr: "$0",
+    offbank: "$0",
   },
   {
     feature: "Compliance audit trail",
     traditional: "Paper receipts",
-    settlr: "On-chain + exportable",
+    offbank: "On-chain + exportable",
   },
   {
     feature: "Multi-state support",
     traditional: "Re-apply per state",
-    settlr: "Works everywhere",
+    offbank: "Works everywhere",
   },
   {
     feature: "Weekend/holiday",
     traditional: "No processing",
-    settlr: "24/7/365",
+    offbank: "24/7/365",
   },
   {
     feature: "Account closure risk",
     traditional: "High \u2014 at bank\u2019s discretion",
-    settlr: "Zero \u2014 non-custodial",
+    offbank: "Zero \u2014 non-custodial",
   },
 ];
 
 const faqItems = [
   {
     q: "Is this legal? How does this comply with cannabis regulations?",
-    a: "Settlr processes settlements in USDC (a regulated US dollar stablecoin issued by Circle, a licensed money transmitter). Because Settlr is non-custodial \u2014 we never hold or touch your funds \u2014 we operate as a software tool, not a money services business. Your state cannabis license and existing compliance remain in effect. Every transaction has a full on-chain audit trail that regulators can verify independently.",
+    a: "Offbank processes settlements in USDC (a regulated US dollar stablecoin issued by Circle, a licensed money transmitter). Because Offbank is non-custodial \u2014 we never hold or touch your funds \u2014 we operate as a software tool, not a money services business. Your state cannabis license and existing compliance remain in effect. Every transaction has a full on-chain audit trail that regulators can verify independently.",
   },
   {
     q: "What happens when the SAFE Banking Act passes?",
-    a: "When federal banking reform comes, you\u2019ll have options. Until then, you need to operate today. Settlr gives you reliable, instant B2B settlements right now \u2014 and if banks open up, you can still keep using us for the speed, fee savings, and privacy benefits. Most clients find Settlr is better than traditional banking even without the debanking problem.",
+    a: "When federal banking reform comes, you\u2019ll have options. Until then, you need to operate today. Offbank gives you reliable, instant B2B settlements right now \u2014 and if banks open up, you can still keep using us for the speed, fee savings, and privacy benefits. Most clients find Offbank is better than traditional banking even without the debanking problem.",
   },
   {
     q: "How do my suppliers receive payments? Do they need crypto knowledge?",
@@ -248,15 +248,15 @@ const faqItems = [
   },
   {
     q: "How does this compare to paying with cash?",
-    a: "Cash costs more than people realize: armored transport ($500\u20132,000/mo), vault/safe costs, cash counting labor, theft/loss risk, and the compliance headache of documenting everything manually. With Settlr, every settlement is instant, trackable, and creates an automatic audit trail. No security vans, no counting rooms, no shrinkage.",
+    a: "Cash costs more than people realize: armored transport ($500\u20132,000/mo), vault/safe costs, cash counting labor, theft/loss risk, and the compliance headache of documenting everything manually. With Offbank, every settlement is instant, trackable, and creates an automatic audit trail. No security vans, no counting rooms, no shrinkage.",
   },
   {
     q: "Can competitors see our payment activity on-chain?",
-    a: "Not with privacy mode enabled. Settlr uses TEE-based private transactions (MagicBlock Private Ephemeral Rollups) that hide settlement amounts from on-chain observers while transactions are being processed. Your supplier relationships and pricing remain confidential.",
+    a: "Not with privacy mode enabled. Offbank uses TEE-based private transactions (MagicBlock Private Ephemeral Rollups) that hide settlement amounts from on-chain observers while transactions are being processed. Your supplier relationships and pricing remain confidential.",
   },
   {
     q: "What about IRS 280E tax requirements?",
-    a: "Every Settlr transaction is recorded on-chain with timestamps and amounts, giving you a clean, immutable record for tax purposes. You can export transaction history for your accountant. This is actually better than cash for 280E documentation since every settlement is independently verifiable.",
+    a: "Every Offbank transaction is recorded on-chain with timestamps and amounts, giving you a clean, immutable record for tax purposes. You can export transaction history for your accountant. This is actually better than cash for 280E documentation since every settlement is independently verifiable.",
   },
 ];
 
@@ -286,17 +286,17 @@ export default function CannabisPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Service",
-            name: "Settlr Cannabis B2B Settlements",
+            name: "Offbank Cannabis B2B Settlements",
             description:
               "Non-custodial USDC settlement infrastructure for cannabis businesses. Pay cultivators, processors, and distributors instantly without bank accounts.",
             provider: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
+              name: "Offbank",
+              url: "https://offbankpay.com",
             },
             serviceType: "Cannabis Payment Processing",
             areaServed: "US",
-            url: "https://settlr.dev/industries/cannabis",
+            url: "https://offbankpay.com/industries/cannabis",
           }),
         }}
       />
@@ -342,14 +342,14 @@ export default function CannabisPage() {
             <Reveal delay={0.15}>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="/waitlist"
+                  href="/onboarding"
                   className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white transition-all hover:opacity-90"
                   style={{
                     background:
                       "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
-                  Request Access
+                  Get Started
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
@@ -601,7 +601,7 @@ export default function CannabisPage() {
               style={{ fontFamily: "var(--font-heading)" }}
             >
               Traditional Banking vs.{" "}
-              <span className="text-[#34c759]">Settlr</span>
+              <span className="text-[#34c759]">Offbank</span>
             </h2>
           </Reveal>
 
@@ -615,7 +615,7 @@ export default function CannabisPage() {
                   Traditional
                 </div>
                 <div className="p-4 text-center text-xs font-semibold uppercase tracking-wider text-[#2ba048]">
-                  Settlr
+                  Offbank
                 </div>
               </div>
               {comparisonRows.map((row, i) => (
@@ -634,7 +634,7 @@ export default function CannabisPage() {
                     {row.traditional}
                   </div>
                   <div className="p-4 text-center text-sm font-medium text-[#2ba048]">
-                    {row.settlr}
+                    {row.offbank}
                   </div>
                 </div>
               ))}
@@ -697,13 +697,13 @@ export default function CannabisPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="/waitlist"
+              href="/onboarding"
               className="group inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-white transition-all hover:opacity-90"
               style={{
                 background: "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
               }}
             >
-              Request Access
+              Get Started
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link

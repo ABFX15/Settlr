@@ -16,23 +16,23 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "Settlr",
-    title: "Settlr Pricing — 1% Flat Settlement Fee",
+    siteName: "Offbank",
+    title: "Offbank Pricing — 1% Flat Settlement Fee",
     description:
       "1% flat per settlement. No setup fees, no FX markup. Non-custodial USDC, instant finality.",
-    url: "https://settlr.dev/pricing",
+    url: "https://offbankpay.com/pricing",
     images: [
       {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Settlr Pricing",
+        alt: "Offbank Pricing",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Settlr Pricing — 1% Flat Settlement Fee",
+    title: "Offbank Pricing — 1% Flat Settlement Fee",
     description:
       "1% flat per settlement. No bank interference, no hidden charges. Built for the debanked.",
     images: ["/twitter-image?v=3"],

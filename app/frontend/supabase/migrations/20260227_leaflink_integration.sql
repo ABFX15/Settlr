@@ -1,4 +1,4 @@
--- LeafLink ↔ Settlr integration tables
+-- LeafLink ↔ Offbank integration tables
 --
 -- leaflink_syncs:   Tracks each LeafLink order through the settlement lifecycle
 -- leaflink_configs: Per-merchant integration config (API keys, preferences)

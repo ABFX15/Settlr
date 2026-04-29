@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Settlr — Enterprise Payments for the Debanked";
+export const alt = "Offbank — Enterprise Payments for the Debanked";
 export const size = {
   width: 1200,
   height: 630,
@@ -11,7 +11,7 @@ export const contentType = "image/png";
 
 export default async function Image() {
   const logoData = await fetch(
-    new URL("../../public/settlr-logo-nobg.png", import.meta.url),
+    new URL("../../public/offbank-logo-nobg.png", import.meta.url),
   ).then((res) => res.arrayBuffer());
 
   return new ImageResponse(
@@ -225,7 +225,7 @@ export default async function Image() {
                 {" = await"}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-                {"  settlr.settle({"}
+                {"  offbank.settle({"}
               </span>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
                 {'    to: "vendor.sol",'}
@@ -269,7 +269,7 @@ export default async function Image() {
               fontWeight: 600,
             }}
           >
-            settlr.dev
+            offbankpay.com
           </span>
           <div style={{ display: "flex", gap: 28 }}>
             {["Non-custodial", "Multisig", "Solana", "1% Flat Fee"].map(

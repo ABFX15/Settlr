@@ -334,7 +334,7 @@ export default function ComplianceSettingsPage() {
           className="mt-4 text-center text-sm text-[#8a8a8a]"
         >
           KYC verification is billed per successful verification.{" "}
-          <Link href="/waitlist" className="text-[#34c759] hover:underline">
+          <Link href="/onboarding" className="text-[#34c759] hover:underline">
             Contact us for pricing
           </Link>
         </motion.p>

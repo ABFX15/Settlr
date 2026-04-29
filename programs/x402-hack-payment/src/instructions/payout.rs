@@ -7,7 +7,7 @@ use crate::errors::PaymentError;
 
 /// Process a payout from the platform treasury to any recipient wallet.
 /// Only the platform authority can call this instruction.
-/// Used by the Settlr Payout API — platforms deposit USDC to treasury,
+/// Used by the Offbank Payout API — platforms deposit USDC to treasury,
 /// then call this to release funds to recipients who have claimed via email.
 #[derive(Accounts)]
 pub struct ProcessPayout<'info> {

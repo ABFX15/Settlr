@@ -11,7 +11,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 const PROGRAM_ID = new PublicKey("339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5");
 
 async function main() {
-    console.log("📊 Settlr Treasury Balance Checker\n");
+    console.log("📊 Offbank Treasury Balance Checker\n");
 
     const connection = new Connection("https://api.devnet.solana.com", "confirmed");
 

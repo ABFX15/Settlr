@@ -268,7 +268,7 @@ export default function ReportsPage() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `settlr-payments-${
+      a.download = `offbank-payments-${
         new Date().toISOString().split("T")[0]
       }.csv`;
       a.click();
@@ -319,7 +319,7 @@ export default function ReportsPage() {
           onClick={() =>
             handleExport(
               "reconciliation",
-              `settlr-reconciliation-${
+              `offbank-reconciliation-${
                 new Date().toISOString().split("T")[0]
               }.csv`,
             )
@@ -368,7 +368,7 @@ export default function ReportsPage() {
           onClick={() =>
             handleExport(
               "audit-log",
-              `settlr-audit-log-${new Date().toISOString().split("T")[0]}.csv`,
+              `offbank-audit-log-${new Date().toISOString().split("T")[0]}.csv`,
             )
           }
           disabled={!!exporting}
@@ -392,7 +392,7 @@ export default function ReportsPage() {
           onClick={() =>
             handleExport(
               "buyers",
-              `settlr-buyer-history-${
+              `offbank-buyer-history-${
                 new Date().toISOString().split("T")[0]
               }.csv`,
             )

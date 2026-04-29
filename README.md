@@ -1,8 +1,8 @@
-# Settlr
+# Offbank
 
 **Stablecoin settlement infrastructure for cannabis.** Non-custodial USDC rails on Solana that replace cash drops and 8% high-risk processors with 1% instant settlement and a cryptographic audit trail.
 
-[settlr.dev](https://settlr.dev) · [Waitlist](https://settlr.dev/waitlist) · [Compliance](https://settlr.dev/compliance) · [GitHub](https://github.com/ABFX15)
+[offbankpay.com](https://offbankpay.com) · [Waitlist](https://offbankpay.com/waitlist) · [Compliance](https://offbankpay.com/compliance) · [GitHub](https://github.com/ABFX15)
 
 ---
 
@@ -10,7 +10,7 @@
 
 Cannabis operators move **$34B+ annually** through cash or predatory payment processors:
 
-| Today                                                | With Settlr                                     |
+| Today                                                | With Offbank                                    |
 | ---------------------------------------------------- | ----------------------------------------------- |
 | Banks close your account for being "high-risk"       | Non-custodial — no bank can freeze your funds   |
 | High-risk processors charge 8–12% + rolling reserves | 1% flat fee, no reserves, no hidden charges     |
@@ -22,48 +22,13 @@ Cannabis operators move **$34B+ annually** through cash or predatory payment pro
 
 ## How It Works
 
-### 1. LeafLink Integration (Automated B2B Settlement)
+### 1. Direct Invoices & Payment Links
 
-The flagship product. Settlr plugs directly into [LeafLink](https://www.leaflink.com) — the marketplace where cannabis wholesalers already manage purchase orders. No code, no integration work for the operator.
-
-```
-LeafLink PO created
-        |
-Settlr generates USDC payment link automatically
-        |
-Buyer receives branded email with payment link
-        |
-Buyer pays in USDC (any wallet — Phantom, Solflare, or Privy embedded)
-        |
-On-chain proof synced back to LeafLink order
-```
-
-**What happens under the hood:**
-
-1. LeafLink fires a webhook when a PO is created or accepted
-2. Settlr creates a compliance-stamped invoice (METRC tags, license numbers, PO reference)
-3. Payment link is emailed to the buyer via Resend
-4. Buyer pays USDC on Solana — settlement in <5 seconds
-5. Settlr writes the Solana tx signature back to the LeafLink order as proof
-6. If the sync-back fails, an automatic retry mechanism catches it
-
-**LeafLink API Endpoints:**
-
-| Endpoint                              | Method   | Purpose                                |
-| ------------------------------------- | -------- | -------------------------------------- |
-| `/api/integrations/leaflink/webhook`  | POST     | Receives LeafLink order webhooks       |
-| `/api/integrations/leaflink/callback` | POST     | Internal callback when invoice is paid |
-| `/api/integrations/leaflink/config`   | GET/POST | Merchant integration settings          |
-| `/api/integrations/leaflink/syncs`    | GET      | List sync records (filterable)         |
-| `/api/integrations/leaflink/retry`    | POST     | Retry failed sync-backs                |
-
-### 2. Direct Invoices & Payment Links
-
-For settlements outside LeafLink — equipment purchases, consulting fees, one-off supplier payments.
+The core product. Settlements for B2B cannabis flows — wholesale orders, equipment purchases, consulting fees, supplier payments.
 
 ```bash
 # Create an invoice
-curl -X POST https://settlr.dev/api/invoices \
+curl -X POST https://offbankpay.com/api/invoices \
   -H "X-API-Key: sk_live_xxx" \
   -H "Content-Type: application/json" \
   -d '{
@@ -74,12 +39,20 @@ curl -X POST https://settlr.dev/api/invoices \
   }'
 
 # Create a shareable payment link
-curl -X POST https://settlr.dev/api/payment-links \
+curl -X POST https://offbankpay.com/api/payment-links \
   -H "X-API-Key: sk_live_xxx" \
   -d '{ "amount": 12500.00, "memo": "Equipment deposit", "expiresIn": "7d" }'
 ```
 
-### 3. Solana Pay Links (Blinks)
+**What happens under the hood:**
+
+1. Operator creates an invoice in the dashboard or via API
+2. Offbank generates a compliance-stamped record (license numbers, PO reference, optional METRC tags)
+3. Payment link is emailed to the buyer via Resend
+4. Buyer pays USDC on Solana — settlement in <5 seconds
+5. Operator sees the on-chain settlement confirmation in the dashboard
+
+### 2. Solana Pay Links (Blinks)
 
 Every invoice automatically generates a [Solana Actions](https://solana.com/docs/advanced/actions) URL — a universal payment link that works in any wallet, browser, or social platform that supports Blinks.
 
@@ -100,14 +73,60 @@ One signature → settlement in <5 seconds
 - `GET /api/actions/pay?invoice=<token>` returns a Solana Action card (title, icon, amount, merchant name)
 - `POST /api/actions/pay?invoice=<token>` accepts the payer's wallet address and returns an unsigned USDC transfer transaction
 - The payer signs in their wallet — no account needed, no login required
-- Settlement memo encodes `settlr:<invoiceNumber>:<id>` for on-chain traceability
+- Settlement memo encodes `offbank:<invoiceNumber>:<id>` for on-chain traceability
 - Works with [dial.to](https://dial.to) for rich link previews on Twitter/X
 
 Blink URLs are displayed in the dashboard after invoice creation and can be copied from the invoice list.
 
-### 4. Operator Dashboard
+### 3. LeafLink Integration (Beta)
 
-Full visibility at [settlr.dev/dashboard](https://settlr.dev/dashboard):
+For cannabis wholesalers using [LeafLink](https://www.leaflink.com), Offbank plugs directly into your existing PO workflow — no manual invoice creation.
+
+```
+LeafLink PO created
+        |
+Webhook → Offbank generates USDC payment link automatically
+        |
+Buyer receives email with payment link
+        |
+Buyer pays in USDC (Phantom, Solflare, or Privy embedded wallet)
+        |
+On-chain settlement → status synced back to LeafLink order
+```
+
+**Setup (Settings → LeafLink Integration):**
+
+1. Toggle on “Enable LeafLink sync”
+2. Paste your LeafLink API key + Company ID
+3. Copy the generated webhook URL into LeafLink → Settings → Integrations → Webhooks
+4. Optionally set an HMAC signing secret
+
+**LeafLink API Endpoints:**
+
+| Endpoint                              | Method   | Purpose                                |
+| ------------------------------------- | -------- | -------------------------------------- |
+| `/api/integrations/leaflink/webhook`  | POST     | Receives LeafLink order webhooks       |
+| `/api/integrations/leaflink/callback` | POST     | Internal callback when invoice is paid |
+| `/api/integrations/leaflink/config`   | GET/POST | Merchant integration settings          |
+| `/api/integrations/leaflink/syncs`    | GET      | List sync records (filterable)         |
+| `/api/integrations/leaflink/retry`    | POST     | Retry failed sync-backs                |
+
+### 4. Cash Out (USDC → USD Off-Ramp)
+
+Offbank partners with [Sphere](https://spherepay.co) — a licensed money transmitter — for fiat off-ramp. Operators can convert USDC to USD via ACH, Wire, SEPA, Faster Payments, or Pix without leaving the dashboard.
+
+**How it works:**
+
+1. Operator clicks **Cash Out** in dashboard → routes to `/offramp` with wallet pre-filled
+2. Sphere handles KYC, bank linking, and the fiat leg
+3. USDC → USD lands in operator’s bank account in 1–2 business days (ACH) or same-day (Wire)
+4. Reconciliation receipts surface back in `/dashboard/reports`
+
+Auto cash-out (Beta): operators can configure a minimum threshold; settlements above the threshold trigger automatic conversion via Sphere.
+
+### 5. Operator Dashboard
+
+Full visibility at [offbankpay.com/dashboard](https://offbankpay.com/dashboard):
 
 - **Dashboard** — Revenue overview, outstanding invoices, overdue alerts
 - **Orders** — Purchase order management with PO→Invoice conversion
@@ -126,11 +145,11 @@ Built for the 2026 regulatory landscape:
 - **GENIUS Act (2025)** — Full stablecoin payment compliance
 - **BSA/AML** — On-chain audit trails satisfy reporting requirements
 - **KYB Verification** — All counterparties verified before settlement
-- **METRC Integration** — Package tags extracted from LeafLink orders and embedded in settlement memos
-- **Non-Custodial** — Settlr never holds funds; no money transmitter risk
+- **METRC Integration** — Package tags can be embedded in settlement memos for chain-of-custody traceability
+- **Non-Custodial** — Offbank never holds funds; no money transmitter risk
 - **Range Security** — Wallet risk screening (OFAC, sanctions, address poisoning detection)
 
-[Full compliance documentation ->](https://settlr.dev/compliance)
+[Full compliance documentation ->](https://offbankpay.com/compliance)
 
 ---
 
@@ -149,6 +168,7 @@ Built for the 2026 regulatory landscape:
 | Privacy            | MagicBlock PER (TEE)     |
 | Risk screening     | Range Security           |
 | Cannabis wholesale | LeafLink REST API v2     |
+| Fiat off-ramp      | Sphere (USDC → USD)      |
 | Pay links          | Solana Actions / Blinks  |
 
 ### On-Chain Program
@@ -165,19 +185,13 @@ Program ID: 339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5 (Devnet)
 
 ```
 x402-hack-payment/
-+-- app/frontend/                    # Next.js app (settlr.dev)
++-- app/frontend/                    # Next.js app (offbankpay.com)
 |   +-- src/
 |       +-- app/                     # Pages + API routes
 |       |   +-- api/invoices/        # Invoice creation
 |       |   +-- api/payments/        # Payment processing
 |       |   +-- api/payouts/         # Payout management
-|       |   +-- api/integrations/    # Third-party integrations
-|       |   |   +-- leaflink/        # LeafLink cannabis wholesale
-|       |   |       +-- webhook/     # Inbound LL webhooks
-|       |   |       +-- callback/    # Internal payment callback
-|       |   |       +-- config/      # Merchant config CRUD
-|       |   |       +-- syncs/       # Sync record listing
-|       |   |       +-- retry/       # Retry failed syncs
+|       |   |   +-- api/integrations/    # Third-party integrations (roadmap)
 |       |   +-- api/actions/pay/     # Solana Actions / Blinks endpoint
 |       |   +-- api/checkout/        # Checkout sessions
 |       |   +-- api/gasless/         # Kora gasless endpoints
@@ -188,10 +202,6 @@ x402-hack-payment/
 |       |   +-- compliance/          # Compliance docs
 |       |   +-- blog/                # SEO content
 |       +-- lib/
-|       |   +-- leaflink/            # LeafLink integration library
-|       |   |   +-- types.ts         # Order, webhook, sync types
-|       |   |   +-- client.ts        # LeafLink REST API wrapper
-|       |   |   +-- db.ts            # Supabase CRUD + in-memory fallback
 |       |   +-- db.ts                # Core database service
 |       |   +-- supabase.ts          # Supabase client
 |       |   +-- email.ts             # Transactional email (Resend)
@@ -236,7 +246,7 @@ npm run dev                    # Start dev server -> localhost:3000
 NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
 NEXT_PUBLIC_PROGRAM_ID=339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5
 NEXT_PUBLIC_PRIVY_APP_ID=your_privy_app_id
-NEXT_PUBLIC_APP_URL=https://settlr.dev
+NEXT_PUBLIC_APP_URL=https://offbankpay.com
 FEE_PAYER_SECRET_KEY=your_fee_payer_keypair
 RESEND_API_KEY=re_xxxxxxxxxxxx
 
@@ -245,30 +255,11 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 
-# LeafLink Integration
-LEAFLINK_CALLBACK_SECRET=your_random_secret
-LEAFLINK_RETRY_SECRET=your_cron_secret
-
 # Optional
 RANGE_API_KEY=                 # Wallet risk screening
 SUMSUB_APP_TOKEN=              # KYC verification
 SUMSUB_SECRET_KEY=
 ```
-
-### LeafLink Setup
-
-1. Run the Supabase migration:
-   ```bash
-   # Paste supabase/migrations/20260227_leaflink_integration.sql into SQL Editor
-   # Or: cd app/frontend && npx supabase db push
-   ```
-2. Configure a merchant's LeafLink connection:
-   ```bash
-   curl -X POST https://settlr.dev/api/integrations/leaflink/config \
-     -H "Content-Type: application/json" \
-     -d '{ "merchant_id": "your_id", "leaflink_api_key": "your_ll_key" }'
-   ```
-3. Copy the returned webhook URL into LeafLink -> Settings -> Integrations -> Webhooks
 
 ---
 
@@ -280,13 +271,13 @@ SUMSUB_SECRET_KEY=
 | Growth     | 300/min    | 1%     |
 | Enterprise | 1000/min   | Custom |
 
-Apply at [settlr.dev/waitlist](https://settlr.dev/waitlist).
+Apply at [offbankpay.com/waitlist](https://offbankpay.com/waitlist).
 
 ---
 
 ## For Developers
 
-An embeddable SDK (`@settlr/sdk`) is planned but not yet published. If you're interested in integrating Settlr settlement into your platform, reach out via the waitlist or GitHub issues.
+An embeddable SDK (`@offbank/sdk`) is planned but not yet published. If you're interested in integrating Offbank settlement into your platform, reach out via the waitlist or GitHub issues.
 
 ---
 
@@ -300,7 +291,7 @@ ISC
 
 ## Links
 
-- **Website:** [settlr.dev](https://settlr.dev)
-- **Twitter:** [@SettlrP](https://twitter.com/SettlrP)
+- **Website:** [offbankpay.com](https://offbankpay.com)
+- **Twitter:** [@OffbankP](https://twitter.com/OffbankP)
 - **GitHub:** [@ABFX15](https://github.com/ABFX15)
 - **SDK:** Planned (not yet published)

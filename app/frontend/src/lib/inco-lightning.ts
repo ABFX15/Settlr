@@ -22,8 +22,8 @@ export const DELEGATION_PROGRAM_ID = new PublicKey('DELeGGvXpWV2fqJUhqcF5ZSYMS4J
 // MagicBlock Permission Program  
 export const PERMISSION_PROGRAM_ID = new PublicKey('ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1');
 
-// Settlr program ID
-export const SETTLR_PROGRAM_ID = new PublicKey('339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5');
+// Offbank program ID
+export const OFFBANK_PROGRAM_ID = new PublicKey('339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5');
 
 // MagicBlock TEE Validator
 export const TEE_VALIDATOR = new PublicKey('FnE6VJT5QNZdedZPnCoLsARgBwoE6DeJNjBs2H1gySXA');
@@ -67,7 +67,7 @@ export function findPrivateReceiptPda(paymentId: string): [PublicKey, number] {
 
     return PublicKey.findProgramAddressSync(
         [PRIVATE_RECEIPT_SEED, paymentIdSeed],
-        SETTLR_PROGRAM_ID
+        OFFBANK_PROGRAM_ID
     );
 }
 

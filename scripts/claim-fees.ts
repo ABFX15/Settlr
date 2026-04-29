@@ -20,7 +20,7 @@ const PROGRAM_ID = new PublicKey("339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5")
 const USDC_MINT = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU");
 
 async function main() {
-    console.log("🏦 Settlr Fee Claim Tool\n");
+    console.log("🏦 Offbank Fee Claim Tool\n");
 
     // Try to load the platform authority wallet
     // First check for phantom-wallet.json (used to initialize platform on devnet)

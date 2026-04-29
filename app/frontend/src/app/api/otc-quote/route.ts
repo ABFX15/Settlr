@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
             {
                 error: "OTC desk integration coming soon",
-                message: "Large USDC purchases via wire transfer will be available once we onboard an OTC provider. Contact support@settlr.dev for manual assistance with orders over $25K.",
+                message: "Large USDC purchases via wire transfer will be available once we onboard an OTC provider. Contact support@offbankpay.com for manual assistance with orders over $25K.",
             },
             { status: 503 },
         );
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
             expiresAt,
             wireInstructions: {
                 bankName: "Partner Bank (via OTC Provider)",
-                accountName: "Settlr OTC Trading LLC",
+                accountName: "Offbank OTC Trading LLC",
                 routingNumber: "Contact support for details",
                 accountNumber: "Contact support for details",
                 reference: quoteId,

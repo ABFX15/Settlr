@@ -797,10 +797,10 @@ export default function ClaimPage({
           <Shield className="h-3 w-3" />
           Powered by{" "}
           <a
-            href="https://settlr.dev"
+            href="https://offbankpay.com"
             className="font-medium text-[#8a8a8a] hover:text-[#212121] transition-colors"
           >
-            Settlr
+            Offbank
           </a>
           .&nbsp;Secure, non-custodial infrastructure.
         </p>
@@ -895,7 +895,7 @@ export default function ClaimPage({
                 <div className="px-5 py-4 border-t border-[#d3d3d3] bg-[#f7f7f7]/50">
                   <p className="text-[11px] text-[#8a8a8a] text-center leading-relaxed">
                     Cash-out is provided by regulated local partners. Exchange
-                    rates and fees vary. Settlr does not hold your funds at any
+                    rates and fees vary. Offbank does not hold your funds at any
                     point during this process.
                   </p>
                 </div>

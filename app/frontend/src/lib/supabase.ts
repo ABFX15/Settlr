@@ -17,7 +17,7 @@ const supabaseKey = isServer
 
 if (!supabaseUrl || !supabaseKey) {
     console.error(
-        "[Settlr] FATAL: Supabase not configured. " +
+        "[Offbank] FATAL: Supabase not configured. " +
         "Set NEXT_PUBLIC_SUPABASE_URL and " +
         (isServer ? "SUPABASE_SERVICE_ROLE_KEY" : "NEXT_PUBLIC_SUPABASE_ANON_KEY") +
         ". " +
@@ -31,11 +31,11 @@ if (isServer && supabaseUrl && !supabaseServiceRoleKey) {
         // RLS policies become the only safeguard, and write paths may fail
         // open or fail silently depending on policy.
         throw new Error(
-            "[Settlr] FATAL: SUPABASE_SERVICE_ROLE_KEY is required on the server in production.",
+            "[Offbank] FATAL: SUPABASE_SERVICE_ROLE_KEY is required on the server in production.",
         );
     }
     console.warn(
-        "[Settlr] WARNING: SUPABASE_SERVICE_ROLE_KEY missing on server; using anon key (dev only).",
+        "[Offbank] WARNING: SUPABASE_SERVICE_ROLE_KEY missing on server; using anon key (dev only).",
     );
 }
 

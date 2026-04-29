@@ -105,14 +105,14 @@ function OnboardingPageInner() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (!token) {
-      // Default: invite-only. The waitlist + admin-approval flow is the
-      // gate. Set NEXT_PUBLIC_ALLOW_OPEN_REGISTRATION=true *only* in dev
-      // or when intentionally running an open beta.
-      if (process.env.NEXT_PUBLIC_ALLOW_OPEN_REGISTRATION === "true") {
-        setTokenStatus("valid");
+      // Open self-serve signup. Set NEXT_PUBLIC_REQUIRE_INVITE_TOKEN=true
+      // to lock /onboarding back behind invite tokens (e.g. for a
+      // private beta or after a wave of unwanted signups).
+      if (process.env.NEXT_PUBLIC_REQUIRE_INVITE_TOKEN === "true") {
+        setTokenStatus("invalid");
         return;
       }
-      setTokenStatus("invalid");
+      setTokenStatus("valid");
       return;
     }
     fetch(`/api/waitlist/verify-token?token=${encodeURIComponent(token)}`)
@@ -373,16 +373,16 @@ function OnboardingPageInner() {
             Invite Required
           </h2>
           <p className="mb-6 text-lg" style={{ color: c.slate }}>
-            Settlr is invite-only during early access. Request access and
+            Offbank is invite-only during early access. Request access and
             we&apos;ll email you a unique sign-in link when approved.
           </p>
           <Link
-            href="/waitlist"
+            href="/onboarding"
             className="inline-flex items-center gap-3 px-8 py-4 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
             style={{ background: c.green }}
           >
             <Shield className="w-5 h-5" />
-            Request Access
+            Get Started
           </Link>
           <p className="mt-4 text-xs" style={{ color: c.muted }}>
             Already approved? Check your email for the invite link.
@@ -1040,7 +1040,7 @@ function OnboardingPageInner() {
                 onChange={(e) =>
                   setState((s) => ({ ...s, webhookUrl: e.target.value }))
                 }
-                placeholder="https://yoursite.com/api/webhooks/settlr"
+                placeholder="https://yoursite.com/api/webhooks/offbank"
                 className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
                 style={{
                   background: c.bg,

@@ -52,14 +52,14 @@ export default function WooCommercePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            name: "Settlr WooCommerce Plugin",
+            name: "Offbank WooCommerce Plugin",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
-            url: "https://settlr.dev/integrations/woocommerce",
+            url: "https://offbankpay.com/integrations/woocommerce",
             description:
               "Accept USDC payments on any WooCommerce store. Stablecoin checkout with instant settlement, no chargebacks.",
-            provider: { "@id": "https://settlr.dev/#organization" },
-            about: { "@id": "https://settlr.dev/#defined-term" },
+            provider: { "@id": "https://offbankpay.com/#organization" },
+            about: { "@id": "https://offbankpay.com/#defined-term" },
           }),
         }}
       />
@@ -221,12 +221,12 @@ export default function WooCommercePage() {
             {
               step: "01",
               title: "Install from WordPress",
-              text: "Search 'Settlr' in the WordPress plugin directory. One-click install, activate, done.",
+              text: "Search 'Offbank' in the WordPress plugin directory. One-click install, activate, done.",
             },
             {
               step: "02",
               title: "Enter your wallet",
-              text: "Paste your USDC wallet address in settings. Or connect via Settlr dashboard for full analytics.",
+              text: "Paste your USDC wallet address in settings. Or connect via Offbank dashboard for full analytics.",
             },
             {
               step: "03",

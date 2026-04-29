@@ -1,4 +1,4 @@
--- Settlr Database Schema
+-- Offbank Database Schema
 -- Run this in your Supabase SQL Editor (https://supabase.com/dashboard)
 
 -- Enable UUID extension

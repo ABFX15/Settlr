@@ -78,9 +78,9 @@ export async function POST(
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-Settlr-Signature": signature,
-                    "X-Settlr-Event": "payment.completed",
-                    "X-Settlr-Test": "true",
+                    "X-Offbank-Signature": signature,
+                    "X-Offbank-Event": "payment.completed",
+                    "X-Offbank-Test": "true",
                 },
                 body: payloadString,
             });

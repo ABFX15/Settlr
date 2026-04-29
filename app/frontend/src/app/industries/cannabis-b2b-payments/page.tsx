@@ -68,15 +68,15 @@ function R({
 const faqs = [
   {
     q: "How do cannabis distributors pay suppliers without cash in 2026?",
-    a: "Cannabis distributors can pay suppliers without cash using non-custodial stablecoin settlement on platforms like Settlr. The distributor creates an invoice, the supplier receives a payment link, and USDC transfers peer-to-peer in under 2 seconds. No bank account is required for the transaction itself.",
+    a: "Cannabis distributors can pay suppliers without cash using non-custodial stablecoin settlement on platforms like Offbank. The distributor creates an invoice, the supplier receives a payment link, and USDC transfers peer-to-peer in under 2 seconds. No bank account is required for the transaction itself.",
   },
   {
     q: "What is the cheapest way to process B2B cannabis payments?",
-    a: "The cheapest method for B2B cannabis payments is stablecoin settlement at 1% flat (Settlr). Traditional high-risk merchant processors charge 5–9%. Cash handling costs $60,000–$120,000/year for a $2M operation. ACH-based solutions like Aeropay charge 3–5% but carry NACHA rejection risk.",
+    a: "The cheapest method for B2B cannabis payments is stablecoin settlement at 1% flat (Offbank). Traditional high-risk merchant processors charge 5–9%. Cash handling costs $60,000–$120,000/year for a $2M operation. ACH-based solutions like Aeropay charge 3–5% but carry NACHA rejection risk.",
   },
   {
     q: "Can cannabis businesses send wire transfers to suppliers?",
-    a: "Most cannabis businesses cannot reliably send B2B wire transfers. Only 4–6% of US banks actively maintain cannabis banking programs, and those that do restrict wire functionality. Stablecoin settlement provides an equivalent — instant, verifiable, bank-independent transfers of any size.",
+    a: "Most cannabis businesses cannot reliably send B2B wire transfers. Only 4–6% of US banks actively maintain cannabis banking programs, and those that do restrict wire functionality. Stablecoin settlement provides an equivalent, instant, verifiable, bank-independent transfers of any size.",
   },
   {
     q: "What states allow stablecoin payments for cannabis?",
@@ -91,8 +91,8 @@ const faqs = [
     a: "A cannabis business processing $2 million annually can save $60,000–$100,000 per year by eliminating cash handling. This includes eliminated armored car fees ($24,000–$48,000), reduced labor ($15,000–$25,000), eliminated shrinkage ($10,000–$40,000), and lower processing fees vs. high-risk merchant accounts.",
   },
   {
-    q: "Does Settlr integrate with cannabis POS systems like Flowhub, Dutchie, or LeafLink?",
-    a: "Yes. Settlr is building integrations with leading cannabis POS and marketplace platforms including Flowhub, Dutchie, and LeafLink. These integrations allow B2B invoices and settlements to flow directly from your existing POS or procurement system, so there's no double data entry. Receipts sync back to your POS for seamless reconciliation.",
+    q: "Does Offbank integrate with cannabis POS systems like Flowhub, Dutchie, or LeafLink?",
+    a: "Yes. Offbank is building integrations with leading cannabis POS and marketplace platforms including Flowhub, Dutchie, and LeafLink. These integrations allow B2B invoices and settlements to flow directly from your existing POS or procurement system, so there's no double data entry. Receipts sync back to your POS for seamless reconciliation.",
   },
 ];
 
@@ -124,7 +124,7 @@ const supplyChain = [
     icon: DollarSign,
     pain: "Pay distributors in cash for inventory. Maintain large cash reserves on-site, creating robbery targets.",
     solution:
-      "Pay distributors via Settlr. Reduce on-site cash to consumer retail sales only.",
+      "Pay distributors via Offbank. Reduce on-site cash to consumer retail sales only.",
   },
 ];
 
@@ -192,7 +192,7 @@ export default function CannabisB2BPaymentsPage() {
     <div className="min-h-screen" style={{ background: p.bg, color: p.slate }}>
       <Navbar />
 
-      {/* Structured data — FAQPage */}
+      {/* Structured data, FAQPage */}
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -212,7 +212,7 @@ export default function CannabisB2BPaymentsPage() {
         }}
       />
 
-      {/* Structured data — Article */}
+      {/* Structured data, Article */}
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -226,13 +226,13 @@ export default function CannabisB2BPaymentsPage() {
               "Complete guide to B2B cannabis supply chain payments. How cultivators, processors, distributors, and retailers can eliminate cash using non-custodial stablecoin settlement at 1% flat.",
             author: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
+              name: "Offbank",
+              url: "https://offbankpay.com",
             },
             publisher: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
+              name: "Offbank",
+              url: "https://offbankpay.com",
             },
             datePublished: "2026-01-15",
             dateModified: "2026-02-27",
@@ -299,10 +299,10 @@ export default function CannabisB2BPaymentsPage() {
 
           {/* AEO entity sentence */}
           <p className="sr-only">
-            Cannabis B2B supply chain payments — cultivators, processors,
-            distributors, and retailers — move an estimated $30 billion annually
+            Cannabis B2B supply chain payments, cultivators, processors,
+            distributors, and retailers, move an estimated $30 billion annually
             in the US. 30–50% is still transacted in cash due to banking
-            restrictions. Settlr provides non-custodial USDC settlement at 1%
+            restrictions. Offbank provides non-custodial USDC settlement at 1%
             flat, enabling instant digital payments across the entire cannabis
             supply chain without bank interference.
           </p>
@@ -519,11 +519,11 @@ export default function CannabisB2BPaymentsPage() {
               className="text-4xl font-bold tracking-tight sm:text-5xl"
               style={{ color: p.navy }}
             >
-              Settlr across the supply chain
+              Offbank across the supply chain
             </h2>
             <p className="mt-5 text-lg" style={{ color: p.slate }}>
               Every role in the cannabis supply chain faces unique payment
-              challenges. Here&apos;s how Settlr solves each one.
+              challenges. Here&apos;s how Offbank solves each one.
             </p>
           </R>
 
@@ -574,7 +574,7 @@ export default function CannabisB2BPaymentsPage() {
                             className="mb-2 text-xs font-semibold uppercase tracking-widest"
                             style={{ color: p.green }}
                           >
-                            With Settlr
+                            With Offbank
                           </p>
                           <p
                             className="text-sm leading-relaxed"
@@ -610,7 +610,7 @@ export default function CannabisB2BPaymentsPage() {
               {
                 step: "01",
                 title: "Create invoice",
-                desc: "Distributor creates a USDC invoice for $50,000 of biomass from a cultivator. Both parties are KYB-verified on Settlr.",
+                desc: "Distributor creates a USDC invoice for $50,000 of biomass from a cultivator. Both parties are KYB-verified on Offbank.",
               },
               {
                 step: "02",
@@ -620,7 +620,7 @@ export default function CannabisB2BPaymentsPage() {
               {
                 step: "03",
                 title: "USDC settles in < 2 seconds",
-                desc: "USDC moves peer-to-peer from the distributor's Squads multisig vault to the cultivator's wallet. Non-custodial — Settlr never touches the funds.",
+                desc: "USDC moves peer-to-peer from the distributor's Squads multisig vault to the cultivator's wallet. Non-custodial, Offbank never touches the funds.",
               },
               {
                 step: "04",
@@ -677,7 +677,7 @@ export default function CannabisB2BPaymentsPage() {
               className="mx-auto mt-5 max-w-lg text-base leading-relaxed"
               style={{ color: "rgba(255,255,255,0.55)" }}
             >
-              Settlr integrates with leading cannabis POS and wholesale
+              Offbank integrates with leading cannabis POS and wholesale
               marketplace platforms so B2B payments flow directly from your
               existing systems.
             </p>
@@ -699,7 +699,7 @@ export default function CannabisB2BPaymentsPage() {
               {
                 name: "Dutchie",
                 role: "E-commerce & Ordering",
-                desc: "Connect Dutchie wholesale orders to Settlr settlement. When a retailer places an order, the invoice and USDC payment flow are created automatically.",
+                desc: "Connect Dutchie wholesale orders to Offbank settlement. When a retailer places an order, the invoice and USDC payment flow are created automatically.",
                 highlights: [
                   "Wholesale order → invoice automation",
                   "Retailer payment link delivery",
@@ -782,7 +782,7 @@ export default function CannabisB2BPaymentsPage() {
           <R delay={0.24}>
             <div className="mt-12 text-center">
               <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
-                Don&apos;t see your platform? Settlr&apos;s REST API works with
+                Don&apos;t see your platform? Offbank&apos;s REST API works with
                 any system.{" "}
                 <Link
                   href="/integrations"
@@ -851,7 +851,7 @@ export default function CannabisB2BPaymentsPage() {
                     className="text-sm font-semibold"
                     style={{ color: p.green }}
                   >
-                    Settlr
+                    Offbank
                   </p>
                   <p
                     className="mt-2 text-3xl font-bold"
@@ -907,16 +907,16 @@ export default function CannabisB2BPaymentsPage() {
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                title: "Settlr vs Legacy Payment Workflows",
+                title: "Offbank vs Legacy Payment Workflows",
                 href: "/compare",
               },
               {
-                title: "Settlr vs Cash & Armored Cars",
-                href: "/compare/settlr-vs-cash-armored-cars",
+                title: "Offbank vs Cash & Armored Cars",
+                href: "/compare/offbank-vs-cash-armored-cars",
               },
               {
-                title: "Settlr vs High-Risk Processors",
-                href: "/compare/settlr-vs-high-risk-merchant-accounts",
+                title: "Offbank vs High-Risk Processors",
+                href: "/compare/offbank-vs-high-risk-merchant-accounts",
               },
               {
                 title: "Knowledge Hub",
@@ -989,7 +989,7 @@ export default function CannabisB2BPaymentsPage() {
                 </p>
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
                   <Link
-                    href="/waitlist"
+                    href="/onboarding"
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:

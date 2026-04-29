@@ -21,8 +21,10 @@ import crypto from "crypto";
 import nacl from "tweetnacl";
 import bs58 from "bs58";
 
-const SESSION_COOKIE = "settlr_session";
-const NONCE_COOKIE = "settlr_nonce";
+const SESSION_COOKIE = "offbank_session";
+const LEGACY_SESSION_COOKIE = "settlr_session";
+const NONCE_COOKIE = "offbank_nonce";
+const LEGACY_NONCE_COOKIE = "settlr_nonce";
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const NONCE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -71,7 +73,7 @@ export interface IssuedNonce {
 
 export function buildSignInMessage(wallet: string, nonce: string, expiresAt: number): string {
     return [
-        "Settlr sign-in",
+        "Offbank sign-in",
         "",
         `Wallet: ${wallet}`,
         `Nonce: ${nonce}`,
@@ -95,7 +97,8 @@ export function issueNonce(wallet: string): { token: string; nonce: string; expi
 }
 
 export function readNonceCookie(request: NextRequest): { nonce: string; wallet: string } | null {
-    const token = request.cookies.get(NONCE_COOKIE)?.value;
+    const token = request.cookies.get(NONCE_COOKIE)?.value
+        ?? request.cookies.get(LEGACY_NONCE_COOKIE)?.value;
     if (!token) return null;
     const parts = token.split(".");
     if (parts.length !== 4) return null;
@@ -120,6 +123,7 @@ export function setNonceCookie(res: NextResponse, token: string, expiresAt: numb
 
 export function clearNonceCookie(res: NextResponse) {
     res.cookies.set(NONCE_COOKIE, "", { path: "/", maxAge: 0 });
+    res.cookies.set(LEGACY_NONCE_COOKIE, "", { path: "/", maxAge: 0 });
 }
 
 /* ── Session ───────────────────────────────────────────── */
@@ -143,6 +147,7 @@ export function setSessionCookie(res: NextResponse, token: string, expiresAt: nu
 
 export function clearSessionCookie(res: NextResponse) {
     res.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0 });
+    res.cookies.set(LEGACY_SESSION_COOKIE, "", { path: "/", maxAge: 0 });
 }
 
 /**
@@ -150,7 +155,8 @@ export function clearSessionCookie(res: NextResponse) {
  * if the cookie is missing/expired/tampered.
  */
 export function getSessionWallet(request: NextRequest): string | null {
-    const token = request.cookies.get(SESSION_COOKIE)?.value;
+    const token = request.cookies.get(SESSION_COOKIE)?.value
+        ?? request.cookies.get(LEGACY_SESSION_COOKIE)?.value;
     if (!token) return null;
     const parts = token.split(".");
     if (parts.length !== 3) return null;

@@ -62,7 +62,7 @@ export function Steps() {
 
         {/* steps row */}
         <div className="relative mt-16 grid gap-8 md:grid-cols-3">
-          {/* animated dashed connector line (desktop only) — draws on scroll */}
+          {/* animated dashed connector line (desktop only), draws on scroll */}
           <motion.div
             className="pointer-events-none absolute top-[52px] left-[16.66%] right-[16.66%] hidden h-px md:block origin-left"
             style={{

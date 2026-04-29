@@ -2,7 +2,7 @@
 
 # Start Next.js dev server and SSL proxy for https://localhost:3001
 
-echo "🚀 Starting Settlr development with HTTPS..."
+echo "🚀 Starting Offbank development with HTTPS..."
 echo ""
 echo "📍 HTTP:   http://localhost:3000"
 echo "🔒 HTTPS:  https://localhost:3001"
@@ -21,11 +21,11 @@ sleep 3
 
 # Start SSL proxy
 echo "🔐 Starting SSL proxy..."
-local-ssl-proxy --source 3001 --target 3000 --cert settlr.dev+2.pem --key settlr.dev+2-key.pem &
+local-ssl-proxy --source 3001 --target 3000 --cert offbankpay.com+2.pem --key offbankpay.com+2-key.pem &
 PROXY_PID=$!
 
 echo ""
-echo "✅ Ready! Visit https://settlr.dev:3001"
+echo "✅ Ready! Visit https://offbankpay.com:3001"
 echo ""
 echo "Press Ctrl+C to stop both servers"
 

@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://settlr.dev/integrations/woocommerce",
-    siteName: "Settlr",
+    url: "https://offbankpay.com/integrations/woocommerce",
+    siteName: "Offbank",
     title: "WooCommerce Settlement — Non-Custodial USDC for WordPress",
     description:
       "Non-custodial USDC settlement for WooCommerce. 1% flat, instant finality.",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Settlr + WooCommerce",
+        alt: "Offbank + WooCommerce",
       },
     ],
   },

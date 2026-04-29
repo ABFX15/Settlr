@@ -11,7 +11,7 @@ import { PublicKey } from '@solana/web3.js';
 import {
     DELEGATION_PROGRAM_ID,
     PERMISSION_PROGRAM_ID,
-    SETTLR_PROGRAM_ID,
+    OFFBANK_PROGRAM_ID,
     TEE_VALIDATOR,
     PER_ENDPOINT,
     PER_WS_ENDPOINT,
@@ -40,9 +40,9 @@ describe('MagicBlock PER - Private Payments', () => {
             expect(PERMISSION_PROGRAM_ID.toBase58()).to.equal('ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1');
         });
 
-        it('should have correct Settlr program ID', () => {
-            expect(SETTLR_PROGRAM_ID).to.be.instanceOf(PublicKey);
-            expect(SETTLR_PROGRAM_ID.toBase58()).to.equal('339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5');
+        it('should have correct Offbank program ID', () => {
+            expect(OFFBANK_PROGRAM_ID).to.be.instanceOf(PublicKey);
+            expect(OFFBANK_PROGRAM_ID.toBase58()).to.equal('339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5');
         });
 
         it('should have correct TEE validator address', () => {

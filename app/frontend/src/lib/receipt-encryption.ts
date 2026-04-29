@@ -31,7 +31,7 @@ import bs58 from "bs58";
  * receipt-decryption keypair. Versioned so the scheme can evolve.
  */
 export const RECEIPT_KEY_DERIVATION_MESSAGE =
-    "Settlr receipt encryption key v1 — sign to derive decryption key";
+    "Offbank receipt encryption key v1 — sign to derive decryption key";
 
 export interface ReceiptKeypair {
     /** X25519 public key (32 bytes) — base58 encoded, safe to publish */

@@ -4,8 +4,8 @@ import Image from "next/image";
 
 const LOGO_SRC = "/new-logo-no-bg.png";
 
-/* ─── SettlrLogo — logo icon + "Settlr" text ─── */
-export function SettlrLogo({
+/* ─── OffbankLogo — logo icon + "Offbank" text ─── */
+export function OffbankLogo({
   size = "lg",
   variant = "dark",
 }: {
@@ -26,7 +26,7 @@ export function SettlrLogo({
     <div className="flex items-center gap-2 select-none">
       <Image
         src={LOGO_SRC}
-        alt="Settlr"
+        alt="Offbank"
         height={d}
         width={d}
         className="object-contain"
@@ -39,30 +39,30 @@ export function SettlrLogo({
           fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif",
         }}
       >
-        Settlr
+        Offbank
       </span>
     </div>
   );
 }
 
-/* ─── SettlrLogoWithIcon — alias for SettlrLogo ─── */
-export function SettlrLogoWithIcon({
+/* ─── OffbankLogoWithIcon — alias for OffbankLogo ─── */
+export function OffbankLogoWithIcon({
   size = "lg",
   variant = "dark",
 }: {
   size?: "sm" | "md" | "lg" | "xl";
   variant?: "default" | "light" | "dark";
 }) {
-  return <SettlrLogo size={size} variant={variant} />;
+  return <OffbankLogo size={size} variant={variant} />;
 }
 
-/* ─── SettlrLogoMono — monochrome variant ─── */
-export function SettlrLogoMono({
+/* ─── OffbankLogoMono — monochrome variant ─── */
+export function OffbankLogoMono({
   size = "lg",
   variant = "dark",
 }: {
   size?: "sm" | "md" | "lg" | "xl";
   variant?: "light" | "dark";
 }) {
-  return <SettlrLogo size={size} variant={variant} />;
+  return <OffbankLogo size={size} variant={variant} />;
 }

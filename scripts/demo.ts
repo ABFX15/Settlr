@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node
 /**
- * Settlr — Demo Script (Frontier Hackathon)
+ * Offbank — Demo Script (Frontier Hackathon)
  *
  * Walks through the core payment lifecycle on devnet:
  *   1. Create an invoice via API
@@ -16,7 +16,7 @@
  * Requirements:
  *   - FEE_PAYER_SECRET_KEY in app/frontend/.env.local
  *   - NEXT_PUBLIC_APP_URL (defaults to http://localhost:3000)
- *   - App running locally (npm run dev) OR use settlr.dev
+ *   - App running locally (npm run dev) OR use offbankpay.com
  */
 
 import { Keypair, Connection, PublicKey } from "@solana/web3.js";
@@ -197,7 +197,7 @@ function printManualWalkthrough() {
     console.log("═══════════════════════════════════════════════");
     console.log(`
   1. LANDING PAGE
-     Open https://settlr.dev
+     Open https://offbankpay.com
      → See hero, pricing tiers, compliance badges, LeafLink integration callout
 
   2. CONNECT WALLET

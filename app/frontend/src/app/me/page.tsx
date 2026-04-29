@@ -81,7 +81,7 @@ export default function RecipientDashboard() {
       }
       // Store email for subsequent requests
       setEmail(data.email);
-      sessionStorage.setItem("settlr_recipient_email", data.email);
+      sessionStorage.setItem("offbank_recipient_email", data.email);
       // Clean URL
       window.history.replaceState({}, "", "/me");
       await loadDashboard(data.email);
@@ -132,7 +132,7 @@ export default function RecipientDashboard() {
 
   // Check for stored session on mount
   useEffect(() => {
-    const stored = sessionStorage.getItem("settlr_recipient_email");
+    const stored = sessionStorage.getItem("offbank_recipient_email");
     if (stored && step === "email") {
       setEmail(stored);
       loadDashboard(stored);
@@ -189,7 +189,7 @@ export default function RecipientDashboard() {
   }
 
   function signOut() {
-    sessionStorage.removeItem("settlr_recipient_email");
+    sessionStorage.removeItem("offbank_recipient_email");
     setStep("email");
     setProfile(null);
     setPayouts([]);
@@ -210,7 +210,7 @@ export default function RecipientDashboard() {
             <div className="w-8 h-8 rounded-lg bg-[#34c759]/15 flex items-center justify-center">
               <span className="text-[#34c759] font-bold text-sm">S</span>
             </div>
-            <h1 className="text-xl font-semibold">Settlr</h1>
+            <h1 className="text-xl font-semibold">Offbank</h1>
           </div>
           {step === "dashboard" && (
             <button
@@ -562,10 +562,10 @@ export default function RecipientDashboard() {
               <p className="text-center text-[#5c5c5c] text-xs">
                 Powered by{" "}
                 <a
-                  href="https://settlr.dev"
+                  href="https://offbankpay.com"
                   className="text-[#34c759] hover:text-[#7086f2] transition"
                 >
-                  Settlr
+                  Offbank
                 </a>{" "}
                 — non-custodial settlement infrastructure
               </p>

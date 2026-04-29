@@ -1,7 +1,7 @@
 /**
  * Data Pipeline — Type Definitions
  *
- * Central event bus for Settlr. Every meaningful state change produces a
+ * Central event bus for Offbank. Every meaningful state change produces a
  * PipelineEvent that feeds analytics aggregation, webhook fan-out, and
  * real-time streaming.
  */

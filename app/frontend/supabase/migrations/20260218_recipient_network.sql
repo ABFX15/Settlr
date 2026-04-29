@@ -1,4 +1,4 @@
--- Settlr recipient network: auto-delivery, balances, notifications
+-- Offbank recipient network: auto-delivery, balances, notifications
 -- Recipients who have claimed at least once get instant payouts
 
 -- ============================================================
@@ -34,7 +34,7 @@ CREATE INDEX idx_recipients_wallet ON recipients(wallet_address);
 CREATE INDEX idx_recipients_auth_token ON recipients(auth_token);
 
 -- ============================================================
--- 2. Recipient balances (Settlr Balance)
+-- 2. Recipient balances (Offbank Balance)
 -- ============================================================
 
 CREATE TABLE IF NOT EXISTS recipient_balances (

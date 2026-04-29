@@ -314,7 +314,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
     return NextResponse.json({
-        name: 'Settlr Private Payments API',
+        name: 'Offbank Private Payments API',
         description: 'Private payments powered by MagicBlock Private Ephemeral Rollups (TEE)',
         version: '2.0.0',
         hackathon: 'SolanaBlitz — MagicBlock Weekend Hackathon',

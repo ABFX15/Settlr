@@ -1,4 +1,4 @@
-# Settlr Architecture Documentation
+# Offbank Architecture Documentation
 
 > **Last Updated:** April 2026  
 > **Program ID:** `339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5` (Devnet)
@@ -7,7 +7,7 @@
 
 ## Overview
 
-Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2B USDC rails on Solana that replace cash drops and high-risk processors. The primary product is automated settlement for LeafLink purchase orders. Secondary paths include direct invoices and Solana Actions pay links (Blinks). An embeddable SDK is planned but not yet published.
+Offbank is stablecoin settlement infrastructure for cannabis — non-custodial B2B USDC rails on Solana that replace cash drops and high-risk processors. The primary product is automated settlement for LeafLink purchase orders. Secondary paths include direct invoices and Solana Actions pay links (Blinks). An embeddable SDK is planned but not yet published.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -60,7 +60,7 @@ Settlr is stablecoin settlement infrastructure for cannabis — non-custodial B2
 | One-Click   | Saved payment methods                | ✅ Implemented                |
 | Blinks      | Solana Actions (shareable pay links) | ✅ Implemented                |
 | Database    | Supabase (with in-memory fallback)   | ✅ Implemented                |
-| SDK         | @settlr/sdk (npm)                    | ⚠️ Planned, not yet published |
+| SDK         | @offbank/sdk (npm)                   | ⚠️ Planned, not yet published |
 | KYC         | Sumsub                               | ⚠️ Scaffolded, not enforced   |
 | Cross-chain | Mayan                                | ❌ Not implemented            |
 | On-chain    | Anchor (Solana)                      | ✅ Deployed to devnet         |
@@ -128,7 +128,7 @@ x402-hack-payment/
 │       └── migrations/        # Database migrations
 ├── packages/                  # SDK (planned, not yet published)
 │   └── src/
-│       ├── client.ts          # SettlrClient class
+│       ├── client.ts          # OffbankClient class
 │       ├── components.tsx     # React components
 │       ├── react.tsx          # React hooks
 │       └── webhooks.ts        # Webhook verification
@@ -346,7 +346,7 @@ pub struct Payment {
 | Column                | Type          | Description                                    |
 | --------------------- | ------------- | ---------------------------------------------- |
 | id                    | text          | Primary key (sync_xxx)                         |
-| merchant_id           | text          | Settlr merchant ID                             |
+| merchant_id           | text          | Offbank merchant ID                            |
 | leaflink_order_id     | integer       | LeafLink order ID                              |
 | leaflink_order_number | text          | Human-readable PO number                       |
 | seller_email          | text          | Seller contact                                 |
@@ -369,7 +369,7 @@ pub struct Payment {
 | merchant_id         | text        | Primary key (FK to merchants)               |
 | leaflink_api_key    | text        | LeafLink API key (App auth)                 |
 | leaflink_company_id | integer     | LeafLink company ID                         |
-| auto_create_invoice | boolean     | Auto-create Settlr invoice (default: true)  |
+| auto_create_invoice | boolean     | Auto-create Offbank invoice (default: true) |
 | auto_send_link      | boolean     | Auto-email payment link (default: true)     |
 | webhook_secret      | text        | HMAC secret for verifying LL webhooks       |
 | metrc_sync          | boolean     | Include METRC tags in memos (default: true) |
@@ -440,7 +440,7 @@ pub struct Payment {
 | Endpoint                              | Method   | Description                                              |
 | ------------------------------------- | -------- | -------------------------------------------------------- |
 | `/api/integrations/leaflink/webhook`  | POST     | Receives LeafLink order webhooks (HMAC-SHA256 verified)  |
-| `/api/integrations/leaflink/callback` | POST     | Internal callback when Settlr invoice is paid            |
+| `/api/integrations/leaflink/callback` | POST     | Internal callback when Offbank invoice is paid           |
 | `/api/integrations/leaflink/config`   | GET/POST | Merchant LeafLink integration config (validates API key) |
 | `/api/integrations/leaflink/syncs`    | GET      | List sync records (filterable by status)                 |
 | `/api/integrations/leaflink/retry`    | POST     | Retry failed sync-backs to LeafLink API                  |
@@ -693,7 +693,7 @@ GET / api / privacy / gaming; // API info and endpoint details
                                                                  │
                                                                  ▼
 ┌──────────┐   set external_id  ┌──────────────┐  mark paid  ┌──────────┐
-│ LeafLink │ ←─────────────── │ /ll/callback  │ ←────────── │  Settlr  │
+│ LeafLink │ ←─────────────── │ /ll/callback  │ ←────────── │  Offbank  │
 │ (order)  │    + add note      │              │   webhook    │ backend  │
 └──────────┘                    └──────────────┘              └──────────┘
 ```
@@ -753,7 +753,7 @@ GET  /.well-known/actions.json              // URL pattern → action mapping
 3. Payer opens the link → wallet renders an Action card showing amount, merchant name, and icon
 4. Payer clicks "Pay" → `POST` returns an unsigned USDC transfer transaction
 5. Payer signs once → settlement in <5 seconds
-6. Transaction memo encodes `settlr:<invoiceNumber>:<id>` for on-chain traceability
+6. Transaction memo encodes `offbank:<invoiceNumber>:<id>` for on-chain traceability
 
 **CORS Headers (required by spec):**
 
@@ -805,11 +805,11 @@ Access-Control-Expose-Headers: x-action-version, x-blockchain-ids
 
 ---
 
-## SDK (@settlr/sdk)
+## SDK (@offbank/sdk)
 
 An embeddable SDK for external developers is planned but **not yet published**. The `packages/` directory is currently empty.
 
-When available, the SDK will provide: `Settlr` client, checkout components, webhook handlers, and privacy utilities.
+When available, the SDK will provide: `Offbank` client, checkout components, webhook handlers, and privacy utilities.
 
 ---
 
@@ -851,7 +851,7 @@ RANGE_API_KEY=
 # LeafLink Integration (cannabis B2B wholesale)
 LEAFLINK_CALLBACK_SECRET=       # Secret for internal payment callback auth
 LEAFLINK_RETRY_SECRET=          # Secret for cron-triggered retry endpoint
-# RESEND_FROM_EMAIL=            # Sender address for payment emails (default: noreply@settlr.dev)
+# RESEND_FROM_EMAIL=            # Sender address for payment emails (default: noreply@offbankpay.com)
 ```
 
 ---
@@ -878,7 +878,7 @@ LEAFLINK_RETRY_SECRET=          # Secret for cron-triggered retry endpoint
 
 ## Squads Vault-First Settlement Architecture
 
-Every Settlr merchant settles into a **Squads v4 Smart Account** — not a raw wallet. This is not an optional add-on; vaults are the default settlement destination.
+Every Offbank merchant settles into a **Squads v4 Smart Account** — not a raw wallet. This is not an optional add-on; vaults are the default settlement destination.
 
 ### Why Vault-First
 
@@ -898,13 +898,13 @@ The vault complexity scales with the operator's volume. Onboarding feels like a 
 
 #### Phase 1 — Soft Start (1-of-1)
 
-- New merchant signs up → Settlr creates a Squads Smart Account with **1-of-1 signing** (the merchant's own key).
+- New merchant signs up → Offbank creates a Squads Smart Account with **1-of-1 signing** (the merchant's own key).
 - UX is identical to a standard wallet. Merchant doesn't need to know "multisig" exists.
 - All settlements flow into this vault by default.
 
 #### Phase 2 — Growth Threshold ($5K+)
 
-- When cumulative vault deposits exceed **$5,000**, Settlr prompts: _"Add a second signer to protect your funds."_
+- When cumulative vault deposits exceed **$5,000**, Offbank prompts: _"Add a second signer to protect your funds."_
 - Merchant adds a CFO, partner, or accountant as a second signer → vault upgrades to **2-of-2**.
 - Spending limits can be configured (e.g., auto-approve < $500, require 2 signatures above).
 
@@ -983,7 +983,7 @@ anchor deploy --provider.cluster devnet
 
 ### SDK Publishing
 
-SDK is planned but not yet implemented. The `packages/` directory is reserved for the future `@settlr/sdk` npm package.
+SDK is planned but not yet implemented. The `packages/` directory is reserved for the future `@offbank/sdk` npm package.
 
 ---
 

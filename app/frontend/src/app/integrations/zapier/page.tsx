@@ -53,14 +53,14 @@ export default function ZapierPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            name: "Settlr Zapier Connector",
+            name: "Offbank Zapier Connector",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
-            url: "https://settlr.dev/integrations/zapier",
+            url: "https://offbankpay.com/integrations/zapier",
             description:
               "Connect stablecoin payments to 8,000+ apps via Zapier. Trigger USDC settlements from any workflow — no code required.",
-            provider: { "@id": "https://settlr.dev/#organization" },
-            about: { "@id": "https://settlr.dev/#defined-term" },
+            provider: { "@id": "https://offbankpay.com/#organization" },
+            about: { "@id": "https://offbankpay.com/#defined-term" },
           }),
         }}
       />
@@ -158,7 +158,7 @@ export default function ZapierPage() {
               {
                 step: "02",
                 title: "Map the fields",
-                text: 'Connect the recipient email and amount to Settlr\'s "Send USDC" action. Set currency, memo, and metadata.',
+                text: 'Connect the recipient email and amount to Offbank\'s "Send USDC" action. Set currency, memo, and metadata.',
               },
               {
                 step: "03",
@@ -253,7 +253,7 @@ export default function ZapierPage() {
         <div className="mx-auto max-w-5xl px-6 py-28">
           <Reveal>
             <h2 className="text-center text-3xl font-semibold tracking-tight md:text-4xl">
-              Why Zapier + Settlr
+              Why Zapier + Offbank
             </h2>
           </Reveal>
 

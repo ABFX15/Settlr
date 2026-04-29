@@ -47,7 +47,7 @@ const integrations = [
     name: "Zapier Connector",
     tagline: "Connect stablecoin payments to 8,000+ apps",
     description:
-      "Trigger USDC settlements from any Zapier workflow. Connect Settlr to your CRM, project management, invoicing, or any of 8,000+ apps — no code required. No settlement connectors like this exist yet.",
+      "Trigger USDC settlements from any Zapier workflow. Connect Offbank to your CRM, project management, invoicing, or any of 8,000+ apps — no code required. No settlement connectors like this exist yet.",
     color: "#FF4A00",
     highlights: [
       "Trigger settlements from any Zapier event",
@@ -136,7 +136,7 @@ const cannabisPOS = [
     name: "Dutchie",
     role: "E-commerce & Ordering",
     description:
-      "Connect Dutchie wholesale orders to Settlr. When a retailer places an order, the USDC invoice and payment link are created automatically.",
+      "Connect Dutchie wholesale orders to Offbank. When a retailer places an order, the USDC invoice and payment link are created automatically.",
     url: "https://dutchie.com",
     highlights: [
       "Wholesale order → invoice automation",
@@ -172,29 +172,29 @@ export default function IntegrationsPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            name: "Settlr Integrations",
+            name: "Offbank Integrations",
             description:
               "Connect stablecoin payments to your existing tools. Zapier, WooCommerce, Shopify, Bubble.io, and Slack integrations.",
-            url: "https://settlr.dev/integrations",
-            isPartOf: { "@id": "https://settlr.dev/#organization" },
+            url: "https://offbankpay.com/integrations",
+            isPartOf: { "@id": "https://offbankpay.com/#organization" },
             mainEntity: {
               "@type": "ItemList",
-              name: "Settlr Integration Directory",
+              name: "Offbank Integration Directory",
               numberOfItems: 5,
               itemListElement: [
                 {
                   "@type": "ListItem",
                   position: 1,
                   name: "Zapier Integration",
-                  url: "https://settlr.dev/integrations/zapier",
+                  url: "https://offbankpay.com/integrations/zapier",
                   description:
-                    "Connect Settlr to 6,000+ apps. Trigger USDC settlements from CRM events, form submissions, and more.",
+                    "Connect Offbank to 6,000+ apps. Trigger USDC settlements from CRM events, form submissions, and more.",
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
                   name: "WooCommerce Plugin",
-                  url: "https://settlr.dev/integrations/woocommerce",
+                  url: "https://offbankpay.com/integrations/woocommerce",
                   description:
                     "Accept USDC at WooCommerce checkout. Instant settlement, automatic refunds, zero FX fees.",
                 },
@@ -202,7 +202,7 @@ export default function IntegrationsPage() {
                   "@type": "ListItem",
                   position: 3,
                   name: "Shopify Payments App",
-                  url: "https://settlr.dev/integrations/shopify",
+                  url: "https://offbankpay.com/integrations/shopify",
                   description:
                     "Add USDC payments to Shopify stores via a Payments App Extension. Sub-second settlement.",
                 },
@@ -210,7 +210,7 @@ export default function IntegrationsPage() {
                   "@type": "ListItem",
                   position: 4,
                   name: "Slack Bot",
-                  url: "https://settlr.dev/integrations/slack",
+                  url: "https://offbankpay.com/integrations/slack",
                   description:
                     "Send USDC payments from Slack with slash commands. Approval workflows and threaded receipts.",
                 },
@@ -218,7 +218,7 @@ export default function IntegrationsPage() {
                   "@type": "ListItem",
                   position: 5,
                   name: "Bubble.io Plugin",
-                  url: "https://settlr.dev/integrations/bubble",
+                  url: "https://offbankpay.com/integrations/bubble",
                   description:
                     "No-code stablecoin payments for Bubble apps. Visual payment elements and workflow actions.",
                 },
@@ -251,7 +251,7 @@ export default function IntegrationsPage() {
 
           <Reveal delay={0.1}>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#5c5c5c]">
-              Connect Settlr to your existing stack. Send and receive USDC from
+              Connect Offbank to your existing stack. Send and receive USDC from
               the tools you already use — no custom code required for most
               integrations.
             </p>
@@ -346,7 +346,7 @@ export default function IntegrationsPage() {
               className="mt-3 max-w-2xl text-base leading-relaxed"
               style={{ color: "#5c5c5c" }}
             >
-              Settlr connects to the cannabis-specific platforms your team
+              Offbank connects to the cannabis-specific platforms your team
               already uses — so B2B settlement flows directly from your POS or
               procurement system.
             </p>
@@ -432,7 +432,7 @@ export default function IntegrationsPage() {
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-5 max-w-md text-base text-[#8a8a8a]">
-              Settlr&apos;s REST API works with any stack. Build a custom
+              Offbank&apos;s REST API works with any stack. Build a custom
               integration in under 30 minutes.
             </p>
           </Reveal>

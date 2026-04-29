@@ -174,7 +174,7 @@ export async function GET(request: NextRequest) {
             return new NextResponse(csv, {
                 headers: {
                     "Content-Type": "text/csv",
-                    "Content-Disposition": `attachment; filename="settlr-buyer-history-${dateStr}.csv"`,
+                    "Content-Disposition": `attachment; filename="offbank-buyer-history-${dateStr}.csv"`,
                 },
             });
         }

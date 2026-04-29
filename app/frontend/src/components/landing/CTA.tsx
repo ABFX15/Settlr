@@ -72,7 +72,7 @@ export function CTA() {
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* left — copy */}
+          {/* left, copy */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -95,8 +95,9 @@ export function CTA() {
               className="mt-6 max-w-md text-[15px] leading-relaxed"
               style={{ color: "#8a8a8a" }}
             >
-              A settlement platform designed to simplify how you move money in
-              cannabis. Low fees. Instant finality. No bank required.
+              Invoicing and B2B settlement built for businesses banks won&apos;t
+              reliably serve. One rail. Low fees. Instant finality. Cash out to
+              USD whenever.
             </p>
             <motion.div
               className="mt-10"
@@ -106,17 +107,17 @@ export function CTA() {
               transition={{ ...spring, delay: 0.15 }}
             >
               <Link
-                href="/waitlist"
+                href="/onboarding"
                 className="group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:brightness-110"
                 style={{ background: t.green }}
               >
-                Start Getting Paid Instantly
+                Get Started
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </motion.div>
           </motion.div>
 
-          {/* right — dashboard screenshot */}
+          {/* right, dashboard screenshot */}
           <motion.div
             className="relative"
             initial={{ opacity: 0, x: 40, scale: 0.96 }}
@@ -139,7 +140,7 @@ export function CTA() {
             <div className="relative z-10 overflow-hidden rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
               <Image
                 src="/dashboard-mock.png"
-                alt="Settlr dashboard"
+                alt="Offbank dashboard"
                 width={720}
                 height={480}
                 loading="lazy"

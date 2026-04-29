@@ -1,5 +1,5 @@
 /**
- * Solana Actions endpoint – Settlr Pay Links as Blinks
+ * Solana Actions endpoint – Offbank Pay Links as Blinks
  *
  * GET  /api/actions/pay?invoice=<viewToken>  → Action metadata (title, icon, label)
  * POST /api/actions/pay?invoice=<viewToken>  → Unsigned USDC transfer transaction
@@ -40,7 +40,7 @@ const USDC_MINT = new PublicKey(
 );
 const USDC_DECIMALS = 6;
 const APP_URL =
-    process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+    process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
 
 /* ─── Memo program (for on-chain invoice reference) ─── */
 const MEMO_PROGRAM_ID = new PublicKey(
@@ -76,8 +76,8 @@ export async function GET(request: NextRequest) {
         return actionsResponse(
             {
                 type: "action",
-                icon: `${APP_URL}/settlr-logo.png`,
-                title: "Settlr — Instant Business Payments",
+                icon: `${APP_URL}/offbank-logo.png`,
+                title: "Offbank — Instant Business Payments",
                 description:
                     "This payment link is missing an invoice reference. Ask the sender for a valid link.",
                 label: "Invalid Link",
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
         return actionsResponse(
             {
                 type: "action",
-                icon: `${APP_URL}/settlr-logo.png`,
+                icon: `${APP_URL}/offbank-logo.png`,
                 title: "Invoice Not Found",
                 description: "This invoice does not exist or has expired.",
                 label: "Not Found",
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
     if (invoice.status === "paid") {
         return actionsResponse({
             type: "action",
-            icon: `${APP_URL}/settlr-logo.png`,
+            icon: `${APP_URL}/offbank-logo.png`,
             title: `Invoice ${invoice.invoiceNumber} — Already Paid`,
             description: `This invoice from ${invoice.merchantName} has already been paid.`,
             label: "Already Paid",
@@ -118,7 +118,7 @@ export async function GET(request: NextRequest) {
     if (invoice.status === "cancelled") {
         return actionsResponse({
             type: "action",
-            icon: `${APP_URL}/settlr-logo.png`,
+            icon: `${APP_URL}/offbank-logo.png`,
             title: `Invoice ${invoice.invoiceNumber} — Cancelled`,
             description: `This invoice from ${invoice.merchantName} has been cancelled.`,
             label: "Cancelled",
@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
     const amount = formatUSD(invoice.total);
     return actionsResponse({
         type: "action",
-        icon: `${APP_URL}/settlr-logo.png`,
+        icon: `${APP_URL}/offbank-logo.png`,
         title: `Pay ${amount} to ${invoice.merchantName}`,
         description: [
             `Invoice ${invoice.invoiceNumber}`,
@@ -251,7 +251,7 @@ export async function POST(request: NextRequest) {
                 programId: MEMO_PROGRAM_ID,
                 keys: [{ pubkey: buyerPubkey, isSigner: true, isWritable: false }],
                 data: Buffer.from(
-                    `settlr:${invoice.invoiceNumber}:${invoice.id}`,
+                    `offbank:${invoice.invoiceNumber}:${invoice.id}`,
                     "utf-8"
                 ),
             })
@@ -275,7 +275,7 @@ export async function POST(request: NextRequest) {
         return actionsResponse({
             type: "transaction",
             transaction: Buffer.from(serialized).toString("base64"),
-            message: `Payment of ${amount} USDC to ${invoice.merchantName} via Settlr`,
+            message: `Payment of ${amount} USDC to ${invoice.merchantName} via Offbank`,
         });
     } catch (err) {
         console.error("[actions/pay] Error building transaction:", err);

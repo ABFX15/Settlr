@@ -44,7 +44,7 @@ function Reveal({
 
 /* --- Comparison data --- */
 const providers = [
-  { name: "Settlr", highlight: true },
+  { name: "Offbank", highlight: true },
   { name: "LeafLink + ACH" },
   { name: "High-risk processor" },
   { name: "Generic crypto gateway" },
@@ -64,12 +64,12 @@ const features: {
       {
         label: "Built for cannabis wholesale",
         values: [true, "Partially", false, false],
-        note: "Settlr is purpose-built for cannabis B2B. LeafLink is a marketplace with payment add-ons. High-risk processors and crypto gateways are industry-agnostic.",
+        note: "Offbank is purpose-built for cannabis B2B. LeafLink is a marketplace with payment add-ons. High-risk processors and crypto gateways are industry-agnostic.",
       },
       {
         label: "Order-to-cash workflow",
         values: ["Full", "Partial", false, false],
-        note: "Settlr covers PO creation, invoice generation, payment collection, reminders, reconciliation, and settlement in one workflow.",
+        note: "Offbank covers PO creation, invoice generation, payment collection, reminders, reconciliation, and settlement in one workflow.",
       },
       {
         label: "Invoice creation",
@@ -82,7 +82,7 @@ const features: {
       {
         label: "Receivables visibility",
         values: [true, "Limited", false, false],
-        note: "AR aging, outstanding balances, and payment status across all buyers — in one dashboard.",
+        note: "AR aging, outstanding balances, and payment status across all buyers, in one dashboard.",
       },
       {
         label: "Reconciliation",
@@ -96,7 +96,7 @@ const features: {
       {
         label: "Time to cash",
         values: ["Seconds", "Days to weeks", "3–7 business days", "Seconds"],
-        note: "Settlr settles on Solana in under 2 seconds. ACH takes 2–5 business days. High-risk processors hold funds 3–7 days plus rolling reserves.",
+        note: "Offbank settles on Solana in under 2 seconds. ACH takes 2–5 business days. High-risk processors hold funds 3–7 days plus rolling reserves.",
       },
       {
         label: "Processing fees",
@@ -118,7 +118,7 @@ const features: {
       {
         label: "Cost on $500K/month",
         values: ["$5,000", "Varies", "$25K–$45K", "$2.5K–$10K"],
-        note: "A cannabis distributor processing $500K/month pays $5,000 on Settlr vs. $25,000–$45,000 on a typical high-risk processor.",
+        note: "A cannabis distributor processing $500K/month pays $5,000 on Offbank vs. $25,000–$45,000 on a typical high-risk processor.",
       },
     ],
   },
@@ -128,7 +128,7 @@ const features: {
       {
         label: "Bank dependency",
         values: ["Lower", "High", "High", "Lower"],
-        note: "Settlr uses non-custodial stablecoin settlement. Funds move wallet-to-wallet without requiring bank intermediaries for the transaction itself.",
+        note: "Offbank uses non-custodial stablecoin settlement. Funds move wallet-to-wallet without requiring bank intermediaries for the transaction itself.",
       },
       {
         label: "Account freeze risk",
@@ -142,7 +142,7 @@ const features: {
       {
         label: "Early-pay incentives",
         values: [true, false, false, false],
-        note: "Offer buyers discount terms for faster payment — reduces time-to-cash and improves working capital.",
+        note: "Offer buyers discount terms for faster payment, reduces time-to-cash and improves working capital.",
       },
     ],
   },
@@ -180,14 +180,14 @@ export default function ComparePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "How Settlr Compares — Cannabis Wholesale Payment Workflows",
+            name: "How Offbank Compares, Cannabis Wholesale Payment Workflows",
             description:
-              "Compare Settlr to LeafLink + ACH, high-risk processors, and generic crypto gateways for cannabis wholesale order-to-cash workflows.",
-            url: "https://settlr.dev/compare",
+              "Compare Offbank to LeafLink + ACH, high-risk processors, and generic crypto gateways for cannabis wholesale order-to-cash workflows.",
+            url: "https://offbankpay.com/compare",
             mainEntity: {
               "@type": "Table",
               about:
-                "Comparison of cannabis wholesale payment workflows: Settlr, LeafLink + ACH, high-risk processors, and generic crypto gateways",
+                "Comparison of cannabis wholesale payment workflows: Offbank, LeafLink + ACH, high-risk processors, and generic crypto gateways",
             },
           }),
         }}
@@ -206,7 +206,7 @@ export default function ComparePage() {
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="text-4xl font-semibold tracking-tight text-[#212121] md:text-5xl lg:text-6xl">
-              How Settlr compares to{" "}
+              How Offbank compares to{" "}
               <span className="text-[#34c759]">legacy payment workflows</span>
             </h1>
           </Reveal>
@@ -274,7 +274,7 @@ export default function ComparePage() {
           <p className="text-center text-[15px] leading-relaxed text-[#8a8a8a]">
             Most cannabis wholesalers are stitching together marketplaces, ACH,
             processors, spreadsheets, and manual follow-up just to get paid.
-            Settlr brings invoicing, collections, reconciliation, and instant
+            Offbank brings invoicing, collections, reconciliation, and instant
             settlement into one workflow.
           </p>
         </Reveal>
@@ -350,10 +350,10 @@ export default function ComparePage() {
         <Reveal>
           <div className="rounded-2xl border border-[#d3d3d3] bg-[#f2f2f2] p-8 sm:p-10">
             <p className="text-[15px] leading-relaxed text-[#5c5c5c]">
-              Settlr is not just another way to move money. It is built to help
+              Offbank is not just another way to move money. It is built to help
               cannabis wholesalers get paid faster. Instead of relying on a
               patchwork of ACH, processors, manual invoice chasing, and
-              disconnected reconciliation, Settlr gives operators one
+              disconnected reconciliation, Offbank gives operators one
               order-to-cash workflow: create the invoice, collect the payment,
               track receivables, automate follow-up, reconcile transactions, and
               settle instantly when speed matters.
@@ -429,7 +429,7 @@ export default function ComparePage() {
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-4 max-w-lg text-[#8a8a8a]">
-              See how Settlr shortens time-to-cash for cannabis wholesalers. One
+              See how Offbank shortens time-to-cash for cannabis wholesalers. One
               workflow for invoicing, collections, reconciliation, and instant
               settlement.
             </p>
@@ -444,11 +444,11 @@ export default function ComparePage() {
                     "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                 }}
               >
-                See Settlr in action
+                See Offbank in action
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/waitlist"
+                href="/onboarding"
                 className="inline-flex items-center gap-2 rounded-xl border border-[#d3d3d3] px-7 py-3.5 text-[15px] font-medium text-[#5c5c5c] transition-colors hover:bg-[#f2f2f2] hover:text-[#212121]"
               >
                 Book a demo

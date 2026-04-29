@@ -158,14 +158,14 @@ async function triggerWebhook(session: CheckoutSession, paymentId: string): Prom
             description: session.description,
             metadata: session.metadata,
             completedAt: session.completedAt,
-            receiptUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://settlr.io'}/receipts/${paymentId}`,
+            receiptUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://offbankpay.com'}/receipts/${paymentId}`,
         },
         timestamp,
     };
 
     // Use merchant's webhook secret or fall back to a default
     // In production, each merchant would have their own secret
-    const webhookSecret = process.env.SETTLR_WEBHOOK_SECRET || session.merchantId;
+    const webhookSecret = process.env.OFFBANK_WEBHOOK_SECRET || session.merchantId;
     const payloadString = JSON.stringify(webhookPayload);
     const webhookSignature = generateWebhookSignature(`${timestamp}.${payloadString}`, webhookSecret);
 
@@ -179,9 +179,9 @@ async function triggerWebhook(session: CheckoutSession, paymentId: string): Prom
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-Settlr-Signature": `t=${timestamp},v1=${webhookSignature}`,
-                    "X-Settlr-Timestamp": Date.now().toString(),
-                    "X-Settlr-Event": "checkout.completed",
+                    "X-Offbank-Signature": `t=${timestamp},v1=${webhookSignature}`,
+                    "X-Offbank-Timestamp": Date.now().toString(),
+                    "X-Offbank-Event": "checkout.completed",
                 },
                 body: JSON.stringify(webhookPayload),
             });

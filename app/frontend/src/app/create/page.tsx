@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
-import { SettlrLogoWithIcon } from "@/components/settlr-logo";
+import { OffbankLogoWithIcon } from "@/components/offbank-logo";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
@@ -94,7 +94,7 @@ export default function CreatePaymentPage() {
       const solanaParams = new URLSearchParams({
         amount: amount,
         "spl-token": USDC_MINT,
-        label: merchantName || "Settlr",
+        label: merchantName || "Offbank",
         message: memo || `Payment of $${amount} USDC`,
       });
       setSolanaPayUrl(`solana:${payTo}?${solanaParams.toString()}`);
@@ -186,7 +186,7 @@ export default function CreatePaymentPage() {
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#d3d3d3] bg-[#FFFFFF]/80 px-4 py-4 backdrop-blur-xl md:px-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <SettlrLogoWithIcon size="sm" variant="dark" />
+            <OffbankLogoWithIcon size="sm" variant="dark" />
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
             <Link

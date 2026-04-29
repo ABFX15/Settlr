@@ -372,7 +372,7 @@ export default function InvoicePayClient({
               href="/"
               className="text-lg font-bold text-[#34c759] tracking-tight"
             >
-              Settlr
+              Offbank
             </Link>
             <span className="text-sm font-medium text-[#212121] underline underline-offset-4">
               Payment
@@ -589,7 +589,7 @@ export default function InvoicePayClient({
                     {/* Trust footer */}
                     <div className="flex items-center gap-2 text-xs text-[#8a8a8a]">
                       <Shield className="h-3.5 w-3.5 text-[#34c759]" />
-                      Secured by Settlr · Payments settle instantly
+                      Secured by Offbank · Payments settle instantly
                     </div>
 
                     {/* Success / Already paid TX info */}
@@ -787,7 +787,7 @@ export default function InvoicePayClient({
                                       onClick={() => {
                                         // For invoices, direct to contact for OTC
                                         window.open(
-                                          `mailto:otc@settlr.app?subject=OTC Quote Request — Invoice ${
+                                          `mailto:otc@offbankpay.com?subject=OTC Quote Request — Invoice ${
                                             invoice?.invoiceNumber || ""
                                           }&body=Amount: $${(
                                             invoice?.total || 0
@@ -882,7 +882,7 @@ export default function InvoicePayClient({
                       href="/"
                       className="text-[#8a8a8a] hover:text-[#212121] transition-colors"
                     >
-                      Settlr
+                      Offbank
                     </Link>{" "}
                     · Instant business payments
                   </span>

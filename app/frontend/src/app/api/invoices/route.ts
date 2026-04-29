@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
         });
 
         // Optionally send email immediately
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
         const invoiceUrl = `${appUrl}/invoice/${invoice.viewToken}`;
         const blinkUrl = `${appUrl}/api/actions/pay?invoice=${invoice.viewToken}`;
 

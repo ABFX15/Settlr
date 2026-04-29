@@ -160,13 +160,13 @@ describe("Webhooks — Dispatch (with endpoint)", () => {
         const last = testServer.received[testServer.received.length - 1];
 
         // Check headers
-        expect(last.headers["x-settlr-event"]).to.equal("payout.created");
-        expect(last.headers["x-settlr-signature"]).to.be.a("string");
-        expect(last.headers["x-settlr-delivery"]).to.match(/^del_/);
+        expect(last.headers["x-offbank-event"]).to.equal("payout.created");
+        expect(last.headers["x-offbank-signature"]).to.be.a("string");
+        expect(last.headers["x-offbank-delivery"]).to.match(/^del_/);
         expect(last.headers["content-type"]).to.equal("application/json");
 
         // Verify signature
-        const sig = last.headers["x-settlr-signature"] as string;
+        const sig = last.headers["x-offbank-signature"] as string;
         expect(verifyPayloadSignature(last.body, sig, SECRET)).to.be.true;
 
         // Verify payload

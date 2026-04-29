@@ -128,7 +128,7 @@ export default function PaymentLinksPage() {
               className="mt-14 flex flex-wrap items-center justify-center gap-4"
             >
               <Link
-                href="/waitlist"
+                href="/onboarding"
                 className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                 style={{
                   background:
@@ -136,7 +136,7 @@ export default function PaymentLinksPage() {
                   boxShadow: "0 4px 24px rgba(27,107,74,0.25)",
                 }}
               >
-                Request Access
+                Get Started
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               <Link
@@ -149,7 +149,7 @@ export default function PaymentLinksPage() {
             </R>
           </div>
 
-          {/* Product mockup — payment link creation */}
+          {/* Product mockup, payment link creation */}
           <R delay={0.24}>
             <div
               className="mx-auto mt-24 max-w-3xl overflow-hidden rounded-3xl"
@@ -175,7 +175,7 @@ export default function PaymentLinksPage() {
                   className="flex-1 text-center text-xs font-medium"
                   style={{ color: p.muted }}
                 >
-                  settlr.dev/pay/greenleaf-farms
+                  offbankpay.com/pay/greenleaf-farms
                 </div>
               </div>
               {/* Link preview content */}
@@ -224,7 +224,7 @@ export default function PaymentLinksPage() {
                     className="flex-1 truncate text-sm font-medium"
                     style={{ color: p.slate }}
                   >
-                    https://settlr.dev/pay/gl-farms-inv-1082
+                    https://offbankpay.com/pay/gl-farms-inv-1082
                   </span>
                   <Share2
                     className="h-4 w-4 shrink-0"
@@ -274,7 +274,7 @@ export default function PaymentLinksPage() {
         </div>
       </section>
 
-      {/* ═══════ HOW IT WORKS — mockups ═══════ */}
+      {/* ═══════ HOW IT WORKS, mockups ═══════ */}
       <section className="py-32 sm:py-48" style={{ background: p.bgSubtle }}>
         <div className="mx-auto max-w-6xl px-6">
           <R className="mx-auto max-w-2xl text-center">
@@ -369,7 +369,7 @@ export default function PaymentLinksPage() {
                         className="flex-1 truncate text-xs"
                         style={{ color: p.slate }}
                       >
-                        settlr.dev/pay/gl-1082
+                        offbankpay.com/pay/gl-1082
                       </span>
                       <Copy
                         className="h-3.5 w-3.5"
@@ -474,7 +474,7 @@ export default function PaymentLinksPage() {
         </div>
       </section>
 
-      {/* ═══════ FEATURES — bento grid ═══════ */}
+      {/* ═══════ FEATURES, bento grid ═══════ */}
       <section className="py-32 sm:py-48">
         <div className="mx-auto max-w-6xl px-6">
           <R className="mx-auto max-w-2xl text-center">
@@ -493,7 +493,7 @@ export default function PaymentLinksPage() {
           </R>
 
           <div className="mt-20 grid gap-5 md:grid-cols-3 md:grid-rows-2">
-            {/* Large — 2 cols */}
+            {/* Large, 2 cols */}
             <R className="md:col-span-2">
               <div
                 className={`${cardStatic} h-full`}
@@ -519,7 +519,7 @@ export default function PaymentLinksPage() {
                       style={{ color: p.slate }}
                     >
                       When your buyer clicks &ldquo;Pay&rdquo;, USDC moves
-                      directly from their wallet to your vault. Settlr never
+                      directly from their wallet to your vault. Offbank never
                       touches the funds. Nothing to freeze, nothing to seize.
                     </p>
                   </div>
@@ -628,7 +628,7 @@ export default function PaymentLinksPage() {
               </div>
             </R>
 
-            {/* Wide — 2 cols */}
+            {/* Wide, 2 cols */}
             <R delay={0.14} className="md:col-span-2">
               <div
                 className={`${cardStatic} h-full`}
@@ -722,7 +722,7 @@ export default function PaymentLinksPage() {
                 </p>
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
                   <Link
-                    href="/waitlist"
+                    href="/onboarding"
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:
@@ -730,7 +730,7 @@ export default function PaymentLinksPage() {
                       boxShadow: "0 4px 24px rgba(27,107,74,0.3)",
                     }}
                   >
-                    Request Access
+                    Get Started
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                   </Link>
                   <Link

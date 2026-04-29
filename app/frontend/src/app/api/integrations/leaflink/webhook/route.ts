@@ -5,7 +5,7 @@
  * accepted, shipped, delivered, or cancelled.
  *
  * On `order.created` or `order.accepted`:
- *   1. Creates a Settlr invoice for the order total
+ *   1. Creates a Offbank invoice for the order total
  *   2. Generates a USDC payment link
  *   3. Emails the payment link to the buyer
  *   4. Stores a sync record to track the lifecycle
@@ -80,10 +80,10 @@ function extractMetrcTags(
 }
 
 /**
- * Create a Settlr invoice for the LeafLink order.
+ * Create a Offbank invoice for the LeafLink order.
  * Uses the internal /api/invoices endpoint.
  */
-async function createSettlrInvoice(
+async function createOffbankInvoice(
     order: LeafLinkWebhookPayload["data"]["order"],
     config: LeafLinkIntegrationConfig,
     merchantWallet: string,
@@ -156,7 +156,7 @@ async function createSettlrInvoice(
             throw new Error(`Failed to create invoice: ${error.message}`);
         }
 
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
         const paymentLink = `${baseUrl}/invoice/${viewToken}`;
 
         return { invoiceId, paymentLink };
@@ -165,7 +165,7 @@ async function createSettlrInvoice(
     // In-memory fallback
     const invoiceId = `inv_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
     const viewToken = `ll_${crypto.randomBytes(16).toString("hex")}`;
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
 
     return {
         invoiceId,
@@ -202,7 +202,7 @@ async function sendPaymentLinkEmail(
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                from: process.env.RESEND_FROM_EMAIL || "payments@settlr.dev",
+                from: process.env.RESEND_FROM_EMAIL || "payments@offbankpay.com",
                 to: buyerEmail,
                 subject: `Payment Request: ${orderNumber} — $${amount.toFixed(2)} USDC`,
                 html: `
@@ -224,7 +224,7 @@ async function sendPaymentLinkEmail(
                 Pay Now with USDC
               </a>
               <p style="color: #94A3B8; font-size: 12px; text-align: center; margin-top: 16px;">
-                Powered by <a href="https://settlr.dev" style="color: #10B981; text-decoration: none;">Settlr</a> · Non-custodial settlement on Solana
+                Powered by <a href="https://offbankpay.com" style="color: #10B981; text-decoration: none;">Offbank</a> · Non-custodial settlement on Solana
               </p>
             </div>
           </div>
@@ -330,8 +330,8 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json({ received: true, duplicate: true });
             }
 
-            // 1. Create Settlr invoice
-            const { invoiceId, paymentLink } = await createSettlrInvoice(
+            // 1. Create Offbank invoice
+            const { invoiceId, paymentLink } = await createOffbankInvoice(
                 order,
                 config,
                 merchantWallet,

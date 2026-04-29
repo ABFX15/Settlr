@@ -14,7 +14,7 @@ import {
 import { sendAuthLinkEmail } from "@/lib/email";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
-const CLAIM_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+const CLAIM_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
 
 /**
  * POST /api/recipients/auth

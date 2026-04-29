@@ -52,14 +52,14 @@ export default function BubblePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            name: "Settlr Bubble.io Plugin",
+            name: "Offbank Bubble.io Plugin",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
-            url: "https://settlr.dev/integrations/bubble",
+            url: "https://offbankpay.com/integrations/bubble",
             description:
               "Add USDC settlement to any Bubble.io app. Drag-and-drop stablecoin checkout and settlement for no-code builders.",
-            provider: { "@id": "https://settlr.dev/#organization" },
-            about: { "@id": "https://settlr.dev/#defined-term" },
+            provider: { "@id": "https://offbankpay.com/#organization" },
+            about: { "@id": "https://offbankpay.com/#defined-term" },
           }),
         }}
       />
@@ -98,7 +98,7 @@ export default function BubblePage() {
           <Reveal delay={0.1}>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#5c5c5c]">
               3M+ apps run on Bubble.io. Zero of them have native stablecoin
-              payment infrastructure. The Settlr plugin gives every no-code
+              payment infrastructure. The Offbank plugin gives every no-code
               builder drag-and-drop USDC checkout and settlement — no blockchain
               knowledge required.
             </p>
@@ -147,7 +147,7 @@ export default function BubblePage() {
             </h2>
             <p className="mt-4 max-w-xl text-[#8a8a8a] leading-relaxed">
               Bubble builders accept Stripe. That&apos;s it. No stablecoin
-              checkout, no USDC settlement, no stablecoin rails. Settlr is the
+              checkout, no USDC settlement, no stablecoin rails. Offbank is the
               first plugin to bring programmable stablecoin infrastructure to
               the no-code ecosystem.
             </p>
@@ -158,7 +158,7 @@ export default function BubblePage() {
               {
                 icon: MousePointerClick,
                 title: "Drag-and-drop setup",
-                text: "Drop the Settlr checkout element onto any page. Configure amount, recipient, and style — all visually.",
+                text: "Drop the Offbank checkout element onto any page. Configure amount, recipient, and style — all visually.",
               },
               {
                 icon: Zap,
@@ -268,12 +268,12 @@ export default function BubblePage() {
               {
                 step: "01",
                 title: "Install from Bubble plugins",
-                text: "Search 'Settlr' in the Bubble plugin marketplace. One click to add it to your app.",
+                text: "Search 'Offbank' in the Bubble plugin marketplace. One click to add it to your app.",
               },
               {
                 step: "02",
                 title: "Drop the checkout element",
-                text: "Drag the Settlr Checkout element onto your page. Configure amount, wallet, and styling in the visual editor.",
+                text: "Drag the Offbank Checkout element onto your page. Configure amount, wallet, and styling in the visual editor.",
               },
               {
                 step: "03",

@@ -67,7 +67,7 @@ export function Testimonials() {
                 className="mt-4 max-w-xl text-[15px] leading-relaxed"
                 style={{ color: "#5c5c5c" }}
               >
-                Settlr moves USDC from buyer to supplier in under 5 seconds with
+                Offbank moves USDC from buyer to supplier in under 5 seconds with
                 zero chargebacks, zero holds, and an immutable audit trail on
                 Solana. Currently live on devnet.
               </p>
@@ -119,7 +119,7 @@ export function Testimonials() {
               {/* CTA */}
               <div className="mt-8">
                 <Link
-                  href="/waitlist"
+                  href="/onboarding"
                   className="group inline-flex items-center gap-2 text-sm font-semibold transition-colors duration-200 hover:brightness-125"
                   style={{ color: t.green }}
                 >

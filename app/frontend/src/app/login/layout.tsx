@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import AuthLayout from "@/components/AuthLayout";
 
 export const metadata: Metadata = {
-  title: "Sign In — Settlr",
-  description: "Connect your wallet to access your Settlr merchant dashboard.",
+  title: "Sign In — Offbank",
+  description: "Connect your wallet to access your Offbank merchant dashboard.",
   alternates: { canonical: "/login" },
 };
 

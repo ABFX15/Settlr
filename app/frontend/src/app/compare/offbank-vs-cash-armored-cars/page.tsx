@@ -67,44 +67,44 @@ const comparisonRows = [
       {
         label: "Payment processing fees",
         cash: "$0 (but see below)",
-        settlr: "$20,000 (1% flat)",
+        offbank: "$20,000 (1% flat)",
         winner: "cash",
       },
       {
         label: "Armored car pickups (3x/week)",
         cash: "$36,000–$72,000",
-        settlr: "$0",
-        winner: "settlr",
+        offbank: "$0",
+        winner: "offbank",
       },
       {
         label: "Cash counting labor (2hr/day)",
         cash: "$18,000–$28,000",
-        settlr: "$0",
-        winner: "settlr",
+        offbank: "$0",
+        winner: "offbank",
       },
       {
         label: "Safe & vault equipment",
         cash: "$5,000–$15,000",
-        settlr: "$0",
-        winner: "settlr",
+        offbank: "$0",
+        winner: "offbank",
       },
       {
         label: "Cash handling insurance",
         cash: "$6,000–$12,000",
-        settlr: "$0",
-        winner: "settlr",
+        offbank: "$0",
+        winner: "offbank",
       },
       {
         label: "Shrinkage & employee theft",
         cash: "$10,000–$60,000 (0.5–3%)",
-        settlr: "$0",
-        winner: "settlr",
+        offbank: "$0",
+        winner: "offbank",
       },
       {
         label: "CIT (cash-in-transit) insurance",
         cash: "$3,000–$8,000",
-        settlr: "$0",
-        winner: "settlr",
+        offbank: "$0",
+        winner: "offbank",
       },
     ],
   },
@@ -114,32 +114,32 @@ const comparisonRows = [
       {
         label: "Settlement speed",
         cash: "1–3 business days (after deposit)",
-        settlr: "< 2 seconds",
-        winner: "settlr",
+        offbank: "< 2 seconds",
+        winner: "offbank",
       },
       {
         label: "24/7 availability",
-        cash: "No — bank hours only",
-        settlr: "Yes — 24/7/365",
-        winner: "settlr",
+        cash: "No, bank hours only",
+        offbank: "Yes, 24/7/365",
+        winner: "offbank",
       },
       {
         label: "B2B supplier payments",
         cash: "Physical cash handoff",
-        settlr: "Instant digital transfer",
-        winner: "settlr",
+        offbank: "Instant digital transfer",
+        winner: "offbank",
       },
       {
         label: "Audit trail",
         cash: "Manual logs, camera footage",
-        settlr: "Cryptographic on-chain receipts",
-        winner: "settlr",
+        offbank: "Cryptographic on-chain receipts",
+        winner: "offbank",
       },
       {
         label: "Employee safety risk",
-        cash: "High — armed robberies",
-        settlr: "None — no physical cash",
-        winner: "settlr",
+        cash: "High, armed robberies",
+        offbank: "None, no physical cash",
+        winner: "offbank",
       },
     ],
   },
@@ -149,26 +149,26 @@ const comparisonRows = [
       {
         label: "IRS audit readiness",
         cash: "Manual reconciliation",
-        settlr: "Automatic on-chain records",
-        winner: "settlr",
+        offbank: "Automatic on-chain records",
+        winner: "offbank",
       },
       {
         label: "FinCEN SAR filing",
         cash: "Required for all cash deposits",
-        settlr: "KYB screening at onboarding",
-        winner: "settlr",
+        offbank: "KYB screening at onboarding",
+        winner: "offbank",
       },
       {
         label: "State seed-to-sale integration",
         cash: "Manual data entry",
-        settlr: "Receipt ID mapping",
-        winner: "settlr",
+        offbank: "Receipt ID mapping",
+        winner: "offbank",
       },
       {
         label: "Robbery / theft exposure",
         cash: "$8.8M lost industry-wide (2024)",
-        settlr: "Zero — digital only",
-        winner: "settlr",
+        offbank: "Zero, digital only",
+        winner: "offbank",
       },
     ],
   },
@@ -182,30 +182,30 @@ const faqs = [
   },
   {
     q: "What is the total cost of cash handling for a dispensary?",
-    a: "The total cost of cash handling for a dispensary processing $2 million annually is estimated at $78,000 to $195,000 per year when factoring in armored transport, counting labor, insurance, safe equipment, shrinkage, and opportunity cost. On Settlr, the same volume costs $20,000 at 1% flat.",
+    a: "The total cost of cash handling for a dispensary processing $2 million annually is estimated at $78,000 to $195,000 per year when factoring in armored transport, counting labor, insurance, safe equipment, shrinkage, and opportunity cost. On Offbank, the same volume costs $20,000 at 1% flat.",
   },
   {
     q: "Is stablecoin settlement safer than cash for cannabis businesses?",
-    a: "Yes. Stablecoin settlement eliminates all physical security risks associated with cash — armed robberies, employee theft, transport vulnerabilities, and counting errors. All transactions are cryptographically verified on-chain with immutable audit trails.",
+    a: "Yes. Stablecoin settlement eliminates all physical security risks associated with cash, armed robberies, employee theft, transport vulnerabilities, and counting errors. All transactions are cryptographically verified on-chain with immutable audit trails.",
   },
   {
-    q: "Can I completely eliminate cash with Settlr?",
-    a: "For B2B supply chain payments (distributor-to-cultivator, processor-to-distributor), yes — Settlr can replace 100% of cash transactions. For retail consumer sales, most dispensaries will maintain some cash acceptance alongside Settlr-powered digital payments.",
+    q: "Can I completely eliminate cash with Offbank?",
+    a: "For B2B supply chain payments (distributor-to-cultivator, processor-to-distributor), yes, Offbank can replace 100% of cash transactions. For retail consumer sales, most dispensaries will maintain some cash acceptance alongside Offbank-powered digital payments.",
   },
 ];
 
 /* ════════════════════════════════════════════════════════ */
 /*  PAGE                                                   */
 /* ════════════════════════════════════════════════════════ */
-export default function SettlrVsCashPage() {
+export default function OffbankVsCashPage() {
   const cashTotal = "$78,000 – $195,000";
-  const settlrTotal = "$20,000";
+  const offbankTotal = "$20,000";
 
   return (
     <div className="min-h-screen" style={{ background: p.bg, color: p.slate }}>
       <Navbar />
 
-      {/* Structured data — FAQPage */}
+      {/* Structured data, FAQPage */}
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -225,7 +225,7 @@ export default function SettlrVsCashPage() {
         }}
       />
 
-      {/* Structured data — ComparisonPage / Article */}
+      {/* Structured data, ComparisonPage / Article */}
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -234,18 +234,18 @@ export default function SettlrVsCashPage() {
             "@context": "https://schema.org",
             "@type": "Article",
             headline:
-              "Settlr vs Cash & Armored Cars: Cannabis Payment Cost Comparison 2026",
+              "Offbank vs Cash & Armored Cars: Cannabis Payment Cost Comparison 2026",
             description:
-              "Complete cost comparison between cash handling (armored cars, safes, counting labor) and Settlr stablecoin settlement for cannabis businesses. A dispensary processing $2M/year can save $58,000–$175,000 annually.",
+              "Complete cost comparison between cash handling (armored cars, safes, counting labor) and Offbank stablecoin settlement for cannabis businesses. A dispensary processing $2M/year can save $58,000–$175,000 annually.",
             author: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
+              name: "Offbank",
+              url: "https://offbankpay.com",
             },
             publisher: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
+              name: "Offbank",
+              url: "https://offbankpay.com",
             },
             datePublished: "2026-01-15",
             dateModified: "2026-02-27",
@@ -285,7 +285,7 @@ export default function SettlrVsCashPage() {
               className="mt-8 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl"
               style={{ color: p.navy }}
             >
-              Settlr vs Cash &{" "}
+              Offbank vs Cash &{" "}
               <span
                 style={{
                   background:
@@ -306,7 +306,7 @@ export default function SettlrVsCashPage() {
             >
               Cannabis businesses spend $78K–$195K per year on cash logistics.
               Here&apos;s the line-by-line breakdown of what you&apos;re
-              actually paying — and what Settlr costs instead.
+              actually paying, and what Offbank costs instead.
             </p>
           </R>
 
@@ -315,7 +315,7 @@ export default function SettlrVsCashPage() {
             Armored car service for cannabis businesses costs between $2,000 and
             $8,000 per month. The total cost of cash handling for a dispensary
             processing $2 million annually is estimated at $78,000 to $195,000
-            per year. Settlr provides an alternative stablecoin settlement rail
+            per year. Offbank provides an alternative stablecoin settlement rail
             at 1% flat ($20,000 on $2M), saving $58,000 to $175,000 annually.
           </p>
         </div>
@@ -351,13 +351,13 @@ export default function SettlrVsCashPage() {
                   className="text-sm font-semibold uppercase tracking-widest"
                   style={{ color: "rgba(255,255,255,0.4)" }}
                 >
-                  Settlr
+                  Offbank
                 </p>
                 <p
                   className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl"
                   style={{ color: p.green }}
                 >
-                  {settlrTotal}
+                  {offbankTotal}
                 </p>
                 <p
                   className="mt-2 text-sm"
@@ -406,7 +406,7 @@ export default function SettlrVsCashPage() {
                   >
                     <div>Item</div>
                     <div className="text-center">Cash / Armored Cars</div>
-                    <div className="text-center">Settlr</div>
+                    <div className="text-center">Offbank</div>
                   </div>
                   {/* Rows */}
                   {section.items.map((item, i) => (
@@ -433,11 +433,11 @@ export default function SettlrVsCashPage() {
                       <div
                         className="text-center"
                         style={{
-                          color: item.winner === "settlr" ? p.green : p.slate,
-                          fontWeight: item.winner === "settlr" ? 600 : 400,
+                          color: item.winner === "offbank" ? p.green : p.slate,
+                          fontWeight: item.winner === "offbank" ? 600 : 400,
                         }}
                       >
-                        {item.settlr}
+                        {item.offbank}
                       </div>
                     </div>
                   ))}
@@ -466,7 +466,7 @@ export default function SettlrVsCashPage() {
                   className="text-center text-base font-bold"
                   style={{ color: p.green }}
                 >
-                  {settlrTotal}
+                  {offbankTotal}
                 </div>
               </div>
             </div>
@@ -637,7 +637,7 @@ export default function SettlrVsCashPage() {
                 </p>
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
                   <Link
-                    href="/waitlist"
+                    href="/onboarding"
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:

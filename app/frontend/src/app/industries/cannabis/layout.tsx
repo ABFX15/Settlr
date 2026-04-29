@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cannabis & Marijuana B2B Payments — Stop Getting Debanked",
+  title: "Cannabis & Marijuana B2B Payments, Stop Getting Debanked",
   description:
     "Pay cannabis and marijuana cultivators and distributors instantly in USDC. No bank account needed, no debanking risk. 1% flat fee, OFAC-compliant.",
   keywords: [
@@ -30,17 +30,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "Settlr",
-    title: "Cannabis & Marijuana B2B Payments — Stop Getting Debanked",
+    siteName: "Offbank",
+    title: "Cannabis & Marijuana B2B Payments, Stop Getting Debanked",
     description:
       "Pay cannabis and marijuana suppliers instantly in USDC. No bank account, no debanking risk. 1% flat fee with full compliance.",
-    url: "https://settlr.dev/industries/cannabis",
+    url: "https://offbankpay.com/industries/cannabis",
     images: [
       {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Settlr Cannabis Payments",
+        alt: "Offbank Cannabis Payments",
       },
     ],
   },

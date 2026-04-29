@@ -588,7 +588,7 @@ export default function AdminDashboardPage() {
                 <DollarSign className="w-5 h-5 text-[#212121]" />
               </div>
               <span className="text-xl font-bold text-[#34c759]">
-                Settlr Admin
+                Offbank Admin
               </span>
             </Link>
           </div>

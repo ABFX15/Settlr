@@ -1,8 +1,8 @@
 /**
- * LeafLink ↔ Settlr integration — database helpers
+ * LeafLink ↔ Offbank integration — database helpers
  *
  * Manages the sync records that track LeafLink orders through the
- * Settlr settlement lifecycle:
+ * Offbank settlement lifecycle:
  *
  *   order.created → invoice created → link sent → paid → synced back
  */
@@ -122,7 +122,7 @@ export async function getSyncByOrderId(
 }
 
 /**
- * Find a sync by its Settlr invoice ID (used in the payment callback).
+ * Find a sync by its Offbank invoice ID (used in the payment callback).
  */
 export async function getSyncByInvoiceId(
     invoiceId: string,

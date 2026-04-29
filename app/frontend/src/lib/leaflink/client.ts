@@ -77,7 +77,7 @@ export class LeafLinkClient {
     }
 
     /**
-     * Add a payment note to an order (e.g. tx hash, Settlr receipt link).
+     * Add a payment note to an order (e.g. tx hash, Offbank receipt link).
      */
     async addOrderNote(
         orderId: number,
@@ -91,7 +91,7 @@ export class LeafLinkClient {
     /**
      * Update order metadata with custom fields (payment proof).
      * Uses LeafLink's order "external_id" or custom attributes endpoint
-     * to record the Settlr payment details.
+     * to record the Offbank payment details.
      */
     async setExternalPaymentRef(
         orderId: number,
@@ -109,7 +109,7 @@ export class LeafLinkClient {
 
         // Also add a human-readable note
         const note = [
-            `✅ USDC Payment Settled via Settlr`,
+            `✅ USDC Payment Settled via Offbank`,
             `Amount: $${ref.amount_usdc.toFixed(2)} USDC`,
             `Tx: https://solscan.io/tx/${ref.tx_signature}`,
             `Invoice: ${ref.settlr_invoice_id}`,

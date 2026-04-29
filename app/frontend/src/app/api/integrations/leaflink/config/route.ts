@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
         const saved = await upsertConfig(config);
 
         // Build the webhook URL for the merchant to configure in LeafLink
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
         const webhookUrl = `${baseUrl}/api/integrations/leaflink/webhook`;
 
         return NextResponse.json({

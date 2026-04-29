@@ -251,7 +251,7 @@ export async function GET(request: NextRequest) {
             return new NextResponse(csv, {
                 headers: {
                     "Content-Type": "text/csv",
-                    "Content-Disposition": `attachment; filename="settlr-reconciliation-${dateStr}.csv"`,
+                    "Content-Disposition": `attachment; filename="offbank-reconciliation-${dateStr}.csv"`,
                 },
             });
         }

@@ -24,7 +24,7 @@ import * as fs from 'fs';
 import type { X402HackPayment } from '../target/types/x402_hack_payment';
 
 // ── Constants ──
-const SETTLR_PROGRAM_ID = new PublicKey('339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5');
+const OFFBANK_PROGRAM_ID = new PublicKey('339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5');
 const DELEGATION_PROGRAM_ID = new PublicKey('DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh');
 const PERMISSION_PROGRAM_ID = new PublicKey('ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1');
 
@@ -37,7 +37,7 @@ const TEE_VALIDATOR = new PublicKey('FnE6VJT5QNZdedZPnCoLsARgBwoE6DeJNjBs2H1gySX
 function findPrivateReceiptPda(paymentId: string): [PublicKey, number] {
     return PublicKey.findProgramAddressSync(
         [Buffer.from('private_receipt'), Buffer.from(paymentId)],
-        SETTLR_PROGRAM_ID,
+        OFFBANK_PROGRAM_ID,
     );
 }
 
@@ -160,7 +160,7 @@ async function main() {
                     delegationBuffer: bufferPda,
                     delegationRecord: recordPda,
                     delegationMetadata: metadataPda,
-                    ownerProgram: SETTLR_PROGRAM_ID,
+                    ownerProgram: OFFBANK_PROGRAM_ID,
                     delegationProgram: DELEGATION_PROGRAM_ID,
                     systemProgram: SystemProgram.programId,
                 })

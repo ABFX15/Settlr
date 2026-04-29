@@ -15,12 +15,10 @@ import {
   ExternalLink,
   Vault,
   Plug,
-  Leaf,
 } from "lucide-react";
 
 const docsTabs = [
   { id: "quickstart", label: "Getting Started", icon: Rocket },
-  { id: "leaflink", label: "LeafLink", icon: Leaf },
   { id: "invoices", label: "Invoices & Payments", icon: Book },
   { id: "dashboard", label: "Dashboard", icon: Vault },
   { id: "api", label: "REST API", icon: Code2 },
@@ -31,7 +29,6 @@ const docsTabs = [
 
 type TabId =
   | "quickstart"
-  | "leaflink"
   | "invoices"
   | "dashboard"
   | "api"
@@ -127,10 +124,19 @@ function DocsPageInner() {
             <div className="max-w-4xl mx-auto px-6 py-12">
               {/* Hero */}
               <div className="mb-10">
-                <h1 className="text-4xl font-bold mb-4">Documentation</h1>
+                <h1 className="text-4xl font-bold mb-4">Operator Docs</h1>
                 <p className="text-xl text-[#5c5c5c]">
-                  Stablecoin settlement infrastructure for cannabis B2B.
-                  Connects to your POS, automates invoicing, settles in USDC.
+                  How to send invoices, settle in USDC, and cash out to USD, no
+                  code required.
+                </p>
+                <p className="mt-4 text-sm text-[#8a8a8a]">
+                  Building an integration?{" "}
+                  <Link
+                    href="/developers"
+                    className="text-[#34c759] font-medium hover:underline"
+                  >
+                    See the developer docs →
+                  </Link>
                 </p>
               </div>
 
@@ -154,7 +160,6 @@ function DocsPageInner() {
               {/* Content */}
               <div className="prose prose-invert max-w-none">
                 {activeTab === "quickstart" && <QuickStartContent />}
-                {activeTab === "leaflink" && <LeafLinkContent />}
                 {activeTab === "invoices" && <InvoicesContent />}
                 {activeTab === "dashboard" && <DashboardContent />}
                 {activeTab === "api" && <APIContent />}
@@ -183,39 +188,23 @@ function QuickStartContent() {
       <section>
         <h2 className="text-2xl font-bold mb-4">Get Started in 5 Minutes</h2>
         <p className="text-[#8a8a8a] mb-6">
-          Settlr automates B2B cannabis payments. Connect your POS system and
-          invoices settle in USDC on Solana — no bank wires, no 30-day net
+          Offbank automates B2B cannabis payments. Connect your POS system and
+          invoices settle in USDC on Solana, no bank wires, no 30-day net
           terms, no chargebacks.
         </p>
 
-        {/* Two paths */}
-        <div className="grid md:grid-cols-2 gap-4 mb-12">
+        {/* Direct invoices intro */}
+        <div className="mb-12">
           <div className="rounded-xl border border-[#34c759]/20 bg-[#34c759]/[0.05] p-5">
             <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#34c759]/15 text-[#34c759] px-2 py-0.5 rounded-full mb-3">
-              Flagship
+              Direct
             </span>
             <h3 className="text-lg font-semibold text-[#212121] mb-2">
-              LeafLink Integration
+              Create Payment Links
             </h3>
             <p className="text-sm text-[#8a8a8a] mb-3">
-              Connect your LeafLink account. When a purchase order is created,
-              Settlr auto-generates a USDC invoice and emails a payment link to
-              the buyer.
-            </p>
-            <span className="text-sm text-[#34c759] font-medium">
-              See LeafLink tab →
-            </span>
-          </div>
-          <div className="rounded-xl border border-[#d3d3d3] bg-[#f2f2f2]/50 p-5">
-            <span className="inline-block text-[10px] font-bold tracking-widest uppercase bg-[#8a8a8a]/10 text-[#8a8a8a] px-2 py-0.5 rounded-full mb-3">
-              Manual
-            </span>
-            <h3 className="text-lg font-semibold text-[#212121] mb-2">
-              Direct Invoices
-            </h3>
-            <p className="text-sm text-[#8a8a8a] mb-3">
-              Create payment links directly from the dashboard. No POS
-              integration required — works for any cannabis B2B transaction.
+              Create USDC payment links directly from the dashboard. Works for
+              any cannabis B2B transaction, no POS integration required.
             </p>
             <span className="text-sm text-[#34c759] font-medium">
               See Invoices tab →
@@ -229,18 +218,18 @@ function QuickStartContent() {
             <div className="w-8 h-8 rounded-full bg-[#34c759]/15 text-[#34c759] flex items-center justify-center font-bold">
               1
             </div>
-            <h3 className="text-xl font-semibold">Request Access</h3>
+            <h3 className="text-xl font-semibold">Get Started</h3>
           </div>
           <p className="text-[#8a8a8a] mb-4">
-            Settlr is currently invite-only. Submit a request on our waitlist
+            Offbank is currently invite-only. Submit a request on our waitlist
             and we&apos;ll review your application. Once approved, you&apos;ll
             receive an email with a link to sign in and complete onboarding.
           </p>
           <a
-            href="/waitlist"
+            href="/onboarding"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#34c759] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
           >
-            Request Access →
+            Get Started →
           </a>
         </div>
 
@@ -254,8 +243,7 @@ function QuickStartContent() {
           </div>
           <p className="text-[#8a8a8a] mb-4">
             Sign in with your email, complete merchant onboarding (business
-            details, license verification), and connect your LeafLink account
-            from the dashboard.
+            details, license verification), and you&apos;re ready to invoice.
           </p>
         </div>
 
@@ -265,21 +253,20 @@ function QuickStartContent() {
             <div className="w-8 h-8 rounded-full bg-[#34c759]/15 text-[#34c759] flex items-center justify-center font-bold">
               3
             </div>
-            <h3 className="text-xl font-semibold">Orders Auto-Settle</h3>
+            <h3 className="text-xl font-semibold">Send a Payment Link</h3>
           </div>
           <p className="text-[#8a8a8a] mb-4">
-            When a purchase order hits LeafLink, Settlr receives a webhook,
-            creates a USDC invoice, and emails the buyer a one-click payment
-            link. Settlement is instant.
+            Create an invoice from the dashboard, share the payment link with
+            your buyer, and the funds settle to your wallet instantly when they
+            pay in USDC.
           </p>
           <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 font-mono text-sm text-[#5c5c5c]">
             <div className="space-y-1">
-              <p>LeafLink PO #4821 created → webhook fires</p>
-              <p>&nbsp;&nbsp;→ Settlr invoice INV-4821 auto-created</p>
-              <p>&nbsp;&nbsp;→ Payment link emailed to buyer</p>
+              <p>Create invoice INV-4821 in dashboard</p>
+              <p>&nbsp;&nbsp;→ Share payment link with buyer</p>
               <p>&nbsp;&nbsp;→ Buyer pays in USDC (one click)</p>
               <p>&nbsp;&nbsp;→ Funds settle to your wallet instantly</p>
-              <p>&nbsp;&nbsp;→ LeafLink order marked &quot;paid&quot;</p>
+              <p>&nbsp;&nbsp;→ On-chain receipt available immediately</p>
             </div>
           </div>
         </div>
@@ -297,247 +284,10 @@ function QuickStartContent() {
             description="METRC tag tracking, license verification, full audit trail."
           />
           <FeatureCard
-            icon="🌿"
-            title="LeafLink Native"
-            description="Auto-syncs with your existing purchase order workflow."
+            icon="🧾"
+            title="On-chain Receipts"
+            description="Every payment generates a verifiable Solana transaction receipt."
           />
-        </div>
-      </section>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════
-   LEAFLINK INTEGRATION
-   ═══════════════════════════════════════════════════════════ */
-
-function LeafLinkContent() {
-  return (
-    <div className="space-y-8">
-      <section>
-        <h2 className="text-2xl font-bold mb-4">LeafLink Integration</h2>
-        <p className="text-[#8a8a8a] mb-6">
-          Connect your LeafLink account to automate B2B cannabis settlement.
-          When purchase orders are created in LeafLink, Settlr automatically
-          generates USDC invoices and emails payment links to buyers.
-        </p>
-
-        {/* How it works */}
-        <div className="bg-[#34c759]/10 border border-[#34c759]/30 rounded-lg p-4 mb-8">
-          <h3 className="text-lg font-semibold text-[#34c759] mb-2">
-            How it works
-          </h3>
-          <ol className="text-[#8a8a8a] text-sm space-y-2">
-            <li>1. Purchase order created in LeafLink (by buyer or seller)</li>
-            <li>2. LeafLink sends a webhook to Settlr</li>
-            <li>3. Settlr creates a USDC invoice + payment link</li>
-            <li>4. Buyer receives email with one-click payment link</li>
-            <li>5. Buyer pays in USDC — settles instantly on Solana</li>
-            <li>
-              6. Settlr updates the LeafLink order status to &quot;paid&quot;
-            </li>
-          </ol>
-        </div>
-
-        {/* Step 1: Get API Key */}
-        <h3 className="text-xl font-semibold mb-4">
-          1. Get Your LeafLink API Key
-        </h3>
-        <p className="text-[#8a8a8a] mb-4">
-          In LeafLink, go to{" "}
-          <strong className="text-[#5c5c5c]">
-            Settings → Integrations → API
-          </strong>{" "}
-          and generate an API key. This is a real LeafLink feature — the key
-          gives Settlr read access to your orders and the ability to update
-          payment status.
-        </p>
-        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-6">
-          <p className="text-sm text-[#8a8a8a]">
-            <strong className="text-[#5c5c5c]">Auth format:</strong>{" "}
-            <code className="text-[#34c759] bg-white px-2 py-0.5 rounded">
-              Authorization: App &#123;your_api_key&#125;
-            </code>
-          </p>
-          <p className="text-sm text-[#8a8a8a] mt-2">
-            <strong className="text-[#5c5c5c]">Permissions needed:</strong> Read
-            orders, update order status
-          </p>
-        </div>
-
-        {/* Step 2: Configure */}
-        <h3 className="text-xl font-semibold mb-4">2. Configure in Settlr</h3>
-        <p className="text-[#8a8a8a] mb-4">
-          Save your LeafLink API key in the Settlr dashboard under{" "}
-          <strong className="text-[#5c5c5c]">
-            Settings → Integrations → LeafLink
-          </strong>
-          . Settlr validates the key immediately by calling LeafLink&apos;s
-          company endpoint.
-        </p>
-        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-6">
-          <p className="text-sm text-[#8a8a8a]">
-            <strong className="text-[#5c5c5c]">Configuration options:</strong>
-          </p>
-          <ul className="text-sm text-[#8a8a8a] mt-2 space-y-1">
-            <li>
-              • <strong>Auto-create invoice</strong> — Automatically create a
-              Settlr invoice when a PO arrives
-            </li>
-            <li>
-              • <strong>Auto-send link</strong> — Automatically email the
-              payment link to the buyer
-            </li>
-            <li>
-              • <strong>METRC sync</strong> — Include METRC tags and licenses in
-              invoice metadata
-            </li>
-          </ul>
-        </div>
-
-        {/* Step 3: Webhook */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">
-          3. Set Your Webhook URL
-        </h3>
-        <p className="text-[#8a8a8a] mb-4">
-          In LeafLink, configure a webhook pointing to your Settlr instance.
-          LeafLink signs webhooks with HMAC-SHA256 — Settlr verifies every
-          payload.
-        </p>
-        <CodeBlock language="bash">
-          {`# Webhook URL to configure in LeafLink:
-# https://settlr.dev/api/integrations/leaflink/webhook
-#
-# LeafLink signs with HMAC-SHA256
-# Store the signing secret when configuring`}
-        </CodeBlock>
-
-        {/* Webhook events */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">Webhook Events</h3>
-        <p className="text-[#8a8a8a] mb-4">
-          Settlr listens for these LeafLink webhook events:
-        </p>
-        <div className="bg-[#f2f2f2] rounded-lg overflow-hidden">
-          <table className="w-full text-left">
-            <thead className="bg-white">
-              <tr>
-                <th className="px-4 py-3 font-medium">Event</th>
-                <th className="px-4 py-3 font-medium">Settlr Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#d3d3d3]">
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  order.created
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  Creates invoice + emails payment link to buyer
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  order.accepted
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  Creates invoice if not already created
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  order.cancelled
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  Marks sync record as cancelled
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* METRC */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">METRC Compliance</h3>
-        <p className="text-[#8a8a8a] mb-4">
-          When METRC sync is enabled, Settlr extracts METRC package tags,
-          license numbers, and manifest data from LeafLink line items and
-          attaches them to the invoice metadata. Full audit trail included with
-          every settlement.
-        </p>
-        <CodeBlock language="json">
-          {`{
-  "invoice_id": "INV-4821",
-  "metadata": {
-    "leaflink_order_id": 4821,
-    "metrc_tags": "1A4000000000000000012345,1A4000000000000000012346",
-    "seller_license": "C11-0000001-LIC",
-    "buyer_license": "C10-0000002-LIC"
-  }
-}`}
-        </CodeBlock>
-
-        {/* Config options table */}
-        <h3 className="text-xl font-semibold mb-4 mt-8">
-          Configuration Options
-        </h3>
-        <div className="bg-[#f2f2f2] rounded-lg overflow-hidden">
-          <table className="w-full text-left">
-            <thead className="bg-white">
-              <tr>
-                <th className="px-4 py-3 font-medium">Option</th>
-                <th className="px-4 py-3 font-medium">Default</th>
-                <th className="px-4 py-3 font-medium">Description</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#d3d3d3]">
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  auto_create_invoice
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">true</td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  Auto-create Settlr invoice when PO arrives
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  auto_send_link
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">true</td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  Auto-email payment link to buyer
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  metrc_sync
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">true</td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  Include METRC tags &amp; licenses in metadata
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  webhook_secret
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">—</td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  HMAC secret for verifying LeafLink webhooks
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Retry */}
-        <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mt-8">
-          <h4 className="font-medium text-[#212121] mb-2">
-            Failed Webhook Retry
-          </h4>
-          <p className="text-[#8a8a8a] text-sm">
-            If a webhook fails to process, you can retry it from the dashboard.
-            The retry re-fetches the order from LeafLink and re-runs the invoice
-            creation flow.
-          </p>
         </div>
       </section>
     </div>
@@ -554,9 +304,8 @@ function InvoicesContent() {
       <section>
         <h2 className="text-2xl font-bold mb-4">Invoices &amp; Payments</h2>
         <p className="text-[#8a8a8a] mb-6">
-          Create USDC invoices for any cannabis B2B transaction. Works
-          standalone or alongside the LeafLink integration for orders that
-          don&apos;t originate from a POS.
+          Create USDC invoices for any cannabis B2B transaction. Buyers pay via
+          a one-click payment link and funds settle to your wallet instantly.
         </p>
 
         {/* How it works */}
@@ -578,7 +327,7 @@ function InvoicesContent() {
         <p className="text-[#8a8a8a] mb-4">
           From your dashboard, go to{" "}
           <strong className="text-[#5c5c5c]">Invoices → Create Invoice</strong>.
-          Enter the amount, memo, and buyer email. Settlr generates a unique
+          Enter the amount, memo, and buyer email. Offbank generates a unique
           payment link and sends it to the buyer automatically.
         </p>
         <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-6">
@@ -587,18 +336,18 @@ function InvoicesContent() {
           </p>
           <ul className="text-sm text-[#8a8a8a] mt-2 space-y-1">
             <li>
-              • <strong>Amount</strong> — Invoice total in USD (settled in USDC)
+              • <strong>Amount</strong>, Invoice total in USD (settled in USDC)
             </li>
             <li>
-              • <strong>Memo</strong> — Description (e.g. &quot;PO #4821 — 500
+              • <strong>Memo</strong>, Description (e.g. &quot;PO #4821, 500
               units Purple Haze&quot;)
             </li>
             <li>
-              • <strong>Buyer email</strong> — Payment link auto-sent to this
+              • <strong>Buyer email</strong>, Payment link auto-sent to this
               address
             </li>
             <li>
-              • <strong>Metadata</strong> — Optional: METRC tags, license
+              • <strong>Metadata</strong>, Optional: METRC tags, license
               numbers
             </li>
           </ul>
@@ -608,14 +357,14 @@ function InvoicesContent() {
         <h3 className="text-xl font-semibold mb-4 mt-8">Payment Links</h3>
         <p className="text-[#8a8a8a] mb-4">
           Every invoice generates a unique payment link. Share it via email,
-          text, or any channel — the buyer clicks, connects a wallet, and pays.
+          text, or any channel, the buyer clicks, connects a wallet, and pays.
           No app download required.
         </p>
         <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mb-6">
           <p className="text-sm text-[#8a8a8a]">
             <strong className="text-[#5c5c5c]">Payment URL format:</strong>{" "}
             <code className="text-[#34c759]">
-              https://settlr.dev/invoice/&#123;token&#125;
+              https://offbankpay.com/invoice/&#123;token&#125;
             </code>
           </p>
           <p className="text-sm text-[#8a8a8a] mt-2">
@@ -672,9 +421,9 @@ function InvoicesContent() {
             Gasless Transactions
           </h4>
           <p className="text-[#8a8a8a] text-sm">
-            All Settlr payments are gasless by default. Buyers don&apos;t need
-            SOL for transaction fees — the fee payer is handled by Settlr&apos;s
-            infrastructure (powered by Kora).
+            All Offbank payments are gasless by default. Buyers don&apos;t need
+            SOL for transaction fees, the fee payer is handled by
+            Offbank&apos;s infrastructure (powered by Kora).
           </p>
         </div>
       </section>
@@ -709,10 +458,10 @@ function DashboardContent() {
             </p>
           </div>
           <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4">
-            <h4 className="font-medium text-[#212121] mb-2">LeafLink Status</h4>
+            <h4 className="font-medium text-[#212121] mb-2">Invoices</h4>
             <p className="text-sm text-[#8a8a8a]">
-              Connection health, last webhook received, sync records, and failed
-              webhook retry queue.
+              Create, track, and manage USDC invoices. View payment status,
+              re-send links, and export records.
             </p>
           </div>
           <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4">
@@ -734,7 +483,7 @@ function DashboardContent() {
         {/* Treasury */}
         <h3 className="text-xl font-semibold mb-4">Treasury &amp; Fees</h3>
         <p className="text-[#8a8a8a] mb-4">
-          Every payment processed through Settlr collects a configurable
+          Every payment processed through Offbank collects a configurable
           platform fee (default 2%) into a program-owned treasury PDA on Solana.
           Authorized signers can claim accumulated fees at any time.
         </p>
@@ -789,15 +538,14 @@ function APIContent() {
       <section>
         <h2 className="text-2xl font-bold mb-4">REST API Reference</h2>
         <p className="text-[#8a8a8a] mb-6">
-          Internal API endpoints for payments, LeafLink integration, and
-          treasury management. All authenticated routes require a valid wallet
-          sign-in session.
+          Internal API endpoints for payments and treasury management. All
+          authenticated routes require a valid wallet sign-in session.
         </p>
 
         {/* Base URL */}
         <div className="bg-[#f2f2f2] rounded-lg p-4 mb-6">
           <p className="text-[#8a8a8a] text-sm mb-1">Base URL</p>
-          <code className="text-[#34c759]">https://settlr.dev/api</code>
+          <code className="text-[#34c759]">https://offbankpay.com/api</code>
         </div>
 
         {/* Authentication */}
@@ -808,94 +556,9 @@ function APIContent() {
           <p className="text-[#8a8a8a] text-sm">
             API requests are authenticated via your Solana wallet sign-in
             session. When calling from the dashboard, authentication is handled
-            automatically. For server-to-server integrations (like LeafLink
-            webhooks), Settlr uses HMAC signature verification.
+            automatically. For server-to-server integrations, Offbank supports
+            HMAC signature verification on incoming webhooks.
           </p>
-        </div>
-
-        {/* LeafLink Endpoints */}
-        <h3 className="text-lg font-semibold text-[#5c5c5c] mb-4">
-          LeafLink Integration
-        </h3>
-
-        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
-              GET
-            </span>
-            <code className="text-[#212121]">
-              /integrations/leaflink/config
-            </code>
-          </div>
-          <div className="p-4">
-            <p className="text-[#8a8a8a]">
-              Get your current LeafLink integration configuration.
-            </p>
-          </div>
-        </div>
-
-        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
-              POST
-            </span>
-            <code className="text-[#212121]">
-              /integrations/leaflink/config
-            </code>
-          </div>
-          <div className="p-4">
-            <p className="text-[#8a8a8a]">
-              Create or update your LeafLink integration. Validates the API key
-              against LeafLink before saving.
-            </p>
-          </div>
-        </div>
-
-        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
-              POST
-            </span>
-            <code className="text-[#212121]">
-              /integrations/leaflink/webhook
-            </code>
-          </div>
-          <div className="p-4">
-            <p className="text-[#8a8a8a]">
-              Receives webhooks from LeafLink. Configure this URL in your
-              LeafLink webhook settings. Verifies HMAC-SHA256 signatures.
-            </p>
-          </div>
-        </div>
-
-        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
-              POST
-            </span>
-            <code className="text-[#212121]">/integrations/leaflink/retry</code>
-          </div>
-          <div className="p-4">
-            <p className="text-[#8a8a8a]">
-              Retry a failed webhook. Re-fetches the order from LeafLink and
-              re-runs invoice creation.
-            </p>
-          </div>
-        </div>
-
-        <div className="border border-[#d3d3d3] rounded-lg overflow-hidden mb-6">
-          <div className="bg-[#f2f2f2] px-4 py-3 flex items-center gap-3">
-            <span className="bg-[#34c759]/15 text-[#34c759] px-2 py-1 rounded text-sm font-mono">
-              GET
-            </span>
-            <code className="text-[#212121]">/integrations/leaflink/syncs</code>
-          </div>
-          <div className="p-4">
-            <p className="text-[#8a8a8a]">
-              List all sync records — tracks each LeafLink order through the
-              invoice lifecycle.
-            </p>
-          </div>
         </div>
 
         {/* Payment Endpoints */}
@@ -1006,14 +669,14 @@ function WebhooksContent() {
       <section>
         <h2 className="text-2xl font-bold mb-4">Webhooks</h2>
         <p className="text-[#8a8a8a] mb-6">
-          Get notified in real-time when payments settle, invoices are paid, or
-          LeafLink orders change state.
+          Get notified in real-time when payments settle or invoices change
+          state.
         </p>
 
         {/* Setup */}
         <h3 className="text-xl font-semibold mb-4">Setting Up Webhooks</h3>
         <p className="text-[#8a8a8a] mb-4">
-          Configure your webhook endpoint in the Settlr dashboard under{" "}
+          Configure your webhook endpoint in the Offbank dashboard under{" "}
           <strong className="text-[#5c5c5c]">Settings → Webhooks</strong>.
           We&apos;ll send a POST request whenever a payment event occurs.
         </p>
@@ -1031,7 +694,6 @@ function WebhooksContent() {
     "signature": "5xKj...abc",
     "paidAt": "2025-07-10T14:30:00Z",
     "metadata": {
-      "leaflink_order_id": 4821,
       "buyer_license": "C10-0000002-LIC"
     }
   },
@@ -1044,17 +706,17 @@ function WebhooksContent() {
           Example Handler (Next.js)
         </h3>
         <CodeBlock language="typescript">
-          {`// app/api/webhooks/settlr/route.ts
+          {`// app/api/webhooks/offbank/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  const signature = req.headers.get('x-settlr-signature');
+  const signature = req.headers.get('x-offbank-signature');
 
   // Verify the webhook signature
   const expectedSig = crypto
-    .createHmac('sha256', process.env.SETTLR_WEBHOOK_SECRET!)
+    .createHmac('sha256', process.env.OFFBANK_WEBHOOK_SECRET!)
     .update(body)
     .digest('hex');
 
@@ -1070,9 +732,6 @@ export async function POST(req: NextRequest) {
       break;
     case 'payment.expired':
       await handleExpiredInvoice(event.data.id);
-      break;
-    case 'leaflink.order.synced':
-      await logLeafLinkSync(event.data.leaflink_order_id);
       break;
     default:
       console.log('Unhandled event:', event.event);
@@ -1117,30 +776,6 @@ export async function POST(req: NextRequest) {
                   Payment failed due to an error
                 </td>
               </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  leaflink.order.synced
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  LeafLink order processed and invoice created
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  leaflink.order.paid
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  LeafLink order invoice settled in USDC
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759]">
-                  leaflink.sync.failed
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  LeafLink webhook processing failed (retryable)
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -1150,8 +785,8 @@ export async function POST(req: NextRequest) {
           <h4 className="font-medium text-[#d29500] mb-2">Security Note</h4>
           <p className="text-[#8a8a8a]">
             Always verify the webhook signature before processing events. Never
-            trust the payload without verification. Both Settlr webhooks and
-            LeafLink webhooks use HMAC-SHA256.
+            trust the payload without verification. Offbank webhooks use
+            HMAC-SHA256.
           </p>
         </div>
       </section>
@@ -1169,8 +804,8 @@ function IntegrationsContent() {
       <section>
         <h2 className="text-2xl font-bold mb-4">POS Integrations</h2>
         <p className="text-[#8a8a8a] mb-6">
-          Settlr connects to the cannabis POS and ordering platforms your
-          business already uses. LeafLink is live today — Dutchie and Flowhub
+          Offbank connects to the cannabis POS and ordering platforms your
+          business already uses. LeafLink is live in beta, Dutchie and Flowhub
           are on the roadmap.
         </p>
 
@@ -1180,13 +815,14 @@ function IntegrationsContent() {
             <div className="flex items-center gap-2 mb-2">
               <span className="text-2xl">🌿</span>
               <span className="text-[10px] font-bold tracking-widest uppercase bg-[#34c759]/15 text-[#34c759] px-2 py-0.5 rounded-full">
-                Live
+                Live · Beta
               </span>
             </div>
             <h3 className="font-semibold mb-1">LeafLink</h3>
             <p className="text-sm text-[#8a8a8a]">
               Wholesale B2B ordering. Auto-creates USDC invoices from purchase
-              orders, syncs payment status back to LeafLink.
+              orders, syncs settlement status back to LeafLink. Configure in
+              Settings → LeafLink Integration.
             </p>
           </div>
           <div className="rounded-lg border border-[#d3d3d3] bg-[#f2f2f2]/50 p-5">
@@ -1215,70 +851,6 @@ function IntegrationsContent() {
           </div>
         </div>
 
-        {/* LeafLink Detail */}
-        <h3 className="text-xl font-semibold mb-4">
-          LeafLink Integration Detail
-        </h3>
-        <p className="text-[#8a8a8a] mb-4">
-          The LeafLink integration is fully production-ready. See the LeafLink
-          tab for complete setup instructions, webhook events, METRC compliance,
-          and configuration options.
-        </p>
-
-        <h4 className="font-medium mb-2">API Routes</h4>
-        <div className="bg-[#f2f2f2] rounded-lg overflow-hidden mb-6">
-          <table className="w-full text-left">
-            <thead className="bg-white">
-              <tr>
-                <th className="px-4 py-3 font-medium">Route</th>
-                <th className="px-4 py-3 font-medium">Purpose</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#d3d3d3]">
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
-                  /api/integrations/leaflink/config
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  GET/POST — manage integration config
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
-                  /api/integrations/leaflink/webhook
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  POST — receives LeafLink webhooks
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
-                  /api/integrations/leaflink/syncs
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  GET — list order sync records
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
-                  /api/integrations/leaflink/retry
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  POST — retry failed webhooks
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-mono text-[#34c759] text-sm">
-                  /api/integrations/leaflink/callback
-                </td>
-                <td className="px-4 py-3 text-[#8a8a8a]">
-                  POST — payment callback from buyer
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
         {/* Coming Soon */}
         <div className="bg-[#f2f2f2] border border-[#d3d3d3] rounded-lg p-4 mt-8">
           <h4 className="font-medium text-[#212121] mb-2">
@@ -1288,10 +860,10 @@ function IntegrationsContent() {
             We&apos;re actively building out POS integrations for the cannabis
             industry. If you use a platform not listed here, let us know at{" "}
             <a
-              href="mailto:support@settlr.dev"
+              href="mailto:support@offbankpay.com"
               className="text-[#34c759] hover:underline"
             >
-              support@settlr.dev
+              support@offbankpay.com
             </a>
             .
           </p>
@@ -1316,18 +888,8 @@ function TroubleshootingContent() {
 
         <div className="space-y-4">
           <TroubleshootingItem
-            question="LeafLink webhooks not arriving"
-            answer={`Check these common issues:\n• Verify the webhook URL in LeafLink points to your domain (not localhost)\n• Ensure your endpoint is publicly accessible over HTTPS\n• Check that your HMAC webhook secret matches between LeafLink and Settlr config\n• Look at the sync records in your dashboard for processed webhook records\n• Use the retry button in the dashboard to re-process a failed webhook`}
-          />
-
-          <TroubleshootingItem
-            question="LeafLink API key validation failing"
-            answer={`When you save your LeafLink config, Settlr validates the key by calling GET /api/v2/companies/ on LeafLink. Common issues:\n• Make sure you copied the full API key from LeafLink (Settings → Integrations → API)\n• The auth format is 'App {key}' — Settlr handles this automatically\n• Check that your LeafLink account has API access enabled\n• Verify the company ID matches your LeafLink account`}
-          />
-
-          <TroubleshootingItem
             question="Payment stuck on 'Processing'"
-            answer={`This usually means the transaction is waiting for confirmation. Solana transactions typically confirm in 1-2 seconds. If stuck longer:\n• Check your internet connection\n• The RPC endpoint may be congested — try refreshing\n• If using devnet, the network may be slower — wait 30 seconds`}
+            answer={`This usually means the transaction is waiting for confirmation. Solana transactions typically confirm in 1-2 seconds. If stuck longer:\n• Check your internet connection\n• The RPC endpoint may be congested, try refreshing\n• If using devnet, the network may be slower, wait 30 seconds`}
           />
 
           <TroubleshootingItem
@@ -1336,13 +898,8 @@ function TroubleshootingContent() {
           />
 
           <TroubleshootingItem
-            question="Invoice not auto-created from LeafLink order"
-            answer={`Check these settings:\n• Verify auto_create_invoice is set to true in your LeafLink config\n• Check that the webhook event type is order.created or order.accepted\n• Look for errors in the sync records in your dashboard\n• The LeafLink order must have a valid total amount`}
-          />
-
-          <TroubleshootingItem
             question="Webhook signature verification failing"
-            answer={`Both LeafLink and Settlr webhooks use HMAC-SHA256:\n• Make sure the webhook secret in your config matches LeafLink's signing secret\n• The signature is computed over the raw request body — don't parse before verifying\n• Check for encoding issues — the body must be the exact bytes received`}
+            answer={`Offbank webhooks use HMAC-SHA256:\n• Make sure the webhook secret in your config matches the value Offbank is signing with\n• The signature is computed over the raw request body, don't parse before verifying\n• Check for encoding issues, the body must be the exact bytes received`}
           />
 
           <TroubleshootingItem
@@ -1352,7 +909,7 @@ function TroubleshootingContent() {
 
           <TroubleshootingItem
             question="How do I get support?"
-            answer={`We're here to help:\n• GitHub Issues: github.com/ABFX15/x402-hack-payment\n• Email: support@settlr.dev`}
+            answer={`We're here to help:\n• GitHub Issues: github.com/ABFX15/x402-hack-payment\n• Email: support@offbankpay.com`}
           />
         </div>
       </section>

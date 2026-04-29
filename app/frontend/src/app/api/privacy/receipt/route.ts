@@ -17,7 +17,7 @@ import {
     findDelegationMetadataPda,
     usdcToMicroUnits,
     DELEGATION_PROGRAM_ID,
-    SETTLR_PROGRAM_ID,
+    OFFBANK_PROGRAM_ID,
     TEE_VALIDATOR,
     PER_ENDPOINT,
     SessionStatus,
@@ -403,7 +403,7 @@ export async function GET(request: NextRequest) {
 
     // Return API info
     return NextResponse.json({
-        name: 'Settlr Private Receipt API',
+        name: 'Offbank Private Receipt API',
         version: '3.0.0',
         privacy: 'MagicBlock Private Ephemeral Rollups',
         hackathon: 'MagicBlock SolanaBlitz 2026',
@@ -416,7 +416,7 @@ export async function GET(request: NextRequest) {
             },
         },
         programs: {
-            settlr: SETTLR_PROGRAM_ID.toBase58(),
+            offbank: OFFBANK_PROGRAM_ID.toBase58(),
             delegation: DELEGATION_PROGRAM_ID.toBase58(),
             teeValidator: TEE_VALIDATOR.toBase58(),
         },

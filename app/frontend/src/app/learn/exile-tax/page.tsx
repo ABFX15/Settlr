@@ -4,16 +4,16 @@ import { Footer } from "@/components/ui/Footer";
 
 export const metadata: Metadata = {
   title:
-    "The Exile Tax — Why Stablecoins Are the Only Solution for the Debanked",
+    "The Exile Tax, Why Stablecoins Are the Only Solution for the Debanked",
   description:
     "A technical and legal analysis of the $4.7 billion annual tax imposed on cannabis businesses by financial exclusion, and why non-custodial USDC settlement on Solana is the only infrastructure-grade solution.",
   openGraph: {
     title:
-      "The Exile Tax — Why Stablecoins Are the Only Solution for the Debanked",
+      "The Exile Tax, Why Stablecoins Are the Only Solution for the Debanked",
     description:
       "Cannabis operators pay 5–12% in fees because banks won't serve them. This whitepaper explains why stablecoins are the structural fix.",
     type: "article",
-    url: "https://settlr.dev/learn/exile-tax",
+    url: "https://offbankpay.com/learn/exile-tax",
   },
 };
 
@@ -32,7 +32,7 @@ const p = {
 export default function ExileTaxWhitepaper() {
   return (
     <>
-      {/* Structured data — Article */}
+      {/* Structured data, Article */}
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -46,19 +46,19 @@ export default function ExileTaxWhitepaper() {
               "A technical and legal analysis of the $4.7 billion annual cost of financial exclusion in cannabis, and why non-custodial stablecoin settlement is the only infrastructure-grade solution.",
             author: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
+              name: "Offbank",
+              url: "https://offbankpay.com",
             },
             publisher: {
               "@type": "Organization",
-              name: "Settlr",
-              url: "https://settlr.dev",
-              logo: "https://settlr.dev/icon.svg",
+              name: "Offbank",
+              url: "https://offbankpay.com",
+              logo: "https://offbankpay.com/icon.svg",
             },
             datePublished: "2026-02-27",
             dateModified: "2026-02-27",
-            url: "https://settlr.dev/learn/exile-tax",
-            mainEntityOfPage: "https://settlr.dev/learn/exile-tax",
+            url: "https://offbankpay.com/learn/exile-tax",
+            mainEntityOfPage: "https://offbankpay.com/learn/exile-tax",
             about: [
               "Cannabis banking",
               "Stablecoin settlement",
@@ -110,7 +110,7 @@ export default function ExileTaxWhitepaper() {
                 name: "How do stablecoins solve the cannabis banking problem?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Stablecoins like USDC are non-custodial — no bank sits between buyer and seller. Settlement is peer-to-peer on Solana in under 5 seconds, at 1% flat vs. 8–12% charged by high-risk processors. The GENIUS Act of 2025 provides a federal regulatory framework for stablecoin issuers, making USDC a regulated, compliant payment rail that doesn't depend on traditional banking relationships.",
+                  text: "Stablecoins like USDC are non-custodial, no bank sits between buyer and seller. Settlement is peer-to-peer on Solana in under 5 seconds, at 1% flat vs. 8–12% charged by high-risk processors. The GENIUS Act of 2025 provides a federal regulatory framework for stablecoin issuers, making USDC a regulated, compliant payment rail that doesn't depend on traditional banking relationships.",
                 },
               },
               {
@@ -152,7 +152,7 @@ export default function ExileTaxWhitepaper() {
               className="mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold"
               style={{ borderColor: p.border, color: p.muted }}
             >
-              <span style={{ color: p.green }}>●</span> Settlr Whitepaper
+              <span style={{ color: p.green }}>●</span> Offbank Whitepaper
               &mdash; February 2026
             </div>
             <h1
@@ -373,7 +373,7 @@ export default function ExileTaxWhitepaper() {
                     [
                       "Tax penalty (IRS §280E)",
                       "~70% effective rate",
-                      "Federal tax code prohibits deductions for businesses trafficking in Schedule I substances. Cannabis companies cannot deduct COGS, rent, or payroll — only cost of goods sold",
+                      "Federal tax code prohibits deductions for businesses trafficking in Schedule I substances. Cannabis companies cannot deduct COGS, rent, or payroll, only cost of goods sold",
                     ],
                     [
                       "Working capital lockup",
@@ -722,7 +722,7 @@ export default function ExileTaxWhitepaper() {
             </p>
             <p className="mb-4 leading-relaxed">
               <strong>Squads Protocol</strong> (v4) provides programmable
-              multisig accounts on Solana. Every Settlr merchant gets a Squads
+              multisig accounts on Solana. Every Offbank merchant gets a Squads
               Smart Account with configurable signing thresholds:
             </p>
 
@@ -749,7 +749,7 @@ export default function ExileTaxWhitepaper() {
                       className="px-4 py-3 font-semibold"
                       style={{ color: p.navy }}
                     >
-                      Settlr + Squads
+                      Offbank + Squads
                     </th>
                   </tr>
                 </thead>
@@ -809,7 +809,7 @@ export default function ExileTaxWhitepaper() {
             <p className="mb-4 leading-relaxed">
               The onboarding flow is progressive: merchants start with a 1-of-1
               signer (feels like a normal app), and upgrade to multi-party
-              governance as their volume grows. At $5K+ in deposits, Settlr
+              governance as their volume grows. At $5K+ in deposits, Offbank
               prompts the operator to add a second signer (CFO, partner) for
               2-of-2 protection.
             </p>
@@ -843,7 +843,7 @@ export default function ExileTaxWhitepaper() {
                       className="px-4 py-3 font-semibold"
                       style={{ color: p.navy }}
                     >
-                      After (Settlr)
+                      After (Offbank)
                     </th>
                   </tr>
                 </thead>
@@ -869,7 +869,7 @@ export default function ExileTaxWhitepaper() {
                     [
                       "Account termination risk",
                       "30-day notice, any time",
-                      "Non-custodial — no account to close",
+                      "Non-custodial, no account to close",
                     ],
                   ].map(([comp, before, after]) => (
                     <tr key={comp}>
@@ -985,7 +985,7 @@ export default function ExileTaxWhitepaper() {
               5.3 BSA/AML Compliance Maintained
             </h3>
             <p className="mb-4 leading-relaxed">
-              Non-custodial does not mean non-compliant. Settlr maintains a full
+              Non-custodial does not mean non-compliant. Offbank maintains a full
               BSA/AML program:
             </p>
             <ul className="list-disc pl-6 space-y-2 mb-4 text-sm leading-relaxed">
@@ -1056,7 +1056,7 @@ export default function ExileTaxWhitepaper() {
               build a rail that doesn&rsquo;t need a bank.
             </p>
             <p className="font-semibold" style={{ color: p.green }}>
-              Settlr is that rail.
+              Offbank is that rail.
             </p>
           </section>
 
@@ -1075,7 +1075,7 @@ export default function ExileTaxWhitepaper() {
               Non-custodial USDC settlement. 1% flat. No bank dependency.
             </p>
             <a
-              href="/waitlist"
+              href="/onboarding"
               className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
               style={{ background: p.green }}
             >

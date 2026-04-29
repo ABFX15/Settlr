@@ -52,14 +52,14 @@ export default function ShopifyPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            name: "Settlr Shopify App",
+            name: "Offbank Shopify App",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
-            url: "https://settlr.dev/integrations/shopify",
+            url: "https://offbankpay.com/integrations/shopify",
             description:
               "Accept USDC payments on any Shopify store. Stablecoin checkout that fills the gap Shopify's native Solana integration doesn't cover.",
-            provider: { "@id": "https://settlr.dev/#organization" },
-            about: { "@id": "https://settlr.dev/#defined-term" },
+            provider: { "@id": "https://offbankpay.com/#organization" },
+            about: { "@id": "https://offbankpay.com/#defined-term" },
           }),
         }}
       />
@@ -99,7 +99,7 @@ export default function ShopifyPage() {
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#5c5c5c]">
               Shopify added Solana Pay, but it doesn&apos;t cover stablecoin
               settlement, gasless checkout, or non-custodial infrastructure.
-              Settlr fills the gap. Accept USDC with zero gas fees for customers
+              Offbank fills the gap. Accept USDC with zero gas fees for customers
               and instant settlement for merchants.
             </p>
           </Reveal>
@@ -148,7 +148,7 @@ export default function ShopifyPage() {
             <p className="mt-4 max-w-xl text-[#8a8a8a] leading-relaxed">
               Shopify blockchain integrations handle basic token payments. But
               merchants need programmable settlement, gasless UX, and real
-              settlement infrastructure. Settlr adds what&apos;s missing.
+              settlement infrastructure. Offbank adds what&apos;s missing.
             </p>
           </Reveal>
 
@@ -157,7 +157,7 @@ export default function ShopifyPage() {
               {
                 icon: CreditCard,
                 title: "Gasless checkout",
-                text: "Customers pay USDC without seeing a gas fee. Settlr sponsors network fees invisibly, just like swiping a card.",
+                text: "Customers pay USDC without seeing a gas fee. Offbank sponsors network fees invisibly, just like swiping a card.",
               },
               {
                 icon: DollarSign,
@@ -221,12 +221,12 @@ export default function ShopifyPage() {
             {
               step: "01",
               title: "Install from the App Store",
-              text: "Find Settlr in the Shopify App Store. One-click install from your Shopify admin.",
+              text: "Find Offbank in the Shopify App Store. One-click install from your Shopify admin.",
             },
             {
               step: "02",
               title: "Connect your wallet",
-              text: "Paste your USDC wallet address. Link your Settlr dashboard for analytics and webhook events.",
+              text: "Paste your USDC wallet address. Link your Offbank dashboard for analytics and webhook events.",
             },
             {
               step: "03",

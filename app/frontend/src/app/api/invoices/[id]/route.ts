@@ -101,7 +101,7 @@ export async function PATCH(
         const { action, paymentSignature, payerWallet } = body;
 
         if (action === "send" || action === "resend") {
-            const invoiceUrl = `${process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev"}/invoice/${invoice.viewToken}`;
+            const invoiceUrl = `${process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com"}/invoice/${invoice.viewToken}`;
             await updateInvoiceStatus(id, "sent", {
                 sentAt: new Date(),
             });

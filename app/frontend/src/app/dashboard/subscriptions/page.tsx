@@ -193,7 +193,7 @@ export default function SubscriptionsPage() {
     const baseUrl =
       typeof window !== "undefined"
         ? window.location.origin
-        : "https://settlr.dev";
+        : "https://offbankpay.com";
     return `${baseUrl}/checkout?plan=${plan.id}&merchant=${publicKey}&subscription=true`;
   };
 

@@ -256,7 +256,7 @@ export default function PricingPage() {
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mx-auto mt-5 max-w-md text-base text-[#8a8a8a]">
-              Join merchants already using Settlr for instant, gasless USDC
+              Join merchants already using Offbank for instant, gasless USDC
               payments.
             </p>
           </Reveal>

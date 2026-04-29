@@ -4,9 +4,9 @@ import { Footer } from "@/components/ui/Footer";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About Settlr — Non-Custodial B2B Stablecoin Settlement",
+  title: "About Offbank, Non-Custodial B2B Stablecoin Settlement",
   description:
-    "Settlr is non-custodial stablecoin settlement infrastructure for cannabis and high-risk B2B industries. 1% flat fee, instant finality, built on Solana.",
+    "Offbank is non-custodial stablecoin settlement infrastructure for cannabis and high-risk B2B industries. 1% flat fee, instant finality, built on Solana.",
   alternates: { canonical: "/about" },
 };
 
@@ -20,12 +20,12 @@ export default function AboutPage() {
       >
         <article>
           <h1 className="text-4xl font-bold tracking-tight text-[#212121] mb-6">
-            About Settlr
+            About Offbank
           </h1>
 
           <section className="space-y-5 text-[#5c5c5c] text-base leading-relaxed">
             <p>
-              Settlr is non-custodial stablecoin settlement infrastructure
+              Offbank is non-custodial stablecoin settlement infrastructure
               purpose-built for cannabis wholesalers and high-risk B2B supply
               chains. We replace cash drops and predatory 8–12% payment
               processors with instant, on-chain USDC settlement at a 1% flat
@@ -43,8 +43,8 @@ export default function AboutPage() {
               audits.
             </p>
             <p>
-              Settlr eliminates all of that. Payments settle in under 5 seconds
-              with an immutable on-chain audit trail — no bank can freeze your
+              Offbank eliminates all of that. Payments settle in under 5 seconds
+              with an immutable on-chain audit trail, no bank can freeze your
               funds, no processor can hold your reserves.
             </p>
 
@@ -53,25 +53,25 @@ export default function AboutPage() {
             </h2>
             <ul className="list-disc pl-6 space-y-2">
               <li>
-                <strong>Non-custodial</strong> — Settlr never holds your funds.
+                <strong>Non-custodial</strong>, Offbank never holds your funds.
                 Payments move directly between buyer and seller wallets via
                 Solana smart contracts.
               </li>
               <li>
-                <strong>Instant settlement</strong> — T+0 finality. Every
+                <strong>Instant settlement</strong>, T+0 finality. Every
                 payment confirms on-chain in under 5 seconds.
               </li>
               <li>
-                <strong>1% flat fee</strong> — No rolling reserves, no hidden
+                <strong>1% flat fee</strong>, No rolling reserves, no hidden
                 charges, no monthly minimums.
               </li>
               <li>
-                <strong>Compliance-ready</strong> — Every transaction produces
+                <strong>Compliance-ready</strong>, Every transaction produces
                 an immutable receipt suitable for BSA/AML reporting, GENIUS Act
                 compliance, and METRC integration.
               </li>
               <li>
-                <strong>LeafLink integration</strong> — Plugs directly into
+                <strong>LeafLink integration</strong>, Plugs directly into
                 cannabis wholesale purchase orders. Automatic invoicing,
                 payment-link delivery, and proof sync-back.
               </li>
@@ -81,7 +81,7 @@ export default function AboutPage() {
               Built on Solana
             </h2>
             <p>
-              Settlr&rsquo;s settlement program is deployed on Solana — the
+              Offbank&rsquo;s settlement program is deployed on Solana, the
               highest-throughput blockchain in production. Transactions cost
               fractions of a cent and finalize in 400ms. Our smart contract
               handles USDC transfers, platform fee collection, merchant
@@ -94,14 +94,14 @@ export default function AboutPage() {
             <p>
               Reach us at{" "}
               <a
-                href="mailto:adam@settlr.dev"
+                href="mailto:adam@offbankpay.com"
                 className="text-[#34c759] underline"
               >
-                adam@settlr.dev
+                adam@offbankpay.com
               </a>{" "}
               or on{" "}
               <a
-                href="https://x.com/settlrp"
+                href="https://x.com/offbankpay"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#34c759] underline"

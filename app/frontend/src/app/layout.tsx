@@ -43,13 +43,13 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: {
     default:
-      "Settlr — Non-Custodial B2B Stablecoin Settlement for Cannabis & High-Risk Industries",
-    template: "%s | Settlr",
+      "Offbank — Non-Custodial B2B Stablecoin Settlement for Cannabis & High-Risk Industries",
+    template: "%s | Offbank",
   },
   description:
-    "Settlr: Non-custodial stablecoin settlement for B2B cannabis and high-risk industries. 1% flat fee, instant finality, and no bank interference. Ever.",
+    "Offbank: Non-custodial stablecoin settlement for B2B cannabis and high-risk industries. 1% flat fee, instant finality, and no bank interference. Ever.",
   alternates: { canonical: "/" },
-  authors: [{ name: "Settlr" }],
+  authors: [{ name: "Offbank" }],
   icons: {
     icon: [
       { url: "/new-logo-no-bg.png", sizes: "any" },
@@ -58,16 +58,16 @@ export const metadata: Metadata = {
     apple: "/new-logo-no-bg.png",
   },
   manifest: "/manifest.webmanifest",
-  creator: "Settlr",
-  publisher: "Settlr",
-  metadataBase: new URL("https://settlr.dev"),
+  creator: "Offbank",
+  publisher: "Offbank",
+  metadataBase: new URL("https://offbankpay.com"),
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://settlr.dev",
-    siteName: "Settlr",
+    url: "https://offbankpay.com",
+    siteName: "Offbank",
     title:
-      "Settlr — Non-Custodial B2B Stablecoin Settlement for Cannabis & High-Risk Industries",
+      "Offbank — Non-Custodial B2B Stablecoin Settlement for Cannabis & High-Risk Industries",
     description:
       "Enterprise payments for the debanked. Non-custodial USDC settlement for high-risk B2B supply chains at 1% flat. No bank interference, ever.",
     images: [
@@ -75,18 +75,18 @@ export const metadata: Metadata = {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Settlr — Enterprise Payments for the Debanked",
+        alt: "Offbank — Enterprise Payments for the Debanked",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@settlrp",
-    title: "Settlr — Non-Custodial Stablecoin Settlement for High-Risk B2B",
+    site: "@offbankpay",
+    title: "Offbank — Non-Custodial Stablecoin Settlement for High-Risk B2B",
     description:
       "Move capital with 100% certainty. Non-custodial USDC settlement for cannabis and high-risk supply chains. 1% flat, no bank interference.",
     images: ["/twitter-image?v=3"],
-    creator: "@settlrp",
+    creator: "@offbankpay",
   },
   robots: {
     index: true,
@@ -164,11 +164,11 @@ export default function RootLayout({
           <a href="/products/invoices">Invoices</a>
           <a href="/pricing">Pricing</a>
           <a href="/compare">Compare</a>
-          <a href="/compare/settlr-vs-cash-armored-cars">
-            Settlr vs Cash &amp; Armored Cars
+          <a href="/compare/offbank-vs-cash-armored-cars">
+            Offbank vs Cash &amp; Armored Cars
           </a>
-          <a href="/compare/settlr-vs-high-risk-merchant-accounts">
-            Settlr vs High-Risk Merchant Accounts
+          <a href="/compare/offbank-vs-high-risk-merchant-accounts">
+            Offbank vs High-Risk Merchant Accounts
           </a>
           <a href="/demo">Demo</a>
           <a href="/learn">Knowledge Hub</a>
@@ -185,7 +185,7 @@ export default function RootLayout({
           </a>
           <a href="/blog">Blog</a>
           <a href="/help">Help Center</a>
-          <a href="/waitlist">Apply for the Private Rail</a>
+          <a href="/onboarding">Apply for the Private Rail</a>
           <a href="/onboarding">Get Started</a>
           <a href="/privacy">Privacy Policy</a>
         </nav>

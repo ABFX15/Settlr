@@ -18,7 +18,7 @@ if (
         redis: Redis.fromEnv(),
         limiter: Ratelimit.slidingWindow(30, "60 s"), // 30 requests per 60 seconds
         analytics: true,
-        prefix: "settlr",
+        prefix: "offbank",
     });
 }
 

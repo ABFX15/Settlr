@@ -273,7 +273,7 @@ export default function WebhooksPage() {
               <p className="text-[#8a8a8a] text-sm">
                 All webhook payloads are signed with HMAC-SHA256. Verify the{" "}
                 <code className="bg-[#f2f2f2] px-1.5 py-0.5 rounded text-[#34c759]">
-                  X-Settlr-Signature
+                  X-Offbank-Signature
                 </code>{" "}
                 header to ensure authenticity. See our{" "}
                 <Link
@@ -465,7 +465,7 @@ export default function WebhooksPage() {
                     type="url"
                     value={newUrl}
                     onChange={(e) => setNewUrl(e.target.value)}
-                    placeholder="https://your-site.com/webhooks/settlr"
+                    placeholder="https://your-site.com/webhooks/offbank"
                     className="w-full bg-[#f2f2f2] border border-[#d3d3d3] rounded-xl px-4 py-3 text-[#212121] placeholder-[#8a8a8a] focus:outline-none focus:ring-2 focus:ring-[#8e24aa] focus:border-transparent"
                   />
                   <p className="text-xs text-[#8a8a8a] mt-2">

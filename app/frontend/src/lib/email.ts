@@ -7,8 +7,8 @@
 
 import { explorerUrl as buildExplorerUrl } from "./constants";
 
-const FROM_EMAIL = process.env.PAYOUT_FROM_EMAIL || "adam@settlr.dev";
-const APP_NAME = "Settlr";
+const FROM_EMAIL = process.env.PAYOUT_FROM_EMAIL || "adam@offbankpay.com";
+const APP_NAME = "Offbank";
 
 function getResendKey(): string | undefined {
     return process.env.RESEND_API_KEY;
@@ -117,11 +117,11 @@ export async function sendInstantPayoutEmail(params: {
             </a>
         </div>
         <p style="color: #999; font-size: 12px; text-align: center;">
-            Want to change your wallet or turn off instant delivery? <a href="https://settlr.dev/me" style="color: #3B82F6; text-decoration: none;">Manage your preferences</a>
+            Want to change your wallet or turn off instant delivery? <a href="https://offbankpay.com/me" style="color: #3B82F6; text-decoration: none;">Manage your preferences</a>
         </p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
         <p style="color: #bbb; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — non-custodial settlement infrastructure
+            Powered by <a href="https://offbankpay.com" style="color: #3B82F6; text-decoration: none;">Offbank</a> — non-custodial settlement infrastructure
         </p>
     </div>`;
 
@@ -138,12 +138,12 @@ export async function sendAuthLinkEmail(params: {
     authUrl: string;
 }): Promise<boolean> {
     const { to, authUrl } = params;
-    const subject = "Sign in to Settlr";
+    const subject = "Sign in to Offbank";
 
     const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
         <div style="text-align: center; margin-bottom: 32px;">
-            <h1 style="color: #212121; font-size: 24px; margin: 0;">Sign in to Settlr</h1>
+            <h1 style="color: #212121; font-size: 24px; margin: 0;">Sign in to Offbank</h1>
         </div>
         <p style="color: #444; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
             Click the button below to access your recipient dashboard. This link expires in 15 minutes.
@@ -158,11 +158,11 @@ export async function sendAuthLinkEmail(params: {
         </p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
         <p style="color: #bbb; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — non-custodial settlement infrastructure
+            Powered by <a href="https://offbankpay.com" style="color: #3B82F6; text-decoration: none;">Offbank</a> — non-custodial settlement infrastructure
         </p>
     </div>`;
 
-    const text = `Sign in to Settlr: ${authUrl} — this link expires in 15 minutes.`;
+    const text = `Sign in to Offbank: ${authUrl} — this link expires in 15 minutes.`;
 
     return sendEmail({ to, subject, html, text });
 }
@@ -201,7 +201,7 @@ export async function sendPayoutClaimEmail(params: {
             ${memo ? `<p style="color: #8a8a8a; font-size: 14px; margin: 8px 0 0;">${memo}</p>` : ""}
         </div>
         <p style="color: #444; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
-            ${sender} sent you <strong>${formattedAmount}</strong> via Settlr.
+            ${sender} sent you <strong>${formattedAmount}</strong> via Offbank.
             Click the button below to claim your funds — no bank details needed.
         </p>
         <div style="text-align: center; margin-bottom: 24px;">
@@ -214,7 +214,7 @@ export async function sendPayoutClaimEmail(params: {
         </p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0;" />
         <p style="color: #bbb; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #3B82F6; text-decoration: none;">Settlr</a> — non-custodial settlement infrastructure
+            Powered by <a href="https://offbankpay.com" style="color: #3B82F6; text-decoration: none;">Offbank</a> — non-custodial settlement infrastructure
         </p>
     </div>`;
 
@@ -273,7 +273,7 @@ export async function sendInvoiceEmail(params: {
         </p>
         <hr style="border: none; border-top: 1px solid #d3d3d3; margin: 32px 0;" />
         <p style="color: #8a8a8a; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #34c759; text-decoration: none;">Settlr</a> — instant business payments
+            Powered by <a href="https://offbankpay.com" style="color: #34c759; text-decoration: none;">Offbank</a> — instant business payments
         </p>
     </div>`;
 
@@ -388,7 +388,7 @@ export async function sendCollectionReminderEmail(params: {
         </p>
         <hr style="border: none; border-top: 1px solid #d3d3d3; margin: 32px 0;" />
         <p style="color: #8a8a8a; font-size: 11px; text-align: center;">
-            Powered by <a href="https://settlr.dev" style="color: #34c759; text-decoration: none;">Settlr</a> — instant business payments
+            Powered by <a href="https://offbankpay.com" style="color: #34c759; text-decoration: none;">Offbank</a> — instant business payments
         </p>
     </div>`;
 

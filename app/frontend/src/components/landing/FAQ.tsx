@@ -7,8 +7,8 @@ import { t, spring, springFast } from "./shared";
 
 const faqs = [
   {
-    q: "What is Settlr?",
-    a: "Non-custodial stablecoin settlement infrastructure for B2B cannabis supply chains. We enable instant USDC payments between wholesalers, distributors, and cultivators without requiring a bank.",
+    q: "What is Offbank?",
+    a: "Non-custodial USDC invoicing for cannabis distributors, brands, and the wholesalers banks won't reliably serve. Send an invoice, your buyer pays it, you get USDC in seconds, and cash out to USD via ACH whenever you want. 1% flat. We never hold your funds.",
   },
   {
     q: "Do recipients need a crypto wallet?",
@@ -16,11 +16,11 @@ const faqs = [
   },
   {
     q: "Is this legal?",
-    a: "Yes. Settlr uses USDC (a fully-reserved, audited stablecoin issued by Circle) and performs KYB/KYC verification on all merchants. All transactions are recorded on-chain for full auditability.",
+    a: "Yes. Offbank uses USDC (a fully-reserved, audited stablecoin issued by Circle) and performs KYB/KYC verification at first settlement. All transactions are recorded on-chain for full auditability.",
   },
   {
     q: "What if cannabis becomes federally legal?",
-    a: "Our value proposition is speed and cost, not just banking access. 1% fees and instant settlement beat ACH regardless of the regulatory environment.",
+    a: "Cannabis is one of several verticals we serve. Our value proposition (1% flat, instant settlement, non-custodial) holds across CBD and hemp, firearms, and international wholesale regardless of any single vertical's regulatory status.",
   },
   {
     q: "How is this different from ACH or wire transfers?",
@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: "Who controls the funds?",
-    a: "You do. Settlr is non-custodial. Funds move peer-to-peer between multisig vaults that you and your counterparty control.",
+    a: "You do. Offbank is non-custodial. Funds move peer-to-peer between multisig vaults that you and your counterparty control.",
   },
 ];
 
@@ -92,7 +92,7 @@ export function FAQ() {
     <section className="bg-white py-[120px]">
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-20">
-          {/* left — heading */}
+          {/* left, heading */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -107,11 +107,11 @@ export function FAQ() {
               Frequently Asked Questions
             </h2>
             <p className="mt-4 max-w-sm text-base" style={{ color: "#5c5c5c" }}>
-              Get answers to common questions about Settlr
+              Get answers to common questions about Offbank
             </p>
           </motion.div>
 
-          {/* right — accordion */}
+          {/* right, accordion */}
           <div>
             {faqs.map((faq, i) => (
               <FAQItem key={faq.q} q={faq.q} a={faq.a} index={i} />

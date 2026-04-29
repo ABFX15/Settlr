@@ -846,7 +846,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       setPaidFromWallet(activeWallet.address);
       setStep("success");
-      sendToParent("settlr:success", {
+      sendToParent("offbank:success", {
         signature: finalSignature,
         amount,
         merchantWallet,
@@ -871,7 +871,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
             "Gasless transaction may have been processed, but no signature was available to verify treasury fee transfer.",
           );
           setStep("error");
-          sendToParent("settlr:error", {
+          sendToParent("offbank:error", {
             message:
               "Gasless processed without signature; fee transfer could not be verified.",
           });
@@ -882,7 +882,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       // For other errors, show error state
       setError(`${errorMessage}. Please try again.`);
       setStep("error");
-      sendToParent("settlr:error", { message: errorMessage });
+      sendToParent("offbank:error", { message: errorMessage });
     } finally {
       // Always reset the processing flag
       setIsProcessingPayment(false);
@@ -1109,7 +1109,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
 
       setPaidFromWallet(activeWallet.address);
       setStep("success");
-      sendToParent("settlr:success", {
+      sendToParent("offbank:success", {
         signature: transferSignature,
         swapSignature,
         amount,
@@ -1125,7 +1125,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         err instanceof Error ? err.message : "Payment failed";
       setError(errorMessage);
       setStep("error");
-      sendToParent("settlr:error", { message: errorMessage });
+      sendToParent("offbank:error", { message: errorMessage });
     }
   };
 
@@ -1372,7 +1372,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       setStep("success");
 
       // Notify parent window if embedded
-      sendToParent("settlr:success", {
+      sendToParent("offbank:success", {
         signature: signatureBase58,
         amount,
         merchantWallet,
@@ -1387,7 +1387,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
       setStep("error");
 
       // Notify parent window if embedded
-      sendToParent("settlr:error", { message: errorMessage });
+      sendToParent("offbank:error", { message: errorMessage });
     }
   };
 
@@ -1411,7 +1411,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         <button
           onClick={() => {
             if (isEmbed || isWidget) {
-              sendToParent("settlr:cancel", {});
+              sendToParent("offbank:cancel", {});
             } else if (cancelUrl) {
               window.location.href = cancelUrl;
             } else {
@@ -1591,7 +1591,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
           <p className="text-center text-[#8a8a8a] text-xs mt-6">
             Powered by{" "}
             <Link href="/" className="text-[#34c759] hover:text-[#34c759]">
-              Settlr
+              Offbank
             </Link>
           </p>
         </motion.div>
@@ -1670,7 +1670,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         <button
           onClick={() => {
             if (isEmbed || isWidget) {
-              sendToParent("settlr:cancel", {});
+              sendToParent("offbank:cancel", {});
             } else if (cancelUrl) {
               window.location.href = cancelUrl;
             } else {
@@ -1852,7 +1852,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
         <button
           onClick={() => {
             if (isEmbed || isWidget) {
-              sendToParent("settlr:cancel", {});
+              sendToParent("offbank:cancel", {});
             } else if (cancelUrl) {
               window.location.href = cancelUrl;
             } else {
@@ -2031,7 +2031,7 @@ export default function CheckoutClient({ searchParams }: CheckoutClientProps) {
                 {useGasless && (
                   <p className="text-[#34c759] text-xs mt-2 flex items-center gap-1">
                     <Check className="w-3 h-3" />
-                    Gas fees covered by Settlr
+                    Gas fees covered by Offbank
                   </p>
                 )}
               </div>

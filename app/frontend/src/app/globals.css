@@ -578,13 +578,13 @@ pre,
 }
 
 /* ── Blog prose styles ── */
-.prose-settlr {
+.prose-offbank {
   color: #3a3a3a;
   font-size: 1.05rem;
   line-height: 1.8;
 }
 
-.prose-settlr h2 {
+.prose-offbank h2 {
   color: #212121;
   font-size: 1.5rem;
   font-weight: 600;
@@ -593,7 +593,7 @@ pre,
   letter-spacing: -0.01em;
 }
 
-.prose-settlr h3 {
+.prose-offbank h3 {
   color: #212121;
   font-size: 1.2rem;
   font-weight: 600;
@@ -601,40 +601,40 @@ pre,
   margin-bottom: 0.5rem;
 }
 
-.prose-settlr p {
+.prose-offbank p {
   margin-bottom: 1.25rem;
 }
 
-.prose-settlr a {
+.prose-offbank a {
   color: #22863a;
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: color 0.15s;
 }
 
-.prose-settlr a:hover {
+.prose-offbank a:hover {
   color: #34c759;
 }
 
-.prose-settlr ul,
-.prose-settlr ol {
+.prose-offbank ul,
+.prose-offbank ol {
   padding-left: 1.5rem;
   margin-bottom: 1.25rem;
 }
 
-.prose-settlr ul {
+.prose-offbank ul {
   list-style-type: disc;
 }
 
-.prose-settlr ol {
+.prose-offbank ol {
   list-style-type: decimal;
 }
 
-.prose-settlr li {
+.prose-offbank li {
   margin-bottom: 0.4rem;
 }
 
-.prose-settlr code {
+.prose-offbank code {
   background: #f4f4f5;
   padding: 0.15em 0.4em;
   border-radius: 4px;
@@ -643,7 +643,7 @@ pre,
   color: #212121;
 }
 
-.prose-settlr pre {
+.prose-offbank pre {
   background: #f8f8f8;
   border: 1px solid #e5e5e5;
   border-radius: 0.75rem;
@@ -652,14 +652,14 @@ pre,
   margin-bottom: 1.5rem;
 }
 
-.prose-settlr pre code {
+.prose-offbank pre code {
   background: transparent;
   padding: 0;
   font-size: 0.85rem;
   line-height: 1.7;
 }
 
-.prose-settlr blockquote {
+.prose-offbank blockquote {
   border-left: 3px solid #34c759;
   padding-left: 1rem;
   margin: 1.5rem 0;
@@ -667,29 +667,29 @@ pre,
   font-style: italic;
 }
 
-.prose-settlr strong {
+.prose-offbank strong {
   color: #212121;
   font-weight: 600;
 }
 
-.prose-settlr hr {
+.prose-offbank hr {
   border: none;
   border-top: 1px solid #e5e5e5;
   margin: 2rem 0;
 }
 
-.prose-settlr table {
+.prose-offbank table {
   width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
   font-size: 0.95rem;
 }
 
-.prose-settlr thead {
+.prose-offbank thead {
   background: #f4f4f5;
 }
 
-.prose-settlr th {
+.prose-offbank th {
   text-align: left;
   padding: 0.75rem 1rem;
   font-weight: 600;
@@ -697,17 +697,17 @@ pre,
   border-bottom: 2px solid #e5e5e5;
 }
 
-.prose-settlr td {
+.prose-offbank td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #f0f0f0;
   color: #3a3a3a;
 }
 
-.prose-settlr tbody tr:hover {
+.prose-offbank tbody tr:hover {
   background: #fafafa;
 }
 
-.prose-settlr img {
+.prose-offbank img {
   max-width: 100%;
   height: auto;
   border-radius: 12px;

@@ -106,7 +106,7 @@ export default function InvoicesPage() {
   const appUrl =
     typeof window !== "undefined"
       ? window.location.origin
-      : process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+      : process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
 
   const copyPayLink = (inv: InvoiceSummary) => {
     if (!inv.viewToken) return;

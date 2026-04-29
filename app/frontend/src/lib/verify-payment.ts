@@ -1,11 +1,11 @@
 /**
- * Server-side verification of an on-chain Settlr payment.
+ * Server-side verification of an on-chain Offbank payment.
  *
  * Confirms the parsed Solana transaction contains:
  *   - a successful spl-token transfer of `merchantAmount` (USDC base units)
  *     into the merchant's USDC ATA, AND
  *   - a successful spl-token transfer of `platformFee` into the platform
- *     treasury PDA owned by the Settlr program.
+ *     treasury PDA owned by the Offbank program.
  *
  * Used by every server route that records or trusts a buyer-supplied tx
  * signature (invoice payments, SDK redirect recording, etc.) so callers

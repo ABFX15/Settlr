@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://settlr.dev/send-payments",
-    siteName: "Settlr",
+    url: "https://offbankpay.com/send-payments",
+    siteName: "Offbank",
     title: "Send Payments — Non-Custodial USDC Settlement",
     description:
       "Settle with vendors and contractors using non-custodial USDC. 1% flat, instant finality.",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Settlr — Non-Custodial Settlement",
+        alt: "Offbank — Non-Custodial Settlement",
       },
     ],
   },

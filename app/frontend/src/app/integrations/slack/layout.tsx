@@ -3,13 +3,13 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Slack Notifications — Settlement Alerts in Slack",
   description:
-    "Get real-time Settlr settlement notifications in Slack. Know instantly when payments are sent, confirmed, and settled.",
+    "Get real-time Offbank settlement notifications in Slack. Know instantly when payments are sent, confirmed, and settled.",
   alternates: { canonical: "/integrations/slack" },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://settlr.dev/integrations/slack",
-    siteName: "Settlr",
+    url: "https://offbankpay.com/integrations/slack",
+    siteName: "Offbank",
     title: "Slack Notifications — Settlement Alerts in Slack",
     description:
       "Get real-time settlement notifications in Slack. Know when payments settle.",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Settlr + Slack",
+        alt: "Offbank + Slack",
       },
     ],
   },

@@ -1,11 +1,11 @@
 /**
- * Settlr Checkout Widget - Embeddable JavaScript
+ * Offbank Checkout Widget - Embeddable JavaScript
  * 
  * Usage:
- * <script src="https://settlr.app/widget.js"></script>
+ * <script src="https://offbankpay.com/widget.js"></script>
  * <script>
  *   document.getElementById('pay-btn').onclick = function() {
- *     Settlr.checkout({
+ *     Offbank.checkout({
  *       merchantWallet: 'YOUR_SOLANA_WALLET',
  *       amount: 9.99,
  *       memo: 'In-game purchase',
@@ -22,12 +22,12 @@
 (function () {
     'use strict';
 
-    var SETTLR_BASE_URL = 'https://settlr.app';
+    var SETTLR_BASE_URL = 'https://offbankpay.com';
     var VERSION = '1.0.0';
 
     // Prevent double initialization
-    if (window.Settlr && window.Settlr.initialized) {
-        console.log('[Settlr] Already initialized');
+    if (window.Offbank && window.Offbank.initialized) {
+        console.log('[Offbank] Already initialized');
         return;
     }
 
@@ -121,7 +121,7 @@
      */
     function checkout(config) {
         if (!config || !config.merchantWallet) {
-            console.error('[Settlr] merchantWallet is required');
+            console.error('[Offbank] merchantWallet is required');
             return;
         }
 
@@ -320,8 +320,8 @@
         });
     }
 
-    // Initialize Settlr global
-    window.Settlr = {
+    // Initialize Offbank global
+    window.Offbank = {
         version: VERSION,
         initialized: true,
         checkout: checkout,
@@ -336,5 +336,5 @@
         initDataAttributes();
     }
 
-    console.log('[Settlr] Widget initialized v' + VERSION);
+    console.log('[Offbank] Widget initialized v' + VERSION);
 })();

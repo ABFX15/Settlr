@@ -3,7 +3,7 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import { Hero, LogoBar, BentoCards } from "@/components/landing";
 
-/* Below-fold sections — lazy loaded to reduce initial JS bundle */
+/* Below-fold sections, lazy loaded to reduce initial JS bundle */
 const SocialProof = dynamic(() =>
   import("@/components/landing/SocialProof").then((m) => ({
     default: m.SocialProof,
@@ -53,22 +53,22 @@ export default function HomePage() {
             "@graph": [
               {
                 "@type": "Organization",
-                "@id": "https://settlr.dev/#organization",
-                name: "Settlr",
-                url: "https://settlr.dev",
+                "@id": "https://offbankpay.com/#organization",
+                name: "Offbank",
+                url: "https://offbankpay.com",
                 logo: {
                   "@type": "ImageObject",
-                  url: "https://settlr.dev/icon.svg",
+                  url: "https://offbankpay.com/icon.svg",
                   width: 512,
                   height: 512,
                 },
                 description:
                   "Non-custodial stablecoin settlement infrastructure for B2B cannabis distributors. Instant USDC payments on Solana at a 1% flat fee.",
                 foundingDate: "2025",
-                sameAs: ["https://x.com/settlrp"],
+                sameAs: ["https://x.com/offbankpay"],
                 contactPoint: {
                   "@type": "ContactPoint",
-                  email: "adam@settlr.dev",
+                  email: "adam@offbankpay.com",
                   contactType: "sales",
                 },
                 areaServed: "US",
@@ -83,19 +83,19 @@ export default function HomePage() {
               },
               {
                 "@type": "WebSite",
-                "@id": "https://settlr.dev/#website",
-                url: "https://settlr.dev",
-                name: "Settlr",
-                publisher: { "@id": "https://settlr.dev/#organization" },
+                "@id": "https://offbankpay.com/#website",
+                url: "https://offbankpay.com",
+                name: "Offbank",
+                publisher: { "@id": "https://offbankpay.com/#organization" },
                 potentialAction: {
                   "@type": "SearchAction",
-                  target: "https://settlr.dev/help?q={search_term_string}",
+                  target: "https://offbankpay.com/help?q={search_term_string}",
                   "query-input": "required name=search_term_string",
                 },
               },
               {
                 "@type": "SoftwareApplication",
-                name: "Settlr",
+                name: "Offbank",
                 applicationCategory: "FinanceApplication",
                 operatingSystem: "Web",
                 offers: {
@@ -103,7 +103,7 @@ export default function HomePage() {
                   price: "0",
                   priceCurrency: "USD",
                   description:
-                    "1% flat fee per settlement — no monthly minimums",
+                    "1% flat fee per settlement, no monthly minimums",
                 },
                 featureList: [
                   "Non-custodial USDC settlement",
@@ -111,6 +111,7 @@ export default function HomePage() {
                   "Purchase order to invoice workflow",
                   "Automated collection reminders",
                   "LeafLink integration",
+                  "USDC to USD off-ramp via Sphere",
                   "BSA/AML compliance receipts",
                 ],
               },

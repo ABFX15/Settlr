@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SettlrLogoWithIcon } from "@/components/settlr-logo";
+import { OffbankLogoWithIcon } from "@/components/offbank-logo";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
@@ -62,7 +62,7 @@ export function DashboardSidebar() {
       {/* Logo */}
       <div className="flex h-16 items-center px-5 border-b border-[#d3d3d3]">
         <Link href="/" className="flex items-center gap-2">
-          <SettlrLogoWithIcon size="sm" variant="dark" />
+          <OffbankLogoWithIcon size="sm" variant="dark" />
         </Link>
         <button
           onClick={() => setMobileOpen(false)}
@@ -158,7 +158,7 @@ export function DashboardSidebar() {
         >
           <Menu className="h-5 w-5" />
         </button>
-        <SettlrLogoWithIcon size="sm" variant="light" />
+        <OffbankLogoWithIcon size="sm" variant="light" />
         <Link
           href="/dashboard/invoices/create"
           className="flex items-center gap-1.5 rounded-lg bg-[#34c759] px-3 py-1.5 text-xs font-bold text-black uppercase"

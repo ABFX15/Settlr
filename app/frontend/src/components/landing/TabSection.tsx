@@ -36,7 +36,7 @@ export function TabSection() {
             className="mx-auto mt-4 max-w-lg text-base font-normal"
             style={{ color: t.bodyLight }}
           >
-            No banks, no holds, no middlemen. See how Settlr replaces your
+            No banks, no holds, no middlemen. See how Offbank replaces your
             entire payment stack with one USDC rail.
           </p>
         </motion.div>
@@ -106,13 +106,14 @@ function ProblemTab() {
             className="text-2xl font-extrabold"
             style={{ color: t.navy, fontFamily: t.sans }}
           >
-            Cannabis is legal. Banking isn&apos;t.
+            Your business is legal. Banking isn&apos;t.
           </h3>
           <p
             className="mt-3 text-[15px] font-normal leading-relaxed"
             style={{ color: t.bodyLight }}
           >
-            State-legal businesses still can&apos;t access basic financial
+            Restricted-commerce operators (cannabis, CBD and hemp, firearms,
+            cross-border wholesale) still can&apos;t access basic financial
             infrastructure.
           </p>
           <div className="mt-5 space-y-2.5">
@@ -264,7 +265,7 @@ function HowTab() {
               {
                 n: "1",
                 title: "Connect your business",
-                desc: "KYB verification — licences, permits.",
+                desc: "KYB verification, licences, permits.",
               },
               {
                 n: "2",

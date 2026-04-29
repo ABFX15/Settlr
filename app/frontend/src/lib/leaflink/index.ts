@@ -1,5 +1,5 @@
 /**
- * LeafLink ↔ Settlr integration — barrel export
+ * LeafLink ↔ Offbank integration — barrel export
  */
 
 export { LeafLinkClient } from "./client";

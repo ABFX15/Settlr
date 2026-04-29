@@ -1757,7 +1757,7 @@ function generateBatchId(): string {
     return id;
 }
 
-const CLAIM_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://settlr.dev";
+const CLAIM_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://offbankpay.com";
 
 export async function createPayout(
     data: {

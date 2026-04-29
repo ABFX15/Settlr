@@ -55,7 +55,7 @@ const cards = [
     countTo: 34,
     prefix: "$",
     suffix: "B",
-    desc: "US cannabis market with no reliable payment rails",
+    desc: "US restricted-commerce TAM banks won't reliably serve, including cannabis, CBD, hemp, firearms, and cross-border wholesale",
     img: "/nobg-globe.png",
     span: "sm:col-span-2",
     bg: "#f7f7f7",
@@ -66,7 +66,7 @@ const cards = [
     countTo: 4,
     prefix: "$",
     suffix: "B",
-    desc: "Unpaid B2B receivables in cannabis wholesale",
+    desc: "Unpaid B2B receivables in high-friction wholesale verticals",
     img: "/nobg-dollar.png",
     span: "",
     bg: "#f7f7f7",
@@ -88,7 +88,7 @@ const cards = [
     countTo: null,
     prefix: "",
     suffix: "",
-    desc: "Zero stablecoin settlement providers serve cannabis B2B. Until now.",
+    desc: "Stablecoin settlement built for industries banks won't serve. Until now.",
     img: "/nobg-shield.png",
     span: "",
     bg: "#34c759",
@@ -99,7 +99,7 @@ const cards = [
     countTo: 9,
     prefix: "5–",
     suffix: "%",
-    desc: "What high-risk processors charge — because they can",
+    desc: "What high-risk processors charge, because they can",
     img: "/nobg-document.png",
     span: "",
     bg: "#f7f7f7",
@@ -126,7 +126,7 @@ export function BentoCards() {
             className="text-[32px] leading-[1.15] tracking-tight font-extrabold sm:text-[44px]"
             style={{ color: t.navy, fontFamily: t.sans }}
           >
-            Cannabis wholesalers wait 30–60 days to get paid.
+            B2B operators in restricted industries wait 30-60 days to get paid.
           </h2>
         </motion.div>
 

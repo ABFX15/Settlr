@@ -53,14 +53,14 @@ export default function SlackPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            name: "Settlr Slack Bot",
+            name: "Offbank Slack Bot",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
-            url: "https://settlr.dev/integrations/slack",
+            url: "https://offbankpay.com/integrations/slack",
             description:
               "Trigger USDC settlements from Slack. Use slash commands to settle with vendors, get approval workflows, and thread receipts.",
-            provider: { "@id": "https://settlr.dev/#organization" },
-            about: { "@id": "https://settlr.dev/#defined-term" },
+            provider: { "@id": "https://offbankpay.com/#organization" },
+            about: { "@id": "https://offbankpay.com/#defined-term" },
           }),
         }}
       />

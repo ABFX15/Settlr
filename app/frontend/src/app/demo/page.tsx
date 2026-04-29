@@ -45,7 +45,7 @@ const STEPS = [
   { id: 5, label: "Blinks", icon: Link2 },
 ] as const;
 
-/* --- Settlr Verified Seal --- */
+/* --- Offbank Verified Seal --- */
 function VerifiedSeal({ className = "" }: { className?: string }) {
   return (
     <div
@@ -56,7 +56,7 @@ function VerifiedSeal({ className = "" }: { className?: string }) {
         className="text-[11px] font-semibold uppercase tracking-wider text-[#2ba048]"
         style={{ fontFamily: "var(--font-jetbrains), monospace" }}
       >
-        Settlr Verified
+        Offbank Verified
       </span>
     </div>
   );
@@ -127,7 +127,7 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
         </div>
       </div>
 
-      {/* Settlr Rail */}
+      {/* Offbank Rail */}
       <div
         className="relative overflow-hidden rounded-2xl border p-6 transition-all duration-500"
         style={{
@@ -152,7 +152,7 @@ function SettlementProgress({ onSettled }: { onSettled?: () => void }) {
           <div className="mb-4 flex items-center gap-2">
             <Shield className="h-5 w-5 text-[#2ba048]" />
             <span className="text-sm font-semibold uppercase tracking-wider text-[#8a8a8a]">
-              Settlr Private Rail
+              Offbank Private Rail
             </span>
           </div>
           <div className="mb-3 flex items-center gap-3">
@@ -619,7 +619,7 @@ function StepInvoice({ form }: { form: DemoForm }) {
             <div className="flex items-center gap-2 rounded-lg border border-[#34c759]/20 bg-[#34c759]/[0.06] px-3 py-1.5">
               <Shield className="h-3.5 w-3.5 text-[#2ba048]" />
               <span className="text-xs font-medium text-[#2ba048]">
-                Compliant with GENIUS Act (2025)
+                KYB · AML · BSA reporting
               </span>
             </div>
           </div>
@@ -999,22 +999,19 @@ function StepReceipt({
 
         {/* Compliance stamps */}
         <div className="mt-6 flex flex-wrap gap-2">
-          {[
-            "KYB Verified",
-            "AML Screened",
-            "GENIUS Act Compliant",
-            "BSA Reporting Ready",
-          ].map((stamp) => (
-            <div
-              key={stamp}
-              className="flex items-center gap-1.5 rounded-full border border-[#34c759]/15 bg-[#34c759]/[0.05] px-3 py-1.5"
-            >
-              <Check className="h-3 w-3 text-[#2ba048]" />
-              <span className="text-xs font-medium text-[#2ba048]">
-                {stamp}
-              </span>
-            </div>
-          ))}
+          {["KYB Verified", "AML Screened", "BSA Reporting Ready"].map(
+            (stamp) => (
+              <div
+                key={stamp}
+                className="flex items-center gap-1.5 rounded-full border border-[#34c759]/15 bg-[#34c759]/[0.05] px-3 py-1.5"
+              >
+                <Check className="h-3 w-3 text-[#2ba048]" />
+                <span className="text-xs font-medium text-[#2ba048]">
+                  {stamp}
+                </span>
+              </div>
+            ),
+          )}
         </div>
       </div>
     </motion.div>
@@ -1029,7 +1026,7 @@ function StepBlinks({ form }: { form: DemoForm }) {
   const [copied, setCopied] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
 
-  const demoBlinkUrl = `https://settlr.dev/api/actions/pay?invoice=demo_${
+  const demoBlinkUrl = `https://offbankpay.com/api/actions/pay?invoice=demo_${
     form.businessName?.replace(/\s+/g, "_").toLowerCase() || "pacific_growers"
   }`;
 
@@ -1069,7 +1066,7 @@ function StepBlinks({ form }: { form: DemoForm }) {
         Share a Link. Get Paid.
       </h2>
       <p className="mb-8 max-w-xl text-[#8a8a8a]">
-        Every Settlr invoice generates a{" "}
+        Every Offbank invoice generates a{" "}
         <strong className="text-[#212121]">Solana Blink</strong> {"\u2014"} a
         shareable pay link that renders a native payment card in any compatible
         wallet. No app download. No login. Just tap &amp; pay.
@@ -1095,9 +1092,11 @@ function StepBlinks({ form }: { form: DemoForm }) {
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#34c759]">
                       <Shield className="h-4 w-4 text-white" />
                     </div>
-                    <span className="text-sm font-bold text-white">Settlr</span>
+                    <span className="text-sm font-bold text-white">
+                      Offbank
+                    </span>
                   </div>
-                  <p className="mt-3 text-xs text-white/60">settlr.dev</p>
+                  <p className="mt-3 text-xs text-white/60">offbankpay.com</p>
                 </div>
                 <div className="rounded-md bg-white/10 px-2 py-1">
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-white/70">
@@ -1171,7 +1170,7 @@ function StepBlinks({ form }: { form: DemoForm }) {
               {
                 icon: FileText,
                 title: "Invoice creates a Blink",
-                desc: "Every Settlr invoice auto-generates a Blink URL using the Solana Actions spec. No extra setup needed.",
+                desc: "Every Offbank invoice auto-generates a Blink URL using the Solana Actions spec. No extra setup needed.",
               },
               {
                 icon: Share2,
@@ -1318,7 +1317,7 @@ export default function DemoPage() {
       router.push(
         `/checkout?amount=${safeAmount.toFixed(
           2,
-        )}&merchant=Settlr&to=${merchantWallet}&memo=${encodeURIComponent(
+        )}&merchant=Offbank&to=${merchantWallet}&memo=${encodeURIComponent(
           memo,
         )}`,
       );
@@ -1527,14 +1526,14 @@ export default function DemoPage() {
             ) : (
               <div className="flex items-center gap-3">
                 <Link
-                  href="/waitlist"
+                  href="/onboarding"
                   className="group flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
                   style={{
                     background:
                       "linear-gradient(135deg, #34c759 0%, #2ba048 100%)",
                   }}
                 >
-                  Request Access
+                  Get Started
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <button

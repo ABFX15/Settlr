@@ -18,7 +18,7 @@ export async function generateExport(req: ExportRequest): Promise<ExportResult> 
 
     if (entityType === "stats") {
         const stats = await getMerchantStats(merchantId, { dateFrom, dateTo, limit });
-        return formatOutput(stats, statsColumns, format, `settlr-stats-${merchantId}`);
+        return formatOutput(stats, statsColumns, format, `offbank-stats-${merchantId}`);
     }
 
     // Export raw pipeline events filtered by entity type
@@ -34,7 +34,7 @@ export async function generateExport(req: ExportRequest): Promise<ExportResult> 
         ? events.filter((e) => e.entityType === entityType)
         : events;
 
-    return formatOutput(filtered, eventColumns, format, `settlr-${entityType || "events"}-${merchantId}`);
+    return formatOutput(filtered, eventColumns, format, `offbank-${entityType || "events"}-${merchantId}`);
 }
 
 // ---------------------------------------------------------------------------

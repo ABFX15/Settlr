@@ -1,11 +1,11 @@
 /**
  * POST /api/integrations/leaflink/callback
  *
- * Called by Settlr's internal webhook system when an invoice linked to
+ * Called by Offbank's internal webhook system when an invoice linked to
  * a LeafLink order gets paid.
  *
  * Flow:
- *   1. Settlr fires `payment.completed` for the invoice
+ *   1. Offbank fires `payment.completed` for the invoice
  *   2. Internal webhook dispatcher calls this endpoint
  *   3. We update the sync record → "paid"
  *   4. We push the payment proof back to LeafLink via their API
@@ -25,7 +25,7 @@ import { LeafLinkClient } from "@/lib/leaflink/client";
 
 const CALLBACK_SECRET = process.env.LEAFLINK_CALLBACK_SECRET || "ll_callback_dev_secret";
 
-/* ── Payload from Settlr webhook dispatcher ──────────── */
+/* ── Payload from Offbank webhook dispatcher ──────────── */
 interface CallbackPayload {
     event: "invoice.paid";
     invoice_id: string;
