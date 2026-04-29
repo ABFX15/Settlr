@@ -55,7 +55,3 @@ const levels = pino.levels;
 
 export default pino;
 export { pino, levels };
-module.exports = pino;
-module.exports.default = pino;
-module.exports.pino = pino;
-module.exports.levels = levels;
