@@ -6,7 +6,7 @@
  *
  * Drop into the dashboard layout. While `status === "ready"`, all
  * `fetch("/api/...")` calls will be authenticated by the
- * `settlr_session` cookie set by /api/auth/wallet/verify.
+ * `offbank_session` cookie set by /api/auth/wallet/verify.
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";

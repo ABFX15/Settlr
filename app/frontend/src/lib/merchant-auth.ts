@@ -1,6 +1,6 @@
 /**
  * Shared helper for routes that authenticate a merchant via the
- * `settlr_session` cookie set by /api/auth/wallet/verify.
+ * `offbank_session` cookie set by /api/auth/wallet/verify.
  *
  * Replaces the previous pattern of trusting the `x-merchant-wallet`
  * request header (which any caller could forge to impersonate any

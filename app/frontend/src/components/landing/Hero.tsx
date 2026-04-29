@@ -64,7 +64,7 @@ export function Hero() {
                   textShadow: "0 2px 30px rgba(0,0,0,0.7)",
                 }}
               >
-                Send an invoice. Get paid in USDC. Cash out to USD.
+                USDC settlement for cannabis wholesalers.
               </h1>
 
               <p
@@ -74,10 +74,14 @@ export function Hero() {
                   textShadow: "0 1px 8px rgba(0,0,0,0.4)",
                 }}
               >
-                Stop chasing NET-30 cheques. Send a buyer an invoice, get paid
-                in USDC the same hour, cash out to your business bank account.
-                Built for cannabis distributors, brands, and the wholesalers
-                banks won&apos;t reliably serve. 1% flat. Non-custodial.
+                Send invoices. Get paid the same hour. Cash out to your business
+                bank account. 1% flat. No bank required.
+              </p>
+              <p
+                className="mt-3 text-[13px] font-medium"
+                style={{ color: "#a3a3a3" }}
+              >
+                Also serving CBD, hemp, firearms, and other restricted B2B.
               </p>
 
               {/* ── CTAs ───────────────────────────────────── */}
