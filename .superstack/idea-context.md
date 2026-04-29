@@ -119,3 +119,74 @@
 ## Phase
 
 Idea validation complete. Ready for **Build → Launch** phase (mainnet deployment + first paying customer).
+
+---
+
+## Validation Re-run · 29 April 2026
+
+After ~6 weeks of build + outreach, the previous "go" verdict was re-tested against actual market response.
+
+```json
+{
+  "demand_signals": [
+    {
+      "signal": "26–100 cold outreach attempts to cannabis distributors → 0 responses, 0 calls booked",
+      "strength": "strong-negative",
+      "source": "Founder self-report, Apr 29 2026"
+    },
+    {
+      "signal": "Zero warm intros to any licensed cannabis operator after 6 weeks of attempts",
+      "strength": "strong-negative",
+      "source": "Founder self-report"
+    },
+    {
+      "signal": "Schedule III rescheduling now applies to medical-only — partially weakens cannabis-B2B-stablecoin pitch (medical operators get better banking access)",
+      "strength": "moderate-negative",
+      "source": "User update, Apr 2026"
+    },
+    {
+      "signal": "Product technically validated: built, mainnet-ready, managed-wallet onboarding shipped, no direct competitor exists",
+      "strength": "strong-positive",
+      "source": "This codebase + Colosseum search"
+    }
+  ],
+  "risks": [
+    {
+      "category": "distribution",
+      "description": "Solo founder with no operator network cannot reach licensed cannabis B2B buyers via cold channels — cannabis lives at conferences, private slacks, and via referrals",
+      "severity": "critical"
+    },
+    {
+      "category": "runway",
+      "description": "3–6 months runway vs cannabis B2B sales cycle of 3–9 months — math doesn't close",
+      "severity": "high"
+    },
+    {
+      "category": "regulatory",
+      "description": "Schedule III medical-only carve-out partially erodes cannabis pain point",
+      "severity": "medium"
+    }
+  ],
+  "go_no_go": "pivot",
+  "confidence": 0.74,
+  "next_steps": [
+    "Stop cold-DMing cannabis distributors immediately — the 100-attempt experiment ran, the result is in",
+    "Pick ONE pivot lane by Friday: (A) crypto-native B2B / agencies / DAOs (RECOMMENDED), (B) reachable high-risk verticals (CBD/hemp, firearms, adult), or (C) persist on cannabis with a BD partner who has operator relationships",
+    "If A: ship offbankpay.com/agencies, post one X thread with a real settled USDC invoice tx, demo in DMs",
+    "If B: un-noindex /cbd-hemp and /firearms, pull 50 CBD brands from Shopify directories, cold-email those",
+    "If C: must name 3 people in network who can intro to a cannabis operator THIS WEEK — if you can't name 3, don't pick C",
+    "Set a 60-day kill date for the new lane: if revenue is still $0, pivot again or stop"
+  ],
+  "rerun_artifact": ".superstack/validation-rerun-apr29.html",
+  "scoring_against_framework": {
+    "demand_score_2plus": false,
+    "technical_feasibility": true,
+    "time_to_mvp_2_weeks": "n/a — already built",
+    "unfair_advantage": false,
+    "crypto_necessary": true,
+    "go_criteria_met": "2 of 5 (threshold is 3)"
+  }
+}
+```
+
+**Plain-language summary:** Cannabis-B2B is the right product for the wrong wedge given your distribution. The product transfers cleanly to crypto-native B2B (agencies, DAOs, contractor payouts) where you can actually reach buyers on X/Telegram and the "should I use crypto" objection is pre-cleared. Same code, faster cycle, today-reachable ICP. See `.superstack/validation-rerun-apr29.html` for the full report.

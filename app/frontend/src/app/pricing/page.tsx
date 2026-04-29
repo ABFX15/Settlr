@@ -64,7 +64,7 @@ const plans = [
       "Team accounts",
     ],
     cta: "Contact Sales",
-    href: "/waitlist",
+    href: "mailto:adam@offbankpay.com?subject=Growth%20plan%20enquiry",
     popular: true,
   },
   {
@@ -83,7 +83,7 @@ const plans = [
       "On-chain reporting",
     ],
     cta: "Talk to Us",
-    href: "/waitlist",
+    href: "mailto:adam@offbankpay.com?subject=Enterprise%20enquiry",
     popular: false,
   },
 ];

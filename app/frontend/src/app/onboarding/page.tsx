@@ -374,8 +374,9 @@ function OnboardingPageInner() {
             Invite Required
           </h2>
           <p className="mb-6 text-lg" style={{ color: c.slate }}>
-            Offbank is invite-only during early access. Request access and
-            we&apos;ll email you a unique sign-in link when approved.
+            Offbank is invite-only right now. Click below to start onboarding —
+            if you have an invite code from a partner, paste it on the next
+            screen.
           </p>
           <Link
             href="/onboarding"

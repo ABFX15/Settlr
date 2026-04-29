@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Offbank — Validation Re-run · 29 Apr 2026</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      :root {
+        --bg: #0b0f0c;
+        --card: #131815;
+        --border: #1f2622;
+        --text: #f4f6f5;
+        --muted: #a1aaa3;
+        --green: #34c759;
+        --red: #ef4444;
+        --amber: #f59e0b;
+        --accent: #34c759;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+        line-height: 1.55;
+      }
+      .wrap {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 48px 24px 96px;
+      }
+      header {
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+      h1 {
+        font-size: 32px;
+        margin: 0 0 8px;
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 40px 0 16px;
+        letter-spacing: -0.01em;
+      }
+      h3 {
+        font-size: 16px;
+        margin: 24px 0 8px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      p,
+      li {
+        color: var(--text);
+      }
+      small,
+      .meta {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px 22px;
+        margin: 14px 0;
+      }
+      .verdict {
+        background: linear-gradient(
+          135deg,
+          rgba(245, 158, 11, 0.12),
+          rgba(239, 68, 68, 0.1)
+        );
+        border: 1px solid var(--amber);
+        padding: 24px;
+        border-radius: 14px;
+        margin: 24px 0;
+      }
+      .verdict h2 {
+        margin-top: 0;
+        color: var(--amber);
+      }
+      .pill {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .pill-red {
+        background: rgba(239, 68, 68, 0.15);
+        color: #fca5a5;
+      }
+      .pill-green {
+        background: rgba(52, 199, 89, 0.15);
+        color: var(--green);
+      }
+      .pill-amber {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fcd34d;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+        vertical-align: top;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 500;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      code {
+        background: #1a201d;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 13px;
+      }
+      ul {
+        padding-left: 20px;
+      }
+      li {
+        margin: 4px 0;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      @media (max-width: 700px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .num {
+        font-size: 28px;
+        font-weight: 700;
+      }
+      .num.bad {
+        color: var(--red);
+      }
+      .num.warn {
+        color: var(--amber);
+      }
+      .num.good {
+        color: var(--green);
+      }
+      blockquote {
+        margin: 12px 0;
+        padding: 10px 16px;
+        border-left: 3px solid var(--accent);
+        color: var(--muted);
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Offbank — Validation Re-run</h1>
+        <p class="meta">
+          29 April 2026 · Re-validating after ~6 weeks of build + outreach
+        </p>
+      </header>
+
+      <div class="verdict">
+        <h2>
+          Verdict: <span class="pill pill-amber">PIVOT (wedge)</span> &nbsp;
+          Confidence: 0.74
+        </h2>
+        <p style="margin-bottom: 0">
+          The cannabis-B2B thesis is
+          <strong>technically validated</strong> (product works, no competitor)
+          but <strong>commercially failing</strong> for you specifically.
+          <code>26–100 cold outreach attempts → 0 responses</code>
+          is not a ranking signal; it is the market telling you that a solo
+          founder with no operator network cannot sell into licensed cannabis
+          from the outside. The product is right. The wedge is wrong for your
+          distribution.
+          <strong>Pivot the ICP, keep the product.</strong>
+        </p>
+      </div>
+
+      <h2>What changed since the last validation</h2>
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Apr 2026 (prior)</th>
+              <th>Today</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Verdict</td>
+              <td><span class="pill pill-green">go</span> · 0.82</td>
+              <td><span class="pill pill-amber">pivot</span> · 0.74</td>
+            </tr>
+            <tr>
+              <td>Product status</td>
+              <td>Devnet only</td>
+              <td>
+                Built, mainnet-ready, managed-wallet onboarding shipped today
+              </td>
+            </tr>
+            <tr>
+              <td>Outreach attempts</td>
+              <td>0</td>
+              <td>26–100</td>
+            </tr>
+            <tr>
+              <td>Responses</td>
+              <td>—</td>
+              <td><strong>0</strong></td>
+            </tr>
+            <tr>
+              <td>Operator network</td>
+              <td>None</td>
+              <td>Still none</td>
+            </tr>
+            <tr>
+              <td>Regulatory</td>
+              <td>SAFE stalled, Schedule III pending</td>
+              <td>
+                Schedule III now <em>medical-only</em> — partially weakens
+                cannabis pitch (medical operators get better banking)
+              </td>
+            </tr>
+            <tr>
+              <td>Runway</td>
+              <td>n/a</td>
+              <td>3–6 months</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>The brutal numbers</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="num bad">0%</div>
+          <p>Cold-outreach response rate (over up to 100 attempts).</p>
+        </div>
+        <div class="card">
+          <div class="num bad">0</div>
+          <p>Discovery calls booked.</p>
+        </div>
+        <div class="card">
+          <div class="num bad">0</div>
+          <p>Warm intros to a licensed cannabis operator.</p>
+        </div>
+        <div class="card">
+          <div class="num warn">3–6 mo</div>
+          <p>Runway. Cannabis B2B sales cycles are 3–9 months.</p>
+        </div>
+      </div>
+
+      <h2>Re-scored against the framework</h2>
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Go criterion</th>
+              <th>Last time</th>
+              <th>Now</th>
+              <th>Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Demand score ≥ 2</td>
+              <td>3 (strong)</td>
+              <td><strong>1 (weak)</strong></td>
+              <td>
+                Pain is real but observed willingness to engage with you
+                specifically is zero. 0/26–100 is data.
+              </td>
+            </tr>
+            <tr>
+              <td>Technical feasibility</td>
+              <td>Solvable</td>
+              <td><strong>Done</strong></td>
+              <td>Mainnet-ready, managed wallets shipped, SDK published.</td>
+            </tr>
+            <tr>
+              <td>Time to MVP ≤ 2 weeks</td>
+              <td>n/a</td>
+              <td><strong>n/a — already built</strong></td>
+              <td>This criterion no longer applies; you're past it.</td>
+            </tr>
+            <tr>
+              <td>Unfair advantage</td>
+              <td>Not present</td>
+              <td><strong>Still not present</strong></td>
+              <td>
+                No operator network, no industry credentials, no warm channel.
+                The original next_steps called this out and it didn't get fixed.
+              </td>
+            </tr>
+            <tr>
+              <td>Crypto necessary</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>
+                Federal banking exclusion is the moat — still real for
+                adult-use, weaker for medical post-Schedule-III.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          <strong>Score: 2 of 5 Go criteria met.</strong> Threshold is 3. This
+          used to be a Go. It is not anymore <em>for the cannabis wedge</em>.
+        </p>
+      </div>
+
+      <h2>Why "build harder" / "DM more" is the wrong answer</h2>
+      <div class="card">
+        <ul>
+          <li>
+            <strong>Cannabis operators don't live on LinkedIn.</strong> They
+            live at MJBizCon, Hall of Flowers, on private operator Slacks, and
+            in regional distributor coalitions. Cold DMs are the worst possible
+            channel for this ICP.
+          </li>
+          <li>
+            <strong>Crypto + cannabis is a double-skeptic conversation.</strong>
+            You're asking strangers to trust (a) a federally-illegal-payments
+            rail and (b) a stranger they've never met. That requires referrals
+            or in-person trust, not cold reach-outs.
+          </li>
+          <li>
+            <strong
+              >Your runway can't survive a cannabis B2B sales cycle.</strong
+            >
+            Even if the next 100 DMs land 2 calls, you're 6+ months from
+            revenue. You have 3–6 months.
+          </li>
+          <li>
+            <strong>You shipped managed wallets today</strong> — that's the
+            right move, but it doesn't fix the distribution problem. The
+            bottleneck was never UX; it was that no one knows who Offbank is.
+          </li>
+        </ul>
+      </div>
+
+      <h2>Three pivot options (ranked)</h2>
+
+      <div class="card">
+        <h3>
+          Option A — <span class="pill pill-green">RECOMMENDED</span> ·
+          Crypto-native B2B (agencies, DAOs, contractors)
+        </h3>
+        <p>
+          <strong>ICP:</strong> Web3 agencies, DAO treasuries paying
+          contractors, crypto-native SaaS billing in stables, hackathon teams,
+          dev shops. People who already hold USDC and want to invoice / get paid
+          in it without spinning up custom infra.
+        </p>
+        <p>
+          <strong>Why this works:</strong> They live on X and Telegram (you can
+          reach them today), the "should I use crypto" objection is pre-cleared,
+          sales cycle is days not months, and your existing product (USDC
+          invoices, payment links, Blinks, T+0) is exactly what they need.
+        </p>
+        <p>
+          <strong>What you cut:</strong> KYB-heavy onboarding (move it to
+          Settings → Compliance), cannabis-specific copy, off-ramp to USD bank
+          (DAO treasuries don't need it day 1).
+        </p>
+        <p>
+          <strong>First customer plausible in:</strong> 2–3 weeks. Post a thread
+          on X showing a $500 invoice → settled in 2 seconds, ask "who wants the
+          SDK?" Demo in DMs.
+        </p>
+        <p>
+          <strong>Risk:</strong> Crypto-native B2B is a
+          lower-revenue-per-customer market. But it gets you to
+          <em>any</em> revenue, which unlocks everything else.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>
+          Option B · Reachable high-risk verticals (CBD/hemp, firearms, adult)
+        </h3>
+        <p>
+          <strong>ICP:</strong> CBD/hemp brands, FFL firearms dealers, adult
+          content platforms — all non-cannabis "high-risk" categories that get
+          strangled by Stripe and pay 5–10% in processor fees, but live
+          <em>online</em> and respond to outbound.
+        </p>
+        <p>
+          <strong>Why this works:</strong> Same value prop ("we're the rail
+          high-risk processors won't touch"), but the buyers have public emails,
+          run paid ads, and are SMB-scale founders who answer LinkedIn. CBD/hemp
+          in particular has 100k+ Shopify-class merchants.
+        </p>
+        <p>
+          <strong>Risk:</strong> You already have these as "industry pages" but
+          de-prioritized them. Reactivating them = admitting cannabis-first was
+          wrong, which is fine.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>
+          Option C · Persist on cannabis but completely change distribution
+        </h3>
+        <p>
+          <strong>What it requires:</strong> (1) hire/partner with a
+          cannabis-industry BD person who has operator relationships
+          <em>this month</em>; (2) book a booth at MJBizCon Fall 2026; (3)
+          sponsor 1 cannabis newsletter (Cannabis Business Times, MJBizDaily);
+          (4) find one paid pilot via warm intro and turn that into 5 referrals.
+        </p>
+        <p>
+          <strong>Why it's risky:</strong> Costs $5k–25k upfront, doesn't
+          guarantee revenue, and your runway is 3–6 months. If you can't find
+          that BD person in 30 days, you've burned a third of your runway on a
+          strategy that didn't even start.
+        </p>
+        <p>
+          <strong>When to pick this:</strong> Only if you already know someone
+          in cannabis and just hadn't asked them yet. Otherwise: don't.
+        </p>
+      </div>
+
+      <h2>Concrete next steps (this week)</h2>
+      <div class="card">
+        <ol>
+          <li>
+            <strong>Stop cold-DMing cannabis distributors.</strong> Today. The
+            100-attempt experiment ran. The result is in.
+          </li>
+          <li>
+            <strong>Pick a pivot lane (A, B, or C) by EOD Friday.</strong> Don't
+            try to do two.
+          </li>
+          <li>
+            <strong>If A (crypto-native):</strong> ship a marketing page at
+            <code>offbankpay.com/agencies</code> reframing the product for web3
+            invoicing. Post 1 demo thread on X with a real settled tx.
+          </li>
+          <li>
+            <strong>If B (reachable high-risk):</strong> un-noindex
+            <code>/cbd-hemp</code> and <code>/firearms</code>. Pull a list of 50
+            CBD brands from Shopify directories. Cold-email <em>those</em>.
+          </li>
+          <li>
+            <strong>If C (cannabis persist):</strong> answer this honestly today
+            — name 3 people in your network you can ask for a cannabis-operator
+            intro. If you can't name 3, don't pick C.
+          </li>
+          <li>
+            <strong>Set a kill date.</strong> 60 days from today. If revenue is
+            still $0 on the new lane, you pivot again or stop. Write the date in
+            your calendar.
+          </li>
+        </ol>
+      </div>
+
+      <h2>What you got right</h2>
+      <div class="card">
+        <ul>
+          <li>
+            You shipped. The product works. The codebase is genuinely good.
+          </li>
+          <li>
+            Managed-wallet onboarding shipped today removes the wallet-first
+            objection — that work is <em>not</em> wasted; it transfers to any
+            pivot.
+          </li>
+          <li>
+            Your competitive analysis was correct: there really is no one in
+            cannabis-B2B-stablecoins. The market is empty for a reason though —
+            the buyers are unreachable to outsiders.
+          </li>
+          <li>
+            You're asking the validation question now instead of grinding for
+            another month. That's the discipline that keeps founders alive.
+          </li>
+        </ul>
+      </div>
+
+      <footer
+        style="
+          margin-top: 60px;
+          padding-top: 24px;
+          border-top: 1px solid var(--border);
+          color: var(--muted);
+          font-size: 13px;
+        "
+      >
+        Generated by validate-idea skill · re-run on 29 Apr 2026 · prior verdict
+        was "go" (0.82); this re-run downgrades to "pivot" (0.74) based on
+        0/26–100 cold-outreach conversion.
+      </footer>
+    </div>
+  </body>
+</html>

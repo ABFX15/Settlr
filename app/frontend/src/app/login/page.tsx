@@ -2,11 +2,13 @@
 
 import { useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
+import { usePrivy } from "@privy-io/react-auth";
+import { usePrivySession } from "@/hooks/usePrivySession";
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@/components/WalletModal";
-import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Shield, Wallet, Loader2, ArrowRight } from "lucide-react";
+import { Mail, Loader2, Wallet, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -18,14 +20,17 @@ const c = {
   muted: "#8a8a8a",
   border: "#d3d3d3",
   green: "#34c759",
-  greenBg: "rgba(27,107,74,0.06)",
+  greenBg: "rgba(52,199,89,0.08)",
 };
 
 export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center">
+        <div
+          className="min-h-screen flex items-center justify-center"
+          style={{ background: c.bg }}
+        >
           <Loader2
             className="w-8 h-8 animate-spin"
             style={{ color: c.green }}
@@ -39,35 +44,37 @@ export default function LoginPage() {
 }
 
 function LoginPageInner() {
-  const { connected } = useWallet();
+  const privyEnabled = !!process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+  const { ready: privyReady, authenticated, login } = usePrivy();
+  const { status: sessionStatus } = usePrivySession();
+  const { status: onboardingStatus } = useOnboardingStatus();
+  const { connected: walletConnected } = useWallet();
   const { setVisible } = useWalletModal();
-  const { status } = useOnboardingStatus();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Smart routing once we know who this wallet is.
-  //   onboarded         → /dashboard
-  //   needs-onboarding  → /onboarding (preserve invite token if present)
+  // Once we have an `offbank_session` (either via Privy verify OR via
+  // wallet sign-in flow), route based on whether the merchant is onboarded.
+  const haveSession = sessionStatus === "ready" || walletConnected;
   useEffect(() => {
-    if (!connected) return;
-    if (status === "onboarded") {
+    if (!haveSession) return;
+    if (onboardingStatus === "loading") return;
+    const token = searchParams.get("token");
+    if (onboardingStatus === "onboarded") {
       router.replace("/dashboard");
-    } else if (status === "needs-onboarding") {
-      const token = searchParams.get("token");
+    } else if (onboardingStatus === "needs-onboarding") {
       router.replace(
-        token
-          ? `/onboarding?token=${encodeURIComponent(token)}`
-          : "/onboarding",
+        token ? `/onboarding?token=${encodeURIComponent(token)}` : "/onboarding",
       );
     }
-  }, [connected, status, router, searchParams]);
+  }, [haveSession, onboardingStatus, router, searchParams]);
 
-  // Connected and verifying account status
+  // Verifying / routing state
   if (
-    connected &&
-    (status === "loading" ||
-      status === "onboarded" ||
-      status === "needs-onboarding")
+    haveSession &&
+    (onboardingStatus === "loading" ||
+      onboardingStatus === "onboarded" ||
+      onboardingStatus === "needs-onboarding")
   ) {
     return (
       <div
@@ -83,13 +90,16 @@ function LoginPageInner() {
             className="w-8 h-8 animate-spin mx-auto mb-4"
             style={{ color: c.green }}
           />
-          <p style={{ color: c.muted }}>Checking your account...</p>
+          <p style={{ color: c.muted }}>
+            {sessionStatus === "verifying"
+              ? "Verifying your sign-in…"
+              : "Checking your account…"}
+          </p>
         </motion.div>
       </div>
     );
   }
 
-  // Not connected — show connect wallet prompt
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
@@ -98,71 +108,108 @@ function LoginPageInner() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl border p-10 text-center max-w-lg"
+        className="rounded-2xl border p-10 max-w-lg w-full"
         style={{ background: c.card, borderColor: c.border }}
       >
         <div
-          className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8"
+          className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
           style={{ background: c.greenBg }}
         >
-          <Shield className="w-10 h-10" style={{ color: c.green }} />
+          <ShieldCheck className="w-8 h-8" style={{ color: c.green }} />
         </div>
-        <h1 className="text-3xl font-bold mb-3" style={{ color: c.navy }}>
-          Sign In to Offbank
+        <h1
+          className="text-3xl font-bold mb-2 text-center"
+          style={{ color: c.navy }}
+        >
+          Sign in to Offbank
         </h1>
-        <p className="mb-2 text-lg" style={{ color: c.slate }}>
-          Connect the wallet you used during onboarding.
-        </p>
-        <p className="mb-8 text-sm" style={{ color: c.muted }}>
-          Your wallet is your identity — no passwords, no email login.
+        <p className="mb-8 text-sm text-center" style={{ color: c.muted }}>
+          Use your email — we&apos;ll send a one-time code.
         </p>
 
-        {/* Trust indicators */}
-        <div className="flex items-center justify-center gap-6 mb-8">
+        {/* Privy email login (recommended) */}
+        {privyEnabled && (
+          <button
+            type="button"
+            disabled={!privyReady || authenticated}
+            onClick={() => login()}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+            style={{ background: c.green }}
+          >
+            {!privyReady ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Loading…
+              </>
+            ) : (
+              <>
+                <Mail className="h-4 w-4" />
+                Continue with email
+              </>
+            )}
+          </button>
+        )}
+
+        {!privyEnabled && (
+          <div
+            className="rounded-xl p-4 text-xs text-center"
+            style={{ background: "#fef3c7", color: "#92400e" }}
+          >
+            Email sign-in is currently disabled. Use the wallet option below.
+          </div>
+        )}
+
+        {/* OR / advanced wallet path */}
+        <div className="flex items-center gap-3 my-6">
+          <div className="h-px flex-1" style={{ background: c.border }} />
+          <span
+            className="text-[11px] font-medium uppercase tracking-wider"
+            style={{ color: c.muted }}
+          >
+            or, advanced
+          </span>
+          <div className="h-px flex-1" style={{ background: c.border }} />
+        </div>
+
+        <button
+          onClick={() => setVisible(true)}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-semibold transition hover:bg-white"
+          style={{ borderColor: c.border, color: c.navy, background: "white" }}
+        >
+          <Wallet className="h-4 w-4" />
+          Connect existing Solana wallet
+        </button>
+
+        <div className="flex items-center justify-center gap-4 mt-8 pt-6 border-t" style={{ borderColor: c.border }}>
           {[
             ["/circle-logo.svg", "USDC"],
             ["/solana-logo.svg", "Solana"],
-            ["/squads-logo.png", "Squads"],
           ].map(([src, label]) => (
-            <div key={label} className="flex flex-col items-center gap-1">
+            <div key={label} className="flex items-center gap-1.5">
               <Image
                 src={src}
                 alt={label}
-                width={28}
-                height={28}
-                className="opacity-50"
+                width={16}
+                height={16}
+                className="opacity-60"
               />
-              <span className="text-[10px]" style={{ color: c.muted }}>
+              <span className="text-[11px]" style={{ color: c.muted }}>
                 {label}
               </span>
             </div>
           ))}
         </div>
 
-        <button
-          onClick={() => setVisible(true)}
-          className="inline-flex items-center gap-3 px-8 py-4 font-semibold rounded-xl text-white transition-opacity hover:opacity-90"
-          style={{ background: c.green }}
-        >
-          <Wallet className="w-5 h-5" />
-          Connect Wallet
-        </button>
-        <p className="mt-4 text-xs" style={{ color: c.muted }}>
-          Phantom · Solflare · Hardware wallets supported
+        <p className="mt-6 text-sm text-center" style={{ color: c.muted }}>
+          New to Offbank?{" "}
+          <Link
+            href="/onboarding"
+            className="font-medium underline"
+            style={{ color: c.green }}
+          >
+            Get started
+          </Link>
         </p>
-
-        <div className="mt-8 pt-6 border-t" style={{ borderColor: c.border }}>
-          <p className="text-sm" style={{ color: c.muted }}>
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/onboarding"
-              className="font-medium underline"
-              style={{ color: c.green }}
-            >
-              Request access
-            </Link>
-          </p>
-        </div>
       </motion.div>
     </div>
   );
