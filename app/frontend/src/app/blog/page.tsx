@@ -48,7 +48,9 @@ export default function BlogPage() {
   return (
     <main
       className="relative min-h-screen bg-[#FFFFFF] text-[#212121] antialiased"
-      style={{ fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif" }}
+      style={{
+        fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif",
+      }}
     >
       <Navbar />
 
@@ -67,7 +69,7 @@ export default function BlogPage() {
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-[#8a8a8a]">
+            <p className="mx-auto mt-4 max-w-xl text-lg text-[#5c5c5c]">
               Non-custodial settlement, stablecoin compliance, high-risk B2B
               infrastructure, and building for the debanked.
             </p>
@@ -81,7 +83,7 @@ export default function BlogPage() {
           <Reveal>
             <Link
               href={`/blog/${featured.slug}`}
-              className="group block overflow-hidden rounded-2xl border border-[#d3d3d3] bg-white/[0.02] transition-colors hover:bg-[#f2f2f2]"
+              className="group block overflow-hidden rounded-2xl border border-[#d3d3d3] bg-white shadow-sm transition-all hover:border-[#34c759]/40 hover:shadow-md"
             >
               <div className="p-8 md:p-10">
                 <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -96,10 +98,10 @@ export default function BlogPage() {
                     {formatDate(featured.date)}
                   </span>
                 </div>
-                <h2 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-[#34c759] md:text-3xl">
+                <h2 className="text-2xl font-semibold tracking-tight text-[#212121] transition-colors group-hover:text-[#34c759] md:text-3xl">
                   {featured.title}
                 </h2>
-                <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#8a8a8a]">
+                <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#5c5c5c]">
                   {featured.excerpt}
                 </p>
                 <div className="mt-6 flex items-center gap-4">
@@ -132,7 +134,7 @@ export default function BlogPage() {
               <Reveal key={post.slug} delay={i * 0.06}>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="group flex h-full flex-col rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-6 transition-colors hover:bg-[#f2f2f2]"
+                  className="group flex h-full flex-col rounded-xl border border-[#d3d3d3] bg-white p-6 shadow-sm transition-all hover:border-[#34c759]/40 hover:shadow-md"
                 >
                   <div className="mb-3 flex items-center gap-3">
                     <span className="flex items-center gap-1.5 text-xs text-[#8a8a8a]">
@@ -143,10 +145,10 @@ export default function BlogPage() {
                       {formatDate(post.date)}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold tracking-tight transition-colors group-hover:text-[#34c759]">
+                  <h3 className="text-lg font-semibold tracking-tight text-[#212121] transition-colors group-hover:text-[#34c759]">
                     {post.title}
                   </h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-[#8a8a8a]">
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-[#5c5c5c]">
                     {post.excerpt}
                   </p>
                   <div className="mt-4 flex items-center justify-between">

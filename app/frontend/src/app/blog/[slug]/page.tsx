@@ -75,7 +75,9 @@ export default function BlogPostPage() {
   return (
     <main
       className="relative min-h-screen bg-[#FFFFFF] text-[#212121] antialiased"
-      style={{ fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif" }}
+      style={{
+        fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif",
+      }}
     >
       {/* JSON-LD for blog post */}
       <script
@@ -141,7 +143,7 @@ export default function BlogPostPage() {
 
           {/* Header */}
           <Reveal delay={0.05}>
-            <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-[#8a8a8a]">
+            <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-[#5c5c5c]">
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-3.5 w-3.5" />
                 {formatDate(post.date)}
@@ -164,7 +166,7 @@ export default function BlogPostPage() {
           </Reveal>
 
           <Reveal delay={0.15}>
-            <p className="mt-4 text-lg leading-relaxed text-[#8a8a8a]">
+            <p className="mt-4 text-lg leading-relaxed text-[#5c5c5c]">
               {post.excerpt}
             </p>
           </Reveal>
@@ -174,7 +176,7 @@ export default function BlogPostPage() {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 rounded-md bg-[#f2f2f2] px-2.5 py-1 text-xs font-medium text-[#8a8a8a]"
+                  className="inline-flex items-center gap-1 rounded-md bg-[#f2f2f2] px-2.5 py-1 text-xs font-medium text-[#5c5c5c]"
                 >
                   <Tag className="h-2.5 w-2.5" />
                   {tag}
@@ -223,24 +225,24 @@ export default function BlogPostPage() {
 
           {/* Bottom CTA */}
           <Reveal delay={0.1}>
-            <div className="mt-16 rounded-xl border border-[#d3d3d3] bg-white/[0.02] p-8 text-center">
-              <h3 className="text-xl font-semibold">
+            <div className="mt-16 rounded-xl border border-[#d3d3d3] bg-[#fafafa] p-8 text-center">
+              <h3 className="text-xl font-semibold text-[#212121]">
                 Ready to settle without bank interference?
               </h3>
-              <p className="mt-2 text-sm text-[#8a8a8a]">
+              <p className="mt-2 text-sm text-[#5c5c5c]">
                 Non-custodial, 1% flat fees, instant settlement. Integrate in
                 under 30 minutes.
               </p>
               <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <Link
                   href="/onboarding"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#34c759] px-6 py-3 text-sm font-semibold text-[#212121] shadow-lg shadow-[#3B82F6]/25 transition-transform hover:scale-[1.02]"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#34c759] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#2ba048] hover:scale-[1.02]"
                 >
                   Get started free
                 </Link>
                 <Link
                   href="/docs"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#d3d3d3] px-6 py-3 text-sm font-medium text-[#5c5c5c] transition-colors hover:text-[#212121]"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#d3d3d3] bg-white px-6 py-3 text-sm font-medium text-[#212121] transition-colors hover:bg-[#f2f2f2]"
                 >
                   Read the docs
                 </Link>
