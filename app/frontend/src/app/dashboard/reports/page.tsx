@@ -25,6 +25,8 @@ import {
   BookOpen,
   Calendar,
   XCircle,
+  Receipt,
+  FileSpreadsheet,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -95,7 +97,31 @@ function fmt(n: number): string {
   }).format(n);
 }
 
-type Tab = "reconciliation" | "buyers" | "audit";
+type Tab = "reconciliation" | "buyers" | "audit" | "tax";
+
+interface TaxSummary {
+  merchantWallet: string;
+  year: number;
+  transactionCount: number;
+  grossAmount: number;
+  platformFees: number;
+  netAmount: number;
+  refundedAmount: number;
+  uniqueCounterparties: number;
+  monthlyGross: number[];
+  crossesIrsThreshold2025: boolean;
+  crossesIrsThreshold2026: boolean;
+  disclaimer: string;
+}
+
+interface TaxCounterparty {
+  customerWallet: string;
+  transactionCount: number;
+  grossAmount: number;
+  platformFees: number;
+  netAmount: number;
+  refundedAmount: number;
+}
 
 const MATCH_COLORS: Record<
   string,
@@ -165,6 +191,14 @@ export default function ReportsPage() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
 
+  // Tax state
+  const currentYear = new Date().getUTCFullYear();
+  const [taxYear, setTaxYear] = useState<number>(currentYear - 1);
+  const [taxSummary, setTaxSummary] = useState<TaxSummary | null>(null);
+  const [taxCounterparties, setTaxCounterparties] = useState<TaxCounterparty[]>(
+    [],
+  );
+
   const headers: Record<string, string> = publicKey
     ? { "x-merchant-wallet": publicKey }
     : {};
@@ -222,11 +256,31 @@ export default function ReportsPage() {
     }
   }, [publicKey, auditTypeFilter, dateFrom, dateTo]);
 
+  const fetchTax = useCallback(async () => {
+    if (!publicKey) return;
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `/api/reports/tax/1099k?year=${taxYear}&format=json`,
+        { headers },
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setTaxSummary(data.summary);
+        setTaxCounterparties(data.counterparties || []);
+      }
+    } finally {
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [publicKey, taxYear]);
+
   useEffect(() => {
     if (tab === "reconciliation") fetchRecon();
     else if (tab === "buyers") fetchBuyers();
     else if (tab === "audit") fetchAudit();
-  }, [tab, fetchRecon, fetchBuyers, fetchAudit]);
+    else if (tab === "tax") fetchTax();
+  }, [tab, fetchRecon, fetchBuyers, fetchAudit, fetchTax]);
 
   const handleExport = async (endpoint: string, filename: string) => {
     if (!publicKey) return;
@@ -337,7 +391,9 @@ export default function ReportsPage() {
               }`}
             />
           </div>
-          <div className="text-sm font-semibold text-[#212121]">Reconciliation</div>
+          <div className="text-sm font-semibold text-[#212121]">
+            Reconciliation
+          </div>
           <div className="text-[11px] text-[#8a8a8a] mt-0.5">
             Invoice↔Payment matching
           </div>
@@ -358,7 +414,9 @@ export default function ReportsPage() {
               }`}
             />
           </div>
-          <div className="text-sm font-semibold text-[#212121]">Payments CSV</div>
+          <div className="text-sm font-semibold text-[#212121]">
+            Payments CSV
+          </div>
           <div className="text-[11px] text-[#8a8a8a] mt-0.5">
             QuickBooks / Xero ready
           </div>
@@ -385,7 +443,9 @@ export default function ReportsPage() {
             />
           </div>
           <div className="text-sm font-semibold text-[#212121]">Audit Log</div>
-          <div className="text-[11px] text-[#8a8a8a] mt-0.5">Full event trail</div>
+          <div className="text-[11px] text-[#8a8a8a] mt-0.5">
+            Full event trail
+          </div>
         </button>
 
         <button
@@ -410,7 +470,9 @@ export default function ReportsPage() {
               }`}
             />
           </div>
-          <div className="text-sm font-semibold text-[#212121]">Buyer History</div>
+          <div className="text-sm font-semibold text-[#212121]">
+            Buyer History
+          </div>
           <div className="text-[11px] text-[#8a8a8a] mt-0.5">
             Per-buyer payment data
           </div>
@@ -428,6 +490,7 @@ export default function ReportsPage() {
             },
             { id: "buyers" as Tab, label: "Buyers", icon: Users },
             { id: "audit" as Tab, label: "Audit Log", icon: Activity },
+            { id: "tax" as Tab, label: "Tax Center", icon: Receipt },
           ].map((t) => (
             <button
               key={t.id}
@@ -876,6 +939,303 @@ export default function ReportsPage() {
                     </div>
                   ))
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* ════ TAX CENTER TAB ════ */}
+          {tab === "tax" && (
+            <div className="space-y-6">
+              {/* Year selector + disclaimer */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-semibold text-[#212121]">
+                    Tax year {taxYear}
+                  </h3>
+                  <p className="text-xs text-[#5c5c5c] mt-1">
+                    Year-end exports for your accountant. Offbank doesn&apos;t
+                    file with the IRS — these are for your records.
+                  </p>
+                </div>
+                <select
+                  value={taxYear}
+                  onChange={(e) => setTaxYear(parseInt(e.target.value, 10))}
+                  className="rounded-lg border border-[#d3d3d3] bg-[#ffffff] px-3 py-2 text-sm text-[#212121] outline-none focus:border-[#34c759]/50"
+                >
+                  {[
+                    currentYear,
+                    currentYear - 1,
+                    currentYear - 2,
+                    currentYear - 3,
+                  ].map((y) => (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Summary cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-4">
+                  <div className="text-xs text-[#5c5c5c] uppercase tracking-wider">
+                    Gross volume
+                  </div>
+                  <div className="mt-1 text-2xl font-bold text-[#212121]">
+                    ${fmt(taxSummary?.grossAmount || 0)}
+                  </div>
+                  <div className="mt-1 text-xs text-[#8a8a8a]">
+                    {taxSummary?.transactionCount || 0} settlements
+                  </div>
+                </div>
+                <div className="rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-4">
+                  <div className="text-xs text-[#5c5c5c] uppercase tracking-wider">
+                    Platform fees (1%)
+                  </div>
+                  <div className="mt-1 text-2xl font-bold text-[#212121]">
+                    ${fmt(taxSummary?.platformFees || 0)}
+                  </div>
+                  <div className="mt-1 text-xs text-[#8a8a8a]">
+                    Deductible business expense
+                  </div>
+                </div>
+                <div className="rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-4">
+                  <div className="text-xs text-[#5c5c5c] uppercase tracking-wider">
+                    Net to merchant
+                  </div>
+                  <div className="mt-1 text-2xl font-bold text-[#34c759]">
+                    ${fmt(taxSummary?.netAmount || 0)}
+                  </div>
+                  <div className="mt-1 text-xs text-[#8a8a8a]">
+                    After 1% platform fee
+                  </div>
+                </div>
+                <div className="rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-4">
+                  <div className="text-xs text-[#5c5c5c] uppercase tracking-wider">
+                    Counterparties
+                  </div>
+                  <div className="mt-1 text-2xl font-bold text-[#212121]">
+                    {taxSummary?.uniqueCounterparties || 0}
+                  </div>
+                  <div className="mt-1 text-xs text-[#8a8a8a]">
+                    Unique payer wallets
+                  </div>
+                </div>
+              </div>
+
+              {/* Export cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <button
+                  onClick={() =>
+                    handleExport(
+                      `tax/transactions?year=${taxYear}`,
+                      `offbank-transactions-${taxYear}.csv`,
+                    )
+                  }
+                  disabled={exporting !== null}
+                  className="text-left rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-5 hover:border-[#34c759]/40 hover:shadow-sm transition-all disabled:opacity-50"
+                >
+                  <FileSpreadsheet className="h-6 w-6 text-[#34c759] mb-2" />
+                  <div className="font-semibold text-[#212121]">
+                    Transaction CSV
+                  </div>
+                  <div className="text-xs text-[#5c5c5c] mt-1">
+                    Every settlement: gross, fee, net, counterparty, tx hash.
+                    Hand to your bookkeeper.
+                  </div>
+                  <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#34c759]">
+                    <Download className="h-3.5 w-3.5" />
+                    Download CSV
+                  </div>
+                </button>
+
+                <button
+                  onClick={() =>
+                    handleExport(
+                      `tax/1099k?year=${taxYear}`,
+                      `offbank-1099k-summary-${taxYear}.csv`,
+                    )
+                  }
+                  disabled={exporting !== null}
+                  className="text-left rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-5 hover:border-[#34c759]/40 hover:shadow-sm transition-all disabled:opacity-50"
+                >
+                  <Receipt className="h-6 w-6 text-[#34c759] mb-2" />
+                  <div className="font-semibold text-[#212121]">
+                    1099-K summary
+                  </div>
+                  <div className="text-xs text-[#5c5c5c] mt-1">
+                    Per-counterparty totals + monthly gross. Mirrors IRS Form
+                    1099-K boxes 1, 5a–5l.
+                  </div>
+                  <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#34c759]">
+                    <Download className="h-3.5 w-3.5" />
+                    Download CSV
+                  </div>
+                </button>
+
+                <button
+                  onClick={() =>
+                    handleExport(
+                      `tax/8949?year=${taxYear}`,
+                      `offbank-form-8949-${taxYear}.csv`,
+                    )
+                  }
+                  disabled={exporting !== null}
+                  className="text-left rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-5 hover:border-[#34c759]/40 hover:shadow-sm transition-all disabled:opacity-50"
+                >
+                  <FileText className="h-6 w-6 text-[#34c759] mb-2" />
+                  <div className="font-semibold text-[#212121]">
+                    Form 8949 (cost basis)
+                  </div>
+                  <div className="text-xs text-[#5c5c5c] mt-1">
+                    USDC dispositions with proceeds, basis, and gain/loss. For
+                    Schedule D filings.
+                  </div>
+                  <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#34c759]">
+                    <Download className="h-3.5 w-3.5" />
+                    Download CSV
+                  </div>
+                </button>
+              </div>
+
+              {/* Monthly bar (1099-K boxes 5a–5l) */}
+              {taxSummary && taxSummary.transactionCount > 0 && (
+                <div className="rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-semibold text-[#212121]">
+                      Monthly gross
+                    </h4>
+                    <span className="text-xs text-[#8a8a8a]">
+                      1099-K boxes 5a – 5l
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-1 items-end h-32">
+                    {taxSummary.monthlyGross.map((v, i) => {
+                      const max = Math.max(...taxSummary.monthlyGross, 1);
+                      const h = (v / max) * 100;
+                      const months = [
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                      ];
+                      return (
+                        <div
+                          key={i}
+                          className="flex flex-col items-center gap-1"
+                        >
+                          <div className="flex-1 w-full flex items-end">
+                            <div
+                              className="w-full rounded-t bg-[#34c759]/60 hover:bg-[#34c759] transition-colors"
+                              style={{
+                                height: `${h}%`,
+                                minHeight: v > 0 ? "2px" : "0",
+                              }}
+                              title={`${months[i]}: $${fmt(v)}`}
+                            />
+                          </div>
+                          <div className="text-[10px] text-[#8a8a8a]">
+                            {months[i]}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Top counterparties */}
+              {taxCounterparties.length > 0 && (
+                <div className="rounded-xl border border-[#d3d3d3] bg-[#ffffff] overflow-hidden">
+                  <div className="px-5 py-4 border-b border-[#e5e5e5]">
+                    <h4 className="font-semibold text-[#212121]">
+                      Top counterparties
+                    </h4>
+                    <p className="text-xs text-[#8a8a8a] mt-0.5">
+                      Use these to issue 1099-NEC / 1099-MISC if you paid any
+                      individual contractor through Offbank.
+                    </p>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="bg-[#f9f9f9] text-xs uppercase tracking-wider text-[#8a8a8a]">
+                          <th className="text-left px-5 py-2 font-medium">
+                            Wallet
+                          </th>
+                          <th className="text-right px-5 py-2 font-medium">
+                            Txns
+                          </th>
+                          <th className="text-right px-5 py-2 font-medium">
+                            Gross
+                          </th>
+                          <th className="text-right px-5 py-2 font-medium">
+                            Net
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#e5e5e5]">
+                        {taxCounterparties.slice(0, 25).map((c) => (
+                          <tr key={c.customerWallet}>
+                            <td className="px-5 py-2.5 font-mono text-xs text-[#212121]">
+                              {c.customerWallet.slice(0, 8)}…
+                              {c.customerWallet.slice(-6)}
+                            </td>
+                            <td className="px-5 py-2.5 text-right text-[#5c5c5c]">
+                              {c.transactionCount}
+                            </td>
+                            <td className="px-5 py-2.5 text-right text-[#212121] font-medium">
+                              ${fmt(c.grossAmount)}
+                            </td>
+                            <td className="px-5 py-2.5 text-right text-[#34c759] font-medium">
+                              ${fmt(c.netAmount)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Empty state */}
+              {taxSummary && taxSummary.transactionCount === 0 && (
+                <div className="rounded-xl border border-[#d3d3d3] bg-[#ffffff] p-10 text-center">
+                  <Receipt className="h-8 w-8 text-[#5c5c5c] mx-auto mb-3" />
+                  <div className="font-medium text-[#212121]">
+                    No settlements in {taxYear}
+                  </div>
+                  <div className="text-xs text-[#5c5c5c] mt-1">
+                    Once you start receiving payments, year-end reports will
+                    populate here automatically.
+                  </div>
+                </div>
+              )}
+
+              {/* Disclaimer */}
+              <div className="rounded-lg border border-[#d29500]/20 bg-[#d29500]/5 p-4">
+                <div className="flex gap-2">
+                  <AlertTriangle className="h-4 w-4 text-[#d29500] shrink-0 mt-0.5" />
+                  <div className="text-xs text-[#5c5c5c] leading-relaxed">
+                    <strong className="text-[#212121]">
+                      Offbank does not provide tax advice.
+                    </strong>{" "}
+                    Offbank is a non-custodial settlement protocol and is{" "}
+                    <strong>not</strong> a Payment Settlement Entity (PSE) under
+                    IRC §6050W. We don&apos;t file 1099-K forms with the IRS.
+                    These exports are formatted to match common IRS forms so
+                    your CPA can use them directly. Consult a tax professional
+                    for filing.
+                  </div>
+                </div>
               </div>
             </div>
           )}

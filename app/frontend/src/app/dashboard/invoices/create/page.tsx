@@ -574,6 +574,36 @@ export default function CreateInvoicePage() {
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#8a8a8a]">
+                  Sales Tax / VAT (%)
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  value={taxRate}
+                  onChange={(e) => setTaxRate(e.target.value)}
+                  placeholder="0"
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2.5 text-sm text-[#212121] outline-none focus:border-[#34c759]/50"
+                />
+                <div className="mt-1 text-[10px] text-[#8a8a8a]">
+                  Optional. Applied to subtotal. Tracked for reporting.
+                </div>
+              </div>
+              <div className="sm:col-span-2">
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#8a8a8a]">
+                  Memo / Notes
+                </label>
+                <input
+                  type="text"
+                  value={memo}
+                  onChange={(e) => setMemo(e.target.value)}
+                  placeholder="Internal reference, PO number, etc."
+                  className="w-full rounded-lg border border-[#d3d3d3] bg-[#f2f2f2] px-4 py-2.5 text-sm text-[#212121] outline-none focus:border-[#34c759]/50"
+                />
+              </div>
             </div>
           </div>
         </div>
