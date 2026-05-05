@@ -28,6 +28,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Transaction, PublicKey } from "@solana/web3.js";
+import {
+  buildVaultTransactionApprove,
+  buildVaultTransactionExecute,
+} from "@/lib/squads";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -66,6 +70,29 @@ interface PlatformStatsData {
     invoicesPaid?: number;
     newMerchants?: number;
   };
+}
+
+interface MultisigMember {
+  key: string;
+  permissions: number;
+}
+interface MultisigPendingProposal {
+  transactionIndex: string;
+  status: string;
+  approvers: string[];
+  rejectors: string[];
+}
+interface MultisigInfo {
+  enabled: boolean;
+  multisigPda?: string;
+  vaultPda?: string;
+  threshold?: number;
+  members?: MultisigMember[];
+  transactionIndex?: string;
+  onChainAuthority?: string;
+  authorityMatches?: boolean;
+  pendingProposals?: MultisigPendingProposal[];
+  error?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -121,6 +148,12 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [claimTxSig, setClaimTxSig] = useState<string | null>(null);
+
+  // Platform multisig state (Squads-gated treasury)
+  const [multisigInfo, setMultisigInfo] = useState<MultisigInfo | null>(null);
+  const [multisigLoading, setMultisigLoading] = useState(false);
+  const [approvingIdx, setApprovingIdx] = useState<string | null>(null);
+  const [executingIdx, setExecutingIdx] = useState<string | null>(null);
 
   // Waitlist management state
   const [waitlistEntries, setWaitlistEntries] = useState<any[]>([]);
@@ -268,6 +301,99 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     fetchTreasuryData();
   }, [fetchTreasuryData]);
+
+  // ── Multisig info ────────────────────────────────────────────────────
+  const fetchMultisigInfo = useCallback(async () => {
+    setMultisigLoading(true);
+    try {
+      const res = await fetch("/api/admin/multisig/info", {
+        credentials: "include",
+      });
+      if (!res.ok) {
+        // 401/403 just means we're not yet admin — silently ignore
+        setMultisigInfo(null);
+        return;
+      }
+      const json: MultisigInfo = await res.json();
+      setMultisigInfo(json);
+    } catch (err) {
+      console.error("Failed to fetch multisig info:", err);
+      setMultisigInfo(null);
+    } finally {
+      setMultisigLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAdmin) fetchMultisigInfo();
+  }, [isAdmin, fetchMultisigInfo]);
+
+  // Approve a pending vault-tx proposal (member casts their vote)
+  const handleApproveProposal = async (transactionIndex: string) => {
+    if (!connectedPublicKey || !signTransaction || !multisigInfo?.multisigPda) {
+      setError("Connect a wallet first");
+      return;
+    }
+    setApprovingIdx(transactionIndex);
+    setError(null);
+    setSuccess(null);
+    try {
+      const tx = await buildVaultTransactionApprove({
+        connection,
+        multisigPda: new PublicKey(multisigInfo.multisigPda),
+        member: connectedPublicKey,
+        transactionIndex: BigInt(transactionIndex),
+      });
+      const signed = await signTransaction(tx);
+      const sig = await connection.sendRawTransaction(signed.serialize(), {
+        skipPreflight: false,
+        preflightCommitment: "confirmed",
+      });
+      await connection.confirmTransaction(sig, "confirmed");
+      setSuccess(`Approved proposal #${transactionIndex}`);
+      fetchMultisigInfo();
+    } catch (err: any) {
+      console.error("Approve error:", err);
+      setError(err.message || "Failed to approve proposal");
+    } finally {
+      setApprovingIdx(null);
+    }
+  };
+
+  // Execute an approved vault-tx proposal (anyone can call once threshold met)
+  const handleExecuteProposal = async (transactionIndex: string) => {
+    if (!connectedPublicKey || !signTransaction || !multisigInfo?.multisigPda) {
+      setError("Connect a wallet first");
+      return;
+    }
+    setExecutingIdx(transactionIndex);
+    setError(null);
+    setSuccess(null);
+    try {
+      const tx = await buildVaultTransactionExecute({
+        connection,
+        multisigPda: new PublicKey(multisigInfo.multisigPda),
+        executor: connectedPublicKey,
+        transactionIndex: BigInt(transactionIndex),
+      });
+      const signed = await signTransaction(tx);
+      const sig = await connection.sendRawTransaction(signed.serialize(), {
+        skipPreflight: false,
+        preflightCommitment: "confirmed",
+      });
+      await connection.confirmTransaction(sig, "confirmed");
+      setSuccess(
+        `Executed proposal #${transactionIndex} — funds transferred to vault USDC ATA`,
+      );
+      fetchTreasuryData();
+      fetchMultisigInfo();
+    } catch (err: any) {
+      console.error("Execute error:", err);
+      setError(err.message || "Failed to execute proposal");
+    } finally {
+      setExecutingIdx(null);
+    }
+  };
 
   const fetchOperationalData = useCallback(async () => {
     setOpsLoading(true);
@@ -434,11 +560,16 @@ export default function AdminDashboardPage() {
 
       setClaimTxSig(sig);
       setSuccess(
-        `Claimed ${formatUSD(body.amount)} USDC! Funds sent to your wallet.`,
+        body.mode === "multisig"
+          ? `Claim proposal #${body.transactionIndex} created — needs ${body.threshold}/${body.memberCount} approvals before it can execute. Funds will land in the multisig vault USDC ATA.`
+          : `Claimed ${formatUSD(
+              body.amount,
+            )} USDC! Funds sent to your wallet.`,
       );
 
       // Refresh data
       fetchTreasuryData();
+      if (body.mode === "multisig") fetchMultisigInfo();
     } catch (err: any) {
       console.error("Claim error:", err);
       if (err.message?.includes("User rejected")) {
@@ -453,8 +584,17 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const isMultisigMode = Boolean(
+    multisigInfo?.enabled && multisigInfo?.authorityMatches,
+  );
+  const isMultisigMember = Boolean(
+    isMultisigMode &&
+      publicKey &&
+      multisigInfo?.members?.some((m) => m.key === publicKey),
+  );
   const isAuthority =
-    publicKey && data?.platformConfig?.authority === publicKey;
+    publicKey &&
+    (data?.platformConfig?.authority === publicKey || isMultisigMember);
 
   const explorerBase =
     data?.cluster === "mainnet-beta"
@@ -770,27 +910,201 @@ export default function AdminDashboardPage() {
                 {claiming ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Claiming...
+                    {isMultisigMode ? "Proposing..." : "Claiming..."}
                   </>
                 ) : (
                   <>
                     <ArrowDownToLine className="w-4 h-4" />
-                    {isAuthority
-                      ? `Claim ${formatUSD(
+                    {!isAuthority
+                      ? isMultisigMode
+                        ? "Connect a Multisig Member Wallet"
+                        : "Connect Authority Wallet to Claim"
+                      : isMultisigMode
+                      ? `Propose Claim of ${formatUSD(
                           data?.treasuryBalance ?? 0,
-                        )} to Wallet`
-                      : "Connect Authority Wallet to Claim"}
+                        )}`
+                      : `Claim ${formatUSD(
+                          data?.treasuryBalance ?? 0,
+                        )} to Wallet`}
                   </>
                 )}
               </button>
               {isAuthority && (data?.treasuryBalance ?? 0) > 0 && (
                 <p className="text-xs text-[#8a8a8a] mt-2 text-center">
-                  Signs a transaction to transfer USDC from treasury PDA to your
-                  wallet
+                  {isMultisigMode
+                    ? `Creates a Squads proposal — needs ${multisigInfo?.threshold}/${multisigInfo?.members?.length} approvals before funds move to the vault USDC ATA`
+                    : "Signs a transaction to transfer USDC from treasury PDA to your wallet"}
                 </p>
               )}
             </div>
           </motion.div>
+
+          {/* Platform Multisig (only when configured) */}
+          {multisigInfo?.enabled && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              className="rounded-2xl bg-[#f2f2f2] border border-[#d3d3d3] p-6 md:col-span-2"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-purple-500/15 flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-purple-500" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-[#8a8a8a]">Platform Multisig</p>
+                  <p className="text-xl font-bold text-[#212121]">
+                    {multisigInfo.threshold ?? "?"}-of-
+                    {multisigInfo.members?.length ?? "?"} Squads vault
+                  </p>
+                </div>
+                {!multisigInfo.authorityMatches && (
+                  <div className="flex items-center gap-2 text-xs text-amber-700 bg-amber-100 px-3 py-1.5 rounded-lg">
+                    <ShieldAlert className="w-4 h-4" />
+                    Authority drift — vault PDA does not match on-chain
+                    authority. Run setup script.
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                <div>
+                  <p className="text-xs text-[#8a8a8a] mb-1">
+                    Vault PDA (USDC recipient)
+                  </p>
+                  <code className="text-xs text-[#212121] break-all">
+                    {multisigInfo.vaultPda}
+                  </code>
+                </div>
+                <div>
+                  <p className="text-xs text-[#8a8a8a] mb-1">Multisig PDA</p>
+                  <code className="text-xs text-[#212121] break-all">
+                    {multisigInfo.multisigPda}
+                  </code>
+                </div>
+              </div>
+
+              <div className="mb-5">
+                <p className="text-xs text-[#8a8a8a] mb-2">Members</p>
+                <div className="space-y-1.5">
+                  {multisigInfo.members?.map((m) => (
+                    <div
+                      key={m.key}
+                      className="flex items-center justify-between bg-white/60 rounded-lg px-3 py-2 text-xs"
+                    >
+                      <code className="text-[#212121] break-all">{m.key}</code>
+                      {publicKey === m.key && (
+                        <span className="ml-2 text-purple-600 font-semibold whitespace-nowrap">
+                          you
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Pending proposals */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm font-semibold text-[#212121]">
+                    Pending proposals
+                  </p>
+                  <button
+                    onClick={fetchMultisigInfo}
+                    disabled={multisigLoading}
+                    className="text-xs text-[#8a8a8a] hover:text-[#212121] flex items-center gap-1"
+                  >
+                    <RefreshCw
+                      className={`w-3 h-3 ${
+                        multisigLoading ? "animate-spin" : ""
+                      }`}
+                    />
+                    Refresh
+                  </button>
+                </div>
+                {(!multisigInfo.pendingProposals ||
+                  multisigInfo.pendingProposals.length === 0) && (
+                  <p className="text-xs text-[#8a8a8a] py-3">
+                    No pending proposals
+                  </p>
+                )}
+                {multisigInfo.pendingProposals?.map((p) => {
+                  const callerHasApproved = publicKey
+                    ? p.approvers.includes(publicKey)
+                    : false;
+                  const isApproved = p.status === "approved";
+                  const threshold = multisigInfo.threshold ?? 0;
+                  return (
+                    <div
+                      key={p.transactionIndex}
+                      className="bg-white/60 rounded-lg p-3 mb-2"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <p className="text-sm font-semibold text-[#212121]">
+                            Proposal #{p.transactionIndex}
+                          </p>
+                          <p className="text-xs text-[#8a8a8a]">
+                            {p.approvers.length}/{threshold} approvals · status:{" "}
+                            <span
+                              className={
+                                isApproved
+                                  ? "text-green-700 font-semibold"
+                                  : "text-amber-700"
+                              }
+                            >
+                              {p.status}
+                            </span>
+                          </p>
+                        </div>
+                        <div className="flex gap-2">
+                          {!isApproved &&
+                            isMultisigMember &&
+                            !callerHasApproved && (
+                              <button
+                                onClick={() =>
+                                  handleApproveProposal(p.transactionIndex)
+                                }
+                                disabled={approvingIdx === p.transactionIndex}
+                                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-purple-500 text-white hover:bg-purple-600 disabled:opacity-50 flex items-center gap-1"
+                              >
+                                {approvingIdx === p.transactionIndex ? (
+                                  <Loader2 className="w-3 h-3 animate-spin" />
+                                ) : (
+                                  <Check className="w-3 h-3" />
+                                )}
+                                Approve
+                              </button>
+                            )}
+                          {!isApproved && callerHasApproved && (
+                            <span className="px-3 py-1.5 rounded-lg text-xs text-purple-600 bg-purple-100">
+                              You approved
+                            </span>
+                          )}
+                          {isApproved && isMultisigMember && (
+                            <button
+                              onClick={() =>
+                                handleExecuteProposal(p.transactionIndex)
+                              }
+                              disabled={executingIdx === p.transactionIndex}
+                              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#34c759] text-[#212121] hover:bg-[#2ba948] disabled:opacity-50 flex items-center gap-1"
+                            >
+                              {executingIdx === p.transactionIndex ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <ArrowDownToLine className="w-3 h-3" />
+                              )}
+                              Execute
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
 
           {/* Platform Fee */}
           <motion.div

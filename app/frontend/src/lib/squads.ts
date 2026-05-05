@@ -492,3 +492,245 @@ export function permissionsLabel(mask: number): string {
 export function shortenAddress(address: string, chars = 4): string {
     return `${address.slice(0, chars)}...${address.slice(-chars)}`;
 }
+
+// ─── Vault Transactions (arbitrary instructions, e.g. claim fees) ─────────
+//
+// Squads v4 lets a vault execute any arbitrary instructions via:
+//   1. vaultTransactionCreate  — stores the inner TransactionMessage on chain
+//   2. proposalCreate          — opens it for voting
+//   3. proposalApprove         — each member votes (k votes needed)
+//   4. vaultTransactionExecute — once threshold met, anyone executes
+//
+// We use this to gate `claim_platform_fees` behind the platform multisig.
+
+import { TransactionMessage } from "@solana/web3.js";
+
+export interface VaultProposalResult {
+    transactionIndex: bigint;
+    /** Tx that creates the vault tx, opens proposal, and casts proposer's vote. */
+    setupTransaction: Transaction;
+    /** True if the proposer's single vote already meets threshold. */
+    canExecuteImmediately: boolean;
+}
+
+/**
+ * Build a Squads vault-transaction proposal that, when approved & executed,
+ * runs `instructions` from the vault PDA.
+ *
+ * The caller (proposer) signs and sends `setupTransaction`. After the
+ * threshold of approvals is reached, any member calls
+ * `buildVaultTransactionExecute` to apply the inner instructions.
+ *
+ * @param vaultIndex Defaults to 0 (the standard vault PDA).
+ */
+export async function buildVaultTransactionProposal(args: {
+    connection: Connection;
+    multisigPda: PublicKey;
+    creator: PublicKey;
+    instructions: TransactionInstruction[];
+    memo?: string;
+    vaultIndex?: number;
+}): Promise<VaultProposalResult> {
+    const {
+        connection,
+        multisigPda,
+        creator,
+        instructions,
+        memo,
+        vaultIndex = 0,
+    } = args;
+
+    const info = await getVaultInfo(connection, multisigPda);
+    if (!info) throw new Error("Multisig not found");
+
+    const [vaultPda] = multisig.getVaultPda({
+        multisigPda,
+        index: vaultIndex,
+        programId: SQUADS_PROGRAM_ID,
+    });
+
+    const transactionIndex = info.transactionIndex + BigInt(1);
+
+    // Build the inner TransactionMessage that the vault will execute.
+    // Blockhash is irrelevant for the inner message (Squads strips it),
+    // so we use the latest one to keep validators happy.
+    const { blockhash } = await connection.getLatestBlockhash("confirmed");
+    const innerMessage = new TransactionMessage({
+        payerKey: vaultPda,
+        recentBlockhash: blockhash,
+        instructions,
+    });
+
+    // 1. Store the inner message
+    const createIx = multisig.instructions.vaultTransactionCreate({
+        multisigPda,
+        transactionIndex,
+        creator,
+        rentPayer: creator,
+        vaultIndex,
+        ephemeralSigners: 0,
+        transactionMessage: innerMessage,
+        memo,
+        programId: SQUADS_PROGRAM_ID,
+    });
+
+    // 2. Open proposal
+    const proposalIx = multisig.instructions.proposalCreate({
+        multisigPda,
+        transactionIndex,
+        creator,
+        rentPayer: creator,
+        programId: SQUADS_PROGRAM_ID,
+    });
+
+    // 3. Proposer's approval
+    const approveIx = multisig.instructions.proposalApprove({
+        multisigPda,
+        transactionIndex,
+        member: creator,
+        memo: memo ? `Self-approve: ${memo}` : "Self-approve",
+        programId: SQUADS_PROGRAM_ID,
+    });
+
+    const setupTx = new Transaction().add(createIx, proposalIx, approveIx);
+    setupTx.feePayer = creator;
+    const { blockhash: setupBh, lastValidBlockHeight } =
+        await connection.getLatestBlockhash("confirmed");
+    setupTx.recentBlockhash = setupBh;
+    setupTx.lastValidBlockHeight = lastValidBlockHeight;
+
+    return {
+        transactionIndex,
+        setupTransaction: setupTx,
+        canExecuteImmediately: info.threshold <= 1,
+    };
+}
+
+/**
+ * Build an approval-vote tx for an existing vault-transaction proposal.
+ * Used by additional members in a k-of-n vault.
+ */
+export async function buildVaultTransactionApprove(args: {
+    connection: Connection;
+    multisigPda: PublicKey;
+    member: PublicKey;
+    transactionIndex: bigint;
+    memo?: string;
+}): Promise<Transaction> {
+    const { connection, multisigPda, member, transactionIndex, memo } = args;
+    const ix = multisig.instructions.proposalApprove({
+        multisigPda,
+        transactionIndex,
+        member,
+        memo: memo ?? "Approve vault tx",
+        programId: SQUADS_PROGRAM_ID,
+    });
+    const tx = new Transaction().add(ix);
+    tx.feePayer = member;
+    const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash("confirmed");
+    tx.recentBlockhash = blockhash;
+    tx.lastValidBlockHeight = lastValidBlockHeight;
+    return tx;
+}
+
+/**
+ * Build the execute tx that runs the inner instructions of an approved
+ * vault-transaction proposal. Squads SDK auto-loads the stored inner
+ * message and resolves the required remaining accounts.
+ */
+export async function buildVaultTransactionExecute(args: {
+    connection: Connection;
+    multisigPda: PublicKey;
+    executor: PublicKey;
+    transactionIndex: bigint;
+}): Promise<Transaction> {
+    const { connection, multisigPda, executor, transactionIndex } = args;
+    const { instruction } = await multisig.instructions.vaultTransactionExecute({
+        connection,
+        multisigPda,
+        transactionIndex,
+        member: executor,
+        programId: SQUADS_PROGRAM_ID,
+    });
+    const tx = new Transaction().add(instruction);
+    tx.feePayer = executor;
+    const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash("confirmed");
+    tx.recentBlockhash = blockhash;
+    tx.lastValidBlockHeight = lastValidBlockHeight;
+    return tx;
+}
+
+// ─── Proposal Inspection ───────────────────────────────────
+
+export interface ProposalSummary {
+    transactionIndex: bigint;
+    /** Status: "draft" | "active" | "approved" | "rejected" | "executed" | "cancelled" */
+    status: string;
+    approvers: PublicKey[];
+    rejectors: PublicKey[];
+    cancellers: PublicKey[];
+}
+
+/**
+ * Fetch the current state of a single proposal.
+ * Returns null if the proposal account doesn't exist (yet).
+ */
+export async function getProposal(
+    connection: Connection,
+    multisigPda: PublicKey,
+    transactionIndex: bigint,
+): Promise<ProposalSummary | null> {
+    try {
+        const [proposalPda] = multisig.getProposalPda({
+            multisigPda,
+            transactionIndex,
+            programId: SQUADS_PROGRAM_ID,
+        });
+        const accountInfo = await connection.getAccountInfo(proposalPda);
+        if (!accountInfo) return null;
+        const [proposal] = multisig.accounts.Proposal.fromAccountInfo(accountInfo);
+        const statusKind = (proposal.status as { __kind: string }).__kind;
+        return {
+            transactionIndex,
+            status: statusKind.toLowerCase(),
+            approvers: proposal.approved,
+            rejectors: proposal.rejected,
+            cancellers: proposal.cancelled,
+        };
+    } catch (err) {
+        console.error("Failed to fetch proposal:", err);
+        return null;
+    }
+}
+
+/**
+ * List the most recent N pending proposals (status "active" or "approved")
+ * by walking back from the multisig's current transactionIndex.
+ */
+export async function listPendingProposals(
+    connection: Connection,
+    multisigPda: PublicKey,
+    lookback = 20,
+): Promise<ProposalSummary[]> {
+    const info = await getVaultInfo(connection, multisigPda);
+    if (!info) return [];
+    const start = info.transactionIndex;
+    if (start === BigInt(0)) return [];
+
+    const out: ProposalSummary[] = [];
+    const end = start > BigInt(lookback) ? start - BigInt(lookback) + BigInt(1) : BigInt(1);
+
+    // Fetch in parallel
+    const indices: bigint[] = [];
+    for (let i = start; i >= end; i = i - BigInt(1)) indices.push(i);
+
+    const proposals = await Promise.all(
+        indices.map((idx) => getProposal(connection, multisigPda, idx)),
+    );
+    for (const p of proposals) {
+        if (p && (p.status === "active" || p.status === "approved")) out.push(p);
+    }
+    return out;
+}
