@@ -956,6 +956,18 @@ export default function ReportsPage() {
                     Year-end exports for your accountant. Offbank doesn&apos;t
                     file with the IRS — these are for your records.
                   </p>
+                  <p className="text-xs text-[#5c5c5c] mt-2">
+                    Receiving private payments via{" "}
+                    <Link
+                      href="/dashboard/cloak"
+                      className="text-[#1e40af] hover:underline"
+                    >
+                      Cloak
+                    </Link>
+                    ? Cloak invoice payments are already included below. Direct
+                    private transfers (not through a Settlr invoice) can be
+                    exported separately from the Cloak inbox.
+                  </p>
                 </div>
                 <select
                   value={taxYear}

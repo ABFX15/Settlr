@@ -43,6 +43,7 @@ import {
   USDC_MINT_ADDRESS,
   IS_DEVNET,
 } from "@/lib/constants";
+import { payInvoicePrivately } from "@/lib/cloak";
 
 /* ─── Solana config ─── */
 const RPC_ENDPOINT = SOLANA_RPC_URL;
@@ -109,6 +110,7 @@ export default function InvoicePayClient({
     connected,
     connecting,
     signTransaction: walletSignTransaction,
+    signMessage: walletSignMessage,
     sendTransaction,
   } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
@@ -139,6 +141,14 @@ export default function InvoicePayClient({
   const [txSignature, setTxSignature] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(0);
+  // Cloak: shielded payment opt-in. `merchantCloakNk` is fetched from
+  // /api/merchants/cloak-key — when present, the buyer can flip
+  // `payPrivately` to route through the Cloak shielded pool. The
+  // merchant doesn't need a Cloak account to *receive* funds, only
+  // their published viewing key so the chain note is encrypted to them.
+  const [merchantCloakNk, setMerchantCloakNk] = useState<string | null>(null);
+  const [payPrivately, setPayPrivately] = useState(false);
+  const [cloakStatus, setCloakStatus] = useState<string | null>(null);
 
   const fetchInvoice = useCallback(async () => {
     if (!token) return;
@@ -151,6 +161,21 @@ export default function InvoicePayClient({
       if (!res.ok) throw new Error("Failed to load invoice");
       const data: InvoiceData = await res.json();
       setInvoice(data);
+      // Best-effort fetch of the merchant's Cloak viewing key. 404 is
+      // expected when the merchant has not enabled Cloak.
+      try {
+        const ckRes = await fetch(
+          `/api/merchants/cloak-key?wallet=${encodeURIComponent(
+            data.merchantWallet,
+          )}`,
+        );
+        if (ckRes.ok) {
+          const ckBody = await ckRes.json();
+          setMerchantCloakNk(ckBody.cloakViewingNk || null);
+        }
+      } catch {
+        /* private payments simply unavailable */
+      }
       if (data.status === "paid") {
         setTxSignature(data.paymentSignature || null);
         setState("already-paid");
@@ -198,6 +223,75 @@ export default function InvoicePayClient({
     }
     setState("paying");
     setError(null);
+
+    // ─── Cloak: shielded payment branch ──────────────────────────
+    // When the buyer has opted in *and* the merchant has published a
+    // viewing key, route the payment through the Cloak shielded pool.
+    // The merchant receives funds in their normal USDC ATA; the
+    // amount + counterparty are hidden on the public ledger and the
+    // chain note is encrypted to the merchant's `nk` for inbox/audit.
+    if (
+      payPrivately &&
+      merchantCloakNk &&
+      walletSignTransaction &&
+      walletSignMessage
+    ) {
+      try {
+        const connection = new Connection(RPC_ENDPOINT, "confirmed");
+        const userPubkey = publicKey ?? new PublicKey(payerAddress);
+        const merchantPubkey = new PublicKey(invoice.merchantWallet);
+        const amountBaseUnits = BigInt(
+          Math.round(invoice.total * Math.pow(10, USDC_DECIMALS)),
+        );
+        setCloakStatus("Preparing shielded payment…");
+        const result = await payInvoicePrivately({
+          connection,
+          payerPublicKey: userPubkey,
+          signTransaction: walletSignTransaction,
+          signMessage: walletSignMessage,
+          merchantRecipient: merchantPubkey,
+          merchantNkHex: merchantCloakNk,
+          mint: USDC_MINT,
+          amountBaseUnits,
+          onProgress: (s) => setCloakStatus(s),
+        });
+        setTxSignature(result.withdrawSignature);
+
+        const recordResponse = await fetch(`/api/invoices/view/${token}/pay`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            paymentSignature: result.withdrawSignature,
+            payerWallet: payerAddress,
+            cloak: {
+              depositSignature: result.depositSignature,
+              withdrawSignature: result.withdrawSignature,
+            },
+          }),
+        });
+        if (!recordResponse.ok) {
+          // Non-fatal: the funds landed; the merchant will still pick
+          // this up via Cloak inbox scan even if our DB record fails.
+          console.warn(
+            "[invoice] cloak payment recorded on-chain but db update failed",
+            await recordResponse.text(),
+          );
+        }
+        setCloakStatus(null);
+        setState("success");
+        return;
+      } catch (err) {
+        console.error("[invoice] Cloak payment error:", err);
+        setError(
+          err instanceof Error
+            ? `Private payment failed: ${err.message}`
+            : "Private payment failed.",
+        );
+        setCloakStatus(null);
+        setState("ready");
+        return;
+      }
+    }
 
     try {
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
@@ -884,26 +978,54 @@ export default function InvoicePayClient({
                               }
                             </div>
                           ) : (
-                            <button
-                              onClick={handlePay}
-                              disabled={state === "paying"}
-                              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#34c759] py-4 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors disabled:opacity-50"
-                            >
-                              {state === "paying" ? (
-                                <>
-                                  <Loader2 className="h-4 w-4 animate-spin" />
-                                  Processing Payment...
-                                </>
-                              ) : (
-                                <>
-                                  Pay $
-                                  {invoice.total.toLocaleString("en-US", {
-                                    minimumFractionDigits: 2,
-                                  })}
-                                  <ArrowRight className="h-4 w-4" />
-                                </>
+                            <>
+                              {merchantCloakNk && (
+                                <label className="flex items-start gap-3 rounded-lg border border-[#d3d3d3] bg-[#f7f7f7] p-3 cursor-pointer hover:bg-[#f2f2f2] transition-colors">
+                                  <input
+                                    type="checkbox"
+                                    checked={payPrivately}
+                                    onChange={(e) =>
+                                      setPayPrivately(e.target.checked)
+                                    }
+                                    className="mt-0.5 h-4 w-4 accent-[#1e40af]"
+                                  />
+                                  <div className="flex-1 min-w-0">
+                                    <div className="text-sm font-semibold text-[#212121] flex items-center gap-2">
+                                      Pay privately with Cloak
+                                      <span className="text-[10px] font-medium text-[#1e40af] bg-[#eff6ff] px-2 py-0.5 rounded-full">
+                                        ZK shielded
+                                      </span>
+                                    </div>
+                                    <div className="text-xs text-[#5c5c5c] mt-0.5">
+                                      Routes the USDC through Cloak&apos;s
+                                      shielded pool. Amount and counterparty
+                                      hidden on the public ledger; merchant
+                                      receives normally.
+                                    </div>
+                                  </div>
+                                </label>
                               )}
-                            </button>
+                              <button
+                                onClick={handlePay}
+                                disabled={state === "paying"}
+                                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#34c759] py-4 text-sm font-bold text-black hover:bg-[#2ba048] transition-colors disabled:opacity-50"
+                              >
+                                {state === "paying" ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    {cloakStatus || "Processing Payment..."}
+                                  </>
+                                ) : (
+                                  <>
+                                    {payPrivately ? "Pay privately $" : "Pay $"}
+                                    {invoice.total.toLocaleString("en-US", {
+                                      minimumFractionDigits: 2,
+                                    })}
+                                    <ArrowRight className="h-4 w-4" />
+                                  </>
+                                )}
+                              </button>
+                            </>
                           )}
                         </div>
 

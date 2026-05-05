@@ -11,6 +11,7 @@
     "test:auth": "tsx node_modules/mocha/bin/mocha.js 'src/__tests__/auth-wallet.test.ts'"
   },
   "dependencies": {
+    "@cloak.dev/sdk": "^0.1.6",
     "@coral-xyz/anchor": "^0.32.1",
     "@inco/solana-sdk": "^0.0.2",
     "@privy-io/react-auth": "^3.22.2",

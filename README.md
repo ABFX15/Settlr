@@ -138,6 +138,53 @@ Full visibility at [offbankpay.com/dashboard](https://offbankpay.com/dashboard):
 
 ---
 
+## Privacy — ZK Shielded Payments via Cloak
+
+Cannabis B2B has a hard secondary problem: **competitors and brokers
+can read your wholesale flow** the moment a public-chain transfer
+hits the explorer. Pricing tiers, supplier relationships, customer
+concentration — all leak. Settlr integrates the [Cloak SDK](https://docs.cloak.ag)
+to give merchants a _production_ privacy rail on top of standard USDC.
+
+### What's shipped
+
+| Surface                                 | Behaviour                                                                                                                                                                     |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/dashboard/cloak`                      | Derive a viewing key from a wallet signature, publish it, and register with the Cloak relay. One-time setup.                                                                  |
+| `/dashboard/cloak` — Inbox              | Client-side scan of on-chain Cloak chain notes encrypted to your viewing key. Plaintext never touches Settlr's server.                                                        |
+| `/dashboard/cloak` — Compliance CSV     | One-click export of decrypted private payments for your accountant.                                                                                                           |
+| `/dashboard/cloak` — Private batch send | Paste `wallet,amount` rows; each disbursement is an unlinkable shielded deposit + withdraw.                                                                                   |
+| `/invoice/[token]` — Pay privately      | Buyers see a "Pay privately with Cloak" toggle when the merchant has published a viewing key. Funds land in the normal USDC ATA; the chain note is encrypted to the merchant. |
+| Tax exports (`/dashboard/reports`)      | Cloak-paid Settlr invoices are already in the year-end CSV / 1099-K / 8949 reports. Direct private transfers export from the Cloak inbox.                                     |
+
+### Trust model
+
+- The Cloak **spend secret is derived deterministically** from a
+  wallet signature over a domain-separated `SETTLR_SIGN_IN_MESSAGE`.
+  Settlr's server never sees it.
+- The **viewing key (`nk`) is publishable by design** — it is an
+  encryption _target_, not the spend key. Settlr stores only `nk`.
+- Recipients **don't need a Cloak account to receive** funds — the
+  withdraw lands in their normal USDC ATA. The viewing key is only
+  needed to _see the audit trail_ of incoming private payments.
+
+### Code map
+
+- [app/frontend/src/lib/cloak.ts](app/frontend/src/lib/cloak.ts) — SDK wrapper (key derivation, payment, scan, compliance).
+- [app/frontend/src/app/dashboard/cloak/page.tsx](app/frontend/src/app/dashboard/cloak/page.tsx) — Setup + inbox + private batch UI.
+- [app/frontend/src/app/api/merchants/cloak-key/route.ts](app/frontend/src/app/api/merchants/cloak-key/route.ts) — Public/private nk endpoints.
+- [app/frontend/src/app/invoice/[token]/InvoicePayClient.tsx](app/frontend/src/app/invoice/[token]/InvoicePayClient.tsx) — Buyer-side private-pay branch.
+- [app/frontend/supabase/migrations/20260505_cloak_integration.sql](app/frontend/supabase/migrations/20260505_cloak_integration.sql) — DB schema additions.
+
+### Network
+
+Cloak is mainnet-first but ships a devnet relay. Settlr defaults to
+the devnet relay so the demo and integration tests run without a
+mainnet deployment. Override via `NEXT_PUBLIC_CLOAK_RELAY_URL` and
+`NEXT_PUBLIC_CLOAK_PROGRAM_ID` for production.
+
+---
+
 ## Compliance
 
 Built for the 2026 regulatory landscape:
@@ -259,6 +306,10 @@ SUPABASE_SERVICE_ROLE_KEY=
 RANGE_API_KEY=                 # Wallet risk screening
 SUMSUB_APP_TOKEN=              # KYC verification
 SUMSUB_SECRET_KEY=
+
+# Cloak (ZK shielded payments) — optional, devnet by default
+NEXT_PUBLIC_CLOAK_RELAY_URL=https://api.cloak.ag
+# NEXT_PUBLIC_CLOAK_PROGRAM_ID=zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW
 ```
 
 ---

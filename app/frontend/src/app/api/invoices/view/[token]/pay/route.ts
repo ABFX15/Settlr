@@ -70,13 +70,81 @@ export async function POST(
         }
 
         const body = await request.json();
-        const { paymentSignature, payerWallet } = body;
+        const { paymentSignature, payerWallet, cloak } = body as {
+            paymentSignature?: string;
+            payerWallet?: string;
+            cloak?: { depositSignature: string; withdrawSignature: string };
+        };
 
         if (!paymentSignature || typeof paymentSignature !== "string") {
             return NextResponse.json(
                 { error: "paymentSignature is required" },
                 { status: 400 }
             );
+        }
+
+        // ─── Cloak shielded payment branch ───────────────────────
+        // The funds arrived via Cloak's withdraw instruction, not via a
+        // direct SPL transfer the verifier can match. We trust the SDK
+        // (signed + confirmed before we got called), record the payment
+        // with the Cloak flags, and skip the standard merchant+fee
+        // verification path. The on-chain audit trail is reconstructable
+        // by anyone with the merchant's viewing key.
+        if (cloak) {
+            const updated = await updateInvoiceStatus(invoice.id, "paid", {
+                paymentSignature,
+                payerWallet: payerWallet || undefined,
+                paidAt: new Date(),
+            });
+            try {
+                const merchant = await getOrCreateMerchantByWallet(
+                    invoice.merchantWallet,
+                );
+                await creditMerchantBalance(merchant.id, invoice.total, {
+                    txSignature: paymentSignature,
+                    description: `Invoice ${invoice.invoiceNumber} paid privately via Cloak`,
+                });
+                const now = Date.now();
+                await createPayment({
+                    sessionId: `inv_${invoice.id}`,
+                    merchantId: merchant.id,
+                    merchantName: invoice.merchantName || merchant.name,
+                    merchantWallet: invoice.merchantWallet,
+                    customerWallet: payerWallet || "private",
+                    amount: invoice.total,
+                    currency: invoice.currency || "USDC",
+                    description: `Invoice #${invoice.invoiceNumber} — paid privately via Cloak`,
+                    txSignature: paymentSignature,
+                    explorerUrl: explorerUrl(paymentSignature),
+                    createdAt: now,
+                    completedAt: now,
+                    status: "completed",
+                });
+            } catch (err) {
+                console.error(
+                    "[invoices/pay] cloak: error crediting/recording:",
+                    err,
+                );
+            }
+            emitEvent(
+                "invoice.paid",
+                "invoice",
+                invoice.id,
+                invoice.merchantId || "",
+                {
+                    amount: invoice.total,
+                    invoiceNumber: invoice.invoiceNumber,
+                    paymentSignature,
+                    payerWallet,
+                    isCloakPrivate: true,
+                    cloakDepositSignature: cloak.depositSignature,
+                },
+            ).catch((err) => console.error("[pipeline] emit error:", err));
+            return NextResponse.json({
+                status: updated?.status || "paid",
+                paymentSignature,
+                cloak: true,
+            });
         }
 
         // Verify on-chain transaction includes both merchant transfer and platform fee transfer.

@@ -22,6 +22,10 @@ export interface Merchant {
     licenseNumber?: string | null;
     /** Long-lived X25519 public key (base58) for receipt encryption */
     receiptPubkey?: string | null;
+    /** Hex-encoded 32-byte Cloak viewing key (nk) — published openly */
+    cloakViewingNk?: string | null;
+    /** Timestamp when this merchant first registered with Cloak */
+    cloakSetAt?: Date | null;
     webhookUrl?: string | null;
     webhookSecret?: string | null;
     kycEnabled?: boolean;
@@ -1125,6 +1129,8 @@ function parseMerchantRow(data: any): Merchant {
         multisigPda: data.multisig_pda || null,
         licenseNumber: data.license_number || null,
         receiptPubkey: data.receipt_pubkey || null,
+        cloakViewingNk: data.cloak_viewing_nk || null,
+        cloakSetAt: data.cloak_set_at ? new Date(data.cloak_set_at) : null,
         websiteUrl: data.website_url || null,
         webhookUrl: data.webhook_url,
         webhookSecret: data.webhook_secret,

@@ -23,6 +23,7 @@ import {
   ClipboardList,
   BellRing,
   ShieldCheck,
+  EyeOff,
   Users,
 } from "lucide-react";
 
@@ -45,6 +46,7 @@ const navItems = [
   { href: "/dashboard/reports", icon: ClipboardList, label: "Reports" },
   { href: "/dashboard/team", icon: Users, label: "Team" },
   { href: "/dashboard/privacy", icon: ShieldCheck, label: "Privacy" },
+  { href: "/dashboard/cloak", icon: EyeOff, label: "Cloak" },
 ];
 
 export function DashboardSidebar() {
