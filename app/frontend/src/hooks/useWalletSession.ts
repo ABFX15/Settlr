@@ -9,13 +9,31 @@
  * `offbank_session` cookie set by /api/auth/wallet/verify.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+    createContext,
+    createElement,
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+    type ReactNode,
+} from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import bs58 from "bs58";
 
 type Status = "idle" | "signing" | "ready" | "error";
 
-export function useWalletSession() {
+interface WalletSessionValue {
+    status: Status;
+    error: string | null;
+    signIn: () => Promise<void>;
+    signOut: () => Promise<void>;
+}
+
+const WalletSessionContext = createContext<WalletSessionValue | null>(null);
+
+function useWalletSessionInternal(): WalletSessionValue {
     const { publicKey, signMessage, connected } = useWallet();
     const [status, setStatus] = useState<Status>("idle");
     const [error, setError] = useState<string | null>(null);
@@ -88,4 +106,24 @@ export function useWalletSession() {
     }, []);
 
     return { status, error, signIn, signOut };
+}
+
+/**
+ * Provider — mount once high in the tree (e.g. DashboardShell) so the
+ * sign-in flow runs exactly once per wallet connect. Without this,
+ * multiple components calling useWalletSession() would each fire their
+ * own nonce + signMessage request, causing duplicate Phantom prompts.
+ */
+export function WalletSessionProvider({ children }: { children: ReactNode }) {
+    const value = useWalletSessionInternal();
+    return createElement(WalletSessionContext.Provider, { value }, children);
+}
+
+export function useWalletSession(): WalletSessionValue {
+    const ctx = useContext(WalletSessionContext);
+    if (ctx) return ctx;
+    // Fallback: not wrapped in provider (e.g. /admin which uses the hook
+    // directly). Run the local sign-in flow inline. Safe as long as only
+    // one component on the page calls the hook.
+    return useWalletSessionInternal();
 }

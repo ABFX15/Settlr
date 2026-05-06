@@ -7,6 +7,7 @@ import { explorerUrl } from "@/lib/constants";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
+import { useWalletSession } from "@/hooks/useWalletSession";
 import Link from "next/link";
 import {
   Wallet,
@@ -97,6 +98,7 @@ export default function DashboardPage() {
   const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
   const onboarding = useOnboardingStatus();
+  const { status: sessionStatus } = useWalletSession();
 
   const [treasury, setTreasury] = useState<TreasuryBalance | null>(null);
   const [invoiceStats, setInvoiceStats] = useState<InvoiceStats | null>(null);
@@ -108,6 +110,13 @@ export default function DashboardPage() {
   const fetchData = useCallback(async () => {
     if (!publicKey) {
       setLoading(false);
+      return;
+    }
+    // Wait for the wallet sign-in flow (nonce → signMessage → verify)
+    // to complete before hitting authenticated endpoints. Otherwise the
+    // very first call races the session cookie and 401s, flipping the UI
+    // to the "session expired" screen even though the user just signed in.
+    if (sessionStatus !== "ready") {
       return;
     }
     try {
@@ -129,6 +138,8 @@ export default function DashboardPage() {
         setLoading(false);
         return;
       }
+      // Clear any previous expiry banner once we get a clean response.
+      setSessionExpired(false);
 
       const failures: string[] = [];
       if (treasuryRes.ok) setTreasury(await treasuryRes.json());
@@ -155,7 +166,7 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, [publicKey]);
+  }, [publicKey, sessionStatus]);
 
   useEffect(() => {
     fetchData();
