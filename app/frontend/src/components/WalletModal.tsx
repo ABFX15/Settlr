@@ -43,7 +43,8 @@ interface WalletModalProps {
 }
 
 const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
-  const { wallets, select, connecting, connected } = useWallet();
+  const { wallets, select, connect, wallet, connecting, connected } =
+    useWallet();
 
   const [selectedWallet, setSelectedWallet] = useState<WalletName | null>(null);
   const [connectError, setConnectError] = useState<string | null>(null);
@@ -71,6 +72,23 @@ const WalletModal: FC<WalletModalProps> = ({ visible, onClose }) => {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [visible, onClose]);
+
+  // After `select(name)` completes, the wallet-adapter swaps `wallet` to
+  // the chosen adapter on the next render. With autoConnect disabled
+  // (e.g. on /login) we have to explicitly call connect() — otherwise
+  // the wallet popup never fires. Trigger it once the selected adapter
+  // has actually been wired up.
+  useEffect(() => {
+    if (!selectedWallet) return;
+    if (!wallet || wallet.adapter.name !== selectedWallet) return;
+    if (connected || connecting) return;
+    connect().catch((err: unknown) => {
+      const msg =
+        err instanceof Error ? err.message : "Failed to connect wallet";
+      setConnectError(msg);
+      setSelectedWallet(null);
+    });
+  }, [selectedWallet, wallet, connect, connected, connecting]);
 
   const handleSelect = useCallback(
     (walletName: WalletName) => {
