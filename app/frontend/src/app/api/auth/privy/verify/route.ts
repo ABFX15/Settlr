@@ -29,6 +29,21 @@ function getClient(): PrivyClient | null {
 }
 
 export async function POST(request: NextRequest) {
+    try {
+        return await handle(request);
+    } catch (err) {
+        console.error("[privy-verify] unhandled error:", err);
+        return NextResponse.json(
+            {
+                error: "Internal error verifying Privy session",
+                detail: err instanceof Error ? err.message : String(err),
+            },
+            { status: 500 },
+        );
+    }
+}
+
+async function handle(request: NextRequest) {
     const rateLimited = await checkRateLimit(`privy-verify:${getClientIp(request)}`);
     if (rateLimited) return rateLimited;
 
@@ -59,7 +74,8 @@ export async function POST(request: NextRequest) {
     let claims;
     try {
         claims = await client.verifyAuthToken(accessToken);
-    } catch {
+    } catch (err) {
+        console.error("[privy-verify] verifyAuthToken failed:", err);
         return NextResponse.json(
             { error: "Invalid Privy access token" },
             { status: 401 },
@@ -67,7 +83,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Pull the full user record so we can find their Solana wallet.
-    const user = await client.getUser(claims.userId);
+    let user;
+    try {
+        user = await client.getUser(claims.userId);
+    } catch (err) {
+        console.error("[privy-verify] getUser failed:", err);
+        return NextResponse.json(
+            { error: "Failed to fetch Privy user" },
+            { status: 502 },
+        );
+    }
 
     // Prefer the embedded Solana wallet (created by Privy on first
     // sign-in). Fall back to the first linked external Solana wallet.
@@ -82,9 +107,17 @@ export async function POST(request: NextRequest) {
         (a) => a.type === "wallet" && a.chainType === "solana" && a.address,
     );
     if (solanaWallets.length === 0) {
+        // Per Privy docs: automatic wallet creation only works with the
+        // Privy login modal, not direct login methods. The client should
+        // call useCreateWallet() and retry. Return 425 so the client
+        // knows to wait + retry rather than treating this as fatal.
+        console.warn(
+            "[privy-verify] no Solana wallet on user yet — client should provision and retry",
+            { userId: claims.userId, accountTypes: accounts.map((a) => a.type) },
+        );
         return NextResponse.json(
-            { error: "No Solana wallet on Privy user — embedded wallet provisioning failed" },
-            { status: 422 },
+            { error: "Embedded Solana wallet not yet provisioned. Retry shortly." },
+            { status: 425 },
         );
     }
     const embedded = solanaWallets.find((a) => a.walletClientType === "privy");
