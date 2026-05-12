@@ -17,7 +17,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useIdentityToken } from "@privy-io/react-auth";
 import {
     useWallets as useSolanaWallets,
     useCreateWallet as useCreateSolanaWallet,
@@ -30,6 +30,7 @@ const VERIFY_RETRY_MS = 2000;
 
 export function usePrivySession() {
     const { authenticated, ready, user, getAccessToken, logout } = usePrivy();
+    const { identityToken } = useIdentityToken();
     const { wallets: solanaWallets } = useSolanaWallets();
     const { createWallet } = useCreateSolanaWallet();
     const [status, setStatus] = useState<Status>("idle");
@@ -46,6 +47,7 @@ export function usePrivySession() {
             // If no embedded Solana wallet yet, try to create one. This is
             // necessary when the user signs in via a custom flow (not the
             // Privy modal) — auto-creation doesn't fire in that path.
+            // Ignore "User already has an embedded wallet" — that's success.
             const hasSolana = solanaWallets.some(
                 (w) => (w as { walletClientType?: string }).walletClientType === "privy",
             );
@@ -53,9 +55,10 @@ export function usePrivySession() {
                 try {
                     await createWallet();
                 } catch (e) {
-                    // Non-fatal: server may still find a previously
-                    // provisioned wallet. Log and continue.
-                    console.warn("[privy-session] createWallet failed:", e);
+                    const msg = e instanceof Error ? e.message : String(e);
+                    if (!/already has an embedded wallet/i.test(msg)) {
+                        console.warn("[privy-session] createWallet failed:", e);
+                    }
                 }
             }
 
@@ -69,7 +72,7 @@ export function usePrivySession() {
                     method: "POST",
                     headers: { "content-type": "application/json" },
                     credentials: "include",
-                    body: JSON.stringify({ accessToken }),
+                    body: JSON.stringify({ accessToken, identityToken }),
                 });
                 if (res.ok) {
                     setStatus("ready");

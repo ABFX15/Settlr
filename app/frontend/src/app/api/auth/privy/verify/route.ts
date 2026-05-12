@@ -55,7 +55,7 @@ async function handle(request: NextRequest) {
         );
     }
 
-    let body: { accessToken?: string };
+    let body: { accessToken?: string; identityToken?: string };
     try {
         body = await request.json();
     } catch {
@@ -63,6 +63,7 @@ async function handle(request: NextRequest) {
     }
 
     const accessToken = typeof body?.accessToken === "string" ? body.accessToken : "";
+    const identityToken = typeof body?.identityToken === "string" ? body.identityToken : "";
     if (!accessToken) {
         return NextResponse.json(
             { error: "accessToken required" },
@@ -83,13 +84,22 @@ async function handle(request: NextRequest) {
     }
 
     // Pull the full user record so we can find their Solana wallet.
+    // PREFER getUser({idToken}) — it's cached and not rate-limited.
+    // getUser(userId) is deprecated and hits strict rate limits.
     let user;
     try {
-        user = await client.getUser(claims.userId);
+        if (identityToken) {
+            user = await client.getUser({ idToken: identityToken });
+        } else {
+            user = await client.getUser(claims.userId);
+        }
     } catch (err) {
         console.error("[privy-verify] getUser failed:", err);
         return NextResponse.json(
-            { error: "Failed to fetch Privy user" },
+            {
+                error: "Failed to fetch Privy user",
+                detail: err instanceof Error ? err.message : String(err),
+            },
             { status: 502 },
         );
     }
