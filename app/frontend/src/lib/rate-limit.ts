@@ -9,6 +9,7 @@ import { Redis } from "@upstash/redis";
  */
 
 let ratelimit: Ratelimit | null = null;
+let warnedNoRedis = false;
 
 if (
     process.env.UPSTASH_REDIS_REST_URL &&
@@ -30,16 +31,16 @@ export async function checkRateLimit(
     identifier: string,
 ): Promise<NextResponse | null> {
     if (!ratelimit) {
-        // Production must have Redis configured — fail closed to avoid silent
-        // unbounded request floods. In dev (NODE_ENV !== "production"), skip.
-        if (process.env.NODE_ENV === "production") {
-            console.error(
-                "[rate-limit] FATAL: UPSTASH_REDIS_REST_URL/TOKEN missing in production",
+        // No Redis configured — log once and no-op. We previously failed
+        // closed in production, but that took the whole app down whenever
+        // Upstash env vars were missing on a new deploy. Better to allow
+        // requests through and rely on Vercel's per-route concurrency
+        // limits as a soft cap.
+        if (process.env.NODE_ENV === "production" && !warnedNoRedis) {
+            console.warn(
+                "[rate-limit] UPSTASH_REDIS_REST_URL/TOKEN missing in production — rate limiting disabled",
             );
-            return NextResponse.json(
-                { error: "Service temporarily unavailable" },
-                { status: 503 },
-            );
+            warnedNoRedis = true;
         }
         return null;
     }
