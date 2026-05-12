@@ -45,7 +45,7 @@ export default function LoginPage() {
 
 function LoginPageInner() {
   const privyEnabled = !!process.env.NEXT_PUBLIC_PRIVY_APP_ID;
-  const { ready: privyReady, authenticated, login } = usePrivy();
+  const { ready: privyReady, authenticated, login, logout } = usePrivy();
   const { status: sessionStatus } = usePrivySession();
   const { status: onboardingStatus } = useOnboardingStatus();
   const { connected: walletConnected } = useWallet();
@@ -64,7 +64,9 @@ function LoginPageInner() {
       router.replace("/dashboard");
     } else if (onboardingStatus === "needs-onboarding") {
       router.replace(
-        token ? `/onboarding?token=${encodeURIComponent(token)}` : "/onboarding",
+        token
+          ? `/onboarding?token=${encodeURIComponent(token)}`
+          : "/onboarding",
       );
     }
   }, [haveSession, onboardingStatus, router, searchParams]);
@@ -131,8 +133,19 @@ function LoginPageInner() {
         {privyEnabled && (
           <button
             type="button"
-            disabled={!privyReady || authenticated}
-            onClick={() => login()}
+            disabled={!privyReady}
+            onClick={async () => {
+              // If a stale Privy session exists but onboarding never
+              // completed (e.g. earlier 503), logging out first lets the
+              // user start the email flow cleanly instead of getting
+              // stuck on a disabled button.
+              if (authenticated) {
+                try {
+                  await logout();
+                } catch {}
+              }
+              login();
+            }}
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
             style={{ background: c.green }}
           >
@@ -144,7 +157,7 @@ function LoginPageInner() {
             ) : (
               <>
                 <Mail className="h-4 w-4" />
-                Continue with email
+                {authenticated ? "Sign in again" : "Continue with email"}
               </>
             )}
           </button>
@@ -180,7 +193,10 @@ function LoginPageInner() {
           Connect existing Solana wallet
         </button>
 
-        <div className="flex items-center justify-center gap-4 mt-8 pt-6 border-t" style={{ borderColor: c.border }}>
+        <div
+          className="flex items-center justify-center gap-4 mt-8 pt-6 border-t"
+          style={{ borderColor: c.border }}
+        >
           {[
             ["/circle-logo.svg", "USDC"],
             ["/solana-logo.svg", "Solana"],
