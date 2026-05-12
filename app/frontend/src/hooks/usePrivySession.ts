@@ -18,7 +18,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import { useSolanaWallets } from "@privy-io/react-auth/solana";
+import {
+    useWallets as useSolanaWallets,
+    useCreateWallet as useCreateSolanaWallet,
+} from "@privy-io/react-auth/solana";
 
 type Status = "idle" | "verifying" | "ready" | "error";
 
@@ -27,7 +30,8 @@ const VERIFY_RETRY_MS = 2000;
 
 export function usePrivySession() {
     const { authenticated, ready, user, getAccessToken, logout } = usePrivy();
-    const { wallets: solanaWallets, createWallet } = useSolanaWallets();
+    const { wallets: solanaWallets } = useSolanaWallets();
+    const { createWallet } = useCreateSolanaWallet();
     const [status, setStatus] = useState<Status>("idle");
     const [error, setError] = useState<string | null>(null);
     const inFlight = useRef<string | null>(null);
