@@ -1,6 +1,6 @@
 {
-  "name": "Settlr",
-  "short_name": "Settlr",
+  "name": "Offbank",
+  "short_name": "Offbank",
   "description": "Non-custodial USDC settlement infrastructure for high-risk B2B supply chains.",
   "start_url": "/",
   "display": "standalone",
@@ -8,7 +8,7 @@
   "theme_color": "#1B6B4A",
   "icons": [
     {
-      "src": "/settlr-logo-nobg.png",
+      "src": "/offbank-logo-nobg.png",
       "sizes": "500x500",
       "type": "image/png",
       "purpose": "any maskable"
