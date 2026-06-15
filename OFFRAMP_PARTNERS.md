@@ -15,15 +15,52 @@ settlement partner**, not a consumer crypto off-ramp — and our on-chain audit
 trail + Sumsub KYB are the provenance that makes such a partner willing to
 accept the funds.
 
-## Candidate partners (verify cannabis + crypto acceptance directly)
+## Two layers: an API off-ramp provider + a cannabis-compliant bank
 
-| Partner | What they are | Fit |
+The realistic flow is **two parties**: a high-risk-friendly API provider that
+converts USDC→USD and runs KYB/AML, settling into a **cannabis-compliant bank**
+where the merchant holds a USD account.
+
+### API off-ramp providers (the adapter we plug in)
+
+| Provider | What they are | Fit |
 |---|---|---|
-| **Safe Harbor Financial** (NASDAQ: SHFS, shfinancial.org) | The leading cannabis banking/fintech platform — banks cannabis operators nationwide, expanded payments in Jan 2026 (GreenCard, Lüt: ACH debit, next-day ACH settlement). | **Top pick.** Already banks cannabis + has compliance infra. Likely the account the merchant off-ramps *into*. Partnership/onboarding, not self-serve API. |
-| **Green Check Verified / Shield Compliance** | Compliance connectors between cannabis businesses and banks/credit unions. | The layer that makes a bank/CU comfortable; feed them our audit trail + KYB. |
-| **Cannabis-friendly credit unions** (Affinity FCU, Salal CU, North Bay CU) | CUs that explicitly bank cannabis. NCUA stablecoin-issuer rule in comment period (through Jul 17 2026). | The merchant's USD deposit account. |
-| **BitPay** | Established crypto→fiat processor, next-business-day bank settlement. | Worth exploring, but **confirm cannabis acceptance** — historically avoids it. |
-| **Bankcard International Group** | Writes about cannabis stablecoin payments; high-risk processor. | Possible processor partner — vet. |
+| **Cybrid** (cybrid.xyz) | White-label off-ramp inside *your own* API; integrated KYB + multi-rail ACH/domestic wire. | **Top API pick** — slots straight into our provider adapter; keeps the flow in-product. |
+| **BVNK** (bvnk.com) | Enterprise on/off-ramp; virtual accounts USD/EUR/GBP; deep B2B banking orchestration. | Strong for multi-currency / larger volume. |
+| **Rain** (rain.xyz) | Virtual accounts + automated programmatic stablecoin-treasury → fiat. | Good for automated, recurring treasury sweeps. |
+| **BitPay** | Established crypto→fiat processor, next-day settlement. | Vet cannabis acceptance — historically avoids it. |
+
+> Mainstream (Circle, Bridge/Stripe, Coinbase, MoonPay) will reject cannabis on
+> AML/federal grounds — do not build on them for this.
+
+### Cannabis-compliant banks (the USD destination)
+
+| Bank | Notes |
+|---|---|
+| **Safe Harbor Financial** (NASDAQ: SHFS) | Leading cannabis banking platform; expanded payments Jan 2026 (next-day ACH). |
+| **Partner Colorado Credit Union** | Safe Harbor's chartering CU — real, verifiable cannabis rail. |
+| **Continental Bank** | Underwrites state-legal cannabis. |
+| **Cannabis-friendly CUs** (Affinity FCU, Salal CU, North Bay CU) | Merchant USD deposit accounts. |
+| **Green Check Verified / Shield Compliance** | Compliance connectors that make a bank/CU comfortable — feed them our audit trail + KYB. |
+
+## Recommended 3-step architecture (matches what we've built)
+
+```
+[Merchant Solana wallet]
+   │  payout request in dashboard (KYB-gated)
+   ▼
+[High-risk off-ramp API: Cybrid / BVNK / Rain]   ← provider adapter
+   │  KYB + BSA/AML, sender+receiver wallet screen (Range/Elliptic/Chainalysis)
+   │  + cannabis license # and invoice metadata attached
+   ▼
+[Cannabis-compliant ACH/Fedwire: Safe Harbor / Partner Colorado CU]
+   │  next-day settle
+   ▼
+[Merchant business USD bank account]
+```
+
+Build redundancy: support a **multi-provider fallback** so traffic can shift if
+a partner changes its risk policy.
 
 ## How the code is built around this
 
