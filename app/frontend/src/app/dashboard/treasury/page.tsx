@@ -108,6 +108,12 @@ export default function TreasuryPage() {
   const { publicKey, connected } = useActiveWallet();
 
   const [balance, setBalance] = useState<Balance | null>(null);
+  const [fiatView, setFiatView] = useState<{
+    availableUSD: number;
+    pendingSettlements: number;
+    pendingSettlementCount: number;
+    settledToBankLifetime: number;
+  } | null>(null);
   const [lifetime, setLifetime] = useState<Lifetime | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [depositInfo, setDepositInfo] = useState<DepositInfo | null>(null);
@@ -135,6 +141,14 @@ export default function TreasuryPage() {
       setBalance(data.balance);
       setLifetime(data.lifetime);
       setTransactions(data.transactions || []);
+
+      // Virtual ledger: plain-USD framing incl. withdrawals clearing to bank.
+      try {
+        const fv = await fetch(`/api/treasury/fiat-view?wallet=${publicKey}`);
+        if (fv.ok) setFiatView(await fv.json());
+      } catch {
+        /* non-fatal — the balance cards still render */
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch");
     } finally {
@@ -328,6 +342,42 @@ export default function TreasuryPage() {
             Refresh
           </button>
         </div>
+
+        {/* Virtual ledger — plain-USD summary. The blockchain is invisible:
+            the operator just sees USD available and what's clearing to bank. */}
+        {fiatView && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 grid grid-cols-1 gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-6 sm:grid-cols-3"
+          >
+            <div>
+              <div className="text-[13px] text-[#94A3B8]">Available to withdraw</div>
+              <div className="mt-1 text-3xl font-bold text-[#212121]">
+                {formatUSD(fiatView.availableUSD)}
+              </div>
+              <div className="mt-1 text-xs text-[#94A3B8]">USD · ready now</div>
+            </div>
+            <div className="sm:border-l sm:border-[#E2E8F0] sm:pl-6">
+              <div className="text-[13px] text-[#94A3B8]">Pending settlements</div>
+              <div className="mt-1 text-3xl font-bold text-[#212121]">
+                {formatUSD(fiatView.pendingSettlements)}
+              </div>
+              <div className="mt-1 text-xs text-[#94A3B8]">
+                {fiatView.pendingSettlementCount === 0
+                  ? "No withdrawals in progress"
+                  : `${fiatView.pendingSettlementCount} clearing to your bank`}
+              </div>
+            </div>
+            <div className="sm:border-l sm:border-[#E2E8F0] sm:pl-6">
+              <div className="text-[13px] text-[#94A3B8]">Settled to bank</div>
+              <div className="mt-1 text-3xl font-bold text-[#212121]">
+                {formatUSD(fiatView.settledToBankLifetime)}
+              </div>
+              <div className="mt-1 text-xs text-[#94A3B8]">Lifetime payouts</div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Balance Cards */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
