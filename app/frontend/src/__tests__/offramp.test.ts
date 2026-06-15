@@ -16,6 +16,10 @@ import {
     updateOfframpStatus,
     verifyOfframpWebhook,
 } from "../lib/offramp";
+import {
+    resolveProviderChain,
+    initiateOfframpPayout,
+} from "../lib/offramp-providers";
 
 const SECRET = "offramp_secret_xyz";
 
@@ -78,6 +82,50 @@ describe("Off-ramp settlement", () => {
 
         it("rejects when no secret is set", () => {
             expect(verifyOfframpWebhook(body, sign(body, SECRET), "")).to.equal(false);
+        });
+    });
+
+    describe("provider chain", () => {
+        afterEach(() => {
+            delete process.env.OFFBANK_OFFRAMP_PROVIDER;
+            delete process.env.CYBRID_CLIENT_ID;
+            delete process.env.CYBRID_CLIENT_SECRET;
+            delete process.env.CYBRID_BANK_GUID;
+        });
+
+        it("defaults to the manual provider", () => {
+            const chain = resolveProviderChain().map((p) => p.name);
+            expect(chain).to.deep.equal(["manual"]);
+        });
+
+        it("drops an unconfigured provider but keeps manual as fallback", () => {
+            process.env.OFFBANK_OFFRAMP_PROVIDER = "cybrid,manual";
+            // No Cybrid creds → cybrid is filtered out.
+            expect(resolveProviderChain().map((p) => p.name)).to.deep.equal(["manual"]);
+        });
+
+        it("includes a configured provider ahead of manual", () => {
+            process.env.OFFBANK_OFFRAMP_PROVIDER = "cybrid,manual";
+            process.env.CYBRID_CLIENT_ID = "id";
+            process.env.CYBRID_CLIENT_SECRET = "secret";
+            process.env.CYBRID_BANK_GUID = "bank_guid";
+            expect(resolveProviderChain().map((p) => p.name)).to.deep.equal([
+                "cybrid",
+                "manual",
+            ]);
+        });
+
+        it("manual initiation yields a pending payout (never auto-settles)", async () => {
+            const res = await initiateOfframpPayout({
+                requestId: "ofr_test",
+                amount: 1000,
+                currency: "USD",
+                method: "ach",
+                accountInfo: "****1",
+                merchantWallet: "W",
+            });
+            expect(res.provider).to.equal("manual");
+            expect(res.status).to.equal("pending");
         });
     });
 });

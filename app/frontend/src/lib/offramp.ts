@@ -35,8 +35,14 @@ export interface OfframpRequest {
     localAmount: number;
     accountInfo: string;
     status: OfframpStatus;
+    /** Which provider is handling this payout (e.g. "cybrid", "manual"). */
+    provider?: string;
     /** Partner's reference once they pick it up (e.g. ACH trace / batch id). */
     providerRef?: string;
+    /** Compliance metadata partners require — attached automatically. */
+    licenseNumber?: string | null;
+    /** Range risk score (0-100) of the merchant wallet at payout time. */
+    riskScore?: number;
     /** Reason when status is "failed". */
     failureReason?: string;
     createdAt: string;
@@ -80,11 +86,12 @@ export function getOfframpRequest(id: string): OfframpRequest | null {
 export function updateOfframpStatus(
     id: string,
     status: OfframpStatus,
-    extra?: { providerRef?: string; failureReason?: string },
+    extra?: { provider?: string; providerRef?: string; failureReason?: string },
 ): OfframpRequest | null {
     const req = byId.get(id);
     if (!req) return null;
     req.status = status;
+    if (extra?.provider) req.provider = extra.provider;
     if (extra?.providerRef) req.providerRef = extra.providerRef;
     if (extra?.failureReason) req.failureReason = extra.failureReason;
     req.updatedAt = new Date().toISOString();

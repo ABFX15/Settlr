@@ -11,10 +11,13 @@ import {
     getOrCreateMerchantByWallet,
 } from "@/lib/db";
 import { isUserVerified } from "@/lib/sumsub";
+import { screenWallet } from "@/lib/range";
 import {
     createOfframpRequest,
     listOfframpRequests,
+    updateOfframpStatus,
 } from "@/lib/offramp";
+import { initiateOfframpPayout } from "@/lib/offramp-providers";
 
 /**
  * KYB enforcement gate.
@@ -136,6 +139,23 @@ export async function POST(request: NextRequest) {
         const kybBlock = await assertKybIfRequired(wallet);
         if (kybBlock) return kybBlock;
 
+        // AML: screen the wallet before any USD movement. Range falls back to
+        // a low-risk mock when no API key is set, so dev/devnet still works.
+        const screen = await screenWallet(wallet);
+        if (screen.shouldBlock) {
+            logger.warn(
+                `[offramp] Blocked wallet ${wallet.slice(0, 8)}… (risk ${screen.riskScore})`,
+            );
+            return NextResponse.json(
+                {
+                    error: "risk_blocked",
+                    message:
+                        "This wallet was flagged by compliance screening and can't off-ramp. Contact support.",
+                },
+                { status: 403 },
+            );
+        }
+
         const merchant = await getOrCreateMerchantByWallet(wallet);
 
         const offrampReq = createOfframpRequest({
@@ -147,11 +167,34 @@ export async function POST(request: NextRequest) {
             amount,
             localAmount: localAmount || amount,
             accountInfo,
+            // Compliance metadata partners require, attached automatically.
+            licenseNumber: merchant.licenseNumber,
+            riskScore: screen.riskScore,
         });
 
+        // Hand off to the provider chain (e.g. cybrid → manual fallback).
+        const initiation = await initiateOfframpPayout({
+            requestId: offrampReq.id,
+            amount,
+            currency: currency || "USD",
+            method,
+            accountInfo,
+            licenseNumber: merchant.licenseNumber,
+            merchantWallet: wallet,
+        });
+        const updated =
+            updateOfframpStatus(offrampReq.id, initiation.status, {
+                provider: initiation.provider,
+                providerRef: initiation.providerRef,
+            }) || offrampReq;
+
         return NextResponse.json({
-            request: offrampReq,
-            message: `Off-ramp request received: ${amount} USDC → ${method}. Funds settle once our compliance partner confirms — you'll see the status update here.`,
+            request: updated,
+            message: `Off-ramp request received: ${amount} USDC → ${method}. Funds settle once ${
+                initiation.provider === "manual"
+                    ? "our compliance partner confirms"
+                    : `${initiation.provider} settles`
+            } — you'll see the status update here.`,
         });
     } catch (err) {
         logger.error("[offramp] POST error:", err);
