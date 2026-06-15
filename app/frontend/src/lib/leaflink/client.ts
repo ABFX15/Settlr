@@ -10,7 +10,12 @@ import type {
     LeafLinkOrderStatus,
 } from "./types";
 
-const LEAFLINK_API_BASE = "https://www.leaflink.com/api/v2";
+// Base URL for the LeafLink REST API. Resolved per-request (not at module
+// load) so LEAFLINK_API_BASE can be set to a sandbox host — or a local server
+// in integration tests — and take effect without re-importing the module.
+function leaflinkApiBase(): string {
+    return process.env.LEAFLINK_API_BASE || "https://www.leaflink.com/api/v2";
+}
 
 export class LeafLinkClient {
     private apiKey: string;
@@ -28,7 +33,7 @@ export class LeafLinkClient {
         path: string,
         body?: unknown,
     ): Promise<T> {
-        const url = `${LEAFLINK_API_BASE}${path}`;
+        const url = `${leaflinkApiBase()}${path}`;
         const headers: Record<string, string> = {
             Authorization: `App ${this.apiKey}`,
             "Content-Type": "application/json",

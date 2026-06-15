@@ -3,6 +3,8 @@
  */
 
 export { LeafLinkClient } from "./client";
+export { syncPaymentToLeafLink } from "./sync";
+export type { SyncPaymentResult } from "./sync";
 export {
     createSync,
     updateSync,

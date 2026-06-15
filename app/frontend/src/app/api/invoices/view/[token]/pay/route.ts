@@ -14,6 +14,7 @@ import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { explorerUrl, SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 import { emitEvent } from "@/lib/pipeline";
+import { syncPaymentToLeafLink } from "@/lib/leaflink/sync";
 import {
     getInvoiceByViewToken,
     updateInvoiceStatus,
@@ -141,6 +142,14 @@ export async function POST(
                     cloakDepositSignature: cloak.depositSignature,
                 },
             ).catch((err) => logger.error("[pipeline] emit error:", err));
+            // If this invoice came from a LeafLink order, push the payment
+            // proof back to LeafLink. No-op for non-LeafLink invoices.
+            syncPaymentToLeafLink({
+                invoiceId: invoice.id,
+                txSignature: paymentSignature,
+                amount: invoice.total,
+                paidAt: new Date().toISOString(),
+            }).catch((err) => logger.error("[leaflink] sync-back error:", err));
             return NextResponse.json({
                 status: updated?.status || "paid",
                 paymentSignature,
@@ -247,6 +256,15 @@ export async function POST(
         emitEvent("invoice.paid", "invoice", invoice.id, invoice.merchantId || "", {
             amount: invoice.total, invoiceNumber: invoice.invoiceNumber, paymentSignature, payerWallet,
         }).catch((err) => logger.error("[pipeline] emit error:", err));
+
+        // If this invoice came from a LeafLink order, push the payment proof
+        // back to LeafLink. No-op for non-LeafLink invoices.
+        syncPaymentToLeafLink({
+            invoiceId: invoice.id,
+            txSignature: paymentSignature,
+            amount: invoice.total,
+            paidAt: new Date().toISOString(),
+        }).catch((err) => logger.error("[leaflink] sync-back error:", err));
 
         return NextResponse.json({
             status: updated?.status || "paid",

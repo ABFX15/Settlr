@@ -302,21 +302,46 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // Look up merchant wallet
+        // Resolve the merchant's payout wallet. config.merchant_id is either a
+        // merchants.id (UUID — from the standalone /config API) or a wallet
+        // address (from the dashboard settings bridge); handle both.
         let merchantWallet = "";
         let merchantName = order.seller.company_name;
+
+        const looksLikeUuid =
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+                config.merchant_id,
+            );
 
         if (isSupabaseConfigured()) {
             const { data: merchant } = await supabase
                 .from("merchants")
                 .select("wallet_address, name")
-                .eq("id", config.merchant_id)
+                .eq(looksLikeUuid ? "id" : "wallet_address", config.merchant_id)
                 .single();
 
             if (merchant) {
                 merchantWallet = merchant.wallet_address;
                 merchantName = merchant.name || merchantName;
             }
+        }
+
+        // If the config is keyed by wallet and no merchant row was found, the
+        // merchant_id *is* the payout wallet — use it directly.
+        if (!merchantWallet && !looksLikeUuid) {
+            merchantWallet = config.merchant_id;
+        }
+
+        if (!merchantWallet) {
+            logger.error(
+                `[leaflink] Could not resolve a payout wallet for merchant ${config.merchant_id}; refusing to create an unpayable invoice for order ${order.number}`,
+            );
+            // 200 so LeafLink doesn't retry a config problem indefinitely.
+            return NextResponse.json({
+                received: true,
+                matched: true,
+                error: "merchant_wallet_unresolved",
+            });
         }
 
         /* ── Handle event types ───────────────────────────── */
