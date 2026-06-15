@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Peptide Payments — Validation &amp; Pricing · 6 Jun 2026</title>
+    <style>
+      :root {
+        --bg: #0a0c10;
+        --panel: #12161d;
+        --panel2: #161b24;
+        --ink: #e8edf4;
+        --muted: #93a1b3;
+        --line: #222a35;
+        --green: #34d399;
+        --amber: #fbbf24;
+        --red: #f87171;
+        --blue: #60a5fa;
+        --violet: #a78bfa;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+      }
+      .wrap {
+        max-width: 940px;
+        margin: 0 auto;
+        padding: 48px 24px 96px;
+      }
+      h1 {
+        font-size: 30px;
+        line-height: 1.2;
+        margin: 0 0 6px;
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        margin: 42px 0 14px;
+        font-weight: 600;
+      }
+      h3 {
+        font-size: 18px;
+        margin: 22px 0 8px;
+        letter-spacing: -0.01em;
+      }
+      p {
+        margin: 10px 0;
+      }
+      .sub {
+        color: var(--muted);
+        margin: 0 0 26px;
+      }
+      .verdict {
+        display: flex;
+        gap: 16px;
+        align-items: stretch;
+        flex-wrap: wrap;
+        margin: 24px 0;
+      }
+      .vcard {
+        flex: 1;
+        min-width: 200px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 18px 20px;
+      }
+      .vcard .label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+      }
+      .vcard .big {
+        font-size: 24px;
+        font-weight: 700;
+        margin-top: 4px;
+        letter-spacing: -0.01em;
+      }
+      .pill {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 999px;
+        border: 1px solid;
+      }
+      .pill.go {
+        color: var(--green);
+        border-color: #16432f;
+        background: #08231a;
+      }
+      .pill.cond {
+        color: var(--amber);
+        border-color: #5a4711;
+        background: #241d06;
+      }
+      .pill.no {
+        color: var(--red);
+        border-color: #4a1f1f;
+        background: #250c0c;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 20px 22px;
+        margin: 14px 0;
+      }
+      .kv {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 8px 18px;
+        margin: 8px 0;
+      }
+      .kv .k {
+        color: var(--muted);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .tag {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .t-strong {
+        color: var(--green);
+        background: #08231a;
+      }
+      .t-weak {
+        color: var(--amber);
+        background: #241d06;
+      }
+      .t-neg {
+        color: var(--red);
+        background: #250c0c;
+      }
+      ul {
+        margin: 8px 0;
+        padding-left: 20px;
+      }
+      li {
+        margin: 6px 0;
+      }
+      .callout {
+        border-left: 3px solid var(--violet);
+        background: var(--panel2);
+        padding: 14px 18px;
+        border-radius: 0 10px 10px 0;
+        margin: 16px 0;
+      }
+      .callout.amber {
+        border-color: var(--amber);
+      }
+      .callout.green {
+        border-color: var(--green);
+      }
+      .callout.red {
+        border-color: var(--red);
+      }
+      .foot {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 40px;
+        border-top: 1px solid var(--line);
+        padding-top: 16px;
+      }
+      code {
+        background: #0d1117;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 1px 6px;
+        font-size: 13px;
+      }
+      .num {
+        font-variant-numeric: tabular-nums;
+      }
+      .big-num {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      @media (max-width: 720px) {
+        .grid3,
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+        .kv {
+          grid-template-columns: 1fr;
+        }
+      }
+      .hl {
+        color: var(--green);
+        font-weight: 600;
+      }
+      .hlr {
+        color: var(--red);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Peptide Payments — Validation &amp; Pricing</h1>
+      <p class="sub">
+        Offbank · reachable high-risk wedge assessment · 6 June 2026
+      </p>
+
+      <div class="verdict">
+        <div class="vcard">
+          <div class="label">Verdict</div>
+          <div class="big" style="color: var(--amber)">Validate</div>
+          <div style="margin-top: 6px">
+            <span class="pill cond">GO — pending legal</span>
+          </div>
+        </div>
+        <div class="vcard">
+          <div class="label">Go-criteria score</div>
+          <div class="big num">4 / 5</div>
+          <div style="color: var(--muted); margin-top: 6px; font-size: 13px">
+            vs cannabis cold lane 2/5
+          </div>
+        </div>
+        <div class="vcard">
+          <div class="label">The one gate</div>
+          <div class="big" style="color: var(--red)">Legal</div>
+          <div style="color: var(--muted); margin-top: 6px; font-size: 13px">
+            Facilitating unapproved-drug payments
+          </div>
+        </div>
+      </div>
+
+      <div class="callout green">
+        <strong
+          >Why this beats cannabis on the axis that actually broke you:</strong
+        >
+        the cannabis lane failed on <em>distribution</em> — you couldn't reach
+        offline, gated, relationship-driven buyers. Peptide vendors are
+        <strong>online-native DTC e-commerce</strong> (Shopify/WooCommerce,
+        Reddit, X, forums) and
+        <strong>many already accept crypto</strong> (USDT/BTC). So the channels
+        that failed for cannabis — SEO, comparison pages, cold email, forums,
+        ads on crypto media — <span class="hl">all work here</span>, and the
+        "why would I use crypto" objection is
+        <span class="hl">pre-cleared</span>.
+      </div>
+
+      <h2>Demand signals</h2>
+      <table>
+        <tr>
+          <th>Signal</th>
+          <th>Strength</th>
+          <th>Read</th>
+        </tr>
+        <tr>
+          <td>
+            Vendors actively searching for payment solutions (your observation)
+          </td>
+          <td><span class="tag t-strong">Strong</span></td>
+          <td>
+            Pull, not push — they're looking for you. Pin down
+            <em>where</em> you saw this; those threads are validation + lead
+            list.
+          </td>
+        </tr>
+        <tr>
+          <td>Many already pay/receive via raw USDT/BTC addresses</td>
+          <td><span class="tag t-strong">Strong</span></td>
+          <td>
+            "Hacking a manual version" = top-rubric signal. Crypto objection
+            gone.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Stripe/PayPal/high-risk processors churn peptide vendors constantly
+          </td>
+          <td><span class="tag t-strong">Strong</span></td>
+          <td>Acute, recurring pain → willingness to switch and to pay.</td>
+        </tr>
+        <tr>
+          <td>Online-native, reachable by a solo founder today</td>
+          <td><span class="tag t-strong">Strong</span></td>
+          <td>Fixes the exact gap that killed cannabis.</td>
+        </tr>
+        <tr>
+          <td>
+            Legal status of the underlying product (research peptides / "not for
+            human consumption")
+          </td>
+          <td><span class="tag t-neg">Strong-negative</span></td>
+          <td>The real risk. Must clear before money moves.</td>
+        </tr>
+      </table>
+
+      <h2>Go / No-Go scoring (same framework as cannabis)</h2>
+      <div class="grid2">
+        <div class="panel">
+          <h3 style="margin-top: 0">Peptide payments</h3>
+          <div class="kv">
+            <span class="k">Demand ≥ 2</span
+            ><span class="hl">Yes — observed pull + workarounds</span>
+          </div>
+          <div class="kv">
+            <span class="k">Tech feasible</span
+            ><span class="hl">Yes — checkout/links/Blinks exist</span>
+          </div>
+          <div class="kv">
+            <span class="k">MVP ≤ 2 wks</span
+            ><span class="hl">Already built; reposition only</span>
+          </div>
+          <div class="kv">
+            <span class="k">Unfair advantage</span
+            ><span class="hl"
+              >Reachable channel + off-ramp + working product</span
+            >
+          </div>
+          <div class="kv">
+            <span class="k">Crypto necessary</span
+            ><span class="hl">Yes — banks won't touch the vertical</span>
+          </div>
+          <div class="kv">
+            <span class="k num">Score</span
+            ><span><strong>4 / 5</strong> — legal is the asterisk</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3 style="margin-top: 0">Cannabis (cold lane, for comparison)</h3>
+          <div class="kv">
+            <span class="k">Demand ≥ 2</span
+            ><span class="hlr">No — distribution-blocked</span>
+          </div>
+          <div class="kv">
+            <span class="k">Tech feasible</span><span>Yes</span>
+          </div>
+          <div class="kv">
+            <span class="k">MVP ≤ 2 wks</span><span>Built</span>
+          </div>
+          <div class="kv">
+            <span class="k">Unfair advantage</span
+            ><span class="hlr">No operator network</span>
+          </div>
+          <div class="kv">
+            <span class="k">Crypto necessary</span><span>Yes</span>
+          </div>
+          <div class="kv">
+            <span class="k num">Score</span><span><strong>2 / 5</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <h2 style="color: var(--violet)">
+        Pricing — how you actually make money
+      </h2>
+
+      <div class="callout amber">
+        <strong>The core pricing insight:</strong> peptide vendors mentally
+        anchor on <em>two</em> different numbers, and you price against both.
+        Their
+        <strong>card processor costs 8–15% + reserves + chargebacks</strong>
+        (your "look how cheap we are" story). Their
+        <strong>raw-crypto cost is ~0%</strong> but the product is broken (your
+        "look how much better we are" story). So:
+        <span class="hl"
+          >keep the headline % low to beat the crypto anchor, and earn real
+          margin on the off-ramp + SaaS, where the comparison is to expensive
+          cards.</span
+        >
+        Don't sell crypto — sell the product on top of it.
+      </div>
+
+      <h3>Your cost basis (per transaction)</h3>
+      <table>
+        <tr>
+          <th>Cost</th>
+          <th>Approx</th>
+          <th>Notes</th>
+        </tr>
+        <tr>
+          <td>Solana network fee</td>
+          <td class="num">~$0.0003</td>
+          <td>Negligible.</td>
+        </tr>
+        <tr>
+          <td>Gasless sponsorship (Kora)</td>
+          <td class="num">~$0.001</td>
+          <td>If you sponsor; optional.</td>
+        </tr>
+        <tr>
+          <td>Off-ramp (Sphere) USDC→USD</td>
+          <td class="num">~0.5–1%</td>
+          <td>Your COGS on the cash-out leg. Pass through + margin.</td>
+        </tr>
+        <tr>
+          <td>Infra (Privy, Supabase, RPC)</td>
+          <td class="num">fixed/mo</td>
+          <td>Amortized; favors a SaaS component.</td>
+        </tr>
+      </table>
+      <p>
+        Translation: on the <em>settlement</em> leg your marginal cost is
+        basically zero. Real COGS only appears at <strong>off-ramp</strong>.
+        That's the pricing seam — bake margin into the fiat conversion where
+        merchants already expect to pay a spread.
+      </p>
+
+      <h3>
+        Recommended structure — hybrid (this is what investors want: % + MRR)
+      </h3>
+      <div class="grid3">
+        <div class="panel">
+          <div
+            class="label"
+            style="
+              color: var(--muted);
+              font-size: 11px;
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+            "
+          >
+            Transaction fee
+          </div>
+          <div class="big-num hl">1.5%</div>
+          <div style="font-size: 13px; color: var(--muted)">
+            On USDC settlement. Low enough to barely beat the "crypto is free"
+            anchor while clearly undercutting 8–15% cards. Your program supports
+            per-merchant bps up to 10%, so this is config, not code.
+          </div>
+        </div>
+        <div class="panel">
+          <div
+            class="label"
+            style="
+              color: var(--muted);
+              font-size: 11px;
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+            "
+          >
+            Off-ramp spread
+          </div>
+          <div class="big-num hl">1.0%</div>
+          <div style="font-size: 13px; color: var(--muted)">
+            On USDC→USD (Sphere costs you ~0.5–1%, so ~0.5–1.5% net margin).
+            Merchants expect to pay to reach a bank; this is the
+            invisible-margin lever.
+          </div>
+        </div>
+        <div class="panel">
+          <div
+            class="label"
+            style="
+              color: var(--muted);
+              font-size: 11px;
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+            "
+          >
+            SaaS tier (optional)
+          </div>
+          <div class="big-num hl">$99–299/mo</div>
+          <div style="font-size: 13px; color: var(--muted)">
+            For volume merchants: lower % (e.g. 0.9%) in exchange for monthly.
+            Predictable MRR — the metric that gets you funded.
+          </div>
+        </div>
+      </div>
+
+      <h3>Worked example — a mid-size peptide vendor, $80k/mo volume</h3>
+      <table>
+        <tr>
+          <th>Option</th>
+          <th>What the merchant pays</th>
+          <th>Your monthly revenue</th>
+          <th>Merchant's view</th>
+        </tr>
+        <tr>
+          <td>High-risk card processor (today)</td>
+          <td class="num">
+            ~10% = $8,000 + 10% reserve held 6mo + chargebacks
+          </td>
+          <td class="num">—</td>
+          <td>Painful, cash-flow killer</td>
+        </tr>
+        <tr>
+          <td>Raw USDT (today)</td>
+          <td class="num">
+            ~0% but no UX, no USD, manual recon, no compliance
+          </td>
+          <td class="num">$0</td>
+          <td>Cheap but broken</td>
+        </tr>
+        <tr style="background: #0d1a14">
+          <td><strong>Offbank hybrid</strong></td>
+          <td class="num">
+            1.5% settle ($1,200) + 1% off-ramp on cashed-out portion
+          </td>
+          <td class="num hl">~$1,200–2,000/mo per merchant</td>
+          <td><strong>~80% cheaper than cards, plus real UX + USD</strong></td>
+        </tr>
+      </table>
+      <p>
+        Ten merchants like this ≈ <span class="hl num">$12–20k MRR</span> — and
+        the pitch writes itself: "80% cheaper than their processor, and they get
+        a real product instead of a wallet address." That's a fundable wedge.
+      </p>
+
+      <div class="callout">
+        <strong>Pricing pitfalls to avoid:</strong>
+        <ul style="margin-bottom: 0">
+          <li>
+            <strong>Don't anchor at 1% like cannabis.</strong> Cannabis 1% was
+            positioned against 8% processors as a loss-leader for a market you
+            couldn't reach. Peptides bear more because their pain is worse and
+            they can't easily leave — 1.5% + off-ramp is still a no-brainer for
+            them.
+          </li>
+          <li>
+            <strong>Don't make off-ramp free.</strong> It's your only real COGS
+            and your best invisible-margin lever. Merchants expect a cash-out
+            spread.
+          </li>
+          <li>
+            <strong>Don't skip the SaaS tier.</strong> Pure-% revenue is lumpy
+            and unloved by investors; even a small MRR base changes the raise
+            conversation.
+          </li>
+          <li>
+            <strong>Don't underprice to win the "vs crypto" headline.</strong>
+            They're not really comparing to crypto — they're trapped paying
+            cards. Price to the pain you remove, not the wallet they tolerate.
+          </li>
+        </ul>
+      </div>
+
+      <h2 style="color: var(--red)">
+        The gate: legal (do this before anything else)
+      </h2>
+      <div class="callout red">
+        Many "research peptides" are
+        <strong>unapproved drugs sold "not for human consumption"</strong> that
+        buyers inject anyway. Facilitating payments can expose you to
+        <strong>money-transmitter + aiding-the-sale-of-unapproved-drugs</strong>
+        risk. Your non-custodial design and KYB (Sumsub) help but are
+        <em>not</em> a full shield.
+        <strong
+          >Get a 30–60 min read from a fintech/payments lawyer before you route
+          a single real dollar.</strong
+        >
+        If the answer is "manageable with KYB + clear ToS + non-custodial + no
+        medical claims" → proceed. If it's "you'd be facilitating illegal drug
+        sales" → this is a no-go regardless of demand, and you pivot to a
+        cleaner high-risk vertical (CBD/hemp, supplements) or Path A.
+      </div>
+
+      <h2>2-week, ~$0 validation plan</h2>
+      <ol>
+        <li>
+          <strong>Pin the signal</strong> — where exactly are vendors "looking
+          for payment solutions"? (r/Peptides, r/PeptidesUK, Telegram vendor
+          groups, X.) Screenshot every instance — that's evidence + your lead
+          list.
+        </li>
+        <li>
+          <strong>Build a list of 20 vendors</strong> from Shopify directories +
+          Reddit vendor lists. Record how each currently takes payment.
+        </li>
+        <li>
+          <strong>Legal gut-check (parallel)</strong> — book the lawyer call
+          now; it's the long pole.
+        </li>
+        <li>
+          <strong>Outreach to 10</strong>: "Saw you take USDT — I built a real
+          checkout + USD off-ramp on top. 90-sec demo?" Measure reply rate.
+        </li>
+        <li>
+          <strong>Decision gate:</strong> ≥2 vendor replies <em>and</em> legal
+          "manageable" → commit, deploy mainnet, settle one real payment at the
+          hybrid pricing above. Otherwise → CBD/supplements or Path A.
+        </li>
+      </ol>
+
+      <div class="foot">
+        Generated by the validate-idea skill · 6 Jun 2026. Pricing grounded in
+        current program config (<code>fee_bps</code> per-merchant up to 1000
+        bps; platform default 100 bps in <code>verify-payment.ts</code>) and
+        Sphere off-ramp economics. Demand framing is from the founder's market
+        observation — confirm with the 2-week test before committing. Legal risk
+        is the decisive variable and is <strong>not</strong> assessed here;
+        obtain counsel. Landscape claims bounded by available data.
+      </div>
+    </div>
+  </body>
+</html>

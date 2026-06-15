@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Offbank — Funding Readiness &amp; Chain-vs-Vertical Decision · 6 Jun 2026
+    </title>
+    <style>
+      :root {
+        --bg: #0a0c10;
+        --panel: #12161d;
+        --panel2: #161b24;
+        --ink: #e8edf4;
+        --muted: #93a1b3;
+        --line: #222a35;
+        --green: #34d399;
+        --amber: #fbbf24;
+        --red: #f87171;
+        --blue: #60a5fa;
+        --violet: #a78bfa;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+      }
+      .wrap {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 48px 24px 96px;
+      }
+      h1 {
+        font-size: 30px;
+        line-height: 1.2;
+        margin: 0 0 6px;
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        margin: 40px 0 14px;
+        font-weight: 600;
+      }
+      h3 {
+        font-size: 18px;
+        margin: 22px 0 8px;
+        letter-spacing: -0.01em;
+      }
+      p {
+        margin: 10px 0;
+      }
+      .sub {
+        color: var(--muted);
+        margin: 0 0 26px;
+      }
+      .verdict {
+        display: flex;
+        gap: 16px;
+        align-items: stretch;
+        flex-wrap: wrap;
+        margin: 24px 0;
+      }
+      .vcard {
+        flex: 1;
+        min-width: 200px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 18px 20px;
+      }
+      .vcard .label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+      }
+      .vcard .big {
+        font-size: 24px;
+        font-weight: 700;
+        margin-top: 4px;
+        letter-spacing: -0.01em;
+      }
+      .pill {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 999px;
+        border: 1px solid;
+      }
+      .pill.pivot {
+        color: var(--amber);
+        border-color: #5a4711;
+        background: #241d06;
+      }
+      .pill.go {
+        color: var(--green);
+        border-color: #16432f;
+        background: #08231a;
+      }
+      .pill.no {
+        color: var(--red);
+        border-color: #4a1f1f;
+        background: #250c0c;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 20px 22px;
+        margin: 14px 0;
+      }
+      .kv {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 8px 18px;
+        margin: 8px 0;
+      }
+      .kv .k {
+        color: var(--muted);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .tag {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .t-strong {
+        color: var(--green);
+        background: #08231a;
+      }
+      .t-weak {
+        color: var(--amber);
+        background: #241d06;
+      }
+      .t-neg {
+        color: var(--red);
+        background: #250c0c;
+      }
+      ul {
+        margin: 8px 0 8px 0;
+        padding-left: 20px;
+      }
+      li {
+        margin: 6px 0;
+      }
+      .callout {
+        border-left: 3px solid var(--violet);
+        background: var(--panel2);
+        padding: 14px 18px;
+        border-radius: 0 10px 10px 0;
+        margin: 16px 0;
+      }
+      .callout.amber {
+        border-color: var(--amber);
+      }
+      .callout.green {
+        border-color: var(--green);
+      }
+      .callout.red {
+        border-color: var(--red);
+      }
+      .foot {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 40px;
+        border-top: 1px solid var(--line);
+        padding-top: 16px;
+      }
+      code {
+        background: #0d1117;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 1px 6px;
+        font-size: 13px;
+      }
+      .score {
+        font-variant-numeric: tabular-nums;
+      }
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      @media (max-width: 680px) {
+        .two {
+          grid-template-columns: 1fr;
+        }
+        .kv {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Funding Readiness &amp; "Should we open up beyond Solana?"</h1>
+      <p class="sub">
+        Offbank · stablecoin settlement infra · decision memo — 6 June 2026
+      </p>
+
+      <div class="verdict">
+        <div class="vcard">
+          <div class="label">Core question asked</div>
+          <div class="big">Open up the chain?</div>
+          <div style="color: var(--muted); margin-top: 6px; font-size: 13px">
+            Solana-only vs multi-chain / broader scope
+          </div>
+        </div>
+        <div class="vcard">
+          <div class="label">Honest answer</div>
+          <div class="big" style="color: var(--blue)">Wrong axis</div>
+          <div style="color: var(--muted); margin-top: 6px; font-size: 13px">
+            Chain breadth is not what's blocking funding
+          </div>
+        </div>
+        <div class="vcard">
+          <div class="label">Real blocker (from Apr&nbsp;29 re-run)</div>
+          <div class="big" style="color: var(--amber)">Distribution</div>
+          <div style="color: var(--muted); margin-top: 6px; font-size: 13px">
+            2 / 5 go-criteria · verdict was
+            <span class="pill pivot">PIVOT</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout amber">
+        <strong>The one thing to internalise:</strong> Your own validation
+        history already ran this experiment. The April 29 re-run found the
+        product is technically validated and has <em>no direct competitor</em>,
+        but
+        <strong
+          >~100 cold-outreach attempts to cannabis distributors produced 0
+          responses</strong
+        >. The bottleneck was never "Solana is too narrow" — it was "a solo
+        founder can't reach licensed cannabis B2B buyers cold." Adding chains
+        does not add buyers. So the funding question is really a
+        <strong>wedge + traction</strong> question, not a chain question.
+      </div>
+
+      <h2>Decoupling the question</h2>
+      <p>
+        "Limited to Solana" is bundling two very different decisions that pull
+        in opposite directions for a raise:
+      </p>
+
+      <table>
+        <tr>
+          <th>Axis</th>
+          <th>The move</th>
+          <th>Verdict</th>
+          <th>Why</th>
+        </tr>
+        <tr>
+          <td><strong>Chain breadth</strong></td>
+          <td>Solana-only → multi-chain (Base, ETH, Tron)</td>
+          <td><span class="tag t-neg">Don't — yet</span></td>
+          <td>
+            3× eng surface (redeploys, bridging, multi-gas, cross-explorer
+            recon) for ~0 buyer pull. Buyers don't care what chain it is. This
+            is a Series-A "scaling distribution" slide, not a seed wedge.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Vertical breadth</strong></td>
+          <td>Cannabis-only → reachable high-risk B2B</td>
+          <td><span class="tag t-weak">Yes — deliberately</span></td>
+          <td>
+            This is the pivot your own re-run already recommended. Same code, a
+            buyer you can actually reach, "should I use crypto" objection
+            pre-cleared.
+          </td>
+        </tr>
+      </table>
+
+      <div class="callout">
+        <strong>The single chain exception worth researching:</strong>
+        <code>USDT on Tron</code> is the dominant rail in grey-market
+        international wholesale. If your
+        <em>international-wholesale</em> segment shows real pull, that is the
+        <em>only</em> chain expansion with a concrete buyer rationale —
+        everything else is premature.
+      </div>
+
+      <h2>What investors actually fund at this stage</h2>
+      <p>
+        For an infra/payments company, breadth is rarely the unlock. In priority
+        order:
+      </p>
+      <table>
+        <tr>
+          <th>Lever</th>
+          <th>Strength today</th>
+          <th>Gap to close</th>
+        </tr>
+        <tr>
+          <td>Real settled volume / signed merchants</td>
+          <td><span class="tag t-neg">Missing</span></td>
+          <td>
+            The decisive one. One merchant doing $200k/mo &gt; five chains with
+            $0. Need 1–3 live payers.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Compliance + off-ramp moat (Sphere, KYB, GENIUS Act, Cloak privacy)
+          </td>
+          <td><span class="tag t-strong">Strong</span></td>
+          <td>
+            This is the hard-to-copy layer. Lead the pitch with it; payments
+            rails are a commodity.
+          </td>
+        </tr>
+        <tr>
+          <td>"Why doesn't an incumbent just do this"</td>
+          <td><span class="tag t-weak">Partial</span></td>
+          <td>
+            You have <code>/vs/stripe-connect</code>. Tighten the answer to
+            high-risk processors &amp; LeafLink.
+          </td>
+        </tr>
+        <tr>
+          <td>Founder / distribution unfair advantage</td>
+          <td><span class="tag t-neg">Weak</span></td>
+          <td>
+            The re-run flagged this as <em>critical</em>. A BD partner or
+            crypto-native ICP fixes it.
+          </td>
+        </tr>
+        <tr>
+          <td>Working product (program, build, types, 155 tests green)</td>
+          <td><span class="tag t-strong">Strong</span></td>
+          <td>Already de-risked. Don't over-invest here; you're past it.</td>
+        </tr>
+      </table>
+
+      <h2>Demand signals (carried from validation history + product state)</h2>
+      <table>
+        <tr>
+          <th>Signal</th>
+          <th>Strength</th>
+          <th>Source</th>
+        </tr>
+        <tr>
+          <td>
+            Cannabis B2B forced into cash / 8–12% processors; $34B market,
+            federal banking excluded
+          </td>
+          <td><span class="tag t-strong">Strong</span></td>
+          <td>MJBizDaily, NCIA (via idea-context)</td>
+        </tr>
+        <tr>
+          <td>
+            Zero direct crypto-cannabis-B2B competitor alive (CargoBill pivoted,
+            rest dead)
+          </td>
+          <td><span class="tag t-strong">Strong</span></td>
+          <td>Colosseum search, 2,800+ projects</td>
+        </tr>
+        <tr>
+          <td>
+            Product built, mainnet-ready, managed-wallet onboarding, off-ramp +
+            privacy shipped
+          </td>
+          <td><span class="tag t-strong">Strong</span></td>
+          <td>This codebase</td>
+        </tr>
+        <tr>
+          <td>
+            ~100 cold-outreach attempts to cannabis distributors → 0 responses,
+            0 calls
+          </td>
+          <td><span class="tag t-neg">Strong-negative</span></td>
+          <td>Founder self-report, Apr 29</td>
+        </tr>
+        <tr>
+          <td>
+            No observed buyer building a crypto workaround (demand inferred, not
+            seen)
+          </td>
+          <td><span class="tag t-weak">Weak</span></td>
+          <td>No direct evidence</td>
+        </tr>
+      </table>
+
+      <h2>Go / No-Go scoring (pivot-or-persist framework)</h2>
+      <div class="two">
+        <div class="panel">
+          <h3 style="margin-top: 0">Cannabis cold lane</h3>
+          <div class="kv">
+            <span class="k">Demand ≥ 2</span
+            ><span>No (distribution-blocked)</span>
+          </div>
+          <div class="kv">
+            <span class="k">Tech feasible</span><span>Yes</span>
+          </div>
+          <div class="kv">
+            <span class="k">MVP ≤ 2 wks</span><span>Already built</span>
+          </div>
+          <div class="kv">
+            <span class="k">Unfair advantage</span
+            ><span>No — no operator network</span>
+          </div>
+          <div class="kv">
+            <span class="k">Crypto necessary</span><span>Yes</span>
+          </div>
+          <div class="kv">
+            <span class="k score">Score</span
+            ><span><strong>2 / 5</strong> → below threshold</span>
+          </div>
+          <div style="margin-top: 8px">
+            <span class="pill no">Persisting cold = No-Go</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3 style="margin-top: 0">Crypto-native B2B lane</h3>
+          <div class="kv">
+            <span class="k">Demand ≥ 2</span
+            ><span>Plausible — reachable, vocal on X/TG</span>
+          </div>
+          <div class="kv">
+            <span class="k">Tech feasible</span><span>Yes — same code</span>
+          </div>
+          <div class="kv">
+            <span class="k">MVP ≤ 2 wks</span><span>Already built</span>
+          </div>
+          <div class="kv">
+            <span class="k">Unfair advantage</span
+            ><span>You live in this channel</span>
+          </div>
+          <div class="kv">
+            <span class="k">Crypto necessary</span
+            ><span>Yes — payer already holds USDC</span>
+          </div>
+          <div class="kv">
+            <span class="k score">Score</span
+            ><span><strong>4 / 5</strong> (pending demand proof)</span>
+          </div>
+          <div style="margin-top: 8px">
+            <span class="pill go">Validate &amp; pursue</span>
+          </div>
+        </div>
+      </div>
+
+      <h2>Recommendation</h2>
+      <div class="callout green">
+        <strong>For funding: lead with the wedge, not the chain.</strong> Pitch
+        =
+        <em
+          >"Non-custodial USDC settlement for high-risk &amp; crypto-native B2B
+          — beachhead in [reachable vertical], expansion to
+          cannabis/CBD/firearms as banking access stays broken."</em
+        >
+        Keep the architecture chain-agnostic internally (your DB/pipeline
+        already is) so "multi-chain" is a credible
+        <em>roadmap slide</em>, never a current rebuild.
+      </div>
+
+      <h3>Do</h3>
+      <ul>
+        <li>
+          <strong>Get 1 real settled payment from a reachable buyer</strong>
+          (crypto-native B2B / agency / DAO payout). One live tx on X with the
+          Solscan link is worth more to an investor than any deck slide.
+        </li>
+        <li>
+          <strong
+            >Position cannabis as the wedge story, not the whole TAM</strong
+          >
+          — "narrow beachhead, obvious land-and-expand" beats "we do all
+          payments."
+        </li>
+        <li>
+          <strong>Lead the moat:</strong> compliance + off-ramp (Sphere) + Cloak
+          privacy. That's the defensible part.
+        </li>
+        <li>
+          <strong>Research the one real chain signal:</strong> is there
+          USDT/Tron pull in international wholesale? Only expand if a buyer
+          pulls you.
+        </li>
+      </ul>
+      <h3>Don't</h3>
+      <ul>
+        <li>
+          <strong>Don't go multi-chain to look bigger.</strong> Reads as
+          unfocused; dilutes the "Solana speed + non-custodial" wedge; triples
+          your surface for zero new buyers.
+        </li>
+        <li>
+          <strong>Don't resume cold-DMing cannabis distributors.</strong> The
+          100-attempt experiment already returned its result.
+        </li>
+        <li>
+          <strong>Don't raise on "the market is huge."</strong> TAM masks the
+          absence of a single paying user — investors will see through it.
+        </li>
+      </ul>
+
+      <h2>Funding-readiness checklist (close these before you pitch)</h2>
+      <table>
+        <tr>
+          <th>Item</th>
+          <th>Status</th>
+        </tr>
+        <tr>
+          <td>Working product on mainnet</td>
+          <td><span class="tag t-weak">Devnet — deploy to mainnet</span></td>
+        </tr>
+        <tr>
+          <td>≥ 1 real settled USDC transaction with a real counterparty</td>
+          <td><span class="tag t-neg">Not yet — top priority</span></td>
+        </tr>
+        <tr>
+          <td>Reachable ICP defined + 1 named design-partner</td>
+          <td><span class="tag t-neg">Open</span></td>
+        </tr>
+        <tr>
+          <td>Moat narrative (compliance + off-ramp + privacy)</td>
+          <td><span class="tag t-strong">Ready</span></td>
+        </tr>
+        <tr>
+          <td>Competitor / "why not incumbent" answer</td>
+          <td><span class="tag t-weak">Tighten</span></td>
+        </tr>
+        <tr>
+          <td>Distribution unfair advantage (BD partner or native channel)</td>
+          <td><span class="tag t-neg">Critical gap</span></td>
+        </tr>
+        <tr>
+          <td>KYC enforced (Sumsub) before mainnet money moves</td>
+          <td><span class="tag t-weak">Scaffolded, enforce</span></td>
+        </tr>
+      </table>
+
+      <div class="callout red">
+        <strong>The investor will ask:</strong> "Who is paying you today, and
+        how did you reach them?" Right now there's no answer. Closing that —
+        even with one small live merchant — moves you from "interesting tech,
+        unproven distribution" to "fundable." That, not chain count, is the
+        gate.
+      </div>
+
+      <h2>Optional: deeper market data</h2>
+      <p>
+        For hackathon precedents, comparable raises, and accelerator-portfolio
+        overlap, the <code>colosseum-copilot</code> skill can pull from 5,400+
+        Solana builder projects — it needs a free PAT:
+      </p>
+      <p>
+        <code>export COLOSSEUM_COPILOT_PAT="your-token"</code> &nbsp;(get one at
+        arena.colosseum.org/copilot)
+      </p>
+
+      <div class="foot">
+        Generated by the validate-idea skill · 6 Jun 2026. Grounded in
+        <code>.superstack/idea-context.md</code>
+        (incl. the Apr 29 2026 re-run) and current product state. Live market
+        search was bot-blocked at generation time; refresh with Colosseum
+        Copilot or manual web research before final pitch. Landscape claims are
+        bounded by the available corpus — absence of evidence is not evidence of
+        absence.
+      </div>
+    </div>
+  </body>
+</html>
