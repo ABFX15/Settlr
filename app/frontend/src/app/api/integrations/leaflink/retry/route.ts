@@ -13,6 +13,7 @@
  * Authentication: Internal secret or merchant API key
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { validateApiKey } from "@/lib/db";
 import { listSyncs, updateSync, getConfig } from "@/lib/leaflink/db";
@@ -83,7 +84,7 @@ export async function POST(request: NextRequest) {
             });
         }
 
-        console.log(
+        logger.info(
             `[leaflink] Retrying ${retryTargets.length} paid-but-unsynced records`,
         );
 
@@ -127,7 +128,7 @@ export async function POST(request: NextRequest) {
                 await updateSync(sync.id, { status: "synced", error: undefined });
                 succeeded++;
 
-                console.log(
+                logger.info(
                     `[leaflink] Retry succeeded: order ${sync.leaflink_order_number}`,
                 );
             } catch (err) {
@@ -136,7 +137,7 @@ export async function POST(request: NextRequest) {
                 errors.push({ sync_id: sync.id, error: msg });
                 failed++;
 
-                console.error(
+                logger.error(
                     `[leaflink] Retry failed: order ${sync.leaflink_order_number} — ${msg}`,
                 );
             }
@@ -149,7 +150,7 @@ export async function POST(request: NextRequest) {
             errors: errors.length > 0 ? errors : undefined,
         });
     } catch (error) {
-        console.error("[leaflink] Retry error:", error);
+        logger.error("[leaflink] Retry error:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 },

@@ -9,6 +9,7 @@
  * was used — they just check `getSessionWallet(req)`.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { PrivyClient } from "@privy-io/server-auth";
 import {
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
     try {
         return await handle(request);
     } catch (err) {
-        console.error("[privy-verify] unhandled error:", err);
+        logger.error("[privy-verify] unhandled error:", err);
         return NextResponse.json(
             {
                 error: "Internal error verifying Privy session",
@@ -76,7 +77,7 @@ async function handle(request: NextRequest) {
     try {
         claims = await client.verifyAuthToken(accessToken);
     } catch (err) {
-        console.error("[privy-verify] verifyAuthToken failed:", err);
+        logger.error("[privy-verify] verifyAuthToken failed:", err);
         return NextResponse.json(
             { error: "Invalid Privy access token" },
             { status: 401 },
@@ -94,7 +95,7 @@ async function handle(request: NextRequest) {
             user = await client.getUser(claims.userId);
         }
     } catch (err) {
-        console.error("[privy-verify] getUser failed:", err);
+        logger.error("[privy-verify] getUser failed:", err);
         return NextResponse.json(
             {
                 error: "Failed to fetch Privy user",
@@ -121,7 +122,7 @@ async function handle(request: NextRequest) {
         // Privy login modal, not direct login methods. The client should
         // call useCreateWallet() and retry. Return 425 so the client
         // knows to wait + retry rather than treating this as fatal.
-        console.warn(
+        logger.warn(
             "[privy-verify] no Solana wallet on user yet — client should provision and retry",
             { userId: claims.userId, accountTypes: accounts.map((a) => a.type) },
         );

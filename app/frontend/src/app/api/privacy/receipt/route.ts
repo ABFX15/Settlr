@@ -8,6 +8,7 @@
  * GET: Query receipt by paymentId or list by wallet
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { PublicKey } from '@solana/web3.js';
 import { createClient } from '@supabase/supabase-js';
@@ -169,9 +170,9 @@ export async function POST(request: NextRequest) {
                             .upsert(row, { onConflict: 'payment_id' });
 
                         if (!error) stored = true;
-                        else console.warn('[PER] Supabase upsert error:', error.message);
+                        else logger.warn('[PER] Supabase upsert error:', error.message);
                     } catch (err) {
-                        console.warn('[PER] Supabase error:', err);
+                        logger.warn('[PER] Supabase error:', err);
                     }
                 }
 
@@ -268,7 +269,7 @@ export async function POST(request: NextRequest) {
                             });
                         }
                     } catch (err) {
-                        console.warn('[PER] Verify lookup error:', err);
+                        logger.warn('[PER] Verify lookup error:', err);
                     }
                 }
 
@@ -322,7 +323,7 @@ export async function POST(request: NextRequest) {
                         source: 'database',
                     });
                 } catch (err) {
-                    console.error('[PER] List error:', err);
+                    logger.error('[PER] List error:', err);
                     return NextResponse.json({
                         success: false,
                         error: 'Failed to fetch receipts',
@@ -368,7 +369,7 @@ export async function POST(request: NextRequest) {
                 );
         }
     } catch (error) {
-        console.error('[PER] API error:', error);
+        logger.error('[PER] API error:', error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : 'Internal server error' },
             { status: 500 }

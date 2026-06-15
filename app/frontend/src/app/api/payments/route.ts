@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getAllPayments, getPaymentsByMerchantWallet } from "@/lib/db";
 import { resolveMerchantId } from "@/lib/resolve-merchant";
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest) {
             count: payments.length,
         });
     } catch (error) {
-        console.error("Error fetching payments:", error);
+        logger.error("Error fetching payments:", error);
         return NextResponse.json(
             { error: "Failed to fetch payments", payments: [] },
             { status: 500 }

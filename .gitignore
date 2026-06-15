@@ -15,3 +15,6 @@ product-roast.html
 product-review.html
 validation-report.html
 marketing-video.html
+
+# Generated research output (keep the scripts, ignore the dumps)
+scripts/reddit-research/out/

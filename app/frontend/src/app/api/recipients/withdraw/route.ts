@@ -7,6 +7,7 @@
  * This executes an on-chain USDC transfer from the platform treasury
  * to the recipient's saved wallet address.
  */
+import { logger } from "@/lib/logger";
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -113,7 +114,7 @@ export async function POST(request: NextRequest) {
                 amount,
             });
         } catch (err) {
-            console.error("[recipients/withdraw] Transfer failed:", err);
+            logger.error("[recipients/withdraw] Transfer failed:", err);
             if (process.env.NODE_ENV === "development" || !process.env.FEE_PAYER_SECRET_KEY) {
                 txSignature = `demo_withdraw_${Date.now()}`;
             } else {
@@ -136,7 +137,7 @@ export async function POST(request: NextRequest) {
             remainingBalance: updatedBalance.balance,
         });
     } catch (error) {
-        console.error("[recipients/withdraw] Error:", error);
+        logger.error("[recipients/withdraw] Error:", error);
         return NextResponse.json(
             { error: "Failed to process withdrawal" },
             { status: 500 }

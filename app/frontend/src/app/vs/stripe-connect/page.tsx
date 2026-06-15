@@ -466,7 +466,7 @@ export default function StripeConnectComparison() {
                 <span style={{ color: MUTED }}>{"  headers: { "}</span>
                 <span style={{ color: ACCENT_LIGHT }}>{'"X-API-Key"'}</span>
                 <span style={{ color: MUTED }}>
-                  {": process.env.SETTLR_API_KEY },\n"}
+                  {": process.env.OFFBANK_API_KEY },\n"}
                 </span>
                 <span style={{ color: MUTED }}>
                   {"  body: JSON.stringify({\n"}

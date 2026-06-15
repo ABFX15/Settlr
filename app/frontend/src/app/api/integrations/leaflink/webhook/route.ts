@@ -17,6 +17,7 @@
  * The shared secret is stored per-merchant in leaflink_configs.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -152,7 +153,7 @@ async function createOffbankInvoice(
         });
 
         if (error) {
-            console.error("[leaflink] Invoice insert error:", error);
+            logger.error("[leaflink] Invoice insert error:", error);
             throw new Error(`Failed to create invoice: ${error.message}`);
         }
 
@@ -187,7 +188,7 @@ async function sendPaymentLinkEmail(
     // Use Resend if configured, otherwise log
     const resendKey = process.env.RESEND_API_KEY;
     if (!resendKey) {
-        console.log(
+        logger.info(
             `[leaflink] Email skipped (no RESEND_API_KEY). Would send to ${buyerEmail}:`,
             { orderNumber, amount, paymentLink },
         );
@@ -234,12 +235,12 @@ async function sendPaymentLinkEmail(
 
         if (!res.ok) {
             const err = await res.text();
-            console.error("[leaflink] Resend error:", err);
+            logger.error("[leaflink] Resend error:", err);
         } else {
-            console.log(`[leaflink] Payment link emailed to ${buyerEmail} for ${orderNumber}`);
+            logger.info(`[leaflink] Payment link emailed to ${buyerEmail} for ${orderNumber}`);
         }
     } catch (err) {
-        console.error("[leaflink] Email send error:", err);
+        logger.error("[leaflink] Email send error:", err);
     }
 }
 
@@ -269,7 +270,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        console.log(
+        logger.info(
             `[leaflink] Webhook received: ${event} for order ${order.number} ($${order.total})`,
         );
 
@@ -282,7 +283,7 @@ export async function POST(request: NextRequest) {
         );
 
         if (!config) {
-            console.warn(
+            logger.warn(
                 `[leaflink] No integration config for seller company ${order.seller.id} (${order.seller.company_name})`,
             );
             // Return 200 so LeafLink doesn't retry
@@ -293,7 +294,7 @@ export async function POST(request: NextRequest) {
         const signature = request.headers.get("x-leaflink-signature") ?? "";
         if (config.webhook_secret) {
             if (!verifySignature(rawBody, signature, config.webhook_secret)) {
-                console.warn("[leaflink] Invalid webhook signature");
+                logger.warn("[leaflink] Invalid webhook signature");
                 return NextResponse.json(
                     { error: "Invalid signature" },
                     { status: 401 },
@@ -324,7 +325,7 @@ export async function POST(request: NextRequest) {
             // Check for duplicate
             const existing = await getSyncByOrderId(order.id);
             if (existing && existing.status !== "failed") {
-                console.log(
+                logger.info(
                     `[leaflink] Order ${order.number} already synced (${existing.status}), skipping`,
                 );
                 return NextResponse.json({ received: true, duplicate: true });
@@ -358,7 +359,7 @@ export async function POST(request: NextRequest) {
                 },
             });
 
-            console.log(
+            logger.info(
                 `[leaflink] Sync created: ${sync.id} — invoice ${invoiceId} for $${order.total}`,
             );
 
@@ -388,7 +389,7 @@ export async function POST(request: NextRequest) {
             const existing = await getSyncByOrderId(order.id);
             if (existing) {
                 await updateSync(existing.id, { status: "cancelled" });
-                console.log(
+                logger.info(
                     `[leaflink] Order ${order.number} cancelled, sync ${existing.id} updated`,
                 );
             }
@@ -396,11 +397,11 @@ export async function POST(request: NextRequest) {
         }
 
         // For other events (shipped, delivered), just acknowledge
-        console.log(`[leaflink] Event ${event} acknowledged for order ${order.number}`);
+        logger.info(`[leaflink] Event ${event} acknowledged for order ${order.number}`);
         return NextResponse.json({ received: true });
 
     } catch (error) {
-        console.error("[leaflink] Webhook error:", error);
+        logger.error("[leaflink] Webhook error:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 },

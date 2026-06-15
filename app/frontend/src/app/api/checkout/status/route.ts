@@ -8,6 +8,7 @@
  * GET /api/checkout/status?order_id={orderId}
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
@@ -99,7 +100,7 @@ export async function GET(request: NextRequest) {
         } as PaymentStatusResponse);
 
     } catch (error) {
-        console.error('[PaymentStatus] Error:', error);
+        logger.error('[PaymentStatus] Error:', error);
         return NextResponse.json(
             { error: 'Failed to check status' },
             { status: 500 }
@@ -162,7 +163,7 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error('[PaymentStatus] Update error:', error);
+        logger.error('[PaymentStatus] Update error:', error);
         return NextResponse.json(
             { error: 'Failed to update status' },
             { status: 500 }

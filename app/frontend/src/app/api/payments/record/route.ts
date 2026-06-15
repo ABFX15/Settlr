@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { createPayment, getMerchantByWallet, getPaymentByTxSignature } from "@/lib/db";
 import { explorerUrl } from "@/lib/constants";
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest) {
             }
         } catch (err) {
             // If lookup fails we proceed; verification below is the real gate.
-            console.error("[Payments] Dedup lookup error:", err);
+            logger.error("[Payments] Dedup lookup error:", err);
         }
 
         // CRITICAL: verify the buyer-supplied signature actually represents a
@@ -122,11 +123,11 @@ export async function POST(request: NextRequest) {
             status: "completed",
         });
 
-        console.log(`[Payments] Recorded redirect payment: ${payment.id} for ${amount} USDC to ${merchantWallet}`);
+        logger.info(`[Payments] Recorded redirect payment: ${payment.id} for ${amount} USDC to ${merchantWallet}`);
 
         emitEvent("payment.completed", "payment", payment.id, merchantId, {
             amount, merchantWallet, customerWallet, signature, currency: "USDC",
-        }).catch((err) => console.error("[pipeline] emit error:", err));
+        }).catch((err) => logger.error("[pipeline] emit error:", err));
 
         return NextResponse.json({
             success: true,
@@ -134,7 +135,7 @@ export async function POST(request: NextRequest) {
         }, { headers: corsHeaders });
 
     } catch (error) {
-        console.error("Error recording payment:", error);
+        logger.error("Error recording payment:", error);
         return NextResponse.json(
             { error: "Failed to record payment" },
             { status: 500, headers: corsHeaders }

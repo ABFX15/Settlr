@@ -13,6 +13,7 @@
  *   POST { action: "status" }   → Check session status
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
@@ -301,7 +302,7 @@ export async function POST(request: NextRequest) {
                 );
         }
     } catch (error) {
-        console.error('Private payments API error:', error);
+        logger.error('Private payments API error:', error);
         return NextResponse.json(
             {
                 error: error instanceof Error ? error.message : 'Internal server error',

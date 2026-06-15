@@ -5,6 +5,7 @@
  * Authenticated by X-Recipient-Id header (set from magic link session on frontend).
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getRecipientByEmail,
@@ -73,7 +74,7 @@ export async function GET(request: NextRequest) {
             offset,
         });
     } catch (error) {
-        console.error("[recipients/me] Error:", error);
+        logger.error("[recipients/me] Error:", error);
         return NextResponse.json(
             { error: "Failed to load profile" },
             { status: 500 }
@@ -129,7 +130,7 @@ export async function PATCH(request: NextRequest) {
             updatedAt: updated.updatedAt.toISOString(),
         });
     } catch (error) {
-        console.error("[recipients/me] Error updating:", error);
+        logger.error("[recipients/me] Error updating:", error);
         return NextResponse.json(
             { error: "Failed to update profile" },
             { status: 500 }

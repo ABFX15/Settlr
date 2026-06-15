@@ -7,6 +7,7 @@
  * @see https://www.range.org/
  */
 
+import { logger } from "@/lib/logger";
 import { PublicKey } from '@solana/web3.js';
 
 // Range API endpoint
@@ -69,7 +70,7 @@ export interface WalletRiskResult {
     shouldBlock: boolean;
 
     /** Raw response from Range API (for debugging) */
-    raw?: any;
+    raw?: unknown;
 }
 
 /**
@@ -143,7 +144,7 @@ export async function screenWallet(
         });
 
         if (!response.ok) {
-            console.error('[Range] API error:', response.status, response.statusText);
+            logger.error('[Range] API error:', response.status, response.statusText);
             // Fail open in case of API errors (configurable)
             return getFailOpenResult(addressStr);
         }
@@ -151,7 +152,7 @@ export async function screenWallet(
         const data = await response.json();
         return parseRangeResponse(data, addressStr, blockThreshold, alwaysBlockSanctioned);
     } catch (error) {
-        console.error('[Range] Screening failed:', error);
+        logger.error('[Range] Screening failed:', error);
         // Fail open on network errors
         return getFailOpenResult(addressStr);
     }
@@ -206,11 +207,22 @@ export async function isSanctioned(
     return result.isSanctioned;
 }
 
+/** Subset of the Range API response we read (snake_case and camelCase variants). */
+interface RangeApiResponse {
+    risk_score?: number;
+    riskScore?: number;
+    is_sanctioned?: boolean;
+    sanctioned?: boolean;
+    ofac?: boolean;
+    categories?: string[];
+    labels?: string[];
+}
+
 /**
  * Parse Range API response into our standardized format
  */
 function parseRangeResponse(
-    data: any,
+    data: RangeApiResponse,
     address: string,
     blockThreshold: number,
     alwaysBlockSanctioned: boolean
@@ -393,7 +405,7 @@ function getMockRiskResult(
  * In production, you may want to fail-closed instead
  */
 function getFailOpenResult(address: string): WalletRiskResult {
-    console.warn('[Range] API unavailable, failing open for:', address);
+    logger.warn('[Range] API unavailable, failing open for:', address);
     return {
         address,
         riskLevel: RiskLevel.UNKNOWN,

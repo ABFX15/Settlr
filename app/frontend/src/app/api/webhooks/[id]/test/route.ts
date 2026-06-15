@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import crypto from "crypto";
@@ -111,7 +112,7 @@ export async function POST(
             error: errorMessage || undefined,
         });
     } catch (error) {
-        console.error("Error testing webhook:", error);
+        logger.error("Error testing webhook:", error);
         return NextResponse.json(
             { error: "Failed to test webhook" },
             { status: 500 }

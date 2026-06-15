@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { checkWaitlistAccess, getWaitlistByWallet } from "@/lib/db";
 
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
             hasEntry: false,
         });
     } catch (error) {
-        console.error("Waitlist check error:", error);
+        logger.error("Waitlist check error:", error);
         return NextResponse.json(
             { error: "Failed to check access" },
             { status: 500 }

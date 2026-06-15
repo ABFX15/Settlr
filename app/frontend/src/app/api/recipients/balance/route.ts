@@ -4,6 +4,7 @@
  * Authenticated by X-Recipient-Email header.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getRecipientByEmail,
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
             offset,
         });
     } catch (error) {
-        console.error("[recipients/balance] Error:", error);
+        logger.error("[recipients/balance] Error:", error);
         return NextResponse.json(
             { error: "Failed to load balance" },
             { status: 500 }

@@ -10,6 +10,7 @@
  * Each event includes its delivery attempts for debugging.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { validateApiKey } from "@/lib/db";
 import {
@@ -86,7 +87,7 @@ export async function GET(request: NextRequest) {
             offset,
         });
     } catch (error) {
-        console.error("[webhooks/events] Error:", error);
+        logger.error("[webhooks/events] Error:", error);
         return NextResponse.json(
             { error: "Failed to fetch webhook events" },
             { status: 500 }

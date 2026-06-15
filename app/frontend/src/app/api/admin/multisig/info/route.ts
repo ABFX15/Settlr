@@ -16,6 +16,7 @@
  * arbitrary public probing of the multisig membership).
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { Program, AnchorProvider } from "@coral-xyz/anchor";
@@ -102,7 +103,7 @@ export async function GET(request: NextRequest) {
             onChainAuthority = auth.toBase58();
             authorityMatches = auth.equals(vaultPda);
         } catch (err) {
-            console.warn("Failed to fetch platform config:", err);
+            logger.warn("Failed to fetch platform config:", err);
         }
 
         const pending = await listPendingProposals(
@@ -131,7 +132,7 @@ export async function GET(request: NextRequest) {
             })),
         });
     } catch (error: any) {
-        console.error("multisig/info error:", error);
+        logger.error("multisig/info error:", error);
         return NextResponse.json(
             { error: error.message || "Failed to load multisig info" },
             { status: 500 }

@@ -5,6 +5,7 @@
  * Authentication: X-API-Key header (validated against merchant API keys)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { validateApiKey } from "@/lib/db";
 import { getConfig, upsertConfig } from "@/lib/leaflink/db";
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
             updated_at: config.updated_at,
         });
     } catch (error) {
-        console.error("[leaflink] Config GET error:", error);
+        logger.error("[leaflink] Config GET error:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 },
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
                 companyId: leaflink_company_id,
             });
             const company = await ll.getCompany();
-            console.log(
+            logger.info(
                 `[leaflink] Verified API key for company: ${company.name} (${company.state})`,
             );
         } catch (llError) {
@@ -152,7 +153,7 @@ export async function POST(request: NextRequest) {
             },
         });
     } catch (error) {
-        console.error("[leaflink] Config POST error:", error);
+        logger.error("[leaflink] Config POST error:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 },

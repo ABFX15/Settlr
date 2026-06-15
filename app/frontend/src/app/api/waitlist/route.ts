@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { addToWaitlist, getWaitlist, type WaitlistEntry } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
             position: entry.position,
         });
     } catch (error) {
-        console.error("Waitlist error:", error);
+        logger.error("Waitlist error:", error);
 
         if (error instanceof Error && error.message.includes("already")) {
             return NextResponse.json(
@@ -76,7 +77,7 @@ export async function GET(request: NextRequest) {
             entries: waitlist,
         });
     } catch (error) {
-        console.error("Waitlist fetch error:", error);
+        logger.error("Waitlist fetch error:", error);
         return NextResponse.json(
             { error: "Failed to fetch waitlist" },
             { status: 500 }

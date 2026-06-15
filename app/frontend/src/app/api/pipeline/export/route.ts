@@ -10,6 +10,7 @@
  *   limit      — Max rows (default: 1000, max: 10000)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { generateExport } from "@/lib/pipeline";
 import type { EntityType, ExportFormat } from "@/lib/pipeline";
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
             },
         });
     } catch (error) {
-        console.error("[Pipeline] Export error:", error);
+        logger.error("[Pipeline] Export error:", error);
         return NextResponse.json(
             { error: "Export failed", details: (error as Error).message },
             { status: 500 },

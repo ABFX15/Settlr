@@ -965,7 +965,7 @@ export default function ReportsPage() {
                       Cloak
                     </Link>
                     ? Cloak invoice payments are already included below. Direct
-                    private transfers (not through a Settlr invoice) can be
+                    private transfers (not through an Offbank invoice) can be
                     exported separately from the Cloak inbox.
                   </p>
                 </div>

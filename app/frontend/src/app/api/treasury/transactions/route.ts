@@ -10,6 +10,7 @@
  * Authentication: X-API-Key header OR ?wallet= query param
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     validateApiKey,
@@ -78,7 +79,7 @@ export async function GET(request: NextRequest) {
             offset,
         });
     } catch (error) {
-        console.error("[treasury/transactions] Error:", error);
+        logger.error("[treasury/transactions] Error:", error);
         return NextResponse.json(
             { error: "Failed to fetch transactions" },
             { status: 500 }

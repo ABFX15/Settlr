@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 // Supabase client
@@ -16,7 +17,7 @@ const supabaseKey = isServer
     : supabaseAnonKey;
 
 if (!supabaseUrl || !supabaseKey) {
-    console.error(
+    logger.error(
         "[Offbank] FATAL: Supabase not configured. " +
         "Set NEXT_PUBLIC_SUPABASE_URL and " +
         (isServer ? "SUPABASE_SERVICE_ROLE_KEY" : "NEXT_PUBLIC_SUPABASE_ANON_KEY") +
@@ -34,7 +35,7 @@ if (isServer && supabaseUrl && !supabaseServiceRoleKey) {
             "[Offbank] FATAL: SUPABASE_SERVICE_ROLE_KEY is required on the server in production.",
         );
     }
-    console.warn(
+    logger.warn(
         "[Offbank] WARNING: SUPABASE_SERVICE_ROLE_KEY missing on server; using anon key (dev only).",
     );
 }

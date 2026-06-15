@@ -13,6 +13,7 @@
  *   ?format=json | csv (defaults to json)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getPaymentsByMerchantWallet } from "@/lib/db";
 import { requireMerchantSession } from "@/lib/merchant-auth";
@@ -186,7 +187,7 @@ export async function GET(request: NextRequest) {
             },
         });
     } catch (err) {
-        console.error("[reports/tax/1099k] error", err);
+        logger.error("[reports/tax/1099k] error", err);
         return NextResponse.json(
             { error: "Failed to build 1099-K summary" },
             { status: 500 },

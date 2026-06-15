@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 
 const RANGE_API_KEY = process.env.RANGE_API_KEY;
@@ -50,7 +51,7 @@ export async function GET(req: NextRequest) {
         }
 
         if (!RANGE_API_KEY) {
-            console.warn("[Range] API key not configured, skipping risk check");
+            logger.warn("[Range] API key not configured, skipping risk check");
             return NextResponse.json({
                 safe: true,
                 riskScore: 0,
@@ -74,7 +75,7 @@ export async function GET(req: NextRequest) {
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error("[Range] API error:", response.status, errorText);
+            logger.error("[Range] API error:", response.status, errorText);
 
             // Don't block payments if Range is unavailable
             if (response.status === 429) {
@@ -102,7 +103,7 @@ export async function GET(req: NextRequest) {
         const isSafe = data.riskScore < BLOCK_THRESHOLD;
         const isWarning = data.riskScore >= WARN_THRESHOLD && data.riskScore < BLOCK_THRESHOLD;
 
-        console.log(
+        logger.info(
             `[Range] Address ${address.slice(0, 8)}... risk score: ${data.riskScore} (${data.riskLevel})`
         );
 
@@ -118,7 +119,7 @@ export async function GET(req: NextRequest) {
             attribution: data.attribution,
         });
     } catch (error) {
-        console.error("[Range] Risk check error:", error);
+        logger.error("[Range] Risk check error:", error);
 
         // Don't block payments on errors - fail open
         return NextResponse.json({
@@ -156,7 +157,7 @@ export async function POST(req: NextRequest) {
         }
 
         if (!RANGE_API_KEY) {
-            console.warn("[Range] API key not configured, skipping payment risk check");
+            logger.warn("[Range] API key not configured, skipping payment risk check");
             return NextResponse.json({
                 safe: true,
                 overallRiskLevel: "unknown",
@@ -187,7 +188,7 @@ export async function POST(req: NextRequest) {
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error("[Range] Payment risk API error:", response.status, errorText);
+            logger.error("[Range] Payment risk API error:", response.status, errorText);
 
             return NextResponse.json({
                 safe: true,
@@ -203,7 +204,7 @@ export async function POST(req: NextRequest) {
         const isSafe = data.overall_risk_level !== "high";
         const isWarning = data.overall_risk_level === "medium";
 
-        console.log(
+        logger.info(
             `[Range] Payment risk: ${data.overall_risk_level} (${data.risk_factors?.length || 0} factors)`
         );
 
@@ -216,7 +217,7 @@ export async function POST(req: NextRequest) {
             processingTimeMs: data.processing_time_ms,
         });
     } catch (error) {
-        console.error("[Range] Payment risk check error:", error);
+        logger.error("[Range] Payment risk check error:", error);
 
         return NextResponse.json({
             safe: true,

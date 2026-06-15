@@ -2,6 +2,7 @@
  * GET /api/payouts/[id] — Get a payout by ID
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getPayoutById, validateApiKey } from "@/lib/db";
 
@@ -51,7 +52,7 @@ export async function GET(
             expiresAt: payout.expiresAt.toISOString(),
         });
     } catch (error) {
-        console.error("[payouts] Error fetching payout:", error);
+        logger.error("[payouts] Error fetching payout:", error);
         return NextResponse.json(
             { error: "Failed to fetch payout" },
             { status: 500 }

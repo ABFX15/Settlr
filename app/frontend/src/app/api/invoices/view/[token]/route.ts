@@ -6,6 +6,7 @@
  * emailed to the buyer.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getInvoiceByViewToken,
@@ -57,7 +58,7 @@ export async function GET(
             blinkUrl: `${appUrl}/api/actions/pay?invoice=${token}`,
         });
     } catch (error) {
-        console.error("[invoices/view] Error fetching invoice:", error);
+        logger.error("[invoices/view] Error fetching invoice:", error);
         return NextResponse.json(
             { error: "Failed to load invoice" },
             { status: 500 }

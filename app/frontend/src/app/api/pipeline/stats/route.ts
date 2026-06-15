@@ -9,6 +9,7 @@
  *   days       — Shortcut: last N days (default: 30)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getMerchantStats, getPlatformStats } from "@/lib/pipeline";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
             totals: aggregateMerchantTotals(stats),
         });
     } catch (error) {
-        console.error("[Pipeline] Stats error:", error);
+        logger.error("[Pipeline] Stats error:", error);
         return NextResponse.json(
             { error: "Failed to fetch stats" },
             { status: 500 },

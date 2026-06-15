@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyWebhookSignature } from "@/lib/sumsub";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest) {
         if (process.env.SUMSUB_SECRET_KEY) {
             const isValid = verifyWebhookSignature(payload, signature);
             if (!isValid) {
-                console.error("[KYC Webhook] Invalid signature");
+                logger.error("[KYC Webhook] Invalid signature");
                 return NextResponse.json(
                     { error: "Invalid signature" },
                     { status: 401 }
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
 
         const data: SumsubWebhookPayload = JSON.parse(payload);
 
-        console.log("[KYC Webhook] Received:", {
+        logger.info("[KYC Webhook] Received:", {
             type: data.type,
             applicantId: data.applicantId,
             externalUserId: data.externalUserId,
@@ -81,12 +82,12 @@ export async function POST(request: NextRequest) {
                 break;
 
             default:
-                console.log(`[KYC Webhook] Unhandled type: ${data.type}`);
+                logger.info(`[KYC Webhook] Unhandled type: ${data.type}`);
         }
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("[KYC Webhook] Error:", error);
+        logger.error("[KYC Webhook] Error:", error);
         return NextResponse.json(
             { error: "Failed to process webhook" },
             { status: 500 }
@@ -102,7 +103,7 @@ async function handleApplicantReviewed(data: SumsubWebhookPayload) {
     const { applicantId, externalUserId, reviewResult, levelName } = data;
 
     if (reviewResult?.reviewAnswer === "GREEN") {
-        console.log(`[KYC] ✅ User ${externalUserId} APPROVED`, {
+        logger.info(`[KYC] ✅ User ${externalUserId} APPROVED`, {
             applicantId,
             levelName,
         });
@@ -116,11 +117,11 @@ async function handleApplicantReviewed(data: SumsubWebhookPayload) {
                     status: "verified",
                     verified_at: new Date().toISOString(),
                 }, { onConflict: "external_user_id" });
-            if (error) console.error("[KYC Webhook] DB error (approved):", error);
+            if (error) logger.error("[KYC Webhook] DB error (approved):", error);
         }
 
     } else if (reviewResult?.reviewAnswer === "RED") {
-        console.log(`[KYC] ❌ User ${externalUserId} REJECTED`, {
+        logger.info(`[KYC] ❌ User ${externalUserId} REJECTED`, {
             applicantId,
             levelName,
             rejectLabels: reviewResult.rejectLabels,
@@ -136,7 +137,7 @@ async function handleApplicantReviewed(data: SumsubWebhookPayload) {
                     status: "rejected",
                     reject_reasons: reviewResult.rejectLabels || [],
                 }, { onConflict: "external_user_id" });
-            if (error) console.error("[KYC Webhook] DB error (rejected):", error);
+            if (error) logger.error("[KYC Webhook] DB error (rejected):", error);
         }
     }
 }
@@ -147,7 +148,7 @@ async function handleApplicantReviewed(data: SumsubWebhookPayload) {
 async function handleApplicantActionPending(data: SumsubWebhookPayload) {
     const { applicantId, externalUserId, applicantActionId } = data;
 
-    console.log(`[KYC] ⏳ User ${externalUserId} action pending`, {
+    logger.info(`[KYC] ⏳ User ${externalUserId} action pending`, {
         applicantId,
         applicantActionId,
     });
@@ -160,7 +161,7 @@ async function handleApplicantActionPending(data: SumsubWebhookPayload) {
                 sumsub_applicant_id: applicantId,
                 status: "pending",
             }, { onConflict: "external_user_id" });
-        if (error) console.error("[KYC Webhook] DB error (pending):", error);
+        if (error) logger.error("[KYC Webhook] DB error (pending):", error);
     }
 }
 
@@ -170,7 +171,7 @@ async function handleApplicantActionPending(data: SumsubWebhookPayload) {
 async function handleApplicantActivated(data: SumsubWebhookPayload) {
     const { applicantId, externalUserId, levelName, sandboxMode } = data;
 
-    console.log(`[KYC] 🆕 Applicant ${externalUserId} activated`, {
+    logger.info(`[KYC] 🆕 Applicant ${externalUserId} activated`, {
         applicantId,
         levelName,
         sandboxMode,
@@ -184,6 +185,6 @@ async function handleApplicantActivated(data: SumsubWebhookPayload) {
                 sumsub_applicant_id: applicantId,
                 status: "not_started",
             }, { onConflict: "external_user_id" });
-        if (error) console.error("[KYC Webhook] DB error (activated):", error);
+        if (error) logger.error("[KYC Webhook] DB error (activated):", error);
     }
 }

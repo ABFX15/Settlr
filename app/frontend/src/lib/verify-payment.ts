@@ -19,7 +19,22 @@ import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 const PROGRAM_ID = new PublicKey("339A4zncMj8fbM2zvEopYXu6TZqRieJKebDiXCKwquA5");
 const PLATFORM_FEE_BPS = 100; // 1%
 
-function extractRawAmountFromParsedInstruction(ix: any): bigint {
+/** Shape of an spl-token transfer instruction as returned by getParsedTransaction. */
+interface ParsedTransferInstruction {
+    program?: string;
+    parsed?: {
+        type?: string;
+        info?: {
+            destination?: string;
+            amount?: string;
+            tokenAmount?: { amount?: string };
+        };
+    };
+}
+
+function extractRawAmountFromParsedInstruction(
+    ix: ParsedTransferInstruction,
+): bigint {
     const info = ix?.parsed?.info;
     if (!info) return BigInt(0);
     if (typeof info.amount === "string") return BigInt(info.amount);
@@ -95,20 +110,22 @@ export async function verifyOnChainPayment(
     const platformFee = (totalBase * BigInt(PLATFORM_FEE_BPS)) / BigInt(10000);
     const merchantAmount = totalBase - platformFee;
 
-    const transferIxs = parsedTx.transaction.message.instructions.filter(
-        (ix: any) =>
+    const transferIxs = (
+        parsedTx.transaction.message.instructions as ParsedTransferInstruction[]
+    ).filter(
+        (ix) =>
             ix?.program === "spl-token" &&
             ix?.parsed?.type &&
             (ix.parsed.type === "transfer" ||
                 ix.parsed.type === "transferChecked"),
     );
 
-    const merchantTransfer = transferIxs.find((ix: any) => {
+    const merchantTransfer = transferIxs.find((ix) => {
         if (ix?.parsed?.info?.destination !== merchantAta.toBase58()) return false;
         return extractRawAmountFromParsedInstruction(ix) >= merchantAmount;
     });
 
-    const treasuryTransfer = transferIxs.find((ix: any) => {
+    const treasuryTransfer = transferIxs.find((ix) => {
         if (ix?.parsed?.info?.destination !== treasuryPDA.toBase58()) return false;
         return extractRawAmountFromParsedInstruction(ix) >= platformFee;
     });

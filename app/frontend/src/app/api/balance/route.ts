@@ -6,6 +6,7 @@
  * Authentication: settlr_session cookie (wallet sign-in)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getOrCreateMerchantBalance, calculatePayoutFee } from "@/lib/db";
 import { requireMerchantSession } from "@/lib/merchant-auth";
@@ -45,7 +46,7 @@ export async function GET(request: NextRequest) {
             { headers }
         );
     } catch (error) {
-        console.error("[balance] Error:", error);
+        logger.error("[balance] Error:", error);
         return NextResponse.json(
             { error: "Failed to fetch balance" },
             { status: 500, headers }

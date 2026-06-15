@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { claimInviteForWallet } from "@/lib/db";
 
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
             wallet,
         });
     } catch (error) {
-        console.error("[waitlist/claim-invite] error:", error);
+        logger.error("[waitlist/claim-invite] error:", error);
         return NextResponse.json(
             { error: "Failed to claim invite" },
             { status: 500 }

@@ -5,6 +5,7 @@
  * Falls back to in-memory storage if Supabase is not configured.
  */
 
+import { logger } from "@/lib/logger";
 import { supabase, isSupabaseConfigured } from "./supabase";
 import { explorerUrl as buildExplorerUrl } from "./constants";
 
@@ -448,10 +449,10 @@ export async function createPurchaseOrder(data: {
         if (error) {
             // Table might not exist yet — fall back to in-memory
             if (error.message?.includes("purchase_orders")) {
-                console.warn("[db] purchase_orders table missing, using in-memory fallback");
+                logger.warn("[db] purchase_orders table missing, using in-memory fallback");
                 memoryOrders.set(order.id, order);
             } else {
-                console.error("[db] Error creating purchase order:", error);
+                logger.error("[db] Error creating purchase order:", error);
                 throw new Error("Failed to create purchase order");
             }
         }
@@ -659,7 +660,7 @@ export async function createCheckoutSession(
         });
 
         if (error) {
-            console.error("Supabase error creating session:", error);
+            logger.error("Supabase error creating session:", error);
             throw new Error("Failed to create checkout session");
         }
     } else {
@@ -788,7 +789,7 @@ export async function createPayment(
         }
 
         if (error) {
-            console.error("Supabase error creating payment:", error);
+            logger.error("Supabase error creating payment:", error);
             throw new Error("Failed to create payment");
         }
     } else {
@@ -1246,7 +1247,7 @@ export async function createMerchant(
             .single();
 
         if (error || !inserted) {
-            console.error("Supabase error creating merchant:", error);
+            logger.error("Supabase error creating merchant:", error);
             throw new Error("Failed to create merchant");
         }
 
@@ -1816,7 +1817,7 @@ export async function createPayout(
         });
 
         if (error) {
-            console.error("Error creating payout:", error);
+            logger.error("Error creating payout:", error);
             throw new Error("Failed to create payout");
         }
     } else {
@@ -1918,7 +1919,7 @@ export async function claimPayout(
             .eq("claim_token", claimToken);
 
         if (error) {
-            console.error("Error claiming payout:", error);
+            logger.error("Error claiming payout:", error);
             return null;
         }
     } else {
@@ -1986,7 +1987,7 @@ export async function createPayoutBatch(
             status: batch.status,
         });
         if (error) {
-            console.error("Error creating payout batch:", error);
+            logger.error("Error creating payout batch:", error);
             throw new Error("Failed to create batch");
         }
     } else {
@@ -2136,7 +2137,7 @@ export async function registerRecipient(data: {
             auto_withdraw: recipient.autoWithdraw,
         });
         if (error) {
-            console.error("Error registering recipient:", error);
+            logger.error("Error registering recipient:", error);
             throw new Error("Failed to register recipient");
         }
     } else {
@@ -2664,9 +2665,9 @@ export async function creditMerchantBalance(
     const balance = await getOrCreateMerchantBalance(merchantId, currency);
     const now = new Date();
 
-    let newAvailable = balance.available + amount;
+    const newAvailable = balance.available + amount;
     let newPending = balance.pending;
-    let newTotalDeposited = balance.totalDeposited + amount;
+    const newTotalDeposited = balance.totalDeposited + amount;
 
     if (options.fromPending) {
         newPending = Math.max(0, balance.pending - amount);
@@ -3110,7 +3111,7 @@ export async function createInvoice(data: {
             updated_at: invoice.updatedAt.toISOString(),
         });
         if (error) {
-            console.error("[db] Error creating invoice:", error);
+            logger.error("[db] Error creating invoice:", error);
             throw new Error("Failed to create invoice");
         }
     } else {

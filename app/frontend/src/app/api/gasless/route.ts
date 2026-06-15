@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { SOLANA_RPC_URL } from "@/lib/constants";
 import {
@@ -33,7 +34,7 @@ export async function GET() {
             supportedTokens,
         });
     } catch (error) {
-        console.error("Gasless config error:", error);
+        logger.error("Gasless config error:", error);
         return NextResponse.json(
             { enabled: false, error: "Failed to connect to Kora" },
             { status: 500 }
@@ -134,16 +135,16 @@ export async function POST(req: NextRequest) {
                 }
 
                 try {
-                    console.log("[Gasless] signAndSend: Signing and submitting transaction...");
+                    logger.info("[Gasless] signAndSend: Signing and submitting transaction...");
                     const signer = await getKoraSigner(client);
-                    console.log("[Gasless] Using signer:", signer.signerAddress);
+                    logger.info("[Gasless] Using signer:", signer.signerAddress);
 
                     const result = await client.signAndSendTransaction({
                         transaction,
                         signer_key: signer.signerAddress,
                     });
 
-                    console.log("[Gasless] signAndSendTransaction result:", JSON.stringify(result));
+                    logger.info("[Gasless] signAndSendTransaction result:", JSON.stringify(result));
 
                     // Cast to access potential fields returned by API
                     const response = result as unknown as {
@@ -166,17 +167,17 @@ export async function POST(req: NextRequest) {
                                 const vtx = VersionedTransaction.deserialize(txBytes);
                                 if (vtx.signatures[0] && !vtx.signatures[0].every(b => b === 0)) {
                                     signature = bs58.default.encode(vtx.signatures[0]);
-                                    console.log("[Gasless] Extracted signature from versioned tx:", signature);
+                                    logger.info("[Gasless] Extracted signature from versioned tx:", signature);
                                 }
                             } catch {
                                 const tx = Transaction.from(txBytes);
                                 if (tx.signature) {
                                     signature = bs58.default.encode(tx.signature);
-                                    console.log("[Gasless] Extracted signature from legacy tx:", signature);
+                                    logger.info("[Gasless] Extracted signature from legacy tx:", signature);
                                 }
                             }
                         } catch (extractErr) {
-                            console.log("[Gasless] Could not extract signature:", extractErr);
+                            logger.info("[Gasless] Could not extract signature:", extractErr);
                         }
                     }
 
@@ -187,13 +188,13 @@ export async function POST(req: NextRequest) {
                     });
                 } catch (txError) {
                     const errorMessage = txError instanceof Error ? txError.message : String(txError);
-                    console.error("[Gasless] signAndSend error:", errorMessage);
+                    logger.error("[Gasless] signAndSend error:", errorMessage);
 
                     // Handle "already processed" - this means the transaction succeeded previously
                     if (errorMessage.includes('already been processed') ||
                         errorMessage.includes('AlreadyProcessed') ||
                         errorMessage.includes('-32002')) {
-                        console.log('[Gasless] Transaction already processed - treating as success');
+                        logger.info('[Gasless] Transaction already processed - treating as success');
 
                         // Try to extract signature from the transaction if possible
                         // The transaction was already submitted successfully
@@ -228,8 +229,8 @@ export async function POST(req: NextRequest) {
                 const platformFee = (totalAmount * BigInt(PLATFORM_FEE_BPS)) / BigInt(10000);
                 const merchantAmount = totalAmount - platformFee;
 
-                console.log(`[Gasless] Creating transfer: ${amount} of ${token} from ${source} to ${destination} (nonce: ${nonce || 'none'})`);
-                console.log(`[Gasless] Fee split: merchant=${merchantAmount}, platform=${platformFee}`);
+                logger.info(`[Gasless] Creating transfer: ${amount} of ${token} from ${source} to ${destination} (nonce: ${nonce || 'none'})`);
+                logger.info(`[Gasless] Fee split: merchant=${merchantAmount}, platform=${platformFee}`);
 
                 // Import required modules
                 const { Connection, PublicKey, Transaction } = await import("@solana/web3.js");
@@ -302,7 +303,7 @@ export async function POST(req: NextRequest) {
                             platformFee
                         )
                     );
-                    console.log(`[Gasless] Added fee transfer: ${platformFee} to treasury ${treasuryPDA.toBase58()}`);
+                    logger.info(`[Gasless] Added fee transfer: ${platformFee} to treasury ${treasuryPDA.toBase58()}`);
                 }
 
                 // Get blockhash and set fee payer
@@ -316,7 +317,7 @@ export async function POST(req: NextRequest) {
                     verifySignatures: false,
                 }).toString("base64");
 
-                console.log(`[Gasless] Transfer transaction created with fee split`);
+                logger.info(`[Gasless] Transfer transaction created with fee split`);
 
                 return NextResponse.json({
                     transaction: serialized,
@@ -336,7 +337,7 @@ export async function POST(req: NextRequest) {
                     );
                 }
 
-                console.log("[Gasless] Broadcasting fully-signed transaction to Solana...");
+                logger.info("[Gasless] Broadcasting fully-signed transaction to Solana...");
 
                 const { Connection } = await import("@solana/web3.js");
                 const connection = new Connection(
@@ -354,7 +355,7 @@ export async function POST(req: NextRequest) {
                         preflightCommitment: "confirmed",
                     });
 
-                    console.log("[Gasless] Transaction broadcast, signature:", signature);
+                    logger.info("[Gasless] Transaction broadcast, signature:", signature);
 
                     // Wait for confirmation
                     const confirmation = await connection.confirmTransaction(signature, "confirmed");
@@ -363,7 +364,7 @@ export async function POST(req: NextRequest) {
                         throw new Error(`Transaction failed: ${JSON.stringify(confirmation.value.err)}`);
                     }
 
-                    console.log("[Gasless] Transaction confirmed!");
+                    logger.info("[Gasless] Transaction confirmed!");
 
                     return NextResponse.json({
                         signature,
@@ -376,7 +377,7 @@ export async function POST(req: NextRequest) {
                     if (errorMessage.includes('already been processed') ||
                         errorMessage.includes('AlreadyProcessed') ||
                         errorMessage.includes('has already been processed')) {
-                        console.log('[Gasless] Transaction already processed - treating as success');
+                        logger.info('[Gasless] Transaction already processed - treating as success');
                         return NextResponse.json({
                             signature: null,
                             alreadyProcessed: true,
@@ -395,7 +396,7 @@ export async function POST(req: NextRequest) {
                 );
         }
     } catch (error) {
-        console.error("Gasless API error:", error);
+        logger.error("Gasless API error:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Gasless operation failed" },
             { status: 500 }

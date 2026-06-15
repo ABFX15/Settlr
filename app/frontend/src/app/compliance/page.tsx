@@ -1599,11 +1599,11 @@ export default function CompliancePage() {
                 }}
               >
                 {`┌─────────────────────────────────────────────────────┐
-│                   SETTLR PROTOCOL                   │
+│                  OFFBANK PROTOCOL                   │
 ├─────────────────────────────────────────────────────┤
 │                                                     │
 │  ┌──────────┐   ┌──────────┐   ┌──────────────┐   │
-│  │  SENDER  │──▶│  SETTLR  │──▶│   RECEIVER   │   │
+│  │  SENDER  │──▶│ OFFBANK  │──▶│   RECEIVER   │   │
 │  │  WALLET  │   │  SMART   │   │   WALLET     │   │
 │  └──────────┘   │ CONTRACT │   └──────────────┘   │
 │       │         └──────────┘          │            │

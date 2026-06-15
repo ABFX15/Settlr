@@ -10,6 +10,7 @@
  *   search — substring match on name, wallet_address, signer_wallet, or license_number
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin-auth";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -54,7 +55,7 @@ export async function GET(request: NextRequest) {
 
     const { data, error, count } = await query;
     if (error) {
-        console.error("[admin/merchants] supabase error:", error);
+        logger.error("[admin/merchants] supabase error:", error);
         return NextResponse.json(
             { error: "query_failed", detail: error.message },
             { status: 500 },

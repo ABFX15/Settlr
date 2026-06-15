@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
@@ -210,7 +211,7 @@ export async function POST(request: NextRequest) {
                 // Clear the accumulator
                 batchAccumulator.delete(merchantWallet);
 
-                console.log(
+                logger.info(
                     `[auto-offramp] Batch flushed: $${batchAmount} (${existing.payments.length} payments) via ${autoOfframp.provider} for ${merchantWallet.slice(0, 8)}…`,
                 );
 
@@ -221,7 +222,7 @@ export async function POST(request: NextRequest) {
                 });
             }
 
-            console.log(
+            logger.info(
                 `[auto-offramp] Batched: +$${amount} → $${existing.total}/$${batchThreshold} for ${merchantWallet.slice(0, 8)}…`,
             );
 
@@ -260,7 +261,7 @@ export async function POST(request: NextRequest) {
             createdAt: new Date().toISOString(),
         });
 
-        console.log(
+        logger.info(
             `[auto-offramp] Initiated: $${amount} USDC → ${autoOfframp.currency} via ${autoOfframp.provider} (${autoOfframp.method}) for ${merchantWallet.slice(0, 8)}…`,
         );
 
@@ -270,7 +271,7 @@ export async function POST(request: NextRequest) {
             offramp: result,
         });
     } catch (err) {
-        console.error("[auto-offramp] POST error:", err);
+        logger.error("[auto-offramp] POST error:", err);
         return NextResponse.json(
             { error: "Failed to trigger auto off-ramp" },
             { status: 500 },

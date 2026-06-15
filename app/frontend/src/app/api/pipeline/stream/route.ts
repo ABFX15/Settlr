@@ -8,6 +8,7 @@
  * Dashboard listens via EventSource for live payment/invoice/payout updates.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest } from "next/server";
 import { getRecentEvents } from "@/lib/pipeline";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
                 const initPayload = JSON.stringify({ type: "init", events: recent });
                 controller.enqueue(encoder.encode(`data: ${initPayload}\n\n`));
             } catch (err) {
-                console.error("[Pipeline SSE] Init error:", err);
+                logger.error("[Pipeline SSE] Init error:", err);
             }
 
             // Track the last event timestamp we sent
@@ -64,7 +65,7 @@ export async function GET(request: NextRequest) {
                     // Heartbeat to keep connection alive
                     controller.enqueue(encoder.encode(`: heartbeat\n\n`));
                 } catch (err) {
-                    console.error("[Pipeline SSE] Poll error:", err);
+                    logger.error("[Pipeline SSE] Poll error:", err);
                 }
             }, 2000);
 

@@ -10,6 +10,7 @@
  *   await emitEvent("payment.completed", "payment", payment.id, merchantId, { amount, ... });
  */
 
+import { logger } from "@/lib/logger";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "../supabase";
 import type { PipelineEvent, PipelineEventType, EntityType } from "./types";
@@ -66,17 +67,17 @@ export async function emitEvent(
 
         if (error) {
             if (
-                (error as any).code === "42P01" ||
+                (error as { code?: string }).code === "42P01" ||
                 String(error.message || "").includes("pipeline_events")
             ) {
                 if (pipelineSupabaseAvailable) {
-                    console.warn(
+                    logger.warn(
                         "[Pipeline] pipeline_events table missing; falling back to in-memory events",
                     );
                 }
                 pipelineSupabaseAvailable = false;
             } else {
-                console.error("[Pipeline] Failed to write event:", error.message);
+                logger.error("[Pipeline] Failed to write event:", error.message);
             }
             // Fallback to memory so we don't lose the event
             pushToMemory(event);
@@ -110,7 +111,7 @@ export async function getPendingEvents(limit = 500): Promise<PipelineEvent[]> {
             .limit(limit);
 
         if (error) {
-            console.error("[Pipeline] Failed to fetch pending events:", error.message);
+            logger.error("[Pipeline] Failed to fetch pending events:", error.message);
             return [];
         }
 
@@ -130,7 +131,7 @@ export async function markEventsProcessed(eventIds: string[]): Promise<void> {
             .in("id", eventIds);
 
         if (error) {
-            console.error("[Pipeline] Failed to mark events processed:", error.message);
+            logger.error("[Pipeline] Failed to mark events processed:", error.message);
         }
     } else {
         for (const event of memoryEvents) {
@@ -161,7 +162,7 @@ export async function getEventsByMerchant(
 
         const { data, error } = await query;
         if (error) {
-            console.error("[Pipeline] Failed to fetch merchant events:", error.message);
+            logger.error("[Pipeline] Failed to fetch merchant events:", error.message);
             return [];
         }
         return (data || []).map(mapRow);

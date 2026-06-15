@@ -24,6 +24,7 @@
  * 6. Store verification status (not PII)
  */
 
+import { logger } from "@/lib/logger";
 import crypto from "crypto";
 
 const SUMSUB_APP_TOKEN = process.env.SUMSUB_APP_TOKEN || "";
@@ -74,7 +75,7 @@ async function sumsubRequest<T>(
     const bodyString = body ? JSON.stringify(body) : undefined;
     const { ts, signature } = generateSignature(method, endpoint, bodyString);
 
-    console.log(`[Sumsub] ${method} ${endpoint}`);
+    logger.info(`[Sumsub] ${method} ${endpoint}`);
 
     const response = await fetch(`${SUMSUB_BASE_URL}${endpoint}`, {
         method,
@@ -89,7 +90,7 @@ async function sumsubRequest<T>(
 
     if (!response.ok) {
         const error = await response.text();
-        console.error(`[Sumsub] Error ${response.status}:`, error);
+        logger.error(`[Sumsub] Error ${response.status}:`, error);
         throw new Error(`Sumsub API error: ${response.status} - ${error}`);
     }
 

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getApplicantByExternalId, isUserVerified } from "@/lib/sumsub";
 
@@ -54,7 +55,7 @@ export async function GET(request: NextRequest) {
             applicantId: applicant?.id || null,
         });
     } catch (error) {
-        console.error("Error checking KYC status:", error);
+        logger.error("Error checking KYC status:", error);
         return NextResponse.json(
             { error: "Failed to check KYC status" },
             { status: 500 }

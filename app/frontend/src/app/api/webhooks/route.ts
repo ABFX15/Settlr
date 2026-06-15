@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
                 .order("created_at", { ascending: false });
 
             if (error) {
-                console.error("Supabase error:", error);
+                logger.error("Supabase error:", error);
                 return NextResponse.json({ webhooks: [] });
             }
 
@@ -75,7 +76,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ webhooks });
         }
     } catch (error) {
-        console.error("Error fetching webhooks:", error);
+        logger.error("Error fetching webhooks:", error);
         return NextResponse.json(
             { error: "Failed to fetch webhooks" },
             { status: 500 }
@@ -141,7 +142,7 @@ export async function POST(request: NextRequest) {
                 .single();
 
             if (error) {
-                console.error("Supabase error:", error);
+                logger.error("Supabase error:", error);
                 return NextResponse.json(
                     { error: "Failed to create webhook" },
                     { status: 500 }
@@ -164,7 +165,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ webhook });
         }
     } catch (error) {
-        console.error("Error creating webhook:", error);
+        logger.error("Error creating webhook:", error);
         return NextResponse.json(
             { error: "Failed to create webhook" },
             { status: 500 }

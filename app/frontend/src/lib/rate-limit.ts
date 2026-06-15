@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextResponse } from "next/server";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
@@ -37,7 +38,7 @@ export async function checkRateLimit(
         // requests through and rely on Vercel's per-route concurrency
         // limits as a soft cap.
         if (process.env.NODE_ENV === "production" && !warnedNoRedis) {
-            console.warn(
+            logger.warn(
                 "[rate-limit] UPSTASH_REDIS_REST_URL/TOKEN missing in production — rate limiting disabled",
             );
             warnedNoRedis = true;

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getWaitlist, updateWaitlistStatus } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
         const entries = await getWaitlist();
         return NextResponse.json({ entries, total: entries.length });
     } catch (error) {
-        console.error("Admin waitlist list error:", error);
+        logger.error("Admin waitlist list error:", error);
         return NextResponse.json({ error: "Failed to fetch waitlist" }, { status: 500 });
     }
 }
@@ -102,14 +103,14 @@ export async function PATCH(request: NextRequest) {
                 text: `You're approved for Offbank! Sign in at ${loginUrl} — this link is unique to you.`,
             });
             if (!emailSent) {
-                console.error(`[admin] Email failed for ${normalizedEmail}. RESEND_API_KEY set: ${!!process.env.RESEND_API_KEY}`);
+                logger.error(`[admin] Email failed for ${normalizedEmail}. RESEND_API_KEY set: ${!!process.env.RESEND_API_KEY}`);
             }
             return NextResponse.json({ success: true, email: normalizedEmail, status, emailSent, walletAddress: walletAddress || null });
         }
 
         return NextResponse.json({ success: true, email: normalizedEmail, status, walletAddress: walletAddress || null });
     } catch (error) {
-        console.error("Admin waitlist update error:", error);
+        logger.error("Admin waitlist update error:", error);
         return NextResponse.json({ error: "Failed to update entry" }, { status: 500 });
     }
 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
@@ -18,7 +19,7 @@ export async function DELETE(
                 .eq("id", id);
 
             if (error) {
-                console.error("Supabase error:", error);
+                logger.error("Supabase error:", error);
                 return NextResponse.json(
                     { error: "Failed to delete webhook" },
                     { status: 500 }
@@ -28,7 +29,7 @@ export async function DELETE(
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Error deleting webhook:", error);
+        logger.error("Error deleting webhook:", error);
         return NextResponse.json(
             { error: "Failed to delete webhook" },
             { status: 500 }

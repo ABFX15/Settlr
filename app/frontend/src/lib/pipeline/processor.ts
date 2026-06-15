@@ -8,6 +8,7 @@
  * Runs idempotently — safe to call multiple times.
  */
 
+import { logger } from "@/lib/logger";
 import { supabase, isSupabaseConfigured } from "../supabase";
 import { getPendingEvents, markEventsProcessed } from "./events";
 import type {
@@ -380,7 +381,7 @@ export async function getMerchantStats(
 
         const { data, error } = await query;
         if (error) {
-            console.error("[Pipeline] Failed to fetch merchant stats:", error.message);
+            logger.error("[Pipeline] Failed to fetch merchant stats:", error.message);
             return [];
         }
 
@@ -411,7 +412,7 @@ export async function getPlatformStats(
 
         const { data, error } = await query;
         if (error) {
-            console.error("[Pipeline] Failed to fetch platform stats:", error.message);
+            logger.error("[Pipeline] Failed to fetch platform stats:", error.message);
             return [];
         }
 

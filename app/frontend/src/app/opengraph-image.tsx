@@ -75,7 +75,7 @@ export default async function Image() {
           >
             {/* Logo */}
             <div style={{ display: "flex", marginBottom: 32 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              { }
               <img
                 // @ts-expect-error Satori accepts ArrayBuffer for img src
                 src={logoData}

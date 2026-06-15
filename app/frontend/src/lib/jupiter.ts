@@ -13,6 +13,7 @@
  * Docs: https://station.jup.ag/docs/apis/swap-api
  */
 
+import { logger } from "@/lib/logger";
 import { VersionedTransaction, Connection, PublicKey } from "@solana/web3.js";
 
 const JUPITER_API_URL = "https://quote-api.jup.ag/v6";
@@ -351,20 +352,20 @@ export async function swapToUsdc(
     try {
         // 1. Get quote for exact output
         const usdcAmountRaw = Math.floor(usdcAmount * 1_000_000).toString();
-        console.log(`[Jupiter] Getting quote: ${inputToken.symbol} → ${usdcAmount} USDC`);
+        logger.info(`[Jupiter] Getting quote: ${inputToken.symbol} → ${usdcAmount} USDC`);
 
         const quote = await getQuoteForExactOutput(inputMint, usdcAmountRaw);
-        console.log(`[Jupiter] Need ${quote.inAmount} ${inputToken.symbol} (${quote.priceImpactPct}% impact)`);
+        logger.info(`[Jupiter] Need ${quote.inAmount} ${inputToken.symbol} (${quote.priceImpactPct}% impact)`);
 
         // 2. Build swap transaction
         // Note: merchantWallet destination is handled separately after swap
         // Jupiter doesn't support arbitrary destination for non-ATA
         const swapTx = await buildSwapTransaction(quote, userWallet);
-        console.log("[Jupiter] Transaction built");
+        logger.info("[Jupiter] Transaction built");
 
         // 3. Execute swap
         const signature = await executeSwap(connection, swapTx, signTransaction);
-        console.log(`[Jupiter] Swap complete: ${signature}`);
+        logger.info(`[Jupiter] Swap complete: ${signature}`);
 
         return {
             success: true,
@@ -375,7 +376,7 @@ export async function swapToUsdc(
             outputToken,
         };
     } catch (error) {
-        console.error("[Jupiter] Swap failed:", error);
+        logger.error("[Jupiter] Swap failed:", error);
         return {
             success: false,
             error: error instanceof Error ? error.message : "Swap failed",

@@ -4,6 +4,7 @@
  * Returns queue depth, processing lag, and storage mode.
  */
 
+import { logger } from "@/lib/logger";
 import { NextResponse } from "next/server";
 import {
     getEventCount,
@@ -45,7 +46,7 @@ export async function GET() {
             status: status === "down" ? 503 : 200,
         });
     } catch (error) {
-        console.error("[Pipeline] Health check error:", error);
+        logger.error("[Pipeline] Health check error:", error);
         return NextResponse.json(
             { status: "down", error: (error as Error).message },
             { status: 503 },

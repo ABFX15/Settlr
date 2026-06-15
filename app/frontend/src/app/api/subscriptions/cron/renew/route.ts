@@ -9,6 +9,7 @@
  * Cron schedule: every hour (or every 15 min for higher resolution)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -258,7 +259,7 @@ export async function GET(request: NextRequest) {
             }
         }
 
-        console.log("[Cron] Subscription renewal results:", results);
+        logger.info("[Cron] Subscription renewal results:", results);
 
         return NextResponse.json({
             success: true,
@@ -266,7 +267,7 @@ export async function GET(request: NextRequest) {
             ...results,
         });
     } catch (error) {
-        console.error("[Cron] Error:", error);
+        logger.error("[Cron] Error:", error);
         return NextResponse.json(
             { error: "Cron processing failed" },
             { status: 500 }
@@ -324,7 +325,7 @@ async function chargeSubscription(
             "Auto-renewal unavailable — gasless infrastructure removed. Customer must pay invoice manually."
         );
     } catch (error) {
-        console.error(`[Charge] Failed for sub ${subId}:`, error);
+        logger.error(`[Charge] Failed for sub ${subId}:`, error);
 
         await supabase
             .from("subscription_payments")
@@ -394,9 +395,9 @@ async function fireWebhook(
             },
             body: JSON.stringify(payload),
         }).catch((err) =>
-            console.error(`[Webhook] Failed for ${merchantId}:`, err)
+            logger.error(`[Webhook] Failed for ${merchantId}:`, err)
         );
     } catch (err) {
-        console.error("[Webhook] Error:", err);
+        logger.error("[Webhook] Error:", err);
     }
 }

@@ -3,6 +3,7 @@
  * GET  /api/invoices — List invoices for authenticated merchant
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     createInvoice,
@@ -123,15 +124,15 @@ export async function POST(request: NextRequest) {
                 invoiceUrl,
                 memo,
             }).then((sent) => {
-                if (!sent) console.error("[invoices] Email send returned false for", buyerEmail);
+                if (!sent) logger.error("[invoices] Email send returned false for", buyerEmail);
             }).catch((err) =>
-                console.error("[invoices] Failed to send email:", err)
+                logger.error("[invoices] Failed to send email:", err)
             );
         }
 
         emitEvent("invoice.created", "invoice", invoice.id, auth.merchantId, {
             amount: invoice.total, invoiceNumber: invoice.invoiceNumber, buyerEmail: invoice.buyerEmail,
-        }).catch((err) => console.error("[pipeline] emit error:", err));
+        }).catch((err) => logger.error("[pipeline] emit error:", err));
 
         return NextResponse.json(
             {
@@ -148,7 +149,7 @@ export async function POST(request: NextRequest) {
             { status: 201 }
         );
     } catch (error) {
-        console.error("[invoices] Error creating invoice:", error);
+        logger.error("[invoices] Error creating invoice:", error);
         return NextResponse.json(
             { error: "Failed to create invoice" },
             { status: 500 }
@@ -205,7 +206,7 @@ export async function GET(request: NextRequest) {
             count: invoices.length,
         });
     } catch (error) {
-        console.error("[invoices] Error listing invoices:", error);
+        logger.error("[invoices] Error listing invoices:", error);
         return NextResponse.json(
             { error: "Failed to list invoices" },
             { status: 500 }

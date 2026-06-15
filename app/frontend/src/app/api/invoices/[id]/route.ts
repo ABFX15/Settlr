@@ -3,6 +3,7 @@
  * PATCH  /api/invoices/[id] — Update invoice status (send, cancel, mark paid)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getInvoice, updateInvoiceStatus, validateApiKey } from "@/lib/db";
 import { sendInvoiceEmail } from "@/lib/email";
@@ -70,7 +71,7 @@ export async function GET(
             createdAt: invoice.createdAt.toISOString(),
         });
     } catch (error) {
-        console.error("[invoices] Error getting invoice:", error);
+        logger.error("[invoices] Error getting invoice:", error);
         return NextResponse.json(
             { error: "Failed to get invoice" },
             { status: 500 }
@@ -119,7 +120,7 @@ export async function PATCH(
             });
 
             if (!sent) {
-                console.error("[invoices] Email send failed for", invoice.buyerEmail);
+                logger.error("[invoices] Email send failed for", invoice.buyerEmail);
                 return NextResponse.json({ status: "sent", emailSent: false });
             }
 
@@ -130,7 +131,7 @@ export async function PATCH(
             const updated = await updateInvoiceStatus(id, "cancelled");
             emitEvent("invoice.cancelled", "invoice", id, invoice.merchantId || "", {
                 invoiceNumber: invoice.invoiceNumber, amount: invoice.total,
-            }).catch((err) => console.error("[pipeline] emit error:", err));
+            }).catch((err) => logger.error("[pipeline] emit error:", err));
             return NextResponse.json({ status: updated?.status || "cancelled" });
         }
 
@@ -142,13 +143,13 @@ export async function PATCH(
             });
             emitEvent("invoice.paid", "invoice", id, invoice.merchantId || "", {
                 amount: invoice.total, invoiceNumber: invoice.invoiceNumber, paymentSignature,
-            }).catch((err) => console.error("[pipeline] emit error:", err));
+            }).catch((err) => logger.error("[pipeline] emit error:", err));
             return NextResponse.json({ status: updated?.status || "paid" });
         }
 
         return NextResponse.json({ error: "Unknown action" }, { status: 400 });
     } catch (error) {
-        console.error("[invoices] Error updating invoice:", error);
+        logger.error("[invoices] Error updating invoice:", error);
         return NextResponse.json(
             { error: "Failed to update invoice" },
             { status: 500 }

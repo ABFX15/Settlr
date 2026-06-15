@@ -14,6 +14,7 @@
  *   charge     — Manually trigger a charge for a subscription
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -79,7 +80,7 @@ export async function GET(request: NextRequest) {
         const { data, error } = await query;
 
         if (error) {
-            console.error("[Subscriptions] List error:", error);
+            logger.error("[Subscriptions] List error:", error);
             return NextResponse.json(
                 { error: "Failed to list subscriptions" },
                 { status: 500 }
@@ -117,7 +118,7 @@ export async function GET(request: NextRequest) {
             })),
         });
     } catch (error) {
-        console.error("[Subscriptions] Error:", error);
+        logger.error("[Subscriptions] Error:", error);
         return NextResponse.json(
             { error: "Internal error" },
             { status: 500 }
@@ -158,7 +159,7 @@ export async function POST(request: NextRequest) {
                 );
         }
     } catch (error) {
-        console.error("[Subscriptions] Error:", error);
+        logger.error("[Subscriptions] Error:", error);
         return NextResponse.json(
             {
                 error:
@@ -278,7 +279,7 @@ async function handleSubscribe(body: Record<string, unknown>) {
         .single();
 
     if (subError) {
-        console.error("[Subscribe] Error:", subError);
+        logger.error("[Subscribe] Error:", subError);
         return NextResponse.json(
             { error: "Failed to create subscription" },
             { status: 500 }
@@ -606,7 +607,7 @@ async function chargeSubscription(
             "Auto-charge unavailable — gasless infrastructure removed. Customer must pay invoice manually."
         );
     } catch (error) {
-        console.error(`[Subscription Charge] Failed for ${subId}:`, error);
+        logger.error(`[Subscription Charge] Failed for ${subId}:`, error);
 
         // Update payment as failed
         await supabase

@@ -2,6 +2,7 @@
  * POST /api/payouts/batch — Create multiple payouts at once
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { createPayoutBatch, validateApiKey, getOrCreateMerchantBalance, reservePayoutFunds, calculatePayoutFee } from "@/lib/db";
 import { sendPayoutClaimEmail } from "@/lib/email";
@@ -98,7 +99,7 @@ export async function POST(request: NextRequest) {
                 merchantName: validation.merchantName,
                 expiresAt: payout.expiresAt,
             }).catch((err) => {
-                console.error(`[payouts] Failed to send email for ${payout.id}:`, err);
+                logger.error(`[payouts] Failed to send email for ${payout.id}:`, err);
             });
         }
 
@@ -109,16 +110,16 @@ export async function POST(request: NextRequest) {
             count: result.batch.count,
             payoutIds: result.payouts.map((p: { id: string }) => p.id),
             createdAt: result.batch.createdAt.toISOString(),
-        }).catch((err) => console.error("[webhooks] dispatch error:", err));
+        }).catch((err) => logger.error("[webhooks] dispatch error:", err));
 
         emitEvent("batch.created", "batch", result.batch.id, validation.merchantId, {
             amount: result.batch.totalAmount, count: result.batch.count,
-        }).catch((err) => console.error("[pipeline] emit error:", err));
+        }).catch((err) => logger.error("[pipeline] emit error:", err));
 
         for (const p of result.payouts) {
             emitEvent("payout.created", "payout", p.id, validation.merchantId, {
                 amount: p.amount, email: p.email, batchId: result.batch.id,
-            }).catch((err) => console.error("[pipeline] emit error:", err));
+            }).catch((err) => logger.error("[pipeline] emit error:", err));
         }
 
         return NextResponse.json({
@@ -136,7 +137,7 @@ export async function POST(request: NextRequest) {
             createdAt: result.batch.createdAt.toISOString(),
         }, { status: 201 });
     } catch (error) {
-        console.error("[payouts] Error creating batch:", error);
+        logger.error("[payouts] Error creating batch:", error);
         return NextResponse.json(
             { error: "Failed to create batch" },
             { status: 500 }

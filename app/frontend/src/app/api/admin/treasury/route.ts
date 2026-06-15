@@ -7,6 +7,7 @@
  *
  * This is read-only on-chain data (publicly visible), so no auth required.
  */
+import { logger } from "@/lib/logger";
 import { SOLANA_RPC_URL } from "@/lib/constants";
 
 import { NextResponse } from "next/server";
@@ -85,7 +86,7 @@ export async function GET() {
                 usdcMint: (config as any).usdcMint?.toBase58?.() || String((config as any).usdcMint),
             };
         } catch (err: any) {
-            console.warn("Could not fetch platform config:", err.message);
+            logger.warn("Could not fetch platform config:", err.message);
             platformConfig = null;
         }
 
@@ -99,7 +100,7 @@ export async function GET() {
             cluster: RPC_URL.includes("devnet") ? "devnet" : RPC_URL.includes("mainnet") ? "mainnet-beta" : "custom",
         });
     } catch (error: any) {
-        console.error("Admin treasury API error:", error);
+        logger.error("Admin treasury API error:", error);
         return NextResponse.json(
             { error: error.message || "Failed to fetch treasury data" },
             { status: 500 }

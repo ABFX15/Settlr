@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { PublicKey } from "@solana/web3.js";
 import {
@@ -115,7 +116,7 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error("Error creating checkout session:", error);
+        logger.error("Error creating checkout session:", error);
         return NextResponse.json(
             { error: "Failed to create checkout session" },
             { status: 500 }

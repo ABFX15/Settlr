@@ -3,6 +3,7 @@
  * PATCH /api/orders/[id] — Update order status / link invoice
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getPurchaseOrder,
@@ -59,7 +60,7 @@ export async function GET(
                 : null,
         });
     } catch (err) {
-        console.error("[api/orders/[id]] GET error:", err);
+        logger.error("[api/orders/[id]] GET error:", err);
         return NextResponse.json(
             { error: "Failed to fetch order" },
             { status: 500 }
@@ -137,7 +138,7 @@ export async function PATCH(
                     sentAt: new Date(),
                 });
             } catch (emailErr) {
-                console.error("[orders] Email send failed:", emailErr);
+                logger.error("[orders] Email send failed:", emailErr);
             }
 
             // Link invoice to order
@@ -174,7 +175,7 @@ export async function PATCH(
 
         return NextResponse.json({ error: "Invalid action" }, { status: 400 });
     } catch (err) {
-        console.error("[api/orders/[id]] PATCH error:", err);
+        logger.error("[api/orders/[id]] PATCH error:", err);
         return NextResponse.json(
             { error: "Failed to update order" },
             { status: 500 }

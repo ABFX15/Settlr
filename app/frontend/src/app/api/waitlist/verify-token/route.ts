@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyInviteToken } from "@/lib/db";
 
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ valid: true, email });
     } catch (error) {
-        console.error("Token verification error:", error);
+        logger.error("Token verification error:", error);
         return NextResponse.json(
             { valid: false, error: "Verification failed" },
             { status: 500 }

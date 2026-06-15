@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
             kycLevel: data.kyc_level || "basic-kyc-level",
         });
     } catch (err) {
-        console.error("Error fetching merchant settings:", err);
+        logger.error("Error fetching merchant settings:", err);
         return NextResponse.json(
             { error: "Failed to fetch settings" },
             { status: 500 }
@@ -87,7 +88,7 @@ export async function PUT(request: NextRequest) {
 
         return NextResponse.json({ success: true });
     } catch (err) {
-        console.error("Error updating merchant settings:", err);
+        logger.error("Error updating merchant settings:", err);
         return NextResponse.json(
             { error: "Failed to update settings" },
             { status: 500 }

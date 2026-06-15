@@ -5,6 +5,7 @@
  * PUT  /api/subscriptions/[id] — Update subscription (e.g., change plan)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
@@ -88,7 +89,7 @@ export async function GET(
             })),
         });
     } catch (error) {
-        console.error("[Subscription Detail] Error:", error);
+        logger.error("[Subscription Detail] Error:", error);
         return NextResponse.json(
             { error: "Internal error" },
             { status: 500 }

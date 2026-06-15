@@ -10,6 +10,7 @@
  * to send the user to /dashboard or /onboarding.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getMerchantByWallet } from "@/lib/db";
 
@@ -40,7 +41,7 @@ export async function GET(request: NextRequest) {
             },
         });
     } catch (err) {
-        console.error("[merchants/by-wallet] error:", err);
+        logger.error("[merchants/by-wallet] error:", err);
         return NextResponse.json(
             { error: "lookup_failed" },
             { status: 500 },

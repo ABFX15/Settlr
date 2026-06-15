@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
@@ -89,7 +90,7 @@ export async function POST(request: NextRequest) {
             createdAt: new Date().toISOString(),
         });
 
-        console.log(
+        logger.info(
             `[otc-quote] New request: $${amount.toLocaleString()} for ${walletAddress.slice(0, 8)}… (${email})`,
         );
 
@@ -119,7 +120,7 @@ export async function POST(request: NextRequest) {
             estimatedDelivery: "Same day for wires received before 3 PM ET",
         });
     } catch (err) {
-        console.error("[otc-quote] POST error:", err);
+        logger.error("[otc-quote] POST error:", err);
         return NextResponse.json(
             { error: "Failed to request OTC quote" },
             { status: 500 },

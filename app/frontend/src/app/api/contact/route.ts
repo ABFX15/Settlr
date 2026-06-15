@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
@@ -50,10 +51,10 @@ export async function POST(request: NextRequest) {
             .single();
 
         if (error) {
-            console.error("Supabase error:", error);
+            logger.error("Supabase error:", error);
             // If table doesn't exist, still return success but log it
             if (error.code === "42P01") {
-                console.warn("Contact submissions table doesn't exist yet");
+                logger.warn("Contact submissions table doesn't exist yet");
                 return NextResponse.json({
                     success: true,
                     message: "Message received (table pending setup)",
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
             id: data?.id,
         });
     } catch (error) {
-        console.error("Contact form error:", error);
+        logger.error("Contact form error:", error);
         return NextResponse.json(
             { error: "Failed to send message. Please try again." },
             { status: 500 }

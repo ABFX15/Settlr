@@ -8,6 +8,7 @@
  * Authentication: X-API-Key header
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { validateApiKey } from "@/lib/db";
 import { listSyncs } from "@/lib/leaflink/db";
@@ -72,7 +73,7 @@ export async function GET(request: NextRequest) {
             })),
         });
     } catch (error) {
-        console.error("[leaflink] Syncs GET error:", error);
+        logger.error("[leaflink] Syncs GET error:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 },

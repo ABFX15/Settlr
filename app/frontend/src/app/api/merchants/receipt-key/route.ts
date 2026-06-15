@@ -14,6 +14,7 @@
  *                                  Idempotent — sending the same pubkey is a no-op.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import {
@@ -131,7 +132,7 @@ export async function POST(request: NextRequest) {
         .eq("id", merchant.id);
 
     if (error) {
-        console.error("[receipt-key] update failed:", error);
+        logger.error("[receipt-key] update failed:", error);
         return NextResponse.json(
             { error: "update_failed", detail: error.message },
             { status: 500 }

@@ -16,6 +16,7 @@
  *   ?format=json | csv (defaults to csv)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getPaymentsByMerchantWallet, type Payment } from "@/lib/db";
 import { requireMerchantSession } from "@/lib/merchant-auth";
@@ -170,7 +171,7 @@ export async function GET(request: NextRequest) {
             },
         });
     } catch (err) {
-        console.error("[reports/tax/8949] error", err);
+        logger.error("[reports/tax/8949] error", err);
         return NextResponse.json(
             { error: "Failed to build Form 8949 export" },
             { status: 500 },

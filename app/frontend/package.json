@@ -7,7 +7,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx node_modules/mocha/bin/mocha.js 'src/__tests__/**/*.test.ts'",
+    "test": "DEMO_MODE=true tsx node_modules/mocha/bin/mocha.js 'src/__tests__/**/*.test.ts'",
     "test:auth": "tsx node_modules/mocha/bin/mocha.js 'src/__tests__/auth-wallet.test.ts'"
   },
   "dependencies": {

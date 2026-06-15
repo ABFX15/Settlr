@@ -17,7 +17,7 @@ Offbank is stablecoin settlement infrastructure for cannabis — non-custodial B
                               │ webhook
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                     SETTLR BACKEND                              │
+│                     OFFBANK BACKEND                             │
 │                   (Next.js App Router)                          │
 │                                                                 │
 │  LeafLink Integration:                                          │

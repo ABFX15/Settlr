@@ -7,6 +7,7 @@
  * legacy PLATFORM_ADMIN_KEY / X-Admin-Key header for backwards compat
  * with internal scripts.
  */
+import { logger } from "@/lib/logger";
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -111,7 +112,7 @@ export async function GET(request: NextRequest) {
             });
         }
     } catch (error) {
-        console.error("[fees] Error:", error);
+        logger.error("[fees] Error:", error);
         return NextResponse.json({ error: "Failed to fetch fee data" }, { status: 500 });
     }
 }
@@ -179,14 +180,14 @@ export async function POST(request: NextRequest) {
                 // For now, we report the balance — the actual on-chain claim
                 // should be done via the scripts/claim-fees.ts script or
                 // integrated Anchor client call.
-                console.log(`[fees] On-chain treasury balance: $${treasuryBalance} USDC`);
-                console.log(`[fees] Use scripts/claim-fees.ts for on-chain claim, or proceed to integrate Anchor client.`);
+                logger.info(`[fees] On-chain treasury balance: $${treasuryBalance} USDC`);
+                logger.info(`[fees] Use scripts/claim-fees.ts for on-chain claim, or proceed to integrate Anchor client.`);
 
                 // Demo mode: report what would be collected
                 txSignature = `pending_manual_claim_${Date.now()}`;
             }
         } catch (err) {
-            console.error("[fees] On-chain fee check failed:", err);
+            logger.error("[fees] On-chain fee check failed:", err);
             // Continue with off-chain data
         }
 
@@ -216,7 +217,7 @@ export async function POST(request: NextRequest) {
             },
         });
     } catch (error) {
-        console.error("[fees] Error collecting fees:", error);
+        logger.error("[fees] Error collecting fees:", error);
         return NextResponse.json(
             { error: "Failed to collect fees" },
             { status: 500 }

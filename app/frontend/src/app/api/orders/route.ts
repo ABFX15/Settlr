@@ -3,6 +3,7 @@
  * GET  /api/orders — List orders for authenticated merchant
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     createPurchaseOrder,
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
 
         emitEvent("order.created", "order", order.id, auth.merchantId, {
             amount: order.total, orderNumber: order.orderNumber, buyerEmail,
-        }).catch((err) => console.error("[pipeline] emit error:", err));
+        }).catch((err) => logger.error("[pipeline] emit error:", err));
 
         return NextResponse.json({
             id: order.id,
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
             status: order.status,
         });
     } catch (err) {
-        console.error("[api/orders] POST error:", err);
+        logger.error("[api/orders] POST error:", err);
         return NextResponse.json(
             { error: "Failed to create order" },
             { status: 500 }
@@ -127,7 +128,7 @@ export async function GET(request: NextRequest) {
             count: orders.length,
         });
     } catch (err) {
-        console.error("[api/orders] GET error:", err);
+        logger.error("[api/orders] GET error:", err);
         return NextResponse.json(
             { error: "Failed to fetch orders" },
             { status: 500 }

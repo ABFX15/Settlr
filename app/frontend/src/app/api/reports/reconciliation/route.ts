@@ -10,6 +10,7 @@
  *   ?status=all | matched | unmatched | overdue
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getOrCreateMerchantByWallet,
@@ -258,7 +259,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ summary, rows: filtered });
     } catch (err) {
-        console.error("[api/reports/reconciliation] error:", err);
+        logger.error("[api/reports/reconciliation] error:", err);
         return NextResponse.json({ error: "Failed to generate reconciliation" }, { status: 500 });
     }
 }

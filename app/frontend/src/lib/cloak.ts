@@ -1,7 +1,7 @@
 /**
- * Cloak (ZK shielded payments) wrapper for Settlr.
+ * Cloak (ZK shielded payments) wrapper for Offbank.
  *
- * Cloak gives Settlr a *production* privacy rail on top of Solana:
+ * Cloak gives Offbank a *production* privacy rail on top of Solana:
  *   • Payers can settle invoices through a shielded UTXO pool, hiding
  *     amount + counterparty from the public ledger.
  *   • Merchants get a *viewing key* (`nk`) they publish openly so payers
@@ -13,7 +13,7 @@
  * Trust model
  * -----------
  * The Cloak spend secret is derived deterministically from a wallet
- * signature (same pattern as `receiptKeys`). Settlr's server NEVER
+ * signature (same pattern as `receiptKeys`). Offbank's server NEVER
  * stores the secret — only the publishable `nk`. Every operation that
  * needs the spend key asks the wallet to sign `SIGN_IN_MESSAGE` again.
  *
@@ -71,10 +71,15 @@ export function getCloakConfig(): CloakConfig {
 // ─── Key derivation ────────────────────────────────────────────────────
 
 /**
- * Settlr extends Cloak's standard `SIGN_IN_MESSAGE` with a fixed
+ * Offbank extends Cloak's standard `SIGN_IN_MESSAGE` with a fixed
  * suffix so the resulting spend key is domain-separated from a
  * generic Cloak app sign-in. This keeps a leaked-elsewhere Cloak
- * sign-in signature from unlocking Settlr funds.
+ * sign-in signature from unlocking Offbank funds.
+ *
+ * NOTE: the signed message value below is a key-derivation seed, NOT
+ * branding. Changing the literal string (incl. "Settlr (settlr.app)")
+ * changes every user's derived spend key and permanently orphans their
+ * existing shielded balances. Do not "rebrand" it without a key-migration.
  */
 const SETTLR_SIGN_IN_MESSAGE =
     SIGN_IN_MESSAGE +

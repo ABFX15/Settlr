@@ -9,6 +9,7 @@
  *   ?buyer=email (optional, single buyer detail)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getOrCreateMerchantByWallet,
@@ -186,7 +187,7 @@ export async function GET(request: NextRequest) {
             ...(buyerFilter && buyers[0] ? { invoices: buyers[0].invoices } : {}),
         });
     } catch (err) {
-        console.error("[api/reports/buyers] error:", err);
+        logger.error("[api/reports/buyers] error:", err);
         return NextResponse.json({ error: "Failed to generate buyer report" }, { status: 500 });
     }
 }

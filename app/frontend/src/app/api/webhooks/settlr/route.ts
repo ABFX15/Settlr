@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
         const webhookSecret = process.env.OFFBANK_WEBHOOK_SECRET;
 
         if (!webhookSecret) {
-            console.error("OFFBANK_WEBHOOK_SECRET not configured");
+            logger.error("OFFBANK_WEBHOOK_SECRET not configured");
             return NextResponse.json(
                 { error: "Webhook secret not configured" },
                 { status: 500 }
@@ -69,7 +70,7 @@ export async function POST(request: NextRequest) {
         // Parse payload
         const event = JSON.parse(rawBody);
 
-        console.log("Received webhook event:", event.type, event.payment?.id);
+        logger.info("Received webhook event:", event.type, event.payment?.id);
 
         // Handle different event types
         switch (event.type) {
@@ -90,12 +91,12 @@ export async function POST(request: NextRequest) {
                 break;
 
             default:
-                console.log("Unknown event type:", event.type);
+                logger.info("Unknown event type:", event.type);
         }
 
         return NextResponse.json({ received: true });
     } catch (error) {
-        console.error("Webhook error:", error);
+        logger.error("Webhook error:", error);
         return NextResponse.json(
             { error: "Webhook processing failed" },
             { status: 500 }
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
 // Handler functions - implement your business logic here
 
 async function handlePaymentCompleted(payment: any) {
-    console.log("✅ Payment completed:", {
+    logger.info("✅ Payment completed:", {
         id: payment.id,
         amount: payment.amount,
         orderId: payment.orderId,
@@ -131,7 +132,7 @@ async function handlePaymentCompleted(payment: any) {
 }
 
 async function handlePaymentFailed(payment: any) {
-    console.log("❌ Payment failed:", {
+    logger.info("❌ Payment failed:", {
         id: payment.id,
         orderId: payment.orderId,
     });
@@ -145,7 +146,7 @@ async function handlePaymentFailed(payment: any) {
 }
 
 async function handlePaymentExpired(payment: any) {
-    console.log("⏰ Payment expired:", {
+    logger.info("⏰ Payment expired:", {
         id: payment.id,
         orderId: payment.orderId,
     });
@@ -155,7 +156,7 @@ async function handlePaymentExpired(payment: any) {
 }
 
 async function handlePaymentRefunded(payment: any) {
-    console.log("↩️ Payment refunded:", {
+    logger.info("↩️ Payment refunded:", {
         id: payment.id,
         amount: payment.amount,
         orderId: payment.orderId,

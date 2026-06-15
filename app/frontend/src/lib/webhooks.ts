@@ -17,6 +17,7 @@
  *   batch.created      — Batch payout was created
  */
 
+import { logger } from "@/lib/logger";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "./supabase";
 
@@ -354,11 +355,11 @@ export async function dispatchWebhookEvent(
 
     const webhooks = await getWebhooksForEvent(merchantId, eventType);
     if (webhooks.length === 0) {
-        console.log(`[webhooks] No endpoints for ${merchantId} / ${eventType}`);
+        logger.info(`[webhooks] No endpoints for ${merchantId} / ${eventType}`);
         return [];
     }
 
-    console.log(`[webhooks] Dispatching ${eventType} to ${webhooks.length} endpoint(s) for ${merchantId}`);
+    logger.info(`[webhooks] Dispatching ${eventType} to ${webhooks.length} endpoint(s) for ${merchantId}`);
 
     const deliveries = await Promise.allSettled(
         webhooks.map((wh) => deliverWebhook(wh, event))

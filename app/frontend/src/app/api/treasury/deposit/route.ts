@@ -9,6 +9,7 @@
  *
  * Authentication: X-API-Key header OR wallet field in body (dashboard)
  */
+import { logger } from "@/lib/logger";
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS, IS_DEVNET } from "@/lib/constants";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
         // For now, we trust the reported amount (dev mode)
 
         let verified = false;
-        let verifiedAmount = amount;
+        const verifiedAmount = amount;
 
         try {
             // Attempt on-chain verification
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
                 // For now, trust the reported amount
             }
         } catch (err) {
-            console.warn("[treasury/deposit] On-chain verification failed, using reported amount:", err);
+            logger.warn("[treasury/deposit] On-chain verification failed, using reported amount:", err);
             // In dev/demo mode, accept without verification
             if (process.env.NODE_ENV === "development" || !process.env.FEE_PAYER_SECRET_KEY) {
                 verified = true;
@@ -156,7 +157,7 @@ export async function POST(request: NextRequest) {
             txSignature,
             balanceAfter: updatedBalance.available,
             totalDeposited: updatedBalance.totalDeposited,
-        }).catch((err) => console.error("[webhooks] dispatch error:", err));
+        }).catch((err) => logger.error("[webhooks] dispatch error:", err));
 
         return NextResponse.json({
             status: "credited",
@@ -171,7 +172,7 @@ export async function POST(request: NextRequest) {
             },
         });
     } catch (error) {
-        console.error("[treasury/deposit] Error:", error);
+        logger.error("[treasury/deposit] Error:", error);
         return NextResponse.json(
             { error: "Failed to process deposit" },
             { status: 500 }

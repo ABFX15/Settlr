@@ -5,6 +5,7 @@
  * No API key required — public endpoint for recipients.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getRecipientByEmail,
@@ -62,7 +63,7 @@ export async function POST(request: NextRequest) {
             message: "If you have received payouts, check your email for a sign-in link.",
         });
     } catch (error) {
-        console.error("[recipients/auth] Error:", error);
+        logger.error("[recipients/auth] Error:", error);
         return NextResponse.json(
             { error: "Failed to send auth link" },
             { status: 500 }
@@ -108,7 +109,7 @@ export async function GET(request: NextRequest) {
             lastPayoutAt: recipient.lastPayoutAt?.toISOString(),
         });
     } catch (error) {
-        console.error("[recipients/auth] Error validating token:", error);
+        logger.error("[recipients/auth] Error validating token:", error);
         return NextResponse.json(
             { error: "Failed to validate token" },
             { status: 500 }

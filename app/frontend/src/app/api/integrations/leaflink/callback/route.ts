@@ -14,6 +14,7 @@
  * This endpoint is internal-only — protected by a shared secret.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import {
@@ -61,14 +62,14 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        console.log(
+        logger.info(
             `[leaflink] Callback: invoice ${invoice_id} paid — tx ${tx_signature}`,
         );
 
         // 1. Find the sync record
         const sync = await getSyncByInvoiceId(invoice_id);
         if (!sync) {
-            console.log(`[leaflink] No sync found for invoice ${invoice_id}, ignoring`);
+            logger.info(`[leaflink] No sync found for invoice ${invoice_id}, ignoring`);
             return NextResponse.json({ received: true, matched: false });
         }
 
@@ -78,14 +79,14 @@ export async function POST(request: NextRequest) {
             tx_signature,
         });
 
-        console.log(
+        logger.info(
             `[leaflink] Sync ${sync.id} marked paid — order ${sync.leaflink_order_number}`,
         );
 
         // 3. Push payment proof back to LeafLink
         const config = await getConfig(sync.merchant_id);
         if (!config) {
-            console.warn(
+            logger.warn(
                 `[leaflink] No config for merchant ${sync.merchant_id}, skipping LL sync`,
             );
             return NextResponse.json({
@@ -112,7 +113,7 @@ export async function POST(request: NextRequest) {
             // 4. Mark as fully synced
             await updateSync(sync.id, { status: "synced" });
 
-            console.log(
+            logger.info(
                 `[leaflink] Order ${sync.leaflink_order_number} synced back to LeafLink ✓`,
             );
 
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
 
         } catch (llError) {
             // Payment is confirmed but LL sync failed — don't lose the tx
-            console.error(
+            logger.error(
                 `[leaflink] LeafLink API sync failed for order ${sync.leaflink_order_number}:`,
                 llError,
             );
@@ -144,7 +145,7 @@ export async function POST(request: NextRequest) {
         }
 
     } catch (error) {
-        console.error("[leaflink] Callback error:", error);
+        logger.error("[leaflink] Callback error:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 },

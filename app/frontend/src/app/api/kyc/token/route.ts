@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { generateAccessToken, KYC_LEVELS, KYCLevel } from "@/lib/sumsub";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
@@ -45,11 +46,11 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        console.log(`[KYC Token] Generating token for ${externalUserId} with level ${kycLevel}`);
+        logger.info(`[KYC Token] Generating token for ${externalUserId} with level ${kycLevel}`);
 
         const result = await generateAccessToken(externalUserId, kycLevel);
 
-        console.log(`[KYC Token] Token generated successfully for ${result.userId}`);
+        logger.info(`[KYC Token] Token generated successfully for ${result.userId}`);
 
         return NextResponse.json({
             token: result.token,
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
             applicantId: result.userId, // For compatibility
         });
     } catch (error) {
-        console.error("[KYC Token] Error generating token:", error);
+        logger.error("[KYC Token] Error generating token:", error);
         const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json(
             { error: "Failed to generate KYC token", details: message },

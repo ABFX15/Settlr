@@ -7,6 +7,7 @@
  * Vercel cron schedule: every 5 minutes (* /5 * * * *)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { processEvents } from "@/lib/pipeline";
 
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
             ...result,
         });
     } catch (error) {
-        console.error("[Pipeline] Process error:", error);
+        logger.error("[Pipeline] Process error:", error);
         return NextResponse.json(
             { error: "Pipeline processing failed", details: (error as Error).message },
             { status: 500 },

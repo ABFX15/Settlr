@@ -10,6 +10,7 @@
  *   ?type=all | invoice | payment | order
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getOrCreateMerchantByWallet,
@@ -211,7 +212,7 @@ export async function GET(request: NextRequest) {
             events: filtered,
         });
     } catch (err) {
-        console.error("[api/reports/audit-log] error:", err);
+        logger.error("[api/reports/audit-log] error:", err);
         return NextResponse.json({ error: "Failed to generate audit log" }, { status: 500 });
     }
 }

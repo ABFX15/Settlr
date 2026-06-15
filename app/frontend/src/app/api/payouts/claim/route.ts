@@ -6,6 +6,7 @@
  * Authenticated by the claim token in the URL.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 import { getPayoutByClaimToken, claimPayout, updatePayoutStatus, getRecipientByEmail, registerRecipient, updateRecipientStats, releasePayoutFunds, calculatePayoutFee } from "@/lib/db";
@@ -58,7 +59,7 @@ export async function GET(request: NextRequest) {
                 amount: payout.amount,
                 currency: payout.currency,
                 expiredAt: new Date().toISOString(),
-            }).catch((err) => console.error("[webhooks] dispatch error:", err));
+            }).catch((err) => logger.error("[webhooks] dispatch error:", err));
             return NextResponse.json(
                 { error: "This payout has expired" },
                 { status: 410, headers: corsHeaders }
@@ -79,7 +80,7 @@ export async function GET(request: NextRequest) {
             txSignature: payout.txSignature,
         }, { headers: corsHeaders });
     } catch (error) {
-        console.error("[payouts/claim] Error fetching payout:", error);
+        logger.error("[payouts/claim] Error fetching payout:", error);
         return NextResponse.json(
             { error: "Failed to fetch payout" },
             { status: 500, headers: corsHeaders }
@@ -171,12 +172,12 @@ export async function POST(request: NextRequest) {
                 payoutId: payout.id,
             });
         } catch (transferError) {
-            console.error("[payouts/claim] On-chain transfer failed:", transferError);
+            logger.error("[payouts/claim] On-chain transfer failed:", transferError);
 
             // In demo/dev mode, generate a mock signature so the flow completes
             if (process.env.NODE_ENV === "development" || !process.env.FEE_PAYER_SECRET_KEY) {
                 txSignature = `demo_${payout.id}_${Date.now()}`;
-                console.log("[payouts/claim] Using demo signature:", txSignature);
+                logger.info("[payouts/claim] Using demo signature:", txSignature);
             } else {
                 return NextResponse.json(
                     { error: "Failed to execute payout transfer. Please try again." },
@@ -205,7 +206,7 @@ export async function POST(request: NextRequest) {
             );
         } catch (treasuryErr) {
             // Non-blocking: payout succeeded, treasury accounting is secondary
-            console.error("[payouts/claim] Treasury release failed:", treasuryErr);
+            logger.error("[payouts/claim] Treasury release failed:", treasuryErr);
         }
 
         // ── Save email→wallet mapping for future auto-delivery ──
@@ -213,12 +214,12 @@ export async function POST(request: NextRequest) {
             const existingRecipient = await getRecipientByEmail(payout.email);
             if (!existingRecipient) {
                 await registerRecipient({ email: payout.email, walletAddress: recipientWallet });
-                console.log(`[payouts/claim] Registered new recipient: ${payout.email} → ${recipientWallet}`);
+                logger.info(`[payouts/claim] Registered new recipient: ${payout.email} → ${recipientWallet}`);
             }
             await updateRecipientStats(payout.email, payout.amount);
         } catch (regErr) {
             // Non-blocking: don't fail the claim if recipient registration fails
-            console.error("[payouts/claim] Failed to register recipient:", regErr);
+            logger.error("[payouts/claim] Failed to register recipient:", regErr);
         }
 
         // Dispatch payout.claimed webhook
@@ -230,11 +231,11 @@ export async function POST(request: NextRequest) {
             recipientWallet,
             txSignature,
             claimedAt: claimed.claimedAt?.toISOString() || new Date().toISOString(),
-        }).catch((err) => console.error("[webhooks] dispatch error:", err));
+        }).catch((err) => logger.error("[webhooks] dispatch error:", err));
 
         emitEvent("payout.claimed", "payout", claimed.id, payout.merchantId || "", {
             amount: claimed.amount, recipientWallet, txSignature, email: payout.email,
-        }).catch((err) => console.error("[pipeline] emit error:", err));
+        }).catch((err) => logger.error("[pipeline] emit error:", err));
 
         return NextResponse.json({
             success: true,
@@ -247,7 +248,7 @@ export async function POST(request: NextRequest) {
             claimedAt: claimed.claimedAt?.toISOString(),
         }, { headers: corsHeaders });
     } catch (error) {
-        console.error("[payouts/claim] Error claiming payout:", error);
+        logger.error("[payouts/claim] Error claiming payout:", error);
         return NextResponse.json(
             { error: "Failed to claim payout" },
             { status: 500, headers: corsHeaders }
@@ -340,6 +341,6 @@ async function executePayoutTransfer(params: {
     // Wait for confirmation
     await connection.confirmTransaction(signature, "confirmed");
 
-    console.log(`[payouts] Payout ${params.payoutId} executed: ${signature}`);
+    logger.info(`[payouts] Payout ${params.payoutId} executed: ${signature}`);
     return signature;
 }

@@ -12,6 +12,7 @@
  * Reference: https://solana.com/docs/advanced/actions
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest } from "next/server";
 import {
     Connection,
@@ -278,7 +279,7 @@ export async function POST(request: NextRequest) {
             message: `Payment of ${amount} USDC to ${invoice.merchantName} via Offbank`,
         });
     } catch (err) {
-        console.error("[actions/pay] Error building transaction:", err);
+        logger.error("[actions/pay] Error building transaction:", err);
         return actionsResponse(
             { error: "Failed to build payment transaction" },
             500

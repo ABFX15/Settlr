@@ -7,6 +7,7 @@
  * Docs: https://launch.solana.com/docs/kora
  * SDK: @solana/kora
  */
+import { logger } from "@/lib/logger";
 const USDC_MINT_DEVNET_STR = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
 
 import { KoraClient } from "@solana/kora";
@@ -327,7 +328,7 @@ export async function processGaslessPayment(params: {
             destination: params.to,
         });
 
-        console.log("[Kora] Transfer transaction created");
+        logger.info("[Kora] Transfer transaction created");
 
         // Step 3: Get the payment instruction
         // This is the instruction that pays Kora a small fee in exchange for gas sponsorship
@@ -337,7 +338,7 @@ export async function processGaslessPayment(params: {
             source_wallet: params.from,
         });
 
-        console.log("[Kora] Payment instruction received, fee:", paymentResult.payment_amount);
+        logger.info("[Kora] Payment instruction received, fee:", paymentResult.payment_amount);
 
         // Step 4: Build final transaction with payment instruction
         // The Kora SDK's transferTransaction already includes Kora as fee payer
@@ -349,7 +350,7 @@ export async function processGaslessPayment(params: {
         // This transaction has Kora's address as the fee payer
         const userSignedTx = await signCallback(transferResult.transaction);
 
-        console.log("[Kora] Transaction signed by user");
+        logger.info("[Kora] Transaction signed by user");
 
         // Step 5: Send to Kora for co-signing and submission
         // Kora will:
@@ -363,14 +364,14 @@ export async function processGaslessPayment(params: {
         // Cast to access signature field (API returns it but types don't include it)
         const result = response as typeof response & { signature?: string };
 
-        console.log("[Kora] Transaction submitted, signature:", result.signature);
+        logger.info("[Kora] Transaction submitted, signature:", result.signature);
 
         return {
             success: true,
             signature: result.signature,
         };
     } catch (error) {
-        console.error("[Kora] Gasless payment failed:", error);
+        logger.error("[Kora] Gasless payment failed:", error);
         return {
             success: false,
             error: error instanceof Error ? error.message : "Gasless payment failed",
@@ -408,7 +409,7 @@ export async function processGaslessPaymentAdvanced(params: {
 
         // Get Kora signer info
         const { signerAddress } = await getKoraSigner(kora);
-        console.log("[Kora Advanced] Fee payer:", signerAddress);
+        logger.info("[Kora Advanced] Fee payer:", signerAddress);
 
         // Get supported payment token
         const supportedTokens = await getSupportedTokens(kora);
@@ -436,8 +437,8 @@ export async function processGaslessPaymentAdvanced(params: {
             source_wallet: params.from,
         });
 
-        console.log("[Kora Advanced] Fee amount:", paymentResult.payment_amount, "tokens");
-        console.log("[Kora Advanced] Payment destination:", paymentResult.payment_address);
+        logger.info("[Kora Advanced] Fee amount:", paymentResult.payment_amount, "tokens");
+        logger.info("[Kora Advanced] Payment destination:", paymentResult.payment_address);
 
         // Step 3: User signs the transaction
         // Note: The transaction from transferTransaction already has Kora as fee payer
@@ -457,7 +458,7 @@ export async function processGaslessPaymentAdvanced(params: {
             signature: result.signature,
         };
     } catch (error) {
-        console.error("[Kora Advanced] Failed:", error);
+        logger.error("[Kora Advanced] Failed:", error);
         return {
             success: false,
             error: error instanceof Error ? error.message : "Gasless payment failed",

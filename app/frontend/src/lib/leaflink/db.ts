@@ -7,6 +7,7 @@
  *   order.created → invoice created → link sent → paid → synced back
  */
 
+import { logger } from "@/lib/logger";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import type {
     LeafLinkSync,
@@ -46,7 +47,7 @@ export async function createSync(
             .insert(record);
 
         if (error) {
-            console.error("[leaflink] DB insert error:", error);
+            logger.error("[leaflink] DB insert error:", error);
             throw new Error(`Failed to create sync: ${error.message}`);
         }
     } else {
@@ -83,7 +84,7 @@ export async function updateSync(
             .single();
 
         if (error) {
-            console.error("[leaflink] DB update error:", error);
+            logger.error("[leaflink] DB update error:", error);
             return null;
         }
         return data as LeafLinkSync;
@@ -168,7 +169,7 @@ export async function listSyncs(
 
         const { data, error } = await query;
         if (error) {
-            console.error("[leaflink] DB list error:", error);
+            logger.error("[leaflink] DB list error:", error);
             return [];
         }
         return (data ?? []) as LeafLinkSync[];
@@ -206,7 +207,7 @@ export async function upsertConfig(
             .upsert(record, { onConflict: "merchant_id" });
 
         if (error) {
-            console.error("[leaflink] Config upsert error:", error);
+            logger.error("[leaflink] Config upsert error:", error);
             throw new Error(`Failed to save config: ${error.message}`);
         }
     } else {
@@ -246,7 +247,7 @@ export async function getAllConfigs(): Promise<LeafLinkIntegrationConfig[]> {
             .select();
 
         if (error) {
-            console.error("[leaflink] Config list error:", error);
+            logger.error("[leaflink] Config list error:", error);
             return [];
         }
         return (data ?? []) as LeafLinkIntegrationConfig[];

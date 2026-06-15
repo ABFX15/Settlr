@@ -15,6 +15,7 @@
  * (it is derived on-demand from a signed message, see lib/cloak.ts).
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import {
@@ -124,7 +125,7 @@ export async function POST(request: NextRequest) {
         .eq("id", merchant.id);
 
     if (error) {
-        console.error("[cloak-key] update failed:", error);
+        logger.error("[cloak-key] update failed:", error);
         return NextResponse.json(
             { error: "update_failed", detail: error.message },
             { status: 500 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { explorerUrl } from "@/lib/constants";
 import { checkoutSessions } from "../store";
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
         );
 
         if (!riskScreening.canProceed) {
-            console.warn(`[Range] Payment blocked: ${riskScreening.blockedParty}`, {
+            logger.warn(`[Range] Payment blocked: ${riskScreening.blockedParty}`, {
                 sessionId,
                 customerWallet,
                 merchantWallet: session.merchantWallet,
@@ -84,7 +85,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        console.log(`[Range] Payment parties cleared: payer=${riskScreening.payer.riskLevel}, merchant=${riskScreening.merchant.riskLevel}`);
+        logger.info(`[Range] Payment parties cleared: payer=${riskScreening.payer.riskLevel}, merchant=${riskScreening.merchant.riskLevel}`);
 
         // Update session status
         await updateCheckoutSession(sessionId, { status: "completed" });
@@ -117,7 +118,7 @@ export async function POST(request: NextRequest) {
         // Trigger webhook asynchronously
         if (session.webhookUrl) {
             triggerWebhook(session, payment.id).catch(err => {
-                console.error("Webhook delivery failed:", err);
+                logger.error("Webhook delivery failed:", err);
             });
         }
 
@@ -130,7 +131,7 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error) {
-        console.error("Error completing checkout:", error);
+        logger.error("Error completing checkout:", error);
         return NextResponse.json(
             { error: "Failed to complete checkout" },
             { status: 500 }
@@ -187,16 +188,16 @@ async function triggerWebhook(session: CheckoutSession, paymentId: string): Prom
             });
 
             if (response.ok) {
-                console.log(`Webhook delivered successfully to ${session.webhookUrl}`);
+                logger.info(`Webhook delivered successfully to ${session.webhookUrl}`);
                 return;
             }
 
             // Log failed attempt
-            console.warn(`Webhook attempt ${attempt} failed with status ${response.status}`);
+            logger.warn(`Webhook attempt ${attempt} failed with status ${response.status}`);
             lastError = new Error(`HTTP ${response.status}`);
 
         } catch (error) {
-            console.warn(`Webhook attempt ${attempt} failed:`, error);
+            logger.warn(`Webhook attempt ${attempt} failed:`, error);
             lastError = error as Error;
         }
 

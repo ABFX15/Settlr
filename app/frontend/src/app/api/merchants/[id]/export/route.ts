@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { getPaymentsByMerchant, getPaymentsByMerchantWallet, getMerchant, getMerchantByWallet } from "@/lib/db";
 
@@ -155,7 +156,7 @@ export async function GET(
             },
         });
     } catch (error) {
-        console.error("Export error:", error);
+        logger.error("Export error:", error);
         return NextResponse.json(
             { error: "Failed to export payments" },
             { status: 500 }

@@ -5,6 +5,7 @@
  * Auth: wallet query param (GET) or wallet in body (POST)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getOrCreateMerchantByWallet,
@@ -41,7 +42,7 @@ async function assertKybIfRequired(wallet: string): Promise<NextResponse | null>
             );
         }
     } catch (err) {
-        console.error("[offramp] KYB check failed:", err);
+        logger.error("[offramp] KYB check failed:", err);
         // Fail closed when the gate is required but the check errors —
         // refusing settlement is safer than leaking funds to an unverified
         // merchant.
@@ -121,7 +122,7 @@ export async function GET(request: NextRequest) {
             total: requests.length,
         });
     } catch (err) {
-        console.error("[offramp] GET error:", err);
+        logger.error("[offramp] GET error:", err);
         return NextResponse.json(
             { error: "Failed to fetch off-ramp requests" },
             { status: 500 },
@@ -193,7 +194,7 @@ export async function POST(request: NextRequest) {
             message: `Off-ramp request submitted: ${amount} USDC → ${method}`,
         });
     } catch (err) {
-        console.error("[offramp] POST error:", err);
+        logger.error("[offramp] POST error:", err);
         return NextResponse.json(
             { error: "Failed to submit off-ramp request" },
             { status: 500 },

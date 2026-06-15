@@ -10,6 +10,7 @@
  * In production you'd verify the on-chain tx against expected amount.
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { explorerUrl, SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 import { emitEvent } from "@/lib/pipeline";
@@ -121,7 +122,7 @@ export async function POST(
                     status: "completed",
                 });
             } catch (err) {
-                console.error(
+                logger.error(
                     "[invoices/pay] cloak: error crediting/recording:",
                     err,
                 );
@@ -139,7 +140,7 @@ export async function POST(
                     isCloakPrivate: true,
                     cloakDepositSignature: cloak.depositSignature,
                 },
-            ).catch((err) => console.error("[pipeline] emit error:", err));
+            ).catch((err) => logger.error("[pipeline] emit error:", err));
             return NextResponse.json({
                 status: updated?.status || "paid",
                 paymentSignature,
@@ -240,19 +241,19 @@ export async function POST(
         } catch (err) {
             // Don't fail the overall request if treasury/payment recording fails
             // The invoice is already marked paid and the on-chain tx is confirmed
-            console.error("[invoices/pay] Error crediting treasury or recording payment:", err);
+            logger.error("[invoices/pay] Error crediting treasury or recording payment:", err);
         }
 
         emitEvent("invoice.paid", "invoice", invoice.id, invoice.merchantId || "", {
             amount: invoice.total, invoiceNumber: invoice.invoiceNumber, paymentSignature, payerWallet,
-        }).catch((err) => console.error("[pipeline] emit error:", err));
+        }).catch((err) => logger.error("[pipeline] emit error:", err));
 
         return NextResponse.json({
             status: updated?.status || "paid",
             paymentSignature,
         });
     } catch (error) {
-        console.error("[invoices/pay] Error recording payment:", error);
+        logger.error("[invoices/pay] Error recording payment:", error);
         return NextResponse.json(
             { error: "Failed to record payment" },
             { status: 500 }

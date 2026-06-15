@@ -7,6 +7,7 @@
  * Authentication: X-API-Key header
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { validateApiKey } from "@/lib/db";
 
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
             { headers: corsHeaders }
         );
     } catch (error) {
-        console.error("[auth/me] Error:", error);
+        logger.error("[auth/me] Error:", error);
         return NextResponse.json(
             { error: "Authentication failed" },
             { status: 500, headers: corsHeaders }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -51,7 +52,7 @@ export async function GET(request: NextRequest) {
                 .order("created_at", { ascending: false });
 
             if (error) {
-                console.error("Supabase error:", error);
+                logger.error("Supabase error:", error);
                 return NextResponse.json({ plans: [] });
             }
 
@@ -81,7 +82,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ plans });
         }
     } catch (error) {
-        console.error("Error fetching plans:", error);
+        logger.error("Error fetching plans:", error);
         return NextResponse.json(
             { error: "Failed to fetch subscription plans" },
             { status: 500 }
@@ -153,7 +154,7 @@ export async function POST(request: NextRequest) {
                 .single();
 
             if (error) {
-                console.error("Supabase error:", error);
+                logger.error("Supabase error:", error);
                 return NextResponse.json(
                     { error: "Failed to create subscription plan" },
                     { status: 500 }
@@ -183,7 +184,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ plan });
         }
     } catch (error) {
-        console.error("Error creating plan:", error);
+        logger.error("Error creating plan:", error);
         return NextResponse.json(
             { error: "Failed to create subscription plan" },
             { status: 500 }

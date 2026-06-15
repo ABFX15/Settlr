@@ -2,9 +2,10 @@
  * Email utility for sending settlement notification emails.
  *
  * Uses Resend in production (RESEND_API_KEY env var).
- * Falls back to console.log for development / when no key is set.
+ * Falls back to logger output for development / when no key is set.
  */
 
+import { logger } from "@/lib/logger";
 import { explorerUrl as buildExplorerUrl } from "./constants";
 
 const FROM_EMAIL = process.env.PAYOUT_FROM_EMAIL || "adam@offbankpay.com";
@@ -24,7 +25,7 @@ interface SendEmailOptions {
 async function sendViaResend(options: SendEmailOptions): Promise<boolean> {
     const apiKey = getResendKey();
     if (!apiKey) {
-        console.error("[email] RESEND_API_KEY is not set");
+        logger.error("[email] RESEND_API_KEY is not set");
         return false;
     }
     try {
@@ -45,24 +46,24 @@ async function sendViaResend(options: SendEmailOptions): Promise<boolean> {
 
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
-            console.error("[email] Resend API error:", res.status, err);
+            logger.error("[email] Resend API error:", res.status, err);
             return false;
         }
 
-        console.log(`[email] Sent to ${options.to} via Resend`);
+        logger.info(`[email] Sent to ${options.to} via Resend`);
         return true;
     } catch (error) {
-        console.error("[email] Resend send failed:", error);
+        logger.error("[email] Resend send failed:", error);
         return false;
     }
 }
 
 function logToConsole(options: SendEmailOptions): boolean {
-    console.log("─────────────────────────────────────────");
-    console.log(`[email] TO: ${options.to}`);
-    console.log(`[email] SUBJECT: ${options.subject}`);
-    console.log(`[email] BODY (text): ${options.text || "(html only)"}`);
-    console.log("─────────────────────────────────────────");
+    logger.info("─────────────────────────────────────────");
+    logger.info(`[email] TO: ${options.to}`);
+    logger.info(`[email] SUBJECT: ${options.subject}`);
+    logger.info(`[email] BODY (text): ${options.text || "(html only)"}`);
+    logger.info("─────────────────────────────────────────");
     return true;
 }
 
@@ -70,7 +71,7 @@ export async function sendEmail(options: SendEmailOptions): Promise<boolean> {
     if (getResendKey()) {
         return sendViaResend(options);
     }
-    console.warn("[email] No RESEND_API_KEY — falling back to console log");
+    logger.warn("[email] No RESEND_API_KEY — falling back to console log");
     return logToConsole(options);
 }
 

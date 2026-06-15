@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { createMerchant, getMerchantByWallet, getMerchantBySignerWallet } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
@@ -83,7 +84,7 @@ export async function POST(request: NextRequest) {
             },
         });
     } catch (error) {
-        console.error("Merchant registration error:", error);
+        logger.error("Merchant registration error:", error);
         return NextResponse.json(
             { error: error instanceof Error ? error.message : "Registration failed" },
             { status: 500 }
@@ -123,7 +124,7 @@ export async function GET(request: NextRequest) {
                 : null,
         });
     } catch (error) {
-        console.error("Merchant lookup error:", error);
+        logger.error("Merchant lookup error:", error);
         return NextResponse.json(
             { error: "Failed to check registration" },
             { status: 500 }

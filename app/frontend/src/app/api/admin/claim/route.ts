@@ -23,6 +23,7 @@
  *   └────────────────────────────────────────────────────────────────┘
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     Connection,
@@ -77,7 +78,7 @@ function getMultisigPdaFromEnv(): PublicKey | null {
     try {
         return new PublicKey(raw.trim());
     } catch {
-        console.warn("Invalid PLATFORM_MULTISIG_PDA env value:", raw);
+        logger.warn("Invalid PLATFORM_MULTISIG_PDA env value:", raw);
         return null;
     }
 }
@@ -163,7 +164,7 @@ export async function POST(request: NextRequest) {
                 vaultPda = derivedVault;
                 multisigPda = configuredMultisig;
             } else {
-                console.warn(
+                logger.warn(
                     "PLATFORM_MULTISIG_PDA set but on-chain authority does not match its vault PDA — falling back to single-sig.",
                     {
                         onChainAuthority: onChainAuthority.toBase58(),
@@ -322,7 +323,7 @@ export async function POST(request: NextRequest) {
             lastValidBlockHeight,
         });
     } catch (error: any) {
-        console.error("Admin claim API error:", error);
+        logger.error("Admin claim API error:", error);
         return NextResponse.json(
             { error: error.message || "Failed to build claim transaction" },
             { status: 500 }

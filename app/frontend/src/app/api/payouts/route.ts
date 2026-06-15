@@ -4,6 +4,7 @@
  *
  * Authentication: X-API-Key header (validated against merchant API keys)
  */
+import { logger } from "@/lib/logger";
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -70,7 +71,7 @@ async function executePayoutTransfer(params: {
 
     const signature = await connection.sendRawTransaction(tx.serialize(), { skipPreflight: false });
     await connection.confirmTransaction(signature, "confirmed");
-    console.log(`[payouts] Transfer for ${params.payoutId} executed: ${signature}`);
+    logger.info(`[payouts] Transfer for ${params.payoutId} executed: ${signature}`);
     return signature;
 }
 
@@ -147,7 +148,7 @@ export async function POST(request: NextRequest) {
         // ── Auto-delivery: check if this recipient has a saved wallet ──
         const recipient = await getRecipientByEmail(email);
         if (recipient?.walletAddress && recipient.autoWithdraw) {
-            console.log(`[payouts] Auto-delivery: ${email} → ${recipient.walletAddress}`);
+            logger.info(`[payouts] Auto-delivery: ${email} → ${recipient.walletAddress}`);
 
             let txSignature = "";
             try {
@@ -157,7 +158,7 @@ export async function POST(request: NextRequest) {
                     payoutId: payout.id,
                 });
             } catch (err) {
-                console.error("[payouts] Auto-delivery transfer failed:", err);
+                logger.error("[payouts] Auto-delivery transfer failed:", err);
                 // Fallback: dev/demo mode
                 if (process.env.NODE_ENV === "development" || !process.env.FEE_PAYER_SECRET_KEY) {
                     txSignature = `demo_auto_${payout.id}_${Date.now()}`;
@@ -186,7 +187,7 @@ export async function POST(request: NextRequest) {
                     walletAddress: recipient.walletAddress,
                     txSignature,
                     merchantName: validation.merchantName,
-                }).catch((err) => console.error("[payouts] Failed to send instant payout email:", err));
+                }).catch((err) => logger.error("[payouts] Failed to send instant payout email:", err));
 
                 // Dispatch webhook: payout.claimed (auto-delivery)
                 dispatchWebhookEvent(validation.merchantId, "payout.claimed", {
@@ -198,7 +199,7 @@ export async function POST(request: NextRequest) {
                     txSignature,
                     delivery: "instant",
                     claimedAt: new Date().toISOString(),
-                }).catch((err) => console.error("[webhooks] dispatch error:", err));
+                }).catch((err) => logger.error("[webhooks] dispatch error:", err));
 
                 return NextResponse.json({
                     id: payout.id,
@@ -227,7 +228,7 @@ export async function POST(request: NextRequest) {
             merchantName: validation.merchantName,
             expiresAt: payout.expiresAt,
         }).catch((err) => {
-            console.error("[payouts] Failed to send claim email:", err);
+            logger.error("[payouts] Failed to send claim email:", err);
         });
 
         // Dispatch webhook: payout.created
@@ -243,7 +244,7 @@ export async function POST(request: NextRequest) {
             claimUrl: payout.claimUrl,
             createdAt: payout.createdAt.toISOString(),
             expiresAt: payout.expiresAt.toISOString(),
-        }).catch((err) => console.error("[webhooks] dispatch error:", err));
+        }).catch((err) => logger.error("[webhooks] dispatch error:", err));
 
         return NextResponse.json({
             id: payout.id,
@@ -259,7 +260,7 @@ export async function POST(request: NextRequest) {
             expiresAt: payout.expiresAt.toISOString(),
         }, { status: 201 });
     } catch (error) {
-        console.error("[payouts] Error creating payout:", error);
+        logger.error("[payouts] Error creating payout:", error);
         return NextResponse.json(
             { error: "Failed to create payout" },
             { status: 500 }
@@ -311,7 +312,7 @@ export async function GET(request: NextRequest) {
             offset,
         });
     } catch (error) {
-        console.error("[payouts] Error listing payouts:", error);
+        logger.error("[payouts] Error listing payouts:", error);
         return NextResponse.json(
             { error: "Failed to list payouts", data: [] },
             { status: 500 }

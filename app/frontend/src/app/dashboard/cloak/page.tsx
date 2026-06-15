@@ -348,7 +348,7 @@ export default function CloakDashboardPage() {
       setBatchSending(false);
     }
     // batchResults intentionally not in deps \u2014 we mutate via setBatchResults.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [batchCsv, publicKey, signTransaction, signMessage, publishedNk]);
 
   const cfg = getCloakConfig();
@@ -484,7 +484,7 @@ export default function CloakDashboardPage() {
             </h2>
             <p className="text-[#8a8a8a] text-xs mt-1">
               Scans on-chain Cloak chain notes encrypted to your viewing key.
-              Fully client-side — Settlr never sees plaintext.
+              Fully client-side — Offbank never sees plaintext.
             </p>
           </div>
           <div className="flex gap-2">
@@ -694,7 +694,7 @@ function SummaryRow({
   count: number;
 }) {
   // Cloak amounts are in lamports for SOL or token base units. We assume
-  // USDC (6 decimals) for display since that's the Settlr default.
+  // USDC (6 decimals) for display since that's the Offbank default.
   const fmt = (b: bigint) => (Number(b) / 1_000_000).toFixed(2);
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-2">

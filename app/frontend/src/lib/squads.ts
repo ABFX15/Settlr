@@ -5,6 +5,7 @@
  * This module handles vault creation, member management, and
  * reading vault state.
  */
+import { logger } from "@/lib/logger";
 import {
     Connection,
     Keypair,
@@ -171,7 +172,7 @@ export async function getVaultInfo(
             transactionIndex: BigInt(msAccount.transactionIndex.toString()),
         };
     } catch (err) {
-        console.error("Failed to fetch vault info:", err);
+        logger.error("Failed to fetch vault info:", err);
         return null;
     }
 }
@@ -700,7 +701,7 @@ export async function getProposal(
             cancellers: proposal.cancelled,
         };
     } catch (err) {
-        console.error("Failed to fetch proposal:", err);
+        logger.error("Failed to fetch proposal:", err);
         return null;
     }
 }

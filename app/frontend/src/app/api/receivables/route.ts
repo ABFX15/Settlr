@@ -10,6 +10,7 @@
  *   - cash unlocked by instant settlement (vs Net 30 baseline)
  */
 
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import {
     getOrCreateMerchantByWallet,
@@ -202,7 +203,7 @@ export async function GET(request: NextRequest) {
             outstandingInvoices,
         });
     } catch (err) {
-        console.error("[api/receivables] GET error:", err);
+        logger.error("[api/receivables] GET error:", err);
         return NextResponse.json({ error: "Failed to compute receivables" }, { status: 500 });
     }
 }

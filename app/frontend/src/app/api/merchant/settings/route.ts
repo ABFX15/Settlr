@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { upsertConfig as upsertLeafLinkConfig } from "@/lib/leaflink/db";
 import { LeafLinkClient } from "@/lib/leaflink/client";
@@ -183,19 +184,19 @@ export async function PUT(request: NextRequest) {
                     updated_at: now,
                 });
             } catch (bridgeErr) {
-                console.error("[merchant/settings] LeafLink bridge upsert failed:", bridgeErr);
+                logger.error("[merchant/settings] LeafLink bridge upsert failed:", bridgeErr);
                 // Don't fail the whole save — settings were stored, integration just
                 // won't be reachable from webhook until the next save retries.
             }
         }
 
-        console.log(
+        logger.info(
             `[merchant/settings] Saved settings for ${body.wallet.slice(0, 8)}… — auto-offramp: ${body.autoOfframp?.enabled ? "ON" : "OFF"}`,
         );
 
         return NextResponse.json({ success: true });
     } catch (err) {
-        console.error("[merchant/settings] PUT error:", err);
+        logger.error("[merchant/settings] PUT error:", err);
         return NextResponse.json(
             { error: "Failed to save settings" },
             { status: 500 },

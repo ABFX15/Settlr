@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
@@ -28,7 +29,7 @@ export async function PATCH(
                 .eq("id", id);
 
             if (error) {
-                console.error("Supabase error:", error);
+                logger.error("Supabase error:", error);
                 return NextResponse.json(
                     { error: "Failed to update subscription plan" },
                     { status: 500 }
@@ -38,7 +39,7 @@ export async function PATCH(
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Error updating plan:", error);
+        logger.error("Error updating plan:", error);
         return NextResponse.json(
             { error: "Failed to update subscription plan" },
             { status: 500 }
@@ -78,7 +79,7 @@ export async function DELETE(
                 .eq("id", id);
 
             if (error) {
-                console.error("Supabase error:", error);
+                logger.error("Supabase error:", error);
                 return NextResponse.json(
                     { error: "Failed to delete subscription plan" },
                     { status: 500 }
@@ -88,7 +89,7 @@ export async function DELETE(
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Error deleting plan:", error);
+        logger.error("Error deleting plan:", error);
         return NextResponse.json(
             { error: "Failed to delete subscription plan" },
             { status: 500 }
