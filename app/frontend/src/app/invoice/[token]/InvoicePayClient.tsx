@@ -44,6 +44,7 @@ import {
   IS_DEVNET,
 } from "@/lib/constants";
 import { payInvoicePrivately } from "@/lib/cloak";
+import { buildTransakUrl } from "@/lib/transak";
 
 /* ─── Solana config ─── */
 const RPC_ENDPOINT = SOLANA_RPC_URL;
@@ -141,6 +142,9 @@ export default function InvoicePayClient({
   const [txSignature, setTxSignature] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(0);
+  // True while a Transak (USD on-ramp) order is in flight — drives a poll
+  // that flips the page to "paid" once the webhook settles the invoice.
+  const [transakPending, setTransakPending] = useState(false);
   // Cloak: shielded payment opt-in. `merchantCloakNk` is fetched from
   // /api/merchants/cloak-key — when present, the buyer can flip
   // `payPrivately` to route through the Cloak shielded pool. The
@@ -193,6 +197,27 @@ export default function InvoicePayClient({
   useEffect(() => {
     fetchInvoice();
   }, [fetchInvoice]);
+
+  // While a Transak USD payment is in flight, poll the invoice until the
+  // webhook marks it paid (card/bank settlement takes a few minutes).
+  useEffect(() => {
+    if (!transakPending || !token) return;
+    const id = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/invoices/view/${token}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.status === "paid") {
+          setInvoice(data);
+          setState("already-paid");
+          setTransakPending(false);
+        }
+      } catch {
+        /* transient — keep polling */
+      }
+    }, 5000);
+    return () => clearInterval(id);
+  }, [transakPending, token]);
 
   const payerAddress =
     publicKey?.toBase58() ??
@@ -884,65 +909,40 @@ export default function InvoicePayClient({
                                     <div className="flex-1 h-px bg-[#d3d3d3]" />
                                   </div>
 
-                                  {/* Card — up to $5K */}
-                                  {(invoice?.total || 0) <= 5000 && (
-                                    <button
-                                      onClick={() => {
-                                        const params = new URLSearchParams({
-                                          apiKey:
-                                            process.env
-                                              .NEXT_PUBLIC_MOONPAY_API_KEY ||
-                                            "",
-                                          currencyCode: "usdc_sol",
-                                          baseCurrencyCode: "usd",
-                                          baseCurrencyAmount: (
-                                            invoice?.total || 0
-                                          ).toString(),
-                                          colorCode: "#34c759",
-                                          language: "en",
-                                          redirectURL: window.location.href,
-                                          showWalletAddressForm: "true",
-                                        });
-                                        window.open(
-                                          `https://buy.moonpay.com?${params.toString()}`,
-                                          "moonpay-onramp",
-                                          "width=500,height=700,toolbar=no,menubar=no,scrollbars=yes",
-                                        );
-                                      }}
-                                      className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#f2f2f2] py-4 text-sm font-semibold text-[#212121] border border-[#d3d3d3] hover:bg-[#d3d3d3]/50 transition-colors"
-                                    >
-                                      <CreditCard className="h-4 w-4" />
-                                      Pay with Card (~5 min)
-                                    </button>
-                                  )}
-
-                                  {/* Bank transfer — $100–$100K */}
-                                  {(invoice?.total || 0) >= 100 &&
-                                    (invoice?.total || 0) <= 100000 && (
+                                  {/* Pay in USD (card or bank) via Transak.
+                                      USDC settles straight to the merchant —
+                                      the buyer never needs a wallet. */}
+                                  {process.env.NEXT_PUBLIC_TRANSAK_API_KEY &&
+                                    invoice && (
                                       <button
                                         onClick={() => {
-                                          const params = new URLSearchParams({
-                                            amount: (
-                                              invoice?.total || 0
-                                            ).toString(),
-                                            currency: "usdc",
-                                            network: "solana",
+                                          const url = buildTransakUrl({
+                                            walletAddress: invoice.merchantWallet,
+                                            fiatAmount: invoice.total,
+                                            partnerOrderId: token || "",
+                                            redirectURL: window.location.href,
                                           });
+                                          if (!url) return;
                                           window.open(
-                                            `https://spherepay.co/buy?${params.toString()}`,
-                                            "sphere-onramp",
-                                            "width=600,height=750,toolbar=no,menubar=no,scrollbars=yes",
+                                            url,
+                                            "transak-onramp",
+                                            "width=480,height=720,toolbar=no,menubar=no,scrollbars=yes",
                                           );
+                                          setTransakPending(true);
                                         }}
                                         className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#f2f2f2] py-4 text-sm font-semibold text-[#212121] border border-[#d3d3d3] hover:bg-[#d3d3d3]/50 transition-colors"
                                       >
-                                        <Building2 className="h-4 w-4" />
-                                        Bank Transfer / ACH
-                                        {(invoice?.total || 0) > 5000
-                                          ? " (Recommended)"
-                                          : ""}
+                                        <CreditCard className="h-4 w-4" />
+                                        Pay with card or bank (USD)
                                       </button>
                                     )}
+
+                                  {transakPending && (
+                                    <p className="flex items-center justify-center gap-2 text-center text-[#8a8a8a] text-xs">
+                                      <Loader2 className="h-3 w-3 animate-spin" />
+                                      Waiting for your USD payment to settle…
+                                    </p>
+                                  )}
 
                                   {/* OTC — $25K+ */}
                                   {(invoice?.total || 0) >= 25000 && (
@@ -968,10 +968,10 @@ export default function InvoicePayClient({
                                     </button>
                                   )}
 
-                                  {(invoice?.total || 0) > 5000 && (
+                                  {(invoice?.total || 0) >= 25000 && (
                                     <p className="text-center text-[#8a8a8a] text-xs">
-                                      Card limited to $5K. Bank transfer or OTC
-                                      recommended for this amount.
+                                      For large transfers, the OTC desk offers
+                                      better rates than card or bank.
                                     </p>
                                   )}
                                 </>
