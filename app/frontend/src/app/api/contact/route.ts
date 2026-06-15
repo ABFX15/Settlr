@@ -1,12 +1,7 @@
 import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 export async function POST(request: NextRequest) {
     try {
@@ -22,6 +17,14 @@ export async function POST(request: NextRequest) {
                 { error: "Name, email, subject, and message are required" },
                 { status: 400 }
             );
+        }
+
+        if (!isSupabaseConfigured()) {
+            logger.warn("[contact] Supabase not configured; message dropped");
+            return NextResponse.json({
+                success: true,
+                message: "Message received (storage pending setup)",
+            });
         }
 
         // Validate email format
