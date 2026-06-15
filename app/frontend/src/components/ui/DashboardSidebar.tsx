@@ -25,6 +25,7 @@ import {
   ShieldCheck,
   EyeOff,
   Users,
+  Send,
 } from "lucide-react";
 
 const navItems = [
@@ -36,6 +37,7 @@ const navItems = [
   },
   { href: "/dashboard/orders", icon: Package, label: "Orders" },
   { href: "/dashboard/invoices", icon: FileText, label: "Invoices" },
+  { href: "/dashboard/suppliers", icon: Send, label: "Pay Suppliers" },
   {
     href: "/dashboard/settlements",
     icon: ArrowRightLeft,
