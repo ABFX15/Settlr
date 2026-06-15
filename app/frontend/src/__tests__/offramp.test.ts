@@ -15,6 +15,9 @@ import {
     getOfframpRequest,
     updateOfframpStatus,
     verifyOfframpWebhook,
+    createOfframpBatch,
+    settleOfframpBatch,
+    buildOtcExportCsv,
 } from "../lib/offramp";
 import {
     resolveProviderChain,
@@ -126,6 +129,49 @@ describe("Off-ramp settlement", () => {
             });
             expect(res.provider).to.equal("manual");
             expect(res.status).to.equal("pending");
+        });
+    });
+
+    describe("OTC batch", () => {
+        function seedWithLicense(amount: number) {
+            const r = seed();
+            r.licenseNumber = "C11-0000123-LIC";
+            r.riskScore = 5;
+            r.amount = amount;
+            return r;
+        }
+
+        it("batches selected pending payouts and moves them to processing", () => {
+            const a = seedWithLicense(3000);
+            const b = seedWithLicense(2000);
+            const batch = createOfframpBatch([a.id, b.id]);
+            expect(batch).to.not.equal(null);
+            expect(batch!.totalAmount).to.equal(5000);
+            expect(batch!.requestIds).to.have.members([a.id, b.id]);
+            expect(getOfframpRequest(a.id)?.status).to.equal("processing");
+        });
+
+        it("exports a compliance CSV with license + amount + destination", () => {
+            const a = seedWithLicense(1234);
+            const csv = buildOtcExportCsv([getOfframpRequest(a.id)!]);
+            const [header, row] = csv.split("\n");
+            expect(header).to.contain("license_number");
+            expect(header).to.contain("amount_usdc");
+            expect(row).to.contain("C11-0000123-LIC");
+            expect(row).to.contain("1234");
+        });
+
+        it("settles every payout in the batch with the wire reference", () => {
+            const a = seedWithLicense(1000);
+            const b = seedWithLicense(1500);
+            const batch = createOfframpBatch([a.id, b.id])!;
+            const res = settleOfframpBatch(batch.id, "WIRE-REF-001");
+            expect(res).to.not.equal(null);
+            expect(res!.settled.length).to.equal(2);
+            expect(getOfframpRequest(a.id)?.status).to.equal("completed");
+            expect(getOfframpRequest(a.id)?.providerRef).to.equal("WIRE-REF-001");
+            // Idempotent — a second settle is a no-op.
+            expect(settleOfframpBatch(batch.id, "WIRE-REF-001")).to.equal(null);
         });
     });
 });

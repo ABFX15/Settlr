@@ -98,6 +98,125 @@ export function updateOfframpStatus(
     return req;
 }
 
+export function listOfframpsByStatus(status: OfframpStatus): OfframpRequest[] {
+    return [...byId.values()].filter((r) => r.status === status);
+}
+
+/* ── OTC batches ───────────────────────────────────────────────
+   At volume, an OTC desk clears payouts in batches off the licensing data
+   we export, then wires USD to the cannabis-compliant bank. A batch groups
+   payouts, moves them to "processing" (handed to the desk), and settles them
+   all when the wire confirms. */
+
+export type OfframpBatchStatus = "open" | "settled";
+
+export interface OfframpBatch {
+    id: string;
+    requestIds: string[];
+    totalAmount: number;
+    currency: string;
+    status: OfframpBatchStatus;
+    /** Wire/ACH reference from the OTC desk once the batch settles. */
+    wireRef?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+const batches: Map<string, OfframpBatch> = new Map();
+
+/**
+ * Create a batch from pending requests (all pending if `requestIds` omitted).
+ * Included requests move to "processing" (handed to the OTC desk).
+ */
+export function createOfframpBatch(requestIds?: string[]): OfframpBatch | null {
+    const reqs = (requestIds
+        ? requestIds.map((id) => byId.get(id)).filter((r): r is OfframpRequest => !!r)
+        : listOfframpsByStatus("pending")
+    ).filter((r) => r.status === "pending");
+
+    if (reqs.length === 0) return null;
+
+    const now = new Date().toISOString();
+    const batch: OfframpBatch = {
+        id: `ofb_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        requestIds: reqs.map((r) => r.id),
+        totalAmount: reqs.reduce((s, r) => s + r.amount, 0),
+        currency: reqs[0].currency,
+        status: "open",
+        createdAt: now,
+        updatedAt: now,
+    };
+    for (const r of reqs) updateOfframpStatus(r.id, "processing", { provider: "otc" });
+    batches.set(batch.id, batch);
+    return batch;
+}
+
+export function getOfframpBatch(id: string): OfframpBatch | null {
+    return batches.get(id) ?? null;
+}
+
+export function listOfframpBatches(): OfframpBatch[] {
+    return [...batches.values()].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+}
+
+/** Settle a batch: mark it + all its requests completed with the wire ref. */
+export function settleOfframpBatch(
+    id: string,
+    wireRef: string,
+): { batch: OfframpBatch; settled: OfframpRequest[] } | null {
+    const batch = batches.get(id);
+    if (!batch || batch.status === "settled") return null;
+    const settled: OfframpRequest[] = [];
+    for (const rid of batch.requestIds) {
+        const r = updateOfframpStatus(rid, "completed", {
+            provider: "otc",
+            providerRef: wireRef,
+        });
+        if (r) settled.push(r);
+    }
+    batch.status = "settled";
+    batch.wireRef = wireRef;
+    batch.updatedAt = new Date().toISOString();
+    return { batch, settled };
+}
+
+/** CSV the OTC desk needs to clear a batch (compliance + settlement fields). */
+export function buildOtcExportCsv(requests: OfframpRequest[]): string {
+    const esc = (v: unknown) => {
+        const s = v == null ? "" : String(v);
+        return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const header = [
+        "request_id",
+        "merchant_id",
+        "wallet",
+        "license_number",
+        "amount_usdc",
+        "currency",
+        "method",
+        "destination_account",
+        "risk_score",
+        "created_at",
+    ];
+    const rows = requests.map((r) =>
+        [
+            r.id,
+            r.merchantId,
+            r.wallet,
+            r.licenseNumber ?? "",
+            r.amount,
+            r.currency,
+            r.method,
+            r.accountInfo,
+            r.riskScore ?? "",
+            r.createdAt,
+        ]
+            .map(esc)
+            .join(","),
+    );
+    return [header.join(","), ...rows].join("\n");
+}
+
 /**
  * Verify an HMAC-SHA256 settlement webhook from the off-ramp partner.
  * The partner signs the raw request body with OFFRAMP_WEBHOOK_SECRET and
