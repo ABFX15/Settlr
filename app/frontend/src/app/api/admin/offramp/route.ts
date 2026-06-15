@@ -18,6 +18,7 @@ import {
     buildOtcExportCsv,
     getOfframpRequest,
 } from "@/lib/offramp";
+import { assembleCompliancePayload } from "@/lib/compliance-payload";
 
 export async function GET(request: NextRequest) {
     const auth = requireAdmin(request);
@@ -58,9 +59,12 @@ export async function POST(request: NextRequest) {
         .filter((r): r is NonNullable<typeof r> => !!r);
     const csv = buildOtcExportCsv(reqs);
 
+    // Per-payout compliance bundles (license + provenance) the bank auto-clears on.
+    const compliance = await Promise.all(reqs.map((r) => assembleCompliancePayload(r)));
+
     logger.info(
         `[offramp] OTC batch ${batch.id}: ${reqs.length} payouts, ${batch.totalAmount} ${batch.currency}`,
     );
 
-    return NextResponse.json({ batch, csv });
+    return NextResponse.json({ batch, csv, compliance });
 }
