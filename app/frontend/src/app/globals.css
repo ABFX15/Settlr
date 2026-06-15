@@ -119,6 +119,30 @@ pre,
   font-family: var(--font-jetbrains), var(--font-mono), ui-monospace, monospace;
 }
 
+/* ── Accessibility: respect reduced-motion globally ──────────
+   Users who set "reduce motion" get near-instant transitions and no
+   looping/parallax animation. Framer-motion loops are additionally
+   gated in JS via useReducedMotion(). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Consistent, on-brand keyboard focus ─────────────────────
+   Every focusable element gets a visible emerald ring. Mouse users
+   don't see it (focus-visible), keyboard users always do. */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* Premium grain texture overlay — apply to any section */
 .grain-overlay::before {
   content: "";

@@ -1,7 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
@@ -9,6 +14,7 @@ import { t, spring } from "./shared";
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -17,12 +23,21 @@ export function Hero() {
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
   const dashY = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
 
+  // Looping float for the dashboard cards — disabled for reduced-motion.
+  const floatAnim = reduceMotion ? undefined : { y: [0, -8, 0] };
+
   return (
-    <section ref={sectionRef} className="relative min-h-screen overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen overflow-hidden"
+      // Deep base so the hero never washes out to white if the background
+      // image is slow or fails to load.
+      style={{ backgroundColor: t.heroBase }}
+    >
       {/* ── background image with parallax ─────────────── */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
-        style={{ y: bgY }}
+        style={{ y: reduceMotion ? 0 : bgY }}
       >
         <Image
           src="/hero-bg.png"
@@ -54,13 +69,13 @@ export function Hero() {
         <div className="mx-auto w-full max-w-[1400px] px-6 pt-20 pb-16 sm:pt-24 sm:pb-20">
           <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-12">
             {/* ── left: copy ─────────────────────────────── */}
-            <motion.div style={{ y: contentY }}>
+            <motion.div style={{ y: reduceMotion ? 0 : contentY }}>
               <h1
                 className="text-[44px] leading-[1.08] tracking-tight drop-shadow-lg sm:text-[58px] lg:text-[68px]"
                 style={{
                   fontFamily: t.sans,
                   fontWeight: 900,
-                  color: "#FFFFFF",
+                  color: t.onDark,
                   textShadow: "0 2px 30px rgba(0,0,0,0.7)",
                 }}
               >
@@ -70,7 +85,7 @@ export function Hero() {
               <p
                 className="mt-7 max-w-lg text-[19px] font-normal leading-[1.65]"
                 style={{
-                  color: "#e5e5e5",
+                  color: t.onDarkBody,
                   textShadow: "0 1px 8px rgba(0,0,0,0.4)",
                 }}
               >
@@ -81,7 +96,7 @@ export function Hero() {
               </p>
               <p
                 className="mt-3 text-[13px] font-medium"
-                style={{ color: "#a3a3a3" }}
+                style={{ color: t.onDarkMuted }}
               >
                 Built for cannabis, CBD, hemp, firearms, and other restricted
                 B2B verticals.
@@ -134,7 +149,7 @@ export function Hero() {
 
             {/* ── right: dashboard mockup ────────────────── */}
             <motion.div
-              style={{ y: dashY }}
+              style={{ y: reduceMotion ? 0 : dashY }}
               initial={{ opacity: 0, x: 50, scale: 0.97 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ ...spring, delay: 0.35 }}
@@ -157,7 +172,7 @@ export function Hero() {
               {/* ── floating card 1: settlement complete ──── */}
               <motion.div
                 className="absolute -left-4 top-6 z-20 rounded-2xl border border-white/15 bg-black/60 px-5 py-4 shadow-2xl backdrop-blur-2xl sm:-left-10"
-                animate={{ y: [0, -8, 0] }}
+                animate={floatAnim}
                 transition={{
                   duration: 5,
                   repeat: Infinity,
@@ -182,7 +197,7 @@ export function Hero() {
               {/* ── floating card 2: invoice paid ─────────── */}
               <motion.div
                 className="absolute -right-3 bottom-10 z-20 rounded-2xl border border-white/15 bg-black/60 px-5 py-4 shadow-2xl backdrop-blur-2xl sm:-right-8"
-                animate={{ y: [0, -8, 0] }}
+                animate={floatAnim}
                 transition={{
                   duration: 5,
                   repeat: Infinity,
