@@ -62,6 +62,42 @@ where the merchant holds a USD account.
 Build redundancy: support a **multi-provider fallback** so traffic can shift if
 a partner changes its risk policy.
 
+## Reality check: automated API vs OTC / compliance-first
+
+A self-serve crypto API (Cybrid/BVNK/Rain) is the *cleanest* integration, but
+their banking partners may decline the cannabis nexus on AML grounds — same wall
+as Sphere. So **don't bet on it**. The proven path for cannabis is
+**compliance-first, not tech-first**:
+
+1. **Secure the bank first.** Open a corporate account at a cannabis-compliant
+   institution (Safe Harbor Financial / Partner Colorado CU) to *receive wires*.
+2. **Then engage an OTC desk** to convert stablecoins→USD and wire to that bank,
+   with human compliance review of the licensing data we provide.
+
+```
+[Dispensary] → [Our platform wallet] → [Institutional OTC desk] → [Cannabis-compliant bank]
+```
+
+### High-risk processors / gateways (custom merchant accounts, not crypto APIs)
+- **PayFirmly**, **Nomupay**, **National Processing** — CBD/cannabis-friendly
+  high-risk merchant accounts + B2B gateways with bank relationships.
+
+### Institutional OTC desks (human-cleared stablecoin→USD)
+- **Kraken Institutional**, **B2C2**, plus boutique high-risk crypto brokers.
+- They manually review the model; if dispensaries are provably state-licensed,
+  compliance can clear conversions and wire USD to the cannabis bank.
+
+### How this maps to our code
+Our **`manual` provider + settlement webhook IS the OTC path**: the payout
+stays `pending`, the desk clears it off our audit trail + KYB + license data,
+then calls `/api/integrations/offramp/webhook` to mark it settled. The Cybrid
+adapter is an optional automated lane *if* a provider clears cannabis.
+
+### Open questions that gate partner selection
+- **Which states** are the licensed dispensaries in? (determines eligible banks)
+- **Estimated monthly off-ramp volume?** (< $50K → processor; $50K–$5M → OTC
+  desk; aggregated/large → OTC + dedicated bank relationship)
+
 ## How the code is built around this
 
 - Off-ramp requests are **honest**: they stay `pending` until a real partner
