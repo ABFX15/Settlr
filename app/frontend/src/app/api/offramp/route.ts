@@ -11,6 +11,10 @@ import {
     getOrCreateMerchantByWallet,
 } from "@/lib/db";
 import { isUserVerified } from "@/lib/sumsub";
+import {
+    createOfframpRequest,
+    listOfframpRequests,
+} from "@/lib/offramp";
 
 /**
  * KYB enforcement gate.
@@ -59,49 +63,12 @@ async function assertKybIfRequired(wallet: string): Promise<NextResponse | null>
 }
 
 // ---------------------------------------------------------------------------
-// In-memory store (replace with DB in production)
-// ---------------------------------------------------------------------------
-
-interface OfframpRequest {
-    id: string;
-    merchantId: string;
-    wallet: string;
-    method: string;
-    region: string;
-    currency: string;
-    amount: number;
-    localAmount: number;
-    accountInfo: string;
-    status: "pending" | "processing" | "completed" | "failed";
-    createdAt: string;
-    updatedAt: string;
-}
-
-const offrampRequests: Map<string, OfframpRequest[]> = new Map();
-
-function getRequests(merchantId: string): OfframpRequest[] {
-    return offrampRequests.get(merchantId) || [];
-}
-
-function addRequest(merchantId: string, req: OfframpRequest): void {
-    const existing = offrampRequests.get(merchantId) || [];
-    existing.unshift(req);
-    offrampRequests.set(merchantId, existing);
-
-    // Simulate processing → completed after a delay
-    setTimeout(() => {
-        req.status = "processing";
-        req.updatedAt = new Date().toISOString();
-    }, 3000);
-
-    setTimeout(() => {
-        req.status = "completed";
-        req.updatedAt = new Date().toISOString();
-    }, 10000);
-}
-
-// ---------------------------------------------------------------------------
 // Handlers
+//
+// Requests stay "pending" until a real cannabis-compliant settlement partner
+// confirms the USD moved (via /api/integrations/offramp/webhook). We never
+// fake completion — claiming "completed" before money settles is a demo
+// liability and, for cannabis, a compliance one.
 // ---------------------------------------------------------------------------
 
 export async function GET(request: NextRequest) {
@@ -115,7 +82,7 @@ export async function GET(request: NextRequest) {
         }
 
         const merchant = await getOrCreateMerchantByWallet(wallet);
-        const requests = getRequests(merchant.id);
+        const requests = listOfframpRequests(merchant.id);
 
         return NextResponse.json({
             requests,
@@ -171,9 +138,7 @@ export async function POST(request: NextRequest) {
 
         const merchant = await getOrCreateMerchantByWallet(wallet);
 
-        const id = `ofr_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-        const offrampReq: OfframpRequest = {
-            id,
+        const offrampReq = createOfframpRequest({
             merchantId: merchant.id,
             wallet,
             method,
@@ -182,16 +147,11 @@ export async function POST(request: NextRequest) {
             amount,
             localAmount: localAmount || amount,
             accountInfo,
-            status: "pending",
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
-
-        addRequest(merchant.id, offrampReq);
+        });
 
         return NextResponse.json({
             request: offrampReq,
-            message: `Off-ramp request submitted: ${amount} USDC → ${method}`,
+            message: `Off-ramp request received: ${amount} USDC → ${method}. Funds settle once our compliance partner confirms — you'll see the status update here.`,
         });
     } catch (err) {
         logger.error("[offramp] POST error:", err);
