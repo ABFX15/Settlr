@@ -57,13 +57,18 @@ export interface CreateVaultResult {
  *
  * The merchant signs and sends this transaction.
  *
- * @param creator   The merchant's wallet public key (pays rent, becomes sole member)
+ * @param creator   The merchant's wallet public key (becomes sole member)
  * @param connection  Solana connection (for blockhash)
+ * @param feePayer  Optional sponsor that pays rent + fees instead of the
+ *                  creator. Used for gasless onboarding so a brand-new
+ *                  wallet with 0 SOL can still create its vault. The sponsor
+ *                  must co-sign the returned transaction. Defaults to creator.
  * @returns          The unsigned transaction + derived addresses
  */
 export async function buildCreateVaultTransaction(
     creator: PublicKey,
-    connection: Connection
+    connection: Connection,
+    feePayer?: PublicKey
 ): Promise<CreateVaultResult> {
     // Random keypair to derive a unique multisig PDA
     const createKey = Keypair.generate();
@@ -117,7 +122,8 @@ export async function buildCreateVaultTransaction(
     // Build the transaction
     const tx = new Transaction();
     tx.add(ix);
-    tx.feePayer = creator;
+    // The sponsor (if any) pays rent + fees; otherwise the creator does.
+    tx.feePayer = feePayer ?? creator;
 
     const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash("confirmed");

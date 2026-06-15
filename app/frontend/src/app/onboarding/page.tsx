@@ -230,14 +230,46 @@ function OnboardingPageInner() {
       const connection = new Connection(RPC_ENDPOINT, "confirmed");
       const creatorPubkey = new PublicKey(publicKey);
 
-      // Build the Squads vault creation transaction
-      const { multisigPda, vaultPda, transaction } =
-        await buildCreateVaultTransaction(creatorPubkey, connection);
-
-      // Sign the partially-signed transaction using wallet-adapter
       if (!walletSignTransaction) {
         throw new Error("Wallet does not support transaction signing");
       }
+
+      // Prefer gasless: ask the server to sponsor rent + fees so a brand-new
+      // wallet (0 SOL) can still create its vault. The fee payer + createKey
+      // are already co-signed server-side; the user just adds their signature
+      // and pays nothing. Fall back to self-pay only if no sponsor is set up.
+      let multisigPda: string;
+      let vaultPda: string;
+      let transaction: Transaction;
+
+      const sponsorRes = await fetch("/api/onboarding/vault", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ creator: publicKey }),
+      });
+
+      if (sponsorRes.ok) {
+        const data = await sponsorRes.json();
+        multisigPda = data.multisigPda;
+        vaultPda = data.vaultPda;
+        const bytes = Uint8Array.from(atob(data.transaction), (ch) =>
+          ch.charCodeAt(0),
+        );
+        transaction = Transaction.from(bytes);
+      } else if (sponsorRes.status === 503) {
+        // Sponsorship unavailable — self-pay path (wallet must hold SOL).
+        const built = await buildCreateVaultTransaction(
+          creatorPubkey,
+          connection,
+        );
+        multisigPda = built.multisigPda.toBase58();
+        vaultPda = built.vaultPda.toBase58();
+        transaction = built.transaction;
+      } else {
+        const errBody = await sponsorRes.json().catch(() => ({}));
+        throw new Error(errBody.error || "Could not prepare vault transaction");
+      }
+
       const signedTx = await walletSignTransaction(transaction);
       const signature = await Promise.race([
         connection.sendRawTransaction(signedTx.serialize()),
@@ -259,8 +291,8 @@ function OnboardingPageInner() {
 
       setState((s) => ({
         ...s,
-        vaultPda: vaultPda.toBase58(),
-        multisigPda: multisigPda.toBase58(),
+        vaultPda,
+        multisigPda,
         step: 4,
       }));
     } catch (err) {
@@ -280,11 +312,13 @@ function OnboardingPageInner() {
         friendly = "You cancelled the signature. Click again when ready.";
       } else if (
         lc.includes("insufficient") ||
+        lc.includes("prior credit") ||
+        lc.includes("debit an account") ||
         lc.includes("0x1") ||
         lc.includes("0xfffffffe")
       ) {
         friendly =
-          "Not enough SOL to pay rent + fees. Top up your wallet with ~0.05 SOL and try again.";
+          "Couldn't cover the network fee for your vault. Our fee sponsor may be temporarily unavailable — try again in a moment, or top up this wallet with ~0.05 SOL.";
       } else if (
         lc.includes("blockhash") ||
         lc.includes("expired") ||
