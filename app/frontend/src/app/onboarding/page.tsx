@@ -246,6 +246,10 @@ function OnboardingPageInner() {
       let multisigPda: string;
       let vaultPda: string;
       let transaction: Transaction;
+      // blockhash + lastValidBlockHeight are needed for confirmation but are
+      // NOT preserved when a tx is deserialized client-side, so track them.
+      let confirmBlockhash: string;
+      let confirmLastValidBlockHeight: number;
 
       const sponsorRes = await fetch("/api/onboarding/vault", {
         method: "POST",
@@ -261,6 +265,8 @@ function OnboardingPageInner() {
           ch.charCodeAt(0),
         );
         transaction = Transaction.from(bytes);
+        confirmBlockhash = data.blockhash;
+        confirmLastValidBlockHeight = data.lastValidBlockHeight;
       } else if (sponsorRes.status === 503) {
         // Sponsorship unavailable — self-pay path (wallet must hold SOL).
         const built = await buildCreateVaultTransaction(
@@ -270,29 +276,43 @@ function OnboardingPageInner() {
         multisigPda = built.multisigPda.toBase58();
         vaultPda = built.vaultPda.toBase58();
         transaction = built.transaction;
+        confirmBlockhash = built.transaction.recentBlockhash!;
+        confirmLastValidBlockHeight = built.transaction.lastValidBlockHeight!;
       } else {
         const errBody = await sponsorRes.json().catch(() => ({}));
         throw new Error(errBody.error || "Could not prepare vault transaction");
       }
 
       const signedTx = await walletSignTransaction(transaction);
-      const signature = await Promise.race([
-        connection.sendRawTransaction(signedTx.serialize()),
+      const signature = (await Promise.race([
+        connection.sendRawTransaction(signedTx.serialize(), {
+          skipPreflight: true,
+          maxRetries: 5,
+        }),
         timeoutPromise,
-      ]);
+      ])) as string;
 
-      // Confirm
-      await Promise.race([
-        connection.confirmTransaction(
-          {
-            signature: signature as string,
-            blockhash: transaction.recentBlockhash!,
-            lastValidBlockHeight: transaction.lastValidBlockHeight!,
-          },
-          "confirmed",
-        ),
-        timeoutPromise,
-      ]);
+      // Confirm with the correct blockhash + lastValidBlockHeight.
+      try {
+        await Promise.race([
+          connection.confirmTransaction(
+            {
+              signature,
+              blockhash: confirmBlockhash,
+              lastValidBlockHeight: confirmLastValidBlockHeight,
+            },
+            "confirmed",
+          ),
+          timeoutPromise,
+        ]);
+      } catch (confirmErr) {
+        // "Block height exceeded" / timeout doesn't always mean failure — the
+        // tx may have landed. Verify the vault account exists before erroring.
+        const exists = await connection.getAccountInfo(
+          new PublicKey(multisigPda),
+        );
+        if (!exists) throw confirmErr;
+      }
 
       setState((s) => ({
         ...s,

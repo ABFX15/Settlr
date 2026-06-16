@@ -93,6 +93,10 @@ export async function POST(request: NextRequest) {
             multisigPda: multisigPda.toBase58(),
             vaultPda: vaultPda.toBase58(),
             feePayer: feePayer.publicKey.toBase58(),
+            // lastValidBlockHeight is NOT preserved when the client deserializes
+            // the tx, so return it (with the blockhash) for confirmation.
+            blockhash: transaction.recentBlockhash,
+            lastValidBlockHeight: transaction.lastValidBlockHeight,
         });
     } catch (error) {
         logger.error("[onboarding/vault] Sponsor error:", error);
