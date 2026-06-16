@@ -14,8 +14,20 @@ import {
   LogIn,
   ArrowLeft,
   Info,
+  Download,
+  FileCheck,
+  XCircle,
 } from "lucide-react";
 import Link from "next/link";
+
+interface ComplianceDossier {
+  business: { name: string; licenseNumber: string | null; wallet: string };
+  kyb: { verified: boolean };
+  aml: { riskLevel: string; riskScore: number; flagged: boolean };
+  activity: { completedPayments: number; totalVolumeUSDC: number };
+  offramp: { settledCount: number; settledTotalUSD: number; pendingCount: number };
+  generatedAt: string;
+}
 
 interface MerchantSettings {
   kycEnabled: boolean;
@@ -58,6 +70,33 @@ export default function ComplianceSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [dossier, setDossier] = useState<ComplianceDossier | null>(null);
+  const [loadingDossier, setLoadingDossier] = useState(false);
+
+  const loadDossier = async () => {
+    if (!publicKey) return;
+    setLoadingDossier(true);
+    try {
+      const res = await fetch(`/api/compliance/report?wallet=${publicKey}`);
+      if (res.ok) setDossier((await res.json()).report);
+    } finally {
+      setLoadingDossier(false);
+    }
+  };
+
+  const downloadDossier = () => {
+    if (!dossier) return;
+    const blob = new Blob([JSON.stringify(dossier, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `offbank-compliance-${dossier.business.wallet.slice(0, 8)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   // Load merchant settings
   useEffect(() => {
@@ -188,6 +227,68 @@ export default function ComplianceSettingsPage() {
               </p>
             </div>
           </div>
+        </motion.div>
+
+        {/* Compliance dossier — the bank/OTC-ready proof of clean funds */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="mb-6 rounded-xl border border-[#E2E8F0] bg-white p-5"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <FileCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#34c759]" />
+              <div>
+                <p className="font-semibold text-[#212121]">Compliance dossier</p>
+                <p className="mt-0.5 text-sm text-[#8a8a8a]">
+                  One report proving your funds are clean — identity, KYB, AML
+                  screening, on-chain volume, and settlement history. Send it to a
+                  bank or settlement partner.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={dossier ? downloadDossier : loadDossier}
+              disabled={loadingDossier}
+              className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg bg-[#34c759] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2ba048] disabled:opacity-50 transition-colors"
+            >
+              {loadingDossier ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : dossier ? (
+                <Download className="h-4 w-4" />
+              ) : (
+                <FileCheck className="h-4 w-4" />
+              )}
+              {dossier ? "Download" : "Generate"}
+            </button>
+          </div>
+
+          {dossier && (
+            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#F1F5F9] pt-4 sm:grid-cols-4">
+              <DossierStat
+                label="KYB"
+                value={dossier.kyb.verified ? "Verified" : "Pending"}
+                ok={dossier.kyb.verified}
+              />
+              <DossierStat
+                label="AML risk"
+                value={dossier.aml.flagged ? "Flagged" : dossier.aml.riskLevel}
+                ok={!dossier.aml.flagged}
+              />
+              <DossierStat
+                label="Volume"
+                value={dossier.activity.totalVolumeUSDC.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                })}
+              />
+              <DossierStat
+                label="Payments"
+                value={String(dossier.activity.completedPayments)}
+              />
+            </div>
+          )}
         </motion.div>
 
         {/* Info Banner */}
@@ -338,6 +439,29 @@ export default function ComplianceSettingsPage() {
             Contact us for pricing
           </Link>
         </motion.p>
+      </div>
+    </div>
+  );
+}
+
+function DossierStat({
+  label,
+  value,
+  ok,
+}: {
+  label: string;
+  value: string;
+  ok?: boolean;
+}) {
+  return (
+    <div>
+      <div className="text-[11px] uppercase tracking-wide text-[#94A3B8]">
+        {label}
+      </div>
+      <div className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-[#212121]">
+        {ok === true && <CheckCircle2 className="h-3.5 w-3.5 text-[#34c759]" />}
+        {ok === false && <XCircle className="h-3.5 w-3.5 text-[#e74c3c]" />}
+        {value}
       </div>
     </div>
   );
