@@ -93,6 +93,39 @@ stays `pending`, the desk clears it off our audit trail + KYB + license data,
 then calls `/api/integrations/offramp/webhook` to mark it settled. The Cybrid
 adapter is an optional automated lane *if* a provider clears cannabis.
 
+## Banking architecture: FBO + correspondent banks
+
+The resilient structure for a high-risk settlement platform:
+
+- **FBO ("For Benefit Of") master account + per-merchant virtual accounts.** One
+  master account at an embedded-finance / Tier-2-3 crypto-friendly bank, with an
+  isolated virtual account (or ledger sub-account) per merchant. If a bank flags
+  one merchant, only *their* sub-account freezes — the platform and everyone else
+  stay operational. This is the model to ask a banking partner for.
+- **OTC desk as buffer.** The final USD wire comes from the desk's regulated
+  treasury, so the receiving bank sees a normal corporate liquidity transfer
+  (validates our manual/OTC settlement path).
+- **On-chain analytics** (Chainalysis / Elliptic — we use Range today) to block
+  "dirty" stablecoins before they hit the off-ramp.
+
+### More high-risk providers to evaluate
+- **OpenPayd** — regulated EMI + OTC desks + banking rails (legit multi-fiat).
+- **Radom / PayRam** — iGaming-focused (relevant only if we expand verticals).
+- **RocketFuel / PDX Beam** — cannabis retail/POS (more checkout than B2B).
+
+## ⚠️ The compliance line we do NOT cross
+
+Some "workarounds" circulating (e.g. routing USD through EUR/GBP specifically to
+"strip the high-risk crypto signature" so a bank can't tell funds are cannabis)
+describe **deceiving a receiving institution about the source of funds** — that is
+structuring / money laundering, not a workaround, and is criminal.
+
+Our strategy is the opposite: **radical transparency to a bank that has knowingly
+agreed to accept these funds.** Full license + provenance + audit trail, disclosed
+up front. Multi-jurisdiction rails are fine for genuine FX/settlement reasons only
+if the receiving institution knows exactly what the money is. Get a fintech/AML
+lawyer to draw this line before any international routing.
+
 ### Open questions that gate partner selection
 - **Which states** are the licensed dispensaries in? (determines eligible banks)
 - **Estimated monthly off-ramp volume?** (< $50K → processor; $50K–$5M → OTC
