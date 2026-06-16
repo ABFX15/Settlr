@@ -10,6 +10,7 @@ import {
     Connection,
     Keypair,
     PublicKey,
+    SystemProgram,
     Transaction,
     TransactionInstruction,
 } from "@solana/web3.js";
@@ -121,8 +122,34 @@ export async function buildCreateVaultTransaction(
 
     // Build the transaction
     const tx = new Transaction();
+
+    // Squads charges the multisig-account rent (+ any creation fee) to the
+    // CREATOR, not the transaction fee payer. For sponsored (gasless) creation
+    // the creator is a brand-new 0-SOL wallet, so the sponsor tops it up
+    // atomically, right before creation. We fund: the protocol creation fee +
+    // the multisig-account rent + the system rent-exempt minimum — so after the
+    // program takes the rent, the creator is left exactly at the rent-exempt
+    // floor (a valid balance, and a tiny usable SOL cushion for the user).
+    // Verified against devnet simulation with a 0-SOL creator.
+    if (feePayer) {
+        const creationFee = Number(programConfig.multisigCreationFee.toString());
+        // Observed rent for a 1-of-1 Squads v4 multisig account (the SDK's
+        // byteSize under-reports the program's actual allocation).
+        const MULTISIG_RENT_LAMPORTS = 2_039_280;
+        const SYSTEM_RENT_EXEMPT_MIN = 890_880;
+        const topUpLamports =
+            creationFee + MULTISIG_RENT_LAMPORTS + SYSTEM_RENT_EXEMPT_MIN;
+        tx.add(
+            SystemProgram.transfer({
+                fromPubkey: feePayer,
+                toPubkey: creator,
+                lamports: topUpLamports,
+            }),
+        );
+    }
+
     tx.add(ix);
-    // The sponsor (if any) pays rent + fees; otherwise the creator does.
+    // The sponsor (if any) pays the network fee; otherwise the creator does.
     tx.feePayer = feePayer ?? creator;
 
     const { blockhash, lastValidBlockHeight } =
