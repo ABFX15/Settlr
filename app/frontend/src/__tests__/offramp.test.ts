@@ -18,6 +18,7 @@ import {
     createOfframpBatch,
     settleOfframpBatch,
     buildOtcExportCsv,
+    type OfframpRequest,
 } from "../lib/offramp";
 import {
     resolveProviderChain,
@@ -30,7 +31,7 @@ function sign(body: string, secret: string): string {
     return crypto.createHmac("sha256", secret).update(body).digest("hex");
 }
 
-function seed() {
+function seed(): Promise<OfframpRequest> {
     return createOfframpRequest({
         merchantId: "m_1",
         wallet: "Wa11et1111111111111111111111111111111111111",
@@ -45,26 +46,24 @@ function seed() {
 
 describe("Off-ramp settlement", () => {
     it("new requests start pending and never auto-complete", async () => {
-        const req = seed();
+        const req = await seed();
         expect(req.status).to.equal("pending");
-        // Wait well past the old fake 10s timer window (scaled down) to prove
-        // nothing flips it on its own.
         await new Promise((r) => setTimeout(r, 50));
-        expect(getOfframpRequest(req.id)?.status).to.equal("pending");
+        expect((await getOfframpRequest(req.id))?.status).to.equal("pending");
     });
 
-    it("only completes when the partner confirms", () => {
-        const req = seed();
-        updateOfframpStatus(req.id, "completed", { providerRef: "ach_trace_99" });
-        const after = getOfframpRequest(req.id);
+    it("only completes when the partner confirms", async () => {
+        const req = await seed();
+        await updateOfframpStatus(req.id, "completed", { providerRef: "ach_trace_99" });
+        const after = await getOfframpRequest(req.id);
         expect(after?.status).to.equal("completed");
         expect(after?.providerRef).to.equal("ach_trace_99");
     });
 
-    it("records failures with a reason", () => {
-        const req = seed();
-        updateOfframpStatus(req.id, "failed", { failureReason: "account_closed" });
-        expect(getOfframpRequest(req.id)?.failureReason).to.equal("account_closed");
+    it("records failures with a reason", async () => {
+        const req = await seed();
+        await updateOfframpStatus(req.id, "failed", { failureReason: "account_closed" });
+        expect((await getOfframpRequest(req.id))?.failureReason).to.equal("account_closed");
     });
 
     describe("webhook signature", () => {
@@ -103,7 +102,6 @@ describe("Off-ramp settlement", () => {
 
         it("drops an unconfigured provider but keeps manual as fallback", () => {
             process.env.OFFBANK_OFFRAMP_PROVIDER = "cybrid,manual";
-            // No Cybrid creds → cybrid is filtered out.
             expect(resolveProviderChain().map((p) => p.name)).to.deep.equal(["manual"]);
         });
 
@@ -133,27 +131,27 @@ describe("Off-ramp settlement", () => {
     });
 
     describe("OTC batch", () => {
-        function seedWithLicense(amount: number) {
-            const r = seed();
+        async function seedWithLicense(amount: number): Promise<OfframpRequest> {
+            const r = await seed();
             r.licenseNumber = "C11-0000123-LIC";
             r.riskScore = 5;
             r.amount = amount;
             return r;
         }
 
-        it("batches selected pending payouts and moves them to processing", () => {
-            const a = seedWithLicense(3000);
-            const b = seedWithLicense(2000);
-            const batch = createOfframpBatch([a.id, b.id]);
+        it("batches selected pending payouts and moves them to processing", async () => {
+            const a = await seedWithLicense(3000);
+            const b = await seedWithLicense(2000);
+            const batch = await createOfframpBatch([a.id, b.id]);
             expect(batch).to.not.equal(null);
             expect(batch!.totalAmount).to.equal(5000);
             expect(batch!.requestIds).to.have.members([a.id, b.id]);
-            expect(getOfframpRequest(a.id)?.status).to.equal("processing");
+            expect((await getOfframpRequest(a.id))?.status).to.equal("processing");
         });
 
-        it("exports a compliance CSV with license + amount + destination", () => {
-            const a = seedWithLicense(1234);
-            const csv = buildOtcExportCsv([getOfframpRequest(a.id)!]);
+        it("exports a compliance CSV with license + amount + destination", async () => {
+            const a = await seedWithLicense(1234);
+            const csv = buildOtcExportCsv([(await getOfframpRequest(a.id))!]);
             const [header, row] = csv.split("\n");
             expect(header).to.contain("license_number");
             expect(header).to.contain("amount_usdc");
@@ -161,17 +159,17 @@ describe("Off-ramp settlement", () => {
             expect(row).to.contain("1234");
         });
 
-        it("settles every payout in the batch with the wire reference", () => {
-            const a = seedWithLicense(1000);
-            const b = seedWithLicense(1500);
-            const batch = createOfframpBatch([a.id, b.id])!;
-            const res = settleOfframpBatch(batch.id, "WIRE-REF-001");
+        it("settles every payout in the batch with the wire reference", async () => {
+            const a = await seedWithLicense(1000);
+            const b = await seedWithLicense(1500);
+            const batch = (await createOfframpBatch([a.id, b.id]))!;
+            const res = await settleOfframpBatch(batch.id, "WIRE-REF-001");
             expect(res).to.not.equal(null);
             expect(res!.settled.length).to.equal(2);
-            expect(getOfframpRequest(a.id)?.status).to.equal("completed");
-            expect(getOfframpRequest(a.id)?.providerRef).to.equal("WIRE-REF-001");
+            expect((await getOfframpRequest(a.id))?.status).to.equal("completed");
+            expect((await getOfframpRequest(a.id))?.providerRef).to.equal("WIRE-REF-001");
             // Idempotent — a second settle is a no-op.
-            expect(settleOfframpBatch(batch.id, "WIRE-REF-001")).to.equal(null);
+            expect(await settleOfframpBatch(batch.id, "WIRE-REF-001")).to.equal(null);
         });
     });
 });

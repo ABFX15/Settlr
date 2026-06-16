@@ -24,12 +24,12 @@ export async function GET(request: NextRequest) {
     const auth = requireAdmin(request);
     if (!auth.ok) return auth.response;
 
-    const pending = listOfframpsByStatus("pending");
-    const processing = listOfframpsByStatus("processing");
+    const pending = await listOfframpsByStatus("pending");
+    const processing = await listOfframpsByStatus("processing");
     return NextResponse.json({
         pending,
         processing,
-        batches: listOfframpBatches(),
+        batches: await listOfframpBatches(),
         pendingTotal: pending.reduce((s, r) => s + r.amount, 0),
     });
 }
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         /* no body = batch all pending */
     }
 
-    const batch = createOfframpBatch(requestIds);
+    const batch = await createOfframpBatch(requestIds);
     if (!batch) {
         return NextResponse.json(
             { error: "no_pending_requests", message: "No pending payouts to batch." },
@@ -54,9 +54,9 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const reqs = batch.requestIds
-        .map((id) => getOfframpRequest(id))
-        .filter((r): r is NonNullable<typeof r> => !!r);
+    const reqs = (
+        await Promise.all(batch.requestIds.map((id) => getOfframpRequest(id)))
+    ).filter((r): r is NonNullable<typeof r> => !!r);
     const csv = buildOtcExportCsv(reqs);
 
     // Per-payout compliance bundles (license + provenance) the bank auto-clears on.

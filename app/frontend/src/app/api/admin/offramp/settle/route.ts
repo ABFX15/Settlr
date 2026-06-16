@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const result = settleOfframpBatch(batchId, wireRef);
+    const result = await settleOfframpBatch(batchId, wireRef);
     if (!result) {
         return NextResponse.json(
             { error: "not_found_or_already_settled" },

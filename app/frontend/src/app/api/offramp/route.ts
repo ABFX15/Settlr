@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
         }
 
         const merchant = await getOrCreateMerchantByWallet(wallet);
-        const requests = listOfframpRequests(merchant.id);
+        const requests = await listOfframpRequests(merchant.id);
 
         return NextResponse.json({
             requests,
@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
 
         const merchant = await getOrCreateMerchantByWallet(wallet);
 
-        const offrampReq = createOfframpRequest({
+        const offrampReq = await createOfframpRequest({
             merchantId: merchant.id,
             wallet,
             method,
@@ -183,10 +183,10 @@ export async function POST(request: NextRequest) {
             merchantWallet: wallet,
         });
         const updated =
-            updateOfframpStatus(offrampReq.id, initiation.status, {
+            (await updateOfframpStatus(offrampReq.id, initiation.status, {
                 provider: initiation.provider,
                 providerRef: initiation.providerRef,
-            }) || offrampReq;
+            })) || offrampReq;
 
         return NextResponse.json({
             request: updated,

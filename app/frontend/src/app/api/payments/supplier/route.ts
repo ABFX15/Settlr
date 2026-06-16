@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         }
 
         const merchant = await getOrCreateMerchantByWallet(wallet);
-        const payee = getPayee(payeeId);
+        const payee = await getPayee(payeeId);
         if (!payee || payee.merchantId !== merchant.id) {
             return NextResponse.json({ error: "Payee not found" }, { status: 404 });
         }

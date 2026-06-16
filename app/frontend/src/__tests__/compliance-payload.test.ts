@@ -49,7 +49,7 @@ describe("Compliance payload", () => {
             status: "completed",
         });
 
-        const req = createOfframpRequest({
+        const req = await createOfframpRequest({
             merchantId: merchant.id,
             wallet: WALLET,
             method: "ach",
@@ -74,7 +74,7 @@ describe("Compliance payload", () => {
     });
 
     it("still produces a bundle when there is no funding history", async () => {
-        const req = createOfframpRequest({
+        const req = await createOfframpRequest({
             merchantId: "m_empty",
             wallet: "Wa11etEmpty111111111111111111111111111111111",
             method: "wire",

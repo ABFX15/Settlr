@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
         const merchant = await getOrCreateMerchantByWallet(wallet);
         const balance = await getOrCreateMerchantBalance(merchant.id);
-        const offramps = listOfframpRequests(merchant.id);
+        const offramps = await listOfframpRequests(merchant.id);
 
         // Payouts the user has requested that haven't settled to their bank yet.
         const inFlight = offramps.filter(

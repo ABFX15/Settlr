@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const existing = getOfframpRequest(requestId);
+        const existing = await getOfframpRequest(requestId);
         if (!existing) {
             logger.warn(`[offramp] Settlement for unknown request ${requestId}`);
             return NextResponse.json({ received: true, matched: false });
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ received: true, duplicate: true });
         }
 
-        const updated = updateOfframpStatus(requestId, status, {
+        const updated = await updateOfframpStatus(requestId, status, {
             providerRef,
             failureReason,
         });

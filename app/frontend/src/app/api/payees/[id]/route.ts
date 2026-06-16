@@ -18,7 +18,7 @@ export async function DELETE(
             return NextResponse.json({ error: "Missing wallet" }, { status: 400 });
         }
         const merchant = await getOrCreateMerchantByWallet(wallet);
-        const ok = deletePayee(merchant.id, id);
+        const ok = await deletePayee(merchant.id, id);
         if (!ok) {
             return NextResponse.json({ error: "Payee not found" }, { status: 404 });
         }

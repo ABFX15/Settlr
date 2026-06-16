@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "Missing wallet" }, { status: 400 });
         }
         const merchant = await getOrCreateMerchantByWallet(wallet);
-        return NextResponse.json({ payees: listPayees(merchant.id) });
+        return NextResponse.json({ payees: await listPayees(merchant.id) });
     } catch (err) {
         logger.error("[payees] GET error:", err);
         return NextResponse.json({ error: "Failed to load payees" }, { status: 500 });
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
         }
 
         const merchant = await getOrCreateMerchantByWallet(wallet);
-        const payee = createPayee({
+        const payee = await createPayee({
             merchantId: merchant.id,
             name: name.trim(),
             walletAddress,
