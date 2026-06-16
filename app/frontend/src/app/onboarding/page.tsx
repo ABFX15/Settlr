@@ -79,10 +79,15 @@ export default function OnboardingPageWrapper() {
 }
 
 function OnboardingPageInner() {
-  const { connected: walletConnected, signTransaction: walletSignTransaction } =
-    useWallet();
+  const { connected: walletConnected } = useWallet();
   const { setVisible } = useWalletModal();
-  const { publicKey, connected, wallet } = useActiveWallet();
+  // Unified signer — works for both extension wallets AND Privy email wallets.
+  const {
+    publicKey,
+    connected,
+    wallet,
+    signTransaction: walletSignTransaction,
+  } = useActiveWallet();
   const searchParams = useSearchParams();
   const router = useRouter();
 
