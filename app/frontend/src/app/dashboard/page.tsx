@@ -395,7 +395,7 @@ export default function DashboardPage() {
             Create invoice
           </Link>
           <Link
-            href={`/offramp${publicKey ? `?wallet=${publicKey}` : ""}`}
+            href="/dashboard/offramp"
             className="inline-flex items-center gap-2 rounded-lg border border-[#d3d3d3] bg-white px-4 py-2.5 text-sm font-semibold text-[#212121] hover:bg-[#f2f2f2] transition-colors"
           >
             <ArrowDownToLine className="h-4 w-4" />
