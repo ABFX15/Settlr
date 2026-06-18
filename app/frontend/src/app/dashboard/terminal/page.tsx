@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { Connection, PublicKey, Keypair } from "@solana/web3.js";
 import { QRCodeSVG } from "qrcode.react";
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
@@ -8,7 +9,7 @@ import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useWalletModal } from "@/components/WalletModal";
 import {
   Loader2,
-  CheckCircle2,
+  Check,
   Wallet,
   QrCode,
   RotateCcw,
@@ -18,6 +19,10 @@ import {
 type Status = "idle" | "awaiting" | "paid";
 
 const PRESETS = [25, 50, 100, 250];
+
+// Soft elevation — the single biggest "slick" upgrade over flat 1px borders.
+const CARD =
+  "rounded-3xl bg-white ring-1 ring-black/[0.04] shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.18)]";
 
 const fmtUSD = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD" });
@@ -60,7 +65,7 @@ export default function TerminalPage() {
     setStatus("idle");
   };
 
-  // Watch the chain for the payment to this sale's reference.
+  // Watch the chain for the payment carrying this sale's reference.
   useEffect(() => {
     if (status !== "awaiting" || !referenceRef.current) return;
     const reference = referenceRef.current;
@@ -75,8 +80,10 @@ export default function TerminalPage() {
         if (cancelled || sigs.length === 0) return;
         const sig = sigs[0];
         if (sig.err) return;
-        // Confirmed payment carrying our reference → done.
-        if (sig.confirmationStatus === "confirmed" || sig.confirmationStatus === "finalized") {
+        if (
+          sig.confirmationStatus === "confirmed" ||
+          sig.confirmationStatus === "finalized"
+        ) {
           cancelled = true;
           clearInterval(id);
           setStatus("paid");
@@ -94,15 +101,19 @@ export default function TerminalPage() {
 
   if (!connected || !publicKey) {
     return (
-      <div className="mx-auto max-w-md py-20 text-center">
-        <QrCode className="mx-auto h-10 w-10 text-[#94A3B8]" />
-        <h1 className="mt-4 text-xl font-bold text-[#212121]">Terminal</h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+      <div className="mx-auto max-w-md py-24 text-center">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#34c759]/10">
+          <QrCode className="h-7 w-7 text-[#34c759]" />
+        </div>
+        <h1 className="mt-5 text-2xl font-bold tracking-tight text-[#101828]">
+          Terminal
+        </h1>
+        <p className="mt-1.5 text-[15px] text-[#667085]">
           Connect your wallet to take payments.
         </p>
         <button
           onClick={() => openWalletModal(true)}
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#34c759] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#2ba048]"
+          className="mt-7 inline-flex items-center gap-2 rounded-xl bg-[#34c759] px-5 py-3 text-sm font-semibold text-white transition-[transform,background-color] duration-100 ease-out hover:bg-[#2ba048] active:scale-[0.98]"
         >
           <Wallet className="h-4 w-4" />
           Connect wallet
@@ -113,25 +124,38 @@ export default function TerminalPage() {
 
   return (
     <div className="mx-auto max-w-md">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#212121]">Terminal</h1>
-        <p className="mt-0.5 text-sm text-[#94A3B8]">
-          Take a payment — customer scans, pays in seconds, settles instantly.
+      <div className="mb-7">
+        <h1 className="text-[26px] font-bold leading-tight tracking-tight text-[#101828]">
+          Terminal
+        </h1>
+        <p className="mt-1 text-[15px] text-[#667085]">
+          Customer scans, pays in seconds, settles instantly.
         </p>
       </div>
 
       {/* ── PAID ─────────────────────────────────────── */}
       {status === "paid" ? (
-        <div className="rounded-2xl border border-[#34c759]/30 bg-[#34c759]/5 p-10 text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#34c759]">
-            <CheckCircle2 className="h-9 w-9 text-white" />
-          </div>
-          <p className="mt-4 text-sm font-medium text-[#2ba048]">Payment received</p>
-          <p className="mt-1 text-4xl font-bold text-[#212121]">{fmtUSD(paidAmount)}</p>
-          <p className="mt-1 text-sm text-[#64748B]">Settled instantly · no chargebacks</p>
+        <div className={`${CARD} p-12 text-center`}>
+          <motion.div
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 320, damping: 18 }}
+            className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#34c759] shadow-[0_8px_24px_-6px_rgba(52,199,89,0.5)]"
+          >
+            <Check className="h-10 w-10 text-white" strokeWidth={2.5} />
+          </motion.div>
+          <p className="mt-5 text-sm font-medium text-[#2ba048]">
+            Payment received
+          </p>
+          <p className="mt-1 text-5xl font-bold tracking-tight tabular-nums text-[#101828]">
+            {fmtUSD(paidAmount)}
+          </p>
+          <p className="mt-2 text-sm text-[#667085]">
+            Settled instantly · no chargebacks
+          </p>
           <button
             onClick={reset}
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#212121] px-5 py-2.5 text-sm font-semibold text-white"
+            className="mt-9 inline-flex items-center gap-2 rounded-xl bg-[#101828] px-6 py-3 text-sm font-semibold text-white transition-[transform,background-color] duration-100 ease-out hover:bg-[#1d2939] active:scale-[0.98]"
           >
             <RotateCcw className="h-4 w-4" />
             New sale
@@ -139,33 +163,39 @@ export default function TerminalPage() {
         </div>
       ) : status === "awaiting" ? (
         /* ── AWAITING ──────────────────────────────── */
-        <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center">
-          <p className="text-sm text-[#64748B]">Amount due</p>
-          <p className="text-4xl font-bold text-[#212121]">{fmtUSD(paidAmount)}</p>
-          <div className="mx-auto mt-6 w-fit rounded-xl border border-[#E2E8F0] bg-white p-4">
-            <QRCodeSVG value={solanaUrl} size={220} level="M" />
+        <div className={`${CARD} p-9 text-center`}>
+          <p className="text-[13px] font-medium uppercase tracking-wide text-[#98A2B3]">
+            Amount due
+          </p>
+          <p className="mt-1 text-5xl font-bold tracking-tight tabular-nums text-[#101828]">
+            {fmtUSD(paidAmount)}
+          </p>
+          <div className="mx-auto mt-7 w-fit rounded-2xl bg-white p-5 ring-1 ring-black/[0.05] shadow-[0_2px_8px_rgba(16,24,40,0.06)]">
+            <QRCodeSVG value={solanaUrl} size={216} level="M" />
           </div>
-          <div className="mt-5 flex items-center justify-center gap-2 text-sm text-[#64748B]">
+          <div className="mt-6 flex items-center justify-center gap-2 text-sm font-medium text-[#475467]">
             <Smartphone className="h-4 w-4" />
-            Scan with any Solana wallet to pay
+            Scan with any Solana wallet
           </div>
-          <div className="mt-3 flex items-center justify-center gap-2 text-sm text-[#94A3B8]">
-            <Loader2 className="h-4 w-4 animate-spin" />
+          <div className="mt-2.5 flex items-center justify-center gap-2 text-sm text-[#98A2B3]">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
             Waiting for payment…
           </div>
           <button
             onClick={reset}
-            className="mt-6 text-sm text-[#94A3B8] hover:text-[#212121]"
+            className="mt-7 text-sm font-medium text-[#98A2B3] transition-colors duration-100 hover:text-[#475467]"
           >
             Cancel
           </button>
         </div>
       ) : (
         /* ── IDLE (enter amount) ───────────────────── */
-        <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8">
-          <label className="text-sm font-medium text-[#64748B]">Amount</label>
-          <div className="mt-2 flex items-center rounded-xl border border-[#E2E8F0] px-4 py-3">
-            <span className="text-2xl font-semibold text-[#94A3B8]">$</span>
+        <div className={`${CARD} p-8`}>
+          <label className="text-[13px] font-medium uppercase tracking-wide text-[#98A2B3]">
+            Amount
+          </label>
+          <div className="mt-2.5 flex items-baseline rounded-2xl bg-[#F9FAFB] px-5 py-4 ring-1 ring-black/[0.05] focus-within:ring-2 focus-within:ring-[#34c759]/40 transition-shadow duration-100">
+            <span className="text-3xl font-semibold text-[#98A2B3]">$</span>
             <input
               type="number"
               inputMode="decimal"
@@ -174,15 +204,19 @@ export default function TerminalPage() {
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
               autoFocus
-              className="w-full bg-transparent pl-2 text-3xl font-bold text-[#212121] outline-none"
+              className="w-full bg-transparent pl-2 text-4xl font-bold tracking-tight tabular-nums text-[#101828] outline-none placeholder:text-[#D0D5DD]"
             />
           </div>
-          <div className="mt-4 grid grid-cols-4 gap-2">
+          <div className="mt-4 grid grid-cols-4 gap-2.5">
             {PRESETS.map((p) => (
               <button
                 key={p}
                 onClick={() => setAmount(String(p))}
-                className="rounded-lg border border-[#E2E8F0] py-2 text-sm font-semibold text-[#212121] hover:bg-[#F8FAFC]"
+                className={`rounded-xl py-2.5 text-sm font-semibold tabular-nums transition-[transform,background-color,box-shadow] duration-100 ease-out active:scale-[0.97] ${
+                  amount === String(p)
+                    ? "bg-[#34c759]/10 text-[#2ba048] ring-1 ring-[#34c759]/30"
+                    : "bg-[#F9FAFB] text-[#344054] ring-1 ring-black/[0.04] hover:bg-[#F2F4F7]"
+                }`}
               >
                 ${p}
               </button>
@@ -191,10 +225,10 @@ export default function TerminalPage() {
           <button
             onClick={startSale}
             disabled={!amount || parseFloat(amount) <= 0}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#34c759] py-3.5 text-sm font-semibold text-white hover:bg-[#2ba048] disabled:opacity-50"
+            className="mt-7 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#34c759] py-4 text-[15px] font-semibold text-white shadow-[0_6px_16px_-6px_rgba(52,199,89,0.55)] transition-[transform,background-color,opacity] duration-100 ease-out hover:bg-[#2ba048] active:scale-[0.99] disabled:opacity-40 disabled:shadow-none"
           >
             <QrCode className="h-4 w-4" />
-            Charge {amount ? fmtUSD(parseFloat(amount)) : ""}
+            Charge{amount && parseFloat(amount) > 0 ? ` ${fmtUSD(parseFloat(amount))}` : ""}
           </button>
         </div>
       )}
