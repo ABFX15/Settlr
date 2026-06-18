@@ -11,7 +11,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { t, spring } from "./shared";
-import { PaymentPhone } from "./PaymentPhone";
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -156,8 +155,19 @@ export function Hero() {
               transition={{ ...spring, delay: 0.35 }}
               className="relative"
             >
-              {/* live CSS phone — payments landing / settling */}
-              <PaymentPhone />
+              {/* main hero mockup — swap src for your product image */}
+              <div className="relative overflow-hidden rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
+                <Image
+                  src="/dashboard-mock.png"
+                  alt="Offbank settlement dashboard showing volumes, transactions, and real-time settlement data"
+                  width={960}
+                  height={640}
+                  priority
+                  fetchPriority="high"
+                  sizes="(max-width: 768px) 100vw, 55vw"
+                  className="block w-full"
+                />
+              </div>
 
               {/* ── floating card 1: settlement complete ──── */}
               <motion.div
