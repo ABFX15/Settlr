@@ -26,6 +26,7 @@ import {
   EyeOff,
   Users,
   Send,
+  QrCode,
 } from "lucide-react";
 
 const navItems = [
@@ -36,6 +37,7 @@ const navItems = [
     exact: true,
   },
   { href: "/dashboard/orders", icon: Package, label: "Orders" },
+  { href: "/dashboard/terminal", icon: QrCode, label: "Terminal" },
   { href: "/dashboard/invoices", icon: FileText, label: "Invoices" },
   { href: "/dashboard/suppliers", icon: Send, label: "Pay Suppliers" },
   {
