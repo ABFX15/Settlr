@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { explorerUrl } from "@/lib/constants";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
@@ -94,8 +93,8 @@ function timeAgo(epoch: number): string {
 const DAY_LABELS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 export default function DashboardPage() {
-  const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
+  // Unified connection — true for both extension wallets AND Privy email logins.
   const { publicKey, connected } = useActiveWallet();
   const onboarding = useOnboardingStatus();
   const { status: sessionStatus } = useWalletSession();
@@ -215,7 +214,7 @@ export default function DashboardPage() {
   const balance = treasury?.balance;
   const lifetime = treasury?.lifetime;
 
-  if (!authenticated) {
+  if (!connected) {
     return (
       <div className="flex items-center justify-center py-32">
         <motion.div

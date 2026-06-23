@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
   Settings,
   Building2,
@@ -120,8 +120,9 @@ const CURRENCIES = [
 ];
 
 export default function SettingsPage() {
-  const { publicKey } = useWallet();
-  const wallet = publicKey?.toBase58() || "";
+  // useActiveWallet returns a base58 string and works for Privy email logins.
+  const { publicKey } = useActiveWallet();
+  const wallet = publicKey || "";
 
   const [settings, setSettings] = useState<MerchantSettings>(DEFAULT_SETTINGS);
   const [saving, setSaving] = useState(false);
