@@ -8,7 +8,11 @@
 import { logger } from "@/lib/logger";
 import { explorerUrl as buildExplorerUrl } from "./constants";
 
-const FROM_EMAIL = process.env.PAYOUT_FROM_EMAIL || "adam@offbankpay.com";
+// The platform's VERIFIED sending domain. Emails go out from here regardless
+// of who the merchant is — you can't legitimately send "as" a user's own inbox
+// (SPF/DKIM would reject it). Instead each email carries the merchant's
+// business name as the display name and the merchant's address as Reply-To.
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "invoices@settlr.dev";
 const APP_NAME = "Offbank";
 
 function getResendKey(): string | undefined {
@@ -20,6 +24,10 @@ interface SendEmailOptions {
     subject: string;
     html: string;
     text?: string;
+    /** Display name on the From line — e.g. the merchant's business name. */
+    fromName?: string;
+    /** Where replies go — e.g. the merchant's own email. */
+    replyTo?: string;
 }
 
 async function sendViaResend(options: SendEmailOptions): Promise<boolean> {
@@ -36,11 +44,14 @@ async function sendViaResend(options: SendEmailOptions): Promise<boolean> {
                 Authorization: `Bearer ${apiKey}`,
             },
             body: JSON.stringify({
-                from: `${APP_NAME} <${FROM_EMAIL}>`,
+                // Display name = merchant business name when provided, so the
+                // buyer sees the invoice as "from" that business, not us.
+                from: `${options.fromName || APP_NAME} <${FROM_EMAIL}>`,
                 to: [options.to],
                 subject: options.subject,
                 html: options.html,
                 text: options.text,
+                ...(options.replyTo ? { reply_to: options.replyTo } : {}),
             }),
         });
 
@@ -237,8 +248,10 @@ export async function sendInvoiceEmail(params: {
     dueDate: Date;
     invoiceUrl: string;
     memo?: string;
+    /** Merchant's email — replies to the invoice go here, not to us. */
+    replyTo?: string;
 }): Promise<boolean> {
-    const { to, invoiceNumber, amount, currency, buyerName, merchantName, dueDate, invoiceUrl, memo } = params;
+    const { to, invoiceNumber, amount, currency, buyerName, merchantName, dueDate, invoiceUrl, memo, replyTo } = params;
     const formattedAmount = `$${amount.toFixed(2)} ${currency}`;
     const dueFormatted = dueDate.toLocaleDateString("en-US", {
         month: "long",
@@ -280,7 +293,8 @@ export async function sendInvoiceEmail(params: {
 
     const text = `Invoice ${invoiceNumber} from ${merchantName} for ${formattedAmount}. Due ${dueFormatted}. View and pay: ${invoiceUrl}`;
 
-    return sendEmail({ to, subject, html, text });
+    // From the merchant's business name; replies go to the merchant.
+    return sendEmail({ to, subject, html, text, fromName: merchantName, replyTo });
 }
 
 /* ═══════════════════════════════════════════════════════════════════════ */

@@ -203,7 +203,7 @@ async function sendPaymentLinkEmail(
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                from: process.env.RESEND_FROM_EMAIL || "payments@offbankpay.com",
+                from: process.env.RESEND_FROM_EMAIL || "invoices@settlr.dev",
                 to: buyerEmail,
                 subject: `Payment Request: ${orderNumber} — $${amount.toFixed(2)} USDC`,
                 html: `
