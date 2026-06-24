@@ -909,13 +909,15 @@ export default function InvoicePayClient({
                                     <div className="flex-1 h-px bg-[#d3d3d3]" />
                                   </div>
 
-                                  {/* Pay in USD (card or bank) via Transak.
-                                      USDC settles straight to the merchant —
-                                      the buyer never needs a wallet.
-                                      Mainnet only: card on-ramps deliver REAL
-                                      USDC, which can't exist on devnet, so the
-                                      option is hidden while testing on devnet. */}
-                                  {process.env.NEXT_PUBLIC_TRANSAK_API_KEY &&
+                                  {/* Pay in USD (card or bank) via an on-ramp.
+                                      DISABLED by default: Transak (and every
+                                      mainstream on-ramp) prohibits cannabis, and
+                                      Visa/MC don't allow card-for-cannabis at
+                                      all. Re-enable per-vertical only once a
+                                      cannabis-compliant provider is wired in.
+                                      Mainnet-only regardless (real USDC). */}
+                                  {process.env.NEXT_PUBLIC_ENABLE_CARD_PAYMENTS === "true" &&
+                                    process.env.NEXT_PUBLIC_TRANSAK_API_KEY &&
                                     !IS_DEVNET &&
                                     invoice && (
                                       <button
