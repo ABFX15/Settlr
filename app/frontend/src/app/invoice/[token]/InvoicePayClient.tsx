@@ -911,8 +911,12 @@ export default function InvoicePayClient({
 
                                   {/* Pay in USD (card or bank) via Transak.
                                       USDC settles straight to the merchant —
-                                      the buyer never needs a wallet. */}
+                                      the buyer never needs a wallet.
+                                      Mainnet only: card on-ramps deliver REAL
+                                      USDC, which can't exist on devnet, so the
+                                      option is hidden while testing on devnet. */}
                                   {process.env.NEXT_PUBLIC_TRANSAK_API_KEY &&
+                                    !IS_DEVNET &&
                                     invoice && (
                                       <button
                                         onClick={() => {
