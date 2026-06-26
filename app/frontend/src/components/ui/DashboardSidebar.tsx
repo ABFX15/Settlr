@@ -19,16 +19,17 @@ import {
   BarChart3,
   ArrowRightLeft,
   Bell,
-  Package,
   ClipboardList,
-  BellRing,
   ShieldCheck,
-  EyeOff,
-  Users,
   Send,
   QrCode,
+  Receipt,
+  Settings,
 } from "lucide-react";
 
+// Focused nav — the money loop + the tools that support it. Niche/overlapping
+// pages (orders, settlements, receivables, collections, team, privacy, cloak,
+// subscriptions, webhooks) still exist and are reachable, just not surfaced here.
 const navItems = [
   {
     href: "/dashboard",
@@ -36,21 +37,15 @@ const navItems = [
     label: "Dashboard",
     exact: true,
   },
-  { href: "/dashboard/orders", icon: Package, label: "Orders" },
-  { href: "/dashboard/terminal", icon: QrCode, label: "Terminal" },
   { href: "/dashboard/invoices", icon: FileText, label: "Invoices" },
+  { href: "/dashboard/terminal", icon: QrCode, label: "Terminal" },
   { href: "/dashboard/suppliers", icon: Send, label: "Pay Suppliers" },
-  {
-    href: "/dashboard/settlements",
-    icon: ArrowRightLeft,
-    label: "Settlements",
-  },
-  { href: "/dashboard/receivables", icon: BarChart3, label: "Receivables" },
-  { href: "/dashboard/collections", icon: BellRing, label: "Collections" },
+  { href: "/dashboard/treasury", icon: Wallet, label: "Treasury" },
+  { href: "/dashboard/transactions", icon: Receipt, label: "Transactions" },
+  { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics" },
   { href: "/dashboard/reports", icon: ClipboardList, label: "Reports" },
-  { href: "/dashboard/team", icon: Users, label: "Team" },
-  { href: "/dashboard/privacy", icon: ShieldCheck, label: "Privacy" },
-  { href: "/dashboard/cloak", icon: EyeOff, label: "Cloak" },
+  { href: "/dashboard/compliance", icon: ShieldCheck, label: "Compliance" },
+  { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
 
 export function DashboardSidebar() {
