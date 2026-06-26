@@ -338,7 +338,6 @@ const fadeInProps = {
 // ---------------------------------------------------------------------------
 
 export default function OfframpPage() {
-  const { connected: authenticated } = useWallet();
   const { publicKey, connected } = useActiveWallet();
 
   // State
@@ -456,7 +455,7 @@ export default function OfframpPage() {
   };
 
   // Not authenticated
-  if (!authenticated) {
+  if (!connected) {
     return (
       <div>
         <div className="mx-auto max-w-2xl">

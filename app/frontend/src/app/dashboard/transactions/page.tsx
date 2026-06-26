@@ -32,7 +32,6 @@ interface PaymentRecord {
 }
 
 export default function TransactionsPage() {
-  const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
@@ -69,7 +68,7 @@ export default function TransactionsPage() {
     return p.status === filter;
   });
 
-  if (!authenticated) {
+  if (!connected) {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center text-center">
         <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm">

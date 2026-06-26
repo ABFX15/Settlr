@@ -76,7 +76,6 @@ const WEBHOOK_EVENTS = [
 ];
 
 export default function WebhooksPage() {
-  const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
 

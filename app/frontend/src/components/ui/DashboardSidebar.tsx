@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OffbankLogoWithIcon } from "@/components/offbank-logo";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { usePrivy } from "@privy-io/react-auth";
 import { useWalletModal } from "@/components/WalletModal";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import {
@@ -51,6 +52,24 @@ const navItems = [
 export function DashboardSidebar() {
   const pathname = usePathname();
   const { disconnect } = useWallet();
+  const { logout: privyLogout, authenticated: privyAuthenticated } = usePrivy();
+
+  // Sign out of BOTH wallet types: extension wallets via the adapter's
+  // disconnect, and Privy email/embedded wallets via Privy logout. Calling
+  // only one leaves email users stuck "signed in".
+  const handleSignOut = async () => {
+    try {
+      await disconnect();
+    } catch {
+      /* not connected via adapter — fine */
+    }
+    try {
+      if (privyAuthenticated) await privyLogout();
+    } catch {
+      /* not logged in via Privy — fine */
+    }
+    window.location.href = "/";
+  };
   const { setVisible } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -133,7 +152,7 @@ export function DashboardSidebar() {
 
         {connected && publicKey ? (
           <button
-            onClick={() => disconnect()}
+            onClick={handleSignOut}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-[#5c5c5c] transition-colors hover:bg-[#f2f2f2] hover:text-[#e74c3c]"
           >
             <LogOut className="h-4 w-4" />

@@ -96,7 +96,6 @@ const statusConfig: Record<
 };
 
 export default function OrdersPage() {
-  const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
 
@@ -148,7 +147,7 @@ export default function OrdersPage() {
     );
   });
 
-  if (!authenticated) {
+  if (!connected) {
     return (
       <div className="flex items-center justify-center py-32">
         <motion.div

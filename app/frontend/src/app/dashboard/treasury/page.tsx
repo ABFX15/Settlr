@@ -103,7 +103,6 @@ const TX_TYPE_LABELS: Record<
 };
 
 export default function TreasuryPage() {
-  const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
 
@@ -217,7 +216,7 @@ export default function TreasuryPage() {
   };
 
   // Not authenticated — show login prompt
-  if (!authenticated) {
+  if (!connected) {
     return (
       <div>
         <div className="mx-auto max-w-2xl">

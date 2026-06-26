@@ -49,7 +49,6 @@ const INTERVAL_LABELS: Record<string, string> = {
 };
 
 export default function SubscriptionsPage() {
-  const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
 

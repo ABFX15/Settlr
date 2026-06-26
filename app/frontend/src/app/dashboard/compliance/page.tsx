@@ -57,7 +57,6 @@ const KYC_LEVELS = [
 ];
 
 export default function ComplianceSettingsPage() {
-  const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
   const ready = true;
   const { publicKey, connected } = useActiveWallet();
@@ -159,7 +158,7 @@ export default function ComplianceSettingsPage() {
   };
 
   // Not authenticated
-  if (ready && !authenticated) {
+  if (ready && !connected) {
     return (
       <div className="flex items-center justify-center p-4">
         <motion.div

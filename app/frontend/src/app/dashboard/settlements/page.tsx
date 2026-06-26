@@ -84,7 +84,6 @@ function explorerUrl(sig: string): string {
 }
 
 export default function SettlementsPage() {
-  const { connected: authenticated } = useWallet();
   const { setVisible: openWalletModal } = useWalletModal();
   const { publicKey, connected } = useActiveWallet();
 
@@ -149,7 +148,7 @@ export default function SettlementsPage() {
     .reduce((sum, p) => sum + p.amount, 0);
 
   // Not connected
-  if (!authenticated) {
+  if (!connected) {
     return (
       <div className="flex items-center justify-center py-32">
         <motion.div
