@@ -84,7 +84,8 @@ export default function ComplianceSettingsPage() {
     }
   };
 
-  const downloadDossier = () => {
+  // Raw machine-readable export (for a compliance officer's own systems).
+  const downloadJson = () => {
     if (!dossier) return;
     const blob = new Blob([JSON.stringify(dossier, null, 2)], {
       type: "application/json",
@@ -92,9 +93,104 @@ export default function ComplianceSettingsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `offbank-compliance-${dossier.business.wallet.slice(0, 8)}.json`;
+    a.download = `settlr-compliance-${dossier.business.wallet.slice(0, 8)}.json`;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  // Open a clean, branded, print-ready report and trigger the browser's
+  // print dialog (→ "Save as PDF"). This is the presentable artifact you
+  // hand a bank / credit-union compliance officer — not raw JSON.
+  const downloadDossier = () => {
+    if (!dossier) return;
+    const d = dossier;
+    const usd = (n: number) =>
+      n.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    const risk = d.aml.flagged ? "Flagged" : d.aml.riskLevel || "Unknown";
+    const riskColor = d.aml.flagged
+      ? "#dc2626"
+      : /low/i.test(d.aml.riskLevel)
+        ? "#16a34a"
+        : "#d97706";
+    const generated = new Date(d.generatedAt || Date.now()).toLocaleString(
+      "en-US",
+      { dateStyle: "long", timeStyle: "short" },
+    );
+    const badge = (ok: boolean, label: string) =>
+      `<span style="display:inline-block;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:600;color:${
+        ok ? "#166534" : "#9a3412"
+      };background:${ok ? "#dcfce7" : "#ffedd5"}">${label}</span>`;
+    const row = (label: string, value: string) =>
+      `<tr><td style="padding:10px 0;color:#64748b;font-size:14px">${label}</td><td style="padding:10px 0;text-align:right;font-weight:600;color:#0f172a;font-size:14px">${value}</td></tr>`;
+
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Settlr Compliance Dossier</title>
+<style>
+  @page { margin: 40px; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color:#0f172a; margin:0; padding:48px; max-width:760px; }
+  .brand { display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #34c759; padding-bottom:16px; margin-bottom:8px; }
+  .brand h1 { font-size:22px; margin:0; letter-spacing:-0.02em; }
+  .brand .sub { color:#34c759; font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:0.08em; }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:#94a3b8; margin:32px 0 8px; }
+  table { width:100%; border-collapse:collapse; }
+  tr + tr td { border-top:1px solid #f1f5f9; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size:12px; word-break:break-all; }
+  .statement { margin-top:32px; padding:16px; background:#f8fafc; border-left:3px solid #34c759; font-size:13px; color:#475569; line-height:1.6; }
+  .footer { margin-top:40px; padding-top:16px; border-top:1px solid #e2e8f0; font-size:11px; color:#94a3b8; display:flex; justify-content:space-between; }
+</style></head>
+<body>
+  <div class="brand">
+    <div><h1>Settlr</h1></div>
+    <div class="sub">Compliance Dossier</div>
+  </div>
+  <p style="color:#64748b;font-size:13px;margin:4px 0 0">Generated ${generated}</p>
+
+  <h2>Business</h2>
+  <table>
+    ${row("Legal name", d.business.name || "—")}
+    ${row("License number", d.business.licenseNumber || "—")}
+    <tr><td style="padding:10px 0;color:#64748b;font-size:14px">Settlement wallet</td><td style="padding:10px 0;text-align:right" class="mono">${d.business.wallet}</td></tr>
+  </table>
+
+  <h2>Verification &amp; Screening</h2>
+  <table>
+    <tr><td style="padding:10px 0;color:#64748b;font-size:14px">Identity / KYB (Sumsub)</td><td style="padding:10px 0;text-align:right">${badge(d.kyb.verified, d.kyb.verified ? "Verified" : "Pending")}</td></tr>
+    <tr><td style="padding:10px 0;border-top:1px solid #f1f5f9;color:#64748b;font-size:14px">AML wallet screening (Range)</td><td style="padding:10px 0;border-top:1px solid #f1f5f9;text-align:right"><span style="display:inline-block;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:600;color:#fff;background:${riskColor}">${risk}</span></td></tr>
+    ${row("Risk score", String(d.aml.riskScore))}
+  </table>
+
+  <h2>Transaction Activity</h2>
+  <table>
+    ${row("Completed payments", String(d.activity.completedPayments))}
+    ${row("Total volume", usd(d.activity.totalVolumeUSDC) + " USDC")}
+  </table>
+
+  <h2>Off-ramp Settlement</h2>
+  <table>
+    ${row("Settled to USD", `${d.offramp.settledCount} payouts · ${usd(d.offramp.settledTotalUSD)}`)}
+    ${row("Pending", String(d.offramp.pendingCount))}
+  </table>
+
+  <div class="statement">
+    This report aggregates identity verification (KYB via Sumsub), wallet-level
+    AML and sanctions screening (via Range), and on-chain transaction activity
+    recorded by Settlr for the business named above. It is generated directly
+    from platform records to support the merchant's banking and compliance review.
+  </div>
+
+  <div class="footer"><span>Settlr · settlr.dev</span><span>Generated ${generated}</span></div>
+  <script>window.onload = function(){ setTimeout(function(){ window.print(); }, 250); };</script>
+</body></html>`;
+
+    const w = window.open("", "_blank");
+    if (!w) {
+      // Pop-up blocked — fall back to the JSON export so the click still does something.
+      downloadJson();
+      return;
+    }
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
   };
 
   // Load merchant settings
@@ -259,34 +355,46 @@ export default function ComplianceSettingsPage() {
               ) : (
                 <FileCheck className="h-4 w-4" />
               )}
-              {dossier ? "Download" : "Generate"}
+              {dossier ? "Download PDF" : "Generate"}
             </button>
           </div>
 
           {dossier && (
-            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#F1F5F9] pt-4 sm:grid-cols-4">
-              <DossierStat
-                label="KYB"
-                value={dossier.kyb.verified ? "Verified" : "Pending"}
-                ok={dossier.kyb.verified}
-              />
-              <DossierStat
-                label="AML risk"
-                value={dossier.aml.flagged ? "Flagged" : dossier.aml.riskLevel}
-                ok={!dossier.aml.flagged}
-              />
-              <DossierStat
-                label="Volume"
-                value={dossier.activity.totalVolumeUSDC.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })}
-              />
-              <DossierStat
-                label="Payments"
-                value={String(dossier.activity.completedPayments)}
-              />
-            </div>
+            <>
+              <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#F1F5F9] pt-4 sm:grid-cols-4">
+                <DossierStat
+                  label="KYB"
+                  value={dossier.kyb.verified ? "Verified" : "Pending"}
+                  ok={dossier.kyb.verified}
+                />
+                <DossierStat
+                  label="AML risk"
+                  value={dossier.aml.flagged ? "Flagged" : dossier.aml.riskLevel}
+                  ok={!dossier.aml.flagged}
+                />
+                <DossierStat
+                  label="Volume"
+                  value={dossier.activity.totalVolumeUSDC.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                />
+                <DossierStat
+                  label="Payments"
+                  value={String(dossier.activity.completedPayments)}
+                />
+              </div>
+              <p className="mt-3 text-xs text-[#8a8a8a]">
+                &ldquo;Download PDF&rdquo; opens a print-ready report — choose
+                &ldquo;Save as PDF&rdquo;.{" "}
+                <button
+                  onClick={downloadJson}
+                  className="underline hover:text-[#212121]"
+                >
+                  Export raw data (JSON)
+                </button>
+              </p>
+            </>
           )}
         </motion.div>
 
