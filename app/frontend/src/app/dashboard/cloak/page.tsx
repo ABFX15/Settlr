@@ -66,8 +66,11 @@ type SetupStatus =
   | "unlocked";
 
 export default function CloakDashboardPage() {
-  const { connected, signMessage, signTransaction } = useWallet();
-  const { publicKey } = useActiveWallet();
+  // signMessage is unified (works for Privy email wallets too). The
+  // experimental batch-send still uses the adapter's generic versioned-tx
+  // signer; that path is extension-wallet only for now.
+  const { connected, signTransaction } = useWallet();
+  const { publicKey, signMessage } = useActiveWallet();
   const { setVisible: openWalletModal } = useWalletModal();
 
   const [keys, setKeys] = useState<MerchantCloakKeys | null>(null);

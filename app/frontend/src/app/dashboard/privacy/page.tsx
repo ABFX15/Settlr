@@ -73,8 +73,7 @@ interface DecryptedReceipt {
 }
 
 export default function PrivacyDashboardPage() {
-  const { connected, signMessage } = useWallet();
-  const { publicKey } = useActiveWallet();
+  const { connected, signMessage, publicKey } = useActiveWallet();
   const { setVisible: openWalletModal } = useWalletModal();
 
   const [keypair, setKeypair] = useState<ReceiptKeypair | null>(null);

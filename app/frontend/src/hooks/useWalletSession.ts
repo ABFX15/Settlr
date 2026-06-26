@@ -19,7 +19,7 @@ import {
     useState,
     type ReactNode,
 } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useActiveWallet } from "@/hooks/useActiveWallet";
 import bs58 from "bs58";
 
 type Status = "idle" | "signing" | "ready" | "error";
@@ -34,14 +34,17 @@ interface WalletSessionValue {
 const WalletSessionContext = createContext<WalletSessionValue | null>(null);
 
 function useWalletSessionInternal(): WalletSessionValue {
-    const { publicKey, signMessage, connected } = useWallet();
+    // useActiveWallet unifies extension wallets and Privy embedded (email)
+    // wallets, so `signMessage` is defined for email users too. `publicKey`
+    // is already a base58 string here.
+    const { publicKey, signMessage, connected } = useActiveWallet();
     const [status, setStatus] = useState<Status>("idle");
     const [error, setError] = useState<string | null>(null);
     const inFlight = useRef<string | null>(null);
 
     const signIn = useCallback(async () => {
         if (!publicKey || !signMessage) return;
-        const wallet = publicKey.toBase58();
+        const wallet = publicKey;
         if (inFlight.current === wallet) return;
         inFlight.current = wallet;
         setStatus("signing");

@@ -52,6 +52,11 @@ export const PrivyProvider: FC<Props> = ({ children }) => {
           // have one. This is the whole point of the integration.
           solana: { createOnLogin: "users-without-wallets" },
           ethereum: { createOnLogin: "off" },
+          // Sign silently — no confirmation modal on every signature. These
+          // are app-origin actions the user already initiated (session
+          // sign-in, sponsored vault creation, supplier payments), and a
+          // non-crypto email user doesn't benefit from a raw-bytes prompt.
+          showWalletUIs: false,
         },
         externalWallets: {
           solana: { connectors: toSolanaWalletConnectors() },
