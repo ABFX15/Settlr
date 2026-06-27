@@ -105,7 +105,9 @@ export function BusinessVerification() {
     });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
-      throw new Error(body.error || "Could not start verification");
+      throw new Error(
+        body.details || body.error || "Could not start verification",
+      );
     }
     return (await res.json()).token as string;
   }, [publicKey]);
