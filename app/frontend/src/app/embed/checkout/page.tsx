@@ -2,21 +2,37 @@
 
 /**
  * Embeddable checkout — rendered inside an iframe on a merchant's own site
- * (via /embed.js). The BUYER scans a Solana Pay QR and pays USDC straight to
- * the merchant's wallet; we watch the chain for a unique reference key, close
- * out the session (fires the merchant webhook), and postMessage the result to
- * the parent page. No login, no wallet connection required of the buyer.
+ * (via /embed.js). Two ways to pay USDC straight to the merchant's wallet:
+ *
+ *   1. Pay with wallet — connect an injected browser wallet (Phantom/Solflare)
+ *      and approve the transfer in-page.
+ *   2. Scan the Solana Pay QR — pay from any wallet on another device.
+ *
+ * Either way we confirm on-chain, close out the checkout session (which fires
+ * the merchant webhook), and postMessage the result to the parent page. No
+ * Settlr login required of the buyer.
  */
 
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { QRCodeSVG } from "qrcode.react";
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import {
+  Connection,
+  Keypair,
+  PublicKey,
+  Transaction,
+} from "@solana/web3.js";
+import {
+  getAssociatedTokenAddress,
+  getAccount,
+  createAssociatedTokenAccountInstruction,
+  createTransferInstruction,
+} from "@solana/spl-token";
 import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
-type Status = "loading" | "awaiting" | "paid" | "error";
+type Status = "loading" | "awaiting" | "paying" | "paid" | "error";
 
 const fmtUSD = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD" });
@@ -27,6 +43,15 @@ function postToParent(msg: Record<string, unknown>) {
   } catch {
     /* not framed — ignore */
   }
+}
+
+/** The injected Solana wallet provider, if the buyer has one (Phantom/Solflare). */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getSolanaProvider(): any | null {
+  if (typeof window === "undefined") return null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const w = window as any;
+  return w.phantom?.solana || (w.solana?.isPhantom && w.solana) || w.solflare || w.solana || null;
 }
 
 function EmbedCheckout() {
@@ -41,14 +66,15 @@ function EmbedCheckout() {
   const [error, setError] = useState<string | null>(null);
   const [solanaUrl, setSolanaUrl] = useState("");
   const [copied, setCopied] = useState(false);
+  const [hasWallet, setHasWallet] = useState(false);
   const referenceRef = useRef<PublicKey | null>(null);
   const sessionIdRef = useRef<string | null>(null);
+  const doneRef = useRef(false);
 
   // ── Set up the payment request (best-effort session + Solana Pay URL) ──
   useEffect(() => {
     let valid = true;
     try {
-      // Throws if the merchant address is malformed.
       // eslint-disable-next-line no-new
       new PublicKey(merchant);
     } catch {
@@ -59,6 +85,8 @@ function EmbedCheckout() {
       setStatus("error");
       return;
     }
+
+    setHasWallet(!!getSolanaProvider());
 
     const reference = Keypair.generate().publicKey;
     referenceRef.current = reference;
@@ -73,8 +101,6 @@ function EmbedCheckout() {
     setSolanaUrl(`solana:${merchant}?${spParams.toString()}`);
     setStatus("awaiting");
 
-    // Create a checkout session so the payment is recorded and the merchant's
-    // webhook fires on completion. Best-effort — the QR still works without it.
     (async () => {
       try {
         const referrer =
@@ -96,12 +122,108 @@ function EmbedCheckout() {
         });
         if (res.ok) sessionIdRef.current = (await res.json()).id;
       } catch {
-        /* session is optional — reference polling still confirms payment */
+        /* session is optional — confirmation still works without it */
       }
     })();
   }, [merchant, name, order, webhook, amount]);
 
-  // ── Watch the chain for the payment carrying this reference ──
+  // Shared success path: record the payment (fires webhook) + notify parent.
+  const closeOut = useCallback(
+    (signature: string, customerWallet: string) => {
+      if (doneRef.current) return;
+      doneRef.current = true;
+      if (sessionIdRef.current) {
+        fetch("/api/checkout/complete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId: sessionIdRef.current,
+            signature,
+            customerWallet,
+          }),
+        }).catch(() => {});
+      }
+      setStatus("paid");
+      postToParent({
+        type: "settlr:checkout:success",
+        sessionId: sessionIdRef.current,
+        signature,
+        amount,
+      });
+    },
+    [amount],
+  );
+
+  // ── Path 1: pay with an injected browser wallet ──
+  const payWithWallet = useCallback(async () => {
+    setError(null);
+    const provider = getSolanaProvider();
+    if (!provider) {
+      setError("No browser wallet found — scan the QR with your phone instead.");
+      return;
+    }
+    setStatus("paying");
+    try {
+      const resp = await provider.connect();
+      const buyer = new PublicKey(
+        (resp?.publicKey || provider.publicKey).toString(),
+      );
+      const merchantPk = new PublicKey(merchant);
+      const mint = new PublicKey(USDC_MINT_ADDRESS);
+      const connection = new Connection(SOLANA_RPC_URL, "confirmed");
+
+      const buyerAta = await getAssociatedTokenAddress(mint, buyer);
+      const merchantAta = await getAssociatedTokenAddress(mint, merchantPk);
+
+      const tx = new Transaction();
+      try {
+        await getAccount(connection, merchantAta);
+      } catch {
+        // First time this merchant receives USDC — buyer covers the rent.
+        tx.add(
+          createAssociatedTokenAccountInstruction(
+            buyer,
+            merchantAta,
+            merchantPk,
+            mint,
+          ),
+        );
+      }
+      tx.add(
+        createTransferInstruction(
+          buyerAta,
+          merchantAta,
+          buyer,
+          BigInt(Math.round(amount * 1_000_000)),
+        ),
+      );
+
+      const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash("confirmed");
+      tx.recentBlockhash = blockhash;
+      tx.feePayer = buyer;
+
+      const out = await provider.signAndSendTransaction(tx);
+      const signature: string = typeof out === "string" ? out : out.signature;
+
+      const conf = await connection.confirmTransaction(
+        { signature, blockhash, lastValidBlockHeight },
+        "confirmed",
+      );
+      if (conf.value.err) {
+        throw new Error("Payment didn't settle — check your USDC balance.");
+      }
+      closeOut(signature, buyer.toBase58());
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Payment failed.";
+      setError(
+        /reject|declin|cancel/i.test(msg) ? "Payment cancelled." : msg,
+      );
+      setStatus("awaiting");
+    }
+  }, [merchant, amount, closeOut]);
+
+  // ── Path 2: watch the chain for a QR payment carrying this reference ──
   useEffect(() => {
     if (status !== "awaiting" || !referenceRef.current) return;
     const reference = referenceRef.current;
@@ -126,37 +248,19 @@ function EmbedCheckout() {
         clearInterval(id);
         const signature = sig.signature;
 
-        // Best-effort: derive payer + close out the session (fires webhook).
         let customerWallet = "unknown";
         try {
           const tx = await connection.getParsedTransaction(signature, {
             maxSupportedTransactionVersion: 0,
           });
-          const payer =
-            tx?.transaction.message.accountKeys.find((k) => k.signer)?.pubkey;
+          const payer = tx?.transaction.message.accountKeys.find(
+            (k) => k.signer,
+          )?.pubkey;
           if (payer) customerWallet = payer.toBase58();
         } catch {
           /* ignore */
         }
-        if (sessionIdRef.current) {
-          fetch("/api/checkout/complete", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              sessionId: sessionIdRef.current,
-              signature,
-              customerWallet,
-            }),
-          }).catch(() => {});
-        }
-
-        setStatus("paid");
-        postToParent({
-          type: "settlr:checkout:success",
-          sessionId: sessionIdRef.current,
-          signature,
-          amount,
-        });
+        closeOut(signature, customerWallet);
       } catch {
         /* transient RPC error — keep polling */
       }
@@ -166,7 +270,7 @@ function EmbedCheckout() {
       cancelled = true;
       clearInterval(id);
     };
-  }, [status, amount]);
+  }, [status, closeOut]);
 
   const copyLink = useCallback(() => {
     navigator.clipboard?.writeText(solanaUrl).then(
@@ -182,7 +286,6 @@ function EmbedCheckout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white px-6 py-7 text-[#101828]">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-[15px] font-bold tracking-tight">Settlr</span>
         <button
@@ -210,7 +313,7 @@ function EmbedCheckout() {
           <p className="text-sm text-[#667085]">Preparing checkout…</p>
         )}
 
-        {status === "awaiting" && (
+        {(status === "awaiting" || status === "paying") && (
           <>
             <p className="text-[13px] font-medium uppercase tracking-wide text-[#98a2b3]">
               Pay {name}
@@ -220,31 +323,51 @@ function EmbedCheckout() {
             </p>
             <p className="mb-5 mt-0.5 text-[13px] text-[#667085]">in USDC</p>
 
-            <div className="rounded-2xl border border-[#eaecf0] p-4 shadow-sm">
-              <QRCodeSVG value={solanaUrl} size={208} level="M" />
+            {/* Path 1: pay with wallet (primary) */}
+            <button
+              onClick={payWithWallet}
+              disabled={status === "paying"}
+              className="flex w-full max-w-[18rem] items-center justify-center gap-2 rounded-xl bg-[#34c759] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#2ba048] disabled:opacity-60"
+            >
+              {status === "paying" ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                  Confirm in your wallet…
+                </>
+              ) : (
+                "Pay with wallet"
+              )}
+            </button>
+            {!hasWallet && status === "awaiting" && (
+              <p className="mt-2 max-w-[16rem] text-[12px] text-[#98a2b3]">
+                No browser wallet detected — scan below with your phone.
+              </p>
+            )}
+            {error && status === "awaiting" && (
+              <p className="mt-2 max-w-[16rem] text-[12px] text-[#d92d20]">
+                {error}
+              </p>
+            )}
+
+            {/* divider */}
+            <div className="my-5 flex w-full max-w-[18rem] items-center gap-3 text-[12px] text-[#98a2b3]">
+              <span className="h-px flex-1 bg-[#eaecf0]" />
+              or scan to pay
+              <span className="h-px flex-1 bg-[#eaecf0]" />
             </div>
 
-            <p className="mt-5 max-w-[15rem] text-[13px] leading-relaxed text-[#667085]">
-              Scan with any Solana wallet (Phantom, Solflare…) to pay. Settles
-              instantly.
-            </p>
-
-            <div className="mt-4 flex items-center gap-2">
-              <a
-                href={solanaUrl}
-                className="rounded-lg bg-[#34c759] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2ba048]"
-              >
-                Open in wallet
-              </a>
-              <button
-                onClick={copyLink}
-                className="rounded-lg border border-[#d0d5dd] px-4 py-2 text-sm font-medium text-[#344054] transition-colors hover:bg-[#f9fafb]"
-              >
-                {copied ? "Copied" : "Copy link"}
-              </button>
+            {/* Path 2: QR */}
+            <div className="rounded-2xl border border-[#eaecf0] p-3 shadow-sm">
+              <QRCodeSVG value={solanaUrl} size={168} level="M" />
             </div>
+            <button
+              onClick={copyLink}
+              className="mt-3 text-[12px] font-medium text-[#475467] underline-offset-2 hover:underline"
+            >
+              {copied ? "Link copied" : "Copy payment link"}
+            </button>
 
-            <div className="mt-6 flex items-center gap-2 text-[12px] text-[#98a2b3]">
+            <div className="mt-5 flex items-center gap-2 text-[12px] text-[#98a2b3]">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#34c759] opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[#34c759]" />
