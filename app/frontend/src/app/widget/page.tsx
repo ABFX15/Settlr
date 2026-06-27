@@ -23,13 +23,16 @@ const SNIPPET = `<script src="https://settlr.dev/embed.js"></script>
   Pay with USDC
 </button>`;
 
-const PROGRAMMATIC = `SettlrCheckout.open({
+const PROGRAMMATIC = `// Call this from your store's checkout button,
+// with the LIVE cart total at that moment:
+SettlrCheckout.open({
   merchant: "YOUR_WALLET_ADDRESS",
-  amount: 49.99,
+  amount: cart.total,              // dynamic
   name: "Your Store",
-  orderId: "INV-1023",
+  orderId: order.id,
+  items: cart.items,               // [{ name, qty, price }]
   webhook: "https://yoursite.com/hooks/settlr",
-  onSuccess: (d) => console.log("paid", d.signature),
+  onSuccess: (d) => completeOrder(order.id, d.signature),
 });`;
 
 export default function WidgetPage() {
@@ -85,6 +88,12 @@ export default function WidgetPage() {
         >
           {copied ? "Copied!" : "Copy snippet"}
         </button>
+        <a
+          href="/demo/store"
+          className="rounded-xl px-5 py-3 text-sm font-semibold text-[#34c759] transition-colors hover:bg-[#34c759]/5"
+        >
+          See it in a live store →
+        </a>
       </div>
 
       {lastPaid && (
@@ -106,7 +115,7 @@ export default function WidgetPage() {
 
       <div className="mt-8">
         <h2 className="text-sm font-semibold text-[#101828]">
-          2. Or trigger it from code
+          2. Online store checkout (dynamic cart total)
         </h2>
         <pre className="mt-2 overflow-x-auto rounded-xl bg-[#0d1117] p-4 text-[13px] leading-relaxed text-[#e6edf3]">
           <code>{PROGRAMMATIC}</code>

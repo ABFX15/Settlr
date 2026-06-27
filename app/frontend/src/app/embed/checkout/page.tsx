@@ -1,16 +1,23 @@
 "use client";
 
 /**
- * Embeddable checkout — rendered inside an iframe on a merchant's own site
- * (via /embed.js). Two ways to pay USDC straight to the merchant's wallet:
+ * Embeddable store checkout — rendered inside an iframe on a merchant's online
+ * store (via /embed.js), driven by the live cart total at checkout time.
  *
- *   1. Pay with wallet — connect an injected browser wallet (Phantom/Solflare)
- *      and approve the transfer in-page.
+ * Two config modes:
+ *   • Param mode  — store passes merchant + amount (+ items, order) in the URL.
+ *                   Amount integrity is enforced by the store verifying the
+ *                   webhook server-side before fulfilling.
+ *   • Session mode — store creates a checkout session server-side (amount fixed
+ *                   on the server, untamperable) and passes ?session=ID.
+ *
+ * Two ways to pay USDC straight to the merchant's wallet:
+ *   1. Pay with wallet — connect an injected wallet (Phantom/Solflare) in-page.
  *   2. Scan the Solana Pay QR — pay from any wallet on another device.
  *
- * Either way we confirm on-chain, close out the checkout session (which fires
- * the merchant webhook), and postMessage the result to the parent page. No
- * Settlr login required of the buyer.
+ * Either way we confirm on-chain, close out the session (fires the merchant
+ * webhook → store marks the order paid), and postMessage the result to the
+ * parent page.
  */
 
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
@@ -33,6 +40,20 @@ import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 export const dynamic = "force-dynamic";
 
 type Status = "loading" | "awaiting" | "paying" | "paid" | "error";
+interface LineItem {
+  name: string;
+  qty?: number;
+  price?: number;
+}
+interface Config {
+  merchant: string;
+  name: string;
+  amount: number;
+  order: string;
+  webhook: string;
+  items: LineItem[];
+  sessionId: string | null;
+}
 
 const fmtUSD = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD" });
@@ -45,23 +66,24 @@ function postToParent(msg: Record<string, unknown>) {
   }
 }
 
-/** The injected Solana wallet provider, if the buyer has one (Phantom/Solflare). */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getSolanaProvider(): any | null {
   if (typeof window === "undefined") return null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const w = window as any;
-  return w.phantom?.solana || (w.solana?.isPhantom && w.solana) || w.solflare || w.solana || null;
+  return (
+    w.phantom?.solana ||
+    (w.solana?.isPhantom && w.solana) ||
+    w.solflare ||
+    w.solana ||
+    null
+  );
 }
 
 function EmbedCheckout() {
   const params = useSearchParams();
-  const merchant = params.get("merchant") || "";
-  const name = params.get("name") || "Merchant";
-  const order = params.get("order") || "";
-  const webhook = params.get("webhook") || "";
-  const amount = parseFloat(params.get("amount") || "");
 
+  const [cfg, setCfg] = useState<Config | null>(null);
   const [status, setStatus] = useState<Status>("loading");
   const [error, setError] = useState<string | null>(null);
   const [solanaUrl, setSolanaUrl] = useState("");
@@ -71,63 +93,120 @@ function EmbedCheckout() {
   const sessionIdRef = useRef<string | null>(null);
   const doneRef = useRef(false);
 
-  // ── Set up the payment request (best-effort session + Solana Pay URL) ──
+  // ── Resolve config (param mode OR session mode), then set up payment ──
   useEffect(() => {
-    let valid = true;
-    try {
-      // eslint-disable-next-line no-new
-      new PublicKey(merchant);
-    } catch {
-      valid = false;
-    }
-    if (!valid || !amount || amount <= 0) {
-      setError("This payment link is misconfigured.");
-      setStatus("error");
-      return;
-    }
-
-    setHasWallet(!!getSolanaProvider());
-
-    const reference = Keypair.generate().publicKey;
-    referenceRef.current = reference;
-
-    const spParams = new URLSearchParams({
-      amount: amount.toString(),
-      "spl-token": USDC_MINT_ADDRESS,
-      reference: reference.toBase58(),
-      label: name,
-      message: `Payment to ${name}${order ? ` · ${order}` : ""}`,
-    });
-    setSolanaUrl(`solana:${merchant}?${spParams.toString()}`);
-    setStatus("awaiting");
-
+    let cancelled = false;
     (async () => {
+      const sessionParam = params.get("session");
+      let resolved: Config | null = null;
+
+      if (sessionParam) {
+        // Session mode — fetch the server-fixed amount/merchant.
+        try {
+          const res = await fetch(
+            `/api/checkout/sessions?id=${encodeURIComponent(sessionParam)}`,
+          );
+          if (res.ok) {
+            const s = await res.json();
+            resolved = {
+              merchant: s.merchantWallet,
+              name: s.merchantName || "Store",
+              amount: Number(s.amount),
+              order: s.description || "",
+              webhook: "",
+              items: Array.isArray(s.metadata?.items) ? s.metadata.items : [],
+              sessionId: s.id || sessionParam,
+            };
+          }
+        } catch {
+          /* fall through to error */
+        }
+      } else {
+        // Param mode.
+        let items: LineItem[] = [];
+        try {
+          const raw = params.get("items");
+          if (raw) items = JSON.parse(raw);
+        } catch {
+          /* ignore malformed items */
+        }
+        resolved = {
+          merchant: params.get("merchant") || "",
+          name: params.get("name") || "Merchant",
+          amount: parseFloat(params.get("amount") || ""),
+          order: params.get("order") || "",
+          webhook: params.get("webhook") || "",
+          items,
+          sessionId: null,
+        };
+      }
+
+      // Validate.
+      let valid = !!resolved && resolved.amount > 0;
       try {
-        const referrer =
-          document.referrer || window.location.origin || "https://settlr.dev";
-        const res = await fetch("/api/checkout/sessions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            merchantId: merchant,
-            merchantName: name,
-            merchantWallet: merchant,
-            amount,
-            description: order || undefined,
-            metadata: order ? { orderId: order } : undefined,
-            successUrl: referrer,
-            cancelUrl: referrer,
-            webhookUrl: webhook || undefined,
-          }),
-        });
-        if (res.ok) sessionIdRef.current = (await res.json()).id;
+        if (resolved) new PublicKey(resolved.merchant);
       } catch {
-        /* session is optional — confirmation still works without it */
+        valid = false;
+      }
+      if (cancelled) return;
+      if (!valid || !resolved) {
+        setError("This checkout link is misconfigured.");
+        setStatus("error");
+        return;
+      }
+
+      setCfg(resolved);
+      setHasWallet(!!getSolanaProvider());
+      sessionIdRef.current = resolved.sessionId;
+
+      const reference = Keypair.generate().publicKey;
+      referenceRef.current = reference;
+      const spParams = new URLSearchParams({
+        amount: resolved.amount.toString(),
+        "spl-token": USDC_MINT_ADDRESS,
+        reference: reference.toBase58(),
+        label: resolved.name,
+        message: `Payment to ${resolved.name}${resolved.order ? ` · ${resolved.order}` : ""}`,
+      });
+      setSolanaUrl(`solana:${resolved.merchant}?${spParams.toString()}`);
+      setStatus("awaiting");
+
+      // Param mode: create a session so the payment records + webhook fires.
+      if (!resolved.sessionId) {
+        try {
+          const referrer =
+            document.referrer ||
+            window.location.origin ||
+            "https://settlr.dev";
+          const res = await fetch("/api/checkout/sessions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              merchantId: resolved.merchant,
+              merchantName: resolved.name,
+              merchantWallet: resolved.merchant,
+              amount: resolved.amount,
+              description: resolved.order || undefined,
+              metadata: {
+                ...(resolved.order ? { orderId: resolved.order } : {}),
+                ...(resolved.items.length ? { items: resolved.items } : {}),
+              },
+              successUrl: referrer,
+              cancelUrl: referrer,
+              webhookUrl: resolved.webhook || undefined,
+            }),
+          });
+          if (res.ok && !cancelled) sessionIdRef.current = (await res.json()).id;
+        } catch {
+          /* session is optional — confirmation still works */
+        }
       }
     })();
-  }, [merchant, name, order, webhook, amount]);
+    return () => {
+      cancelled = true;
+    };
+  }, [params]);
 
-  // Shared success path: record the payment (fires webhook) + notify parent.
   const closeOut = useCallback(
     (signature: string, customerWallet: string) => {
       if (doneRef.current) return;
@@ -148,14 +227,16 @@ function EmbedCheckout() {
         type: "settlr:checkout:success",
         sessionId: sessionIdRef.current,
         signature,
-        amount,
+        amount: cfg?.amount,
+        order: cfg?.order,
       });
     },
-    [amount],
+    [cfg],
   );
 
   // ── Path 1: pay with an injected browser wallet ──
   const payWithWallet = useCallback(async () => {
+    if (!cfg) return;
     setError(null);
     const provider = getSolanaProvider();
     if (!provider) {
@@ -168,7 +249,7 @@ function EmbedCheckout() {
       const buyer = new PublicKey(
         (resp?.publicKey || provider.publicKey).toString(),
       );
-      const merchantPk = new PublicKey(merchant);
+      const merchantPk = new PublicKey(cfg.merchant);
       const mint = new PublicKey(USDC_MINT_ADDRESS);
       const connection = new Connection(SOLANA_RPC_URL, "confirmed");
 
@@ -179,7 +260,6 @@ function EmbedCheckout() {
       try {
         await getAccount(connection, merchantAta);
       } catch {
-        // First time this merchant receives USDC — buyer covers the rent.
         tx.add(
           createAssociatedTokenAccountInstruction(
             buyer,
@@ -194,7 +274,7 @@ function EmbedCheckout() {
           buyerAta,
           merchantAta,
           buyer,
-          BigInt(Math.round(amount * 1_000_000)),
+          BigInt(Math.round(cfg.amount * 1_000_000)),
         ),
       );
 
@@ -216,12 +296,10 @@ function EmbedCheckout() {
       closeOut(signature, buyer.toBase58());
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Payment failed.";
-      setError(
-        /reject|declin|cancel/i.test(msg) ? "Payment cancelled." : msg,
-      );
+      setError(/reject|declin|cancel/i.test(msg) ? "Payment cancelled." : msg);
       setStatus("awaiting");
     }
-  }, [merchant, amount, closeOut]);
+  }, [cfg, closeOut]);
 
   // ── Path 2: watch the chain for a QR payment carrying this reference ──
   useEffect(() => {
@@ -283,8 +361,6 @@ function EmbedCheckout() {
   }, [solanaUrl]);
 
   const cancel = () => postToParent({ type: "settlr:checkout:close" });
-  // Only show the close button when framed (iframe widget). As a standalone
-  // hosted payment link there's no parent to close back to.
   const embedded =
     typeof window !== "undefined" && window.self !== window.top;
 
@@ -319,17 +395,38 @@ function EmbedCheckout() {
           <p className="text-sm text-[#667085]">Preparing checkout…</p>
         )}
 
-        {(status === "awaiting" || status === "paying") && (
+        {cfg && (status === "awaiting" || status === "paying") && (
           <>
             <p className="text-[13px] font-medium uppercase tracking-wide text-[#98a2b3]">
-              Pay {name}
+              Pay {cfg.name}
             </p>
             <p className="mt-1 text-4xl font-bold tracking-tight">
-              {fmtUSD(amount)}
+              {fmtUSD(cfg.amount)}
             </p>
-            <p className="mb-5 mt-0.5 text-[13px] text-[#667085]">in USDC</p>
+            <p className="mb-4 mt-0.5 text-[13px] text-[#667085]">in USDC</p>
 
-            {/* Path 1: pay with wallet (primary) */}
+            {/* Order summary (line items) */}
+            {cfg.items.length > 0 && (
+              <div className="mb-5 w-full max-w-[18rem] rounded-xl border border-[#eaecf0] bg-[#fcfcfd] p-3 text-left">
+                {cfg.items.map((it, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between py-0.5 text-[13px]"
+                  >
+                    <span className="truncate text-[#475467]">
+                      {it.qty && it.qty > 1 ? `${it.qty}× ` : ""}
+                      {it.name}
+                    </span>
+                    {typeof it.price === "number" && (
+                      <span className="ml-2 flex-shrink-0 text-[#101828]">
+                        {fmtUSD(it.price * (it.qty || 1))}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
             <button
               onClick={payWithWallet}
               disabled={status === "paying"}
@@ -355,14 +452,12 @@ function EmbedCheckout() {
               </p>
             )}
 
-            {/* divider */}
             <div className="my-5 flex w-full max-w-[18rem] items-center gap-3 text-[12px] text-[#98a2b3]">
               <span className="h-px flex-1 bg-[#eaecf0]" />
               or scan to pay
               <span className="h-px flex-1 bg-[#eaecf0]" />
             </div>
 
-            {/* Path 2: QR */}
             <div className="rounded-2xl border border-[#eaecf0] p-3 shadow-sm">
               <QRCodeSVG value={solanaUrl} size={168} level="M" />
             </div>
@@ -383,7 +478,7 @@ function EmbedCheckout() {
           </>
         )}
 
-        {status === "paid" && (
+        {cfg && status === "paid" && (
           <>
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#34c759]">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
@@ -398,7 +493,7 @@ function EmbedCheckout() {
             </div>
             <p className="mt-5 text-xl font-bold">Payment received</p>
             <p className="mt-1 text-sm text-[#667085]">
-              {fmtUSD(amount)} paid to {name}
+              {fmtUSD(cfg.amount)} paid to {cfg.name}
             </p>
           </>
         )}

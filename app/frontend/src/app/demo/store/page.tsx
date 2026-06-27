@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 
 interface Plan {
   id: string;
@@ -105,11 +105,14 @@ const addons: Plan[] = [
 ];
 
 export default function DemoStorePage() {
-  const router = useRouter();
   const [selectedItems, setSelectedItems] = useState<
     { plan: Plan; quantity: number }[]
   >([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [orderPaid, setOrderPaid] = useState<{
+    amount: number;
+    signature: string;
+  } | null>(null);
 
   const addItem = (plan: Plan) => {
     setSelectedItems((prev) => {
@@ -134,21 +137,68 @@ export default function DemoStorePage() {
 
   const handleCheckout = () => {
     if (selectedItems.length === 0) return;
-
     const demoWallet = "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV";
-    const itemNames = selectedItems.map((item) => item.plan.name).join(", ");
-
-    router.push(
-      `/checkout?amount=${total.toFixed(
-        2,
-      )}&merchant=Offbank&to=${demoWallet}&memo=${encodeURIComponent(
-        `Checkout: ${itemNames}`,
-      )}`,
-    );
+    // The store calls the Settlr widget with the LIVE cart total + line items.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const settlr = (window as any).SettlrCheckout;
+    if (!settlr) return;
+    settlr.open({
+      merchant: demoWallet,
+      amount: Number(total.toFixed(2)),
+      name: "Settlr Demo Store",
+      orderId: "ORD-" + Date.now(),
+      items: selectedItems.map((item) => ({
+        name: item.plan.name,
+        qty: item.quantity,
+        price: item.plan.price,
+      })),
+      onSuccess: (d: { signature: string }) => {
+        // The store marks the order paid here (and verifies via webhook).
+        setOrderPaid({ amount: Number(total.toFixed(2)), signature: d.signature });
+        setSelectedItems([]);
+        setIsCartOpen(false);
+      },
+    });
   };
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
+      {/* Settlr checkout widget loader */}
+      <Script src="/embed.js" strategy="afterInteractive" />
+
+      {/* Order confirmed (after a successful USDC payment) */}
+      {orderPaid && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4"
+          onClick={() => setOrderPaid(null)}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl bg-white p-8 text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#34c759]">
+              <span className="text-3xl text-white">✓</span>
+            </div>
+            <h2 className="mt-5 text-xl font-bold text-[#101828]">
+              Order confirmed
+            </h2>
+            <p className="mt-1 text-sm text-[#667085]">
+              ${orderPaid.amount.toFixed(2)} paid in USDC. Your order is on its
+              way.
+            </p>
+            <p className="mt-3 break-all font-mono text-[11px] text-[#98a2b3]">
+              {orderPaid.signature.slice(0, 24)}…
+            </p>
+            <button
+              onClick={() => setOrderPaid(null)}
+              className="mt-6 w-full rounded-xl bg-[#34c759] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2ba048]"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--card-bg)]/95 border-b border-[var(--border-color)] backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">

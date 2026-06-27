@@ -35,20 +35,39 @@
 
   function open(opts) {
     opts = opts || {};
-    var merchant = opts.merchant;
-    var amount = opts.amount;
-    if (!merchant || !amount) {
-      console.error("[Settlr] `merchant` and `amount` are required.");
-      return;
-    }
+    var params = new URLSearchParams();
 
-    var params = new URLSearchParams({
-      merchant: String(merchant),
-      amount: String(amount),
-      name: opts.name || "",
-      order: opts.orderId || opts.order || "",
-      webhook: opts.webhook || "",
-    });
+    if (opts.session) {
+      // Secure mode: amount + merchant fixed server-side.
+      params.set("session", String(opts.session));
+    } else {
+      var merchant = opts.merchant;
+      var amount = opts.amount;
+      if (!merchant || !amount) {
+        console.error(
+          "[Settlr] `merchant` and `amount` (or `session`) are required.",
+        );
+        return;
+      }
+      params.set("merchant", String(merchant));
+      params.set("amount", String(amount));
+      params.set("name", opts.name || "");
+      params.set("order", opts.orderId || opts.order || "");
+      if (opts.webhook) params.set("webhook", opts.webhook);
+      // Optional line items: [{ name, qty, price }] — shown as an order summary.
+      if (opts.items) {
+        try {
+          params.set(
+            "items",
+            typeof opts.items === "string"
+              ? opts.items
+              : JSON.stringify(opts.items),
+          );
+        } catch (e) {
+          /* ignore malformed items */
+        }
+      }
+    }
 
     var overlay = document.createElement("div");
     overlay.setAttribute("data-settlr-overlay", "");
