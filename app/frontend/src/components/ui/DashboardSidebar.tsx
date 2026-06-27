@@ -26,6 +26,7 @@ import {
   QrCode,
   Receipt,
   Settings,
+  Link2,
 } from "lucide-react";
 
 // Focused nav — the money loop + the tools that support it. Niche/overlapping
@@ -40,6 +41,7 @@ const navItems = [
   },
   { href: "/dashboard/invoices", icon: FileText, label: "Invoices" },
   { href: "/dashboard/terminal", icon: QrCode, label: "Terminal" },
+  { href: "/dashboard/payment-links", icon: Link2, label: "Payment Links" },
   { href: "/dashboard/suppliers", icon: Send, label: "Pay Suppliers" },
   { href: "/dashboard/treasury", icon: Wallet, label: "Treasury" },
   { href: "/dashboard/transactions", icon: Receipt, label: "Transactions" },

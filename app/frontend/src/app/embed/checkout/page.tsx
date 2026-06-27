@@ -283,25 +283,31 @@ function EmbedCheckout() {
   }, [solanaUrl]);
 
   const cancel = () => postToParent({ type: "settlr:checkout:close" });
+  // Only show the close button when framed (iframe widget). As a standalone
+  // hosted payment link there's no parent to close back to.
+  const embedded =
+    typeof window !== "undefined" && window.self !== window.top;
 
   return (
     <div className="flex min-h-screen flex-col bg-white px-6 py-7 text-[#101828]">
       <div className="flex items-center justify-between">
         <span className="text-[15px] font-bold tracking-tight">Settlr</span>
-        <button
-          onClick={cancel}
-          aria-label="Close"
-          className="rounded-full p-1.5 text-[#98a2b3] transition-colors hover:bg-[#f2f4f7] hover:text-[#475467]"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M18 6 6 18M6 6l12 12"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+        {embedded && (
+          <button
+            onClick={cancel}
+            aria-label="Close"
+            className="rounded-full p-1.5 text-[#98a2b3] transition-colors hover:bg-[#f2f4f7] hover:text-[#475467]"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M18 6 6 18M6 6l12 12"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center text-center">
