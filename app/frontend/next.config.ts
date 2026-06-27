@@ -50,6 +50,21 @@ const nextConfig: NextConfig = {
           { key: "Access-Control-Allow-Methods", value: "GET, OPTIONS" },
         ],
       },
+      {
+        // Embeddable checkout — must be framable by any merchant site.
+        source: "/embed/:path*",
+        headers: [
+          { key: "Content-Security-Policy", value: "frame-ancestors *" },
+        ],
+      },
+      {
+        // Loader script — served cross-origin to merchant sites.
+        source: "/embed.js",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Cache-Control", value: "public, max-age=300" },
+        ],
+      },
     ];
   },
   webpack: (config, { isServer }) => {
