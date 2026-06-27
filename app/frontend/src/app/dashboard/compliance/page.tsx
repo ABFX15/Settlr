@@ -19,6 +19,7 @@ import {
   XCircle,
 } from "lucide-react";
 import Link from "next/link";
+import { BusinessVerification } from "@/components/compliance/BusinessVerification";
 
 interface ComplianceDossier {
   business: { name: string; licenseNumber: string | null; wallet: string };
@@ -323,6 +324,9 @@ export default function ComplianceSettingsPage() {
             </div>
           </div>
         </motion.div>
+
+        {/* Merchant KYB — verifying the business itself; feeds the dossier */}
+        <BusinessVerification />
 
         {/* Compliance dossier — the bank/OTC-ready proof of clean funds */}
         <motion.div

@@ -37,6 +37,11 @@ export const KYC_LEVELS = {
     BASIC: process.env.SUMSUB_LEVEL_BASIC || "basic-kyc-level", // ID + selfie
     GAMING: process.env.SUMSUB_LEVEL_GAMING || "gaming-kyc-level", // ID + selfie + age verification
     ENHANCED: process.env.SUMSUB_LEVEL_ENHANCED || "enhanced-kyc-level", // ID + selfie + proof of address
+    // Business verification (KYB) — the MERCHANT verifying their own company
+    // (license + beneficial owner). Set SUMSUB_LEVEL_KYB to your real Sumsub
+    // company/KYB level; defaults to the basic level so the flow works out of
+    // the box for demos (verifies a person, still flips the dossier badge).
+    KYB: process.env.SUMSUB_LEVEL_KYB || process.env.SUMSUB_LEVEL_BASIC || "basic-kyc-level",
 } as const;
 
 export type KYCLevel = (typeof KYC_LEVELS)[keyof typeof KYC_LEVELS];

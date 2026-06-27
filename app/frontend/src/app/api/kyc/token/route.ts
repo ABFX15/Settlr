@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
         if (rateLimited) return rateLimited;
 
         const body = await request.json();
-        const { userId, customerId, merchantId, level, levelName } = body;
+        const { userId, customerId, merchantId, level, levelName, kyb } = body;
 
         // Support both userId and customerId:merchantId formats
         const externalUserId = userId || (customerId && merchantId ? `${customerId}:${merchantId}` : customerId);
@@ -32,11 +32,15 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Validate level if provided (support both 'level' and 'levelName')
+        // Business verification (merchant verifying their own company) uses the
+        // KYB level regardless of any client-supplied level — the client can't
+        // know the env-configured level name. Otherwise validate level if given.
         const requestedLevel = levelName || level;
-        const kycLevel: KYCLevel = requestedLevel && Object.values(KYC_LEVELS).includes(requestedLevel)
-            ? requestedLevel
-            : KYC_LEVELS.BASIC;
+        const kycLevel: KYCLevel = kyb
+            ? KYC_LEVELS.KYB
+            : requestedLevel && Object.values(KYC_LEVELS).includes(requestedLevel)
+                ? requestedLevel
+                : KYC_LEVELS.BASIC;
 
         // Check if Sumsub is configured
         if (!process.env.SUMSUB_APP_TOKEN || !process.env.SUMSUB_SECRET_KEY) {
