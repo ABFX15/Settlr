@@ -115,8 +115,25 @@ export default function SuppliersPage() {
       const signed = await signTransaction(tx);
 
       const connection = new Connection(SOLANA_RPC_URL, "confirmed");
-      const sig = await connection.sendRawTransaction(signed.serialize());
-      await connection.confirmTransaction(sig, "confirmed");
+      // skipPreflight + retries avoids blockhash-expiry failures from the
+      // signing round-trip (esp. Privy email wallets), matching vault creation.
+      const sig = await connection.sendRawTransaction(signed.serialize(), {
+        skipPreflight: true,
+        maxRetries: 5,
+      });
+      const conf = await connection.confirmTransaction(
+        {
+          signature: sig,
+          blockhash: data.blockhash,
+          lastValidBlockHeight: data.lastValidBlockHeight,
+        },
+        "confirmed",
+      );
+      if (conf.value.err) {
+        throw new Error(
+          "Payment didn't settle on-chain — check you hold enough USDC.",
+        );
+      }
 
       setPayAmounts((p) => ({ ...p, [payee.id]: "" }));
       flash("ok", `Sent ${fmtUSD(amount)} to ${payee.name}`);

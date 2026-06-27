@@ -28,6 +28,9 @@ export interface SupplierPaymentBuild {
     feePayer: string;
     payeeWallet: string;
     amount: number;
+    /** Needed by the client to confirm without hitting blockhash expiry. */
+    blockhash: string;
+    lastValidBlockHeight: number;
 }
 
 export async function buildSupplierPaymentTransaction(args: {
@@ -82,7 +85,8 @@ export async function buildSupplierPaymentTransaction(args: {
         ),
     );
 
-    const { blockhash } = await connection.getLatestBlockhash("confirmed");
+    const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash("confirmed");
     tx.recentBlockhash = blockhash;
     tx.feePayer = feePayer.publicKey;
     tx.partialSign(feePayer);
@@ -94,5 +98,7 @@ export async function buildSupplierPaymentTransaction(args: {
         feePayer: feePayer.publicKey.toBase58(),
         payeeWallet,
         amount,
+        blockhash,
+        lastValidBlockHeight,
     };
 }
