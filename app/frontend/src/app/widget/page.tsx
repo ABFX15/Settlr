@@ -12,10 +12,10 @@ const DEMO_MERCHANT =
   (process.env.NEXT_PUBLIC_ADMIN_WALLETS || "").split(",")[0]?.trim() ||
   "DthkuDsPKR6MqqV28rVSBEqdgnuNtEU6QpLACZ7bCBpD";
 
-const SNIPPET = `<script src="https://settlr.dev/embed.js"></script>
+const SNIPPET = `<script src="https://offbankpay.com/embed.js"></script>
 
 <button
-  data-settlr-checkout
+  data-offbank-checkout
   data-merchant="YOUR_WALLET_ADDRESS"
   data-amount="49.99"
   data-name="Your Store"
@@ -25,13 +25,13 @@ const SNIPPET = `<script src="https://settlr.dev/embed.js"></script>
 
 const PROGRAMMATIC = `// Call this from your store's checkout button,
 // with the LIVE cart total at that moment:
-SettlrCheckout.open({
+OffbankCheckout.open({
   merchant: "YOUR_WALLET_ADDRESS",
   amount: cart.total,              // dynamic
   name: "Your Store",
   orderId: order.id,
   items: cart.items,               // [{ name, qty, price }]
-  webhook: "https://yoursite.com/hooks/settlr",
+  webhook: "https://yoursite.com/hooks/offbank",
   onSuccess: (d) => completeOrder(order.id, d.signature),
 });`;
 
@@ -49,11 +49,11 @@ export default function WidgetPage() {
   const tryItLive = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const w = window as any;
-    if (!w.SettlrCheckout) return;
-    w.SettlrCheckout.open({
+    if (!w.OffbankCheckout) return;
+    w.OffbankCheckout.open({
       merchant: DEMO_MERCHANT,
       amount: 1,
-      name: "Settlr Demo Store",
+      name: "Offbank Demo Store",
       orderId: "DEMO-" + Date.now(),
       onSuccess: (d: { signature: string }) => setLastPaid(d.signature),
     });
@@ -149,7 +149,7 @@ export default function WidgetPage() {
       </div>
 
       <p className="mt-10 text-[13px] text-[#98a2b3]">
-        The widget is one piece of Settlr — invoicing, a POS terminal, supplier
+        The widget is one piece of Offbank — invoicing, a POS terminal, supplier
         payouts, and compliance tooling come with it.
       </p>
     </div>

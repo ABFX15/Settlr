@@ -94,7 +94,7 @@ export default function ComplianceSettingsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `settlr-compliance-${dossier.business.wallet.slice(0, 8)}.json`;
+    a.download = `offbank-compliance-${dossier.business.wallet.slice(0, 8)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -124,7 +124,7 @@ export default function ComplianceSettingsPage() {
     const row = (label: string, value: string) =>
       `<tr><td style="padding:10px 0;color:#64748b;font-size:14px">${label}</td><td style="padding:10px 0;text-align:right;font-weight:600;color:#0f172a;font-size:14px">${value}</td></tr>`;
 
-    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Settlr Compliance Dossier</title>
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Offbank Compliance Dossier</title>
 <style>
   @page { margin: 40px; }
   * { box-sizing: border-box; }
@@ -141,7 +141,7 @@ export default function ComplianceSettingsPage() {
 </style></head>
 <body>
   <div class="brand">
-    <div><h1>Settlr</h1></div>
+    <div><h1>Offbank</h1></div>
     <div class="sub">Compliance Dossier</div>
   </div>
   <p style="color:#64748b;font-size:13px;margin:4px 0 0">Generated ${generated}</p>
@@ -175,11 +175,11 @@ export default function ComplianceSettingsPage() {
   <div class="statement">
     This report aggregates identity verification (KYB via Sumsub), wallet-level
     AML and sanctions screening (via Range), and on-chain transaction activity
-    recorded by Settlr for the business named above. It is generated directly
+    recorded by Offbank for the business named above. It is generated directly
     from platform records to support the merchant's banking and compliance review.
   </div>
 
-  <div class="footer"><span>Settlr · settlr.dev</span><span>Generated ${generated}</span></div>
+  <div class="footer"><span>Offbank · offbankpay.com</span><span>Generated ${generated}</span></div>
   <script>window.onload = function(){ setTimeout(function(){ window.print(); }, 250); };</script>
 </body></html>`;
 

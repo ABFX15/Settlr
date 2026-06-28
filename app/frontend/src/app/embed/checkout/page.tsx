@@ -177,7 +177,7 @@ function EmbedCheckout() {
           const referrer =
             document.referrer ||
             window.location.origin ||
-            "https://settlr.dev";
+            "https://offbankpay.com";
           const res = await fetch("/api/checkout/sessions", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -224,7 +224,7 @@ function EmbedCheckout() {
       }
       setStatus("paid");
       postToParent({
-        type: "settlr:checkout:success",
+        type: "offbank:checkout:success",
         sessionId: sessionIdRef.current,
         signature,
         amount: cfg?.amount,
@@ -360,14 +360,14 @@ function EmbedCheckout() {
     );
   }, [solanaUrl]);
 
-  const cancel = () => postToParent({ type: "settlr:checkout:close" });
+  const cancel = () => postToParent({ type: "offbank:checkout:close" });
   const embedded =
     typeof window !== "undefined" && window.self !== window.top;
 
   return (
     <div className="flex min-h-screen flex-col bg-white px-6 py-7 text-[#101828]">
       <div className="flex items-center justify-between">
-        <span className="text-[15px] font-bold tracking-tight">Settlr</span>
+        <span className="text-[15px] font-bold tracking-tight">Offbank</span>
         {embedded && (
           <button
             onClick={cancel}
@@ -500,7 +500,7 @@ function EmbedCheckout() {
       </div>
 
       <p className="text-center text-[11px] text-[#98a2b3]">
-        Secured by Settlr · settlr.dev
+        Secured by Offbank · offbankpay.com
       </p>
     </div>
   );

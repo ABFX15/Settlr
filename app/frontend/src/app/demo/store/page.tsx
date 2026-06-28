@@ -138,14 +138,14 @@ export default function DemoStorePage() {
   const handleCheckout = () => {
     if (selectedItems.length === 0) return;
     const demoWallet = "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV";
-    // The store calls the Settlr widget with the LIVE cart total + line items.
+    // The store calls the Offbank widget with the LIVE cart total + line items.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const settlr = (window as any).SettlrCheckout;
+    const settlr = (window as any).OffbankCheckout;
     if (!settlr) return;
     settlr.open({
       merchant: demoWallet,
       amount: Number(total.toFixed(2)),
-      name: "Settlr Demo Store",
+      name: "Offbank Demo Store",
       orderId: "ORD-" + Date.now(),
       items: selectedItems.map((item) => ({
         name: item.plan.name,
@@ -163,7 +163,7 @@ export default function DemoStorePage() {
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
-      {/* Settlr checkout widget loader */}
+      {/* Offbank checkout widget loader */}
       <Script src="/embed.js" strategy="afterInteractive" />
 
       {/* Order confirmed (after a successful USDC payment) */}

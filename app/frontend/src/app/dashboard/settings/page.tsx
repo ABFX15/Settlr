@@ -677,7 +677,7 @@ export default function SettingsPage() {
               API keys
             </h2>
             <p className="text-sm text-[#8a8a8a]">
-              Authenticate the Settlr SDK & API (payouts, checkout). Keep keys
+              Authenticate the Offbank SDK & API (payouts, checkout). Keep keys
               secret — treat them like passwords.
             </p>
           </div>

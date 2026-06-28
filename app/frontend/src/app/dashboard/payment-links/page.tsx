@@ -68,8 +68,8 @@ export default function PaymentLinksPage() {
   const [recent, setRecent] = useState<SavedLink[]>([]);
 
   const origin =
-    typeof window !== "undefined" ? window.location.origin : "https://settlr.dev";
-  const storageKey = publicKey ? `settlr:paymentlinks:${publicKey}` : "";
+    typeof window !== "undefined" ? window.location.origin : "https://offbankpay.com";
+  const storageKey = publicKey ? `offbank:paymentlinks:${publicKey}` : "";
 
   // Prefill the store name from the merchant record.
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function PaymentLinksPage() {
     return `<script src="${origin}/embed.js"></script>
 
 <button
-  data-settlr-checkout
+  data-offbank-checkout
   data-merchant="${publicKey}"
   data-amount="${generated.amount}"
   data-name="${generated.name}"${generated.order ? `\n  data-order="${generated.order}"` : ""}>
@@ -227,7 +227,7 @@ export default function PaymentLinksPage() {
           <input
             value={webhook}
             onChange={(e) => setWebhook(e.target.value)}
-            placeholder="https://yoursite.com/hooks/settlr"
+            placeholder="https://yoursite.com/hooks/offbank"
             className="mt-2 w-full rounded-xl border border-[#d0d5dd] px-3.5 py-2.5 text-sm outline-none focus:border-[#34c759]"
           />
         )}
