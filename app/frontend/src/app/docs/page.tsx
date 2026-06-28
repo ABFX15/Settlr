@@ -860,10 +860,10 @@ function IntegrationsContent() {
             We&apos;re actively building out POS integrations for the cannabis
             industry. If you use a platform not listed here, let us know at{" "}
             <a
-              href="mailto:support@offbankpay.com"
+              href="mailto:support@settlr.dev"
               className="text-[#34c759] hover:underline"
             >
-              support@offbankpay.com
+              support@settlr.dev
             </a>
             .
           </p>
@@ -909,7 +909,7 @@ function TroubleshootingContent() {
 
           <TroubleshootingItem
             question="How do I get support?"
-            answer={`We're here to help:\n• GitHub Issues: github.com/ABFX15/x402-hack-payment\n• Email: support@offbankpay.com`}
+            answer={`We're here to help:\n• GitHub Issues: github.com/ABFX15/x402-hack-payment\n• Email: support@settlr.dev`}
           />
         </div>
       </section>

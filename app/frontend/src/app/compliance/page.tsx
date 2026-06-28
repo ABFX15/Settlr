@@ -1816,11 +1816,11 @@ export default function CompliancePage() {
               during due diligence. If your question isn&apos;t covered here,
               contact{" "}
               <a
-                href="mailto:compliance@offbankpay.com"
+                href="mailto:compliance@settlr.dev"
                 className="font-semibold underline"
                 style={{ color: palette.green }}
               >
-                compliance@offbankpay.com
+                compliance@settlr.dev
               </a>
               .
             </p>

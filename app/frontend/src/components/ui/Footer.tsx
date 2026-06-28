@@ -33,7 +33,7 @@ const columns = [
     title: "Company",
     links: [
       { href: "/about", label: "About" },
-      { href: "mailto:adam@offbankpay.com", label: "Contact" },
+      { href: "mailto:adam@settlr.dev", label: "Contact" },
       { href: "/terms", label: "Terms" },
       { href: "/privacy", label: "Privacy" },
     ],

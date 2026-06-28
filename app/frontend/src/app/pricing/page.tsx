@@ -64,7 +64,7 @@ const plans = [
       "Team / multi-signer accounts",
     ],
     cta: "Talk to sales",
-    href: "mailto:adam@offbankpay.com?subject=Growth%20plan%20enquiry",
+    href: "mailto:adam@settlr.dev?subject=Growth%20plan%20enquiry",
     popular: true,
   },
   {
@@ -83,7 +83,7 @@ const plans = [
       "Audit-ready on-chain reporting",
     ],
     cta: "Talk to sales",
-    href: "mailto:adam@offbankpay.com?subject=Enterprise%20enquiry",
+    href: "mailto:adam@settlr.dev?subject=Enterprise%20enquiry",
     popular: false,
   },
 ];

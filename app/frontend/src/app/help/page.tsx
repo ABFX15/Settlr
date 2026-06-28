@@ -157,7 +157,7 @@ const quickLinks = [
     title: "Contact Support",
     description: "Get help from our team directly",
     icon: Mail,
-    href: "mailto:support@offbankpay.com",
+    href: "mailto:support@settlr.dev",
     external: true,
   },
   {
@@ -489,7 +489,7 @@ export default function HelpPage() {
                 </p>
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
                   <a
-                    href="mailto:support@offbankpay.com"
+                    href="mailto:support@settlr.dev"
                     className="group inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       background:

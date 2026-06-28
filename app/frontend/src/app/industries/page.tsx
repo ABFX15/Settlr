@@ -72,9 +72,9 @@ export default function IndustriesHubPage() {
             Built for commerce banks won&apos;t touch.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-[18px] leading-[1.6] text-white/75">
-            Four verticals. One rail. 1% flat USDC settlement, non-custodial,
-            with USD off-ramp via Sphere. Pick your category to see how it
-            works.
+            One rail for every business banks won&apos;t serve. 1% flat USDC
+            settlement, non-custodial, with USD off-ramp. Pick your category to
+            see how it works.
           </p>
         </div>
       </section>
@@ -116,7 +116,7 @@ export default function IndustriesHubPage() {
             your flow.
           </p>
           <Link
-            href="mailto:adam@offbankpay.com"
+            href="mailto:adam@settlr.dev"
             className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#34c759] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:brightness-110"
           >
             Talk to us

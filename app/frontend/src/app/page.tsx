@@ -68,7 +68,7 @@ export default function HomePage() {
                 sameAs: ["https://x.com/offbankpay"],
                 contactPoint: {
                   "@type": "ContactPoint",
-                  email: "adam@offbankpay.com",
+                  email: "adam@settlr.dev",
                   contactType: "sales",
                 },
                 areaServed: "US",

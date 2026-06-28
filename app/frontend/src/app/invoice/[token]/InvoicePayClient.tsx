@@ -956,7 +956,7 @@ export default function InvoicePayClient({
                                       onClick={() => {
                                         // For invoices, direct to contact for OTC
                                         window.open(
-                                          `mailto:otc@offbankpay.com?subject=OTC Quote Request — Invoice ${
+                                          `mailto:otc@settlr.dev?subject=OTC Quote Request — Invoice ${
                                             invoice?.invoiceNumber || ""
                                           }&body=Amount: $${(
                                             invoice?.total || 0

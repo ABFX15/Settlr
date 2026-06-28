@@ -169,10 +169,10 @@ export default function TermsPage() {
               <p>
                 For questions about these Terms, contact us at{" "}
                 <a
-                  href="mailto:adam@offbankpay.com"
+                  href="mailto:adam@settlr.dev"
                   className="text-[#34c759] underline"
                 >
-                  adam@offbankpay.com
+                  adam@settlr.dev
                 </a>
                 .
               </p>

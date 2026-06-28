@@ -78,7 +78,7 @@ export function Pricing() {
           <p className="mt-6 text-center text-xs" style={{ color: t.muted }}>
             Doing more than $1M/month?{" "}
             <Link
-              href="mailto:adam@offbankpay.com?subject=Volume%20pricing%20enquiry"
+              href="mailto:adam@settlr.dev?subject=Volume%20pricing%20enquiry"
               className="underline"
               style={{ color: t.green }}
             >

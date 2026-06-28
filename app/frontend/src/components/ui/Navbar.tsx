@@ -25,6 +25,7 @@ import {
   Send,
   Gamepad2,
   Plane,
+  QrCode,
 } from "lucide-react";
 
 const navLinks = [
@@ -89,6 +90,12 @@ const productLinks = [
     label: "Invoices",
     icon: FileText,
     description: "B2B invoice settlement on-chain",
+  },
+  {
+    href: "/products/terminal",
+    label: "POS Terminal",
+    icon: QrCode,
+    description: "Take USDC payments in person",
   },
   {
     href: "/developers",
