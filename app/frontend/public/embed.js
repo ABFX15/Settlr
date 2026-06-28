@@ -69,6 +69,9 @@
       }
     }
 
+    // Sandbox/demo mode — the checkout can be completed without a real payment.
+    if (opts.sandbox) params.set("sandbox", "1");
+
     var overlay = document.createElement("div");
     overlay.setAttribute("data-offbank-overlay", "");
     overlay.style.cssText =

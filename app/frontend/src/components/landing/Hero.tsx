@@ -79,7 +79,7 @@ export function Hero() {
                   textShadow: "0 2px 30px rgba(0,0,0,0.7)",
                 }}
               >
-                Your processor can&apos;t shut you down.
+                Get paid in USDC. No bank can freeze it.
               </h1>
 
               <p
@@ -89,17 +89,18 @@ export function Hero() {
                   textShadow: "0 1px 8px rgba(0,0,0,0.4)",
                 }}
               >
-                Cannabis wholesalers lost 4 days of receivables in the March
-                outage. Offbank settles in 0.6 seconds, on a rail no bank can
-                pull. 1% flat. Cash out to your business account when
+                Offbank is the payment rail for businesses banks won&apos;t
+                serve. Accept payments, send instant payouts, and invoice in
+                stablecoin — settles in under a second, 1% flat, on a rail no
+                processor can freeze. Cash out to your account when
                 you&apos;re ready.
               </p>
               <p
                 className="mt-3 text-[13px] font-medium"
                 style={{ color: t.onDarkMuted }}
               >
-                Built for cannabis, CBD, hemp, firearms, and other restricted
-                B2B verticals.
+                Cannabis · iGaming · high-risk · cross-border — checkout,
+                payouts, invoicing &amp; compliance in one API.
               </p>
 
               {/* ── CTAs ───────────────────────────────────── */}
@@ -226,11 +227,13 @@ export function Hero() {
 
       {/* ── sr-only for SEO ────────────────────────────── */}
       <p className="sr-only">
-        Offbank is shutdown-proof B2B payment infrastructure for cannabis
-        distributors, brands, and wholesalers banks won&apos;t reliably serve.
-        When traditional processors go down or freeze accounts, Offbank keeps
-        settling. Send invoices, get paid in seconds, cash out to USD via ACH.
-        1% flat fee, non-custodial, built on Solana.
+        Offbank is USDC payment infrastructure for businesses banks won&apos;t
+        reliably serve — cannabis, iGaming, high-risk, and cross-border
+        merchants. Accept payments via checkout, invoicing, or a POS terminal,
+        send instant payouts to anyone by email, and cash out to USD — all
+        through one API and dashboard. When traditional processors freeze
+        accounts, Offbank keeps settling: under a second, 1% flat, non-custodial,
+        built on Solana.
       </p>
     </section>
   );

@@ -53,6 +53,7 @@ interface Config {
   webhook: string;
   items: LineItem[];
   sessionId: string | null;
+  sandbox: boolean;
 }
 
 const fmtUSD = (n: number) =>
@@ -98,6 +99,8 @@ function EmbedCheckout() {
     let cancelled = false;
     (async () => {
       const sessionParam = params.get("session");
+      const sandbox =
+        params.get("sandbox") === "1" || params.get("sandbox") === "true";
       let resolved: Config | null = null;
 
       if (sessionParam) {
@@ -116,6 +119,7 @@ function EmbedCheckout() {
               webhook: "",
               items: Array.isArray(s.metadata?.items) ? s.metadata.items : [],
               sessionId: s.id || sessionParam,
+              sandbox,
             };
           }
         } catch {
@@ -138,6 +142,7 @@ function EmbedCheckout() {
           webhook: params.get("webhook") || "",
           items,
           sessionId: null,
+          sandbox,
         };
       }
 
@@ -172,7 +177,8 @@ function EmbedCheckout() {
       setStatus("awaiting");
 
       // Param mode: create a session so the payment records + webhook fires.
-      if (!resolved.sessionId) {
+      // Skipped in sandbox (no real payment / on-chain verification happens).
+      if (!resolved.sessionId && !resolved.sandbox) {
         try {
           const referrer =
             document.referrer ||
@@ -211,7 +217,8 @@ function EmbedCheckout() {
     (signature: string, customerWallet: string) => {
       if (doneRef.current) return;
       doneRef.current = true;
-      if (sessionIdRef.current) {
+      // Sandbox payments aren't real, so skip the on-chain-verified /complete.
+      if (sessionIdRef.current && !cfg?.sandbox) {
         fetch("/api/checkout/complete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -233,6 +240,14 @@ function EmbedCheckout() {
     },
     [cfg],
   );
+
+  // ── Sandbox: complete the flow without a real payment (for demos) ──
+  const simulatePayment = useCallback(() => {
+    closeOut(
+      "SANDBOX_" + Date.now().toString(36),
+      "SandboxBuyer1111111111111111111111111111111",
+    );
+  }, [closeOut]);
 
   // ── Path 1: pay with an injected browser wallet ──
   const payWithWallet = useCallback(async () => {
@@ -367,7 +382,14 @@ function EmbedCheckout() {
   return (
     <div className="flex min-h-screen flex-col bg-white px-6 py-7 text-[#101828]">
       <div className="flex items-center justify-between">
-        <span className="text-[15px] font-bold tracking-tight">Offbank</span>
+        <span className="flex items-center gap-2 text-[15px] font-bold tracking-tight">
+          Offbank
+          {cfg?.sandbox && (
+            <span className="rounded-full bg-[#fef3c7] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#92400e]">
+              Sandbox
+            </span>
+          )}
+        </span>
         {embedded && (
           <button
             onClick={cancel}
@@ -427,16 +449,33 @@ function EmbedCheckout() {
               </div>
             )}
 
+            {cfg?.sandbox && (
+              <button
+                onClick={simulatePayment}
+                className="mb-3 flex w-full max-w-[18rem] items-center justify-center gap-2 rounded-xl bg-[#34c759] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#2ba048]"
+              >
+                ✓ Simulate successful payment
+              </button>
+            )}
+
             <button
               onClick={payWithWallet}
               disabled={status === "paying"}
-              className="flex w-full max-w-[18rem] items-center justify-center gap-2 rounded-xl bg-[#34c759] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#2ba048] disabled:opacity-60"
+              className={`flex w-full max-w-[18rem] items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60 ${
+                cfg?.sandbox
+                  ? "border border-[#d0d5dd] bg-white text-[#344054] hover:bg-[#f9fafb]"
+                  : "bg-[#34c759] text-white hover:bg-[#2ba048]"
+              }`}
             >
               {status === "paying" ? (
                 <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                  <span
+                    className={`h-4 w-4 animate-spin rounded-full border-2 ${cfg?.sandbox ? "border-[#d0d5dd] border-t-[#344054]" : "border-white/40 border-t-white"}`}
+                  />
                   Confirm in your wallet…
                 </>
+              ) : cfg?.sandbox ? (
+                "Or pay for real (devnet)"
               ) : (
                 "Pay with wallet"
               )}

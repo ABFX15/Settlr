@@ -42,12 +42,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default:
-      "Offbank — Non-Custodial B2B Stablecoin Settlement for Cannabis & High-Risk Industries",
+    default: "Offbank — USDC payments for businesses banks won't serve",
     template: "%s | Offbank",
   },
   description:
-    "Offbank: Non-custodial stablecoin settlement for B2B cannabis and high-risk industries. 1% flat fee, instant finality, and no bank interference. Ever.",
+    "Offbank is USDC payment infrastructure for cannabis, iGaming, high-risk and cross-border businesses. Accept payments, send instant payouts, and invoice — 1% flat, instant finality, non-custodial. No bank to freeze you.",
   alternates: { canonical: "/" },
   authors: [{ name: "Offbank" }],
   icons: {
@@ -66,25 +65,24 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://offbankpay.com",
     siteName: "Offbank",
-    title:
-      "Offbank — Non-Custodial B2B Stablecoin Settlement for Cannabis & High-Risk Industries",
+    title: "Offbank — USDC payments for businesses banks won't serve",
     description:
-      "Enterprise payments for the debanked. Non-custodial USDC settlement for high-risk B2B supply chains at 1% flat. No bank interference, ever.",
+      "Accept payments, send instant payouts, and invoice in USDC — for cannabis, iGaming, high-risk and cross-border businesses. 1% flat, instant, non-custodial. No bank to freeze you.",
     images: [
       {
         url: "/opengraph-image?v=3",
         width: 1200,
         height: 630,
-        alt: "Offbank — Enterprise Payments for the Debanked",
+        alt: "Offbank — USDC payments for businesses banks won't serve",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     site: "@offbankpay",
-    title: "Offbank — Non-Custodial Stablecoin Settlement for High-Risk B2B",
+    title: "Offbank — USDC payments for businesses banks won't serve",
     description:
-      "Move capital with 100% certainty. Non-custodial USDC settlement for cannabis and high-risk supply chains. 1% flat, no bank interference.",
+      "Accept payments, send instant payouts, and invoice in USDC — for cannabis, iGaming, high-risk and cross-border businesses. 1% flat, instant, non-custodial.",
     images: ["/twitter-image?v=3"],
     creator: "@offbankpay",
   },

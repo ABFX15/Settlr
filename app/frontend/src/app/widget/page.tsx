@@ -55,6 +55,7 @@ export default function WidgetPage() {
       amount: 1,
       name: "Offbank Demo Store",
       orderId: "DEMO-" + Date.now(),
+      sandbox: true,
       onSuccess: (d: { signature: string }) => setLastPaid(d.signature),
     });
   };
