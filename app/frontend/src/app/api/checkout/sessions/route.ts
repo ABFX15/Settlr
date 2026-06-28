@@ -9,6 +9,7 @@ import {
 } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { checkoutSessions } from "../store";
+import { watchAddress } from "@/lib/helius";
 
 // Generate a unique checkout session ID
 function generateSessionId(): string {
@@ -103,6 +104,15 @@ export async function POST(request: NextRequest) {
 
         // Also store in legacy map for backwards compatibility
         checkoutSessions.set(session.id, session);
+
+        // Server-side confirmation: register the checkout's reference key with
+        // Helius so the payment is confirmed even if the buyer's browser closes.
+        // No-ops when Helius isn't configured (client polling still works).
+        const reference = (metadata as { reference?: string } | undefined)
+            ?.reference;
+        if (reference) {
+            watchAddress(reference).catch(() => {});
+        }
 
         // Build checkout URL
         const baseUrl = request.nextUrl.origin;

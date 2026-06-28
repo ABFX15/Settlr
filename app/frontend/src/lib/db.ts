@@ -723,6 +723,37 @@ export async function getCheckoutSession(id: string): Promise<CheckoutSession | 
     }
 }
 
+/**
+ * Find a pending checkout session by its Solana Pay `reference` key (stored in
+ * metadata.reference). Used by the Helius webhook to match an incoming payment
+ * to the checkout that created it.
+ */
+export async function getCheckoutSessionByReference(
+    reference: string,
+): Promise<CheckoutSession | null> {
+    if (isSupabaseConfigured()) {
+        const { data } = await supabase
+            .from("checkout_sessions")
+            .select("id")
+            .filter("metadata->>reference", "eq", reference)
+            .eq("status", "pending")
+            .limit(1)
+            .maybeSingle();
+        if (data?.id) return getCheckoutSession(data.id);
+        // Fall through to in-memory in case the row only lives there.
+    }
+    for (const s of memorySessions.values()) {
+        if (
+            s.status === "pending" &&
+            (s.metadata as { reference?: string } | undefined)?.reference ===
+                reference
+        ) {
+            return s;
+        }
+    }
+    return null;
+}
+
 export async function updateCheckoutSession(
     id: string,
     updates: Partial<CheckoutSession>

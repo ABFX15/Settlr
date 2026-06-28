@@ -194,6 +194,7 @@ function EmbedCheckout() {
               amount: resolved.amount,
               description: resolved.order || undefined,
               metadata: {
+                reference: reference.toBase58(),
                 ...(resolved.order ? { orderId: resolved.order } : {}),
                 ...(resolved.items.length ? { items: resolved.items } : {}),
               },
