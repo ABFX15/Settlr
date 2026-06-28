@@ -19,6 +19,9 @@ import {
   Leaf,
   Copy,
   ExternalLink,
+  KeyRound,
+  Plus,
+  Trash2,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -195,6 +198,66 @@ export default function SettingsPage() {
       setCopiedWebhook(true);
       setTimeout(() => setCopiedWebhook(false), 2000);
     });
+  };
+
+  /* ─── API keys (SDK) ─── */
+  interface KeyInfo {
+    id: string;
+    keyPrefix: string;
+    name: string;
+    active: boolean;
+    createdAt: string;
+    lastUsedAt: string | null;
+    requestCount: number;
+  }
+  const [apiKeys, setApiKeys] = useState<KeyInfo[]>([]);
+  const [newKeyName, setNewKeyName] = useState("");
+  const [creatingKey, setCreatingKey] = useState(false);
+  const [freshKey, setFreshKey] = useState<string | null>(null);
+  const [copiedKey, setCopiedKey] = useState(false);
+  const [keyError, setKeyError] = useState<string | null>(null);
+
+  const loadKeys = useCallback(async () => {
+    if (!wallet) return;
+    try {
+      const res = await fetch(`/api/keys?wallet=${wallet}`);
+      if (res.ok) setApiKeys((await res.json()).keys || []);
+    } catch {
+      /* ignore */
+    }
+  }, [wallet]);
+
+  useEffect(() => {
+    loadKeys();
+  }, [loadKeys]);
+
+  const createKey = async () => {
+    if (!wallet) return;
+    setCreatingKey(true);
+    setKeyError(null);
+    setFreshKey(null);
+    try {
+      const res = await fetch("/api/keys", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wallet, name: newKeyName.trim() || "API key" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Could not create key");
+      setFreshKey(data.key);
+      setNewKeyName("");
+      loadKeys();
+    } catch (e) {
+      setKeyError(e instanceof Error ? e.message : "Could not create key");
+    } finally {
+      setCreatingKey(false);
+    }
+  };
+
+  const revokeKey = async (id: string) => {
+    if (!wallet) return;
+    await fetch(`/api/keys/${id}?wallet=${wallet}`, { method: "DELETE" });
+    loadKeys();
   };
 
   if (loading) {
@@ -601,6 +664,118 @@ export default function SettingsPage() {
             </button>
           </div>
         </div>
+      </section>
+
+      {/* ─── Developer / API keys ─── */}
+      <section className="mb-8 rounded-2xl border border-[#d3d3d3] bg-white p-6">
+        <div className="mb-4 flex items-start gap-3">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#34c759]/10">
+            <KeyRound className="h-5 w-5 text-[#34c759]" />
+          </div>
+          <div>
+            <h2 className="text-base font-semibold text-[#212121]">
+              API keys
+            </h2>
+            <p className="text-sm text-[#8a8a8a]">
+              Authenticate the Settlr SDK & API (payouts, checkout). Keep keys
+              secret — treat them like passwords.
+            </p>
+          </div>
+        </div>
+
+        {/* Freshly created key — shown once */}
+        {freshKey && (
+          <div className="mb-4 rounded-xl border border-[#34c759]/40 bg-[#34c759]/5 p-4">
+            <p className="mb-2 text-sm font-medium text-[#027a48]">
+              Your new key — copy it now, it won&rsquo;t be shown again.
+            </p>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 overflow-x-auto rounded-lg bg-[#0d1117] px-3 py-2 font-mono text-[12px] text-[#e6edf3]">
+                {freshKey}
+              </code>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(freshKey);
+                  setCopiedKey(true);
+                  setTimeout(() => setCopiedKey(false), 1500);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#34c759] px-3 py-2 text-sm font-medium text-white hover:bg-[#2ba048]"
+              >
+                {copiedKey ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+                {copiedKey ? "Copied" : "Copy"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Create */}
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row">
+          <input
+            value={newKeyName}
+            onChange={(e) => setNewKeyName(e.target.value)}
+            placeholder="Key name (e.g. Production, iGaming sandbox)"
+            className="flex-1 rounded-xl border border-[#d3d3d3] px-3.5 py-2.5 text-sm outline-none focus:border-[#34c759]"
+          />
+          <button
+            onClick={createKey}
+            disabled={creatingKey || !wallet}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#34c759] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#2ba048] disabled:opacity-50"
+          >
+            {creatingKey ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Plus className="h-4 w-4" />
+            )}
+            Create key
+          </button>
+        </div>
+        {keyError && (
+          <p className="mb-3 text-sm text-[#d92d20]">{keyError}</p>
+        )}
+
+        {/* List */}
+        {apiKeys.length === 0 ? (
+          <p className="text-sm text-[#8a8a8a]">No API keys yet.</p>
+        ) : (
+          <div className="divide-y divide-[#f2f2f2] rounded-xl border border-[#eaecf0]">
+            {apiKeys.map((k) => (
+              <div
+                key={k.id}
+                className="flex items-center justify-between gap-3 px-4 py-3"
+              >
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-[#212121]">
+                    {k.name}{" "}
+                    {!k.active && (
+                      <span className="ml-1 rounded bg-[#f2f2f2] px-1.5 py-0.5 text-[11px] text-[#8a8a8a]">
+                        revoked
+                      </span>
+                    )}
+                  </p>
+                  <p className="font-mono text-[12px] text-[#8a8a8a]">
+                    {k.keyPrefix}…··· · {k.requestCount} reqs
+                    {k.lastUsedAt
+                      ? ` · last used ${new Date(k.lastUsedAt).toLocaleDateString()}`
+                      : " · never used"}
+                  </p>
+                </div>
+                {k.active && (
+                  <button
+                    onClick={() => revokeKey(k.id)}
+                    className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-lg border border-[#d3d3d3] px-3 py-1.5 text-sm font-medium text-[#d92d20] hover:bg-[#fef2f2]"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    Revoke
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* ─── Save ─── */}

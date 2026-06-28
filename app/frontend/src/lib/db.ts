@@ -1354,6 +1354,109 @@ export async function validateApiKey(rawKey: string): Promise<{
     return { valid: false, error: "Invalid API key" };
 }
 
+function generateRawApiKey(): string {
+    const { randomBytes } = require("crypto");
+    return "sk_live_" + randomBytes(24).toString("hex");
+}
+
+export interface CreatedApiKey {
+    id: string;
+    /** The raw secret — returned ONCE at creation, never stored in plaintext. */
+    key: string;
+    keyPrefix: string;
+    name: string;
+    createdAt: string;
+}
+
+export interface ApiKeyInfo {
+    id: string;
+    keyPrefix: string;
+    name: string;
+    tier: string;
+    active: boolean;
+    createdAt: string;
+    lastUsedAt: string | null;
+    requestCount: number;
+}
+
+/** Issue a new API key for a merchant. Stores only the hash; returns the raw
+ * key once for the caller to display. */
+export async function createApiKey(
+    merchantId: string,
+    name: string,
+): Promise<CreatedApiKey> {
+    if (!isSupabaseConfigured()) {
+        throw new Error("API key storage is not configured");
+    }
+    const rawKey = generateRawApiKey();
+    const keyHash = hashApiKey(rawKey);
+    const keyPrefix = rawKey.slice(0, 12); // e.g. "sk_live_a1b2"
+
+    const { data, error } = await supabase
+        .from("api_keys")
+        .insert({
+            merchant_id: merchantId,
+            key_hash: keyHash,
+            key_prefix: keyPrefix,
+            name: name || "API key",
+            tier: "free",
+            rate_limit: 60,
+            active: true,
+        })
+        .select("id, created_at")
+        .single();
+
+    if (error || !data) {
+        logger.error("Failed to create API key:", error);
+        throw new Error("Failed to create API key");
+    }
+    return {
+        id: data.id,
+        key: rawKey,
+        keyPrefix,
+        name: name || "API key",
+        createdAt: data.created_at,
+    };
+}
+
+/** List a merchant's keys (metadata only — never the secret). */
+export async function listApiKeys(merchantId: string): Promise<ApiKeyInfo[]> {
+    if (!isSupabaseConfigured()) return [];
+    const { data, error } = await supabase
+        .from("api_keys")
+        .select(
+            "id, key_prefix, name, tier, active, created_at, last_used_at, request_count",
+        )
+        .eq("merchant_id", merchantId)
+        .order("created_at", { ascending: false });
+    if (error || !data) return [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any[]).map((k) => ({
+        id: k.id,
+        keyPrefix: k.key_prefix,
+        name: k.name,
+        tier: k.tier,
+        active: k.active,
+        createdAt: k.created_at,
+        lastUsedAt: k.last_used_at,
+        requestCount: k.request_count || 0,
+    }));
+}
+
+/** Revoke (deactivate) a key — scoped to the owning merchant. */
+export async function revokeApiKey(
+    merchantId: string,
+    keyId: string,
+): Promise<boolean> {
+    if (!isSupabaseConfigured()) return false;
+    const { error } = await supabase
+        .from("api_keys")
+        .update({ active: false })
+        .eq("id", keyId)
+        .eq("merchant_id", merchantId);
+    return !error;
+}
+
 // ============================================================================
 // WAITLIST
 // ============================================================================
