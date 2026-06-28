@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Leaf, Sprout, Crosshair, Globe } from "lucide-react";
+import {
+  ArrowRight,
+  Leaf,
+  Sprout,
+  Crosshair,
+  Globe,
+  Gamepad2,
+} from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 
 export const metadata: Metadata = {
   title: "Industries | Offbank",
   description:
-    "USDC invoicing and B2B settlement for cannabis, CBD, hemp, firearms, and international wholesale. 1% flat. Non-custodial. Cash out to USD.",
+    "USDC payments for businesses banks won't serve — cannabis, iGaming, CBD, hemp, firearms, and cross-border wholesale. Checkout, payouts, and invoicing. 1% flat. Non-custodial.",
   alternates: { canonical: "/industries" },
 };
 
@@ -17,6 +24,12 @@ const industries = [
     icon: Leaf,
     title: "Cannabis & Wholesalers",
     desc: "B2B settlement for state-legal cannabis operators. LeafLink-native.",
+  },
+  {
+    href: "/industries/igaming",
+    icon: Gamepad2,
+    title: "iGaming & Online Gaming",
+    desc: "Crypto deposits and instant USDC player payouts. No chargebacks.",
   },
   {
     href: "/industries/cbd-hemp",

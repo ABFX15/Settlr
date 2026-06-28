@@ -21,6 +21,10 @@ import {
   FileText,
   GraduationCap,
   Scale,
+  CreditCard,
+  Send,
+  Gamepad2,
+  Plane,
 } from "lucide-react";
 
 const navLinks = [
@@ -69,6 +73,12 @@ const resourceLinks = [
 
 const productLinks = [
   {
+    href: "/widget",
+    label: "Checkout Widget",
+    icon: CreditCard,
+    description: "Embeddable USDC checkout for any site",
+  },
+  {
     href: "/products/payment-links",
     label: "Payment Links",
     icon: LinkIcon,
@@ -79,6 +89,18 @@ const productLinks = [
     label: "Invoices",
     icon: FileText,
     description: "B2B invoice settlement on-chain",
+  },
+  {
+    href: "/developers",
+    label: "Payouts API",
+    icon: Send,
+    description: "Pay anyone in USDC by email or wallet",
+  },
+  {
+    href: "/sandbox",
+    label: "Try the sandbox",
+    icon: Play,
+    description: "Run the checkout live — no funds needed",
   },
 ];
 
@@ -96,6 +118,12 @@ const industryLinks = [
     description: "B2B settlement for state-legal operators",
   },
   {
+    href: "/industries/igaming",
+    label: "iGaming & Online Gaming",
+    icon: Gamepad2,
+    description: "Instant USDC deposits and player payouts",
+  },
+  {
     href: "/industries/cbd-hemp",
     label: "CBD & Hemp",
     icon: Sprout,
@@ -106,6 +134,12 @@ const industryLinks = [
     label: "Firearms & Ammunition",
     icon: Crosshair,
     description: "FFLs, ammo manufacturers, 2A retail",
+  },
+  {
+    href: "/industries/international-wholesale",
+    label: "International / Cross-border",
+    icon: Plane,
+    description: "Settle cross-border without SWIFT",
   },
 ];
 
