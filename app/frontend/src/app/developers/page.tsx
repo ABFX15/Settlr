@@ -3,7 +3,15 @@
 import Link from "next/link";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
-import { Code2, Webhook, Plug, Github, ArrowRight, Rocket } from "lucide-react";
+import {
+  Code2,
+  Webhook,
+  Plug,
+  Github,
+  ArrowRight,
+  Rocket,
+  Send,
+} from "lucide-react";
 
 /**
  * /developers, developer-facing landing page.
@@ -90,6 +98,21 @@ export default function DevelopersPage() {
               </p>
             </Link>
 
+            <Link
+              href="/products/instant-cashout"
+              className="group rounded-xl border border-[#d3d3d3] p-6 hover:border-[#34c759] hover:bg-[#34c759]/5 transition-colors"
+            >
+              <Send className="h-6 w-6 text-[#34c759] mb-3" />
+              <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
+                Payouts &amp; Cashouts
+                <ArrowRight className="h-4 w-4 text-[#8a8a8a] group-hover:text-[#34c759] group-hover:translate-x-0.5 transition-all" />
+              </h2>
+              <p className="text-sm text-[#5c5c5c]">
+                Pay anyone in USDC by email or wallet — affiliate commissions,
+                player cashouts, supplier runs. Single or batch, instant.
+              </p>
+            </Link>
+
             <a
               href="https://github.com/ABFX15/x402-hack-payment"
               target="_blank"
@@ -132,16 +155,56 @@ export default function DevelopersPage() {
             </p>
           </div>
 
+          {/* Payouts quickstart */}
+          <div className="mt-6 rounded-xl bg-[#0a0a0a] text-white p-8">
+            <div className="flex items-center gap-2 text-sm text-[#34c759] mb-3">
+              <Send className="h-4 w-4" />
+              <span className="font-semibold uppercase tracking-wider">
+                Pay out in one call
+              </span>
+            </div>
+            <pre className="overflow-x-auto text-sm font-mono text-[#d3d3d3] leading-relaxed">
+              {`import { PayoutClient } from "@offbank/sdk";
+
+const payouts = new PayoutClient({ apiKey: "sk_live_..." });
+
+// Affiliate commission, player cashout, supplier payment — same call
+await payouts.create({
+  email: "alice@example.com",
+  amount: 250.0,
+  memo: "March affiliate commission",
+});
+
+// Or pay a whole run at once
+await payouts.createBatch([
+  { email: "alice@example.com", amount: 250.0 },
+  { email: "bob@example.com",   amount: 180.0 },
+]);`}
+            </pre>
+            <p className="mt-4 text-sm text-[#8a8a8a]">
+              Each recipient gets a claim link (and email) and claims with any
+              Solana wallet — or one we provision on first claim. Your webhook
+              fires when it settles. No minimum amounts, no batch windows.
+            </p>
+          </div>
+
           {/* Footer link */}
           <div className="mt-10 text-sm text-[#8a8a8a]">
-            Need an API key?{" "}
+            Need an API key? Generate one in{" "}
             <Link
-              href="/onboarding"
+              href="/dashboard/settings"
               className="text-[#34c759] font-medium hover:underline"
             >
-              Complete onboarding
+              Settings → API keys
             </Link>{" "}
-           , keys are issued once your merchant account is provisioned.
+            once your merchant account is set up. Prefer no code? Use{" "}
+            <Link
+              href="/dashboard/affiliates"
+              className="text-[#34c759] font-medium hover:underline"
+            >
+              Affiliate Payouts
+            </Link>{" "}
+            in the dashboard.
           </div>
         </div>
       </div>

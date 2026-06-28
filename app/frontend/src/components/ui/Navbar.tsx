@@ -104,6 +104,12 @@ const productLinks = [
     description: "Pay anyone in USDC by email or wallet",
   },
   {
+    href: "/products/instant-cashout",
+    label: "Instant Cashout",
+    icon: Zap,
+    description: "Pay players & winners in seconds",
+  },
+  {
     href: "/sandbox",
     label: "Try the sandbox",
     icon: Play,
