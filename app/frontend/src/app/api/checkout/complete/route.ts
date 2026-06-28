@@ -10,6 +10,7 @@ import {
     CheckoutSession,
 } from "@/lib/db";
 import { screenPaymentParties } from "@/lib/range";
+import { verifyUsdcTransferToMerchant } from "@/lib/verify-payment";
 import crypto from "crypto";
 
 /**
@@ -54,6 +55,30 @@ export async function POST(request: NextRequest) {
             return NextResponse.json(
                 { error: `Session already ${session.status}` },
                 { status: 400 }
+            );
+        }
+
+        // On-chain verification: the signature MUST be a confirmed transaction
+        // that credited at least the session amount in USDC to the merchant's
+        // wallet. Without this, a client could mark a session "completed" (and
+        // trigger the merchant's webhook → order fulfilment) with any string.
+        const verification = await verifyUsdcTransferToMerchant({
+            signature,
+            merchantWallet: session.merchantWallet,
+            totalUsdc: session.amount,
+        });
+        if (!verification.ok) {
+            logger.warn(
+                `[checkout/complete] payment verification failed for ${sessionId}: ${verification.error}`,
+            );
+            return NextResponse.json(
+                {
+                    error: "payment_verification_failed",
+                    message:
+                        verification.error ||
+                        "Could not verify this payment on-chain.",
+                },
+                { status: 400 },
             );
         }
 

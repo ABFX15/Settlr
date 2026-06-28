@@ -144,3 +144,83 @@ export async function verifyOnChainPayment(
         platformFeeBase: platformFee,
     };
 }
+
+/**
+ * Verify a plain USDC transfer (no platform-fee split) credited at least
+ * `totalUsdc` to the merchant's wallet in transaction `signature`.
+ *
+ * Used by the checkout widget / hosted checkout, where the buyer pays the
+ * merchant directly. Uses token-balance deltas (pre/post) rather than parsing
+ * instructions, so it's robust to transfer vs transferChecked, ATA creation,
+ * and nested/CPI transfers — and can't be forged by submitting an unrelated
+ * or under-paid signature.
+ */
+export async function verifyUsdcTransferToMerchant(args: {
+    signature: string;
+    merchantWallet: string;
+    totalUsdc: number;
+}): Promise<VerifyPaymentResult> {
+    const { signature, merchantWallet, totalUsdc } = args;
+
+    if (!signature || typeof signature !== "string") {
+        return { ok: false, error: "signature required" };
+    }
+    if (!merchantWallet || typeof merchantWallet !== "string") {
+        return { ok: false, error: "merchantWallet required" };
+    }
+    if (!Number.isFinite(totalUsdc) || totalUsdc <= 0) {
+        return { ok: false, error: "totalUsdc must be a positive number" };
+    }
+
+    let owner: string;
+    try {
+        owner = new PublicKey(merchantWallet).toBase58();
+    } catch {
+        return { ok: false, error: "invalid merchantWallet" };
+    }
+
+    const connection = new Connection(SOLANA_RPC_URL, "confirmed");
+    let parsedTx;
+    try {
+        parsedTx = await connection.getParsedTransaction(signature, {
+            commitment: "confirmed",
+            maxSupportedTransactionVersion: 0,
+        });
+    } catch {
+        // Malformed signature or RPC error — treat as unverifiable, never as paid.
+        return { ok: false, error: "could not look up transaction" };
+    }
+
+    if (!parsedTx) return { ok: false, error: "transaction not found on-chain" };
+    if (parsedTx.meta?.err) {
+        return { ok: false, error: "on-chain transaction failed" };
+    }
+
+    const pre = parsedTx.meta?.preTokenBalances ?? [];
+    const post = parsedTx.meta?.postTokenBalances ?? [];
+
+    // The merchant's USDC token account, identified by owner + mint.
+    const postBal = post.find(
+        (b) => b.mint === USDC_MINT_ADDRESS && b.owner === owner,
+    );
+    if (!postBal) {
+        return {
+            ok: false,
+            error: "transaction credits no USDC to the merchant wallet",
+        };
+    }
+    const preBal = pre.find((b) => b.accountIndex === postBal.accountIndex);
+    const postAmt = BigInt(postBal.uiTokenAmount.amount);
+    const preAmt = preBal ? BigInt(preBal.uiTokenAmount.amount) : BigInt(0);
+    const delta = postAmt - preAmt;
+
+    const totalBase = BigInt(Math.round(totalUsdc * 1_000_000));
+    if (delta < totalBase) {
+        return {
+            ok: false,
+            error: `underpaid: merchant received ${delta} of ${totalBase} USDC base units`,
+        };
+    }
+
+    return { ok: true, merchantAmountBase: delta };
+}

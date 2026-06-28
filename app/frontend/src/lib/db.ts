@@ -660,8 +660,15 @@ export async function createCheckoutSession(
         });
 
         if (error) {
-            logger.error("Supabase error creating session:", error);
-            throw new Error("Failed to create checkout session");
+            // Don't hard-fail checkout on a DB write error (e.g. schema drift —
+            // a missing column). Degrade to the in-memory store so the payment
+            // + webhook flow still works; apply the pending migration to restore
+            // durable persistence.
+            logger.error(
+                "Supabase error creating session — falling back to in-memory:",
+                error,
+            );
+            memorySessions.set(session.id, session);
         }
     } else {
         memorySessions.set(session.id, session);
