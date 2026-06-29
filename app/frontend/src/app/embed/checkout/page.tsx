@@ -39,9 +39,10 @@ import { SOLANA_RPC_URL, USDC_MINT_ADDRESS } from "@/lib/constants";
 import {
   EVM_CHAINS,
   isEvmAddress,
-  getEvmProvider,
+  getEvmWallets,
   payUsdcEvm,
   waitForEvmReceipt,
+  type EvmWallet,
 } from "@/lib/evm";
 
 export const dynamic = "force-dynamic";
@@ -100,7 +101,7 @@ function EmbedCheckout() {
   const [solanaUrl, setSolanaUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [hasWallet, setHasWallet] = useState(false);
-  const [hasEvm, setHasEvm] = useState(false);
+  const [evmWallets, setEvmWallets] = useState<EvmWallet[]>([]);
   const [evmChain, setEvmChain] = useState<"base" | "ethereum">("base");
   const referenceRef = useRef<PublicKey | null>(null);
   const sessionIdRef = useRef<string | null>(null);
@@ -176,7 +177,13 @@ function EmbedCheckout() {
 
       setCfg(resolved);
       setHasWallet(!!getSolanaProvider());
-      setHasEvm(!!getEvmProvider() && isEvmAddress(resolved.evm));
+      if (isEvmAddress(resolved.evm)) {
+        setEvmWallets(getEvmWallets());
+        // EIP-6963 announcements can arrive a tick late; re-scan shortly.
+        setTimeout(() => {
+          if (!cancelled) setEvmWallets(getEvmWallets());
+        }, 300);
+      }
       sessionIdRef.current = resolved.sessionId;
 
       const reference = Keypair.generate().publicKey;
@@ -332,8 +339,10 @@ function EmbedCheckout() {
     }
   }, [cfg, closeOut]);
 
-  // ── Path 1b: pay USDC from an Ethereum / Base wallet (MetaMask etc.) ──
-  const payEvm = useCallback(async () => {
+  // ── Path 1b: pay USDC from a chosen Ethereum / Base wallet ──
+  const payEvm = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async (provider: any) => {
     if (!cfg || !isEvmAddress(cfg.evm)) return;
     setError(null);
     setStatus("paying");
@@ -342,8 +351,9 @@ function EmbedCheckout() {
         chain: evmChain,
         merchant: cfg.evm,
         amountUsd: cfg.amount,
+        provider,
       });
-      const ok = await waitForEvmReceipt(txHash);
+      const ok = await waitForEvmReceipt(txHash, provider);
       if (!ok) {
         throw new Error(
           "Payment didn't confirm — check your USDC balance on " +
@@ -564,16 +574,26 @@ function EmbedCheckout() {
                     </button>
                   ))}
                 </div>
-                <button
-                  onClick={payEvm}
-                  disabled={status === "paying"}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#d0d5dd] bg-white px-5 py-2.5 text-sm font-semibold text-[#344054] transition-colors hover:bg-[#f9fafb] disabled:opacity-60"
-                >
-                  Pay with Ethereum wallet
-                </button>
-                {!hasEvm && (
+                <div className="flex flex-col gap-1.5">
+                  {evmWallets.map((w) => (
+                    <button
+                      key={w.uuid}
+                      onClick={() => payEvm(w.provider)}
+                      disabled={status === "paying"}
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#d0d5dd] bg-white px-5 py-2.5 text-sm font-semibold text-[#344054] transition-colors hover:bg-[#f9fafb] disabled:opacity-60"
+                    >
+                      {w.icon && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={w.icon} alt="" className="h-4 w-4 rounded" />
+                      )}
+                      Pay with {w.name}
+                    </button>
+                  ))}
+                </div>
+                {evmWallets.length === 0 && (
                   <p className="mt-1.5 text-[12px] text-[#98a2b3]">
-                    Install MetaMask to pay from Ethereum or Base.
+                    Install MetaMask (or another Ethereum wallet) to pay on
+                    Ethereum or Base.
                   </p>
                 )}
               </div>

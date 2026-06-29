@@ -52,6 +52,73 @@ export function getEvmProvider(): any | null {
   return (window as any).ethereum || null;
 }
 
+export interface EvmWallet {
+  uuid: string;
+  name: string;
+  icon: string;
+  rdns: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  provider: any;
+}
+
+// EIP-6963: wallets announce themselves so a dApp can let the user choose
+// (instead of whichever extension grabbed window.ethereum). Phantom, MetaMask,
+// Coinbase Wallet, Rabby, etc. all support it.
+const announced: EvmWallet[] = [];
+if (typeof window !== "undefined") {
+  window.addEventListener(
+    "eip6963:announceProvider",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (event: any) => {
+      const d = event?.detail;
+      if (d?.info?.uuid && !announced.some((w) => w.uuid === d.info.uuid)) {
+        announced.push({
+          uuid: d.info.uuid,
+          name: d.info.name,
+          icon: d.info.icon,
+          rdns: d.info.rdns,
+          provider: d.provider,
+        });
+      }
+    },
+  );
+}
+
+/** Discover the EVM wallets installed in this browser (EIP-6963, with a
+ * legacy window.ethereum fallback). */
+export function getEvmWallets(): EvmWallet[] {
+  if (typeof window === "undefined") return [];
+  window.dispatchEvent(new Event("eip6963:requestProvider"));
+
+  if (announced.length === 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const eth = (window as any).ethereum;
+    if (eth) {
+      const providers = eth.providers || [eth];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      providers.forEach((p: any, i: number) => {
+        const name = p.isMetaMask
+          ? "MetaMask"
+          : p.isCoinbaseWallet
+            ? "Coinbase Wallet"
+            : p.isPhantom
+              ? "Phantom"
+              : "Browser wallet";
+        if (!announced.some((w) => w.name === name)) {
+          announced.push({
+            uuid: "legacy-" + i,
+            name,
+            icon: "",
+            rdns: "",
+            provider: p,
+          });
+        }
+      });
+    }
+  }
+  return [...announced];
+}
+
 /** ABI-encode ERC-20 transfer(address,uint256). */
 function encodeTransfer(to: string, amountBaseUnits: bigint): string {
   const selector = "a9059cbb";
@@ -68,8 +135,10 @@ export async function payUsdcEvm(args: {
   chain: "base" | "ethereum";
   merchant: string;
   amountUsd: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  provider?: any;
 }): Promise<{ txHash: string; from: string }> {
-  const provider = getEvmProvider();
+  const provider = args.provider || getEvmProvider();
   if (!provider) throw new Error("No Ethereum wallet found");
   if (!isEvmAddress(args.merchant)) {
     throw new Error("Merchant EVM address is invalid");
@@ -121,9 +190,11 @@ export async function payUsdcEvm(args: {
 /** Poll for the transaction receipt; resolves true on success. */
 export async function waitForEvmReceipt(
   txHash: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  provider?: any,
   timeoutMs = 120_000,
 ): Promise<boolean> {
-  const provider = getEvmProvider();
+  provider = provider || getEvmProvider();
   if (!provider) return false;
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
