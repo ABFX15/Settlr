@@ -37,6 +37,8 @@ export default function SandboxPage() {
     if (!w.OffbankCheckout) return;
     w.OffbankCheckout.open({
       merchant: DEMO_MERCHANT,
+      // Demo EVM receiving address — surfaces the "Pay with Ethereum" option.
+      evm: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
       amount: amt,
       name: name || "Demo Store",
       orderId: "SANDBOX-" + Date.now(),

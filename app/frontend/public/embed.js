@@ -69,6 +69,10 @@
       }
     }
 
+    // Optional EVM (Ethereum/Base) receiving address — enables paying from an
+    // Ethereum wallet (MetaMask etc.) in addition to Solana.
+    if (opts.evm) params.set("evm", String(opts.evm));
+
     // Sandbox/demo mode — the checkout can be completed without a real payment.
     if (opts.sandbox) params.set("sandbox", "1");
 
