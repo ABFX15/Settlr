@@ -14,29 +14,28 @@ import { NextRequest, NextResponse } from "next/server";
 import {
     validateApiKey,
     getOrCreateMerchantBalance,
-    getOrCreateMerchantByWallet,
     getTreasuryTransactions,
     calculatePayoutFee,
 } from "@/lib/db";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
 export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
 
-        // Authenticate — wallet param (dashboard) or API key (SDK)
+        // Authenticate — signed merchant session (dashboard) or API key (SDK).
+        // The merchant is never read from an unauthenticated param.
         let merchantId: string | undefined;
 
-        const wallet = searchParams.get("wallet");
-        if (wallet && wallet.length >= 32) {
-            // Dashboard auth: resolve wallet address to merchant UUID
-            const merchant = await getOrCreateMerchantByWallet(wallet);
-            merchantId = merchant.id;
+        const session = await requireMerchantSession(request);
+        if (session) {
+            merchantId = session.merchantId;
         } else {
             const apiKey =
                 request.headers.get("x-api-key") ||
                 request.headers.get("authorization")?.replace("Bearer ", "");
             if (!apiKey) {
-                return NextResponse.json({ error: "Missing API key or wallet" }, { status: 401 });
+                return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
             }
 
             const validation = await validateApiKey(apiKey);

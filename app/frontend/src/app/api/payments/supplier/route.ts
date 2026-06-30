@@ -10,23 +10,25 @@
 
 import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
-import { getOrCreateMerchantByWallet } from "@/lib/db";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 import { getPayee } from "@/lib/payees";
 import { screenWallet } from "@/lib/range";
 import { buildSupplierPaymentTransaction } from "@/lib/supplier-payment";
 
 export async function POST(request: NextRequest) {
     try {
+        const session = await requireMerchantSession(request);
+        if (!session) {
+            return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+        }
+        const wallet = session.merchantWallet;
+
         const body = await request.json();
-        const { wallet, payeeId, amount } = body as {
-            wallet?: string;
+        const { payeeId, amount } = body as {
             payeeId?: string;
             amount?: number;
         };
 
-        if (!wallet || wallet.length < 32) {
-            return NextResponse.json({ error: "Missing payer wallet" }, { status: 400 });
-        }
         if (!payeeId) {
             return NextResponse.json({ error: "payeeId is required" }, { status: 400 });
         }
@@ -34,7 +36,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "amount must be positive" }, { status: 400 });
         }
 
-        const merchant = await getOrCreateMerchantByWallet(wallet);
+        const merchant = { id: session.merchantId };
         const payee = await getPayee(payeeId);
         if (!payee || payee.merchantId !== merchant.id) {
             return NextResponse.json({ error: "Payee not found" }, { status: 404 });

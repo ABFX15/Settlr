@@ -10,44 +10,48 @@
  * Authentication: X-API-Key header OR wallet field in body (dashboard)
  */
 import { logger } from "@/lib/logger";
-import { SOLANA_RPC_URL, USDC_MINT_ADDRESS, IS_DEVNET } from "@/lib/constants";
+import { USDC_MINT_ADDRESS, IS_DEVNET } from "@/lib/constants";
 
 import { NextRequest, NextResponse } from "next/server";
 import {
     validateApiKey,
     getOrCreateMerchantBalance,
-    getOrCreateMerchantByWallet,
     creditMerchantBalance,
 } from "@/lib/db";
 import { dispatchWebhookEvent } from "@/lib/webhooks";
+import { requireMerchantSession } from "@/lib/merchant-auth";
+import { verifyUsdcTransferToMerchant } from "@/lib/verify-payment";
 
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
 
-        // Authenticate — wallet field (dashboard) or API key (SDK)
+        // Authenticate — signed merchant session (dashboard) or API key (SDK).
+        // Never trust an unauthenticated `wallet` body field: it would let a
+        // caller credit any merchant's treasury.
         let merchantId: string | undefined;
+        let merchantWallet: string | undefined;
 
-        if (body.wallet && typeof body.wallet === "string" && body.wallet.length >= 32) {
-            // Dashboard auth: resolve wallet address to merchant UUID
-            const merchant = await getOrCreateMerchantByWallet(body.wallet);
-            merchantId = merchant.id;
+        const session = await requireMerchantSession(request);
+        if (session) {
+            merchantId = session.merchantId;
+            merchantWallet = session.merchantWallet;
         } else {
             const apiKey =
                 request.headers.get("x-api-key") ||
                 request.headers.get("authorization")?.replace("Bearer ", "");
             if (!apiKey) {
-                return NextResponse.json({ error: "Missing API key or wallet" }, { status: 401 });
+                return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
             }
-
             const validation = await validateApiKey(apiKey);
-            if (!validation.valid || !validation.merchantId) {
+            if (!validation.valid || !validation.merchantId || !validation.merchantWallet) {
                 return NextResponse.json(
                     { error: validation.error || "Invalid API key" },
                     { status: 401 }
                 );
             }
             merchantId = validation.merchantId;
+            merchantWallet = validation.merchantWallet;
         }
 
         const { amount, txSignature } = body;
@@ -107,38 +111,29 @@ export async function POST(request: NextRequest) {
         // 4. Verify it's confirmed/finalized
         // For now, we trust the reported amount (dev mode)
 
-        let verified = false;
-        const verifiedAmount = amount;
-
-        try {
-            // Attempt on-chain verification
-            const { Connection } = await import("@solana/web3.js");
-            const rpcUrl = SOLANA_RPC_URL;
-            const connection = new Connection(rpcUrl, "confirmed");
-
-            const tx = await connection.getTransaction(txSignature, {
-                maxSupportedTransactionVersion: 0,
-            });
-
-            if (tx && tx.meta && !tx.meta.err) {
-                verified = true;
-                // In production: parse token transfer amounts from tx.meta.postTokenBalances
-                // For now, trust the reported amount
-            }
-        } catch (err) {
-            logger.warn("[treasury/deposit] On-chain verification failed, using reported amount:", err);
-            // In dev/demo mode, accept without verification
-            if (process.env.NODE_ENV === "development" || !process.env.FEE_PAYER_SECRET_KEY) {
-                verified = true;
-            }
-        }
-
-        if (!verified) {
+        // Verify the deposit ON-CHAIN before crediting: the signature must be a
+        // confirmed USDC transfer of at least `amount` to the merchant's wallet.
+        // Without this, a caller could credit themselves arbitrary balance.
+        const verification = await verifyUsdcTransferToMerchant({
+            signature: txSignature,
+            merchantWallet: merchantWallet!,
+            totalUsdc: amount,
+        });
+        if (!verification.ok) {
+            logger.warn(
+                `[treasury/deposit] deposit verification failed for ${merchantId}: ${verification.error}`,
+            );
             return NextResponse.json(
-                { error: "Could not verify transaction. Ensure it is confirmed on-chain." },
+                {
+                    error: "deposit_not_verified",
+                    message:
+                        verification.error ||
+                        "Could not verify this deposit on-chain.",
+                },
                 { status: 400 }
             );
         }
+        const verifiedAmount = amount;
 
         // Credit the merchant balance
         const updatedBalance = await creditMerchantBalance(

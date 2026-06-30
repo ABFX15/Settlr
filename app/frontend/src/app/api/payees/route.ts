@@ -8,17 +8,16 @@
 import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { PublicKey } from "@solana/web3.js";
-import { getOrCreateMerchantByWallet } from "@/lib/db";
 import { listPayees, createPayee } from "@/lib/payees";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
 export async function GET(request: NextRequest) {
     try {
-        const wallet = new URL(request.url).searchParams.get("wallet");
-        if (!wallet || wallet.length < 32) {
-            return NextResponse.json({ error: "Missing wallet" }, { status: 400 });
+        const session = await requireMerchantSession(request);
+        if (!session) {
+            return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
         }
-        const merchant = await getOrCreateMerchantByWallet(wallet);
-        return NextResponse.json({ payees: await listPayees(merchant.id) });
+        return NextResponse.json({ payees: await listPayees(session.merchantId) });
     } catch (err) {
         logger.error("[payees] GET error:", err);
         return NextResponse.json({ error: "Failed to load payees" }, { status: 500 });
@@ -27,18 +26,18 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
+        const session = await requireMerchantSession(request);
+        if (!session) {
+            return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+        }
         const body = await request.json();
-        const { wallet, name, walletAddress, licenseNumber, note } = body as {
-            wallet?: string;
+        const { name, walletAddress, licenseNumber, note } = body as {
             name?: string;
             walletAddress?: string;
             licenseNumber?: string;
             note?: string;
         };
 
-        if (!wallet || wallet.length < 32) {
-            return NextResponse.json({ error: "Missing wallet" }, { status: 400 });
-        }
         if (!name || typeof name !== "string") {
             return NextResponse.json({ error: "Supplier name is required" }, { status: 400 });
         }
@@ -51,9 +50,8 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Invalid supplier wallet address" }, { status: 400 });
         }
 
-        const merchant = await getOrCreateMerchantByWallet(wallet);
         const payee = await createPayee({
-            merchantId: merchant.id,
+            merchantId: session.merchantId,
             name: name.trim(),
             walletAddress,
             licenseNumber: licenseNumber?.trim() || undefined,

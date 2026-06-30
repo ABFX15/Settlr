@@ -12,6 +12,7 @@ import {
 } from "@/lib/db";
 import { isUserVerified } from "@/lib/sumsub";
 import { screenWallet } from "@/lib/range";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 import {
     createOfframpRequest,
     listOfframpRequests,
@@ -76,16 +77,11 @@ async function assertKybIfRequired(wallet: string): Promise<NextResponse | null>
 
 export async function GET(request: NextRequest) {
     try {
-        const wallet = request.nextUrl.searchParams.get("wallet");
-        if (!wallet || wallet.length < 32) {
-            return NextResponse.json(
-                { error: "Missing wallet parameter" },
-                { status: 400 },
-            );
+        const session = await requireMerchantSession(request);
+        if (!session) {
+            return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
         }
-
-        const merchant = await getOrCreateMerchantByWallet(wallet);
-        const requests = await listOfframpRequests(merchant.id);
+        const requests = await listOfframpRequests(session.merchantId);
 
         return NextResponse.json({
             requests,
@@ -102,16 +98,14 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json();
-        const { wallet, amount, method, region, currency, localAmount, accountInfo } = body;
-
-        // Validate
-        if (!wallet || typeof wallet !== "string" || wallet.length < 32) {
-            return NextResponse.json(
-                { error: "Valid wallet address required" },
-                { status: 400 },
-            );
+        const session = await requireMerchantSession(request);
+        if (!session) {
+            return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
         }
+        const wallet = session.merchantWallet;
+
+        const body = await request.json();
+        const { amount, method, region, currency, localAmount, accountInfo } = body;
 
         if (!amount || typeof amount !== "number" || amount <= 0) {
             return NextResponse.json(

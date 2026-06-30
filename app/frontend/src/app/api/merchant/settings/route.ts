@@ -2,6 +2,7 @@ import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { upsertConfig as upsertLeafLinkConfig } from "@/lib/leaflink/db";
 import { LeafLinkClient } from "@/lib/leaflink/client";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
 /**
  * GET  /api/merchant/settings?wallet=xxx — Load merchant settings
@@ -46,13 +47,11 @@ interface MerchantSettings {
 const settingsStore = new Map<string, MerchantSettings>();
 
 export async function GET(request: NextRequest) {
-    const wallet = request.nextUrl.searchParams.get("wallet");
-    if (!wallet || wallet.length < 32) {
-        return NextResponse.json(
-            { error: "Missing or invalid wallet parameter" },
-            { status: 400 },
-        );
+    const session = await requireMerchantSession(request);
+    if (!session) {
+        return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
+    const wallet = session.merchantWallet;
 
     const stored = settingsStore.get(wallet);
     if (!stored) {
@@ -103,14 +102,17 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
     try {
-        const body: MerchantSettings = await request.json();
-
-        if (!body.wallet || typeof body.wallet !== "string" || body.wallet.length < 32) {
+        const session = await requireMerchantSession(request);
+        if (!session) {
             return NextResponse.json(
-                { error: "Valid wallet address required" },
-                { status: 400 },
+                { error: "Not authenticated" },
+                { status: 401 },
             );
         }
+
+        const body: MerchantSettings = await request.json();
+        // Bind settings to the authenticated wallet — never trust the body's.
+        body.wallet = session.merchantWallet;
 
         // EVM receiving address is optional, but must be a valid 0x address.
         if (body.evmAddress && !/^0x[a-fA-F0-9]{40}$/.test(body.evmAddress)) {

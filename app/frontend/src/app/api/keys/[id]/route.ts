@@ -1,27 +1,25 @@
 /**
- * DELETE /api/keys/:id?wallet=...  → revoke (deactivate) an API key.
- * Scoped to the owning merchant so one merchant can't revoke another's key.
+ * DELETE /api/keys/:id  → revoke (deactivate) an API key.
+ * Scoped to the signed-in merchant (from the session) so one merchant can't
+ * revoke another's key.
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger";
-import { getOrCreateMerchantByWallet, revokeApiKey } from "@/lib/db";
+import { revokeApiKey } from "@/lib/db";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
 export async function DELETE(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> },
 ) {
+    const session = await requireMerchantSession(request);
+    if (!session) {
+        return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
     try {
         const { id } = await params;
-        const wallet = request.nextUrl.searchParams.get("wallet");
-        if (!wallet) {
-            return NextResponse.json(
-                { error: "wallet is required" },
-                { status: 400 },
-            );
-        }
-        const merchant = await getOrCreateMerchantByWallet(wallet);
-        const ok = await revokeApiKey(merchant.id, id);
+        const ok = await revokeApiKey(session.merchantId, id);
         return NextResponse.json({ success: ok });
     } catch (err) {
         logger.error("[keys] revoke failed:", err);

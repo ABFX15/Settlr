@@ -4,21 +4,20 @@
 
 import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
-import { getOrCreateMerchantByWallet } from "@/lib/db";
 import { deletePayee } from "@/lib/payees";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
 export async function DELETE(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> },
 ) {
     try {
-        const { id } = await params;
-        const wallet = new URL(request.url).searchParams.get("wallet");
-        if (!wallet || wallet.length < 32) {
-            return NextResponse.json({ error: "Missing wallet" }, { status: 400 });
+        const session = await requireMerchantSession(request);
+        if (!session) {
+            return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
         }
-        const merchant = await getOrCreateMerchantByWallet(wallet);
-        const ok = await deletePayee(merchant.id, id);
+        const { id } = await params;
+        const ok = await deletePayee(session.merchantId, id);
         if (!ok) {
             return NextResponse.json({ error: "Payee not found" }, { status: 404 });
         }

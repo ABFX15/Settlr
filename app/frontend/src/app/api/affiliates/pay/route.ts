@@ -11,8 +11,9 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger";
-import { getOrCreateMerchantByWallet, createPayout } from "@/lib/db";
+import { createPayout } from "@/lib/db";
 import { sendPayoutClaimEmail } from "@/lib/email";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
 interface PayoutInput {
     email?: string;
@@ -22,16 +23,23 @@ interface PayoutInput {
 
 export async function POST(request: NextRequest) {
     try {
+        // Auth: the operator must be signed in. The merchant whose treasury is
+        // charged comes from the verified session — NOT a request param — so a
+        // caller cannot pay out of another merchant's balance.
+        const session = await requireMerchantSession(request);
+        if (!session) {
+            return NextResponse.json(
+                { error: "Not authenticated" },
+                { status: 401 },
+            );
+        }
+
         const body = await request.json();
-        const { wallet, payouts, type } = body as {
-            wallet?: string;
+        const { payouts, type } = body as {
             payouts?: PayoutInput[];
             type?: string;
         };
 
-        if (!wallet || wallet.length < 32) {
-            return NextResponse.json({ error: "Missing wallet" }, { status: 400 });
-        }
         if (!Array.isArray(payouts) || payouts.length === 0) {
             return NextResponse.json(
                 { error: "payouts array is required" },
@@ -45,19 +53,28 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const merchant = await getOrCreateMerchantByWallet(wallet);
+        const merchant = {
+            id: session.merchantId,
+            name: session.merchantName,
+        };
+        const wallet = session.merchantWallet;
         const kind = type === "cashout" ? "cashout" : "affiliate";
 
         const results = [];
         for (const p of payouts) {
             const email = (p.email || "").trim();
             const amount = Number(p.amount);
-            if (!email.includes("@") || !Number.isFinite(amount) || amount <= 0) {
+            if (
+                !email.includes("@") ||
+                !Number.isFinite(amount) ||
+                amount <= 0 ||
+                amount > 100_000
+            ) {
                 results.push({
                     email,
                     amount: p.amount,
                     ok: false,
-                    error: "Invalid email or amount",
+                    error: "Invalid email or amount (max $100,000)",
                 });
                 continue;
             }

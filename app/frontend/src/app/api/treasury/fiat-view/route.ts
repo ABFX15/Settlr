@@ -12,23 +12,17 @@
 
 import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
-import {
-    getOrCreateMerchantByWallet,
-    getOrCreateMerchantBalance,
-} from "@/lib/db";
+import { getOrCreateMerchantBalance } from "@/lib/db";
 import { listOfframpRequests } from "@/lib/offramp";
+import { requireMerchantSession } from "@/lib/merchant-auth";
 
 export async function GET(request: NextRequest) {
     try {
-        const wallet = new URL(request.url).searchParams.get("wallet");
-        if (!wallet || wallet.length < 32) {
-            return NextResponse.json(
-                { error: "Missing wallet parameter" },
-                { status: 400 },
-            );
+        const session = await requireMerchantSession(request);
+        if (!session) {
+            return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
         }
-
-        const merchant = await getOrCreateMerchantByWallet(wallet);
+        const merchant = { id: session.merchantId };
         const balance = await getOrCreateMerchantBalance(merchant.id);
         const offramps = await listOfframpRequests(merchant.id);
 
