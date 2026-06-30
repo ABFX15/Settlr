@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import Script from "next/script";
+import { CodeBlock } from "@/components/CodeBlock";
 
 const DEMO_MERCHANT =
   (process.env.NEXT_PUBLIC_ADMIN_WALLETS || "").split(",")[0]?.trim() ||
@@ -109,18 +110,18 @@ export default function WidgetPage() {
         <h2 className="text-sm font-semibold text-[#101828]">
           1. Drop-in button
         </h2>
-        <pre className="mt-2 overflow-x-auto rounded-xl bg-[#0d1117] p-4 text-[13px] leading-relaxed text-[#e6edf3]">
-          <code>{SNIPPET}</code>
-        </pre>
+        <div className="mt-2">
+          <CodeBlock code={SNIPPET} filename="index.html" />
+        </div>
       </div>
 
       <div className="mt-8">
         <h2 className="text-sm font-semibold text-[#101828]">
           2. Online store checkout (dynamic cart total)
         </h2>
-        <pre className="mt-2 overflow-x-auto rounded-xl bg-[#0d1117] p-4 text-[13px] leading-relaxed text-[#e6edf3]">
-          <code>{PROGRAMMATIC}</code>
-        </pre>
+        <div className="mt-2">
+          <CodeBlock code={PROGRAMMATIC} filename="checkout.js" />
+        </div>
       </div>
 
       {/* How it works */}

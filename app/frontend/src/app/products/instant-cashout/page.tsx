@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Zap, Mail, ShieldCheck, Globe, ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
+import { CodeBlock } from "@/components/CodeBlock";
 
 export const metadata: Metadata = {
   title: "Instant Cashout — Pay Players & Winners in Seconds | Offbank",
@@ -111,8 +112,10 @@ export default function InstantCashoutPage() {
           <h2 className="text-center text-[28px] font-extrabold tracking-tight sm:text-[36px]">
             One call to pay a winner.
           </h2>
-          <pre className="mt-8 overflow-x-auto rounded-xl bg-[#0d1117] p-5 text-[13px] leading-relaxed text-[#e6edf3]">
-            <code>{`import { PayoutClient } from "@offbank/sdk";
+          <div className="mt-8">
+            <CodeBlock
+              filename="cashout.ts"
+              code={`import { PayoutClient } from "@offbank/sdk";
 
 const payouts = new PayoutClient({ apiKey: "sk_live_..." });
 
@@ -121,8 +124,9 @@ await payouts.create({
   email: "player@example.com",
   amount: 250.0,
   memo: "Withdrawal #48210",
-});`}</code>
-          </pre>
+});`}
+            />
+          </div>
           <p className="mt-4 text-center text-[13px] text-[#5c5c5c]">
             The player gets a claim link, picks any wallet (or one we provision),
             and the USDC lands on-chain in seconds. Your webhook fires when it

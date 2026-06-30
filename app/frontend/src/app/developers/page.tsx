@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
+import { CodeBlock } from "@/components/CodeBlock";
 import {
   Code2,
   Webhook,
@@ -131,16 +132,17 @@ export default function DevelopersPage() {
           </div>
 
           {/* Quickstart strip */}
-          <div className="rounded-xl bg-[#0a0a0a] text-white p-8">
+          <div>
             <div className="flex items-center gap-2 text-sm text-[#34c759] mb-3">
               <Rocket className="h-4 w-4" />
               <span className="font-semibold uppercase tracking-wider">
                 30-second quickstart
               </span>
             </div>
-            <pre className="overflow-x-auto text-sm font-mono text-[#d3d3d3] leading-relaxed">
-              {`curl https://offbankpay.com/api/invoices \\
-  -H "Authorization: Bearer \$OFFBANK_API_KEY" \\
+            <CodeBlock
+              filename="create-invoice.sh"
+              code={`curl https://offbankpay.com/api/invoices \\
+  -H "Authorization: Bearer $OFFBANK_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
     "amount": 47500,
@@ -148,23 +150,24 @@ export default function DevelopersPage() {
     "buyerEmail": "buyer@example.com",
     "memo": "Wholesale order #4421"
   }'`}
-            </pre>
-            <p className="mt-4 text-sm text-[#8a8a8a]">
+            />
+            <p className="mt-4 text-sm text-[#5c5c5c]">
               Returns a payment link your buyer can pay with any Solana wallet.
               Settlement webhook fires once the on-chain transaction confirms.
             </p>
           </div>
 
           {/* Payouts quickstart */}
-          <div className="mt-6 rounded-xl bg-[#0a0a0a] text-white p-8">
+          <div className="mt-8">
             <div className="flex items-center gap-2 text-sm text-[#34c759] mb-3">
               <Send className="h-4 w-4" />
               <span className="font-semibold uppercase tracking-wider">
                 Pay out in one call
               </span>
             </div>
-            <pre className="overflow-x-auto text-sm font-mono text-[#d3d3d3] leading-relaxed">
-              {`import { PayoutClient } from "@offbank/sdk";
+            <CodeBlock
+              filename="payouts.ts"
+              code={`import { PayoutClient } from "@offbank/sdk";
 
 const payouts = new PayoutClient({ apiKey: "sk_live_..." });
 
@@ -180,8 +183,8 @@ await payouts.createBatch([
   { email: "alice@example.com", amount: 250.0 },
   { email: "bob@example.com",   amount: 180.0 },
 ]);`}
-            </pre>
-            <p className="mt-4 text-sm text-[#8a8a8a]">
+            />
+            <p className="mt-4 text-sm text-[#5c5c5c]">
               Each recipient gets a claim link (and email) and claims with any
               Solana wallet — or one we provision on first claim. Your webhook
               fires when it settles. No minimum amounts, no batch windows.
