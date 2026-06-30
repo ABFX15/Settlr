@@ -51,6 +51,7 @@ interface LeafLinkSettings {
 interface MerchantSettings {
   businessName: string;
   wallet: string;
+  evmAddress: string;
   autoOfframp: OfframpSettings;
   leaflink: LeafLinkSettings;
   notifications: {
@@ -62,6 +63,7 @@ interface MerchantSettings {
 const DEFAULT_SETTINGS: MerchantSettings = {
   businessName: "",
   wallet: "",
+  evmAddress: "",
   autoOfframp: {
     enabled: false,
     provider: "sphere",
@@ -664,6 +666,48 @@ export default function SettingsPage() {
             </button>
           </div>
         </div>
+      </section>
+
+      {/* ─── Multichain: accept Ethereum payments ─── */}
+      <section className="mb-8 rounded-2xl border border-[#d3d3d3] bg-white p-6">
+        <div className="mb-4 flex items-start gap-3">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#34c759]/10">
+            <CreditCard className="h-5 w-5 text-[#34c759]" />
+          </div>
+          <div>
+            <h2 className="text-base font-semibold text-[#212121]">
+              Accept Ethereum payments
+            </h2>
+            <p className="text-sm text-[#8a8a8a]">
+              Add an EVM address to let buyers pay USDC from an Ethereum wallet
+              (MetaMask etc.) on Base, Ethereum, Polygon, Arbitrum, or Optimism —
+              alongside Solana. Funds land directly in this wallet.
+            </p>
+          </div>
+        </div>
+        <label className="mb-1.5 block text-sm font-medium text-[#344054]">
+          EVM receiving address{" "}
+          <span className="text-[#98a2b3]">(optional)</span>
+        </label>
+        <input
+          value={settings.evmAddress}
+          onChange={(e) =>
+            setSettings((s) => ({ ...s, evmAddress: e.target.value.trim() }))
+          }
+          placeholder="0x…"
+          className={`w-full rounded-xl border px-3.5 py-2.5 font-mono text-sm outline-none ${
+            settings.evmAddress &&
+            !/^0x[a-fA-F0-9]{40}$/.test(settings.evmAddress)
+              ? "border-[#e74c3c] focus:border-[#e74c3c]"
+              : "border-[#d0d5dd] focus:border-[#34c759]"
+          }`}
+        />
+        {settings.evmAddress &&
+          !/^0x[a-fA-F0-9]{40}$/.test(settings.evmAddress) && (
+            <p className="mt-1.5 text-[12px] text-[#e74c3c]">
+              That doesn&rsquo;t look like a valid 0x… address.
+            </p>
+          )}
       </section>
 
       {/* ─── Developer / API keys ─── */}

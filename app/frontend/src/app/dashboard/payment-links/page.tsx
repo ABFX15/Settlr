@@ -66,18 +66,25 @@ export default function PaymentLinksPage() {
   const [generated, setGenerated] = useState<SavedLink | null>(null);
   const [tab, setTab] = useState<"link" | "embed" | "qr">("link");
   const [recent, setRecent] = useState<SavedLink[]>([]);
+  const [evmAddress, setEvmAddress] = useState("");
 
   const origin =
     typeof window !== "undefined" ? window.location.origin : "https://offbankpay.com";
   const storageKey = publicKey ? `offbank:paymentlinks:${publicKey}` : "";
 
-  // Prefill the store name from the merchant record.
+  // Prefill the store name + EVM receiving address from the merchant record.
   useEffect(() => {
     if (!publicKey) return;
     fetch(`/api/merchants/by-wallet?wallet=${publicKey}`)
       .then((r) => r.json())
       .then((d) => {
         if (d?.merchant?.name) setStoreName(d.merchant.name);
+      })
+      .catch(() => {});
+    fetch(`/api/merchant/settings?wallet=${publicKey}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.evmAddress) setEvmAddress(d.evmAddress);
       })
       .catch(() => {});
   }, [publicKey]);
@@ -110,9 +117,10 @@ export default function PaymentLinksPage() {
       });
       if (ord) p.set("order", ord);
       if (hook) p.set("webhook", hook);
+      if (evmAddress) p.set("evm", evmAddress);
       return `${origin}/embed/checkout?${p.toString()}`;
     },
-    [publicKey, origin],
+    [publicKey, origin, evmAddress],
   );
 
   const generate = () => {
@@ -138,10 +146,10 @@ export default function PaymentLinksPage() {
   data-offbank-checkout
   data-merchant="${publicKey}"
   data-amount="${generated.amount}"
-  data-name="${generated.name}"${generated.order ? `\n  data-order="${generated.order}"` : ""}>
+  data-name="${generated.name}"${generated.order ? `\n  data-order="${generated.order}"` : ""}${evmAddress ? `\n  data-evm="${evmAddress}"` : ""}>
   Pay ${fmtUSD(generated.amount)} with USDC
 </button>`;
-  }, [generated, origin, publicKey]);
+  }, [generated, origin, publicKey, evmAddress]);
 
   if (!connected || !publicKey) {
     return (

@@ -140,6 +140,7 @@
             name: el.getAttribute("data-name"),
             orderId: el.getAttribute("data-order"),
             webhook: el.getAttribute("data-webhook"),
+            evm: el.getAttribute("data-evm"),
             onSuccess: function (d) {
               el.dispatchEvent(
                 new CustomEvent("offbank:success", {

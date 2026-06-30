@@ -17,17 +17,19 @@ const SNIPPET = `<script src="https://offbankpay.com/embed.js"></script>
 
 <button
   data-offbank-checkout
-  data-merchant="YOUR_WALLET_ADDRESS"
+  data-merchant="YOUR_SOLANA_ADDRESS"
   data-amount="49.99"
   data-name="Your Store"
-  data-order="INV-1023">
+  data-order="INV-1023"
+  data-evm="YOUR_EVM_ADDRESS">
   Pay with USDC
 </button>`;
 
 const PROGRAMMATIC = `// Call this from your store's checkout button,
 // with the LIVE cart total at that moment:
 OffbankCheckout.open({
-  merchant: "YOUR_WALLET_ADDRESS",
+  merchant: "YOUR_SOLANA_ADDRESS",
+  evm: "YOUR_EVM_ADDRESS",         // optional — accept Ethereum/Base too
   amount: cart.total,              // dynamic
   name: "Your Store",
   orderId: order.id,

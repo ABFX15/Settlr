@@ -13,6 +13,8 @@ import { LeafLinkClient } from "@/lib/leaflink/client";
 interface MerchantSettings {
     wallet: string;
     businessName: string;
+    /** Optional EVM (Ethereum/Base/…) receiving address for multichain payments. */
+    evmAddress?: string;
     autoOfframp: {
         enabled: boolean;
         provider: "sphere" | "moonpay" | "manual";
@@ -58,6 +60,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
             wallet,
             businessName: "",
+            evmAddress: "",
             autoOfframp: {
                 enabled: false,
                 provider: "sphere",
@@ -105,6 +108,14 @@ export async function PUT(request: NextRequest) {
         if (!body.wallet || typeof body.wallet !== "string" || body.wallet.length < 32) {
             return NextResponse.json(
                 { error: "Valid wallet address required" },
+                { status: 400 },
+            );
+        }
+
+        // EVM receiving address is optional, but must be a valid 0x address.
+        if (body.evmAddress && !/^0x[a-fA-F0-9]{40}$/.test(body.evmAddress)) {
+            return NextResponse.json(
+                { error: "EVM address must be a valid 0x… address" },
                 { status: 400 },
             );
         }
