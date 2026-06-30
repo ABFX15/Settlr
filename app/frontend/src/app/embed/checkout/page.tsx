@@ -42,6 +42,8 @@ import {
   getEvmWallets,
   payUsdcEvm,
   waitForEvmReceipt,
+  isWalletConnectConfigured,
+  getWalletConnectProvider,
   type EvmWallet,
   type EvmChainKey,
 } from "@/lib/evm";
@@ -377,6 +379,20 @@ function EmbedCheckout() {
     }
   }, [cfg, evmChain, closeOut]);
 
+  // ── Path 1c: WalletConnect (mobile + the long tail, via QR/deep link) ──
+  const payWithWalletConnect = useCallback(async () => {
+    if (!cfg || !isEvmAddress(cfg.evm)) return;
+    setError(null);
+    try {
+      const provider = await getWalletConnectProvider(evmChain);
+      await payEvm(provider);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "WalletConnect failed.";
+      setError(/reject|declin|cancel|close/i.test(msg) ? "Cancelled." : msg);
+      setStatus("awaiting");
+    }
+  }, [cfg, evmChain, payEvm]);
+
   // ── Path 2: watch the chain for a QR payment carrying this reference ──
   useEffect(() => {
     if (status !== "awaiting" || !referenceRef.current) return;
@@ -591,7 +607,16 @@ function EmbedCheckout() {
                     </button>
                   ))}
                 </div>
-                {evmWallets.length === 0 && (
+                {isWalletConnectConfigured() && (
+                  <button
+                    onClick={payWithWalletConnect}
+                    disabled={status === "paying"}
+                    className="mt-1.5 flex w-full items-center justify-center gap-2 rounded-xl border border-[#d0d5dd] bg-white px-5 py-2.5 text-sm font-semibold text-[#344054] transition-colors hover:bg-[#f9fafb] disabled:opacity-60"
+                  >
+                    Pay with another wallet (mobile)
+                  </button>
+                )}
+                {evmWallets.length === 0 && !isWalletConnectConfigured() && (
                   <p className="mt-1.5 text-[12px] text-[#98a2b3]">
                     Install MetaMask (or another Ethereum wallet) to pay on
                     Ethereum or Base.

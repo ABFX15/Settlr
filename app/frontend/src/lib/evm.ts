@@ -251,3 +251,54 @@ export async function waitForEvmReceipt(
   }
   return false;
 }
+
+// ── WalletConnect ───────────────────────────────────────────────────────────
+// One QR / deep link that connects mobile wallets and the long tail (Trust,
+// Rainbow, MetaMask Mobile, 400+ wallets) — and sidesteps the browser-extension
+// "default wallet" hijacking. Produces an EIP-1193 provider that plugs straight
+// into payUsdcEvm. Gated on a Reown/WalletConnect project id.
+
+export function isWalletConnectConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let wcProvider: any = null;
+
+/** Initialize WalletConnect (showing its QR modal) and return a connected
+ * EIP-1193 provider for the chosen chain. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getWalletConnectProvider(chain: EvmChainKey): Promise<any> {
+  const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+  if (!projectId) throw new Error("WalletConnect is not configured");
+
+  const { EthereumProvider } = await import(
+    "@walletconnect/ethereum-provider"
+  );
+
+  if (!wcProvider) {
+    wcProvider = await EthereumProvider.init({
+      projectId,
+      chains: [EVM_CHAINS[chain].chainId],
+      optionalChains: Object.values(EVM_CHAINS).map((c) => c.chainId) as [
+        number,
+        ...number[],
+      ],
+      showQrModal: true,
+      metadata: {
+        name: "Offbank Checkout",
+        description: "Pay with USDC",
+        url:
+          typeof window !== "undefined"
+            ? window.location.origin
+            : "https://offbankpay.com",
+        icons: ["https://offbankpay.com/new-logo-no-bg.png"],
+      },
+    });
+  }
+
+  if (!wcProvider.session) {
+    await wcProvider.connect();
+  }
+  return wcProvider;
+}

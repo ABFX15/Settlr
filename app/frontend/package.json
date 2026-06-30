@@ -33,6 +33,7 @@
     "@tailwindcss/postcss": "^4",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.37.0",
+    "@walletconnect/ethereum-provider": "^2.22.4",
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.555.0",
     "next": "16.0.10",
