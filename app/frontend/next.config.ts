@@ -88,7 +88,22 @@ const nextConfig: NextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       "why-is-node-running": false,
+      // Privy lazily imports this only in a Farcaster mini-app context (which
+      // we never run). It isn't installed, which produces a harmless
+      // "module not found" warning — alias it away so the build log is clean.
+      "@farcaster/mini-app-solana": false,
     };
+
+    // Suppress known non-fatal warnings from deep dependencies:
+    // - snarkjs/ffjavascript use a dynamic require() expression (cloak ZK SDK).
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      { module: /@farcaster\/mini-app-solana/ },
+      {
+        message:
+          /Critical dependency: the request of a dependency is an expression/,
+      },
+    ];
 
     if (!isServer) {
       config.resolve.alias = {

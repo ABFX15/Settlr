@@ -21,7 +21,7 @@ const plans: Plan[] = [
     id: "1",
     name: "Starter",
     description: "For early-stage platforms",
-    price: 49.0,
+    price: 5.0,
     billing: "/month",
     icon: "🚀",
     features: [
