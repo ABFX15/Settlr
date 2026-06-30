@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { upsertConfig as upsertLeafLinkConfig } from "@/lib/leaflink/db";
 import { LeafLinkClient } from "@/lib/leaflink/client";
 import { requireMerchantSession } from "@/lib/merchant-auth";
+import { getMerchantSettings, upsertMerchantSettings } from "@/lib/db";
 
 /**
  * GET  /api/merchant/settings?wallet=xxx — Load merchant settings
@@ -43,8 +44,6 @@ interface MerchantSettings {
     };
 }
 
-// In-memory store (replace with DB in production)
-const settingsStore = new Map<string, MerchantSettings>();
 
 export async function GET(request: NextRequest) {
     const session = await requireMerchantSession(request);
@@ -53,7 +52,7 @@ export async function GET(request: NextRequest) {
     }
     const wallet = session.merchantWallet;
 
-    const stored = settingsStore.get(wallet);
+    const stored = (await getMerchantSettings(wallet)) as MerchantSettings | null;
     if (!stored) {
         // Return defaults
         return NextResponse.json({
@@ -143,7 +142,9 @@ export async function PUT(request: NextRequest) {
         if (body.leaflink?.enabled) {
             if (!body.leaflink.apiKey || body.leaflink.apiKey.startsWith("••••")) {
                 // If user submitted masked key, preserve the existing real key
-                const existing = settingsStore.get(body.wallet);
+                const existing = (await getMerchantSettings(
+                    body.wallet,
+                )) as MerchantSettings | null;
                 if (existing?.leaflink?.apiKey && !existing.leaflink.apiKey.startsWith("••••")) {
                     body.leaflink.apiKey = existing.leaflink.apiKey;
                 } else {
@@ -178,7 +179,10 @@ export async function PUT(request: NextRequest) {
             }
         }
 
-        settingsStore.set(body.wallet, body);
+        await upsertMerchantSettings(
+            body.wallet,
+            body as unknown as Record<string, unknown>,
+        );
 
         // Bridge: also persist into the LeafLink integration store keyed by wallet,
         // so the X-API-Key webhook handlers can find this merchant's config.

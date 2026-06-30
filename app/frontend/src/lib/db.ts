@@ -1489,6 +1489,49 @@ export async function revokeApiKey(
 }
 
 // ============================================================================
+// MERCHANT SETTINGS (durable, JSON blob keyed by wallet)
+// ============================================================================
+
+// Hot in-memory copy — always written, used as a fallback so reads work within
+// a process even if Supabase is unconfigured or a write transiently fails.
+const memoryMerchantSettings = new Map<string, Record<string, unknown>>();
+
+export async function getMerchantSettings(
+    wallet: string,
+): Promise<Record<string, unknown> | null> {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from("merchant_settings")
+            .select("settings")
+            .eq("wallet", wallet)
+            .maybeSingle();
+        if (error) logger.error("getMerchantSettings error:", error);
+        if (data?.settings) return data.settings as Record<string, unknown>;
+    }
+    return memoryMerchantSettings.get(wallet) || null;
+}
+
+export async function upsertMerchantSettings(
+    wallet: string,
+    settings: Record<string, unknown>,
+): Promise<void> {
+    memoryMerchantSettings.set(wallet, settings);
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from("merchant_settings")
+            .upsert(
+                {
+                    wallet,
+                    settings,
+                    updated_at: new Date().toISOString(),
+                },
+                { onConflict: "wallet" },
+            );
+        if (error) logger.error("upsertMerchantSettings error:", error);
+    }
+}
+
+// ============================================================================
 // WAITLIST
 // ============================================================================
 
