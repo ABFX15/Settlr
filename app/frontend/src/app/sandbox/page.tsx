@@ -8,6 +8,7 @@
 
 import { useState } from "react";
 import Script from "next/script";
+import { CodeBlock } from "@/components/CodeBlock";
 
 // A throwaway devnet wallet so the widget has a valid recipient to render.
 const DEMO_MERCHANT = "DjLFeMQ3E6i5CxERRVbQZbAHP1uF4XspLMYafjz3rSQV";
@@ -23,7 +24,6 @@ export default function SandboxPage() {
   const [item1, setItem1] = useState("Starter pack");
   const [item2, setItem2] = useState("Add-on");
   const [result, setResult] = useState<Result | null>(null);
-  const [copied, setCopied] = useState(false);
 
   const launch = () => {
     const amt = parseFloat(amount);
@@ -71,7 +71,11 @@ export default function SandboxPage() {
         </span>
       </div>
       <h1 className="text-4xl font-bold tracking-tight text-[#101828]">
-        Try the Offbank checkout.
+        Try the{" "}
+        <span className="bg-gradient-to-r from-[#34c759] via-[#06b6d4] to-[#8b5cf6] bg-clip-text text-transparent">
+          Offbank checkout
+        </span>
+        .
       </h1>
       <p className="mt-3 text-lg text-[#475467]">
         Configure a checkout and launch the real widget. In sandbox mode you
@@ -147,19 +151,9 @@ export default function SandboxPage() {
         <h2 className="text-sm font-semibold text-[#101828]">
           The snippet for this checkout
         </h2>
-        <pre className="mt-2 overflow-x-auto rounded-xl bg-[#0d1117] p-4 text-[13px] leading-relaxed text-[#e6edf3]">
-          <code>{snippet}</code>
-        </pre>
-        <button
-          onClick={() => {
-            navigator.clipboard?.writeText(snippet);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1500);
-          }}
-          className="mt-3 rounded-xl border border-[#d0d5dd] px-4 py-2 text-sm font-medium text-[#344054] hover:bg-[#f9fafb]"
-        >
-          {copied ? "Copied!" : "Copy snippet"}
-        </button>
+        <div className="mt-2">
+          <CodeBlock code={snippet} filename="checkout.html" />
+        </div>
       </div>
 
       <p className="mt-8 text-[13px] text-[#98a2b3]">

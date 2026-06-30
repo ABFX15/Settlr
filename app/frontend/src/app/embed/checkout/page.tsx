@@ -43,6 +43,7 @@ import {
   payUsdcEvm,
   waitForEvmReceipt,
   type EvmWallet,
+  type EvmChainKey,
 } from "@/lib/evm";
 
 export const dynamic = "force-dynamic";
@@ -102,7 +103,7 @@ function EmbedCheckout() {
   const [copied, setCopied] = useState(false);
   const [hasWallet, setHasWallet] = useState(false);
   const [evmWallets, setEvmWallets] = useState<EvmWallet[]>([]);
-  const [evmChain, setEvmChain] = useState<"base" | "ethereum">("base");
+  const [evmChain, setEvmChain] = useState<EvmChainKey>("base");
   const referenceRef = useRef<PublicKey | null>(null);
   const sessionIdRef = useRef<string | null>(null);
   const doneRef = useRef(false);
@@ -559,12 +560,12 @@ function EmbedCheckout() {
                   or pay with Ethereum
                   <span className="h-px flex-1 bg-[#eaecf0]" />
                 </div>
-                <div className="mb-2 flex gap-1.5">
-                  {(["base", "ethereum"] as const).map((ch) => (
+                <div className="mb-2 flex flex-wrap gap-1.5">
+                  {(Object.keys(EVM_CHAINS) as EvmChainKey[]).map((ch) => (
                     <button
                       key={ch}
                       onClick={() => setEvmChain(ch)}
-                      className={`flex-1 rounded-lg border px-2 py-1.5 text-[12px] font-medium transition-colors ${
+                      className={`rounded-lg border px-2.5 py-1.5 text-[12px] font-medium transition-colors ${
                         evmChain === ch
                           ? "border-[#34c759] bg-[#34c759]/5 text-[#027a48]"
                           : "border-[#eaecf0] text-[#667085] hover:bg-[#f9fafb]"

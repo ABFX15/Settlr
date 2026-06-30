@@ -10,17 +10,25 @@
  * enhancement; v1 settles to the merchant's wallet on the chain they were paid.)
  */
 
+export type EvmChainKey =
+  | "base"
+  | "ethereum"
+  | "polygon"
+  | "arbitrum"
+  | "optimism";
+
 export interface EvmChain {
-  key: "base" | "ethereum";
+  key: EvmChainKey;
   chainId: number;
   hex: string;
   name: string;
   usdc: string;
   rpc: string;
   explorer: string;
+  symbol: string;
 }
 
-export const EVM_CHAINS: Record<"base" | "ethereum", EvmChain> = {
+export const EVM_CHAINS: Record<EvmChainKey, EvmChain> = {
   base: {
     key: "base",
     chainId: 8453,
@@ -29,6 +37,7 @@ export const EVM_CHAINS: Record<"base" | "ethereum", EvmChain> = {
     usdc: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
     rpc: "https://mainnet.base.org",
     explorer: "https://basescan.org",
+    symbol: "ETH",
   },
   ethereum: {
     key: "ethereum",
@@ -38,6 +47,37 @@ export const EVM_CHAINS: Record<"base" | "ethereum", EvmChain> = {
     usdc: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
     rpc: "https://eth.llamarpc.com",
     explorer: "https://etherscan.io",
+    symbol: "ETH",
+  },
+  polygon: {
+    key: "polygon",
+    chainId: 137,
+    hex: "0x89",
+    name: "Polygon",
+    usdc: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+    rpc: "https://polygon-rpc.com",
+    explorer: "https://polygonscan.com",
+    symbol: "POL",
+  },
+  arbitrum: {
+    key: "arbitrum",
+    chainId: 42161,
+    hex: "0xa4b1",
+    name: "Arbitrum",
+    usdc: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+    rpc: "https://arb1.arbitrum.io/rpc",
+    explorer: "https://arbiscan.io",
+    symbol: "ETH",
+  },
+  optimism: {
+    key: "optimism",
+    chainId: 10,
+    hex: "0xa",
+    name: "Optimism",
+    usdc: "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+    rpc: "https://mainnet.optimism.io",
+    explorer: "https://optimistic.etherscan.io",
+    symbol: "ETH",
   },
 };
 
@@ -132,7 +172,7 @@ function encodeTransfer(to: string, amountBaseUnits: bigint): string {
  * to connect and switch chains as needed. Returns the transaction hash.
  */
 export async function payUsdcEvm(args: {
-  chain: "base" | "ethereum";
+  chain: EvmChainKey;
   merchant: string;
   amountUsd: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -168,7 +208,7 @@ export async function payUsdcEvm(args: {
             chainId: c.hex,
             chainName: c.name,
             rpcUrls: [c.rpc],
-            nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+            nativeCurrency: { name: c.symbol, symbol: c.symbol, decimals: 18 },
             blockExplorerUrls: [c.explorer],
           },
         ],
